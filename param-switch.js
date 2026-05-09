@@ -226,7 +226,7 @@
   };
 
   /* ─── WebSocket ──────────────────────────────────────────────────────────── */
-  const WS_URL = 'ws://localhost:9002';
+  const WS_URL = 'ws://127.0.0.1:9002';
   let ws = null;
 
   function connectWebSocket() {

@@ -424,6 +424,7 @@ class WeatherDashboard {
     show() {
         if (this.dashboard) {
             this.dashboard.classList.remove('hidden');
+            this.dashboard.style.display = '';
             this.isVisible = true;
             console.log('👁️ Weather Dashboard shown');
         }
@@ -432,6 +433,7 @@ class WeatherDashboard {
     hide() {
         if (this.dashboard) {
             this.dashboard.classList.add('hidden');
+            this.dashboard.style.display = 'none';
             this.isVisible = false;
             console.log('🙈 Weather Dashboard hidden');
         }

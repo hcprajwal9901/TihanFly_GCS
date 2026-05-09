@@ -316,8 +316,72 @@ void send_ws_safe(const std::string& msg)
     ws_clients = std::move(alive);
 }
 
+
 // Forward declaration
 void send_status();
+
+// ── Video server helpers (Windows) ───────────────────────────────────────────
+// Use CreateProcess instead of system()+start so Python actually spawns.
+// system("start /B ...") is unreliable from background threads.
+// ─────────────────────────────────────────────────────────────────────────────
+#ifdef _WIN32
+static HANDLE g_video_proc = INVALID_HANDLE_VALUE;
+
+static void video_stop_internal()
+{
+    if (g_video_proc != INVALID_HANDLE_VALUE)
+    {
+        TerminateProcess(g_video_proc, 0);
+        WaitForSingleObject(g_video_proc, 2000);
+        CloseHandle(g_video_proc);
+        g_video_proc = INVALID_HANDLE_VALUE;
+        std::cout << "[Video] Previous instance terminated\n";
+    }
+    // Belt-and-suspenders: also kill by port (5001) using netstat+taskkill
+    system("for /f \"tokens=5\" %a in ('netstat -ano 2^>nul ^| findstr :5001') do taskkill /F /PID %a >nul 2>&1");
+}
+
+static bool video_start_internal(const std::string& script_path, const std::string& rtsp_url)
+{
+    video_stop_internal();
+
+    std::string cmdline = "cmd.exe /C python \"" + script_path + "\" \"" + rtsp_url + "\" 5001 > NUL 2>&1";
+    std::cout << "[Video] CreateProcess: " << cmdline << "\n";
+
+    STARTUPINFOA si = {};
+    si.cb         = sizeof(si);
+
+    PROCESS_INFORMATION pi = {};
+    char buf[4096];
+    strncpy_s(buf, cmdline.c_str(), sizeof(buf) - 1);
+
+    BOOL ok = CreateProcessA(
+        NULL, buf, NULL, NULL,
+        FALSE,                  // DO NOT inherit handles (prevents socket hijacking)
+        CREATE_NO_WINDOW,       // no console window
+        NULL, NULL,
+        &si, &pi
+    );
+
+    if (ok)
+    {
+        g_video_proc = pi.hProcess;   // keep so we can TerminateProcess later
+        CloseHandle(pi.hThread);
+        std::cout << "[Video] Spawned PID=" << pi.dwProcessId << "\n";
+        return true;
+    }
+
+    DWORD err = GetLastError();
+    std::cout << "[Video] CreateProcess failed (err=" << err
+              << "). Falling back to system()\n";
+    // Fallback
+    std::string cmd2 = "start /B python \"" + script_path + "\" \"" + rtsp_url + "\" 5001";
+    system(cmd2.c_str());
+    return false;
+}
+#endif
+// ─────────────────────────────────────────────────────────────────────────────
+
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  WebSocket handshake
@@ -353,9 +417,12 @@ static std::string ws_accept_key(const std::string& client_key)
 
 static bool do_ws_handshake(tcp::socket& s)
 {
+    std::cout << "[WebSocket] Handshake thread started for a client\n";
     asio::streambuf buf;
     asio::error_code ec;
+    std::cout << "[WebSocket] Reading until \\r\\n\\r\\n ...\n";
     asio::read_until(s, buf, "\r\n\r\n", ec);
+    std::cout << "[WebSocket] Read completed, ec=" << ec.value() << "\n";
     if (ec) return false;
 
     std::istream stream(&buf);
@@ -367,14 +434,20 @@ static bool do_ws_handshake(tcp::socket& s)
     std::string        line;
     while (std::getline(ss, line))
     {
-        if (line.find("Sec-WebSocket-Key:") != std::string::npos)
+        std::string lower_line = line;
+        std::transform(lower_line.begin(), lower_line.end(), lower_line.begin(), ::tolower);
+        if (lower_line.find("sec-websocket-key:") != std::string::npos)
         {
-            auto pos = line.find(": ");
+            auto pos = line.find(":");
             if (pos != std::string::npos)
             {
-                key = line.substr(pos + 2);
+                key = line.substr(pos + 1);
+                // trim leading spaces
+                size_t start = key.find_first_not_of(" \t");
+                if (start != std::string::npos) key = key.substr(start);
+                
                 while (!key.empty() &&
-                       (key.back() == '\r' || key.back() == '\n'))
+                       (key.back() == '\r' || key.back() == '\n' || key.back() == ' '))
                     key.pop_back();
             }
         }
@@ -1197,32 +1270,39 @@ void start_websocket(CommandManager* cmd_manager)
         while (true)
         {
             tcp::socket socket(io);
-            acceptor.accept(socket);
-
-            auto client = std::make_shared<tcp::socket>(std::move(socket));
-
-            if (!do_ws_handshake(*client))
+            asio::error_code accept_ec;
+            acceptor.accept(socket, accept_ec);
+            
+            if (accept_ec)
             {
-                std::cout << "[WebSocket] Handshake failed — rejected\n";
+                std::cout << "[WebSocket] Accept error: " << accept_ec.message() << "\n";
                 continue;
             }
 
-            std::cout << "[WebSocket] Client connected\n";
+            auto client = std::make_shared<tcp::socket>(std::move(socket));
 
-            // Wrap the socket in a WsClient so every sender gets its own mutex.
-            auto entry = std::make_shared<WsClient>();
-            entry->socket = client;
-
+            std::thread([cmd_manager, client]()
             {
-                std::lock_guard<std::mutex> lock(ws_mutex);
-                ws_clients.push_back(entry);
-            }
+                if (!do_ws_handshake(*client))
+                {
+                    std::cout << "[WebSocket] Handshake failed — rejected\n";
+                    return;
+                }
 
-            send_status();
-            flightMode.pushStatus();
+                std::cout << "[WebSocket] Client connected\n";
 
-            std::thread([cmd_manager, client, entry]()
-            {
+                // Wrap the socket in a WsClient so every sender gets its own mutex.
+                auto entry = std::make_shared<WsClient>();
+                entry->socket = client;
+
+                {
+                    std::lock_guard<std::mutex> lock(ws_mutex);
+                    ws_clients.push_back(entry);
+                }
+
+                send_status();
+                flightMode.pushStatus();
+
                 try
                 {
                     while (true)
@@ -1456,6 +1536,68 @@ void start_websocket(CommandManager* cmd_manager)
                                     send_fp_ack(false, std::string("Exception: ") + ex.what());
                                 }
                             }
+
+                            // ── Video streaming: spawn/kill Python MJPEG server ──────────
+                            // Frontend sends: { type:"start_video", rtsp_url:"rtsp://..." }
+                            // Backend spawns: python video_server.py <rtsp_url> 5001
+                            // Frontend then shows <img src="http://localhost:5001/video">
+                            // ─────────────────────────────────────────────────────────────
+                            else if (type == "start_video")
+                            {
+                                std::string rtsp_url = j.value("rtsp_url", "");
+                                if (rtsp_url.empty())
+                                {
+                                    send_ws_safe(R"({"type":"video_status","status":"error","message":"No RTSP URL provided"})");
+                                }
+                                else
+                                {
+                                    std::cout << "[Video] start_video: " << rtsp_url << "\n";
+
+                                    // Find video_server.py relative to CWD
+                                    std::vector<std::string> candidates = {
+                                        "video_server.py",
+                                        "..\\video_server.py",
+                                        "..\\..\\video_server.py",
+                                        "..\\..\\..\\video_server.py"
+                                    };
+                                    std::string script_path;
+                                    for (auto& c : candidates) {
+                                        if (GetFileAttributesA(c.c_str()) != INVALID_FILE_ATTRIBUTES) {
+                                            script_path = c;
+                                            break;
+                                        }
+                                    }
+
+                                    if (script_path.empty()) {
+                                        std::cout << "[Video] video_server.py not found!\n";
+                                        send_ws_safe(R"({"type":"video_status","status":"error","message":"video_server.py not found."})");
+                                    } else {
+#ifdef _WIN32
+                                        bool spawned = video_start_internal(script_path, rtsp_url);
+                                        (void)spawned;
+#else
+                                        system(("python3 \"" + script_path + "\" \"" + rtsp_url + "\" 5001 >/dev/null 2>&1 &").c_str());
+#endif
+                                        // Notify browser after Python has had time to bind port 5001
+                                        std::thread([]() {
+                                            std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+                                            send_ws_safe(R"({"type":"video_status","status":"ready","url":"http://localhost:5001/video"})");
+                                        }).detach();
+                                    }
+                                }
+                            }
+
+                            else if (type == "stop_video")
+                            {
+                                std::cout << "[Video] stop_video\n";
+#ifdef _WIN32
+                                video_stop_internal();
+#else
+                                system("pkill -f video_server.py 2>/dev/null");
+#endif
+                                send_ws_safe(R"({"type":"video_status","status":"stopped"})");
+                            }
+
 
                             else if (type == "start_accel_calibration")
                             {

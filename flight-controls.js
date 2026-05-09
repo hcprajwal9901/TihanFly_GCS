@@ -308,21 +308,29 @@ class ArmToggle {
 
     toggle() { this.isArmed ? this.disarm() : this.arm(); }
 
+    setArmedState(isArmed) {
+        if (this.isArmed === isArmed) return;
+        this.isArmed = isArmed;
+        if (isArmed) {
+            this.btn.classList.add('armed');
+            if (this.label) this.label.textContent = 'DISARM';
+            if (this.icon)  this.icon.alt = 'Disarm';
+            console.log('🔴 UI State: Drone ARMED');
+        } else {
+            this.btn.classList.remove('armed');
+            if (this.label) this.label.textContent = 'ARM';
+            if (this.icon)  this.icon.alt = 'Arm';
+            console.log('🟢 UI State: Drone DISARMED');
+        }
+    }
+
     arm() {
-        this.isArmed = true;
-        this.btn.classList.add('armed');
-        if (this.label) this.label.textContent = 'DISARM';
-        if (this.icon)  this.icon.alt = 'Disarm';
-        console.log('🔴 Drone ARMED');
+        this.setArmedState(true);
         if (this.callbacks.onArm) this.callbacks.onArm();
     }
 
     disarm() {
-        this.isArmed = false;
-        this.btn.classList.remove('armed');
-        if (this.label) this.label.textContent = 'ARM';
-        if (this.icon)  this.icon.alt = 'Arm';
-        console.log('🟢 Drone DISARMED');
+        this.setArmedState(false);
         if (this.callbacks.onDisarm) this.callbacks.onDisarm();
     }
 

@@ -198,7 +198,17 @@ void FlightMode::processMessage(const mavlink_message_t& msg)
         mavlink_msg_heartbeat_decode(&msg, &hb);
 
         const bool isArmed = (hb.base_mode & MAV_MODE_FLAG_SAFETY_ARMED) != 0;
-        isArmed_ = isArmed;
+        if (isArmed != isArmed_)
+        {
+            isArmed_ = isArmed;
+            
+            // Broadcast armed/disarmed event to frontend
+            json jevt;
+            jevt["type"]    = "event";
+            jevt["event"]   = isArmed ? "armed" : "disarmed";
+            jevt["message"] = isArmed ? "Motors Armed" : "Motors Disarmed";
+            if (send_cb_) send_cb_(jevt.dump());
+        }
 
         CopterMode hbMode = modeFromId(static_cast<uint8_t>(hb.custom_mode));
 

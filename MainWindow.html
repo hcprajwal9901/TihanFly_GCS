@@ -207,7 +207,6 @@
                     ? new _NativeWS(url, protocols)
                     : new _NativeWS(url);
 
-                window.ws = ws;
                 window.__mv_sockets.push(ws);
                 ws.addEventListener('message', routeMessages);
                 return ws;
@@ -232,7 +231,7 @@
     <link rel="stylesheet" href="dropdown-menu.css">
     <link rel="stylesheet" href="plan-flight.css">
     <link rel="stylesheet" href="command-editor.css">
-    <link rel="stylesheet" href="flight-controls-mode.css">
+
     <link rel="stylesheet" href="waypoint-context-menu.css">
     <link rel="stylesheet" href="settings-window.css">
     <!-- Settings panels: one CSS per panel -->
@@ -244,15 +243,14 @@
     <link rel="stylesheet" href="param-switch.css">
     <link rel="stylesheet" href="param-full.css">
     <link rel="stylesheet" href="vehicle-config.css">
-    <!-- v1: flight-controls-mode; v2: flight-mode -->
-    <link rel="stylesheet" href="flight-modes.css">
-    <link rel="stylesheet" href="flight-mode.css">
+
     <!-- failsafe panel -->
     <link rel="stylesheet" href="failsafe.css">
     <!-- geofence panel -->
     <link rel="stylesheet" href="geofence.css">
-    <!-- v2: No-Fly Zone overlay styles -->
-    <link rel="stylesheet" href="nfz-overlay.css">
+    <!-- camera controls: photo capture, video recording, gimbal panel -->
+    <link rel="stylesheet" href="camera-controls.css">
+
 
 </head>
 
@@ -478,12 +476,6 @@
             <div id="map"></div>
             <div id="videoContainer">
                 <div id="videoStream"></div>
-                <div class="video-overlay">
-                    <div class="video-status no-signal">
-                        <div class="status-dot"></div>
-                        <span>NO SIGNAL</span>
-                    </div>
-                </div>
                 <button id="videoMaxBtn" title="Toggle Video Fullscreen">⛶</button>
             </div>
         </div>
@@ -1411,10 +1403,11 @@
     <script src="tmap.js"></script>
 
     <!-- UI COMPONENTS -->
-    <script src="websocket.js"></script>
-    <script src="multi-vechile.js"></script>
+
     <script src="compass.js"></script>
     <script src="video-stream.js"></script>
+    <!-- Camera controls: photo, recording, gimbal — must come after video-stream.js -->
+    <script src="camera-controls.js"></script>
     <script src="flight-controls.js"></script>
     <script src="messaage-console.js"></script>
     <script src="weather-dashboard.js"></script>
@@ -1456,8 +1449,7 @@
     <!-- Internationalisation -->
     <script src="i18n.js"></script>
 
-    <script src="waypoint-polygon-bridge.js"></script>
-    <script src="survey-settings.js"></script>
+
 
     <!-- MAIN APPLICATION (v=3 cache-bust from v2; must be last) -->
     <script src="multi-vehicle.js"></script>
@@ -1478,11 +1470,7 @@
     <script src="failsafe.js"></script>
     <!-- Geofence panel -->
     <script src="geofence.js"></script>
-    <!-- v1: weather restriction -->
-    <script src="weather-restriction.js"></script>
-    <!-- v2: No-Fly Zone overlay -->
-    <script src="nfz-overlay.js"></script>
-    <script src="nfz-panel.js"></script>
+    <!-- NFZ/weather-restriction not yet implemented -->
 
 </body>
 

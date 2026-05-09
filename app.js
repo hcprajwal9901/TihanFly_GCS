@@ -89,19 +89,19 @@ var droneHomePosition = null;  // { lat, lon }
 
 // ── Haversine great-circle distance (metres) ─────────────────────────────────
 function haversineDistance(lat1, lon1, lat2, lon2) {
-    const R  = 6371000; // Earth radius in metres
+    const R = 6371000; // Earth radius in metres
     const φ1 = lat1 * Math.PI / 180;
     const φ2 = lat2 * Math.PI / 180;
     const Δφ = (lat2 - lat1) * Math.PI / 180;
     const Δλ = (lon2 - lon1) * Math.PI / 180;
-    const a  = Math.sin(Δφ / 2) * Math.sin(Δφ / 2)
-             + Math.cos(φ1) * Math.cos(φ2)
-             * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2)
+        + Math.cos(φ1) * Math.cos(φ2)
+        * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 function initializeDroneWebSocket() {
-    const WS_URL = 'ws://localhost:9002';
+    const WS_URL = 'ws://127.0.0.1:9002';
     const RECONNECT_DELAY_MS = 3000;
 
     // Tracks drone connection state — only log to console on actual changes
@@ -211,9 +211,9 @@ function initializeDroneWebSocket() {
                         const update = {};
                         if (typeof data.groundspeed === 'number')
                             update.speed = parseFloat(data.groundspeed.toFixed(1));
-                        if (typeof data.satellites  === 'number')
+                        if (typeof data.satellites === 'number')
                             update.satellites = data.satellites;
-                        if (typeof data.altitude    === 'number')
+                        if (typeof data.altitude === 'number')
                             update.altitude = parseFloat(data.altitude.toFixed(1));
                         if (Object.keys(update).length > 0) compass.updateTelemetry(update);
                     }
@@ -259,8 +259,8 @@ function initializeDroneWebSocket() {
                             }
                         }
                     } else {
-                        if (connected) setHeaderStatus(`${connection}`, 'ready');
-                        else           setHeaderStatus('Waiting for Drone', 'waiting');
+                        if (connected) setHeaderStatus(`${ connection } `, 'ready');
+                                  else           setHeaderStatus('Waiting for Drone', 'waiting');
                     }
                 }
 
@@ -361,7 +361,7 @@ function initializeDroneWebSocket() {
 //         );
 
 //         console.log('✅ Simple Home Marker added: Home Location');
-//         console.log(`📍 Total markers on map: ${tmap.getMarkerCount()}`);
+//         console.log(`📍 Total markers on map: ${ tmap.getMarkerCount() } `);
 
 //         if (window.MsgConsole) {
 //             window.MsgConsole.success('🏠 Home Marker loaded');
@@ -425,44 +425,6 @@ function initializeVideo() {
             console.log('ℹ️ video-stream.js not loaded, skipping video initialization');
         }
 
-        // ── Inject webcam toggle button into the video container ─────────────
-        const videoContainer = document.getElementById('videoContainer');
-        if (videoContainer && !document.getElementById('webcamToggleBtn')) {
-            const btn = document.createElement('button');
-            btn.id = 'webcamToggleBtn';
-            btn.title = 'Toggle Webcam';
-            btn.innerHTML = '📷 Webcam';
-            btn.style.cssText = `
-                position: absolute;
-                top: 8px; right: 8px;
-                z-index: 999;
-                background: rgba(0,0,0,0.65);
-                color: #fff;
-                border: 1px solid rgba(255,255,255,0.3);
-                border-radius: 6px;
-                padding: 4px 10px;
-                font-size: 12px;
-                cursor: pointer;
-                backdrop-filter: blur(4px);
-                transition: background 0.2s;
-            `;
-            btn.onmouseenter = () => btn.style.background = 'rgba(0,180,80,0.75)';
-            btn.onmouseleave = () => btn.style.background = 'rgba(0,0,0,0.65)';
-            btn.onclick = () => {
-                window.VideoStream.toggleWebcam().then(() => {
-                    const on = window.VideoStream.isWebcamActive();
-                    btn.innerHTML = on ? '🔴 Stop Webcam' : '📷 Webcam';
-                    btn.style.background = on
-                        ? 'rgba(200,0,0,0.75)'
-                        : 'rgba(0,0,0,0.65)';
-                });
-            };
-            // Make sure the container is position:relative so absolute child works
-            if (getComputedStyle(videoContainer).position === 'static')
-                videoContainer.style.position = 'relative';
-            videoContainer.appendChild(btn);
-            console.log('✅ Webcam toggle button injected');
-        }
 
     } catch (error) {
         console.error('❌ Error initializing video:', error);
@@ -486,10 +448,14 @@ function initializeVideoMaximize() {
         return;
     }
 
+    // ── Wire the maximize/minimize button ─────────────────────────────────
     const maxBtn = document.getElementById('videoMaxBtn');
     if (maxBtn) {
-        maxBtn.style.display = 'none';
-        console.log('🔒 Maximize button hidden - using click to toggle');
+        maxBtn.style.display = '';
+        maxBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleVideoMaximize();
+        });
     }
 
     function toggleVideoMaximize() {
@@ -500,12 +466,12 @@ function initializeVideoMaximize() {
 
             videoContainer.classList.add('maximized');
             mapContainer.classList.add('minimized');
-            videoContainer.style.cursor = 'zoom-out';
+            if (maxBtn) maxBtn.innerHTML = _iconMinimize();
 
             console.log('✅ Video maximized, map minimized');
 
             if (window.MsgConsole) {
-                window.MsgConsole.info('Video maximized - Click video or map to restore');
+                window.MsgConsole.info('Video maximized — press V or click ⧆ to restore');
             }
 
             setTimeout(() => {
@@ -520,7 +486,7 @@ function initializeVideoMaximize() {
 
             videoContainer.classList.remove('maximized');
             mapContainer.classList.remove('minimized');
-            videoContainer.style.cursor = 'zoom-in';
+            if (maxBtn) maxBtn.innerHTML = _iconMaximize();
 
             console.log('✅ Default view restored');
 
@@ -540,21 +506,14 @@ function initializeVideoMaximize() {
                             }
                         });
 
-                        console.log(`🔄 Map resize attempt at ${delay}ms`);
+                        console.log(`🔄 Map resize attempt at ${ delay } ms`);
                     }
                 }, delay);
             });
         }
     }
 
-    videoContainer.addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-            return;
-        }
 
-        console.log('🖱️ Video container clicked - toggling view');
-        toggleVideoMaximize();
-    });
 
     mapContainer.addEventListener('click', (e) => {
         if (mapContainer.classList.contains('minimized')) {
@@ -591,8 +550,24 @@ function initializeVideoMaximize() {
         }
     });
 
-    videoContainer.style.cursor = 'zoom-in';
     videoContainer.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+
+    // SVG icon helpers
+    function _iconMaximize() {
+        return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+            <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+        </svg>`;
+    }
+    function _iconMinimize() {
+        return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/>
+            <line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/>
+        </svg>`;
+    }
+    if (maxBtn) maxBtn.innerHTML = _iconMaximize();
 
     window.VideoMaximize = {
         toggle: toggleVideoMaximize,
@@ -691,10 +666,10 @@ function integrateWeatherDashboard() {
     console.log('✅ Map click enabled');
 
     tmap.onClick((lat, lng, e) => {
-        console.log(`🖱️ Map clicked at: ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+        console.log(`🖱️ Map clicked at: ${ lat.toFixed(6) }, ${ lng.toFixed(6) } `);
 
         if (window.WaypointManager && window.WaypointManager.currentMode) {
-            console.log(`📍 WAYPOINT MODE ACTIVE: ${window.WaypointManager.currentMode}`);
+            console.log(`📍 WAYPOINT MODE ACTIVE: ${ window.WaypointManager.currentMode } `);
             console.log('Routing click to WaypointManager...');
             window.WaypointManager.handleMapClick(lat, lng, e);
             return;
@@ -709,7 +684,7 @@ function integrateWeatherDashboard() {
         weatherDashboard.onMapClick(lat, lng);
 
         if (window.MsgConsole) {
-            window.MsgConsole.info(`Weather: ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+            window.MsgConsole.info(`Weather: ${ lat.toFixed(4) }, ${ lng.toFixed(4) } `);
         }
     });
 
@@ -800,10 +775,10 @@ function addCustomLocation(lat, lng, name, options = {}) {
     };
 
     const marker = tmap.addStaticLocation(lat, lng, name, defaultOptions);
-    console.log(`✅ Added custom location: ${name} at ${lat}, ${lng}`);
+    console.log(`✅ Added custom location: ${ name } at ${ lat }, ${ lng } `);
 
     if (window.MsgConsole) {
-        window.MsgConsole.success(`📍 Added: ${name}`);
+        window.MsgConsole.success(`📍 Added: ${ name } `);
     }
 
     return marker;
@@ -828,10 +803,10 @@ function addCustomHomeMarker(lat, lng, name = 'Home', options = {}) {
     };
 
     const marker = tmap.addRotatingHomeMarker(lat, lng, name, defaultOptions);
-    console.log(`✅ Added home marker: ${name} at ${lat}, ${lng}`);
+    console.log(`✅ Added home marker: ${ name } at ${ lat }, ${ lng } `);
 
     if (window.MsgConsole) {
-        window.MsgConsole.success(`🏠 Added: ${name}`);
+        window.MsgConsole.success(`🏠 Added: ${ name } `);
     }
 
     return marker;
@@ -852,7 +827,7 @@ function goHome() {
 function centerOnLocation(lat, lng, zoom = 15) {
     if (tmap) {
         tmap.setCenter(lat, lng, zoom);
-        console.log(`🎯 Map centered on ${lat}, ${lng}`);
+        console.log(`🎯 Map centered on ${ lat }, ${ lng } `);
     }
 }
 
@@ -953,7 +928,7 @@ window.GCS = {
         if (tmap && tmap.droneMarker) {
             const pos = tmap.droneMarker.getLatLng();
             tmap.setCenter(pos.lat, pos.lng, 18);
-            console.log(`🚁 Centered on drone: ${pos.lat.toFixed(6)}, ${pos.lng.toFixed(6)}`);
+            console.log(`🚁 Centered on drone: ${ pos.lat.toFixed(6) }, ${ pos.lng.toFixed(6) } `);
         } else {
             console.warn('⚠️ No drone marker yet');
         }

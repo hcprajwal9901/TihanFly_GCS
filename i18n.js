@@ -285,35 +285,43 @@
     }
 
     wrap.innerHTML = '';
-    wrap.style.cssText = 'position:relative; display:flex; align-items:center;';
+    wrap.style.cssText = 'position:relative; display:flex; align-items:center; margin-left: 20px;';
 
-    // Globe button
+    // Combobox button
     const btn = document.createElement('button');
     btn.id = 'langToggleBtn';
-    btn.title = 'Change Language / மொழி மாற்று';
+    btn.title = 'Select Language / மொழியைத் தேர்ந்தெடு';
+    
+    // Determine current language label
+    const currentLangObj = LANGUAGES.find(l => l.code === currentLang) || LANGUAGES[0];
+    const btnLabel = currentLangObj.label;
+
     btn.innerHTML = `
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
-           style="display:block;">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/>
-        <path d="M2 12h20M12 2c-2.5 3-4 6.5-4 10s1.5 7 4 10M12 2c2.5 3 4 6.5 4 10s-1.5 7-4 10"
-              stroke="currentColor" stroke-width="1.8" fill="none"/>
+      <span class="lang-btn-text" style="font-weight:600; margin-right:6px; pointer-events:none;">${btnLabel}</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+           stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+           style="pointer-events:none; transition: transform 0.3s;">
+        <polyline points="6 9 12 15 18 9"></polyline>
       </svg>`;
     btn.style.cssText = `
-      background: transparent;
-      border: 1.5px solid rgba(255,255,255,0.25);
-      border-radius: 8px;
-      color: #fff;
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 6px;
+      color: #333;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 34px;
-      height: 34px;
-      transition: border-color 0.2s, background 0.2s;
+      padding: 0 14px;
+      height: 36px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       flex-shrink: 0;
+      font-size: 13.5px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
     `;
-    btn.onmouseenter = () => { btn.style.borderColor = 'rgba(255,255,255,0.6)'; btn.style.background = 'rgba(255,255,255,0.1)'; };
-    btn.onmouseleave = () => { btn.style.borderColor = 'rgba(255,255,255,0.25)'; btn.style.background = 'transparent'; };
+    btn.onmouseenter = () => { btn.style.borderColor = 'rgba(230,0,126,0.5)'; };
+    btn.onmouseleave = () => { btn.style.borderColor = 'rgba(0,0,0,0.15)'; };
 
     // Dropdown panel
     const dropdown = document.createElement('div');
@@ -390,6 +398,7 @@
         #langToggleBtn.active-lang {
           border-color: #e6007e !important;
           background: rgba(230,0,126,0.15) !important;
+          color: #e6007e !important;
         }
       `;
       document.head.appendChild(style);
@@ -410,6 +419,11 @@
           currentLang = lang.code;
           localStorage.setItem('tihan_lang', currentLang);
           applyTranslations();
+          
+          // Update button text
+          const textSpan = btn.querySelector('.lang-btn-text');
+          if (textSpan) textSpan.textContent = lang.label;
+          
           renderOptions();
           closeDropdown();
         });
@@ -425,11 +439,15 @@
       open = true;
       dropdown.style.display = 'block';
       btn.classList.add('active-lang');
+      const svg = btn.querySelector('svg');
+      if (svg) svg.style.transform = 'rotate(180deg)';
     }
     function closeDropdown() {
       open = false;
       dropdown.style.display = 'none';
-      if (currentLang === 'en') btn.classList.remove('active-lang');
+      btn.classList.remove('active-lang');
+      const svg = btn.querySelector('svg');
+      if (svg) svg.style.transform = 'rotate(0deg)';
     }
 
     btn.addEventListener('click', (e) => {
@@ -439,9 +457,6 @@
 
     document.addEventListener('click', () => { if (open) closeDropdown(); });
     dropdown.addEventListener('click', e => e.stopPropagation());
-
-    // Mark button active if non-English lang is active
-    if (currentLang !== 'en') btn.classList.add('active-lang');
 
     wrap.appendChild(btn);
     wrap.appendChild(dropdown);

@@ -491,8 +491,14 @@ function handleBackendMessage(message) {
         // ── Arm/disarm/mode events ────────────────────────────────────────────
         case 'event': {
             const evt = message.event;
-            if (evt === 'armed')        window.MsgConsole?.arm?.(message.message);
-            else if (evt === 'disarmed') window.MsgConsole?.disarm?.(message.message);
+            if (evt === 'armed') {
+                window.MsgConsole?.arm?.(message.message);
+                window.ArmControl?.setArmedState?.(true);
+            }
+            else if (evt === 'disarmed') {
+                window.MsgConsole?.disarm?.(message.message);
+                window.ArmControl?.setArmedState?.(false);
+            }
             else if (evt === 'mode_change') {
                 window.MsgConsole?.info('\ud83d\udeeb\ufe0f ' + message.message);
                 const modeText = document.getElementById('modeIndicatorText');
@@ -643,8 +649,30 @@ function handleBackendMessage(message) {
             break;
         }
 
+        // ── Video stream status (from video_server.py via C++ backend) ────────
+        // Dispatched as a CustomEvent so video-stream.js can receive it even
+        // after window.ws has been replaced by a reconnect.
+        case 'video_status':
+            window.dispatchEvent(new CustomEvent('video_status', { detail: message }));
+            break;
+
+        // ── Parameter value (from param manager) ─────────────────────────────
+        case 'parameter':
+        case 'param_value':
+            window.dispatchEvent(new CustomEvent('param_value', { detail: message }));
+            break;
+
+        // ── Flight plan ACK ───────────────────────────────────────────────────
+        case 'flight_plan_ack':
+            window.handleFlightPlanAck?.(message);
+            break;
+
         default:
-            console.log('[WS] Unhandled message type:', message.type);
+            // Suppress noisy unknown-type logs for known-unhandled types
+            if (!['ping', 'pong'].includes(message.type)) {
+                console.log('[WS] Unhandled message type:', message.type);
+            }
+
     }
 }
 

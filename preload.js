@@ -27,3 +27,11 @@ contextBridge.exposeInMainWorld('electronRTSP', {
      */
     status: () => ipcRenderer.invoke('rtsp-status'),
 });
+
+/**
+ * Save a file via native Save dialog (works with contextIsolation: true).
+ * Usage: await window.electronSaveFile({ defaultName, base64Data, mimeType })
+ */
+contextBridge.exposeInMainWorld('electronSaveFile', {
+    save: (opts) => ipcRenderer.invoke('save_file', opts),
+});
