@@ -1,0 +1,249 @@
+/**
+ * Minimal Message Console - Fully Transparent Background
+ * Color-coded messages: Green (success/arm/takeoff/land), Yellow (warning), Red (error)
+ */
+
+/* ============================================================================
+   MINIMAL CONSOLE CONTAINER - BOTTOM LEFT CORNER, FULLY TRANSPARENT
+   ============================================================================ */
+
+.minimal-console-container {
+    position: fixed;
+    bottom: 30px;
+    left: 20px;
+    width: 400px;
+    max-height: 300px;
+    z-index: 2500;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    font-family: 'Courier New', monospace;
+}
+
+/* ============================================================================
+   CONSOLE MESSAGES - FULLY TRANSPARENT, NO BACKGROUND
+   ============================================================================ */
+
+.minimal-console-messages {
+    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: transparent;
+}
+
+/* Minimal Scrollbar */
+.minimal-console-messages::-webkit-scrollbar {
+    width: 4px;
+}
+
+.minimal-console-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.minimal-console-messages::-webkit-scrollbar-thumb {
+    background: rgba(255, 204, 0, 0.3);
+    border-radius: 2px;
+}
+
+.minimal-console-messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 204, 0, 0.5);
+}
+
+/* ============================================================================
+   MESSAGE ITEMS - FULLY TRANSPARENT WITH COLOR-CODED TEXT
+   ============================================================================ */
+
+.minimal-console-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.5;
+    animation: slideInLeft 0.3s ease;
+    font-weight: 600;
+    pointer-events: auto;
+    background: transparent;
+    border: none;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Message Icon */
+.minimal-message-icon {
+    font-size: 16px;
+    line-height: 1;
+    flex-shrink: 0;
+    font-weight: bold;
+}
+
+/* Message Text */
+.minimal-message-text {
+    flex: 1;
+    word-wrap: break-word;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* Message Timestamp */
+.minimal-message-time {
+    font-size: 10px;
+    opacity: 0.7;
+    white-space: nowrap;
+    font-weight: 600;
+    margin-left: 8px;
+    align-self: flex-start;
+}
+
+/* ============================================================================
+   MESSAGE TYPE COLORS - TRANSPARENT BG, COLORED TEXT ONLY
+   ============================================================================ */
+
+/* SUCCESS/ARM/TAKEOFF/LAND - GREEN TEXT, TRANSPARENT BG */
+.minimal-console-message.success {
+    background: transparent;
+}
+
+.minimal-console-message.success .minimal-message-icon {
+    color: #22c55e;
+}
+
+.minimal-console-message.success .minimal-message-text {
+    color: #22c55e;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 1),
+                 0 0 10px rgba(34, 197, 94, 0.5);
+}
+
+.minimal-console-message.success .minimal-message-time {
+    color: rgba(34, 197, 94, 0.7);
+}
+
+/* WARNING - YELLOW TEXT, TRANSPARENT BG */
+.minimal-console-message.warning {
+    background: transparent;
+}
+
+.minimal-console-message.warning .minimal-message-icon {
+    color: #FFCC00;
+}
+
+.minimal-console-message.warning .minimal-message-text {
+    color: #FFCC00;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 1),
+                 0 0 10px rgba(255, 204, 0, 0.5);
+}
+
+.minimal-console-message.warning .minimal-message-time {
+    color: rgba(255, 204, 0, 0.7);
+}
+
+/* ERROR - RED TEXT, TRANSPARENT BG */
+.minimal-console-message.error {
+    background: transparent;
+}
+
+.minimal-console-message.error .minimal-message-icon {
+    color: #ef4444;
+}
+
+.minimal-console-message.error .minimal-message-text {
+    color: #ef4444;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 1),
+                 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.minimal-console-message.error .minimal-message-time {
+    color: rgba(239, 68, 68, 0.7);
+}
+
+/* INFO - BLUE TEXT, TRANSPARENT BG (optional) */
+.minimal-console-message.info {
+    background: transparent;
+}
+
+.minimal-console-message.info .minimal-message-icon {
+    color: #3b82f6;
+}
+
+.minimal-console-message.info .minimal-message-text {
+    color: #3b82f6;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 1),
+                 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.minimal-console-message.info .minimal-message-time {
+    color: rgba(59, 130, 246, 0.7);
+}
+
+/* ============================================================================
+   HOVER EFFECT - SUBTLE SCALE
+   ============================================================================ */
+
+.minimal-console-message:hover {
+    transform: translateX(5px);
+    transition: transform 0.2s ease;
+    filter: brightness(1.05);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    .minimal-console-container {
+        width: 350px;
+        bottom: 25px;
+        left: 15px;
+    }
+
+    .minimal-console-messages {
+        max-height: 250px;
+    }
+
+    .minimal-console-message {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+
+    .minimal-message-icon {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .minimal-console-container {
+        width: 300px;
+        bottom: 20px;
+        left: 10px;
+    }
+
+    .minimal-console-messages {
+        max-height: 200px;
+    }
+
+    .minimal-console-message {
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+
+    .minimal-message-icon {
+        font-size: 13px;
+    }
+
+    .minimal-message-time {
+        font-size: 9px;
+    }
+}

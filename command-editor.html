@@ -1,0 +1,219 @@
+<!-- Command Editor Panel - Top Right Below Header -->
+<div id="commandEditorPanel" class="command-editor-panel">
+    
+    <!-- Editor Header -->
+    <div class="editor-header">
+        <div class="editor-title">
+            <svg class="editor-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 3L4 7L8 11M16 13L20 17L16 21M12 3L8 21" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            <span>Command Editor</span>
+        </div>
+    </div>
+    
+    <!-- Editor Tabs -->
+    <div class="editor-tabs">
+        <button class="editor-tab active" data-tab="mission">Mission</button>
+        <button class="editor-tab" data-tab="waypoints">Waypoints</button>
+        <button class="editor-tab" data-tab="fence">Fence</button>
+        <button class="editor-tab" data-tab="rally">Rally</button>
+    </div>
+    
+    <!-- Editor Content -->
+    <div class="editor-content">
+        
+        <!-- Mission Panel -->
+        <div class="tab-panel active" id="missionPanel">
+            <div class="form-group">
+                <label>All Altitudes</label>
+                <select class="form-control">
+                    <option>Relative To Launch</option>
+                    <option>Above Mean Sea Level</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Initial Waypoint Alt.</label>
+                <input type="number" class="form-control" value="50.0" step="0.1">
+            </div>
+            <div class="form-group">
+                <label>Default Speed</label>
+                <input type="number" class="form-control" value="10.0" step="0.1">
+            </div>
+            <div class="form-group">
+                <label>Loiter Radius</label>
+                <input type="number" class="form-control" value="50.0" step="1">
+            </div>
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" checked>
+                    Auto RTL after mission
+                </label>
+            </div>
+        </div>
+        
+        <!-- Waypoints Panel (NEW) -->
+        <div class="tab-panel" id="waypointsPanel">
+            <!-- Waypoint List Header -->
+            <div class="waypoint-list-header">
+                <div class="waypoint-count">
+                    <span id="waypointCountDisplay">0 Waypoints</span>
+                </div>
+                <button class="refresh-waypoints-btn" id="refreshWaypointsBtn" title="Refresh Waypoint List">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 10C21 10 18.995 7.26822 17.3662 5.63824C15.7373 4.00827 13.4864 3 11 3C6.02944 3 2 7.02944 2 12C2 16.9706 6.02944 21 11 21C15.1031 21 18.5649 18.2543 19.6482 14.5M21 10V4M21 10H15" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyWaypointState">
+                <div class="empty-icon">📍</div>
+                <p>No waypoints added yet</p>
+                <small>Click "Add Waypoint" to start creating your mission</small>
+            </div>
+            
+            <!-- Waypoint List -->
+            <div class="waypoint-list" id="waypointList">
+                <!-- Waypoints will be dynamically added here -->
+            </div>
+        </div>
+        
+        <!-- Waypoint Details Panel (for editing selected waypoint) -->
+        <div class="waypoint-details-panel" id="waypointDetailsPanel" style="display: none;">
+            <div class="details-header">
+                <button class="back-to-list-btn" id="backToListBtn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Back to List
+                </button>
+            </div>
+            
+            <div class="details-title">
+                <span id="editingWaypointTitle">Waypoint 1</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Waypoint ID</label>
+                <input type="text" class="form-control" id="waypointIdField" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label>Latitude</label>
+                <input type="number" class="form-control" id="waypointLatField" step="0.000001">
+            </div>
+            
+            <div class="form-group">
+                <label>Longitude</label>
+                <input type="number" class="form-control" id="waypointLngField" step="0.000001">
+            </div>
+            
+            <div class="form-group">
+                <label>Altitude (meters)</label>
+                <input type="number" class="form-control" id="waypointAltField" step="0.1">
+            </div>
+            
+            <div class="form-group">
+                <label>Type</label>
+                <select class="form-control" id="waypointTypeField">
+                    <!-- Navigation Commands -->
+                    <option value="waypoint">Waypoint</option>
+                    <option value="spline-waypoint">Spline Waypoint</option>
+                    <option value="loiter">Loiter</option>
+                    <option value="loiter-turns">Loiter (turns)</option>
+                    <option value="loiter-time">Loiter (time)</option>
+                    <option value="loiter-altitude">Loiter (altitude)</option>
+                    
+                    <!-- Launch & Landing -->
+                    <option value="home">Home/Takeoff</option>
+                    <option value="takeoff">Takeoff</option>
+                    <option value="land">Land</option>
+                    <option value="land-start">Land Start</option>
+                    <option value="rtl">Return To Launch</option>
+                    
+                    <!-- Altitude -->
+                    <option value="change-altitude">Change Altitude</option>
+                    
+                    <!-- Control Commands -->
+                    <option value="guided-enable">Guided Enable</option>
+                    <option value="set-flight-mode">Set Flight Mode</option>
+                    <option value="jump-to-item">Jump to Item</option>
+                    <option value="change-speed">Change Speed</option>
+                    <option value="set-launch-location">Set Launch Location</option>
+                    
+                    <!-- Delays & Timing -->
+                    <option value="delay-until">Delay Until</option>
+                    <option value="delay">Delay</option>
+                    <option value="wait-for-distance">Wait for Distance</option>
+                    <option value="wait-for-yaw">Wait for Yaw</option>
+                    
+                    <!-- Relay & Servo -->
+                    <option value="set-relay">Set Relay</option>
+                    <option value="cycle-relay">Cycle Relay</option>
+                    <option value="set-servo">Set Servo</option>
+                    <option value="cycle-servo">Cycle Servo</option>
+                    
+                    <!-- Camera Commands -->
+                    <option value="region-of-interest">Region of Interest</option>
+                    <option value="camera-config">Camera Config</option>
+                    <option value="camera-control">Camera Control</option>
+                    <option value="camera-trigger-distance">Camera Trigger Distance</option>
+                    
+                    <!-- Mount & Gimbal -->
+                    <option value="control-mount">Control Mount</option>
+                    <option value="gimbal-manager-pitchyaw">Gimbal Manager PitchYaw</option>
+                    <option value="gripper-mechanism">Gripper Mechanism</option>
+                    
+                    <!-- Safety & Limits -->
+                    <option value="enable-geofence">Enable Geofence</option>
+                    <option value="trigger-parachute">Trigger Parachute</option>
+                    <option value="inverted-flight">Inverted Flight</option>
+                    <option value="guided-limits">Guided Limits</option>
+                    
+                    <!-- Advanced -->
+                    <option value="autotune-enable">AutoTune Enable</option>
+                </select>
+            </div>
+            
+            <div class="details-actions">
+                <button class="btn-save" id="saveWaypointBtn">Save Changes</button>
+                <button class="btn-delete" id="deleteWaypointBtn">Delete Waypoint</button>
+            </div>
+        </div>
+        
+        <!-- Fence Panel -->
+        <div class="tab-panel" id="fencePanel">
+            <div class="info-message">
+                <p>Fence configuration coming soon...</p>
+            </div>
+            <div class="form-group">
+                <label>Fence Type</label>
+                <select class="form-control">
+                    <option>Inclusion Fence</option>
+                    <option>Exclusion Fence</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Max Altitude</label>
+                <input type="number" class="form-control" value="100.0" step="1">
+            </div>
+        </div>
+        
+        <!-- Rally Panel -->
+        <div class="tab-panel" id="rallyPanel">
+            <div class="info-message">
+                <p>Rally points coming soon...</p>
+            </div>
+            <div class="form-group">
+                <label>Rally Point Alt.</label>
+                <input type="number" class="form-control" value="50.0" step="0.1">
+            </div>
+            <div class="form-group">
+                <label>Rally Land Alt.</label>
+                <input type="number" class="form-control" value="10.0" step="0.1">
+            </div>
+        </div>
+        
+    </div>
+    
+</div>

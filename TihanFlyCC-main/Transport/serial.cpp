@@ -1,0 +1,85 @@
+#include "serial.h"
+
+SerialTransport::SerialTransport(asio::io_context& io,
+                                 const std::string& port,
+                                 int baudrate)
+    : serial_(io)
+{
+    try {
+        serial_.open(port);
+        serial_.set_option(asio::serial_port_base::baud_rate(baudrate));
+        std::cout << "[Serial] Opened " << port << "\n";
+    } catch (...) {
+        std::cout << "[Serial] Failed to open\n";
+    }
+}
+
+void SerialTransport::start()
+{
+    do_receive();
+}
+
+void SerialTransport::async_send(const uint8_t* data, std::size_t length)
+{
+    if (!serial_.is_open()) return;
+
+    asio::async_write(serial_,
+        asio::buffer(data, length),
+        [](auto, auto){});
+}
+
+void SerialTransport::set_receive_callback(ReceiveCallback cb)
+{
+    callback_ = cb;
+}
+
+void SerialTransport::stop()
+{
+    if (serial_.is_open())
+        serial_.close();
+}
+
+bool SerialTransport::is_open() const
+{
+    return serial_.is_open();
+}
+
+bool SerialTransport::is_active()
+{
+    if (!active_) return false;
+
+    auto now  = std::chrono::steady_clock::now();
+    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(
+        now - last_receive_).count();
+
+    return diff < 2000;
+}
+
+void SerialTransport::do_receive()
+{
+    serial_.async_read_some(
+        asio::buffer(buffer_, sizeof(buffer_)),
+        [this](std::error_code ec, std::size_t len)
+        {
+            if (ec)
+            {
+                // Port was closed (stop() called) or a hardware error occurred.
+                // Do NOT re-arm — spinning on a closed/errored port wastes CPU.
+                // The serial monitor thread will reopen and call start() again.
+                if (ec != asio::error::operation_aborted)
+                    std::cout << "[Serial] Receive error: " << ec.message() << "\n";
+                return;
+            }
+
+            if (len > 0)
+            {
+                active_       = true;
+                last_receive_ = std::chrono::steady_clock::now();
+
+                if (callback_)
+                    callback_(buffer_, len);
+            }
+
+            do_receive();
+        });
+}

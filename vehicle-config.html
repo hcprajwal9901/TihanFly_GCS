@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ti-NARI Firmware Flasher</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vehicle-config.css">
+</head>
+<body>
+
+<div class="root">
+
+  <!-- ═══════════════════════════ LEFT PANEL ═══════════════════════════ -->
+  <div class="panel panel-left">
+
+    <!-- Header -->
+    <div class="flasher-header">
+      <div class="flasher-title">
+        <svg class="flasher-icon" viewBox="0 0 24 24" fill="none">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
+                stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+        Ti-NARI Firmware Flasher
+      </div>
+      <button class="btn-refresh" id="refreshBtn">
+        <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
+          <path d="M21 10C21 10 18.995 7.268 17.366 5.638C15.737 4.008 13.486 3 11 3
+                   C6.029 3 2 7.029 2 12C2 16.971 6.029 21 11 21
+                   C15.103 21 18.565 18.254 19.648 14.5M21 10V4M21 10H15"
+                stroke="currentColor" stroke-width="2"/>
+        </svg>
+        ⟳ Refresh Ports
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="flasher-body">
+
+      <!-- Serial Port -->
+      <div>
+        <div class="section-label">Select Serial Port:</div>
+        <div class="port-table-wrap">
+          <table class="port-table">
+            <thead>
+              <tr>
+                <th>Port</th>
+                <th>Board ID</th>
+                <th>Manufacturer</th>
+                <th>Brand</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="port-row" data-port="/dev/ttyS4">
+                <td>/dev/ttyS4</td><td></td><td></td><td></td><td>n/a</td>
+              </tr>
+              <tr class="port-row" data-port="/dev/ttyS31">
+                <td>/dev/ttyS31</td><td></td><td></td><td></td><td>n/a</td>
+              </tr>
+              <tr class="port-row" data-port="/dev/ttyS30">
+                <td>/dev/ttyS30</td><td></td><td></td><td></td><td>n/a</td>
+              </tr>
+              <tr class="port-row" data-port="/dev/ttyS29">
+                <td>/dev/ttyS29</td><td></td><td></td><td></td><td>n/a</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Baud Settings -->
+      <div class="baud-grid">
+        <div class="baud-field">
+          <span class="baud-lbl">Bootloader Baud:</span>
+          <select class="baud-select">
+            <option>115200</option>
+            <option>57600</option>
+            <option>38400</option>
+            <option>9600</option>
+          </select>
+        </div>
+        <div class="baud-field">
+          <span class="baud-lbl">Flash Baud:</span>
+          <select class="baud-select">
+            <option>115200</option>
+            <option>57600</option>
+            <option>38400</option>
+            <option>9600</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Flashing Log -->
+      <div>
+        <div class="section-label">Flashing Log:</div>
+        <div class="log-box" id="flashLog">
+          <span class="log-line info">→ Found 32 serial port(s)</span>
+          <span class="log-line info">→ Found 32 serial port(s)</span>
+        </div>
+      </div>
+
+      <!-- Progress Bars -->
+      <div class="progress-section">
+        <div class="progress-row">
+          <span class="progress-lbl">Erase Progress:</span>
+          <div class="progress-track">
+            <div class="progress-fill fill-erase" id="eraseBar" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="progress-row">
+          <span class="progress-lbl">Write Progress:</span>
+          <div class="progress-track">
+            <div class="progress-fill fill-write" id="writeBar" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /flasher-body -->
+  </div><!-- /panel-left -->
+
+
+  <!-- ═══════════════════════════ RIGHT PANEL ═══════════════════════════ -->
+  <div class="panel panel-right">
+
+    <div class="drone-panel-header">
+      <div class="drone-panel-title">Select Drone Type</div>
+    </div>
+
+    <div class="drone-list" id="droneList">
+
+      <!-- Ti-Shadow -->
+      <div class="drone-card" data-id="ti-shadow">
+        <div class="drone-img-wrap">
+          <img src="resources/firmware/ti-shadow.png" alt="Ti-Shadow" class="drone-img"
+               onerror="this.style.opacity='0.15'">
+        </div>
+        <div class="drone-info">
+          <span class="drone-name">Ti-Shadow</span>
+          <span class="drone-type">Surveillance Drone</span>
+        </div>
+        <div class="drone-actions">
+          <button class="btn btn-unlock" onclick="doUnlock('ti-shadow')">
+            <svg viewBox="0 0 24 24" fill="none" width="11" height="11">
+              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 11V7a4 4 0 018 0" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            UNLOCK
+          </button>
+          <button class="btn btn-install" data-id="ti-shadow" onclick="doInstall('ti-shadow')">
+            <svg viewBox="0 0 24 24" fill="none" width="11" height="11">
+              <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            INSTALL
+          </button>
+        </div>
+      </div>
+
+      <!-- Spider Drone -->
+      <div class="drone-card" data-id="spider">
+        <div class="drone-img-wrap">
+          <img src="resources/firmware/spider.png" alt="Spider Drone" class="drone-img"
+               onerror="this.style.opacity='0.15'">
+        </div>
+        <div class="drone-info">
+          <span class="drone-name">Spider Drone</span>
+          <span class="drone-type">Hexacopter Drone</span>
+        </div>
+        <div class="drone-actions">
+          <button class="btn btn-unlock" onclick="doUnlock('spider')">
+            <svg viewBox="0 0 24 24" fill="none" width="11" height="11">
+              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 11V7a4 4 0 018 0" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            UNLOCK
+          </button>
+          <button class="btn btn-install" data-id="spider" onclick="doInstall('spider')">
+            <svg viewBox="0 0 24 24" fill="none" width="11" height="11">
+              <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            INSTALL
+          </button>
+        </div>
+      </div>
+
+      <!-- Kala Drone -->
+      <div class="drone-card" data-id="kala">
+        <div class="drone-img-wrap">
+          <img src="resources/firmware/Kala.png" alt="Kala Drone" class="drone-img"
+               onerror="this.style.opacity='0.15'">
+        </div>
+        <div class="drone-info">
+          <span class="drone-name">Kala Drone</span>
+          <span class="drone-type">Payload Dropping Drone</span>
+        </div>
+        <div class="drone-actions">
+          <button class="btn btn-unlock" onclick="doUnlock('kala')">
+            <svg viewBox="0 0 24 24" fill="none" width="11" height="11">
+              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 11V7a4 4 0 018 0" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            UNLOCK
+          </button>
+          <button class="btn btn-install" data-id="kala" onclick="doInstall('kala')">
+            <svg viewBox="0 0 24 24" fill="none" width="11" height="11">
+              <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            INSTALL
+          </button>
+        </div>
+      </div>
+
+      <!-- Palyanka Drone -->
+      <div class="drone-card" data-id="palyanka">
+        <div class="drone-img-wrap">
+          <img src="resources/firmware/palyanka.png" alt="Palyanka Drone" class="drone-img"
+               onerror="this.style.opacity='0.15'">
+        </div>
+        <div class="drone-info">
+          <span class="drone-name">Palyanka Drone</span>
+          <span class="drone-type">Air Taxi</span>
+        </div>
+        <div class="drone-actions">
+          <button class="btn btn-unlock" onclick="doUnlock('palyanka')">
+            <svg viewBox="0 0 24 24" fill="none" width="11" height="11">
+              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 11V7a4 4 0 018 0" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            UNLOCK
+          </button>
+          <button class="btn btn-install" data-id="palyanka" onclick="doInstall('palyanka')">
+            <svg viewBox="0 0 24 24" fill="none" width="11" height="11">
+              <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            INSTALL
+          </button>
+        </div>
+      </div>
+
+      <!-- Chakravyuh Drone -->
+      <div class="drone-card" data-id="chakravyuh">
+        <div class="drone-img-wrap">
+          <img src="resources/firmware/Chakravyuh.png" alt="Chakravyuh Drone" class="drone-img"
+               onerror="this.style.opacity='0.15'">
+        </div>
+        <div class="drone-info">
+          <span class="drone-name">Chakrayukhan Drone</span>
+          <span class="drone-type">Heavy Payload Cargo Drone</span>
+          <span class="drone-tag">Industrial-grade heavy lifting</span>
+        </div>
+        <div class="drone-actions">
+          <button class="btn btn-unlock" onclick="doUnlock('chakravyuh')">
+            <svg viewBox="0 0 24 24" fill="none" width="11" height="11">
+              <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+              <path d="M8 11V7a4 4 0 018 0" stroke="currentColor" stroke-width="2"/>
+            </svg>
+            UNLOCK
+          </button>
+          <button class="btn btn-install" data-id="chakravyuh" onclick="doInstall('chakravyuh')">
+            <svg viewBox="0 0 24 24" fill="none" width="11" height="11">
+              <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            INSTALL
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /drone-list -->
+  </div><!-- /panel-right -->
+
+</div><!-- /root -->
+
+<script src="vehicle-config.js"></script>
+</body>
+</html>

@@ -1,0 +1,493 @@
+/**
+ * Flight Control Buttons Stylesheet - LIGHT THEME WITH GRAY ICONS
+ * Takeoff, Land, RTL: Gray icons matching header style
+ */
+
+/* ============================================================================
+   FLIGHT CONTROLS STRIP - TOP LEFT CORNER WITH LIGHT BACKGROUND
+   ============================================================================ */
+
+.flight-controls-strip {
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 2000;
+    pointer-events: none;
+    background: rgba(245, 248, 252, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 12px;
+    border-radius: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.flight-controls-strip * {
+    pointer-events: all;
+}
+
+/* ============================================================================
+   FLIGHT BUTTON - TRANSPARENT STYLE
+   ============================================================================ */
+
+.flight-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 50px;
+    min-height: 50px;
+}
+
+.flight-btn:hover {
+    transform: scale(1.15);
+    background: transparent;
+}
+
+.flight-btn:active {
+    transform: scale(1.05);
+}
+
+.flight-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ============================================================================
+   BUTTON SVG ICONS - GRAY COLOR (MATCHING HEADER)
+   ============================================================================ */
+
+.btn-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.flight-btn:hover .btn-icon {
+    transform: scale(1.15);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* All icons - Dark gray/black color */
+.takeoff-btn .btn-icon,
+.land-btn .btn-icon,
+.rtl-btn .btn-icon {
+    filter: brightness(0) saturate(100%) invert(45%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(90%) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.flight-btn:hover .btn-icon {
+    filter: brightness(0) saturate(100%) invert(25%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(95%) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+/* ============================================================================
+   BUTTON LABELS - DARK COLOR
+   ============================================================================ */
+
+.btn-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.2;
+    margin-top: 2px;
+    color: #1a1a1a;
+    text-shadow: none;
+}
+
+.flight-btn:hover .btn-label {
+    color: #000000;
+    font-weight: 800;
+}
+
+/* ============================================================================
+   INDIVIDUAL BUTTON HOVER EFFECTS
+   ============================================================================ */
+
+/* Subtle hover for all buttons */
+.takeoff-btn:hover,
+.land-btn:hover,
+.rtl-btn:hover {
+    background: transparent;
+}
+
+/* ============================================================================
+   ACTIVE/EXECUTING STATE
+   ============================================================================ */
+
+.flight-btn.executing {
+    animation: pulse-border 1.5s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes pulse-border {
+    0%, 100% {
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(74, 85, 104, 0.5);
+    }
+}
+
+.flight-btn.executing .btn-icon {
+    animation: icon-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes icon-pulse {
+    0%, 100% { 
+        transform: scale(1);
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    50% { 
+        transform: scale(1.2);
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+    }
+}
+
+.flight-btn.executing .btn-label {
+    animation: text-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes text-pulse {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; font-weight: 900; }
+}
+
+/* Executing state colors */
+.takeoff-btn.executing {
+    background: rgba(74, 85, 104, 0.15);
+    box-shadow: 0 0 20px rgba(74, 85, 104, 0.3);
+}
+
+.land-btn.executing {
+    background: rgba(74, 85, 104, 0.15);
+    box-shadow: 0 0 20px rgba(74, 85, 104, 0.3);
+}
+
+.rtl-btn.executing {
+    background: rgba(74, 85, 104, 0.15);
+    box-shadow: 0 0 20px rgba(74, 85, 104, 0.3);
+}
+
+/* ============================================================================
+   TAKEOFF POPUP MODAL - UPDATED WITH YELLOW/GOLDEN ACCENT
+   ============================================================================ */
+
+.takeoff-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.takeoff-modal.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.takeoff-modal-content {
+    background: linear-gradient(135deg, rgba(20, 20, 25, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+    border: 2px solid rgba(255, 204, 0, 0.5);
+    border-radius: 20px;
+    padding: 30px;
+    width: 450px;
+    max-width: 90vw;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9),
+                0 0 40px rgba(255, 204, 0, 0.4);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #FFCC00;
+    text-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-close {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 24px;
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: rgba(230, 0, 126, 0.8);
+    border-color: rgba(230, 0, 126, 1);
+    transform: scale(1.1);
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-label {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.input-field {
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 12px 15px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.input-field:focus {
+    outline: none;
+    border-color: #FFCC00;
+    background: rgba(255, 204, 0, 0.1);
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+}
+
+.input-unit {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.modal-btn-cancel {
+    background: rgba(107, 114, 128, 0.3);
+    color: #ffffff;
+    border: 2px solid rgba(107, 114, 128, 0.5);
+}
+
+.modal-btn-cancel:hover {
+    background: rgba(107, 114, 128, 0.5);
+    transform: scale(1.05);
+}
+
+.modal-btn-confirm {
+    background: linear-gradient(135deg, #FFCC00 0%, #FF9933 100%);
+    color: #000;
+    border: 2px solid #FFCC00;
+    box-shadow: 0 4px 15px rgba(255, 204, 0, 0.4);
+}
+
+.modal-btn-confirm:hover {
+    box-shadow: 0 6px 25px rgba(255, 204, 0, 0.6);
+    transform: scale(1.05);
+}
+
+.modal-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+    .flight-controls-strip {
+        top: 70px;
+        left: 15px;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .flight-btn {
+        width: 68px;
+        min-height: 68px;
+        padding: 10px 8px;
+    }
+
+    .btn-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .btn-label {
+        font-size: 11px;
+    }
+
+    .takeoff-modal-content {
+        width: 400px;
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .flight-controls-strip {
+        top: 65px;
+        left: 12px;
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .flight-btn {
+        width: 62px;
+        min-height: 62px;
+        padding: 8px 6px;
+    }
+
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        margin-bottom: 4px;
+    }
+
+    .btn-label {
+        font-size: 10px;
+    }
+
+    .takeoff-modal-content {
+        width: 350px;
+        padding: 20px;
+    }
+
+    .modal-title {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .flight-controls-strip {
+        top: 60px;
+        left: 10px;
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .flight-btn {
+        width: 56px;
+        min-height: 56px;
+        padding: 8px 5px;
+    }
+
+    .btn-icon {
+        width: 28px;
+        height: 28px;
+        margin-bottom: 3px;
+    }
+
+    .btn-label {
+        font-size: 9px;
+    }
+
+    .takeoff-modal-content {
+        width: 320px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .flight-controls-strip {
+        top: 60px;
+        left: 12px;
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .flight-btn {
+        width: 58px;
+        min-height: 58px;
+    }
+
+    .btn-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .btn-label {
+        font-size: 9px;
+    }
+}

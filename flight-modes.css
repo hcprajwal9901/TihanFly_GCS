@@ -1,0 +1,323 @@
+/**
+ * flight-modes.css  —  TiHANFly GCS  —  Flight Modes Panel
+ * Matches reference layout: Current Mode/PWM header, 6 mode rows,
+ * Simple + Super Simple checkboxes, PWM range column, Save Modes button.
+ * Uses :root tokens from settings-window.css.
+ */
+
+/* ══ WRAPPER ══════════════════════════════════════════════════════════════════ */
+.fm-wrap {
+    max-width: 780px;
+}
+
+/* ══ CURRENT STATE BAR ════════════════════════════════════════════════════════ */
+.fm-current-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--r-lg);
+    padding: 16px 24px;
+    margin-bottom: 24px;
+    gap: 32px;
+}
+
+.fm-current-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.fm-current-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border-subtle);
+    flex-shrink: 0;
+}
+
+.fm-current-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    white-space: nowrap;
+}
+
+.fm-current-value {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: .4px;
+}
+
+.fm-current-pwm {
+    color: var(--accent);
+}
+
+/* pulsing live dot */
+.fm-live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--good);
+    box-shadow: 0 0 8px var(--good);
+    flex-shrink: 0;
+    animation: fmDotPulse 2s ease-in-out infinite;
+}
+@keyframes fmDotPulse {
+    0%, 100% { opacity: 1;   box-shadow: 0 0 6px var(--good); }
+    50%       { opacity: .5; box-shadow: 0 0 14px var(--good); }
+}
+
+/* ══ TABLE HEADER ═════════════════════════════════════════════════════════════ */
+.fm-table-head {
+    display: grid;
+    grid-template-columns: 130px 1fr 110px 160px 140px;
+    align-items: center;
+    padding: 8px 20px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--r-md) var(--r-md) 0 0;
+    border-bottom: none;
+    gap: 12px;
+}
+
+.fm-th {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+/* ══ TABLE BODY ══════════════════════════════════════════════════════════════ */
+.fm-table-body {
+    border: 1px solid var(--border-subtle);
+    border-radius: 0 0 var(--r-md) var(--r-md);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* ── Row ─────────────────────────────────────────────────────────────────── */
+.fm-row {
+    display: grid;
+    grid-template-columns: 130px 1fr 110px 160px 140px;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background .14s;
+    position: relative;
+}
+.fm-row:last-child { border-bottom: none; }
+.fm-row:hover { background: var(--bg-hover); }
+
+/* active row accent */
+.fm-row--active {
+    background: rgba(230, 0, 126, .045);
+}
+.fm-row--active::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+}
+
+/* row label */
+.fm-row-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: .3px;
+    white-space: nowrap;
+}
+.fm-row--active .fm-row-label {
+    color: var(--text-primary);
+}
+
+/* ── Mode select ─────────────────────────────────────────────────────────── */
+.fm-select-wrap { display: flex; }
+
+.fm-select {
+    width: 100%;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--r-sm);
+    color: var(--text-primary);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 28px 7px 10px;
+    outline: none;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238b91a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-color: var(--bg-raised);
+}
+.fm-select:focus,
+.fm-select:hover {
+    border-color: var(--border-muted);
+    background-color: var(--bg-hover);
+}
+
+/* active row select gets accent border + tinted background */
+.fm-select--active {
+    border-color: var(--border-accent) !important;
+    background-color: var(--accent-dim) !important;
+    color: var(--text-primary);
+}
+
+.fm-select option   { background: var(--bg-raised); color: var(--text-primary); }
+.fm-select optgroup { background: var(--bg-surface); color: var(--text-muted); font-weight: 700; }
+
+/* ── Checkbox ────────────────────────────────────────────────────────────── */
+.fm-check-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+/* hide native checkbox */
+.fm-checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 0; height: 0;
+    pointer-events: none;
+}
+
+/* custom box */
+.fm-checkmark {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-muted);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s, border-color .15s;
+    position: relative;
+}
+.fm-checkmark::after {
+    content: '';
+    display: block;
+    width: 5px; height: 9px;
+    border: 2px solid transparent;
+    border-top: none; border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+    transition: border-color .15s;
+}
+
+.fm-checkbox:checked ~ .fm-checkmark {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+}
+.fm-checkbox:checked ~ .fm-checkmark::after {
+    border-color: var(--accent);
+}
+
+.fm-check-wrap:hover .fm-checkmark {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+}
+
+.fm-check-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    transition: color .15s;
+}
+.fm-check-wrap:hover .fm-check-text  { color: var(--text-primary); }
+.fm-checkbox:checked ~ .fm-check-text { display: none; } /* label already clear from checkmark */
+
+/* re-show the text (it's a sibling, not a child of checkmark) */
+.fm-check-wrap .fm-check-text { display: inline; }
+
+/* ── PWM range label ─────────────────────────────────────────────────────── */
+.fm-pwm-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: .4px;
+    white-space: nowrap;
+    text-align: right;
+}
+.fm-pwm-label--active {
+    color: var(--accent);
+}
+
+/* ══ FOOTER ══════════════════════════════════════════════════════════════════ */
+.fm-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.fm-save-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    background: var(--good);
+    border: none;
+    border-radius: var(--r-md);
+    color: #0a1a0f;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: .3px;
+    transition: all .18s ease;
+    box-shadow: 0 4px 14px rgba(0, 217, 126, .25);
+}
+.fm-save-btn:hover:not(:disabled) {
+    background: #00f090;
+    box-shadow: 0 6px 20px rgba(0, 217, 126, .4);
+    transform: translateY(-1px);
+}
+.fm-save-btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.fm-save-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* ══ RESPONSIVE ══════════════════════════════════════════════════════════════ */
+@media (max-width: 680px) {
+    .fm-table-head { display: none; }
+    .fm-row {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+        row-gap: 8px;
+    }
+    .fm-row-label    { grid-column: 1 / -1; }
+    .fm-select-wrap  { grid-column: 1 / -1; }
+    .fm-pwm-label    { text-align: left; }
+}

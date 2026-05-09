@@ -1,0 +1,478 @@
+/**
+ * calib-radio.css  —  TiHANFly GCS  —  Radio Calibration Panel
+ * Full-size layout: 3-row CSS grid that fills 100% of the host panel height.
+ */
+
+/* The host element (#panel-calib-radio) must be:
+   display:flex; flex-direction:column; flex:1; overflow:hidden;
+   position:relative  ← required so the calibration popup overlays only this panel
+   so that .mp-radio-root can expand to fill it. */
+
+/* ═══════════════════════════════════════════
+   ROOT — 3-row grid filling 100% height
+   ═══════════════════════════════════════════ */
+.mp-radio-root {
+    display: grid;
+    grid-template-rows: auto 1fr auto;   /* Roll | sticks+boxes | Yaw */
+    height: 100%;
+    width: 100%;
+    background: #2b2b2b;
+    padding: 16px 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+    font-size: 12px;
+    color: #ccc;
+    gap: 12px;
+    overflow: hidden;
+}
+
+/* ── ROW 1: Roll bar ── */
+.mp-top-row {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* ── ROW 2: Sticks + boxes ── */
+.mp-main-row {
+    display: flex;
+    gap: 24px;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Left: vertical sticks — stretch to fill row height */
+.mp-sticks-section {
+    display: flex;
+    gap: 28px;
+    align-items: stretch;
+    flex-shrink: 0;
+    padding: 0 8px;
+}
+
+.mp-stick-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mp-stick-outer {
+    position: relative;
+    width: 54px;
+    height: 100%;
+    min-height: 140px;
+    background: linear-gradient(180deg, #444 0%, #2a2a2a 100%);
+    border: 1px solid #555;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.mp-stick-fill {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(180deg, #c4ff7a 0%, #5ccc00 45%, #2d7a00 100%);
+    transition: height 0.08s linear;
+}
+
+.mp-stick-label {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    white-space: nowrap;
+    font-size: 12px; font-weight: 700;
+    color: #fff; text-shadow: 0 1px 3px #000;
+    z-index: 2; pointer-events: none;
+    letter-spacing: 1.5px;
+}
+
+.mp-stick-val {
+    position: absolute;
+    bottom: 6px; width: 100%;
+    text-align: center;
+    font-size: 11px; font-weight: 700;
+    color: #fff; text-shadow: 0 1px 3px #000;
+    z-index: 2;
+}
+
+.mp-stick-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* Right: radio boxes + calibrate + spektrum */
+.mp-boxes-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+    min-height: 0;
+}
+
+.mp-boxes-grid {
+    display: flex;
+    gap: 10px;
+    flex: 1;
+    min-height: 0;
+}
+
+.mp-boxes-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+/* Radio boxes flex to fill available height evenly */
+.mp-radio-box {
+    position: relative;
+    width: 100%;
+    flex: 1;
+    min-height: 28px;
+    background: #3c3c3c;
+    border: 1px solid #555;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.mp-radio-bar {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: linear-gradient(180deg, #c4ff7a 0%, #5ccc00 55%, #2d7a00 100%);
+    transition: width 0.08s linear;
+}
+
+.mp-radio-label {
+    position: relative; z-index: 2;
+    padding-left: 9px;
+    font-size: 11px; font-weight: 600;
+    color: #ddd; text-shadow: 0 1px 1px #000;
+    white-space: nowrap;
+}
+
+.mp-radio-val {
+    position: relative; z-index: 2;
+    margin-left: 6px;
+    font-size: 11px; font-weight: 700;
+    color: #fff; text-shadow: 0 1px 1px #000;
+}
+
+.mp-calib-row {
+    display: flex;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+.mp-calib-btn {
+    background: #3a3a3a;
+    border: 1px solid #6acd00;
+    color: #9aff5a;
+    font-size: 12px; font-weight: 700;
+    padding: 7px 22px;
+    border-radius: 2px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: background 0.15s, color 0.15s;
+}
+.mp-calib-btn:hover  { background: #5ccc00; color: #000; }
+.mp-calib-btn.running { border-color: #ffaa00; color: #ffaa00; }
+
+.mp-bind-group {
+    position: relative;
+    border: 1px solid #555;
+    border-radius: 2px;
+    padding: 10px 12px 8px;
+    flex-shrink: 0;
+}
+
+.mp-bind-legend {
+    position: absolute;
+    top: -8px; left: 10px;
+    background: #2b2b2b;
+    padding: 0 5px;
+    font-size: 10px; color: #999; font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.mp-bind-btns { display: flex; gap: 6px; }
+
+.mp-bind-btn {
+    background: #3a3a3a;
+    border: 1px solid #6acd00;
+    color: #9aff5a;
+    font-size: 11px; font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.mp-bind-btn:hover { background: #5ccc00; color: #000; }
+
+/* ── ROW 3: Yaw bar ── */
+.mp-bottom-row {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* ── Shared: horizontal bar (Roll / Yaw) ── */
+.mp-hbar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.mp-hbar-outer {
+    position: relative;
+    flex: 1;
+    height: 28px;
+    background: #3a3a3a;
+    border: 1px solid #555;
+    border-radius: 2px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.mp-hbar-fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: linear-gradient(180deg, #c4ff7a 0%, #5ccc00 55%, #2d7a00 100%);
+    transition: width 0.08s linear;
+    min-width: 2px;
+}
+
+/* ── Movable red min/max markers ── */
+
+/* Horizontal bars (Roll, Yaw, Radio boxes): vertical red lines */
+.mp-marker-min-h,
+.mp-marker-max-h {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 2px;
+    z-index: 4;
+    pointer-events: none;
+    transform: translateX(-50%);
+    transition: left 0.08s linear;
+}
+.mp-marker-min-h {
+    background: #ff2222;
+    box-shadow: 0 0 5px rgba(255,34,34,0.8);
+}
+.mp-marker-max-h {
+    background: #ff2222;
+    box-shadow: 0 0 5px rgba(255,34,34,0.8);
+}
+
+/* Vertical sticks (Pitch, Throttle): horizontal red lines */
+.mp-marker-min-v,
+.mp-marker-max-v {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    z-index: 4;
+    pointer-events: none;
+    transform: translateY(50%);
+    transition: bottom 0.08s linear;
+}
+.mp-marker-min-v {
+    background: #ff2222;
+    box-shadow: 0 0 5px rgba(255,34,34,0.8);
+}
+.mp-marker-max-v {
+    background: #ff2222;
+    box-shadow: 0 0 5px rgba(255,34,34,0.8);
+}
+
+.mp-hbar-label {
+    position: relative; z-index: 2;
+    padding-left: 10px;
+    font-weight: 700; font-size: 12px;
+    color: #fff; text-shadow: 0 1px 2px #000;
+    white-space: nowrap;
+}
+
+.mp-hbar-val {
+    position: relative; z-index: 2;
+    margin-left: 8px;
+    font-weight: 700; font-size: 12px;
+    color: #fff; text-shadow: 0 1px 2px #000;
+}
+
+.mp-reverse-label {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; color: #bbb;
+    white-space: nowrap; cursor: pointer; user-select: none;
+    flex-shrink: 0;
+}
+
+.mp-reverse-cb {
+    accent-color: #5ccc00;
+    width: 13px; height: 13px;
+}
+
+/* ═══════════════════════════════════════════
+   RADIO CALIBRATION COMPLETE POPUP
+   Styled to match Mission Planner-style dialog
+   (Image 2: light grey box, plain list, OK btn)
+   ═══════════════════════════════════════════ */
+
+.mp-calib-overlay {
+    position: absolute;   /* scoped to #panel-calib-radio, not the whole page */
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mp-calib-popup {
+    background: #f0f0f0;
+    border: 1px solid #999;
+    border-radius: 0;
+    width: 300px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 4px 4px 12px rgba(0,0,0,0.5);
+    font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+    font-size: 12px;
+    color: #111;
+    animation: mp-popup-drop 0.12s ease-out;
+}
+
+@keyframes mp-popup-drop {
+    from { transform: translateY(-10px); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+}
+
+/* Title bar — dark blue like Windows dialog */
+.mp-calib-popup-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #2e5fa3;
+    color: #fff;
+    padding: 5px 8px 5px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    user-select: none;
+}
+
+.mp-calib-popup-close {
+    background: #c0392b;
+    border: none;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    width: 18px; height: 18px;
+    border-radius: 1px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.1s;
+}
+.mp-calib-popup-close:hover { background: #e74c3c; }
+
+/* Body */
+.mp-calib-popup-body {
+    padding: 12px 14px 8px;
+    flex: 1;
+    overflow-y: auto;
+    background: #f0f0f0;
+    scrollbar-width: thin;
+    scrollbar-color: #bbb #f0f0f0;
+}
+.mp-calib-popup-body::-webkit-scrollbar { width: 5px; }
+.mp-calib-popup-body::-webkit-scrollbar-thumb { background: #bbb; }
+
+.mp-rc-intro {
+    margin: 0 0 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #111;
+}
+
+.mp-rc-note {
+    margin: 0 0 2px;
+    font-size: 11px;
+    color: #444;
+}
+
+.mp-rc-divider {
+    height: 1px;
+    background: #bbb;
+    margin: 8px 0 6px;
+}
+
+/* Column header */
+.mp-rc-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 0 2px 4px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 2px;
+}
+
+/* Each channel row */
+.mp-rc-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.mp-rc-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 2px;
+    font-size: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.mp-rc-row:last-child { border-bottom: none; }
+
+.mp-rc-ch {
+    color: #111;
+    font-weight: 600;
+    min-width: 40px;
+}
+
+.mp-rc-vals {
+    font-family: 'Consolas', 'Courier New', monospace;
+    color: #111;
+    letter-spacing: 0.5px;
+}
+
+/* Footer */
+.mp-calib-popup-footer {
+    padding: 8px 14px 10px;
+    display: flex;
+    justify-content: flex-end;
+    background: #e8e8e8;
+    border-top: 1px solid #ccc;
+    flex-shrink: 0;
+}
+
+.mp-calib-popup-ok {
+    background: #e8e8e8;
+    border: 1px solid #999;
+    color: #111;
+    font-size: 12px;
+    font-weight: 400;
+    padding: 4px 28px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.1s;
+    min-width: 70px;
+}
+.mp-calib-popup-ok:hover  { background: #d0d0d0; }
+.mp-calib-popup-ok:active { background: #bbb; }

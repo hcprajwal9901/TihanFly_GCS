@@ -1,0 +1,543 @@
+/**
+ * Plan Flight Menu Strip Stylesheet - COMPLETE VERSION
+ * Includes menu styling, exit button, mission stats, and weather positioning
+ */
+
+/* ============================================================================
+   PLAN FLIGHT MENU STRIP - TOP LEFT BELOW HEADER
+   ============================================================================ */
+
+.plan-flight-menu-strip {
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(245, 248, 252, 0.98) 0%, rgba(235, 240, 248, 0.98) 100%);
+    backdrop-filter: blur(10px);
+    padding: 14px 12px;
+    border-radius: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15),
+                0 2px 8px rgba(230, 0, 126, 0.1);
+}
+
+.plan-flight-menu-strip * {
+    pointer-events: all;
+}
+
+/* ============================================================================
+   PLAN MENU BUTTON - TRANSPARENT STYLE (MATCHING FLIGHT BUTTONS)
+   ============================================================================ */
+
+.plan-menu-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 50px;
+    min-height: 50px;
+}
+
+.plan-menu-btn:hover {
+    transform: scale(1.15);
+    background: transparent;
+}
+
+.plan-menu-btn:active {
+    transform: scale(1.05);
+}
+
+/* ============================================================================
+   BUTTON ICONS - GRAY COLOR (MATCHING HEADER)
+   ============================================================================ */
+
+.plan-menu-icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 5px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Matching header icon style - dark gray with subtle shadow */
+    filter: brightness(0) saturate(100%) invert(45%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(90%);
+    object-fit: contain;
+    opacity: 0.85;
+}
+
+.plan-menu-btn:hover .plan-menu-icon {
+    transform: scale(1.15);
+    /* Darker on hover with enhanced shadow */
+    filter: brightness(0) saturate(100%) invert(25%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(95%);
+    opacity: 1;
+}
+
+/* ============================================================================
+   BUTTON LABELS - DARK COLOR
+   ============================================================================ */
+
+.plan-menu-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.2;
+    margin-top: 2px;
+    color: #1a1a1a;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    opacity: 0.9;
+}
+
+.plan-menu-btn:hover .plan-menu-label {
+    color: #000000;
+    font-weight: 800;
+    opacity: 1;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================================================
+   DROPDOWN CONTENT - APPEARS ON RIGHT SIDE
+   ============================================================================ */
+
+.plan-menu-dropdown {
+    position: relative;
+}
+
+.plan-menu-content {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 12px);
+    min-width: 190px;
+    background: linear-gradient(135deg, rgba(245, 248, 252, 0.98) 0%, rgba(235, 240, 248, 0.98) 100%);
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2),
+                0 2px 8px rgba(230, 0, 126, 0.15);
+    z-index: 10001;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.plan-menu-dropdown:hover .plan-menu-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.plan-menu-content a {
+    display: block;
+    padding: 12px 18px;
+    color: #1a1a1a;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    position: relative;
+}
+
+.plan-menu-content a:last-child {
+    border-bottom: none;
+}
+
+.plan-menu-content a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #E6007E 0%, #FFCC00 100%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.plan-menu-content a:hover {
+    background: linear-gradient(90deg, rgba(230, 0, 126, 0.08) 0%, rgba(255, 204, 0, 0.05) 100%);
+    color: #E6007E;
+    padding-left: 24px;
+    font-weight: 700;
+}
+
+.plan-menu-content a:hover::before {
+    opacity: 1;
+}
+
+.plan-menu-content a:active {
+    background: rgba(230, 0, 126, 0.15);
+    transform: scale(0.98);
+}
+
+/* ============================================================================
+   EXIT PLAN BUTTON - NO RECTANGLE, CLEAN DESIGN
+   ============================================================================ */
+
+.exit-plan-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: #1a1a1a;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-right: 20px;
+}
+
+.exit-plan-btn:hover {
+    color: #E6007E;
+    transform: translateX(-3px);
+}
+
+.exit-plan-btn:active {
+    transform: translateX(-2px) scale(0.98);
+}
+
+.exit-plan-btn .exit-icon {
+    width: 20px;
+    height: 20px;
+    transition: all 0.3s ease;
+}
+
+.exit-plan-btn:hover .exit-icon {
+    transform: translateX(-2px);
+}
+
+/* ============================================================================
+   PLAN MODE MISSION STATS - CLEAN LAYOUT
+   ============================================================================ */
+
+.plan-mission-stats,
+.plan-total-mission {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.plan-mission-stats {
+    padding-right: 24px;
+    border-right: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.stat-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stat-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.stat-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+    letter-spacing: 0.2px;
+}
+
+.stat-value strong {
+    font-weight: 700;
+    color: #000000;
+}
+
+/* Highlight important values */
+.plan-total-mission .stat-value strong {
+    color: #E6007E;
+}
+
+/* ============================================================================
+   WEATHER DASHBOARD IN PLAN MODE - PROPER POSITIONING
+   ============================================================================ */
+
+/* Weather dashboard transitions */
+#weatherDashboard {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Weather positioning when plan mode is active */
+body.plan-mode-active #weatherDashboard {
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 110px !important; /* Right next to the menu strip */
+    top: auto !important;
+    right: auto !important;
+    max-height: calc(100vh - 350px) !important; /* Prevent it from growing too tall */
+    overflow-y: auto !important; /* Add scroll if content is too long */
+    z-index: 999 !important; /* Below menu strip (which is 1000) */
+}
+
+/* Ensure weather dashboard has proper scrolling if needed */
+body.plan-mode-active #weatherDashboard::-webkit-scrollbar {
+    width: 6px;
+}
+
+body.plan-mode-active #weatherDashboard::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+}
+
+body.plan-mode-active #weatherDashboard::-webkit-scrollbar-thumb {
+    background: rgba(230, 0, 126, 0.4);
+    border-radius: 3px;
+}
+
+body.plan-mode-active #weatherDashboard::-webkit-scrollbar-thumb:hover {
+    background: rgba(230, 0, 126, 0.6);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+    .plan-flight-menu-strip {
+        top: 70px;
+        left: 15px;
+        gap: 10px;
+        padding: 12px 10px;
+    }
+
+    .plan-menu-btn {
+        width: 68px;
+        min-height: 68px;
+        padding: 10px 8px;
+    }
+
+    .plan-menu-icon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .plan-menu-label {
+        font-size: 10px;
+    }
+
+    .plan-menu-content {
+        min-width: 170px;
+    }
+
+    .plan-menu-content a {
+        padding: 10px 16px;
+        font-size: 12px;
+    }
+
+    .exit-plan-btn {
+        font-size: 14px;
+        gap: 6px;
+        margin-right: 15px;
+    }
+
+    .exit-plan-btn .exit-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .plan-mission-stats,
+    .plan-total-mission {
+        gap: 18px;
+    }
+
+    .plan-mission-stats {
+        padding-right: 18px;
+    }
+
+    .stat-label {
+        font-size: 9px;
+    }
+
+    .stat-value {
+        font-size: 12px;
+    }
+
+    /* Weather positioning */
+    body.plan-mode-active #weatherDashboard {
+        left: 105px !important;
+        bottom: 15px !important;
+        max-height: calc(100vh - 320px) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .plan-flight-menu-strip {
+        top: 65px;
+        left: 12px;
+        gap: 8px;
+        padding: 10px 8px;
+    }
+
+    .plan-menu-btn {
+        width: 62px;
+        min-height: 62px;
+        padding: 8px 6px;
+    }
+
+    .plan-menu-icon {
+        width: 32px;
+        height: 32px;
+        margin-bottom: 4px;
+    }
+
+    .plan-menu-label {
+        font-size: 9px;
+    }
+
+    .plan-menu-content {
+        min-width: 160px;
+        left: calc(100% + 8px);
+    }
+
+    .plan-menu-content a {
+        padding: 10px 14px;
+        font-size: 11px;
+    }
+
+    .exit-plan-btn {
+        font-size: 13px;
+        gap: 5px;
+        margin-right: 12px;
+    }
+
+    .exit-plan-btn .exit-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    .plan-mission-stats,
+    .plan-total-mission {
+        gap: 14px;
+    }
+
+    .plan-mission-stats {
+        padding-right: 14px;
+    }
+
+    .stat-label {
+        font-size: 8px;
+    }
+
+    .stat-value {
+        font-size: 11px;
+    }
+
+    /* Hide some stats on smaller screens */
+    .stat-group:nth-child(4),
+    .stat-group:nth-child(5) {
+        display: none;
+    }
+
+    /* Weather positioning */
+    body.plan-mode-active #weatherDashboard {
+        left: 95px !important;
+        bottom: 12px !important;
+        max-height: calc(100vh - 280px) !important;
+        /* Scale down the weather dashboard slightly */
+        transform: scale(0.95) !important;
+        transform-origin: bottom left !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .plan-flight-menu-strip {
+        top: 60px;
+        left: 10px;
+        gap: 6px;
+        padding: 8px 6px;
+    }
+
+    .plan-menu-btn {
+        width: 56px;
+        min-height: 56px;
+        padding: 8px 5px;
+    }
+
+    .plan-menu-icon {
+        width: 28px;
+        height: 28px;
+        margin-bottom: 3px;
+    }
+
+    .plan-menu-label {
+        font-size: 8px;
+    }
+
+    .plan-menu-content {
+        min-width: 150px;
+        left: calc(100% + 6px);
+    }
+
+    .plan-menu-content a {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+
+    .exit-plan-btn {
+        font-size: 12px;
+        gap: 4px;
+        margin-right: 10px;
+    }
+
+    .exit-plan-btn .exit-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    /* Show only essential stats */
+    .plan-mission-stats {
+        gap: 10px;
+        padding-right: 10px;
+    }
+
+    .plan-total-mission {
+        gap: 10px;
+    }
+
+    .stat-group:nth-child(n+3) {
+        display: none;
+    }
+
+    .stat-label {
+        font-size: 8px;
+    }
+
+    .stat-value {
+        font-size: 10px;
+    }
+
+    /* Weather positioning */
+    body.plan-mode-active #weatherDashboard {
+        left: 85px !important;
+        bottom: 10px !important;
+        max-height: calc(100vh - 240px) !important;
+        transform: scale(0.9) !important;
+        transform-origin: bottom left !important;
+    }
+}
+
+/* Alternative: Hide weather on very small screens */
+@media (max-width: 420px) {
+    body.plan-mode-active #weatherDashboard {
+        display: none !important; /* Hide on very small screens to avoid clutter */
+    }
+}

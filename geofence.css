@@ -1,0 +1,445 @@
+/**
+ * geofence.css — TiHANFly GCS
+ * Geofence Configuration Panel — QGC-style parameter-based layout.
+ * Inherits design tokens from settings-window.css (:root variables).
+ *
+ * ArduPilot params managed:
+ *   FENCE_ENABLE, FENCE_TYPE, FENCE_ACTION,
+ *   FENCE_ALT_MAX, FENCE_RADIUS, FENCE_MARGIN
+ */
+
+/* ── Enable toggle card ────────────────────────────────────────────────────── */
+.gf-enable-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--r-md);
+    margin-bottom: 22px;
+    transition: border-color .25s, box-shadow .25s;
+}
+
+.gf-enable-card.gf-active {
+    border-color: rgba(230,0,126,.35);
+    box-shadow: 0 0 0 1px rgba(230,0,126,.10);
+}
+
+.gf-enable-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+    min-width: 0;
+}
+
+.gf-enable-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(230,0,126,.10);
+    border: 1px solid rgba(230,0,126,.20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--accent);
+}
+
+.gf-enable-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.gf-enable-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: .3px;
+}
+
+.gf-enable-subtitle {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* ── Toggle switch ─────────────────────────────────────────────────────────── */
+.gf-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.gf-toggle-label {
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--mono);
+    letter-spacing: .6px;
+    color: var(--text-muted);
+    transition: color .2s;
+}
+
+.gf-toggle-label.on { color: var(--good); }
+
+.gf-toggle {
+    position: relative;
+    width: 48px;
+    height: 26px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.gf-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.gf-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 13px;
+    transition: background .2s, border-color .2s;
+}
+
+.gf-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    top: 3px;
+    left: 4px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    transition: transform .2s ease, background .2s;
+}
+
+.gf-toggle input:checked + .gf-slider {
+    background: rgba(230,0,126,.15);
+    border-color: var(--accent);
+}
+
+.gf-toggle input:checked + .gf-slider::before {
+    transform: translateX(22px);
+    background: var(--accent);
+}
+
+/* ── Sync strip ────────────────────────────────────────────────────────────── */
+.gf-sync-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 10px 16px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--r-md);
+    margin-bottom: 20px;
+}
+
+.gf-sync-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.gf-sync-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.gf-refresh-btn {
+    flex-shrink: 0;
+    font-size: 12px !important;
+    padding: 7px 14px !important;
+}
+
+/* ── Status badge (shared style reused from fs-badge, namespaced gf-) ──────── */
+.gf-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.gf-badge-idle    { background: transparent; color: transparent; border: none; }
+.gf-badge-loading { background: rgba(255,170,0,.10); color: var(--warn); border: 1px solid rgba(255,170,0,.25); animation: gfPulse 1s ease-in-out infinite; }
+.gf-badge-ok      { background: rgba(0,217,126,.10); color: var(--good); border: 1px solid rgba(0,217,126,.25); }
+.gf-badge-error   { background: rgba(255,71,87,.10);  color: var(--bad);  border: 1px solid rgba(255,71,87,.25); }
+
+@keyframes gfPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: .5; }
+}
+
+/* ── Content area (hidden when disabled) ───────────────────────────────────── */
+.gf-params-wrap {
+    transition: opacity .25s ease, filter .25s ease;
+}
+
+.gf-params-wrap.gf-disabled {
+    opacity: .35;
+    pointer-events: none;
+    filter: grayscale(.6);
+    user-select: none;
+}
+
+/* ── Section card ──────────────────────────────────────────────────────────── */
+.gf-section {
+    margin-bottom: 18px;
+}
+
+/* ── Parameter row ─────────────────────────────────────────────────────────── */
+.gf-param-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    align-items: start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background .25s ease;
+}
+
+.gf-param-row:first-of-type {
+    border-top: 1px solid var(--border-subtle);
+}
+
+.gf-param-row:last-of-type {
+    border-bottom: none;
+}
+
+.gf-param-row.gf-row-saved {
+    background: rgba(0,217,126,.06);
+    border-radius: var(--r-sm);
+}
+
+.gf-param-row.gf-row-pending {
+    background: rgba(255,170,0,.04);
+    border-radius: var(--r-sm);
+}
+
+.gf-param-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.gf-param-name {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: .5px;
+}
+
+.gf-param-desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* ── Control area ──────────────────────────────────────────────────────────── */
+.gf-param-control {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* ── Select (matches fs-select style) ─────────────────────────────────────── */
+.gf-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #1e2330;
+    color: #dde1ed;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e6007e' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 34px !important;
+    cursor: pointer;
+    font-size: 13px;
+    width: 100%;
+}
+
+.gf-select option {
+    background-color: #1e2330;
+    color: #dde1ed;
+}
+
+.gf-select:focus {
+    border-color: #e6007e;
+    background-color: rgba(230,0,126,.10);
+    box-shadow: 0 0 0 3px rgba(230,0,126,.10);
+    outline: none;
+}
+
+/* ── Number input ──────────────────────────────────────────────────────────── */
+.gf-number-input {
+    width: 100%;
+    font-size: 13px;
+    font-family: var(--mono);
+}
+
+.gf-number-input::-webkit-inner-spin-button,
+.gf-number-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.gf-number-input[type=number] { -moz-appearance: textfield; }
+
+.gf-input-unit {
+    font-size: 10px;
+    font-family: var(--mono);
+    color: var(--text-muted);
+    letter-spacing: .5px;
+    padding-left: 2px;
+}
+
+/* ── Row hint ──────────────────────────────────────────────────────────────── */
+.gf-row-hint {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    min-height: 16px;
+    padding-left: 2px;
+}
+
+/* ── Breach alert banner ───────────────────────────────────────────────────── */
+.gf-breach-banner {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: rgba(255,71,87,.12);
+    border: 1px solid rgba(255,71,87,.40);
+    border-radius: var(--r-md);
+    margin-top: 20px;
+    animation: gfBreachPulse 1.2s ease-in-out infinite;
+}
+
+.gf-breach-banner.visible {
+    display: flex;
+}
+
+@keyframes gfBreachPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,71,87,.25); }
+    50%       { box-shadow: 0 0 0 8px rgba(255,71,87,0); }
+}
+
+.gf-breach-icon {
+    color: var(--bad);
+    flex-shrink: 0;
+}
+
+.gf-breach-text {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--bad);
+}
+
+.gf-breach-sub {
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255,71,87,.75);
+    display: block;
+    margin-top: 2px;
+}
+
+/* ── Live telemetry strip ──────────────────────────────────────────────────── */
+.gf-telemetry-strip {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.gf-telem-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--r-sm);
+    flex: 1;
+    min-width: 120px;
+}
+
+.gf-telem-chip-label {
+    font-size: 10px;
+    font-family: var(--mono);
+    color: var(--text-muted);
+    letter-spacing: .6px;
+    flex-shrink: 0;
+}
+
+.gf-telem-chip-value {
+    font-size: 15px;
+    font-weight: 700;
+    font-family: var(--mono);
+    color: var(--text-primary);
+    flex: 1;
+    text-align: right;
+    transition: color .3s;
+}
+
+.gf-telem-chip-value.gf-warn { color: var(--warn); }
+.gf-telem-chip-value.gf-bad  { color: var(--bad);  }
+.gf-telem-chip-value.gf-ok   { color: var(--good); }
+
+.gf-telem-chip-unit {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-family: var(--mono);
+}
+
+/* ── Save strip ──────────────────────────────────────────────────────────────── */
+.gf-save-strip {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+/* ── Warning note ────────────────────────────────────────────────────────────── */
+.gf-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(255,170,0,.06);
+    border: 1px solid rgba(255,170,0,.18);
+    border-radius: var(--r-sm);
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+.gf-note svg { flex-shrink: 0; color: var(--warn); margin-top: 1px; }
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 680px) {
+    .gf-param-row         { grid-template-columns: 1fr; }
+    .gf-telemetry-strip   { flex-direction: column; }
+    .gf-enable-card       { flex-direction: column; align-items: flex-start; }
+}

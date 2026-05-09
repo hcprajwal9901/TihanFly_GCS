@@ -1,0 +1,341 @@
+/**
+ * calib-accel.css  —  TiHANFly GCS  —  Accelerometer Calibration Panel
+ */
+
+/* ── Force full width on panel and all ancestors ──────────── */
+#panel-calib-accel,
+#panel-calib-accel > *,
+.settings-panel-content,
+.settings-panel-body,
+.settings-content,
+.panel-content,
+.calib-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* ── Card ─────────────────────────────────────────────────── */
+.calib-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* ── Grid ─────────────────────────────────────────────────── */
+.calib-cube-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 22px;
+    min-height: 440px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ── Face card ────────────────────────────────────────────── */
+.calib-cube-face {
+    position: relative;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-muted);
+    border-radius: var(--r-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: border-color .2s ease, background .2s ease, box-shadow .2s ease;
+    overflow: hidden;
+    user-select: none;
+    padding: 16px 12px 12px;
+    box-sizing: border-box;
+}
+
+/* ── Drone position image ─────────────────────────────────── */
+.calib-face-img {
+    width: 100%;
+    height: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: calc(100% - 36px);
+    object-fit: contain;
+    opacity: 0.60;
+    transition: opacity .25s ease, filter .25s ease, transform .25s ease;
+    filter: grayscale(20%) brightness(0.95);
+    pointer-events: none;
+}
+
+/* ── Label ────────────────────────────────────────────────── */
+.calib-face-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    transition: color .2s ease;
+    flex-shrink: 0;
+}
+
+/* ── Checkmark tick (hidden until done) ───────────────────── */
+.calib-face-tick {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 18px;
+    height: 18px;
+    opacity: 0;
+    transition: opacity .3s ease;
+    color: var(--good);
+}
+.calib-face-tick svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* ── Hover state ──────────────────────────────────────────── */
+.calib-cube-face:hover {
+    border-color: var(--border-accent);
+    background: var(--accent-dim);
+}
+.calib-cube-face:hover .calib-face-img {
+    opacity: 1;
+    filter: grayscale(0%) brightness(1.05);
+    transform: scale(1.04);
+}
+.calib-cube-face:hover .calib-face-label {
+    color: var(--text-secondary);
+}
+
+/* ── Active / capturing state ─────────────────────────────── */
+.calib-cube-face.active {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    animation: accelPulse 1s ease infinite;
+}
+.calib-cube-face.active .calib-face-img {
+    opacity: 1;
+    filter: grayscale(0%) brightness(1.1);
+    transform: scale(1.06);
+}
+.calib-cube-face.active .calib-face-label {
+    color: var(--accent);
+}
+
+/* ── Done / captured state ────────────────────────────────── */
+.calib-cube-face.done {
+    border-color: rgba(0, 217, 126, .35);
+    background: rgba(0, 217, 126, .08);
+    cursor: default;
+}
+.calib-cube-face.done .calib-face-img {
+    opacity: 1;
+    filter: grayscale(0%) brightness(1.05) saturate(1.1);
+}
+.calib-cube-face.done .calib-face-label {
+    color: var(--good);
+}
+.calib-cube-face.done .calib-face-tick {
+    opacity: 1;
+}
+
+/* ── Rejected / wrong orientation state ───────────────────── */
+/* Applied temporarily to the active face when backend rejects the position */
+.calib-cube-face.rejected {
+    border-color: rgba(255, 80, 60, .55);
+    background: rgba(255, 80, 60, .08);
+    animation: accelReject .35s ease 2;
+}
+.calib-cube-face.rejected .calib-face-img {
+    opacity: 1;
+    filter: grayscale(0%) brightness(1.05) hue-rotate(320deg) saturate(1.4);
+}
+.calib-cube-face.rejected .calib-face-label {
+    color: #ff6b55;
+}
+
+/* ── Pulse keyframe ───────────────────────────────────────── */
+@keyframes accelPulse {
+    0%,  100% { box-shadow: 0 0 0 0   rgba(230, 0, 126, .45); }
+    50%        { box-shadow: 0 0 0 8px rgba(230, 0, 126, 0);   }
+}
+
+/* ── Rejection shake keyframe ─────────────────────────────── */
+@keyframes accelReject {
+    0%,  100% { transform: translateX(0); }
+    25%        { transform: translateX(-5px); }
+    75%        { transform: translateX( 5px); }
+}
+
+/* ── Step hint ────────────────────────────────────────────── */
+.calib-step-hint {
+    display: none;
+    background: rgba(230, 0, 126, 0.08);
+    border: 1px solid rgba(230, 0, 126, 0.3);
+    border-radius: var(--r-lg);
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent, #E6007E);
+    letter-spacing: 0.4px;
+    text-align: center;
+}
+
+/* ── Orientation error banner ─────────────────────────────── */
+/* Shown when the backend rejects confirmAccelPosition()       */
+.calib-error-banner {
+    display: none;          /* JS sets display:flex to show  */
+    align-items: center;
+    gap: 10px;
+    background: rgba(255, 80, 60, 0.12);
+    border: 1px solid rgba(255, 80, 60, 0.45);
+    border-radius: var(--r-lg);
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: #ff6b55;
+    letter-spacing: 0.3px;
+    animation: errorSlideIn .2s ease;
+}
+.calib-error-banner svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    stroke: #ff6b55;
+}
+
+@keyframes errorSlideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── OK button (success green) ────────────────────────────── */
+.calib-btn-success {
+    background: rgba(0, 217, 126, 0.15);
+    color: #00d97e;
+    border: 1px solid rgba(0, 217, 126, 0.4);
+}
+.calib-btn-success:hover {
+    background: rgba(0, 217, 126, 0.25);
+    border-color: rgba(0, 217, 126, 0.7);
+    box-shadow: 0 0 12px rgba(0, 217, 126, 0.3);
+}
+
+/* ── Next button — awaiting backend confirmation ──────────── */
+/* Disabled while we wait for the backend to accept/reject     */
+#accelNextBtn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ── Modal overlay ────────────────────────────────────────── */
+.calib-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s ease;
+}
+.calib-modal-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ── Modal box ────────────────────────────────────────────── */
+.calib-modal-box {
+    background: var(--bg-raised, #1e1e2a);
+    border: 1px solid rgba(0, 217, 126, 0.35);
+    border-radius: 16px;
+    padding: 36px 40px 32px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6),
+                0 0 40px rgba(0, 217, 126, 0.12);
+    transform: translateY(20px);
+    transition: transform .3s ease;
+}
+.calib-modal-overlay.visible .calib-modal-box {
+    transform: translateY(0);
+}
+
+/* ── Modal icon ───────────────────────────────────────────── */
+.calib-modal-icon {
+    color: #00d97e;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+}
+.calib-modal-icon svg {
+    width: 56px;
+    height: 56px;
+    filter: drop-shadow(0 0 12px rgba(0, 217, 126, 0.5));
+}
+
+/* ── Modal title ──────────────────────────────────────────── */
+.calib-modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary, #fff);
+    margin-bottom: 10px;
+    letter-spacing: 0.3px;
+}
+
+/* ── Modal body ───────────────────────────────────────────── */
+.calib-modal-body {
+    font-size: 13px;
+    color: var(--text-muted, rgba(255,255,255,0.55));
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+/* ── Modal stats row ──────────────────────────────────────── */
+.calib-modal-stats {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-bottom: 28px;
+    padding: 16px;
+    background: rgba(0, 217, 126, 0.05);
+    border: 1px solid rgba(0, 217, 126, 0.15);
+    border-radius: 10px;
+}
+.calib-modal-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+.calib-modal-stat-val {
+    font-size: 18px;
+    font-weight: 700;
+    color: #00d97e;
+    font-family: var(--mono, monospace);
+}
+.calib-modal-stat-lbl {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted, rgba(255,255,255,0.45));
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+/* ── Modal actions ────────────────────────────────────────── */
+.calib-modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}

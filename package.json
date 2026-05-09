@@ -1,0 +1,26 @@
+{
+  "name": "tflygcs",
+  "version": "1.0.0",
+  "description": "TihanFly Ground Control Station",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Pavan",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.0.0"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "com.tihan.fly",
+    "productName": "TihanFly",
+    "win": {
+      "target": "nsis"
+    }
+  }
+}
+

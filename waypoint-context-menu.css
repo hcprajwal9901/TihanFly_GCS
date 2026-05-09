@@ -1,0 +1,353 @@
+/**
+ * Waypoint Context Menu Stylesheet
+ * Styling for right-click context menu matching the reference image
+ */
+
+/* ============================================================================
+   WAYPOINT CONTEXT MENU
+   ============================================================================ */
+
+.waypoint-context-menu {
+    position: fixed;
+    background: linear-gradient(135deg, rgba(245, 248, 252, 0.98) 0%, rgba(235, 240, 248, 0.98) 100%);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
+                0 4px 12px rgba(230, 0, 126, 0.15);
+    z-index: 10000;
+    min-width: 220px;
+    max-width: 280px;
+    padding: 8px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    animation: contextMenuFadeIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes contextMenuFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* ============================================================================
+   CONTEXT MENU ITEMS
+   ============================================================================ */
+
+.context-menu-items {
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+.context-menu-items::-webkit-scrollbar {
+    width: 6px;
+}
+
+.context-menu-items::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+.context-menu-items::-webkit-scrollbar-thumb {
+    background: rgba(230, 0, 126, 0.3);
+    border-radius: 3px;
+}
+
+.context-menu-items::-webkit-scrollbar-thumb:hover {
+    background: rgba(230, 0, 126, 0.5);
+}
+
+/* ============================================================================
+   MENU ITEM STYLING
+   ============================================================================ */
+
+.context-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    gap: 10px;
+    color: #1a1a1a;
+    font-size: 13px;
+    font-weight: 500;
+    user-select: none;
+}
+
+.context-menu-item:hover {
+    background: linear-gradient(90deg, rgba(230, 0, 126, 0.1) 0%, rgba(255, 204, 0, 0.05) 100%);
+    color: #E6007E;
+    font-weight: 600;
+    padding-left: 20px;
+}
+
+.context-menu-item:active {
+    background: rgba(230, 0, 126, 0.15);
+    transform: scale(0.98);
+}
+
+/* Icon styling */
+.context-menu-icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}
+
+.context-menu-item:hover .context-menu-icon {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Label styling */
+.context-menu-label {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Submenu arrow */
+.context-menu-arrow {
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.4);
+    margin-left: auto;
+    transition: all 0.2s ease;
+}
+
+.context-menu-item:hover .context-menu-arrow {
+    color: #E6007E;
+    transform: translateX(2px);
+}
+
+/* ============================================================================
+   CONTEXT MENU SUBMENU
+   ============================================================================ */
+
+.context-menu-submenu {
+    position: fixed;
+    background: linear-gradient(135deg, rgba(245, 248, 252, 0.98) 0%, rgba(235, 240, 248, 0.98) 100%);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25),
+                0 4px 12px rgba(230, 0, 126, 0.15);
+    z-index: 10001;
+    min-width: 220px;
+    max-width: 280px;
+    padding: 8px 0;
+    animation: submenuSlideIn 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes submenuSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.context-menu-submenu .context-menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #1a1a1a;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.context-menu-submenu .context-menu-item:hover {
+    background: linear-gradient(90deg, rgba(230, 0, 126, 0.1) 0%, rgba(255, 204, 0, 0.05) 100%);
+    color: #E6007E;
+    padding-left: 20px;
+    font-weight: 600;
+}
+
+/* Polygon submenu specific styling */
+
+
+/* ============================================================================
+   MENU SEPARATOR
+   ============================================================================ */
+
+.context-menu-separator {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.1), transparent);
+    margin: 6px 12px;
+}
+
+/* ============================================================================
+   HIGHLIGHTED MENU ITEMS (for important actions)
+   ============================================================================ */
+
+.context-menu-item[data-action="delete-wp"] .context-menu-icon {
+    color: #dc3545;
+}
+
+.context-menu-item[data-action="delete-wp"]:hover {
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%);
+    color: #dc3545;
+}
+
+.context-menu-item[data-action="clear-mission"] .context-menu-icon {
+    color: #dc3545;
+}
+
+.context-menu-item[data-action="clear-mission"]:hover {
+    background: linear-gradient(90deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%);
+    color: #dc3545;
+}
+
+/* RTL, Land, Takeoff - special colors */
+.context-menu-item[data-action="rtl"] .context-menu-icon,
+.context-menu-item[data-action="land"] .context-menu-icon,
+.context-menu-item[data-action="takeoff"] .context-menu-icon,
+.context-menu-item[data-action="set-home-here"] .context-menu-icon {
+    color: #28a745;
+}
+
+.context-menu-item[data-action="rtl"]:hover,
+.context-menu-item[data-action="land"]:hover,
+.context-menu-item[data-action="takeoff"]:hover,
+.context-menu-item[data-action="set-home-here"]:hover {
+    background: linear-gradient(90deg, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.05) 100%);
+    color: #28a745;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    .waypoint-context-menu {
+        min-width: 200px;
+        max-width: 250px;
+    }
+    
+    .context-menu-item {
+        padding: 9px 14px;
+        font-size: 12px;
+    }
+    
+    .context-menu-icon {
+        font-size: 14px;
+        width: 18px;
+    }
+    
+    .context-menu-items {
+        max-height: 450px;
+    }
+}
+
+@media (max-width: 480px) {
+    .waypoint-context-menu {
+        min-width: 180px;
+        max-width: 220px;
+    }
+    
+    .context-menu-item {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+    
+    .context-menu-icon {
+        font-size: 13px;
+        width: 16px;
+    }
+    
+    .context-menu-items {
+        max-height: 350px;
+    }
+}
+
+/* ============================================================================
+   DARK MODE SUPPORT (Optional)
+   ============================================================================ */
+
+@media (prefers-color-scheme: dark) {
+    .waypoint-context-menu {
+        background: linear-gradient(135deg, rgba(30, 30, 35, 0.98) 0%, rgba(25, 25, 30, 0.98) 100%);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .context-menu-item {
+        color: #e0e0e0;
+    }
+    
+    .context-menu-item:hover {
+        background: linear-gradient(90deg, rgba(230, 0, 126, 0.15) 0%, rgba(255, 204, 0, 0.08) 100%);
+        color: #FF69B4;
+    }
+    
+    .context-menu-separator {
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    }
+}
+
+/* ============================================================================
+   ANIMATION CLASSES
+   ============================================================================ */
+
+.context-menu-item-disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.context-menu-item-highlight {
+    animation: highlightPulse 1s ease-in-out;
+}
+
+@keyframes highlightPulse {
+    0%, 100% {
+        background: transparent;
+    }
+    50% {
+        background: rgba(230, 0, 126, 0.2);
+    }
+}
+
+/* ============================================================================
+   LOADING STATE
+   ============================================================================ */
+
+.context-menu-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #666;
+    font-size: 12px;
+}
+
+.context-menu-loading::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(230, 0, 126, 0.2);
+    border-top-color: #E6007E;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

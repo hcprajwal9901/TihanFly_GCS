@@ -1,0 +1,86 @@
+<!-- PLAN FLIGHT MENU STRIP - HIDDEN BY DEFAULT -->
+<div id="planFlightMenuStrip" class="plan-flight-menu-strip" style="display: none;">
+    
+    <!-- FILE BUTTON -->
+    <div class="plan-menu-dropdown">
+        <button class="plan-menu-btn" title="File">
+            <img src="resources/flightplan.png" alt="File" class="plan-menu-icon">
+            <span class="plan-menu-label">FILE</span>
+        </button>
+        <div class="plan-menu-content">
+            <a href="#" data-action="new-mission">New Mission</a>
+            <a href="#" data-action="open-mission">Open Mission</a>
+            <a href="#" data-action="save-mission">Save Mission</a>
+            <a href="#" data-action="write-to-drone" style="border-top: 2px solid rgba(230, 0, 126, 0.2); margin-top: 4px; padding-top: 12px;">📡 Write to Drone</a>                    
+        </div>
+    </div>
+    
+    <!-- TAKEOFF BUTTON -->
+    <div class="plan-menu-dropdown">
+        <button class="plan-menu-btn" title="Takeoff">
+            <img src="resources/takeoff.svg" alt="Takeoff" class="plan-menu-icon">
+            <span class="plan-menu-label">TAKEOFF</span>
+        </button>
+        <div class="plan-menu-content">
+            <a href="#" data-action="takeoff-here">Takeoff Here</a>
+            <a href="#" data-action="set-home-position">Set Home Position</a>
+            <a href="#" data-action="clear-home">Clear Home</a>
+        </div>
+    </div>
+    
+    <!-- WAYPOINT BUTTON -->
+    <div class="plan-menu-dropdown">
+        <button class="plan-menu-btn" title="Waypoint">
+            <img src="resources/Gps.svg" alt="Waypoint" class="plan-menu-icon">
+            <span class="plan-menu-label">WAYPOINT</span>
+        </button>
+        <div class="plan-menu-content">
+            <a href="#" data-action="add-waypoint">Add Waypoint</a>
+            <a href="#" data-action="insert-waypoint">Insert Waypoint</a>
+            <a href="#" data-action="delete-waypoint">Delete Waypoint</a>
+            <a href="#" data-action="clear-all">Clear All</a>
+        </div>
+    </div>
+    
+    <!-- POLYGON BUTTON -->
+    <div class="plan-menu-dropdown">
+        <button class="plan-menu-btn" title="Polygon">
+            <img src="resources/polygon.png" alt="Polygon" class="plan-menu-icon">
+            <span class="plan-menu-label">POLYGON</span>
+        </button>
+        <div class="plan-menu-content">
+            <a href="#" data-action="draw-polygon">Draw Polygon</a>
+            <a href="#" data-action="survey-pattern">Survey Pattern</a>
+            <a href="#" data-action="survey-settings">Survey Settings</a>
+            <a href="#" data-action="clear-polygon">Clear Polygon</a>
+        </div>
+    </div>
+    
+    <!-- RETURN BUTTON -->
+    <div class="plan-menu-dropdown">
+        <button class="plan-menu-btn" title="Return">
+            <img src="resources/rtl.svg" alt="Return" class="plan-menu-icon">
+            <span class="plan-menu-label">RETURN</span>
+        </button>
+        <div class="plan-menu-content">
+            <a href="#" data-action="return-to-launch">Return to Launch</a>
+            <a href="#" data-action="land-here">Land Here</a>
+        </div>
+    </div>
+    
+    <!-- CENTER BUTTON -->
+    <div class="plan-menu-dropdown">
+        <button class="plan-menu-btn" title="Center">
+            <img src="resources/analayze.png" alt="Center" class="plan-menu-icon">
+            <span class="plan-menu-label">CENTER</span>
+        </button>
+        <div class="plan-menu-content">
+            <a href="#" data-action="center-mission">Center Mission</a>
+            <a href="#" data-action="center-vehicle">Center Vehicle</a>
+            <a href="#" data-action="center-home">Center Home</a>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Command Editor Panel is loaded separately in command-editor.html -->

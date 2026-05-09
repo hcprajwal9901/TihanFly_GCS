@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TiHANFly — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#05080f; --bg2:#090d18; --card:#0e1422; --card2:#131929;
+  --line:rgba(255,255,255,0.06); --line2:rgba(255,255,255,0.10);
+  --pink:#f0006e; --pink2:#ff3d8a; --pink-glow:rgba(240,0,110,0.18);
+  --cyan:#00c8f0; --cyan-glow:rgba(0,200,240,0.14);
+  --green:#00e090; --red:#ff3d5a; --amber:#ffaa00;
+  --txt:#dce4f0; --txt2:#7a8aa0; --txt3:#3a4a60;
+  --syne:'Syne',sans-serif; --inter:'Inter',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+html{height:100%}
+body{font-family:var(--inter);background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 50% at 15% 20%,rgba(240,0,110,.07) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 85% 80%,rgba(0,200,240,.06) 0%,transparent 60%);pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+
+/* ═══ LOGIN ═══ */
+#loginScreen{position:fixed;inset:0;display:flex;z-index:50;transition:opacity .5s ease,transform .6s cubic-bezier(.4,0,.2,1)}
+#loginScreen.out{opacity:0;transform:scale(.97);pointer-events:none}
+
+.login-art{flex:1;display:none;position:relative;overflow:hidden;background:var(--bg2);border-right:1px solid var(--line)}
+@media(min-width:900px){.login-art{display:block}}
+.art-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,200,240,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,240,.06) 1px,transparent 1px);background-size:40px 40px}
+.art-drone{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);animation:float 6s ease-in-out infinite}
+.art-drone svg{width:180px;height:180px;filter:drop-shadow(0 0 40px rgba(240,0,110,.4)) drop-shadow(0 0 80px rgba(0,200,240,.2))}
+.art-rings{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+.art-ring{position:absolute;border-radius:50%;border:1px solid rgba(0,200,240,.15);top:50%;left:50%;transform:translate(-50%,-50%);animation:ringPulse 4s ease-in-out infinite}
+.art-ring:nth-child(1){width:240px;height:240px;animation-delay:0s}
+.art-ring:nth-child(2){width:320px;height:320px;animation-delay:.5s;border-color:rgba(240,0,110,.10)}
+.art-ring:nth-child(3){width:420px;height:420px;animation-delay:1s;border-color:rgba(0,200,240,.07)}
+.art-ring:nth-child(4){width:540px;height:540px;animation-delay:1.5s;border-color:rgba(240,0,110,.05)}
+.art-info{position:absolute;bottom:40px;left:40px;right:40px}
+.art-info-title{font-family:var(--syne);font-size:28px;font-weight:800;line-height:1.2;margin-bottom:12px}
+.art-info-title span{background:linear-gradient(135deg,var(--pink),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.art-info-sub{font-size:13px;color:var(--txt2);line-height:1.6}
+.art-brand{position:absolute;top:40px;left:40px;font-family:var(--syne);font-size:14px;font-weight:800;letter-spacing:1px}
+.art-brand em{color:var(--pink);font-style:normal}
+
+.login-form-panel{width:100%;max-width:480px;display:flex;align-items:center;justify-content:center;padding:40px 24px;position:relative;z-index:1}
+@media(min-width:900px){.login-form-panel{border-left:1px solid var(--line)}}
+.login-box{width:100%;max-width:400px}
+
+.lb-logo{display:flex;align-items:center;gap:14px;margin-bottom:40px}
+.lb-icon{width:46px;height:46px;background:linear-gradient(135deg,rgba(240,0,110,.2),rgba(0,200,240,.15));border:1px solid rgba(255,255,255,.1);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(240,0,110,.12)}
+.lb-icon svg{width:26px;height:26px}
+.lb-wordmark{font-family:var(--syne);font-size:20px;font-weight:800;letter-spacing:.5px}
+.lb-wordmark em{color:var(--pink);font-style:normal}
+.lb-pill{margin-left:auto;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);background:rgba(0,200,240,.08);border:1px solid rgba(0,200,240,.2);padding:3px 9px;border-radius:20px}
+
+.lb-heading{font-family:var(--syne);font-size:26px;font-weight:800;line-height:1.15;margin-bottom:6px}
+.lb-sub{font-size:13px;color:var(--txt2);line-height:1.6;margin-bottom:28px}
+.lb-restrict{display:flex;align-items:center;gap:10px;background:rgba(240,0,110,.05);border:1px solid rgba(240,0,110,.15);border-radius:10px;padding:10px 14px;margin-bottom:24px}
+.lb-restrict-dot{width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 8px var(--pink);flex-shrink:0;animation:blink 2s ease-in-out infinite}
+.lb-restrict-text{font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--pink)}
+
+.lb-conn{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt2);margin-bottom:22px;padding:8px 12px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px}
+.lb-conn-dot{width:7px;height:7px;border-radius:50%;background:var(--txt3);flex-shrink:0;transition:background .4s,box-shadow .4s}
+.lb-conn-dot.connecting{background:var(--amber);animation:blink 1s infinite}
+.lb-conn-dot.connected{background:var(--green);box-shadow:0 0 8px var(--green)}
+.lb-conn-dot.error{background:var(--red)}
+
+.lb-alert{display:none;padding:11px 14px;border-radius:9px;font-size:13px;font-weight:500;margin-bottom:18px;background:rgba(255,61,90,.08);border:1px solid rgba(255,61,90,.22);color:#ff6b84}
+.lb-field{margin-bottom:18px}
+.lb-field label{display:block;font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--txt2);margin-bottom:8px}
+.lb-field input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:10px;padding:13px 16px;color:var(--txt);font-family:var(--inter);font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s,background .2s}
+.lb-field input:focus{border-color:rgba(240,0,110,.5);box-shadow:0 0 0 3px rgba(240,0,110,.08);background:rgba(255,255,255,.05)}
+.lb-field input::placeholder{color:var(--txt3);font-size:13px}
+
+.lb-btn{width:100%;padding:14px 20px;background:var(--pink);color:#fff;border:none;border-radius:10px;font-family:var(--syne);font-size:14px;font-weight:700;letter-spacing:.5px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s,box-shadow .2s,background .2s;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:4px}
+.lb-btn:hover{background:var(--pink2);box-shadow:0 8px 28px rgba(240,0,110,.4);transform:translateY(-1px)}
+.lb-btn:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+
+.lb-cfg-link{text-align:center;margin-top:18px;font-size:12px;color:var(--txt3);cursor:pointer;transition:color .2s}
+.lb-cfg-link:hover{color:var(--txt2)}
+.lb-cfg-panel{display:none;margin-top:14px;padding-top:16px;border-top:1px solid var(--line)}
+.lb-cfg-panel.open{display:block}
+.lb-cfg-panel label{display:block;font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--txt2);margin-bottom:7px}
+.lb-cfg-panel input{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;padding:10px 13px;color:var(--txt);font-family:var(--mono);font-size:12px;outline:none;transition:border-color .2s}
+.lb-cfg-panel input:focus{border-color:rgba(0,200,240,.3)}
+.lb-cfg-hint{font-size:11px;color:var(--txt3);margin-top:6px;line-height:1.6}
+.lb-cfg-hint code{color:var(--cyan);font-family:var(--mono)}
+.lb-cfg-save{margin-top:10px;padding:8px 18px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:7px;color:var(--txt2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.lb-cfg-save:hover{border-color:var(--line2);color:var(--txt)}
+
+/* ═══ OFFLINE LOGIN BUTTON ═══ */
+.lb-offline-btn{
+  width:100%;padding:11px 20px;
+  background:transparent;
+  color:var(--amber);
+  border:1px solid rgba(255,170,0,.25);
+  border-radius:10px;
+  font-family:var(--inter);font-size:13px;font-weight:500;
+  cursor:pointer;
+  transition:all .2s;
+  display:none;
+  align-items:center;justify-content:center;gap:8px;
+  margin-top:10px;
+}
+.lb-offline-btn:hover{background:rgba(255,170,0,.07);border-color:rgba(255,170,0,.4)}
+.lb-offline-btn.show{display:flex}
+
+/* ═══ DASHBOARD ═══ */
+#dashScreen{display:none;min-height:100vh;flex-direction:column;position:relative;z-index:1}
+#dashScreen.show{display:flex}
+
+/* ── offline banner ── */
+.offline-banner{
+  display:none;
+  background:rgba(255,170,0,.07);
+  border-bottom:1px solid rgba(255,170,0,.2);
+  padding:10px 28px;
+  align-items:center;gap:12px;
+  font-size:13px;
+}
+.offline-banner.show{display:flex}
+.ob-dot{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 8px var(--amber);animation:blink 1.5s infinite;flex-shrink:0}
+.ob-text{color:var(--amber);font-weight:500;flex:1}
+.ob-queue{font-size:11px;color:rgba(255,170,0,.6);margin-left:auto}
+.ob-sync-btn{
+  padding:5px 12px;background:rgba(255,170,0,.12);border:1px solid rgba(255,170,0,.3);
+  border-radius:6px;font-size:11px;font-weight:600;color:var(--amber);cursor:pointer;
+  transition:all .2s;white-space:nowrap;
+}
+.ob-sync-btn:hover{background:rgba(255,170,0,.2)}
+
+/* ── topnav ── */
+.topnav{height:58px;background:rgba(9,13,24,.85);border-bottom:1px solid var(--line);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;align-items:center;padding:0 28px;gap:20px;position:sticky;top:0;z-index:40}
+.tn-brand{display:flex;align-items:center;gap:12px;font-family:var(--syne);font-size:15px;font-weight:800;letter-spacing:.4px;white-space:nowrap}
+.tn-brand em{color:var(--pink);font-style:normal}
+.tn-brand-sep{color:var(--line2);margin:0 2px}
+.tn-tag{font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);background:rgba(0,200,240,.08);border:1px solid rgba(0,200,240,.18);padding:3px 9px;border-radius:20px}
+.tn-spacer{flex:1}
+.tn-server{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;color:var(--txt2);background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:7px;padding:6px 11px;white-space:nowrap}
+.tn-live{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2.5s infinite;flex-shrink:0;transition:background .4s,box-shadow .4s}
+.tn-live.offline{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.tn-logout{display:flex;align-items:center;gap:7px;background:rgba(255,61,90,.08);border:1px solid rgba(255,61,90,.2);color:#ff6b84;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s}
+.tn-logout:hover{background:rgba(255,61,90,.15);border-color:rgba(255,61,90,.35)}
+
+/* ── main ── */
+.dash-main{flex:1;padding:36px 32px 80px;max-width:1480px;width:100%;margin:0 auto}
+@media(max-width:640px){.dash-main{padding:20px 16px 60px}}
+
+.dash-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.dash-title{font-family:var(--syne);font-size:26px;font-weight:800;letter-spacing:-.2px;line-height:1;margin-bottom:6px}
+.dash-sub{font-size:13px;color:var(--txt2)}
+
+/* cache info row */
+.cache-row{display:none;align-items:center;gap:8px;margin-top:6px}
+.cache-row.show{display:flex}
+.cache-tag{font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--amber);background:rgba(255,170,0,.08);border:1px solid rgba(255,170,0,.2);padding:2px 8px;border-radius:4px}
+.cache-time{font-size:11px;color:var(--txt3)}
+
+.btn-refresh{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:9px;padding:9px 18px;font-size:13px;font-weight:500;color:var(--txt);cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-refresh:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.15)}
+.btn-refresh svg{transition:transform .4s}
+.btn-refresh:hover svg{transform:rotate(180deg)}
+
+/* ── stats ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+@media(max-width:800px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 22px 20px;position:relative;overflow:hidden;transition:border-color .25s,transform .2s;cursor:default}
+.stat-card:hover{transform:translateY(-2px)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:14px 14px 0 0}
+.stat-card.total::before{background:var(--cyan)}
+.stat-card.active::before{background:var(--green)}
+.stat-card.disabled::before{background:var(--red)}
+.stat-card.today::before{background:var(--pink)}
+.stat-card:hover.total{border-color:rgba(0,200,240,.25)}
+.stat-card:hover.active{border-color:rgba(0,224,144,.25)}
+.stat-card:hover.disabled{border-color:rgba(255,61,90,.25)}
+.stat-card:hover.today{border-color:rgba(240,0,110,.25)}
+.stat-lbl{font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--txt2);margin-bottom:14px}
+.stat-num{font-family:var(--syne);font-size:42px;font-weight:800;line-height:1;margin-bottom:4px}
+.stat-card.total .stat-num{color:var(--cyan)}
+.stat-card.active .stat-num{color:var(--green)}
+.stat-card.disabled .stat-num{color:var(--red)}
+.stat-card.today .stat-num{color:var(--pink)}
+.stat-icon-bg{position:absolute;bottom:-8px;right:10px;font-size:64px;line-height:1;opacity:.07;font-family:var(--syne);font-weight:800}
+.stat-card.total .stat-icon-bg{color:var(--cyan)}
+.stat-card.active .stat-icon-bg{color:var(--green)}
+.stat-card.disabled .stat-icon-bg{color:var(--red)}
+.stat-card.today .stat-icon-bg{color:var(--pink)}
+
+/* ── toolbar ── */
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.search-box{flex:1;min-width:220px;position:relative}
+.search-box input{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 16px 11px 40px;color:var(--txt);font-family:var(--inter);font-size:13px;outline:none;transition:border-color .2s,box-shadow .2s}
+.search-box input:focus{border-color:rgba(0,200,240,.3);box-shadow:0 0 0 3px rgba(0,200,240,.06)}
+.search-box input::placeholder{color:var(--txt3)}
+.search-ico{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--txt3);pointer-events:none}
+.search-ico svg{width:15px;height:15px;display:block}
+.fchip{padding:8px 16px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer;transition:all .15s;white-space:nowrap}
+.fchip:hover{border-color:var(--line2);color:var(--txt)}
+.fchip.on.all{background:rgba(0,200,240,.08);border-color:rgba(0,200,240,.25);color:var(--cyan)}
+.fchip.on.pending{background:rgba(255,170,0,.08);border-color:rgba(255,170,0,.25);color:var(--amber)}
+.fchip.on.active{background:rgba(0,224,144,.08);border-color:rgba(0,224,144,.25);color:var(--green)}
+.fchip.on.inactive{background:rgba(255,61,90,.08);border-color:rgba(255,61,90,.25);color:var(--red)}
+
+/* ── table ── */
+.table-wrap{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead th{background:rgba(255,255,255,.025);padding:13px 20px;text-align:left;font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--txt2);border-bottom:1px solid var(--line);white-space:nowrap}
+thead th:last-child{text-align:right}
+tbody tr{border-bottom:1px solid var(--line);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,.018)}
+tbody td{padding:16px 20px;vertical-align:middle}
+.u-cell{display:flex;align-items:center;gap:13px}
+.u-av{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--syne);font-size:12px;font-weight:800;color:#fff;flex-shrink:0;letter-spacing:.5px}
+.u-name{font-size:14px;font-weight:500}
+.u-email{font-size:11px;color:var(--txt2);margin-top:2px}
+.id-chip{font-family:var(--mono);font-size:11px;color:var(--txt2);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:3px 8px;border-radius:5px;white-space:nowrap}
+.sbadge{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;border:1px solid transparent}
+.sbadge .sdot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.sbadge .sdot.pulse{animation:blink 1.5s infinite}
+.sbadge.active{background:rgba(0,224,144,.08);color:var(--green);border-color:rgba(0,224,144,.2)}
+.sbadge.inactive{background:rgba(255,61,90,.08);color:var(--red);border-color:rgba(255,61,90,.2)}
+.sbadge.pending{background:rgba(255,170,0,.08);color:var(--amber);border-color:rgba(255,170,0,.2)}
+.sbadge.rejected{background:rgba(255,61,90,.06);color:#ff7a8a;border-color:rgba(255,61,90,.15)}
+.d-date{font-size:12px;font-weight:500}
+.d-time{font-size:11px;color:var(--txt2);margin-top:2px}
+.d-never{font-size:12px;color:var(--txt3);font-style:italic}
+.ppill{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.5px;padding:2px 6px;border-radius:4px;margin-left:5px}
+.ppill.google{background:#4285F4;color:#fff}
+.ppill.email{background:var(--pink);color:#fff}
+.acts{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+.abtn{padding:6px 13px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--txt);white-space:nowrap}
+.abtn:hover{background:rgba(255,255,255,.08);border-color:var(--line2)}
+.abtn.approve{border-color:rgba(0,224,144,.25);color:var(--green)}
+.abtn.approve:hover{background:rgba(0,224,144,.1);border-color:rgba(0,224,144,.4)}
+.abtn.reject{border-color:rgba(255,61,90,.25);color:var(--red)}
+.abtn.reject:hover{background:rgba(255,61,90,.1);border-color:rgba(255,61,90,.4)}
+.abtn.del{border-color:rgba(255,61,90,.15);color:#ff7a8a}
+.abtn.del:hover{background:rgba(255,61,90,.08)}
+
+/* offline action visual indicator */
+.abtn.queued{opacity:.6;position:relative}
+.abtn.queued::after{content:'⏱';margin-left:4px;font-size:10px}
+
+.load-row td{padding:56px 20px;text-align:center;color:var(--txt2);font-size:13px}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.08);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:8px}
+.empty-state{padding:64px 20px;text-align:center;display:none}
+.empty-icon{width:60px;height:60px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.empty-icon svg{color:var(--txt3)}
+.empty-t{font-family:var(--syne);font-size:17px;font-weight:700;margin-bottom:7px}
+.empty-s{font-size:13px;color:var(--txt2)}
+
+/* ═══ MODAL ═══ */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:200;animation:fadeIn .2s;padding:20px}
+.modal-box{background:var(--card);border:1px solid var(--line2);border-radius:16px;padding:32px;width:100%;max-width:440px;box-shadow:0 40px 80px rgba(0,0,0,.6);animation:scaleIn .25s cubic-bezier(.16,1,.3,1)}
+.modal-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.modal-icon.danger{background:rgba(255,61,90,.1);border:1px solid rgba(255,61,90,.2)}
+.modal-icon.success{background:rgba(0,224,144,.1);border:1px solid rgba(0,224,144,.2)}
+.modal-icon.warning{background:rgba(255,170,0,.1);border:1px solid rgba(255,170,0,.2)}
+.modal-t{font-family:var(--syne);font-size:18px;font-weight:800;margin-bottom:8px}
+.modal-s{font-size:13px;color:var(--txt2);margin-bottom:24px;line-height:1.6}
+.modal-fl label{display:block;font-size:11px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--txt2);margin-bottom:7px}
+.modal-fl textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:9px;padding:11px 14px;color:var(--txt);font-family:var(--inter);font-size:13px;outline:none;resize:vertical;transition:border-color .2s}
+.modal-fl textarea:focus{border-color:rgba(0,200,240,.3)}
+.modal-acts{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}
+.mbtn{padding:10px 22px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:1px solid var(--line2);background:rgba(255,255,255,.04);color:var(--txt)}
+.mbtn:hover{background:rgba(255,255,255,.08)}
+.mbtn.pr{background:var(--pink);border-color:var(--pink);color:#fff}
+.mbtn.pr:hover{background:var(--pink2);box-shadow:0 6px 20px rgba(240,0,110,.3)}
+.mbtn.dg{background:rgba(255,61,90,.1);border-color:rgba(255,61,90,.3);color:var(--red)}
+.mbtn.dg:hover{background:rgba(255,61,90,.2)}
+.mbtn.am{background:rgba(255,170,0,.1);border-color:rgba(255,170,0,.3);color:var(--amber)}
+.mbtn.am:hover{background:rgba(255,170,0,.2)}
+
+/* ═══ TOAST ═══ */
+.toast-area{position:fixed;bottom:28px;right:28px;display:flex;flex-direction:column;gap:10px;z-index:9999;pointer-events:none}
+.toast{background:var(--card2);border-radius:12px;padding:14px 18px;min-width:260px;max-width:340px;box-shadow:0 12px 40px rgba(0,0,0,.5);border:1px solid var(--line2);border-left:3px solid var(--cyan);animation:slideIn .3s cubic-bezier(.16,1,.3,1);pointer-events:auto}
+.toast.s{border-left-color:var(--green)}
+.toast.e{border-left-color:var(--red)}
+.toast.w{border-left-color:var(--amber)}
+.toast-t{font-size:13px;font-weight:600;margin-bottom:3px}
+.toast-b{font-size:12px;color:var(--txt2);line-height:1.5}
+
+/* ═══ KEYFRAMES ═══ */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes float{0%,100%{transform:translate(-50%,-50%) translateY(0)}50%{transform:translate(-50%,-50%) translateY(-12px)}}
+@keyframes ringPulse{0%,100%{opacity:.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.04)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.14)}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═══ -->
+<div id="loginScreen">
+  <div class="login-art">
+    <div class="art-brand">TiHAN<em>Fly</em></div>
+    <div class="art-grid"></div>
+    <div class="art-rings">
+      <div class="art-ring"></div><div class="art-ring"></div>
+      <div class="art-ring"></div><div class="art-ring"></div>
+    </div>
+    <div class="art-drone">
+      <svg viewBox="0 0 120 120" fill="none">
+        <ellipse cx="60" cy="60" rx="14" ry="9" fill="white" opacity=".95"/>
+        <rect x="58" y="28" width="4" height="18" rx="2" fill="white" opacity=".7"/>
+        <rect x="58" y="74" width="4" height="18" rx="2" fill="white" opacity=".7"/>
+        <rect x="28" y="58" width="18" height="4" rx="2" fill="white" opacity=".7"/>
+        <rect x="74" y="58" width="18" height="4" rx="2" fill="white" opacity=".7"/>
+        <circle cx="30" cy="30" r="14" fill="none" stroke="#f0006e" stroke-width="2"/>
+        <circle cx="90" cy="30" r="14" fill="none" stroke="#f0006e" stroke-width="2"/>
+        <circle cx="30" cy="90" r="14" fill="none" stroke="#f0006e" stroke-width="2"/>
+        <circle cx="90" cy="90" r="14" fill="none" stroke="#f0006e" stroke-width="2"/>
+        <ellipse cx="30" cy="30" rx="12" ry="3" fill="rgba(255,255,255,0.25)" transform="rotate(45 30 30)"/>
+        <ellipse cx="90" cy="30" rx="12" ry="3" fill="rgba(255,255,255,0.25)" transform="rotate(-45 90 30)"/>
+        <ellipse cx="30" cy="90" rx="12" ry="3" fill="rgba(255,255,255,0.25)" transform="rotate(-45 30 90)"/>
+        <ellipse cx="90" cy="90" rx="12" ry="3" fill="rgba(255,255,255,0.25)" transform="rotate(45 90 90)"/>
+        <circle cx="60" cy="60" r="4" fill="#f0006e"/>
+        <circle cx="60" cy="32" r="2.5" fill="#00c8f0" opacity=".9"/>
+        <circle cx="60" cy="88" r="2.5" fill="#00c8f0" opacity=".9"/>
+        <circle cx="32" cy="60" r="2.5" fill="#00e090" opacity=".9"/>
+        <circle cx="88" cy="60" r="2.5" fill="#00e090" opacity=".9"/>
+      </svg>
+    </div>
+    <div class="art-info">
+      <div class="art-info-title">Ground Control<br><span>Station Admin</span></div>
+      <div class="art-info-sub">TiHAN Testbed — IIT Hyderabad<br>Manage operators, approvals &amp; access from anywhere — even offline.</div>
+    </div>
+  </div>
+
+  <div class="login-form-panel">
+    <div class="login-box">
+      <div class="lb-logo">
+        <div class="lb-icon">
+          <svg viewBox="0 0 24 24" fill="none" width="26" height="26">
+            <ellipse cx="12" cy="12" rx="4" ry="2.5" fill="white" opacity=".95"/>
+            <rect x="11" y="6" width="2" height="3" rx="1" fill="white" opacity=".7"/>
+            <rect x="11" y="15" width="2" height="3" rx="1" fill="white" opacity=".7"/>
+            <rect x="6" y="11" width="3" height="2" rx="1" fill="white" opacity=".7"/>
+            <rect x="15" y="11" width="3" height="2" rx="1" fill="white" opacity=".7"/>
+            <circle cx="6" cy="6" r="2.5" fill="none" stroke="#f0006e" stroke-width="1.3"/>
+            <circle cx="18" cy="6" r="2.5" fill="none" stroke="#f0006e" stroke-width="1.3"/>
+            <circle cx="6" cy="18" r="2.5" fill="none" stroke="#f0006e" stroke-width="1.3"/>
+            <circle cx="18" cy="18" r="2.5" fill="none" stroke="#f0006e" stroke-width="1.3"/>
+          </svg>
+        </div>
+        <div class="lb-wordmark">TiHAN<em>Fly</em></div>
+        <div class="lb-pill">Admin</div>
+      </div>
+
+      <h1 class="lb-heading">Welcome back,<br>Administrator</h1>
+      <p class="lb-sub">Sign in to manage users, approve access requests, and monitor the GCS operator network.</p>
+
+      <div class="lb-restrict">
+        <div class="lb-restrict-dot"></div>
+        <div class="lb-restrict-text">Restricted — Authorized Personnel Only</div>
+      </div>
+
+      <div class="lb-conn">
+        <div class="lb-conn-dot connecting" id="lcDot"></div>
+        <span id="lcText">Connecting to server…</span>
+      </div>
+
+      <div class="lb-alert" id="lAlert"></div>
+
+      <div class="lb-field">
+        <label>Username</label>
+        <input type="text" id="aUser" placeholder="Enter admin username" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="lb-field">
+        <label>Password</label>
+        <input type="password" id="aPass" placeholder="Enter password">
+      </div>
+
+      <button class="lb-btn" id="lBtn" onclick="doLogin()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Sign In to Admin Panel
+      </button>
+
+      <!-- Shows when server is offline but cached creds exist -->
+      <button class="lb-offline-btn" id="offlineBtn" onclick="doOfflineLogin()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+          <path d="M1 1l22 22M16.72 11.06A10.94 10.94 0 0119 12.55M5 12.55a10.94 10.94 0 015.17-2.39M10.71 5.05A16 16 0 0122.56 9M1.42 9a15.91 15.91 0 014.7-2.88M8.53 16.11a6 6 0 016.95 0M12 20h.01"/>
+        </svg>
+        Continue Offline with Cached Data
+      </button>
+
+      <div class="lb-cfg-link" onclick="toggleCfg()">⚙&nbsp; Change server address</div>
+      <div class="lb-cfg-panel" id="cfgPanel">
+        <label>WebSocket Server URL</label>
+        <input type="text" id="srvIn" placeholder="ws://192.168.21.249:8080">
+        <div class="lb-cfg-hint">Current: <code id="srvShow"></code></div>
+        <button class="lb-cfg-save" onclick="saveServer()">Save &amp; Reconnect</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="dashScreen">
+
+  <!-- Offline warning banner -->
+  <div class="offline-banner" id="offlineBanner">
+    <div class="ob-dot"></div>
+    <div class="ob-text">
+      <strong>Offline Mode</strong> — Showing cached data from last sync.
+      Actions will be queued and sent when the server reconnects.
+    </div>
+    <div class="ob-queue" id="queueCount"></div>
+    <button class="ob-sync-btn" onclick="trySyncQueue()">Sync Now</button>
+  </div>
+
+  <nav class="topnav">
+    <div class="tn-brand">TiHAN<em>Fly</em><span class="tn-brand-sep">|</span><span class="tn-tag">Admin Panel</span></div>
+    <div class="tn-spacer"></div>
+    <div class="tn-server">
+      <div class="tn-live" id="tnLive"></div>
+      <span id="tnSrv">Connected</span>
+    </div>
+    <button class="tn-logout" onclick="doLogout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+      </svg>
+      Log Out
+    </button>
+  </nav>
+
+  <div class="dash-main">
+    <div class="dash-header">
+      <div>
+        <div class="dash-title">User Management</div>
+        <div class="dash-sub" id="dashSub">Loading…</div>
+        <div class="cache-row" id="cacheRow">
+          <span class="cache-tag">Cached</span>
+          <span class="cache-time" id="cacheTime"></span>
+        </div>
+      </div>
+      <button class="btn-refresh" onclick="refreshUsers()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15">
+          <path d="M23 4v6h-6M1 20v-6h6"/>
+          <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+        </svg>
+        Refresh
+      </button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card total"><div class="stat-lbl">Total Users</div><div class="stat-num" id="sT">0</div><div class="stat-icon-bg">∑</div></div>
+      <div class="stat-card active"><div class="stat-lbl">Active</div><div class="stat-num" id="sA">0</div><div class="stat-icon-bg">↑</div></div>
+      <div class="stat-card disabled"><div class="stat-lbl">Disabled</div><div class="stat-num" id="sD">0</div><div class="stat-icon-bg">∅</div></div>
+      <div class="stat-card today"><div class="stat-lbl">Joined Today</div><div class="stat-num" id="sN">0</div><div class="stat-icon-bg">+</div></div>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-box">
+        <span class="search-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></span>
+        <input type="text" id="srch" placeholder="Search by name or email…" oninput="renderTable()">
+      </div>
+      <div class="fchip on all"   id="fA"  onclick="setF('all')">All Users</div>
+      <div class="fchip pending"  id="fP"  onclick="setF('pending')">Pending</div>
+      <div class="fchip active"   id="fAc" onclick="setF('active')">Active</div>
+      <div class="fchip inactive" id="fD"  onclick="setF('inactive')">Disabled</div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th><th>ID</th><th>Status</th>
+              <th>Registered</th><th>Last Login</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr class="load-row"><td colspan="6"><span class="spinner"></span>Connecting…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="emptyDiv">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+        <div class="empty-t" id="emptyT">No users yet</div>
+        <div class="empty-s" id="emptyS">Users will appear here after signing up</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-area" id="ta"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   ★  SET YOUR SERVER ADDRESS HERE  ★
+═══════════════════════════════════════════════════════ */
+const DEFAULT_SRV = 'ws://192.168.21.249:8080';
+
+/* ─── Offline admin credentials (stored locally after first successful login) ─── */
+const CACHE_USERS_KEY   = 'tfly_users_cache';
+const CACHE_TIME_KEY    = 'tfly_cache_time';
+const CACHE_CREDS_KEY   = 'tfly_admin_creds';  // hashed, not plaintext
+const QUEUE_KEY         = 'tfly_action_queue';
+
+/* ─── State ─── */
+let sock=null, hdl={}, users=[], filt='all', hbTimer=null, srvUrl='', loggedIn=false, isOffline=false, actionQueue=[];
+
+/* ─── Avatar colours ─── */
+const COLORS=[['#f0006e','#7a00c8'],['#00c8f0','#0050d0'],['#00e090','#00a060'],['#ff8c00','#d03000'],['#8b5cf6','#5b21b6'],['#06b6d4','#0284c7']];
+function avatarColor(n){let h=0;for(let i=0;i<n.length;i++)h=(h*31+n.charCodeAt(i))&0xffff;return COLORS[h%COLORS.length];}
+
+/* ─── Simple hash for storing creds locally (not real encryption, just obfuscation) ─── */
+function hashCreds(u,p){let h=5381;const s=u+'::'+p;for(let i=0;i<s.length;i++)h=((h<<5)+h)+s.charCodeAt(i);return(h>>>0).toString(36);}
+
+/* ════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════ */
+window.addEventListener('load',()=>{
+  srvUrl=localStorage.getItem('tfly_s')||DEFAULT_SRV;
+  document.getElementById('srvIn').value=srvUrl;
+  document.getElementById('srvShow').textContent=srvUrl;
+  actionQueue=JSON.parse(localStorage.getItem(QUEUE_KEY)||'[]');
+
+  connect();
+  setTimeout(()=>document.getElementById('aUser').focus(),400);
+
+  // If cache exists, show the offline button after a short delay (server might be down)
+  setTimeout(()=>{
+    const cached=localStorage.getItem(CACHE_USERS_KEY);
+    const savedCreds=localStorage.getItem(CACHE_CREDS_KEY);
+    if(cached && savedCreds && (!sock||sock.readyState!==1)){
+      document.getElementById('offlineBtn').classList.add('show');
+    }
+  }, 4000);
+});
+
+/* ════════════════════════════════════════════════
+   WEBSOCKET
+════════════════════════════════════════════════ */
+function connect(){
+  setConn('connecting','Connecting to server…');
+  if(sock){try{sock.onclose=null;sock.close();}catch(e){}}
+  try{ sock=new WebSocket(srvUrl); }catch(e){ setConn('error','Invalid server URL'); showOfflineBtn(); return; }
+
+  sock.onopen=()=>{
+    setConn('connected','Server connected — ready to sign in');
+    startHB();
+    document.getElementById('offlineBtn').classList.remove('show');
+    // If already logged in (reconnect), re-authenticate silently
+    if(loggedIn && isOffline){
+      silentReauth();
+    }
+  };
+
+  sock.onmessage=(e)=>{
+    try{ const m=JSON.parse(e.data); (hdl[m.type]||[]).forEach(c=>c(m)); }catch(err){}
+  };
+
+  sock.onclose=()=>{
+    stopHB();
+    setConn('error','Disconnected — retrying…');
+    if(loggedIn){
+      goOffline();
+    } else {
+      showOfflineBtn();
+    }
+    setTimeout(connect,3000);
+  };
+
+  sock.onerror=()=>{
+    setConn('error','Cannot reach server — retrying…');
+    if(!loggedIn) showOfflineBtn();
+  };
+}
+
+function wsSend(o){
+  if(sock&&sock.readyState===1){
+    sock.send(JSON.stringify(o));
+    return true;
+  }
+  return false;
+}
+function on(t,c){if(!hdl[t])hdl[t]=[];hdl[t].push(c);}
+function off(t){delete hdl[t];}
+function startHB(){stopHB();hbTimer=setInterval(()=>wsSend({type:'ping'}),25000);}
+function stopHB(){if(hbTimer){clearInterval(hbTimer);hbTimer=null;}}
+
+function showOfflineBtn(){
+  const cached=localStorage.getItem(CACHE_USERS_KEY);
+  const savedCreds=localStorage.getItem(CACHE_CREDS_KEY);
+  if(cached&&savedCreds){
+    document.getElementById('offlineBtn').classList.add('show');
+  }
+}
+
+/* ════════════════════════════════════════════════
+   ONLINE LOGIN
+════════════════════════════════════════════════ */
+function doLogin(){
+  const u=document.getElementById('aUser').value.trim();
+  const p=document.getElementById('aPass').value;
+  if(!u||!p){showAlert('Please fill in both fields.');return;}
+
+  if(!sock||sock.readyState!==1){
+    // Server is offline — try offline login
+    doOfflineLogin(u,p);
+    return;
+  }
+
+  clearAlert();
+  const btn=document.getElementById('lBtn');
+  btn.innerHTML='<span class="spinner" style="border-top-color:#fff;margin-right:6px"></span>Verifying…';
+  btn.disabled=true;
+
+  on('admin_login_success',()=>{
+    off('admin_login_success'); off('admin_login_error');
+    // Save hashed creds for offline access
+    localStorage.setItem(CACHE_CREDS_KEY, hashCreds(u,p));
+    localStorage.setItem('tfly_last_user', u);
+    resetBtn(); loggedIn=true; isOffline=false; enterDash(false);
+  });
+  on('admin_login_error',(m)=>{
+    off('admin_login_success'); off('admin_login_error');
+    showAlert(m.message||'Invalid username or password.');
+    resetBtn();
+  });
+  wsSend({type:'admin_login',username:u,password:p});
+}
+
+/* ════════════════════════════════════════════════
+   OFFLINE LOGIN
+════════════════════════════════════════════════ */
+function doOfflineLogin(u, p){
+  // Called with explicit u,p (from doLogin when server is down)
+  // OR called from the "Continue Offline" button
+  u = u || document.getElementById('aUser').value.trim();
+  p = p || document.getElementById('aPass').value;
+
+  const savedHash=localStorage.getItem(CACHE_CREDS_KEY);
+  const cachedData=localStorage.getItem(CACHE_USERS_KEY);
+
+  if(!savedHash || !cachedData){
+    showAlert('No cached data available. You must log in online at least once first.');
+    return;
+  }
+
+  // Validate credentials against saved hash
+  if(u && p){
+    if(hashCreds(u,p) !== savedHash){
+      showAlert('Incorrect username or password.');
+      return;
+    }
+  } else {
+    // "Continue Offline" button pressed without typing creds
+    if(!u || !p){
+      showAlert('Please enter your username and password to verify identity.');
+      return;
+    }
+  }
+
+  clearAlert();
+  loggedIn=true; isOffline=true;
+  enterDash(true);
+}
+
+function silentReauth(){
+  // Try to re-login with saved creds after reconnect
+  const lastUser=localStorage.getItem('tfly_last_user');
+  // We can't re-auth without password, so just refresh data
+  isOffline=false;
+  goOnline();
+  refreshUsers();
+  trySyncQueue();
+}
+
+/* ════════════════════════════════════════════════
+   ONLINE / OFFLINE STATE SWITCHING
+════════════════════════════════════════════════ */
+function goOffline(){
+  if(!loggedIn)return;
+  isOffline=true;
+  document.getElementById('offlineBanner').classList.add('show');
+  document.getElementById('tnLive').classList.add('offline');
+  document.getElementById('tnSrv').textContent='Offline — cached data';
+  updateQueueCount();
+  toast('Server unreachable','Working in offline mode. Changes will sync when reconnected.','w');
+}
+
+function goOnline(){
+  isOffline=false;
+  document.getElementById('offlineBanner').classList.remove('show');
+  document.getElementById('tnLive').classList.remove('offline');
+  document.getElementById('tnSrv').textContent=srvUrl;
+  document.getElementById('cacheRow').classList.remove('show');
+  toast('Back online','Connected to server.','s');
+}
+
+/* ════════════════════════════════════════════════
+   ACTION QUEUE (offline actions → sync later)
+════════════════════════════════════════════════ */
+function queueAction(action){
+  action.id=Date.now();
+  actionQueue.push(action);
+  localStorage.setItem(QUEUE_KEY, JSON.stringify(actionQueue));
+  updateQueueCount();
+}
+
+function updateQueueCount(){
+  const el=document.getElementById('queueCount');
+  if(actionQueue.length>0){
+    el.textContent=`${actionQueue.length} action${actionQueue.length!==1?'s':''} pending`;
+  } else {
+    el.textContent='';
+  }
+}
+
+function trySyncQueue(){
+  if(!sock||sock.readyState!==1){
+    toast('Still offline','Cannot sync — server not reachable.','e');
+    return;
+  }
+  if(actionQueue.length===0){
+    toast('All synced','No pending actions.','s');
+    return;
+  }
+  toast('Syncing…',`Sending ${actionQueue.length} queued action${actionQueue.length!==1?'s':''}…`,'i');
+  const toSync=[...actionQueue];
+  actionQueue=[];
+  localStorage.setItem(QUEUE_KEY,'[]');
+  updateQueueCount();
+  toSync.forEach(a=>wsSend(a));
+  setTimeout(()=>{ refreshUsers(); toast('Sync complete','All actions applied.','s'); }, 1200);
+}
+
+/* ════════════════════════════════════════════════
+   DASHBOARD
+════════════════════════════════════════════════ */
+function enterDash(offline){
+  document.getElementById('loginScreen').classList.add('out');
+  setTimeout(()=>{ document.getElementById('loginScreen').style.display='none'; },520);
+  document.getElementById('dashScreen').classList.add('show');
+
+  if(offline){
+    goOffline();
+    loadFromCache();
+  } else {
+    document.getElementById('tnSrv').textContent=srvUrl;
+    on('new_signup',(m)=>{
+      toast('New Registration Request',`${m.firstName} ${m.lastName} (${m.email}) wants to join.`,'w');
+      refreshUsers();
+    });
+    // Also listen for reconnect (when backend comes back online while in offline dash)
+    refreshUsers();
+    if(actionQueue.length>0) trySyncQueue();
+  }
+}
+
+function loadFromCache(){
+  const raw=localStorage.getItem(CACHE_USERS_KEY);
+  const cacheTime=localStorage.getItem(CACHE_TIME_KEY);
+  if(raw){
+    try{
+      users=JSON.parse(raw);
+      updateStats(); renderTable();
+      const when=cacheTime?new Date(parseInt(cacheTime)).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}):'unknown';
+      document.getElementById('dashSub').textContent=`${users.length} user${users.length!==1?'s':''} (offline cache)`;
+      document.getElementById('cacheRow').classList.add('show');
+      document.getElementById('cacheTime').textContent=`Last synced: ${when}`;
+    }catch(e){
+      document.getElementById('dashSub').textContent='Could not load cached data.';
+    }
+  } else {
+    document.getElementById('dashSub').textContent='No cached data available.';
+    document.getElementById('tbody').innerHTML='<tr class="load-row"><td colspan="6">No offline data available. Connect to server first.</td></tr>';
+  }
+}
+
+function refreshUsers(){
+  if(isOffline){
+    loadFromCache();
+    toast('Offline','Cannot refresh — no server connection.','w');
+    return;
+  }
+  document.getElementById('tbody').innerHTML=
+    '<tr class="load-row"><td colspan="6"><span class="spinner"></span>Fetching users from database…</td></tr>';
+  on('users_list',(m)=>{
+    off('users_list');
+    users=m.users||[];
+    // Save to cache for offline use
+    localStorage.setItem(CACHE_USERS_KEY, JSON.stringify(users));
+    localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+    updateStats(); renderTable();
+    const t=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('dashSub').textContent=`${users.length} user${users.length!==1?'s':''} in database · updated at ${t}`;
+    document.getElementById('cacheRow').classList.remove('show');
+  });
+  wsSend({type:'admin_get_users'});
+}
+
+function updateStats(){
+  const today=new Date().toDateString();
+  animCount('sT',users.length);
+  animCount('sA',users.filter(u=>u.status==='active').length);
+  animCount('sD',users.filter(u=>u.status==='inactive'||u.status==='rejected').length);
+  animCount('sN',users.filter(u=>u.registeredAt&&new Date(u.registeredAt).toDateString()===today).length);
+}
+
+function animCount(id,target){
+  const el=document.getElementById(id);
+  let cur=0,inc=Math.max(1,Math.ceil(target/20));
+  const iv=setInterval(()=>{ cur=Math.min(cur+inc,target); el.textContent=cur; if(cur>=target)clearInterval(iv); },40);
+}
+
+function setF(f){
+  filt=f;
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));
+  const map={all:'fA',pending:'fP',active:'fAc',inactive:'fD'};
+  if(map[f]){ const c=document.getElementById(map[f]); c.classList.add('on',f); }
+  renderTable();
+}
+
+function renderTable(){
+  const q=(document.getElementById('srch').value||'').toLowerCase();
+  const tbody=document.getElementById('tbody');
+  const empty=document.getElementById('emptyDiv');
+  const rows=users.filter(u=>{
+    const mq=((u.firstName||'')+(u.lastName||'')).toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q);
+    const mf=filt==='all'||u.status===filt;
+    return mq&&mf;
+  });
+  if(!rows.length){
+    tbody.innerHTML=''; empty.style.display='block';
+    document.getElementById('emptyT').textContent=users.length?'No results found':'No registered users yet';
+    document.getElementById('emptyS').textContent=users.length?'Try adjusting your search or filter':'Users will appear here after signing up from the login page';
+    return;
+  }
+  empty.style.display='none';
+  tbody.innerHTML=rows.map(u=>{
+    const full=(u.firstName||'')+' '+(u.lastName||'');
+    const ini=((u.firstName||'?')[0]+(u.lastName||'?')[0]).toUpperCase();
+    const [c1,c2]=avatarColor(full);
+    const isPend=u.status==='pending', isAct=u.status==='active';
+    const lbl=isPend?'Pending':isAct?'Active':(u.status==='rejected'?'Rejected':'Inactive');
+    const sc=isPend?'pending':isAct?'active':(u.status==='rejected'?'rejected':'inactive');
+    const offlineNote=isOffline?' queued':'';
+    return `<tr id="ur-${x(u.id)}">
+      <td><div class="u-cell">
+        <div class="u-av" style="background:linear-gradient(135deg,${c1},${c2})">${x(ini)}</div>
+        <div><div class="u-name">${x(u.firstName)} ${x(u.lastName)}</div>
+        <div class="u-email">${x(u.email)}<span class="ppill ${u.provider||'email'}">${u.provider==='google'?'G':'@'}</span></div></div>
+      </div></td>
+      <td><span class="id-chip">…${x(u.id||'').slice(-10)}</span></td>
+      <td><span class="sbadge ${sc}"><span class="sdot ${isAct?'pulse':''}"></span>${lbl}</span></td>
+      <td><div class="d-date">${fd(u.registeredAt)}</div><div class="d-time">${ft(u.registeredAt)}</div></td>
+      <td>${u.lastLogin?`<div class="d-date">${fd(u.lastLogin)}</div><div class="d-time">${ft(u.lastLogin)}</div>`:`<span class="d-never">Never</span>`}</td>
+      <td><div class="acts">
+        ${isPend?`
+          <button class="abtn approve${offlineNote}" onclick="doApprove('${u.id}','${u.sessionId||''}')">Approve</button>
+          <button class="abtn reject${offlineNote}"  onclick="doReject('${u.id}','${u.sessionId||''}')">Reject</button>
+        `:`
+          <button class="abtn${offlineNote}" onclick="doToggle('${u.id}')">${isAct?'Disable':'Enable'}</button>
+          <button class="abtn del${offlineNote}" onclick="doDel('${u.id}','${x(full)}')">Delete</button>
+        `}
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+/* ════════════════════════════════════════════════
+   ACTIONS (online → direct send, offline → queue)
+════════════════════════════════════════════════ */
+function sendOrQueue(action, onlineCallback){
+  if(isOffline || !sock || sock.readyState!==1){
+    queueAction(action);
+    // Apply optimistically to local cache
+    onlineCallback && onlineCallback(true);
+    toast('Action queued',`Will sync when server is back online.`,'w');
+    return;
+  }
+  onlineCallback && onlineCallback(false);
+}
+
+function doApprove(uid,sid){
+  confirm2('success','Approve User','This user will receive an instant notification and can log into GCS.','Approve','pr',()=>{
+    const action={type:'admin_approve',userId:uid,sessionId:sid,note:'Approved by admin.'};
+    sendOrQueue(action,(offline)=>{
+      if(offline){
+        // Update local cache optimistically
+        users=users.map(u=>u.id===uid?{...u,status:'active'}:u);
+        localStorage.setItem(CACHE_USERS_KEY,JSON.stringify(users));
+        updateStats(); renderTable();
+      } else {
+        on('admin_action_done',()=>{ off('admin_action_done'); toast('Approved','User notified and can now log in.','s'); refreshUsers(); });
+        wsSend(action);
+      }
+    });
+  });
+}
+
+function doReject(uid,sid){
+  reasonModal((reason)=>{
+    const action={type:'admin_reject',userId:uid,sessionId:sid,reason};
+    sendOrQueue(action,(offline)=>{
+      if(offline){
+        users=users.map(u=>u.id===uid?{...u,status:'rejected'}:u);
+        localStorage.setItem(CACHE_USERS_KEY,JSON.stringify(users));
+        updateStats(); renderTable();
+      } else {
+        on('admin_action_done',()=>{ off('admin_action_done'); toast('Rejected','User notified.','e'); refreshUsers(); });
+        wsSend(action);
+      }
+    });
+  });
+}
+
+function doToggle(uid){
+  const action={type:'admin_toggle_status',userId:uid};
+  sendOrQueue(action,(offline)=>{
+    if(offline){
+      users=users.map(u=>u.id===uid?{...u,status:u.status==='active'?'inactive':'active'}:u);
+      localStorage.setItem(CACHE_USERS_KEY,JSON.stringify(users));
+      updateStats(); renderTable();
+    } else {
+      on('toggle_done',()=>{ off('toggle_done'); refreshUsers(); });
+      wsSend(action);
+    }
+  });
+}
+
+function doDel(uid,name){
+  confirm2('danger',`Delete "${name}"?`,'This is permanent. The action will apply when synced with the server.','Delete','dg',()=>{
+    const action={type:'admin_delete_user',userId:uid};
+    sendOrQueue(action,(offline)=>{
+      if(offline){
+        users=users.filter(u=>u.id!==uid);
+        localStorage.setItem(CACHE_USERS_KEY,JSON.stringify(users));
+        updateStats(); renderTable();
+      } else {
+        on('delete_done',()=>{ off('delete_done'); users=users.filter(u=>u.id!==uid); updateStats(); renderTable(); toast('Deleted',`${name} removed.`,'w'); });
+        wsSend(action);
+      }
+    });
+  });
+}
+
+function doLogout(){
+  loggedIn=false; isOffline=false; off('new_signup');
+  document.getElementById('dashScreen').classList.remove('show');
+  document.getElementById('offlineBanner').classList.remove('show');
+  const ls=document.getElementById('loginScreen');
+  ls.style.display=''; ls.classList.remove('out');
+  document.getElementById('aPass').value='';
+  document.getElementById('tnLive').classList.remove('offline');
+  clearAlert();
+}
+
+/* ════════════════════════════════════════════════
+   SERVER CONFIG
+════════════════════════════════════════════════ */
+function toggleCfg(){ document.getElementById('cfgPanel').classList.toggle('open'); }
+function saveServer(){
+  const v=document.getElementById('srvIn').value.trim(); if(!v)return;
+  srvUrl=v; localStorage.setItem('tfly_s',v);
+  document.getElementById('srvShow').textContent=v;
+  document.getElementById('cfgPanel').classList.remove('open');
+  connect();
+}
+
+/* ════════════════════════════════════════════════
+   MODALS
+════════════════════════════════════════════════ */
+function confirm2(iconType,title,body,label,btnClass,onOk){
+  const ov=document.createElement('div'); ov.className='modal-ov';
+  const icons={
+    danger:`<svg viewBox="0 0 24 24" fill="none" stroke="#ff3d5a" stroke-width="2" width="24" height="24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    success:`<svg viewBox="0 0 24 24" fill="none" stroke="#00e090" stroke-width="2" width="24" height="24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+    warning:`<svg viewBox="0 0 24 24" fill="none" stroke="#ffaa00" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+  };
+  ov.innerHTML=`<div class="modal-box">
+    <div class="modal-icon ${iconType}">${icons[iconType]||icons.warning}</div>
+    <div class="modal-t">${title}</div>
+    <div class="modal-s">${body}</div>
+    <div class="modal-acts">
+      <button class="mbtn" onclick="this.closest('.modal-ov').remove()">Cancel</button>
+      <button class="mbtn ${btnClass}" id="mok">${label}</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('#mok').onclick=()=>{ ov.remove(); onOk(); };
+  ov.addEventListener('click',e=>{ if(e.target===ov)ov.remove(); });
+}
+
+function reasonModal(onOk){
+  const ov=document.createElement('div'); ov.className='modal-ov';
+  ov.innerHTML=`<div class="modal-box">
+    <div class="modal-icon danger"><svg viewBox="0 0 24 24" fill="none" stroke="#ff3d5a" stroke-width="2" width="24" height="24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+    <div class="modal-t">Reject Registration</div>
+    <div class="modal-s">This reason will be shown to the user${isOffline?' when the server reconnects':' in real time'}.</div>
+    <div class="modal-fl"><label>Rejection Reason</label>
+    <textarea rows="3">Not authorized for testbed access.</textarea></div>
+    <div class="modal-acts">
+      <button class="mbtn" onclick="this.closest('.modal-ov').remove()">Cancel</button>
+      <button class="mbtn dg" id="mok">Reject User</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('#mok').onclick=()=>{ const r=ov.querySelector('textarea').value.trim()||'Not authorized.'; ov.remove(); onOk(r); };
+  ov.addEventListener('click',e=>{ if(e.target===ov)ov.remove(); });
+}
+
+/* ════════════════════════════════════════════════
+   UI HELPERS
+════════════════════════════════════════════════ */
+function resetBtn(){
+  const btn=document.getElementById('lBtn');
+  btn.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Sign In to Admin Panel`;
+  btn.disabled=false;
+}
+function setConn(type,text){
+  const d=document.getElementById('lcDot');
+  d.className='lb-conn-dot'+(type==='connecting'?' connecting':type==='connected'?' connected':type==='error'?' error':'');
+  document.getElementById('lcText').textContent=text;
+}
+function showAlert(m){ const el=document.getElementById('lAlert'); el.textContent=m; el.style.display='block'; }
+function clearAlert(){ document.getElementById('lAlert').style.display='none'; }
+
+function toast(title,body,type='i'){
+  const area=document.getElementById('ta');
+  const t=document.createElement('div');
+  t.className='toast'+(type==='s'?' s':type==='e'?' e':type==='w'?' w':'');
+  t.innerHTML=`<div class="toast-t">${title}</div><div class="toast-b">${body}</div>`;
+  area.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .4s'; setTimeout(()=>t.remove(),400); },5000);
+}
+
+function x(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fd(iso){ if(!iso)return'—'; return new Date(iso).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}); }
+function ft(iso){ if(!iso)return''; return new Date(iso).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}); }
+
+document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!loggedIn) doLogin(); });
+</script>
+</body>
+</html>

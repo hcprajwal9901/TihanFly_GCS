@@ -1,0 +1,225 @@
+/**
+ * Dropdown Menu Strip Style - SAME POSITION AS FLIGHT CONTROLS
+ * Light background with gray icons, vertical strip layout
+ */
+
+/* ============================================================================
+   DROPDOWN MENU STRIP - EXACT SAME POSITION AS FLIGHT CONTROLS
+   ============================================================================ */
+
+.dropdown-menu-strip {
+    position: fixed;
+    top: 80px;  /* Same as flight controls */
+    left: 20px; /* Same as flight controls */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;  /* Match flight controls */
+    z-index: 2000;
+    pointer-events: none;
+    background: rgba(245, 248, 252, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 12px;  /* Match flight controls */
+    border-radius: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-menu-strip * {
+    pointer-events: all;
+}
+
+/* Hidden state */
+.dropdown-menu-strip.hidden {
+    display: none;
+}
+
+/* ============================================================================
+   DROPDOWN MENU BUTTON - TRANSPARENT STYLE LIKE FLIGHT BUTTONS
+   ============================================================================ */
+
+.dropdown-menu-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 10px;  /* Match flight controls */
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 50px;  /* Match flight controls */
+    min-height: 50px;  /* Match flight controls */
+}
+
+.dropdown-menu-btn:hover {
+    transform: scale(1.15);
+    background: transparent;
+}
+
+.dropdown-menu-btn:active {
+    transform: scale(1.05);
+}
+
+.dropdown-menu-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ============================================================================
+   BUTTON ICONS - GRAY COLOR MATCHING FLIGHT CONTROLS
+   ============================================================================ */
+
+.dropdown-btn-icon {
+    width: 24px;  /* Match flight controls */
+    height: 24px;  /* Match flight controls */
+    margin-bottom: 5px;  /* Match flight controls */
+    transition: all 0.3s ease;
+    filter: brightness(0) saturate(100%) invert(45%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(95%) contrast(90%) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.dropdown-menu-btn:hover .dropdown-btn-icon {
+    transform: scale(1.15);
+    filter: brightness(0) saturate(100%) invert(25%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(95%) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* ============================================================================
+   BUTTON LABELS - DARK COLOR MATCHING FLIGHT CONTROLS
+   ============================================================================ */
+
+.dropdown-btn-label {
+    font-size: 12px;  /* Match flight controls */
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.2;
+    margin-top: 2px;  /* Match flight controls */
+    color: #1a1a1a;
+    text-shadow: none;
+}
+
+.dropdown-menu-btn:hover .dropdown-btn-label {
+    color: #000000;
+    font-weight: 800;
+}
+
+/* ============================================================================
+   ACTIVE/SELECTED STATE
+   ============================================================================ */
+
+.dropdown-menu-btn.active {
+    background: rgba(74, 85, 104, 0.15);
+    box-shadow: 0 0 20px rgba(74, 85, 104, 0.3);
+}
+
+.dropdown-menu-btn.active .dropdown-btn-icon {
+    filter: brightness(0) saturate(100%) invert(25%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(90%) contrast(95%) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.dropdown-menu-btn.active .dropdown-btn-label {
+    color: #000000;
+    font-weight: 800;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+    .dropdown-menu-strip {
+        top: 70px;
+        left: 15px;
+        gap: 10px;  /* Match flight controls */
+        padding: 10px;  /* Match flight controls */
+    }
+
+    .dropdown-menu-btn {
+        width: 68px;  /* Match flight controls */
+        min-height: 68px;  /* Match flight controls */
+        padding: 10px 8px;  /* Match flight controls */
+    }
+
+    .dropdown-btn-icon {
+        width: 34px;  /* Match flight controls */
+        height: 34px;  /* Match flight controls */
+    }
+
+    .dropdown-btn-label {
+        font-size: 11px;  /* Match flight controls */
+    }
+}
+
+@media (max-width: 768px) {
+    .dropdown-menu-strip {
+        top: 65px;
+        left: 12px;
+        gap: 8px;  /* Match flight controls */
+        padding: 8px;
+    }
+
+    .dropdown-menu-btn {
+        width: 62px;  /* Match flight controls */
+        min-height: 62px;  /* Match flight controls */
+        padding: 8px 6px;  /* Match flight controls */
+    }
+
+    .dropdown-btn-icon {
+        width: 32px;  /* Match flight controls */
+        height: 32px;  /* Match flight controls */
+        margin-bottom: 4px;
+    }
+
+    .dropdown-btn-label {
+        font-size: 10px;  /* Match flight controls */
+    }
+}
+
+@media (max-width: 480px) {
+    .dropdown-menu-strip {
+        top: 60px;
+        left: 10px;
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .dropdown-menu-btn {
+        width: 56px;  /* Match flight controls */
+        min-height: 56px;  /* Match flight controls */
+        padding: 8px 5px;  /* Match flight controls */
+    }
+
+    .dropdown-btn-icon {
+        width: 28px;  /* Match flight controls */
+        height: 28px;  /* Match flight controls */
+        margin-bottom: 3px;
+    }
+
+    .dropdown-btn-label {
+        font-size: 9px;  /* Match flight controls */
+    }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .dropdown-menu-strip {
+        top: 60px;
+        left: 12px;
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .dropdown-menu-btn {
+        width: 58px;  /* Match flight controls */
+        min-height: 58px;  /* Match flight controls */
+    }
+
+    .dropdown-btn-icon {
+        width: 30px;  /* Match flight controls */
+        height: 30px;  /* Match flight controls */
+    }
+
+    .dropdown-btn-label {
+        font-size: 9px;  /* Match flight controls */
+    }
+}

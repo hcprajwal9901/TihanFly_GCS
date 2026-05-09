@@ -1,0 +1,494 @@
+/**
+ * Command Editor Panel Stylesheet
+ * Positioned at top right below header - AVOIDS VIDEO OVERLAY
+ */
+
+/* ============================================================================
+   COMMAND EDITOR PANEL - TOP RIGHT BELOW HEADER
+   ============================================================================ */
+
+.command-editor-panel {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    width: 280px; /* ✅ Reduced from 320px */
+    max-height: calc(100vh - 420px); /* ✅ Account for video height */
+    background: linear-gradient(135deg, rgba(245, 248, 252, 0.98) 0%, rgba(235, 240, 248, 0.98) 100%);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15),
+                0 2px 8px rgba(230, 0, 126, 0.1);
+    z-index: 999;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ============================================================================
+   EDITOR HEADER
+   ============================================================================ */
+
+.editor-header {
+    padding: 10px 12px; /* ✅ Reduced padding */
+    background: linear-gradient(135deg, rgba(230, 0, 126, 0.08) 0%, rgba(255, 204, 0, 0.05) 100%);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+
+.editor-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px; /* ✅ Reduced from 15px */
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 0.3px;
+}
+
+.editor-icon {
+    width: 18px; /* ✅ Reduced from 20px */
+    height: 18px;
+    stroke: #E6007E;
+}
+
+/* ============================================================================
+   EDITOR TABS
+   ============================================================================ */
+
+.editor-tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.02);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
+}
+
+.editor-tab {
+    flex: 1;
+    padding: 8px 4px; /* ✅ Reduced padding */
+    background: transparent;
+    border: none;
+    font-size: 9px; /* ✅ Reduced from 11px */
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+}
+
+.editor-tab:hover {
+    color: #E6007E;
+    background: rgba(230, 0, 126, 0.05);
+}
+
+.editor-tab.active {
+    color: #E6007E;
+    font-weight: 700;
+    border-bottom-color: #E6007E;
+    background: rgba(230, 0, 126, 0.08);
+}
+
+/* ============================================================================
+   EDITOR CONTENT - SCROLLABLE
+   ============================================================================ */
+
+.editor-content {
+    padding: 12px; /* ✅ Reduced from 16px */
+    overflow-y: auto;
+    flex: 1;
+}
+
+.editor-content::-webkit-scrollbar {
+    width: 5px; /* ✅ Thinner scrollbar */
+}
+
+.editor-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+.editor-content::-webkit-scrollbar-thumb {
+    background: rgba(230, 0, 126, 0.3);
+    border-radius: 3px;
+}
+
+.editor-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(230, 0, 126, 0.5);
+}
+
+/* ============================================================================
+   TAB PANELS
+   ============================================================================ */
+
+.tab-panel {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-panel.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================================
+   FORM ELEMENTS - COMPACT
+   ============================================================================ */
+
+.form-group {
+    margin-bottom: 12px; /* ✅ Reduced from 16px */
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    font-size: 11px; /* ✅ Reduced from 12px */
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 5px; /* ✅ Reduced from 6px */
+    letter-spacing: 0.2px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 6px 10px; /* ✅ Reduced from 8px 12px */
+    font-size: 12px; /* ✅ Reduced from 13px */
+    font-weight: 500;
+    color: #1a1a1a;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1.5px solid rgba(0, 0, 0, 0.15);
+    border-radius: 6px; /* ✅ Reduced from 8px */
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: #E6007E;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(230, 0, 126, 0.1);
+}
+
+.form-control:hover {
+    border-color: rgba(230, 0, 126, 0.5);
+}
+
+/* ============================================================================
+   CHECKBOX GROUP
+   ============================================================================ */
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px; /* ✅ Reduced from 8px */
+    cursor: pointer;
+    margin-bottom: 0;
+    font-size: 11px; /* ✅ Reduced */
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 16px; /* ✅ Reduced from 18px */
+    height: 16px;
+    cursor: pointer;
+    accent-color: #E6007E;
+}
+
+/* ============================================================================
+   INFO MESSAGE
+   ============================================================================ */
+
+.info-message {
+    padding: 10px; /* ✅ Reduced from 12px */
+    background: rgba(230, 0, 126, 0.05);
+    border-left: 3px solid #E6007E;
+    border-radius: 6px; /* ✅ Reduced from 8px */
+    margin-bottom: 12px; /* ✅ Reduced from 16px */
+}
+
+.info-message p {
+    margin: 0;
+    font-size: 11px; /* ✅ Reduced from 12px */
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+/* ============================================================================
+   WAYPOINT LIST HEADER - COMPACT
+   ============================================================================ */
+
+.waypoint-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px; /* ✅ Reduced from 12px */
+    padding-bottom: 8px; /* ✅ Reduced from 10px */
+    border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+.waypoint-count {
+    font-size: 12px; /* ✅ Reduced from 13px */
+    font-weight: 700;
+    color: #E6007E;
+}
+
+.refresh-waypoints-btn {
+    padding: 5px; /* ✅ Reduced from 6px */
+    background: rgba(230, 0, 126, 0.08);
+    border: none;
+    border-radius: 5px; /* ✅ Reduced from 6px */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.refresh-waypoints-btn svg {
+    width: 14px; /* ✅ Reduced from 16px */
+    height: 14px;
+    stroke: #E6007E;
+}
+
+.refresh-waypoints-btn:hover {
+    background: rgba(230, 0, 126, 0.15);
+    transform: rotate(180deg);
+}
+
+/* ============================================================================
+   EMPTY STATE - COMPACT
+   ============================================================================ */
+
+.empty-state {
+    text-align: center;
+    padding: 20px 15px; /* ✅ Reduced from 30px 20px */
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.empty-icon {
+    font-size: 36px; /* ✅ Reduced from 48px */
+    margin-bottom: 10px; /* ✅ Reduced from 12px */
+    opacity: 0.5;
+}
+
+.empty-state p {
+    margin: 6px 0; /* ✅ Reduced from 8px */
+    font-size: 12px; /* ✅ Reduced from 14px */
+    font-weight: 600;
+}
+
+.empty-state small {
+    font-size: 10px; /* ✅ Reduced from 11px */
+    opacity: 0.7;
+}
+
+/* ============================================================================
+   WAYPOINT LIST - COMPACT
+   ============================================================================ */
+
+.waypoint-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px; /* ✅ Reduced from 8px */
+}
+
+.waypoint-item {
+    padding: 8px; /* ✅ Reduced from 12px */
+    background: rgba(255, 255, 255, 0.8);
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px; /* ✅ Reduced from 10px */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.waypoint-item:hover {
+    background: rgba(230, 0, 126, 0.05);
+    border-color: #E6007E;
+    transform: translateX(3px); /* ✅ Reduced from 4px */
+}
+
+.waypoint-item.selected {
+    background: rgba(230, 0, 126, 0.1);
+    border-color: #E6007E;
+    border-width: 2px;
+}
+
+.waypoint-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px; /* ✅ Reduced from 6px */
+}
+
+.waypoint-item-number {
+    font-size: 12px; /* ✅ Reduced from 14px */
+    font-weight: 700;
+    color: #E6007E;
+}
+
+.waypoint-item-type {
+    font-size: 9px; /* ✅ Reduced from 10px */
+    padding: 2px 5px; /* ✅ Reduced from 2px 6px */
+    background: rgba(230, 0, 126, 0.1);
+    border-radius: 3px; /* ✅ Reduced from 4px */
+    color: #E6007E;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.waypoint-item-coords {
+    font-size: 10px; /* ✅ Reduced from 11px */
+    color: rgba(0, 0, 0, 0.6);
+    line-height: 1.3;
+}
+
+.waypoint-item-coords div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.waypoint-item-coords strong {
+    color: rgba(0, 0, 0, 0.8);
+    font-weight: 600;
+}
+
+/* ============================================================================
+   WAYPOINT DETAILS PANEL - COMPACT
+   ============================================================================ */
+
+.waypoint-details-panel {
+    animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.details-header {
+    margin-bottom: 12px; /* ✅ Reduced from 16px */
+}
+
+.back-to-list-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* ✅ Reduced from 6px */
+    padding: 6px 10px; /* ✅ Reduced from 8px 12px */
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    border-radius: 6px; /* ✅ Reduced from 8px */
+    font-size: 11px; /* ✅ Reduced from 12px */
+    font-weight: 600;
+    color: #1a1a1a;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.back-to-list-btn svg {
+    width: 14px; /* ✅ Reduced from 16px */
+    height: 14px;
+    stroke: currentColor;
+}
+
+.back-to-list-btn:hover {
+    background: rgba(230, 0, 126, 0.1);
+    color: #E6007E;
+}
+
+.details-title {
+    font-size: 14px; /* ✅ Reduced from 16px */
+    font-weight: 700;
+    color: #E6007E;
+    margin-bottom: 12px; /* ✅ Reduced from 16px */
+    padding-bottom: 10px; /* ✅ Reduced from 12px */
+    border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+}
+
+.details-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* ✅ Reduced from 10px */
+    margin-top: 15px; /* ✅ Reduced from 20px */
+}
+
+.btn-save,
+.btn-delete {
+    padding: 8px; /* ✅ Reduced from 10px */
+    border: none;
+    border-radius: 6px; /* ✅ Reduced from 8px */
+    font-size: 12px; /* ✅ Reduced from 13px */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #E6007E 0%, #FF1493 100%);
+    color: white;
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(230, 0, 126, 0.3);
+}
+
+.btn-delete {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.btn-delete:hover {
+    background: rgba(220, 53, 69, 0.2);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN - BETTER VIDEO AVOIDANCE
+   ============================================================================ */
+
+@media (max-width: 1400px) {
+    .command-editor-panel {
+        width: 260px;
+        max-height: calc(100vh - 400px);
+    }
+}
+
+@media (max-width: 1024px) {
+    .command-editor-panel {
+        width: 240px;
+        max-height: calc(100vh - 380px);
+    }
+}
+
+@media (max-width: 768px) {
+    .command-editor-panel {
+        width: 220px;
+        max-height: calc(100vh - 360px);
+    }
+}
+
+@media (max-width: 480px) {
+    .command-editor-panel {
+        width: 200px;
+        max-height: calc(100vh - 340px);
+    }
+}

@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TiHANFly — Admin Console</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Variables ─────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:       #080c14;
+  --surface:  #0e1420;
+  --surface2: #141b28;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.12);
+  --text:     #e8edf5;
+  --muted:    #5a6580;
+  --muted2:   #8892a8;
+  --pink:     #e6007e;
+  --pink-dim: rgba(230,0,126,0.15);
+  --green:    #00d084;
+  --red:      #ff4757;
+  --yellow:   #ffc500;
+  --cyan:     #00b8d9;
+  --blue:     #4e6ef2;
+}
+
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}
+
+/* ── Scrollbar ─────────────────────────────────────── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px}
+
+/* ── GATE (login screen) ───────────────────────────── */
+#gate{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg);z-index:100;
+  animation:fadeIn .3s ease;
+}
+
+.gate-card{
+  width:380px;padding:44px 40px;
+  background:var(--surface);
+  border:1px solid var(--border2);
+  border-radius:20px;
+  box-shadow:0 40px 100px rgba(0,0,0,0.6);
+}
+
+.gate-brand{
+  display:flex;align-items:center;gap:10px;margin-bottom:32px;
+}
+.gate-icon{
+  width:38px;height:38px;background:var(--bg);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border2);
+}
+.gate-icon svg{width:20px;height:20px}
+.gate-title{
+  font-family:'Syne',sans-serif;font-size:16px;font-weight:800;
+  letter-spacing:2px;color:var(--text);
+}
+.gate-title span{color:var(--pink)}
+
+.gate-heading{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px}
+.gate-sub{font-size:13px;color:var(--muted2);margin-bottom:28px}
+
+.gate-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:9px;font-weight:700;letter-spacing:2px;
+  color:var(--pink);background:var(--pink-dim);
+  border:1px solid rgba(230,0,126,0.3);
+  border-radius:4px;padding:4px 10px;margin-bottom:22px;
+  font-family:'DM Mono',monospace;
+}
+
+.gate-field{margin-bottom:14px}
+.gate-field label{
+  display:block;font-size:11px;font-weight:600;
+  color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px;
+}
+.gate-field input{
+  width:100%;padding:11px 14px;
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:10px;font-family:'DM Sans',sans-serif;
+  font-size:14px;color:var(--text);outline:none;transition:all .2s;
+}
+.gate-field input::placeholder{color:var(--muted)}
+.gate-field input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(230,0,126,0.12)}
+
+.gate-error{
+  display:none;font-size:12px;color:var(--red);
+  background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.2);
+  border-radius:8px;padding:9px 12px;margin-bottom:14px;
+}
+
+.gate-btn{
+  width:100%;padding:13px;background:var(--pink);color:#fff;
+  border:none;border-radius:10px;font-family:'DM Sans',sans-serif;
+  font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;
+  letter-spacing:.4px;
+}
+.gate-btn:hover{background:#c8006e;transform:translateY(-1px);box-shadow:0 8px 24px rgba(230,0,126,0.35)}
+.gate-btn:disabled{opacity:.5;cursor:not-allowed;transform:none !important}
+
+/* ── CONNECTION STATUS ─────────────────────────────── */
+.conn-bar{
+  display:flex;align-items:center;gap:8px;margin-top:20px;
+  padding:9px 12px;background:var(--surface2);border-radius:8px;
+  border:1px solid var(--border);font-size:11px;color:var(--muted2);
+}
+.conn-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);transition:background .3s;flex-shrink:0}
+.conn-dot.online{background:var(--green);box-shadow:0 0 8px var(--green)}
+.conn-dot.offline{background:var(--red);animation:blink 1s infinite}
+.conn-url{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-left:auto}
+
+/* ── LAYOUT ────────────────────────────────────────── */
+#app{display:none;height:100vh;flex-direction:column}
+#app.visible{display:flex}
+
+/* Sidebar + main */
+.layout{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ───────────────────────────────────────── */
+.sidebar{
+  width:220px;flex-shrink:0;
+  background:var(--surface);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;padding:24px 0;
+}
+
+.sb-brand{
+  display:flex;align-items:center;gap:10px;
+  padding:0 20px 24px;border-bottom:1px solid var(--border);margin-bottom:20px;
+}
+.sb-icon{
+  width:34px;height:34px;background:var(--bg);border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border2);flex-shrink:0;
+}
+.sb-icon svg{width:18px;heigusernameht:18px}
+.sb-name{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:800;
+  letter-spacing:1.5px;color:var(--text);
+}
+.sb-name span{color:var(--pink)}
+
+.sb-section{
+  font-size:9px;font-weight:700;letter-spacing:2px;
+  color:var(--muted);text-transform:uppercase;
+  padding:0 20px;margin-bottom:8px;font-family:'DM Mono',monospace;
+}
+
+.sb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 20px;font-size:13px;font-weight:500;
+  color:var(--muted2);cursor:pointer;transition:all .15s;
+  border-left:2px solid transparent;margin-bottom:2px;
+}
+.sb-item svg{width:15px;height:15px;flex-shrink:0;opacity:.6}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+.sb-item.active{
+  color:var(--text);background:rgba(230,0,126,0.06);
+  border-left-color:var(--pink);
+}
+.sb-item.active svg{opacity:1}
+
+.sb-spacer{flex:1}
+
+.sb-bottom{padding:0 14px 0;border-top:1px solid var(--border);padding-top:16px}
+.sb-admin-info{
+  display:flex;align-items:center;gap:10px;
+  padding:10px;background:var(--surface2);border-radius:10px;
+  border:1px solid var(--border);margin-bottom:10px;
+}
+.sb-avatar{
+  width:30px;height:30px;border-radius:8px;
+  background:linear-gradient(135deg,var(--pink),#ff6fb0);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;flex-shrink:0;
+}
+.sb-admin-name{font-size:12px;font-weight:600;color:var(--text)}
+.sb-admin-role{font-size:10px;color:var(--pink);font-family:'DM Mono',monospace}
+
+.sb-logout{
+  width:100%;padding:8px;background:transparent;
+  border:1px solid rgba(255,71,87,0.2);border-radius:8px;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
+  color:var(--red);cursor:pointer;transition:all .2s;
+}
+.sb-logout:hover{background:rgba(255,71,87,0.08);border-color:var(--red)}
+
+/* ── TOPBAR ────────────────────────────────────────── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:56px;flex-shrink:0;
+  background:var(--surface);border-bottom:1px solid var(--border);
+}
+.topbar-left{display:flex;align-items:center;gap:12px}
+.topbar-page{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text)}
+.topbar-breadcrumb{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.topbar-breadcrumb span{color:var(--muted2)}
+
+.topbar-right{display:flex;align-items:center;gap:12px}
+
+.topbar-ws{
+  display:flex;align-items:center;gap:7px;
+  padding:5px 11px;background:var(--surface2);
+  border:1px solid var(--border);border-radius:7px;
+  font-size:11px;color:var(--muted2);font-family:'DM Mono',monospace;
+}
+.topbar-ws-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);transition:background .3s}
+.topbar-ws-dot.on{background:var(--green);box-shadow:0 0 6px var(--green)}
+
+.topbar-refresh{
+  padding:6px 13px;background:var(--surface2);
+  border:1px solid var(--border2);border-radius:8px;
+  font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
+  color:var(--muted2);cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:6px;
+}
+.topbar-refresh:hover{border-color:var(--border2);color:var(--text);background:rgba(255,255,255,0.05)}
+.topbar-refresh svg{width:12px;height:12px;transition:transform .4s}
+.topbar-refresh:hover svg{transform:rotate(180deg)}
+
+/* ── MAIN CONTENT ──────────────────────────────────── */
+.main{flex:1;overflow-y:auto;padding:28px 32px;display:flex;flex-direction:column;gap:20px}
+
+/* ── STATS GRID ────────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;flex-shrink:0}
+
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:18px 20px;
+  position:relative;overflow:hidden;transition:border-color .2s;
+}
+.stat-card:hover{border-color:var(--border2)}
+.stat-card::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 80% 20%,var(--glow) 0%,transparent 60%);
+  opacity:.06;pointer-events:none;
+}
+.stat-card:nth-child(1){--glow:var(--pink)}
+.stat-card:nth-child(2){--glow:var(--green)}
+.stat-card:nth-child(3){--glow:var(--red)}
+.stat-card:nth-child(4){--glow:var(--cyan)}
+
+.stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.stat-icon{
+  width:34px;height:34px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+}
+.stat-card:nth-child(1) .stat-icon{background:var(--pink-dim)}
+.stat-card:nth-child(2) .stat-icon{background:rgba(0,208,132,0.12)}
+.stat-card:nth-child(3) .stat-icon{background:rgba(255,71,87,0.1)}
+.stat-card:nth-child(4) .stat-icon{background:rgba(0,184,217,0.1)}
+
+.stat-trend{font-size:10px;font-weight:600;font-family:'DM Mono',monospace;
+  padding:2px 7px;border-radius:4px;color:var(--green);background:rgba(0,208,132,0.1)}
+
+.stat-val{
+  font-family:'Syne',sans-serif;font-size:32px;font-weight:800;
+  color:var(--text);line-height:1;margin-bottom:4px;
+}
+.stat-card:nth-child(1) .stat-val{color:var(--pink)}
+.stat-card:nth-child(2) .stat-val{color:var(--green)}
+.stat-card:nth-child(3) .stat-val{color:var(--red)}
+.stat-card:nth-child(4) .stat-val{color:var(--cyan)}
+
+.stat-label{font-size:11px;font-weight:600;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.8px}
+
+/* ── TABLE SECTION ─────────────────────────────────── */
+.table-section{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;flex:1;display:flex;flex-direction:column;overflow:hidden;
+  min-height:0;
+}
+
+.table-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 24px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.table-title{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  color:var(--text);display:flex;align-items:center;gap:10px;
+}
+.table-badge{
+  font-size:10px;font-weight:700;font-family:'DM Mono',monospace;
+  color:var(--pink);background:var(--pink-dim);
+  border:1px solid rgba(230,0,126,0.25);
+  padding:2px 9px;border-radius:20px;
+}
+.table-controls{display:flex;align-items:center;gap:10px}
+.search-wrap{position:relative}
+.search-wrap svg{
+  position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;color:var(--muted);pointer-events:none;
+}
+.table-search{
+  padding:7px 12px 7px 32px;
+  background:var(--surface2);border:1px solid var(--border2);
+  border-radius:8px;font-family:'DM Sans',sans-serif;
+  font-size:12px;color:var(--text);outline:none;
+  transition:all .2s;width:220px;
+}
+.table-search::placeholder{color:var(--muted)}
+.table-search:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(230,0,126,0.1);width:260px}
+
+/* ── TABLE ─────────────────────────────────────────── */
+.table-wrap{flex:1;overflow:auto;min-height:0}
+
+table{width:100%;border-collapse:collapse}
+
+thead{position:sticky;top:0;z-index:5;background:var(--surface2)}
+thead tr{border-bottom:1px solid var(--border)}
+th{
+  padding:11px 18px;text-align:left;
+  font-size:10px;font-weight:700;color:var(--muted);
+  letter-spacing:1px;text-transform:uppercase;
+  font-family:'DM Mono',monospace;white-space:nowrap;
+}
+th:last-child{text-align:right}
+
+tbody tr{border-bottom:1px solid var(--border);transition:background .12s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(255,255,255,0.02)}
+
+td{padding:14px 18px;font-size:13px;vertical-align:middle}
+td:last-child{text-align:right}
+
+/* User cell */
+.u-cell{display:flex;align-items:center;gap:12px;min-width:220px}
+.u-av{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;
+}
+.u-name{font-weight:600;color:var(--text);font-size:13px;white-space:nowrap}
+.u-email{font-size:11px;color:var(--muted2);margin-top:2px;white-space:nowrap}
+
+/* ID pill */
+.id-pill{
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:500;
+  color:var(--muted);background:var(--surface2);
+  border:1px solid var(--border);border-radius:6px;
+  padding:3px 9px;white-space:nowrap;display:inline-block;
+}
+
+/* Status badge */
+.status-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 11px;border-radius:20px;font-size:11px;font-weight:600;
+  white-space:nowrap;border:1px solid transparent;
+}
+.status-badge .dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.status-badge .dot.pulse{animation:blink 2s infinite}
+.status-badge.active  {color:var(--green);background:rgba(0,208,132,0.1);border-color:rgba(0,208,132,0.25)}
+.status-badge.inactive{color:var(--red);background:rgba(255,71,87,0.08);border-color:rgba(255,71,87,0.2)}
+.status-badge.pending {color:var(--yellow);background:rgba(255,197,0,0.1);border-color:rgba(255,197,0,0.25)}
+.status-badge.rejected{color:var(--red);background:rgba(255,71,87,0.08);border-color:rgba(255,71,87,0.2)}
+
+/* Date */
+.d-main{font-size:12px;color:var(--text);font-weight:500;white-space:nowrap}
+.d-sub {font-size:10px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace}
+.d-never{font-size:12px;color:var(--muted);font-style:italic}
+
+/* Buttons */
+.actions{display:flex;gap:6px;align-items:center;justify-content:flex-end}
+.btn-act{
+  padding:5px 12px;font-size:11px;font-weight:600;
+  font-family:'DM Sans',sans-serif;border-radius:7px;cursor:pointer;
+  transition:all .15s;white-space:nowrap;border:1px solid var(--border2);
+  background:var(--surface2);color:var(--muted2);
+}
+.btn-act:hover{border-color:var(--border2);color:var(--text);background:rgba(255,255,255,0.05)}
+.btn-act.approve{border-color:rgba(0,208,132,0.3);color:var(--green);background:rgba(0,208,132,0.07)}
+.btn-act.approve:hover{background:rgba(0,208,132,0.15);border-color:var(--green)}
+.btn-act.danger{border-color:rgba(255,71,87,0.25);color:var(--red);background:rgba(255,71,87,0.05)}
+.btn-act.danger:hover{background:rgba(255,71,87,0.12);border-color:var(--red)}
+
+/* Empty */
+.empty-state{
+  text-align:center;padding:64px 20px;color:var(--muted);
+}
+.empty-state .ei{font-size:40px;opacity:.2;margin-bottom:12px}
+.empty-state .et{font-size:15px;font-weight:600;color:var(--muted2);margin-bottom:5px}
+.empty-state .es{font-size:12px}
+
+/* ── TOAST ─────────────────────────────────────────── */
+#toasts{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:14px 18px;background:var(--surface);
+  border:1px solid var(--border2);border-radius:12px;
+  box-shadow:0 16px 48px rgba(0,0,0,0.5);
+  max-width:340px;animation:slideUp .3s cubic-bezier(0.16,1,0.3,1);
+  border-left:3px solid var(--cyan);
+}
+.toast.success{border-left-color:var(--green)}
+.toast.error  {border-left-color:var(--red)}
+.toast.warn   {border-left-color:var(--yellow)}
+.toast-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.toast-body .tt{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px}
+.toast-body .ts{font-size:11px;color:var(--muted2);line-height:1.4}
+
+/* ── Animations ────────────────────────────────────── */
+@keyframes fadeIn {from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Responsive ────────────────────────────────────── */
+@media(max-width:900px){
+  .sidebar{display:none}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .main{padding:20px 16px}
+  .topbar{padding:0 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ GATE (Login) -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-brand">
+      <div class="gate-icon">
+        <svg viewBox="0 0 24 24" fill="none">
+          <ellipse cx="12" cy="12" rx="4" ry="2.5" fill="white" opacity=".9"/>
+          <rect x="11" y="6" width="2" height="3" rx="1" fill="white" opacity=".7"/>
+          <rect x="11" y="15" width="2" height="3" rx="1" fill="white" opacity=".7"/>
+          <rect x="6" y="11" width="3" height="2" rx="1" fill="white" opacity=".7"/>
+          <rect x="15" y="11" width="3" height="2" rx="1" fill="white" opacity=".7"/>
+          <circle cx="6"  cy="6"  r="2.5" fill="none" stroke="#e6007e" stroke-width="1.2"/>
+          <circle cx="18" cy="6"  r="2.5" fill="none" stroke="#e6007e" stroke-width="1.2"/>
+          <circle cx="6"  cy="18" r="2.5" fill="none" stroke="#e6007e" stroke-width="1.2"/>
+          <circle cx="18" cy="18" r="2.5" fill="none" stroke="#e6007e" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <div class="gate-title">TiHAN<span>Fly</span></div>
+    </div>
+
+    <div class="gate-heading">Admin Console</div>
+    <div class="gate-sub">Restricted access — authorized personnel only</div>
+
+    <div class="gate-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="10" height="10">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      RESTRICTED ACCESS
+    </div>
+
+    <div class="gate-error" id="gateError"></div>
+
+    <div class="gate-field">
+      <label>Username</label>
+      <input type="text" id="gUser" placeholder="Admin username" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="gate-field">
+      <label>Password</label>
+      <input type="password" id="gPass" placeholder="••••••••••">
+    </div>
+
+    <button class="gate-btn" id="gBtn" onclick="doLogin()">Access Admin Console</button>
+
+    <div class="conn-bar">
+      <div class="conn-dot" id="connDot"></div>
+      <span id="connText">Connecting to server…</span>
+      <span class="conn-url" id="connUrlLabel"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ APP -->
+<div id="app">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-page">User Management</div>
+      <div class="topbar-breadcrumb">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="m9 18 6-6-6-6"/></svg>
+        <span id="tbSub">All Users</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-ws">
+        <div class="topbar-ws-dot" id="wsDot"></div>
+        <span id="wsLabel">Connecting…</span>
+      </div>
+      <button class="topbar-refresh" onclick="requestUsers()">
+        <svg id="refreshIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+        Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Layout -->
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sb-brand">
+        <div class="sb-icon">
+          <svg viewBox="0 0 24 24" fill="none">
+            <ellipse cx="12" cy="12" rx="4" ry="2.5" fill="white" opacity=".9"/>
+            <rect x="11" y="6" width="2" height="3" rx="1" fill="white" opacity=".7"/>
+            <rect x="11" y="15" width="2" height="3" rx="1" fill="white" opacity=".7"/>
+            <rect x="6" y="11" width="3" height="2" rx="1" fill="white" opacity=".7"/>
+            <rect x="15" y="11" width="3" height="2" rx="1" fill="white" opacity=".7"/>
+            <circle cx="6"  cy="6"  r="2.5" fill="none" stroke="#e6007e" stroke-width="1.2"/>
+            <circle cx="18" cy="6"  r="2.5" fill="none" stroke="#e6007e" stroke-width="1.2"/>
+            <circle cx="6"  cy="18" r="2.5" fill="none" stroke="#e6007e" stroke-width="1.2"/>
+            <circle cx="18" cy="18" r="2.5" fill="none" stroke="#e6007e" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <div class="sb-name">TiHAN<span>Fly</span></div>
+      </div>
+
+      <div class="sb-section">Navigation</div>
+
+      <div class="sb-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        Users
+      </div>
+
+      <div class="sb-item" onclick="showToast('Coming Soon','Approval logs will be available in the next update.','info')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/>
+        </svg>
+        Approval Log
+      </div>
+
+      <div class="sb-item" onclick="showToast('Coming Soon','Analytics dashboard coming in next release.','info')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        Analytics
+      </div>
+
+      <div class="sb-spacer"></div>
+
+      <div class="sb-bottom">
+        <div class="sb-admin-info">
+          <div class="sb-avatar">A</div>
+          <div>
+            <div class="sb-admin-name">TiHANFLY</div>
+            <div class="sb-admin-role">SUPER ADMIN</div>
+          </div>
+        </div>
+        <button class="sb-logout" onclick="doLogout()">← Log Out</button>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon">👥</div>
+            <div class="stat-trend" id="trendTotal">TOTAL</div>
+          </div>
+          <div class="stat-val" id="sTotal">0</div>
+          <div class="stat-label">Registered Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon">✅</div>
+            <div class="stat-trend" id="trendActive" style="color:var(--green);background:rgba(0,208,132,0.1)">ACTIVE</div>
+          </div>
+          <div class="stat-val" id="sActive">0</div>
+          <div class="stat-label">Active Users</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-trend" id="trendPending" style="color:var(--yellow);background:rgba(255,197,0,0.1)">PENDING</div>
+          </div>
+          <div class="stat-val" id="sPending">0</div>
+          <div class="stat-label">Awaiting Approval</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon">📅</div>
+            <div class="stat-trend" id="trendToday" style="color:var(--cyan);background:rgba(0,184,217,0.1)">TODAY</div>
+          </div>
+          <div class="stat-val" id="sToday">0</div>
+          <div class="stat-label">Joined Today</div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-section">
+        <div class="table-header">
+          <div class="table-title">
+            All Users
+            <span class="table-badge" id="tblBadge">0</span>
+          </div>
+          <div class="table-controls">
+            <div class="search-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+              </svg>
+              <input type="text" class="table-search" id="searchInput"
+                placeholder="Search by name or email…" oninput="filterTable()">
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Registered</th>
+                <th>Last Login</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tBody"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState" style="display:none">
+            <div class="ei">👤</div>
+            <div class="et">No users found</div>
+            <div class="es">Users will appear here after signing up</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /main -->
+  </div><!-- /layout -->
+</div><!-- /app -->
+
+<!-- Toasts -->
+<div id="toasts"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  CONFIG — Change WS_URL to your server IP when remote
+//  Example: 'ws://192.168.1.100:8080'
+//  Example: 'wss://tihanfly.iith.ac.in:8080'
+// ═══════════════════════════════════════════════════════
+const WS_URL = 'ws://localhost:8080';
+
+// ═══════════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════════
+let ws          = null;
+let connected   = false;
+let loggedIn    = false;
+let allUsers    = [];
+let msgQueue    = [];
+let handlers    = {};
+let reconnectTimer = null;
+
+// ═══════════════════════════════════════════════════════
+//  WEBSOCKET
+// ═══════════════════════════════════════════════════════
+function connect() {
+  try { ws = new WebSocket(WS_URL); } catch(e) { scheduleReconnect(); return; }
+
+  ws.onopen = () => {
+    connected = true;
+    updateConnUI(true);
+    msgQueue.forEach(m => ws.send(m));
+    msgQueue = [];
+    // heartbeat
+    ws._hb = setInterval(() => send({type:'ping'}), 25000);
+  };
+
+  ws.onmessage = ({data}) => {
+    try {
+      const msg = JSON.parse(data);
+      (handlers[msg.type] || []).forEach(cb => cb(msg));
+    } catch(e) {}
+  };
+
+  ws.onclose = () => {
+    connected = false;
+    clearInterval(ws._hb);
+    updateConnUI(false);
+    scheduleReconnect();
+  };
+
+  ws.onerror = () => {};
+}
+
+function scheduleReconnect() {
+  clearTimeout(reconnectTimer);
+  reconnectTimer = setTimeout(connect, 3000);
+}
+
+function send(obj) {
+  const s = JSON.stringify(obj);
+  if (connected && ws.readyState === 1) ws.send(s);
+  else msgQueue.push(s);
+}
+
+function on(type, cb) {
+  if (!handlers[type]) handlers[type] = [];
+  handlers[type].push(cb);
+}
+function off(type) { delete handlers[type]; }
+
+// ═══════════════════════════════════════════════════════
+//  CONNECTION UI
+// ═══════════════════════════════════════════════════════
+function updateConnUI(online) {
+  // Gate
+  const dot  = document.getElementById('connDot');
+  const text = document.getElementById('connText');
+  dot.className  = 'conn-dot ' + (online ? 'online' : 'offline');
+  text.textContent = online ? 'Connected to server' : 'Reconnecting…';
+  document.getElementById('connUrlLabel').textContent = WS_URL.replace('ws://','').replace('wss://','');
+
+  // App topbar
+  const wsDot   = document.getElementById('wsDot');
+  const wsLabel = document.getElementById('wsLabel');
+  if (wsDot) {
+    wsDot.className = 'topbar-ws-dot ' + (online ? 'on' : '');
+    wsLabel.textContent = online ? 'Live' : 'Reconnecting…';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+//  LOGIN
+// ═══════════════════════════════════════════════════════
+function doLogin() {
+  const user = document.getElementById('gUser').value.trim();
+  const pass = document.getElementById('gPass').value;
+  const err  = document.getElementById('gateError');
+  const btn  = document.getElementById('gBtn');
+
+  if (!user || !pass) { showGateError('Both fields are required.'); return; }
+  if (!connected)     { showGateError('Not connected to server. Please wait…'); return; }
+
+  btn.disabled = true; btn.textContent = 'Verifying…';
+  err.style.display = 'none';
+
+  on('admin_login_success', () => {
+    off('admin_login_success'); off('admin_login_error');
+    loggedIn = true;
+    document.getElementById('gate').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    // Listen for new signups in real-time
+    on('new_signup', handleNewSignup);
+    on('pong', ()=>{});
+    on('ping', ()=>send({type:'pong'}));
+    requestUsers();
+    btn.disabled = false; btn.textContent = 'Access Admin Console';
+  });
+
+  on('admin_login_error', (msg) => {
+    off('admin_login_success'); off('admin_login_error');
+    showGateError(msg.message || 'Invalid credentials.');
+    btn.disabled = false; btn.textContent = 'Access Admin Console';
+  });
+
+  send({type:'admin_login', username:user, password:pass});
+}
+
+function showGateError(msg) {
+  const el = document.getElementById('gateError');
+  el.textContent = '⚠  ' + msg;
+  el.style.display = 'block';
+}
+
+function doLogout() {
+  loggedIn = false;
+  off('new_signup');
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('gate').style.display = 'flex';
+  document.getElementById('gUser').value = '';
+  document.getElementById('gPass').value = '';
+  document.getElementById('gateError').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════════════
+//  USERS
+// ═══════════════════════════════════════════════════════
+function requestUsers() {
+  const icon = document.getElementById('refreshIcon');
+  icon.style.animation = 'spin .6s linear';
+  setTimeout(() => icon.style.animation = '', 600);
+
+  on('users_list', (msg) => {
+    off('users_list');
+    allUsers = msg.users || [];
+    renderStats();
+    renderTable(allUsers);
+  });
+  send({type:'admin_get_users'});
+}
+
+function renderStats() {
+  const today = new Date().toDateString();
+  document.getElementById('sTotal').textContent   = allUsers.length;
+  document.getElementById('sActive').textContent  = allUsers.filter(u=>u.status==='active').length;
+  document.getElementById('sPending').textContent = allUsers.filter(u=>u.status==='pending').length;
+  document.getElementById('sToday').textContent   = allUsers.filter(u=>
+    u.registeredAt && new Date(u.registeredAt).toDateString()===today).length;
+  document.getElementById('tblBadge').textContent = allUsers.length;
+  document.getElementById('tbSub').textContent    = allUsers.length + ' Users';
+}
+
+function filterTable() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = allUsers.filter(u =>
+    (u.firstName+' '+u.lastName).toLowerCase().includes(q) ||
+    (u.email||'').toLowerCase().includes(q)
+  );
+  renderTable(filtered);
+}
+
+function renderTable(users) {
+  const tbody = document.getElementById('tBody');
+  const empty = document.getElementById('emptyState');
+
+  if (!users.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  // Avatar gradient by index
+  const gradients = [
+    'linear-gradient(135deg,#e6007e,#ff6fb0)',
+    'linear-gradient(135deg,#4e6ef2,#7b9bff)',
+    'linear-gradient(135deg,#00b8d9,#00d084)',
+    'linear-gradient(135deg,#ff6b35,#ffc500)',
+    'linear-gradient(135deg,#7c3aed,#a855f7)',
+  ];
+
+  tbody.innerHTML = users.map((u, i) => {
+    const isPending  = u.status === 'pending';
+    const statusCls  = isPending ? 'pending' : u.status;
+    const statusLbl  = isPending ? '⏳ Pending'
+                     : u.status === 'active' ? 'Active'
+                     : u.status === 'rejected' ? 'Rejected' : 'Disabled';
+    const grad = gradients[i % gradients.length];
+    const shortId = '…' + u.id.slice(-8);
+
+    return `<tr id="row-${u.id}">
+      <td>
+        <div class="u-cell">
+          <div class="u-av" style="background:${grad}">${(u.firstName||'?')[0]}${(u.lastName||'?')[0]}</div>
+          <div>
+            <div class="u-name">${esc(u.firstName)} ${esc(u.lastName)}</div>
+            <div class="u-email">${esc(u.email)}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="id-pill">${esc(shortId)}</span></td>
+      <td>
+        <span class="status-badge ${statusCls}">
+          <span class="dot ${u.status==='active'?'pulse':''}"></span>
+          ${statusLbl}
+        </span>
+      </td>
+      <td>
+        <div class="d-main">${fmtDate(u.registeredAt)}</div>
+        <div class="d-sub">${fmtTime(u.registeredAt)}</div>
+      </td>
+      <td>
+        ${u.lastLogin
+          ? `<div class="d-main">${fmtDate(u.lastLogin)}</div><div class="d-sub">${fmtTime(u.lastLogin)}</div>`
+          : `<span class="d-never">Never</span>`}
+      </td>
+      <td>
+        <div class="actions">
+          ${isPending ? `
+            <button class="btn-act approve" onclick="approveUser('${u.id}','${u.sessionId||''}')">✓ Approve</button>
+            <button class="btn-act danger"  onclick="rejectUser('${u.id}','${u.sessionId||''}')">✗ Reject</button>
+          ` : `
+            <button class="btn-act" onclick="toggleUser('${u.id}')">
+              ${u.status==='active' ? 'Disable' : 'Enable'}
+            </button>
+            <button class="btn-act danger" onclick="deleteUser('${u.id}')">Delete</button>
+          `}
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+//  ADMIN ACTIONS
+// ═══════════════════════════════════════════════════════
+function approveUser(userId, sessionId) {
+  if (!confirm('Approve this user? They will be notified instantly.')) return;
+  on('admin_action_done', () => {
+    off('admin_action_done');
+    showToast('User Approved ✅','User has been notified and can now log in.','success');
+    requestUsers();
+  });
+  send({type:'admin_approve', userId, sessionId, note:'Approved by TiHAN admin.'});
+}
+
+function rejectUser(userId, sessionId) {
+  const reason = prompt('Rejection reason (shown to user):') || 'Not authorized for testbed access.';
+  if (reason === null) return;
+  on('admin_action_done', () => {
+    off('admin_action_done');
+    showToast('User Rejected','User has been notified.','error');
+    requestUsers();
+  });
+  send({type:'admin_reject', userId, sessionId, reason});
+}
+
+function toggleUser(userId) {
+  on('toggle_done', () => {
+    off('toggle_done');
+    showToast('Status Updated','User status has been changed.','info');
+    requestUsers();
+  });
+  send({type:'admin_toggle_status', userId});
+}
+
+function deleteUser(userId) {
+  if (!confirm('Permanently delete this user? This cannot be undone.')) return;
+  on('delete_done', () => {
+    off('delete_done');
+    showToast('User Deleted','User has been removed.','warn');
+    requestUsers();
+  });
+  send({type:'admin_delete_user', userId});
+}
+
+function handleNewSignup(msg) {
+  showToast(
+    '🆕 New Registration',
+    `${msg.firstName} ${msg.lastName} (${msg.email}) wants to join.`,
+    'info'
+  );
+  requestUsers();
+}
+
+// ═══════════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════════
+function showToast(title, body, type='info') {
+  const icons = {success:'✅', error:'❌', warn:'⚠️', info:'💬'};
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `
+    <div class="toast-icon">${icons[type]||icons.info}</div>
+    <div class="toast-body">
+      <div class="tt">${title}</div>
+      <div class="ts">${body}</div>
+    </div>`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(() => {
+    el.style.opacity = '0'; el.style.transition = 'opacity .35s';
+    setTimeout(() => el.remove(), 350);
+  }, 4000);
+}
+
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+}
+function fmtTime(iso) {
+  if (!iso) return '';
+  return new Date(iso).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+}
+
+// Enter key on gate
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !loggedIn) doLogin();
+});
+
+// ═══════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════
+connect();
+</script>
+</body>
+</html>

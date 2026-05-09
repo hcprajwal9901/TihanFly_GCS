@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TiHANFly - Professional Drone GCS</title>
+    <link rel="icon" type="image/x-icon" href="resources/icon/tihan.png">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- ── Drone count badge pulse animation ────────────────────────────── -->
+    <style>
+        @keyframes dronePulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: .4;
+                transform: scale(1.4);
+            }
+        }
+    </style>
+
+    <!-- ── WebSocket interceptor (v1) ──────────────────────────────────────
+         MUST load before websocket.js. Patches the native WebSocket
+         constructor so every socket created anywhere on the page is
+         intercepted. Routes ALL message types:
+           • status          → updateVehicleSelector()
+           • firmware_status / firmware_log / firmware_progress / firmware_result
+                             → vcHandleFirmwareMessage()
+           • serial_ports    → vcPopulatePorts()
+           • port_appeared / port_disappeared → refresh port table
+    ──────────────────────────────────────────────────────────────────────── -->
+    <script>
+        (function () {
+            var _NativeWS = window.WebSocket;
+            window.__mv_sockets = [];
+
+            var FIRMWARE_TYPES = {
+                'firmware_status': true,
+                'firmware_log': true,
+                'firmware_progress': true,
+                'firmware_result': true
+            };
+
+            window.TelemetryStore = {
+                mode: '--',
+                satellites: 0,
+                batteryVoltage: 0.0,
+                batteryPercent: 0,
+                signalStrength: 0,
+                altitude: 0.0,        // AGL metres — for geofence alt check
+                distFromHome: 0.0,    // horizontal metres — for geofence radius check
+                homeLat: null,
+                homeLng: null,
+            };
+
+            function updateHeaderUI() {
+                var elMode = document.getElementById('modeIndicatorText');
+                if (elMode) elMode.textContent = window.TelemetryStore.mode;
+
+                var elSat = document.getElementById('gpsSatCountText');
+                if (elSat) elSat.textContent = window.TelemetryStore.satellites;
+
+                var elBattVolt = document.getElementById('battVoltageText');
+                if (elBattVolt) elBattVolt.textContent = window.TelemetryStore.batteryVoltage.toFixed(1) + ' V';
+
+                var elBattPct = document.getElementById('battPercentText');
+                if (elBattPct) elBattPct.textContent = window.TelemetryStore.batteryPercent + '%';
+
+                var battIcon = document.querySelector('.battery-indicator .indicator-icon');
+                if (battIcon) {
+                    if (window.TelemetryStore.batteryPercent > 80) battIcon.src = 'resources/BatteryGreen.svg';
+                    else if (window.TelemetryStore.batteryPercent > 60) battIcon.src = 'resources/BatteryYellowGreen.svg';
+                    else if (window.TelemetryStore.batteryPercent > 40) battIcon.src = 'resources/BatteryYellow.svg';
+                    else if (window.TelemetryStore.batteryPercent > 20) battIcon.src = 'resources/BatteryOrange.svg';
+                    else if (window.TelemetryStore.batteryPercent > 5) battIcon.src = 'resources/BatteryRed.svg';
+                    else battIcon.src = 'resources/BatteryZero.svg';
+                }
+
+                var elSigQual = document.getElementById('signalQualText');
+                if (elSigQual) {
+                    elSigQual.style.display = 'inline';
+                    elSigQual.textContent = window.TelemetryStore.signalStrength + '%';
+                }
+
+                var sigIcon = document.getElementById('signalIndicatorIcon');
+                if (sigIcon) {
+                    var rank = 0;
+                    if (window.TelemetryStore.signalStrength > 80) rank = 100;
+                    else if (window.TelemetryStore.signalStrength > 60) rank = 80;
+                    else if (window.TelemetryStore.signalStrength > 40) rank = 60;
+                    else if (window.TelemetryStore.signalStrength > 20) rank = 40;
+                    else if (window.TelemetryStore.signalStrength > 0) rank = 20;
+                    sigIcon.src = 'resources/signal' + rank + '.svg';
+                }
+            }
+
+            function formatModeStr(m) {
+                if (typeof m === 'number') {
+                    var modes = {0: 'Stabilize', 1: 'Acro', 2: 'Alt Hold', 3: 'Auto', 4: 'Guided', 5: 'Loiter', 6: 'RTL', 9: 'Land', 16: 'Pos Hold'};
+                    return modes[m] || ('Mode ' + m);
+                }
+                if (typeof m === 'string') {
+                    var friendly = {
+                        'STABILIZE': 'Stabilize', 'ACRO': 'Acro', 'ALT_HOLD': 'Alt Hold', 'AUTO': 'Auto',
+                        'GUIDED': 'Guided', 'LOITER': 'Loiter', 'RTL': 'RTL', 'CIRCLE': 'Circle', 'LAND': 'Land',
+                        'POSHOLD': 'Pos Hold', 'SMART_RTL': 'Smart RTL', 'AUTO_RTL': 'Auto RTL'
+                    };
+                    if (friendly[m.toUpperCase()]) return friendly[m.toUpperCase()];
+                    return m.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, function(l) { return l.toUpperCase(); });
+                }
+                return String(m);
+            }
+
+            function routeMessages(event) {
+                var msg;
+                try { msg = JSON.parse(event.data); } catch (e) { return; }
+                if (!msg || !msg.type) return;
+
+                if (msg.type === 'gps' || msg.type === 'telemetry') {
+                    var updated = false;
+                    if (msg.satellites !== undefined)       { window.TelemetryStore.satellites     = msg.satellites;       updated = true; }
+                    if (msg.battery !== undefined)          { window.TelemetryStore.batteryPercent = msg.battery;          updated = true; }
+                    if (msg.battery_percent !== undefined)  { window.TelemetryStore.batteryPercent = msg.battery_percent;  updated = true; }
+                    if (msg.voltage !== undefined)          { window.TelemetryStore.batteryVoltage = msg.voltage;          updated = true; }
+                    if (msg.battery_voltage !== undefined)  { window.TelemetryStore.batteryVoltage = msg.battery_voltage;  updated = true; }
+                    if (msg.rssi !== undefined)             { window.TelemetryStore.signalStrength = msg.rssi;             updated = true; }
+                    if (msg.signal !== undefined)           { window.TelemetryStore.signalStrength = msg.signal;           updated = true; }
+                    // Geofence telemetry fields
+                    if (msg.altitude !== undefined)         { window.TelemetryStore.altitude      = parseFloat(msg.altitude);       updated = true; }
+                    if (msg.alt !== undefined)              { window.TelemetryStore.altitude      = parseFloat(msg.alt);            updated = true; }
+                    if (msg.relative_alt !== undefined)     { window.TelemetryStore.altitude      = parseFloat(msg.relative_alt);   updated = true; }
+                    if (msg.dist_from_home !== undefined)   { window.TelemetryStore.distFromHome  = parseFloat(msg.dist_from_home); updated = true; }
+                    // Compute distFromHome from lat/lng if provided
+                    if (msg.lat !== undefined && msg.lng !== undefined) {
+                        if (window.TelemetryStore.homeLat !== null && window.TelemetryStore.homeLng !== null) {
+                            var dlat = (msg.lat - window.TelemetryStore.homeLat) * 111320;
+                            var dlng = (msg.lng - window.TelemetryStore.homeLng) * 111320 * Math.cos(msg.lat * Math.PI / 180);
+                            window.TelemetryStore.distFromHome = Math.sqrt(dlat*dlat + dlng*dlng);
+                        }
+                    }
+                    if (msg.home_lat !== undefined) { window.TelemetryStore.homeLat = msg.home_lat; }
+                    if (msg.home_lng !== undefined) { window.TelemetryStore.homeLng = msg.home_lng; }
+                    if (updated) updateHeaderUI();
+                }
+
+                if (msg.type === 'flight_mode_status' && msg.mode !== undefined) {
+                    window.TelemetryStore.mode = formatModeStr(msg.mode);
+                    updateHeaderUI();
+                }
+
+                if (msg.type === 'status' && Array.isArray(msg.vehicles)) {
+                    if (typeof window.updateVehicleSelector === 'function') {
+                        window.updateVehicleSelector(msg.vehicles);
+                    }
+                    var selectedId = window.selectedSysId || 1;
+                    var v = msg.vehicles.find(function(vh) { return vh.sysid === selectedId; }) || msg.vehicles[0];
+                    if (v) {
+                        var updated = false;
+                        if (v.mode !== undefined) { 
+                            window.TelemetryStore.mode = formatModeStr(v.mode);
+                            updated = true; 
+                        }
+                        if (v.battery !== undefined) { window.TelemetryStore.batteryPercent = v.battery; updated = true; }
+                        if (v.voltage !== undefined) { window.TelemetryStore.batteryVoltage = v.voltage; updated = true; }
+                        if (updated) updateHeaderUI();
+                    }
+                }
+
+                if (FIRMWARE_TYPES[msg.type]) {
+                    if (typeof window.vcHandleFirmwareMessage === 'function')
+                        window.vcHandleFirmwareMessage(msg);
+                    return;
+                }
+
+                if (msg.type === 'serial_ports') {
+                    window._vcLastKnownPorts = msg.ports || [];
+                    if (typeof window.vcPopulatePorts === 'function')
+                        window.vcPopulatePorts(msg.ports || []);
+                    return;
+                }
+
+                if (msg.type === 'port_appeared' || msg.type === 'port_disappeared') {
+                    if (typeof window.safeSend === 'function')
+                        window.safeSend({ type: 'list_serial_ports' });
+
+                    if (msg.type === 'port_disappeared' &&
+                        typeof window.vcHandleFirmwareMessage === 'function') {
+                        window.vcHandleFirmwareMessage({
+                            type: 'firmware_status', stage: 'log',
+                            message: '🔌 Port disconnected: ' + (msg.port || '(unknown)'),
+                            error: false
+                        });
+                    }
+                }
+            }
+
+            function PatchedWebSocket(url, protocols) {
+                var ws = protocols
+                    ? new _NativeWS(url, protocols)
+                    : new _NativeWS(url);
+
+                window.ws = ws;
+                window.__mv_sockets.push(ws);
+                ws.addEventListener('message', routeMessages);
+                return ws;
+            }
+
+            PatchedWebSocket.prototype = _NativeWS.prototype;
+            PatchedWebSocket.CONNECTING = _NativeWS.CONNECTING;
+            PatchedWebSocket.OPEN = _NativeWS.OPEN;
+            PatchedWebSocket.CLOSING = _NativeWS.CLOSING;
+            PatchedWebSocket.CLOSED = _NativeWS.CLOSED;
+
+            window.WebSocket = PatchedWebSocket;
+            console.log('[MultiVehicle] WebSocket constructor patched ✓');
+        })();
+    </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="flight-controls.css">
+    <link rel="stylesheet" href="message-console.css">
+    <link rel="stylesheet" href="weather-dashboard.css">
+    <link rel="stylesheet" href="dropdown-menu.css">
+    <link rel="stylesheet" href="plan-flight.css">
+    <link rel="stylesheet" href="command-editor.css">
+    <link rel="stylesheet" href="flight-controls-mode.css">
+    <link rel="stylesheet" href="waypoint-context-menu.css">
+    <link rel="stylesheet" href="settings-window.css">
+    <!-- Settings panels: one CSS per panel -->
+    <link rel="stylesheet" href="calib-accel.css">
+    <link rel="stylesheet" href="calib-compass.css">
+    <link rel="stylesheet" href="calib-radio.css">
+    <link rel="stylesheet" href="calib-esc.css">
+    <!-- v2: param-user replaces v1 param-switch (reverted) -->
+    <link rel="stylesheet" href="param-switch.css">
+    <link rel="stylesheet" href="param-full.css">
+    <link rel="stylesheet" href="vehicle-config.css">
+    <!-- v1: flight-controls-mode; v2: flight-mode -->
+    <link rel="stylesheet" href="flight-modes.css">
+    <link rel="stylesheet" href="flight-mode.css">
+    <!-- failsafe panel -->
+    <link rel="stylesheet" href="failsafe.css">
+    <!-- geofence panel -->
+    <link rel="stylesheet" href="geofence.css">
+    <!-- v2: No-Fly Zone overlay styles -->
+    <link rel="stylesheet" href="nfz-overlay.css">
+
+</head>
+
+<body>
+
+
+    <!-- Main Container with Grid Layout -->
+    <div class="main-container">
+
+        <!-- Header Bar -->
+        <div class="header-bar">
+            <!-- Left Section: Logo + Status -->
+            <div class="header-left">
+                <!--
+                    v2: hamburger menu icon as primary logo trigger (JS can swap).
+                    v1: tihan.png logo (kept as alt, hidden by default).
+                -->
+                <img src="resources/menu.svg" class="header-logo" alt="Menu" id="tihanLogo">
+                <img src="resources/icon/tihan.png" class="header-logo" alt="TiHAN Logo" id="tihanLogoAlt"
+                    style="display:none;">
+                <span class="status-badge ready">Ready To Fly</span>
+            </div>
+
+            <!-- Center Section: System Indicators -->
+            <div class="header-center">
+                <!-- Mode Indicator (v2: dynamic; v1: static "Hold") -->
+                <div class="indicator-item" id="modeIndicator">
+                    <img src="resources/mode.svg" class="indicator-icon" alt="Mode">
+                    <span class="indicator-text" id="modeIndicatorText">Hold</span>
+                </div>
+
+                <!-- Signal/RC Indicator (v2: dynamic icon; v1: static Megaphone + values) -->
+                <div class="indicator-item" id="signalIndicator" title="RC Signal Rank">
+                    <img src="resources/Signal0.svg" class="indicator-icon" alt="Signal" id="signalIndicatorIcon">
+                    <!-- v1 fallback values — JS shows/hides as needed -->
+                    <span class="indicator-text" id="signalRankText" style="display:none;">10</span>
+                    <span class="indicator-subtext" id="signalQualText" style="display:none;">0.7</span>
+                </div>
+
+                <!-- GPS Indicator (v2: satellite count; v1: icon only) -->
+                <div class="indicator-item" title="GPS Satellites">
+                    <div style="display:flex;align-items:baseline;margin-right:4px;">
+                        <span
+                            style="font-size:10px;font-weight:700;color:#888;margin-right:4px;letter-spacing:0.5px;">SATS</span>
+                        <span class="indicator-text" id="gpsSatCountText">--</span>
+                    </div>
+                    <img src="resources/Gps.svg" class="indicator-icon" alt="GPS">
+                </div>
+
+                <!-- Battery Indicator (v2: voltage + percent; v1: percent only) -->
+                <div class="indicator-item battery-indicator" title="Battery Info">
+                    <img src="resources/BatteryGreen.svg" class="indicator-icon" alt="Battery">
+                    <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:center;
+                                font-size:11px;margin-right:4px;font-weight:600;line-height:1.1;">
+                        <span id="battVoltageText">0.0 V</span>
+                    </div>
+                    <span class="indicator-text" id="battPercentText">100%</span>
+                </div>
+            </div>
+
+            <!-- Language Selector -->
+            <div id="langSelectorWrap" style="position: relative; display: flex; align-items: center;"><button
+                    id="langToggleBtn" title="Select Language / மொழியைத் தேர்ந்தெடு"
+                    style="background: rgb(255, 255, 255); border: 1px solid rgba(0, 0, 0, 0.15); border-radius: 6px; color: rgb(51, 51, 51); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0px 14px; height: 36px; box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); flex-shrink: 0; position: relative; overflow: hidden; font-size: 13.5px; font-family: &quot;Segoe UI&quot;, system-ui, sans-serif;">
+                    <span class="lang-btn-text" data-i18n="lang.select"
+                        style="font-weight:600; margin-right:6px; pointer-events:none;">Select Language</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                        style="pointer-events:none; transition: transform 0.3s;">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg></button>
+                <div id="langDropdown"
+                    style="position: absolute; top: calc(100% + 12px); right: 0px; background: rgba(26, 26, 46, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 8px; min-width: 170px; z-index: 99999; box-shadow: rgba(0, 0, 0, 0.6) 0px 16px 40px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset; display: none; animation: 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0s 1 normal forwards running langDropIn; transform-origin: right top;">
+                    <div class="lang-option active">
+                        <span class="lang-check"></span>
+                        <span class="lang-label">English</span>
+                        <span class="lang-native">English</span>
+                    </div>
+                    <div class="lang-option">
+                        <span class="lang-check"></span>
+                        <span class="lang-label">Tamil</span>
+                        <span class="lang-native">தமிழ்</span>
+                    </div>
+                    <div class="lang-option">
+                        <span class="lang-check"></span>
+                        <span class="lang-label">Telugu</span>
+                        <span class="lang-native">తెలుగు</span>
+                    </div>
+                    <div class="lang-option">
+                        <span class="lang-check"></span>
+                        <span class="lang-label">Hindi</span>
+                        <span class="lang-native">हिन्दी</span>
+                    </div>
+                    <div class="lang-option">
+                        <span class="lang-check"></span>
+                        <span class="lang-label">Kannada</span>
+                        <span class="lang-native">ಕನ್ನಡ</span>
+                    </div>
+                    <div class="lang-option">
+                        <span class="lang-check"></span>
+                        <span class="lang-label">Malayalam</span>
+                        <span class="lang-native">മലയാളം</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Section: Multi-vehicle strip (v1) + DX4 Logo -->
+            <div class="header-right">
+
+                <!-- ── Multi-vehicle fleet strip (v1) ─────────────────────── -->
+                <style>
+                    #droneCountBadge {
+                        display: flex;
+                        align-items: center;
+                        gap: 7px;
+                        background: rgba(13, 27, 46, 0.9);
+                        border: 1px solid #1e3a5f;
+                        border-radius: 8px;
+                        padding: 5px 13px;
+                        margin-right: 8px;
+                        font-size: 11px;
+                        font-weight: 600;
+                        letter-spacing: 0.8px;
+                        font-family: 'JetBrains Mono', 'Courier New', monospace;
+                        color: #e57373;
+                        transition: color .3s, border-color .3s;
+                        white-space: nowrap;
+                    }
+
+                    #droneCountDot {
+                        width: 7px;
+                        height: 7px;
+                        border-radius: 50%;
+                        background: #e57373;
+                        display: inline-block;
+                        flex-shrink: 0;
+                        transition: background .3s;
+                    }
+
+                    #vehicleSelectorWrap {
+                        display: none;
+                        align-items: center;
+                        gap: 4px;
+                        margin-right: 10px;
+                        background: rgba(10, 16, 30, 0.85);
+                        border: 1px solid #1e3a5f;
+                        border-radius: 8px;
+                        padding: 3px;
+                    }
+
+                    .mv-drone-tab {
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                        padding: 4px 11px;
+                        border-radius: 6px;
+                        font-size: 11px;
+                        font-weight: 600;
+                        font-family: 'JetBrains Mono', 'Courier New', monospace;
+                        letter-spacing: 0.6px;
+                        cursor: pointer;
+                        border: 1px solid transparent;
+                        color: #6a85a8;
+                        background: transparent;
+                        transition: all 0.18s ease;
+                        white-space: nowrap;
+                        user-select: none;
+                    }
+
+                    .mv-drone-tab:hover {
+                        color: #a8c4e0;
+                        background: rgba(82, 185, 255, 0.07);
+                        border-color: rgba(82, 185, 255, 0.15);
+                    }
+
+                    .mv-drone-tab.mv-active {
+                        color: #52b9ff;
+                        background: rgba(82, 185, 255, 0.12);
+                        border-color: rgba(82, 185, 255, 0.35);
+                    }
+
+                    .mv-drone-tab .mv-dot {
+                        width: 6px;
+                        height: 6px;
+                        border-radius: 50%;
+                        background: #3ddc84;
+                        flex-shrink: 0;
+                        box-shadow: 0 0 4px rgba(61, 220, 132, 0.6);
+                        animation: dronePulse 1.8s ease-in-out infinite;
+                    }
+
+                    .mv-drone-tab .mv-dot.mv-warn {
+                        background: #ffb830;
+                        box-shadow: 0 0 4px rgba(255, 184, 48, 0.6);
+                    }
+
+                    .mv-drone-tab .mv-dot.mv-err {
+                        background: #ff4d4d;
+                        box-shadow: 0 0 4px rgba(255, 77, 77, 0.6);
+                    }
+
+                    #vehicleSelector {
+                        display: none !important;
+                    }
+                </style>
+
+                <div id="droneCountBadge">
+                    <span id="droneCountDot"></span>
+                    <span id="droneCountText">0 DRONES</span>
+                </div>
+
+                <div id="vehicleSelectorWrap">
+                    <!-- drone tabs injected by updateVehicleSelector() -->
+                    <select id="vehicleSelector"><!-- options kept for JS compat --></select>
+                </div>
+
+                <img src="resources/icon/tihan.png" class="dx4-logo" alt="DX4 Logo" style="margin-left:15px;">
+            </div>
+        </div>
+
+        <!-- Content Area: Map + Video -->
+        <div class="content-area">
+            <div id="map"></div>
+            <div id="videoContainer">
+                <div id="videoStream"></div>
+                <div class="video-overlay">
+                    <div class="video-status no-signal">
+                        <div class="status-dot"></div>
+                        <span>NO SIGNAL</span>
+                    </div>
+                </div>
+                <button id="videoMaxBtn" title="Toggle Video Fullscreen">⛶</button>
+            </div>
+        </div>
+
+        <!-- COMPASS -->
+        <div id="compassContainer"></div>
+
+        <!-- FLIGHT CONTROL BUTTONS STRIP -->
+        <div class="flight-controls-strip" id="flightControlsStrip">
+
+            <button id="armBtn" class="flight-btn arm-btn" title="Arm / Disarm">
+                <svg id="armBtnIcon" class="btn-icon arm-svg-icon" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L4 6V12C4 16.4 7.4 20.5 12 22C16.6 20.5 20 16.4 20 12V6L12 2Z" stroke="currentColor"
+                        stroke-width="2" stroke-linejoin="round" />
+                    <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <span class="btn-label" id="armBtnLabel">ARM</span>
+            </button>
+
+            <button id="takeoffBtn" class="flight-btn takeoff-btn" title="Takeoff">
+                <img src="resources/takeoff.svg" alt="Takeoff" class="btn-icon">
+                <span class="btn-label">TAKEOFF</span>
+            </button>
+
+            <button id="landBtn" class="flight-btn land-btn" title="Land">
+                <img src="resources/land.svg" alt="Land" class="btn-icon">
+                <span class="btn-label">LAND</span>
+            </button>
+
+            <button id="rtlBtn" class="flight-btn rtl-btn" title="Return to Launch">
+                <img src="resources/rtl.svg" alt="RTL" class="btn-icon">
+                <span class="btn-label">RTL</span>
+            </button>
+
+            <!-- Flight Modes Dropdown -->
+            <div class="flight-mode-dropdown-wrapper">
+                <button id="flightModeBtn" class="flight-btn flight-mode-btn" title="Flight Modes">
+                    <!-- v2 image icon (default) -->
+                    <img src="resources/mode.svg" alt="Mode" class="btn-icon mode-svg-icon" id="modeBtnImg">
+                    <!-- v1 inline star SVG — hidden by default; restore via JS if needed -->
+                    <svg id="modeBtnSvg" class="btn-icon mode-svg-icon" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg" style="display:none;">
+                        <path
+                            d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span class="btn-label">MODE</span>
+                </button>
+
+                <div class="flight-mode-panel" id="flightModePanel">
+                    <div class="flight-mode-panel-header">
+                        <span>Select Flight Mode</span>
+                        <div class="active-mode-badge" id="activeModeDisplay">STABILIZE</div>
+                    </div>
+                    <div class="flight-mode-list">
+                        <button class="mode-item active-mode" data-mode="Stabilize"><span class="mode-dot"></span><span
+                                class="mode-name">Stabilize</span><span class="mode-tag basic">BASIC</span></button>
+                        <button class="mode-item" data-mode="Acro"><span class="mode-dot"></span><span
+                                class="mode-name">Acro</span><span class="mode-tag expert">EXPERT</span></button>
+                        <button class="mode-item" data-mode="Altitude Hold"><span class="mode-dot"></span><span
+                                class="mode-name">Altitude Hold</span><span class="mode-tag basic">BASIC</span></button>
+                        <button class="mode-item" data-mode="Auto"><span class="mode-dot"></span><span
+                                class="mode-name">Auto</span><span class="mode-tag auto">AUTO</span></button>
+                        <button class="mode-item" data-mode="Guided"><span class="mode-dot"></span><span
+                                class="mode-name">Guided</span><span class="mode-tag auto">AUTO</span></button>
+                        <button class="mode-item" data-mode="Loiter"><span class="mode-dot"></span><span
+                                class="mode-name">Loiter</span><span class="mode-tag gps">GPS</span></button>
+                        <button class="mode-item" data-mode="RTL"><span class="mode-dot"></span><span
+                                class="mode-name">RTL</span><span class="mode-tag gps">GPS</span></button>
+                        <button class="mode-item" data-mode="Circle"><span class="mode-dot"></span><span
+                                class="mode-name">Circle</span><span class="mode-tag gps">GPS</span></button>
+                        <button class="mode-item" data-mode="Land"><span class="mode-dot"></span><span
+                                class="mode-name">Land</span><span class="mode-tag basic">BASIC</span></button>
+                        <button class="mode-item" data-mode="Smart RTL"><span class="mode-dot"></span><span
+                                class="mode-name">Smart RTL</span><span class="mode-tag gps">GPS</span></button>
+                        <button class="mode-item" data-mode="Drift"><span class="mode-dot"></span><span
+                                class="mode-name">Drift</span><span class="mode-tag expert">EXPERT</span></button>
+                        <button class="mode-item" data-mode="Sport"><span class="mode-dot"></span><span
+                                class="mode-name">Sport</span><span class="mode-tag expert">EXPERT</span></button>
+                        <button class="mode-item" data-mode="Position"><span class="mode-dot"></span><span
+                                class="mode-name">Position</span><span class="mode-tag gps">GPS</span></button>
+                        <button class="mode-item" data-mode="Follow Me"><span class="mode-dot"></span><span
+                                class="mode-name">Follow Me</span><span class="mode-tag gps">GPS</span></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- DROPDOWN MENU STRIP -->
+        <div class="dropdown-menu-strip" id="dropdownMenuStrip">
+            <button id="planFlightBtn" class="dropdown-menu-btn" title="Plan Flight" data-action="plan-flight">
+                <img src="resources/flightplan.png" alt="Plan Flight" class="dropdown-btn-icon">
+                <span class="dropdown-btn-label">Plan</span>
+            </button>
+
+            <button id="analyzeBtn" class="dropdown-menu-btn" title="Analyze Tools" data-action="analyze-tools">
+                <img src="resources/analayze.png" alt="Analyze" class="dropdown-btn-icon">
+                <span class="dropdown-btn-label">Analyze</span>
+            </button>
+
+            <button id="vehicleConfigBtn" class="dropdown-menu-btn" title="Vehicle Configuration"
+                data-action="vehicle-config">
+                <img src="resources/vechile.png" alt="Config" class="dropdown-btn-icon">
+                <span class="dropdown-btn-label">Config</span>
+            </button>
+
+            <!-- v2: setting.svg (semantically correct); v1 used BatteryGreen.svg -->
+            <button id="appSettingsBtn" class="dropdown-menu-btn" title="Application Settings"
+                data-action="app-settings">
+                <img src="resources/setting.svg" alt="Settings" class="dropdown-btn-icon">
+                <span class="dropdown-btn-label">Settings</span>
+            </button>
+        </div>
+
+        <!-- PLAN FLIGHT MENU STRIP -->
+        <div id="planFlightMenuStrip" class="plan-flight-menu-strip" style="display: none;">
+
+            <div class="plan-menu-dropdown">
+                <button class="plan-menu-btn" title="File">
+                    <img src="resources/flightplan.png" alt="File" class="plan-menu-icon">
+                    <span class="plan-menu-label">FILE</span>
+                </button>
+                <div class="plan-menu-content">
+                    <a href="#" data-action="new-mission">New Mission</a>
+                    <a href="#" data-action="open-mission">Open Mission</a>
+                    <a href="#" data-action="save-mission">Save Mission</a>
+                    <a href="#" data-action="write-to-drone"
+                        style="border-top:2px solid rgba(230,0,126,0.2);margin-top:4px;padding-top:12px;">📡 Write to
+                        Drone</a>
+                </div>
+            </div>
+
+            <div class="plan-menu-dropdown">
+                <button class="plan-menu-btn" title="Takeoff">
+                    <img src="resources/takeoff.svg" alt="Takeoff" class="plan-menu-icon">
+                    <span class="plan-menu-label">TAKEOFF</span>
+                </button>
+                <div class="plan-menu-content">
+                    <a href="#" data-action="takeoff-here">Takeoff Here</a>
+                    <a href="#" data-action="set-home-position">Set Home Position</a>
+                    <a href="#" data-action="clear-home">Clear Home</a>
+                </div>
+            </div>
+
+            <div class="plan-menu-dropdown">
+                <button class="plan-menu-btn" title="Waypoint">
+                    <img src="resources/Gps.svg" alt="Waypoint" class="plan-menu-icon">
+                    <span class="plan-menu-label">WAYPOINT</span>
+                </button>
+                <div class="plan-menu-content">
+                    <a href="#" data-action="add-waypoint">Add Waypoint</a>
+                    <div class="plan-menu-divider"></div>
+                    <div class="plan-menu-item">
+                        <a href="#" data-action="send-markers"><span class="menu-icon">📡</span> Send Markers</a>
+                    </div>
+                    <a href="#" data-action="delete-waypoint">Delete Waypoint</a>
+                    <a href="#" data-action="clear-all">Clear All</a>
+                </div>
+            </div>
+
+            <div class="plan-menu-dropdown">
+                <button class="plan-menu-btn" title="Polygon">
+                    <img src="resources/polygon.png" alt="Polygon" class="plan-menu-icon">
+                    <span class="plan-menu-label">POLYGON</span>
+                </button>
+                <div class="plan-menu-content">
+                    <a href="#" data-action="draw-polygon">Draw Polygon</a>
+                    <a href="#" data-action="survey-pattern">Survey Pattern</a>
+                    <a href="#" data-action="survey-settings">Survey Settings</a>
+                    <div class="plan-menu-divider"></div>
+                    <div class="plan-menu-item">
+                        <a href="#" data-action="send-mission"><span class="menu-icon">📡</span> Send to Drone</a>
+                    </div>
+                    <a href="#" data-action="clear-polygon">Clear Polygon</a>
+                </div>
+            </div>
+
+            <div class="plan-menu-dropdown">
+                <button class="plan-menu-btn" title="Return">
+                    <img src="resources/rtl.svg" alt="Return" class="plan-menu-icon">
+                    <span class="plan-menu-label">RETURN</span>
+                </button>
+                <div class="plan-menu-content">
+                    <a href="#" data-action="return-to-launch">Return to Launch</a>
+                    <a href="#" data-action="land-here">Land Here</a>
+                </div>
+            </div>
+
+            <div class="plan-menu-dropdown">
+                <button class="plan-menu-btn" title="Center">
+                    <img src="resources/analayze.png" alt="Center" class="plan-menu-icon">
+                    <span class="plan-menu-label">CENTER</span>
+                </button>
+                <div class="plan-menu-content">
+                    <a href="#" data-action="center-mission">Center Mission</a>
+                    <a href="#" data-action="center-vehicle">Center Vehicle</a>
+                    <a href="#" data-action="center-home">Center Home</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- COMMAND EDITOR PANEL -->
+        <div id="commandEditorPanel" class="command-editor-panel" style="display: none;">
+
+            <div class="editor-header">
+                <div class="editor-title">
+                    <svg class="editor-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 3L4 7L8 11M16 13L20 17L16 21M12 3L8 21" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <span>Command Editor</span>
+                </div>
+            </div>
+
+            <div class="editor-tabs">
+                <button class="editor-tab" data-tab="waypoints">Waypoints</button>
+            </div>
+
+            <div class="editor-content">
+
+                <!-- Waypoints Panel -->
+                <div class="tab-panel" id="waypointsPanel">
+                    <div class="waypoint-list-header">
+                        <div class="waypoint-count">
+                            <span id="waypointCountDisplay">0 Waypoints</span>
+                        </div>
+                        <button class="refresh-waypoints-btn" id="refreshWaypointsBtn" title="Refresh Waypoint List">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M21 10C21 10 18.995 7.26822 17.3662 5.63824C15.7373 4.00827 13.4864 3 11 3C6.02944 3 2 7.02944 2 12C2 16.9706 6.02944 21 11 21C15.1031 21 18.5649 18.2543 19.6482 14.5M21 10V4M21 10H15"
+                                    stroke="currentColor" stroke-width="2" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="empty-state" id="emptyWaypointState">
+                        <div class="empty-icon">📍</div>
+                        <p>No waypoints added yet</p>
+                        <small>Click "Add Waypoint" to start</small>
+                    </div>
+                    <div class="waypoint-list" id="waypointList" style="display: none;"></div>
+                </div>
+
+                <!-- Waypoint Details Panel -->
+                <div class="waypoint-details-panel" id="waypointDetailsPanel" style="display: none;">
+                    <div class="details-header">
+                        <button class="back-to-list-btn" id="backToListBtn">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Back to List
+                        </button>
+                    </div>
+                    <div class="details-title"><span id="editingWaypointTitle">Waypoint 1</span></div>
+                    <div class="form-group">
+                        <label>Waypoint ID</label>
+                        <input type="text" class="form-control" id="waypointIdField" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Latitude</label>
+                        <input type="number" class="form-control" id="waypointLatField" step="0.000001">
+                    </div>
+                    <div class="form-group">
+                        <label>Longitude</label>
+                        <input type="number" class="form-control" id="waypointLngField" step="0.000001">
+                    </div>
+                    <div class="form-group">
+                        <label>Altitude (meters)</label>
+                        <input type="number" class="form-control" id="waypointAltField" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Type</label>
+                        <select class="form-control" id="waypointTypeField">
+                            <!-- Navigation Commands -->
+                            <option value="waypoint">Waypoint</option>
+                            <option value="spline-waypoint">Spline Waypoint</option>
+                            <option value="loiter">Loiter</option>
+                            <option value="loiter-turns">Loiter (turns)</option>
+                            <option value="loiter-time">Loiter (time)</option>
+                            <option value="loiter-altitude">Loiter (altitude)</option>
+                            <!-- Launch & Landing -->
+                            <option value="home">Home/Takeoff</option>
+                            <option value="takeoff">Takeoff</option>
+                            <option value="land">Land</option>
+                            <option value="land-start">Land Start</option>
+                            <option value="rtl">Return To Launch</option>
+                            <!-- Altitude -->
+                            <option value="change-altitude">Change Altitude</option>
+                            <!-- Control Commands -->
+                            <option value="guided-enable">Guided Enable</option>
+                            <option value="set-flight-mode">Set Flight Mode</option>
+                            <option value="jump-to-item">Jump to Item</option>
+                            <option value="change-speed">Change Speed</option>
+                            <option value="set-launch-location">Set Launch Location</option>
+                            <!-- Delays & Timing -->
+                            <option value="delay-until">Delay Until</option>
+                            <option value="delay">Delay</option>
+                            <option value="wait-for-distance">Wait for Distance</option>
+                            <option value="wait-for-yaw">Wait for Yaw</option>
+                            <!-- Relay & Servo -->
+                            <option value="set-relay">Set Relay</option>
+                            <option value="cycle-relay">Cycle Relay</option>
+                            <option value="set-servo">Set Servo</option>
+                            <option value="cycle-servo">Cycle Servo</option>
+                            <!-- Camera Commands -->
+                            <option value="region-of-interest">Region of Interest</option>
+                            <option value="camera-config">Camera Config</option>
+                            <option value="camera-control">Camera Control</option>
+                            <option value="camera-trigger-distance">Camera Trigger Distance</option>
+                            <!-- Mount & Gimbal -->
+                            <option value="control-mount">Control Mount</option>
+                            <option value="gimbal-manager-pitchyaw">Gimbal Manager PitchYaw</option>
+                            <option value="gripper-mechanism">Gripper Mechanism</option>
+                            <!-- Safety & Limits -->
+                            <option value="enable-geofence">Enable Geofence</option>
+                            <option value="trigger-parachute">Trigger Parachute</option>
+                            <option value="inverted-flight">Inverted Flight</option>
+                            <option value="guided-limits">Guided Limits</option>
+                            <!-- Advanced -->
+                            <option value="autotune-enable">AutoTune Enable</option>
+                        </select>
+                    </div>
+                    <div class="details-actions">
+                        <button class="btn-save" id="saveWaypointBtn">Save Changes</button>
+                        <button class="btn-delete" id="deleteWaypointBtn">Delete Waypoint</button>
+                    </div>
+                </div>
+
+                <!-- Fence Panel -->
+                <div class="tab-panel" id="fencePanel">
+                    <div class="fence-list-section">
+                        <div class="waypoint-list-header">
+                            <div class="waypoint-count"><span id="fenceCountDisplay">0 Fences</span></div>
+                            <button class="refresh-waypoints-btn" id="refreshFenceBtn" title="Refresh Fence List">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21 10C21 10 18.995 7.26822 17.3662 5.63824C15.7373 4.00827 13.4864 3 11 3C6.02944 3 2 7.02944 2 12C2 16.9706 6.02944 21 11 21C15.1031 21 18.5649 18.2543 19.6482 14.5M21 10V4M21 10H15"
+                                        stroke="currentColor" stroke-width="2" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="empty-state" id="emptyFenceState">
+                            <div class="empty-icon">🚧</div>
+                            <p>No geofences created yet</p>
+                            <small>Use POLYGON menu to draw fences</small>
+                        </div>
+                        <div class="fence-list" id="fenceList" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Fence Details Panel -->
+                <div class="fence-details-panel" id="fenceDetailsPanel" style="display: none;">
+                    <div class="details-header">
+                        <button class="back-to-list-btn" id="backToFenceListBtn">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Back to List
+                        </button>
+                    </div>
+                    <div class="details-title"><span id="editingFenceTitle">Fence 1</span></div>
+                    <div class="form-group">
+                        <label>Fence ID</label>
+                        <input type="text" class="form-control" id="fenceIdField" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Fence Type</label>
+                        <select class="form-control" id="fenceTypeField">
+                            <option value="inclusion">Inclusion</option>
+                            <option value="exclusion">Exclusion</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Points</label>
+                        <input type="number" class="form-control" id="fencePointCountField" readonly>
+                    </div>
+                    <div class="details-actions">
+                        <button class="btn-save" id="saveFenceBtn">Save Changes</button>
+                        <button class="btn-delete" id="deleteFenceBtn">Delete Fence</button>
+                    </div>
+                </div>
+
+                <!-- Rally Panel -->
+                <div class="tab-panel" id="rallyPanel">
+                    <div class="rally-list-section">
+                        <div class="waypoint-list-header">
+                            <div class="waypoint-count"><span id="rallyCountDisplay">0 Rally Points</span></div>
+                            <button class="refresh-waypoints-btn" id="refreshRallyBtn" title="Refresh Rally List">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21 10C21 10 18.995 7.26822 17.3662 5.63824C15.7373 4.00827 13.4864 3 11 3C6.02944 3 2 7.02944 2 12C2 16.9706 6.02944 21 11 21C15.1031 21 18.5649 18.2543 19.6482 14.5M21 10V4M21 10H15"
+                                        stroke="currentColor" stroke-width="2" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="empty-state" id="emptyRallyState">
+                            <div class="empty-icon">📍</div>
+                            <p>No rally points set</p>
+                            <small>Click map to add rally points</small>
+                        </div>
+                        <div class="rally-list" id="rallyList" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Rally Details Panel -->
+                <div class="rally-details-panel" id="rallyDetailsPanel" style="display: none;">
+                    <div class="details-header">
+                        <button class="back-to-list-btn" id="backToRallyListBtn">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Back to List
+                        </button>
+                    </div>
+                    <div class="details-title"><span id="editingRallyTitle">Rally Point 1</span></div>
+                    <div class="form-group">
+                        <label>Rally Point ID</label>
+                        <input type="text" class="form-control" id="rallyIdField" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Latitude</label>
+                        <input type="number" class="form-control" id="rallyLatField" step="0.000001">
+                    </div>
+                    <div class="form-group">
+                        <label>Longitude</label>
+                        <input type="number" class="form-control" id="rallyLngField" step="0.000001">
+                    </div>
+                    <div class="form-group">
+                        <label>Altitude (meters)</label>
+                        <input type="number" class="form-control" id="rallyAltField" step="0.1">
+                    </div>
+                    <div class="details-actions">
+                        <button class="btn-save" id="saveRallyBtn">Save Changes</button>
+                        <button class="btn-delete" id="deleteRallyBtn">Delete Rally Point</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- MINIMAL MESSAGE CONSOLE -->
+        <div class="minimal-console-container">
+            <div class="minimal-console-messages" id="minimalConsoleMessages"></div>
+        </div>
+
+        <!-- WEATHER DASHBOARD -->
+        <div class="weather-dashboard" id="weatherDashboard">
+            <div class="weather-header">
+                <div class="weather-title">
+                    <svg class="weather-icon-title" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12 2C12 2 9.5 5 9.5 9C9.5 10.933 10.567 12 12 12C13.433 12 14.5 10.933 14.5 9C14.5 5 12 2 12 2Z"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M12 12V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M8 16H16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        <path d="M9 19H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    <span>Weather</span>
+                </div>
+                <button class="weather-close-btn" id="weatherCloseBtn" title="Close Weather Dashboard">×</button>
+            </div>
+            <div class="weather-loading" id="weatherLoading">
+                <div class="loading-spinner"></div>
+                <p>Loading weather data...</p>
+            </div>
+            <div class="weather-error" id="weatherError" style="display: none;">
+                <svg class="error-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                    <path d="M12 8V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <circle cx="12" cy="16" r="1" fill="currentColor" />
+                </svg>
+                <p id="weatherErrorMessage">Failed to load weather data</p>
+                <button class="retry-btn" id="weatherRetryBtn">Retry</button>
+            </div>
+            <div class="weather-content" id="weatherContent" style="display: none;">
+                <div class="weather-location">
+                    <svg class="location-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2Z"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    <div class="location-text">
+                        <span class="location-name" id="locationName">--</span>
+                        <span class="location-coords" id="locationCoords">--, --</span>
+                    </div>
+                </div>
+                <div class="weather-main">
+                    <div class="weather-icon-container">
+                        <img src="" alt="Weather" class="weather-main-icon" id="weatherMainIcon">
+                    </div>
+                    <div class="weather-temp-container">
+                        <div class="weather-temp" id="weatherTemp">--°C</div>
+                        <div class="weather-description" id="weatherDescription">--</div>
+                    </div>
+                </div>
+                <div class="weather-details-grid">
+                    <div class="weather-detail-item">
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2C12 2 9 5.5 9 9C9 10.933 10.343 12 12 12C13.657 12 15 10.933 15 9C15 5.5 12 2 12 2Z"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        <div class="detail-content"><span class="detail-label">Feels Like</span><span
+                                class="detail-value" id="feelsLike">--°C</span></div>
+                    </div>
+                    <div class="weather-detail-item">
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 2V8M12 16V22M4.93 4.93L9.17 9.17M14.83 14.83L19.07 19.07M2 12H8M16 12H22M4.93 19.07L9.17 14.83M14.83 9.17L19.07 4.93"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        <div class="detail-content"><span class="detail-label">Humidity</span><span class="detail-value"
+                                id="humidity">--%</span></div>
+                    </div>
+                    <div class="weather-detail-item">
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.59 4.59A2 2 0 1111 8H2M10.59 11.59A2 2 0 1012 15H2M6.59 15.59A2 2 0 118 19H2"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        <div class="detail-content"><span class="detail-label">Wind Speed</span><span
+                                class="detail-value" id="windSpeed">-- m/s</span></div>
+                    </div>
+                    <div class="weather-detail-item">
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M12 3V5M12 19V21M5 12H3M21 12H19M6.34 6.34L4.93 4.93M19.07 19.07L17.66 17.66M6.34 17.66L4.93 19.07M19.07 4.93L17.66 6.34"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        <div class="detail-content"><span class="detail-label">Pressure</span><span class="detail-value"
+                                id="pressure">-- hPa</span></div>
+                    </div>
+                    <div class="weather-detail-item">
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="detail-content"><span class="detail-label">Visibility</span><span
+                                class="detail-value" id="visibility">-- km</span></div>
+                    </div>
+                    <div class="weather-detail-item">
+                        <svg class="detail-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M3 15C3 15 5 13 9 13C13 13 15 15 19 15C21 15 21 14 21 14V6C21 6 19 8 15 8C11 8 9 6 5 6C3 6 3 7 3 7V15Z"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <div class="detail-content"><span class="detail-label">Clouds</span><span class="detail-value"
+                                id="clouds">--%</span></div>
+                    </div>
+                </div>
+                <div class="weather-footer">
+                    <span class="weather-update-time" id="weatherUpdateTime">Click map to load weather</span>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /main-container -->
+
+    <!-- =========================================================
+         VEHICLE CONFIGURATION SCREEN (v2 full-page layout)
+         Drone images: resources/firmware/{ti-shadow,spider,Kala,palyanka,Chakravyuh}.png
+    ========================================================= -->
+    <div class="vc-layout">
+
+        <!-- LEFT PANEL — Serial port + flash controls -->
+        <div class="vc-left">
+
+            <div class="vc-section">
+                <div class="vc-section-header">
+                    <svg class="vc-section-icon" viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M7 10h10M7 14h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                    Select Serial Port:
+                </div>
+                <div class="vc-port-table-wrap">
+                    <table class="vc-port-table">
+                        <thead>
+                            <tr>
+                                <th>Port</th>
+                                <th>Board ID</th>
+                                <th>Manufacturer</th>
+                                <th>Brand</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vcPortTableBody">
+                            <tr class="vc-port-row" data-port="/dev/ttyS4">
+                                <td>/dev/ttyS4</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>n/a</td>
+                            </tr>
+                            <tr class="vc-port-row" data-port="/dev/ttyS31">
+                                <td>/dev/ttyS31</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>n/a</td>
+                            </tr>
+                            <tr class="vc-port-row" data-port="/dev/ttyS30">
+                                <td>/dev/ttyS30</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>n/a</td>
+                            </tr>
+                            <tr class="vc-port-row" data-port="/dev/ttyS29">
+                                <td>/dev/ttyS29</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>n/a</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="vc-port-refresh-row">
+                    <button class="vc-refresh-btn" id="vcRefreshPortsBtn">
+                        <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
+                            <path
+                                d="M21 10C21 10 18.995 7.268 17.366 5.638C15.737 4.008 13.486 3 11 3C6.029 3 2 7.029 2 12C2 16.971 6.029 21 11 21C15.103 21 18.565 18.254 19.648 14.5M21 10V4M21 10H15"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Refresh Ports
+                    </button>
+                </div>
+            </div>
+
+            <div class="vc-section">
+                <div class="vc-baud-row">
+                    <label class="vc-baud-label">Bootloader Baud:</label>
+                    <select class="vc-baud-select" id="vcBootBaud">
+                        <option>115200</option>
+                        <option>57600</option>
+                        <option>38400</option>
+                        <option>9600</option>
+                    </select>
+                </div>
+                <div class="vc-baud-row">
+                    <label class="vc-baud-label">Flash Baud:</label>
+                    <select class="vc-baud-select" id="vcFlashBaud">
+                        <option>115200</option>
+                        <option>57600</option>
+                        <option>38400</option>
+                        <option>9600</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="vc-section vc-log-section">
+                <div class="vc-section-header">
+                    <svg class="vc-section-icon" viewBox="0 0 24 24" fill="none">
+                        <rect x="4" y="3" width="16" height="18" rx="2" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" />
+                    </svg>
+                    Flashing Log:
+                </div>
+                <div class="vc-log-box" id="vcFlashLog">
+                    <span class="vc-log-line">→ Ready</span>
+                </div>
+            </div>
+
+            <div class="vc-section">
+                <div class="vc-progress-row">
+                    <span class="vc-progress-label">Erase Progress:</span>
+                    <div class="vc-progress-track">
+                        <div class="vc-progress-fill vc-progress-erase" id="vcEraseBar" style="width:0%"></div>
+                    </div>
+                </div>
+                <div class="vc-progress-row">
+                    <span class="vc-progress-label">Write Progress:</span>
+                    <div class="vc-progress-track">
+                        <div class="vc-progress-fill vc-progress-write" id="vcWriteBar" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /vc-left -->
+
+        <!-- RIGHT PANEL — Drone type selection -->
+        <div class="vc-right">
+            <div class="vc-drone-title">Select Drone Type</div>
+            <div class="vc-drone-list" id="vcDroneList">
+
+                <div class="vc-drone-card" data-drone="ti-shadow">
+                    <div class="vc-drone-img-wrap"><img src="resources/firmware/ti-shadow.png" alt="Ti-Shadow"
+                            class="vc-drone-img"></div>
+                    <div class="vc-drone-info"><span class="vc-drone-name">Ti-Shadow</span><span
+                            class="vc-drone-desc">Surveillance Drone</span></div>
+                    <div class="vc-drone-actions">
+                        <button class="vc-btn vc-btn-unlock" onclick="vcUnlock('ti-shadow')">
+                            <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
+                                <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor"
+                                    stroke-width="2" />
+                                <path d="M8 11V7a4 4 0 018 0" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            UNLOCK
+                        </button>
+                        <button class="vc-btn vc-btn-install" onclick="vcInstall('ti-shadow')">
+                            <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
+                                <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            INSTALL
+                        </button>
+                    </div>
+                </div>
+
+                <div class="vc-drone-card" data-drone="spider">
+                    <div class="vc-drone-img-wrap"><img src="resources/firmware/spider.png" alt="Spider Drone"
+                            class="vc-drone-img"></div>
+                    <div class="vc-drone-info"><span class="vc-drone-name">Spider Drone</span><span
+                            class="vc-drone-desc">Hexacopter Drone</span></div>
+                    <div class="vc-drone-actions">
+                        <button class="vc-btn vc-btn-unlock" onclick="vcUnlock('spider')">
+                            <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
+                                <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor"
+                                    stroke-width="2" />
+                                <path d="M8 11V7a4 4 0 018 0" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            UNLOCK
+                        </button>
+                        <button class="vc-btn vc-btn-install" onclick="vcInstall('spider')">
+                            <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
+                                <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            INSTALL
+                        </button>
+                    </div>
+                </div>
+
+                <div class="vc-drone-card" data-drone="kala">
+                    <div class="vc-drone-img-wrap"><img src="resources/firmware/Kala.png" alt="Kala Drone"
+                            class="vc-drone-img"></div>
+                    <div class="vc-drone-info"><span class="vc-drone-name">Kala Drone</span><span
+                            class="vc-drone-desc">Payload Dropping Drone</span></div>
+                    <div class="vc-drone-actions">
+                        <button class="vc-btn vc-btn-unlock" onclick="vcUnlock('kala')">
+                            <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
+                                <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor"
+                                    stroke-width="2" />
+                                <path d="M8 11V7a4 4 0 018 0" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            UNLOCK
+                        </button>
+                        <button class="vc-btn vc-btn-install" onclick="vcInstall('kala')">
+                            <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
+                                <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            INSTALL
+                        </button>
+                    </div>
+                </div>
+
+                <div class="vc-drone-card" data-drone="palyanka">
+                    <div class="vc-drone-img-wrap"><img src="resources/firmware/palyanka.png" alt="Palyanka Drone"
+                            class="vc-drone-img"></div>
+                    <div class="vc-drone-info"><span class="vc-drone-name">Palyanka Drone</span><span
+                            class="vc-drone-desc">Air Taxi</span></div>
+                    <div class="vc-drone-actions">
+                        <button class="vc-btn vc-btn-unlock" onclick="vcUnlock('palyanka')">
+                            <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
+                                <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor"
+                                    stroke-width="2" />
+                                <path d="M8 11V7a4 4 0 018 0" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            UNLOCK
+                        </button>
+                        <button class="vc-btn vc-btn-install" onclick="vcInstall('palyanka')">
+                            <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
+                                <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            INSTALL
+                        </button>
+                    </div>
+                </div>
+
+                <div class="vc-drone-card" data-drone="chakravyuh">
+                    <div class="vc-drone-img-wrap"><img src="resources/firmware/Chakravyuh.png" alt="Chakravyuh Drone"
+                            class="vc-drone-img"></div>
+                    <div class="vc-drone-info">
+                        <span class="vc-drone-name">Chakrayukhan Drone</span>
+                        <span class="vc-drone-desc">Heavy Payload Cargo Drone</span>
+                        <span class="vc-drone-tag">Industrial-grade heavy lifting</span>
+                    </div>
+                    <div class="vc-drone-actions">
+                        <button class="vc-btn vc-btn-unlock" onclick="vcUnlock('chakravyuh')">
+                            <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
+                                <rect x="5" y="11" width="14" height="10" rx="2" stroke="currentColor"
+                                    stroke-width="2" />
+                                <path d="M8 11V7a4 4 0 018 0" stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            UNLOCK
+                        </button>
+                        <button class="vc-btn vc-btn-install" onclick="vcInstall('chakravyuh')">
+                            <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
+                                <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 20h14" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            INSTALL
+                        </button>
+                    </div>
+                </div>
+
+            </div><!-- /vc-drone-list -->
+        </div><!-- /vc-right -->
+
+    </div><!-- /vc-layout -->
+
+    <!-- VEHICLE CONFIGURATION OVERLAY WINDOW (v1 + v2) -->
+    <div id="vehicleConfigOverlay" class="vc-overlay">
+        <div class="vc-window">
+            <div class="vc-titlebar">
+                <div class="vc-titlebar-left">
+                    <svg class="vc-title-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7V12C2 17.5 6.5 22.5 12 23C17.5 22.5 22 17.5 22 12V7L12 2Z"
+                            stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M12 9V7M12 17V15M9 12H7M17 12H15" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" />
+                    </svg>
+                    <span class="vc-title-text">Vehicle Configuration</span>
+                </div>
+                <button class="vc-close-btn" id="vcCloseBtn" title="Close">&#x2715;</button>
+            </div>
+            <div class="vc-body">
+                <!-- JS fills this on open() -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Takeoff Modal -->
+    <div id="takeoffModal" class="takeoff-modal">
+        <div class="takeoff-modal-content">
+            <div class="modal-header">
+                <div class="modal-title">🚁 Takeoff Configuration</div>
+                <button class="modal-close" id="modalCloseBtn">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label class="input-label">Target Altitude</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="altitudeInput" class="input-field" min="5" max="50" step="1"
+                            value="10">
+                        <span class="input-unit">m</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Climb Speed</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="speedInput" class="input-field" min="0.5" max="5" step="0.1" value="2">
+                        <span class="input-unit">m/s</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions" id="modalActions">
+                <button class="modal-btn modal-btn-cancel" id="modalCancelBtn">Cancel</button>
+                <button class="modal-btn modal-btn-confirm" id="modalConfirmBtn">Confirm Takeoff</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- v2: Log Browser Panel -->
+    <div id="logBrowser" class="log-browser" style="display:none">
+        <div class="log-header">
+            <span>Log Browser</span>
+            <button id="closeLogBrowser">✖</button>
+        </div>
+        <div class="log-body">
+            <div class="log-graph">
+                <canvas id="logGraph"></canvas>
+            </div>
+            <div class="log-right">
+                <div id="logTree"></div>
+            </div>
+        </div>
+        <div id="logFileDialog" class="log-file-dialog" style="display:none">
+            <div class="dialog-header">Open Log File</div>
+            <div class="dialog-body">
+                <div class="file-list" id="logFileList"></div>
+                <div class="file-controls">
+                    <div class="file-row">
+                        <label>File name:</label>
+                        <input type="text" id="selectedLogFile">
+                    </div>
+                    <div class="file-row">
+                        <label>Files of type:</label>
+                        <select>
+                            <option>Log Files (*.bin)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="dialog-buttons">
+                    <button id="openLogBtn">Open</button>
+                    <button id="cancelLogBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- v2: Hidden file input for log review -->
+    <input type="file" id="reviewLogFileInput" accept=".bin,.log" style="display:none">
+
+    <span id="portStatusUDP"></span>
+    <span id="portStatusSerial"></span>
+
+    <!-- ========================================================================
+         JavaScript Files — ORDER IS CRITICAL
+         ======================================================================== -->
+
+    <!-- v2: Chart.js for log browser graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- CORE MAP -->
+    <script src="tmap.js"></script>
+
+    <!-- UI COMPONENTS -->
+    <script src="websocket.js"></script>
+    <script src="multi-vechile.js"></script>
+    <script src="compass.js"></script>
+    <script src="video-stream.js"></script>
+    <script src="flight-controls.js"></script>
+    <script src="messaage-console.js"></script>
+    <script src="weather-dashboard.js"></script>
+    <!-- v2: Analyze tools + log review -->
+    <script src="analyze-tools.js"></script>
+    <script src="review-log.js"></script>
+    <script src="log-download.js"></script>
+    <script src="dropdown-menu.js"></script>
+    <script src="data-persistence.js"></script>
+
+    <!-- WAYPOINT SYSTEM -->
+    <script src="waypoint-manager.js"></script>
+    <script src="waypoint-context-menu.js"></script>
+
+    <!-- COMMAND EDITOR -->
+    <script src="command-editor.js"></script>
+
+    <!-- MISSION FILE MANAGER -->
+    <script src="plan-flight-modules/mission-file-manager.js"></script>
+
+    <!-- POLYGON MANAGER -->
+    <script src="plan-flight-modules/polygon-manager.js?v=9"></script>
+
+    <!-- PLAN FLIGHT MODULES -->
+    <script src="plan-flight-modules/plan-flight-core.js"></script>
+    <script src="plan-flight-modules/plan-flight-ui.js"></script>
+    <script src="plan-flight-modules/plan-flight-file.js"></script>
+    <script src="plan-flight-modules/plan-flight-takeoff.js"></script>
+    <script src="plan-flight-modules/plan-flight-waypoint.js"></script>
+    <script src="plan-flight-modules/plan-flight-polygon.js"></script>
+    <script src="plan-flight-modules/polygon-backend-integration.js"></script>
+    <script src="plan-flight-modules/plan-flight-return.js"></script>
+    <script src="plan-flight-modules/plan-flight-center.js"></script>
+    <script src="plan-flight-modules/plan-flight-weather.js"></script>
+    <script src="plan-flight-modules/plan-flight-menu-router.js"></script>
+    <script src="plan-flight-modules/websocket.js"></script>
+    <script src="plan-flight-modules/plan-flight-mission-send.js?v=2"></script>
+
+    <!-- Internationalisation -->
+    <script src="i18n.js"></script>
+
+    <script src="waypoint-polygon-bridge.js"></script>
+    <script src="survey-settings.js"></script>
+
+    <!-- MAIN APPLICATION (v=3 cache-bust from v2; must be last) -->
+    <script src="multi-vehicle.js"></script>
+    <script src="app.js?v=3"></script>
+    <script src="settings-window.js"></script>
+    <script src="calib-accel.js"></script>
+    <script src="calib-compass.js"></script>
+    <script src="calib-radio.js"></script>
+    <script src="calib-esc.js"></script>
+    <!-- v2: param-user replaces v1 param-switch (reverted) -->
+    <script src="param-switch.js"></script>
+    <script src="param-full.js"></script>
+    <script src="vehicle-config.js"></script>
+    <!-- note: analyze-tools.js already loaded above (line ~1272), do not load twice -->
+    <!-- Flight modes -->
+    <script src="flight-mode.js"></script>
+    <!-- Failsafe panel -->
+    <script src="failsafe.js"></script>
+    <!-- Geofence panel -->
+    <script src="geofence.js"></script>
+    <!-- v1: weather restriction -->
+    <script src="weather-restriction.js"></script>
+    <!-- v2: No-Fly Zone overlay -->
+    <script src="nfz-overlay.js"></script>
+    <script src="nfz-panel.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,102 @@
+/**
+ * param-full.css  —  TiHANFly GCS  —  Full Parameter List Panel
+ */
+
+#panel-param-full {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+#panel-param-full .calib-card,
+.param-full-card {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+/* ── Toolbar ── */
+.param-toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.param-search-bar {
+  flex: 1;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-muted);
+  border-radius: var(--r-sm);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: var(--sans);
+  padding: 10px 14px;
+  outline: none;
+  transition: all .18s ease;
+}
+.param-search-bar::placeholder { color: var(--text-muted); }
+.param-search-bar:focus {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  box-shadow: 0 0 0 3px rgba(230,0,126,.10);
+}
+
+/* ── Table wrapper ── */
+.param-table-wrap {
+  width: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 62vh;
+  margin-bottom: 4px;
+}
+
+/* ── Table ── */
+.param-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.param-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg-raised);
+}
+
+/* Fixed columns — param name, description expands, value right-aligned */
+.param-table .col-param { width: 200px; }
+.param-table .col-desc  { width: auto; }
+.param-table .col-val   {
+  width: 120px;
+  text-align: right;
+  padding-right: 12px;
+}
+
+/* Value input */
+.param-val-input {
+  background: transparent;
+  border: none;
+  color: var(--accent, #E6007E);
+  font-size: 13px;
+  font-family: var(--sans);
+  text-align: right;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+}
+.param-val-input:focus {
+  background: var(--accent-dim, rgba(230,0,126,.08));
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
+/* ── Footer ── */
+.param-table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}

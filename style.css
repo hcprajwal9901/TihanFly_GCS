@@ -1,0 +1,804 @@
+/**
+ * TiHANFly GCS - Professional Stylesheet with IITH Official Colors
+ * Updated with Magenta, Yellow, Orange color scheme
+ */
+
+/* ============================================================================
+   COLOR VARIABLES - IITH OFFICIAL BRAND COLORS
+   ============================================================================ */
+
+:root {
+    /* IITH Primary Brand Colors */
+    --tihan-magenta-deep: #E6007E;
+    --tihan-magenta-medium: #CC3366;
+    --tihan-purple: #663399;
+
+    /* IITH Secondary Brand Colors */
+    --tihan-orange-bright: #FF6B35;
+    --tihan-orange-warm: #FF9933;
+    --tihan-yellow-golden: #FFCC00;
+
+    /* Functional Colors */
+    --success-green: #22c55e;
+    --info-blue: #3b82f6;
+    --warning-orange: #FF9933;
+    --error-magenta: #E6007E;
+
+    /* UI Neutrals */
+    --bg-dark: rgba(45, 45, 45, 0.95);
+    --bg-darker: rgba(20, 20, 25, 0.95);
+    --text-white: #ffffff;
+    --text-grey: rgba(255, 255, 255, 0.7);
+}
+
+/* ============================================================================
+   RESET & BASE STYLES
+   ============================================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0a0a0a;
+}
+
+/* ============================================================================
+   MAIN LAYOUT
+   ============================================================================ */
+
+.main-container {
+    display: grid;
+    grid-template-rows: 60px 1fr;
+    height: 100vh;
+    width: 100vw;
+}
+
+.content-area {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* ============================================================================
+   HEADER BAR - PROFESSIONAL GCS STYLE WITH DARK BACKGROUND
+   ============================================================================ */
+
+.header-bar {
+    position: relative;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(245, 248, 252, 0.98) 0%, rgba(235, 240, 248, 0.98) 100%);
+    backdrop-filter: blur(10px);
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15),
+        0 1px 0 rgba(230, 0, 126, 0.4);
+    border-bottom: 3px solid transparent;
+    border-image: linear-gradient(90deg, var(--tihan-magenta-deep) 0%, var(--tihan-yellow-golden) 100%);
+    border-image-slice: 1;
+}
+
+.header-left,
+.header-center,
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-left {
+    gap: 12px;
+    flex: 0 0 auto;
+}
+
+.header-center {
+    gap: 20px;
+    flex: 0 0 auto;
+    margin-left: 30px;
+}
+
+.header-right {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+/* ============================================================================
+   HEADER LOGO
+   ============================================================================ */
+
+.header-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0.9) contrast(1.1);
+    cursor: pointer;
+    /* Make it clear the logo is clickable */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+/**
+ * TiHAN Logo - Clickable Interactive Styles
+ * Add this to your style.css file after the .header-logo styles
+ */
+
+/* ============================================================================
+   HEADER LOGO - CLICKABLE & INTERACTIVE
+   ============================================================================ */
+
+.header-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0.9) contrast(1.1);
+    cursor: pointer;
+    /* Make it clear the logo is clickable */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+/* Hover effect - slight scale and brightness increase */
+.header-logo:hover {
+    transform: scale(1.08);
+    filter: brightness(1.1) contrast(1.15) drop-shadow(0 2px 8px rgba(230, 0, 126, 0.4));
+}
+
+/* Active/Click effect */
+.header-logo:active {
+    transform: scale(0.98);
+    filter: brightness(0.95) contrast(1.1);
+}
+
+/* Optional: Add a subtle glow effect on hover */
+.header-logo:hover::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: radial-gradient(circle, rgba(230, 0, 126, 0.15) 0%, transparent 70%);
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: -1;
+    animation: logoGlow 2s ease-in-out infinite;
+}
+
+@keyframes logoGlow {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* When dropdown is active, add special styling to logo */
+.header-logo.menu-active {
+    filter: brightness(1.1) contrast(1.2) drop-shadow(0 3px 12px rgba(255, 204, 0, 0.6));
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .header-logo {
+        height: 36px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-logo {
+        height: 32px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-logo {
+        height: 28px;
+    }
+}
+
+/* ============================================================================
+   STATUS BADGE - UPDATED WITH IITH COLORS
+   ============================================================================ */
+
+.status-badge {
+    padding: 0;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: none;
+    display: flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+}
+
+.status-badge.ready {
+    color: #059669;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.status-badge.armed {
+    color: #CC6600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.status-badge.error {
+    color: #C20067;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* ============================================================================
+   SYSTEM INDICATORS - UPDATED WITH IITH COLORS
+   ============================================================================ */
+
+.indicator-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    border: none;
+    transition: opacity 0.3s ease;
+}
+
+.indicator-item:hover {
+    opacity: 0.8;
+}
+
+.indicator-icon {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0.4) contrast(1.3) saturate(0.8);
+    opacity: 1;
+}
+
+.indicator-text {
+    color: #1a1a1a;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-shadow: none;
+}
+
+.indicator-subtext {
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 13px;
+    font-weight: 500;
+    text-shadow: none;
+}
+
+/* Battery indicator */
+.battery-indicator {
+    background: transparent;
+    border: none;
+}
+
+.battery-indicator .indicator-icon {
+    filter: brightness(0.4) contrast(1.3) saturate(0.8);
+}
+
+.battery-indicator:hover {
+    background: transparent;
+    opacity: 0.8;
+}
+
+/* ============================================================================
+   DX4 LOGO
+   ============================================================================ */
+
+.dx4-logo {
+    height: 50px;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0.9) contrast(1.1);
+}
+
+/* ============================================================================
+   MAP CONTAINER - FULLSCREEN BY DEFAULT
+   ============================================================================ */
+
+#map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+/* Remove Leaflet default controls */
+.leaflet-control-attribution,
+.leaflet-control-zoom {
+    display: none !important;
+}
+
+/* ============================================================================
+   VIDEO CONTAINER - UPDATED WITH YELLOW BORDER
+   ============================================================================ */
+
+#videoContainer {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 480px;
+    height: 270px;
+    background: #000;
+    border: 3px solid rgba(255, 204, 0, 0.5);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7),
+        0 0 30px rgba(255, 204, 0, 0.4);
+}
+
+#videoStream {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+}
+
+#videoStream video,
+#videoStream img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+#videoStream img {
+    object-fit: contain;
+    opacity: 0.85;
+}
+
+/* ============================================================================
+   VIDEO OVERLAY & CONTROLS - UPDATED COLORS
+   ============================================================================ */
+
+.video-overlay {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.video-status {
+    background: rgba(230, 0, 126, 0.95);
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.video-status.live {
+    background: rgba(255, 204, 0, 0.95);
+    color: #000;
+}
+
+.video-status.no-signal {
+    background: rgba(107, 114, 128, 0.95);
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    background: white;
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.video-status.live .status-dot {
+    background: #000;
+}
+
+.video-status.no-signal .status-dot {
+    animation: none;
+    opacity: 0.5;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.9);
+    }
+}
+
+/* Video Maximize Button - Orange hover */
+#videoMaxBtn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: all 0.3s ease;
+    pointer-events: all;
+}
+
+#videoMaxBtn:hover {
+    background: rgba(255, 153, 51, 0.9);
+    border-color: var(--tihan-orange-warm);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(255, 153, 51, 0.5);
+}
+
+#videoMaxBtn:active {
+    transform: scale(0.95);
+}
+
+/* ============================================================================
+   MAXIMIZED VIDEO MODE - UPDATED WITH MAGENTA BORDER FOR MAP PIP
+   ============================================================================ */
+
+/* Video takes full screen below header */
+#videoContainer.maximized {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(100% - 60px);
+    border: none;
+    border-radius: 0;
+    z-index: 900;
+}
+
+#videoContainer.maximized:hover {
+    transform: none;
+}
+
+/* Map becomes Picture-in-Picture with MAGENTA border */
+#map.minimized {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    top: auto !important;
+    left: auto !important;
+    width: 380px !important;
+    height: 260px !important;
+    z-index: 950 !important;
+    border: 3px solid var(--tihan-magenta-deep);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8),
+        0 0 30px rgba(230, 0, 126, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* PIP Label for minimized map - Magenta color */
+#map.minimized::before {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: var(--tihan-magenta-deep);
+    background: rgba(0, 0, 0, 0.85);
+    padding: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 10000;
+    pointer-events: none;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px rgba(230, 0, 126, 0.8);
+}
+
+/* ============================================================================
+   COMPASS - ALWAYS FIXED AT BOTTOM CENTER
+   ============================================================================ */
+
+.compass-telemetry-container {
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    top: auto !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.compass-telemetry-container * {
+    pointer-events: all !important;
+}
+
+.gcs-compass-panel {
+    position: relative !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Override ALL possible state changes */
+body .compass-telemetry-container,
+html .compass-telemetry-container,
+.main-container .compass-telemetry-container,
+.content-area .compass-telemetry-container,
+#map .compass-telemetry-container,
+#map.minimized .compass-telemetry-container,
+#videoContainer .compass-telemetry-container,
+#videoContainer.maximized .compass-telemetry-container,
+div .compass-telemetry-container,
+* .compass-telemetry-container {
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 9999 !important;
+}
+
+.compass-telemetry-container:hover,
+.compass-telemetry-container:focus,
+.compass-telemetry-container:active {
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .header-logo {
+        height: 36px;
+    }
+
+    .dx4-logo {
+        height: 32px;
+    }
+
+    .header-center {
+        gap: 15px;
+        margin-left: 20px;
+    }
+
+    .indicator-item {
+        gap: 4px;
+    }
+
+    .indicator-text {
+        font-size: 13px;
+    }
+
+    #videoContainer {
+        width: 400px;
+        height: 225px;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    #map.minimized {
+        width: 320px !important;
+        height: 220px !important;
+        bottom: 20px !important;
+        right: 20px !important;
+    }
+}
+
+/* Mobile Portrait */
+@media (max-width: 768px) {
+    .header-bar {
+        padding: 0 15px;
+        height: 55px;
+    }
+
+    .header-logo {
+        height: 32px;
+    }
+
+    .dx4-logo {
+        height: 28px;
+    }
+
+    .header-left {
+        gap: 8px;
+    }
+
+    .header-center {
+        gap: 12px;
+        margin-left: 15px;
+    }
+
+    .indicator-item {
+        gap: 3px;
+    }
+
+    .indicator-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .indicator-text {
+        font-size: 12px;
+    }
+
+    .indicator-subtext {
+        font-size: 10px;
+    }
+
+    .status-badge {
+        font-size: 12px;
+    }
+
+    #videoContainer {
+        width: 320px;
+        height: 180px;
+        bottom: 15px;
+        right: 15px;
+    }
+
+    #map.minimized {
+        width: 260px !important;
+        height: 180px !important;
+        bottom: 15px !important;
+        right: 15px !important;
+    }
+
+    #map.minimized::before {
+        font-size: 10px;
+        padding: 6px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .main-container {
+        grid-template-rows: 50px 1fr;
+    }
+
+    .header-bar {
+        height: 50px;
+        padding: 0 10px;
+    }
+
+    .header-logo {
+        height: 28px;
+    }
+
+    .dx4-logo {
+        height: 24px;
+    }
+
+    .header-left {
+        gap: 6px;
+    }
+
+    .header-center {
+        gap: 10px;
+        margin-left: 10px;
+    }
+
+    .indicator-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .indicator-subtext {
+        display: none;
+    }
+
+    .status-badge {
+        font-size: 11px;
+    }
+
+    #videoContainer {
+        width: 280px;
+        height: 158px;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    #map.minimized {
+        width: 220px !important;
+        height: 150px !important;
+        bottom: 10px !important;
+        right: 10px !important;
+    }
+
+    #videoMaxBtn {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.hidden {
+    display: none !important;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ============================================================================
+   SCROLLBAR STYLING - IITH COLORS
+   ============================================================================ */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(230, 0, 126, 0.5);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(230, 0, 126, 0.7);
+}

@@ -1,0 +1,355 @@
+/**
+ * param-switch.css
+ * TiHANFly GCS — RC Switch Options Panel
+ * Fonts: DM Mono (channel IDs) + Outfit (UI text)
+ * Companion to param-user.css — shares same design tokens
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+/* ── Variables ──────────────────────────────────── */
+:root {
+  --pu-bg-card:        #10131e;
+  --pu-bg-row:         #131726;
+  --pu-bg-row-alt:     #111422;
+  --pu-bg-input:       #0d0f1a;
+  --pu-border:         rgba(255,255,255,0.06);
+  --pu-border-strong:  rgba(255,255,255,0.11);
+  --pu-accent:         #e6007e;
+  --pu-accent-dim:     rgba(230,0,126,0.18);
+  --pu-accent-glow:    rgba(230,0,126,0.35);
+  --pu-text-1:         #eef0f8;
+  --pu-text-2:         rgba(238,240,248,0.55);
+  --pu-text-3:         rgba(238,240,248,0.28);
+  --pu-mono:           'DM Mono', 'Fira Code', monospace;
+  --pu-sans:           'Outfit', system-ui, sans-serif;
+  --pu-radius:         10px;
+  --pu-radius-sm:      6px;
+}
+
+/* ── Card shell ─────────────────────────────────── */
+.sw-card {
+  font-family: var(--pu-sans);
+  background: var(--pu-bg-card);
+  border: 1px solid var(--pu-border-strong);
+  border-radius: var(--pu-radius);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.04) inset;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Top accent line */
+.sw-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, var(--pu-accent) 40%, rgba(230,0,126,0.4) 70%, transparent 95%);
+  z-index: 1;
+}
+
+/* ── Header ─────────────────────────────────────── */
+.sw-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--pu-border);
+  background: linear-gradient(135deg, rgba(230,0,126,0.04) 0%, transparent 60%);
+}
+
+.sw-header-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--pu-accent-dim);
+  border: 1px solid rgba(230,0,126,0.3);
+  border-radius: var(--pu-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--pu-accent);
+}
+
+.sw-header-text h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pu-text-1);
+  margin-bottom: 2px;
+}
+
+.sw-header-text p {
+  font-size: 11.5px;
+  color: var(--pu-text-3);
+  font-weight: 300;
+}
+
+.sw-header-stats {
+  margin-left: auto;
+  display: flex;
+  gap: 24px;
+}
+
+.sw-stat { text-align: right; }
+
+.sw-stat-val {
+  display: block;
+  font-family: var(--pu-mono);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--pu-text-1);
+  line-height: 1;
+}
+
+.sw-stat-val.accent { color: var(--pu-accent); }
+
+.sw-stat-label {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--pu-text-3);
+  margin-top: 4px;
+}
+
+/* ── Section group label ────────────────────────── */
+.sw-section-label {
+  grid-column: 1 / -1;
+  padding: 7px 20px 6px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--pu-text-3);
+  border-bottom: 1px solid var(--pu-border);
+  background: rgba(0,0,0,0.15);
+}
+
+/* ── Channel grid ───────────────────────────────── */
+.sw-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--pu-border);
+}
+
+.sw-channel {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--pu-border);
+  border-right: 1px solid var(--pu-border);
+  transition: background 0.12s;
+  position: relative;
+}
+
+/* Right column — no right border */
+.sw-channel:nth-child(even) { border-right: none; }
+
+/* Last two cells — no bottom border */
+.sw-channel:nth-last-child(-n+2) { border-bottom: none; }
+
+.sw-channel:hover { background: rgba(230,0,126,0.03); }
+
+/* Dirty state */
+.sw-channel.dirty {
+  background: rgba(230,0,126,0.055) !important;
+  border-left: 2px solid var(--pu-accent);
+}
+
+/* Even dirty channels: compensate for 2px left border so grid doesn't shift */
+.sw-channel.dirty:nth-child(even) {
+  border-left: none;
+  border-right: none;
+}
+
+.sw-channel.dirty:hover { background: rgba(230,0,126,0.1) !important; }
+
+/* ── Channel top row ────────────────────────────── */
+.sw-channel-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* RC badge (e.g. "RC 6") */
+.sw-ch-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--pu-radius-sm);
+  background: var(--pu-accent-dim);
+  border: 1px solid rgba(230,0,126,0.25);
+  font-family: var(--pu-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--pu-accent);
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.sw-ch-info { flex: 1; min-width: 0; }
+
+.sw-ch-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pu-text-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sw-ch-sub {
+  font-size: 10.5px;
+  color: var(--pu-text-3);
+  font-weight: 300;
+}
+
+/* Dirty pulse dot */
+.sw-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--pu-accent);
+  flex-shrink: 0;
+  box-shadow: 0 0 6px var(--pu-accent);
+  animation: sw-pulse 1.6s ease-in-out infinite;
+  display: none;
+  margin-left: auto;
+}
+
+.sw-channel.dirty .sw-dot { display: block; }
+
+@keyframes sw-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.35; transform: scale(0.65); }
+}
+
+/* ── Select / Enum ──────────────────────────────── */
+.sw-select {
+  width: 100%;
+  background: var(--pu-bg-input);
+  border: 1px solid var(--pu-border-strong);
+  border-radius: var(--pu-radius-sm);
+  color: var(--pu-accent);
+  font-family: var(--pu-sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 7px 28px 7px 10px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='%23e6007e' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.sw-select:focus {
+  border-color: var(--pu-accent);
+  box-shadow: 0 0 0 3px rgba(230,0,126,0.12);
+}
+
+.sw-select option { background: #151828; color: var(--pu-text-1); }
+
+.sw-select.dirty { border-color: rgba(230,0,126,0.55); color: #ff5ab8; }
+
+/* FC default hint below select */
+.sw-default-hint {
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--pu-text-3);
+  font-family: var(--pu-mono);
+}
+
+.sw-default-hint span { color: var(--pu-text-2); }
+
+/* ── Footer ─────────────────────────────────────── */
+.sw-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--pu-border-strong);
+  background: rgba(0,0,0,0.25);
+  flex-wrap: wrap;
+}
+
+.sw-footer-info {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--pu-text-3);
+  font-weight: 300;
+}
+
+.sw-footer-info strong {
+  color: var(--pu-accent);
+  font-weight: 600;
+}
+
+/* ── Buttons ────────────────────────────────────── */
+.sw-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 18px;
+  border-radius: var(--pu-radius-sm);
+  border: 1px solid transparent;
+  font-family: var(--pu-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.sw-btn:active { transform: translateY(1px); }
+
+.sw-btn-primary {
+  background: var(--pu-accent);
+  color: #fff;
+  border-color: var(--pu-accent);
+  box-shadow: 0 4px 14px rgba(230,0,126,0.35);
+}
+.sw-btn-primary:hover {
+  background: #f0008a;
+  box-shadow: 0 6px 22px rgba(230,0,126,0.5);
+}
+
+.sw-btn-secondary {
+  background: rgba(255,255,255,0.05);
+  color: var(--pu-text-2);
+  border-color: var(--pu-border-strong);
+}
+.sw-btn-secondary:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--pu-text-1);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.sw-btn-danger {
+  background: transparent;
+  color: rgba(255,100,100,0.7);
+  border-color: rgba(255,100,100,0.25);
+}
+.sw-btn-danger:hover {
+  background: rgba(255,60,60,0.08);
+  color: #ff6464;
+  border-color: rgba(255,100,100,0.5);
+}
+
+/* Dirty count badge inside Write button */
+.sw-dirty-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  background: rgba(255,255,255,0.22);
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 700;
+}
