@@ -345,7 +345,14 @@ static bool video_start_internal(const std::string& script_path, const std::stri
 {
     video_stop_internal();
 
-    std::string cmdline = "cmd.exe /C python \"" + script_path + "\" \"" + rtsp_url + "\" 5001 > NUL 2>&1";
+    bool is_py = (script_path.length() >= 3 && script_path.substr(script_path.length() - 3) == ".py");
+    std::string cmdline;
+    if (is_py) {
+        cmdline = "cmd.exe /C python \"" + script_path + "\" \"" + rtsp_url + "\" 5001 > NUL 2>&1";
+    } else {
+        cmdline = "cmd.exe /C \"" + script_path + "\" \"" + rtsp_url + "\" 5001 > NUL 2>&1";
+    }
+    
     std::cout << "[Video] CreateProcess: " << cmdline << "\n";
 
     STARTUPINFOA si = {};
@@ -375,7 +382,12 @@ static bool video_start_internal(const std::string& script_path, const std::stri
     std::cout << "[Video] CreateProcess failed (err=" << err
               << "). Falling back to system()\n";
     // Fallback
-    std::string cmd2 = "start /B python \"" + script_path + "\" \"" + rtsp_url + "\" 5001";
+    std::string cmd2;
+    if (is_py) {
+        cmd2 = "start /B python \"" + script_path + "\" \"" + rtsp_url + "\" 5001";
+    } else {
+        cmd2 = "start /B \"\" \"" + script_path + "\" \"" + rtsp_url + "\" 5001";
+    }
     system(cmd2.c_str());
     return false;
 }
@@ -1553,8 +1565,12 @@ void start_websocket(CommandManager* cmd_manager)
                                 {
                                     std::cout << "[Video] start_video: " << rtsp_url << "\n";
 
-                                    // Find video_server.py relative to CWD
+                                    // Find video_server relative to CWD
                                     std::vector<std::string> candidates = {
+                                        "video_server.exe",
+                                        "..\\video_server.exe",
+                                        "..\\..\\video_server.exe",
+                                        "..\\..\\..\\video_server.exe",
                                         "video_server.py",
                                         "..\\video_server.py",
                                         "..\\..\\video_server.py",
@@ -1569,14 +1585,19 @@ void start_websocket(CommandManager* cmd_manager)
                                     }
 
                                     if (script_path.empty()) {
-                                        std::cout << "[Video] video_server.py not found!\n";
-                                        send_ws_safe(R"({"type":"video_status","status":"error","message":"video_server.py not found."})");
+                                        std::cout << "[Video] video_server executable/script not found!\n";
+                                        send_ws_safe(R"({"type":"video_status","status":"error","message":"video_server not found."})");
                                     } else {
 #ifdef _WIN32
                                         bool spawned = video_start_internal(script_path, rtsp_url);
                                         (void)spawned;
 #else
-                                        system(("python3 \"" + script_path + "\" \"" + rtsp_url + "\" 5001 >/dev/null 2>&1 &").c_str());
+                                        bool is_py = (script_path.length() >= 3 && script_path.substr(script_path.length() - 3) == ".py");
+                                        if (is_py) {
+                                            system(("python3 \"" + script_path + "\" \"" + rtsp_url + "\" 5001 >/dev/null 2>&1 &").c_str());
+                                        } else {
+                                            system(("\"" + script_path + "\" \"" + rtsp_url + "\" 5001 >/dev/null 2>&1 &").c_str());
+                                        }
 #endif
                                         // Notify browser after Python has had time to bind port 5001
                                         std::thread([]() {

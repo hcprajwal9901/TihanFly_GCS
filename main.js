@@ -60,10 +60,11 @@ app.whenReady().then(() => {
     // Video streaming is handled by video_server.py (spawned by the backend
     // when the user clicks Connect). No relay server needed.
     const backendCandidates = [
+        app.isPackaged ? path.join(process.resourcesPath, 'backend', 'TiHANFly.exe') : null,
         path.join(__dirname, 'TihanFlyCC-main', 'build', 'Release', 'TiHANFly.exe'),
         path.join(__dirname, 'build', 'Release', 'TiHANFly.exe'),
         path.join(__dirname, 'tihanfly_server'),
-    ];
+    ].filter(Boolean);
 
     for (const candidate of backendCandidates) {
         try {

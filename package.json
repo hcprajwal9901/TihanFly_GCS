@@ -19,8 +19,19 @@
     "appId": "com.tihan.fly",
     "productName": "TihanFly",
     "win": {
-      "target": "nsis"
-    }
+      "target": "portable"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}.exe"
+    },
+    "extraResources": [
+      {
+        "from": "TihanFlyCC-main/build/Release",
+        "to": "backend",
+        "filter": ["**/*"]
+      },
+      "video_server.exe"
+    ]
   }
 }
 
