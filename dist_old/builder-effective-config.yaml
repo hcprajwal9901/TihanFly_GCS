@@ -1,0 +1,19 @@
+directories:
+  output: dist
+  buildResources: build
+appId: com.tihan.fly
+productName: TihanFly
+win:
+  target: portable
+  icon: resources/icon/tihan.png
+portable:
+  artifactName: ${productName}-${version}.exe
+extraResources:
+  - from: TihanFlyCC-main/build/Release
+    to: backend
+    filter:
+      - '**/*'
+  - filter:
+      - video_server.exe
+files: []
+electronVersion: 40.6.1

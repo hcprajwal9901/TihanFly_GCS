@@ -13,6 +13,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1400,
         height: 900,
+        icon: path.join(__dirname, 'resources', 'icon', 'tihan.png'),
         webPreferences: {
             nodeIntegration:  false,
             contextIsolation: true,
@@ -20,7 +21,7 @@ function createWindow() {
         }
     });
 
-    mainWindow.loadFile('Login.html');
+    mainWindow.loadFile('MainWindow.html');
     mainWindow.on('closed', () => { mainWindow = null; });
 }
 

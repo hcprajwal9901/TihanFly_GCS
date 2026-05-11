@@ -345,18 +345,38 @@ static bool video_start_internal(const std::string& script_path, const std::stri
 {
     video_stop_internal();
 
-    bool is_py = (script_path.length() >= 3 && script_path.substr(script_path.length() - 3) == ".py");
+    // Convert script_path to absolute path
+    char abs_path[MAX_PATH];
+    std::string final_path = script_path;
+    if (_fullpath(abs_path, script_path.c_str(), MAX_PATH) != NULL) {
+        final_path = abs_path;
+    }
+
+    bool is_py = (final_path.length() >= 3 && final_path.substr(final_path.length() - 3) == ".py");
     std::string cmdline;
     if (is_py) {
-        cmdline = "cmd.exe /C python \"" + script_path + "\" \"" + rtsp_url + "\" 5001 > NUL 2>&1";
+        cmdline = "cmd.exe /S /C \"python \"" + final_path + "\" \"" + rtsp_url + "\" 5001 > NUL 2>&1\"";
     } else {
-        cmdline = "cmd.exe /C \"" + script_path + "\" \"" + rtsp_url + "\" 5001 > NUL 2>&1";
+        cmdline = "\"" + final_path + "\" \"" + rtsp_url + "\" 5001";
     }
     
     std::cout << "[Video] CreateProcess: " << cmdline << "\n";
 
+    SECURITY_ATTRIBUTES sa;
+    sa.nLength = sizeof(sa);
+    sa.lpSecurityDescriptor = NULL;
+    sa.bInheritHandle = TRUE;
+
+    HANDLE hLog = CreateFileA("video_server.log", FILE_APPEND_DATA, 
+                              FILE_SHARE_READ | FILE_SHARE_WRITE, &sa,
+                              OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
     STARTUPINFOA si = {};
     si.cb         = sizeof(si);
+    si.dwFlags    = STARTF_USESTDHANDLES;
+    si.hStdOutput = hLog;
+    si.hStdError  = hLog;
+    si.hStdInput  = GetStdHandle(STD_INPUT_HANDLE);
 
     PROCESS_INFORMATION pi = {};
     char buf[4096];
@@ -364,11 +384,15 @@ static bool video_start_internal(const std::string& script_path, const std::stri
 
     BOOL ok = CreateProcessA(
         NULL, buf, NULL, NULL,
-        FALSE,                  // DO NOT inherit handles (prevents socket hijacking)
+        TRUE,                   // inherit handles
         CREATE_NO_WINDOW,       // no console window
         NULL, NULL,
         &si, &pi
     );
+
+    if (hLog != INVALID_HANDLE_VALUE) {
+        CloseHandle(hLog);
+    }
 
     if (ok)
     {

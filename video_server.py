@@ -187,7 +187,7 @@ def index():
     return (
         f'<html><body style="background:#0a0a0a;color:#fff;font-family:monospace;padding:20px">'
         f'<h2>TiHANFly Video Server</h2>'
-        f'<p>RTSP: {RTSP_URL}</p>'
+        f'<p>Stream: {STREAM_URL}</p>'
         f'<p>Frames: {_frame_count}</p>'
         f'<img src="/video" style="max-width:100%;border:2px solid #22c55e">'
         f'</body></html>'

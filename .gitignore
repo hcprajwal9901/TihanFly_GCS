@@ -28,6 +28,8 @@ dist/
 out/
 release/
 build-electron/
+build/
+build_dist/
 
 # Electron packager cache
 .cache/

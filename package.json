@@ -19,7 +19,11 @@
     "appId": "com.tihan.fly",
     "productName": "TihanFly",
     "win": {
-      "target": "portable"
+      "target": "portable",
+      "icon": "resources/icon/tihan.png"
+    },
+    "directories": {
+      "output": "build_dist"
     },
     "portable": {
       "artifactName": "${productName}-${version}.exe"
