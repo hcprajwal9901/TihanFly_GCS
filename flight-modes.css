@@ -7,20 +7,19 @@
 
 /* ══ WRAPPER ══════════════════════════════════════════════════════════════════ */
 .fm-wrap {
-    max-width: 780px;
+    max-width: 820px;
 }
 
 /* ══ CURRENT STATE BAR ════════════════════════════════════════════════════════ */
 .fm-current-bar {
     display: flex;
     align-items: center;
-    gap: 0;
+    gap: 32px;
     background: var(--bg-card);
     border: 1px solid var(--border-muted);
     border-radius: var(--r-lg);
     padding: 16px 24px;
     margin-bottom: 24px;
-    gap: 32px;
 }
 
 .fm-current-item {
@@ -71,22 +70,32 @@
     flex-shrink: 0;
     animation: fmDotPulse 2s ease-in-out infinite;
 }
+
 @keyframes fmDotPulse {
-    0%, 100% { opacity: 1;   box-shadow: 0 0 6px var(--good); }
-    50%       { opacity: .5; box-shadow: 0 0 14px var(--good); }
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 6px var(--good);
+    }
+
+    50% {
+        opacity: .5;
+        box-shadow: 0 0 14px var(--good);
+    }
 }
 
 /* ══ TABLE HEADER ═════════════════════════════════════════════════════════════ */
 .fm-table-head {
     display: grid;
-    grid-template-columns: 130px 1fr 110px 160px 140px;
+    grid-template-columns: 120px 1fr 100px 150px 130px;
     align-items: center;
     padding: 8px 20px;
     background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: var(--r-md) var(--r-md) 0 0;
     border-bottom: none;
-    gap: 12px;
+    gap: 10px;
 }
 
 .fm-th {
@@ -109,26 +118,35 @@
 /* ── Row ─────────────────────────────────────────────────────────────────── */
 .fm-row {
     display: grid;
-    grid-template-columns: 130px 1fr 110px 160px 140px;
+    grid-template-columns: 120px 1fr 100px 150px 130px;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     padding: 12px 20px;
     background: var(--bg-card);
     border-bottom: 1px solid var(--border-subtle);
     transition: background .14s;
     position: relative;
 }
-.fm-row:last-child { border-bottom: none; }
-.fm-row:hover { background: var(--bg-hover); }
+
+.fm-row:last-child {
+    border-bottom: none;
+}
+
+.fm-row:hover {
+    background: var(--bg-hover);
+}
 
 /* active row accent */
 .fm-row--active {
     background: rgba(230, 0, 126, .045);
 }
+
 .fm-row--active::before {
     content: '';
     position: absolute;
-    left: 0; top: 0; bottom: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
     width: 3px;
     background: var(--accent);
     border-radius: 0 2px 2px 0;
@@ -143,12 +161,15 @@
     letter-spacing: .3px;
     white-space: nowrap;
 }
+
 .fm-row--active .fm-row-label {
     color: var(--text-primary);
 }
 
 /* ── Mode select ─────────────────────────────────────────────────────────── */
-.fm-select-wrap { display: flex; }
+.fm-select-wrap {
+    display: flex;
+}
 
 .fm-select {
     width: 100%;
@@ -170,6 +191,7 @@
     background-position: right 10px center;
     background-color: var(--bg-raised);
 }
+
 .fm-select:focus,
 .fm-select:hover {
     border-color: var(--border-muted);
@@ -183,8 +205,16 @@
     color: var(--text-primary);
 }
 
-.fm-select option   { background: var(--bg-raised); color: var(--text-primary); }
-.fm-select optgroup { background: var(--bg-surface); color: var(--text-muted); font-weight: 700; }
+.fm-select option {
+    background: var(--bg-raised);
+    color: var(--text-primary);
+}
+
+.fm-select optgroup {
+    background: var(--bg-surface);
+    color: var(--text-muted);
+    font-weight: 700;
+}
 
 /* ── Checkbox ────────────────────────────────────────────────────────────── */
 .fm-check-wrap {
@@ -200,7 +230,8 @@
 .fm-checkbox {
     position: absolute;
     opacity: 0;
-    width: 0; height: 0;
+    width: 0;
+    height: 0;
     pointer-events: none;
 }
 
@@ -218,21 +249,25 @@
     transition: background .15s, border-color .15s;
     position: relative;
 }
+
 .fm-checkmark::after {
     content: '';
     display: block;
-    width: 5px; height: 9px;
+    width: 5px;
+    height: 9px;
     border: 2px solid transparent;
-    border-top: none; border-left: none;
+    border-top: none;
+    border-left: none;
     transform: rotate(45deg) translateY(-1px);
     transition: border-color .15s;
 }
 
-.fm-checkbox:checked ~ .fm-checkmark {
+.fm-checkbox:checked~.fm-checkmark {
     background: var(--accent-dim);
     border-color: var(--accent);
 }
-.fm-checkbox:checked ~ .fm-checkmark::after {
+
+.fm-checkbox:checked~.fm-checkmark::after {
     border-color: var(--accent);
 }
 
@@ -242,17 +277,20 @@
 }
 
 .fm-check-text {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
     color: var(--text-secondary);
     white-space: nowrap;
     transition: color .15s;
 }
-.fm-check-wrap:hover .fm-check-text  { color: var(--text-primary); }
-.fm-checkbox:checked ~ .fm-check-text { display: none; } /* label already clear from checkmark */
 
-/* re-show the text (it's a sibling, not a child of checkmark) */
-.fm-check-wrap .fm-check-text { display: inline; }
+.fm-check-wrap:hover .fm-check-text {
+    color: var(--text-primary);
+}
+
+.fm-checkbox:checked~.fm-check-text {
+    color: var(--text-primary);
+}
 
 /* ── PWM range label ─────────────────────────────────────────────────────── */
 .fm-pwm-label {
@@ -264,6 +302,7 @@
     white-space: nowrap;
     text-align: right;
 }
+
 .fm-pwm-label--active {
     color: var(--accent);
 }
@@ -292,11 +331,13 @@
     transition: all .18s ease;
     box-shadow: 0 4px 14px rgba(0, 217, 126, .25);
 }
+
 .fm-save-btn:hover:not(:disabled) {
     background: #00f090;
     box-shadow: 0 6px 20px rgba(0, 217, 126, .4);
     transform: translateY(-1px);
 }
+
 .fm-save-btn:disabled {
     opacity: .45;
     cursor: not-allowed;
@@ -310,14 +351,28 @@
 }
 
 /* ══ RESPONSIVE ══════════════════════════════════════════════════════════════ */
-@media (max-width: 680px) {
-    .fm-table-head { display: none; }
+@media (max-width: 720px) {
+    .fm-table-head {
+        display: none;
+    }
+
     .fm-row {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto auto auto;
         row-gap: 8px;
     }
-    .fm-row-label    { grid-column: 1 / -1; }
-    .fm-select-wrap  { grid-column: 1 / -1; }
-    .fm-pwm-label    { text-align: left; }
+
+    .fm-row-label {
+        grid-column: 1 / -1;
+        font-size: 12px;
+        color: var(--text-primary);
+    }
+
+    .fm-select-wrap {
+        grid-column: 1 / -1;
+    }
+
+    .fm-pwm-label {
+        text-align: left;
+    }
 }
