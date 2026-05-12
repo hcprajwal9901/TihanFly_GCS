@@ -27,9 +27,10 @@ yarn-error.log*
 dist/
 out/
 release/
-build-electron/
 build/
-build_dist/
+build-electron/
+build*/
+build_dist*/
 
 # Electron packager cache
 .cache/
