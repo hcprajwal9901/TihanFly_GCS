@@ -102,8 +102,8 @@
     }
 
     function render() {
-        const L = [[5,0,0],[6,0,0],[7,0,0],[8,0,0],[9,0,0]];
-        const R = [[10,0,0],[11,0,0],[12,0,0],[13,0,0],[14,0,0]];
+        const L = [[5, 0, 0], [6, 0, 0], [7, 0, 0], [8, 0, 0], [9, 0, 0]];
+        const R = [[10, 0, 0], [11, 0, 0], [12, 0, 0], [13, 0, 0], [14, 0, 0]];
 
         return `
 <div class="mp-radio-root">
@@ -117,14 +117,14 @@
   <div class="mp-main-row">
 
     <div class="mp-sticks-section">
-      ${vStick('pitch',    'Pitch',    50)}
+      ${vStick('pitch', 'Pitch', 50)}
       ${vStick('throttle', 'Throttle', 50)}
     </div>
 
     <div class="mp-boxes-section">
       <div class="mp-boxes-grid">
-        <div class="mp-boxes-col">${L.map(([n,v,p]) => radioBox(n,v,p)).join('')}</div>
-        <div class="mp-boxes-col">${R.map(([n,v,p]) => radioBox(n,v,p)).join('')}</div>
+        <div class="mp-boxes-col">${L.map(([n, v, p]) => radioBox(n, v, p)).join('')}</div>
+        <div class="mp-boxes-col">${R.map(([n, v, p]) => radioBox(n, v, p)).join('')}</div>
       </div>
 
       <!-- Status message bar -->
@@ -175,11 +175,11 @@
     /* ── DOM update helpers ── */
 
     function setHbar(id, raw) {
-        const pct  = pwmToPct(raw);
+        const pct = pwmToPct(raw);
         const fill = document.getElementById(`hbar-fill-${id}`);
-        const val  = document.getElementById(`hbar-val-${id}`);
+        const val = document.getElementById(`hbar-val-${id}`);
         if (fill) fill.style.width = pct.toFixed(1) + '%';
-        if (val)  val.textContent  = raw;
+        if (val) val.textContent = raw;
 
         const mm = _mm(`hbar-${id}`, pct);
         const minEl = document.getElementById(`hbar-min-${id}`);
@@ -189,11 +189,11 @@
     }
 
     function setVstick(id, raw) {
-        const pct  = pwmToPct(raw);
+        const pct = pwmToPct(raw);
         const fill = document.getElementById(`stick-fill-${id}`);
-        const val  = document.getElementById(`stick-val-${id}`);
+        const val = document.getElementById(`stick-val-${id}`);
         if (fill) fill.style.height = pct.toFixed(1) + '%';
-        if (val)  val.textContent   = raw;
+        if (val) val.textContent = raw;
 
         const mm = _mm(`vstick-${id}`, pct);
         const minEl = document.getElementById(`stick-min-${id}`);
@@ -232,8 +232,8 @@
 
         // Build channel rows — format: "CH1  1114 | 1910"  (Image 2 style)
         const rowsHtml = channels.map(({ channel, min, max, moved }) => {
-            const minVal  = (min != null && min !== 65535) ? min : '—';
-            const maxVal  = (max != null && max !== 0)     ? max : '—';
+            const minVal = (min != null && min !== 65535) ? min : '—';
+            const maxVal = (max != null && max !== 0) ? max : '—';
 
             // `moved` is set by the backend (Fix 3 in radio_calibration.cpp).
             // Fallback: detect locally from the range in case an older backend
@@ -242,7 +242,7 @@
                 ? !!moved
                 : (typeof min === 'number' && typeof max === 'number' && (max - min) > 4);
 
-            const rowStyle  = didMove ? '' : 'color:#999;';
+            const rowStyle = didMove ? '' : 'color:#999;';
             const notMovedBadge = didMove
                 ? ''
                 : ' <span style="font-size:10px;color:#aaa;font-weight:400"> (not moved)</span>';
@@ -254,7 +254,7 @@
         }).join('');
 
         const overlay = document.createElement('div');
-        overlay.id        = 'mp-calib-popup-overlay';
+        overlay.id = 'mp-calib-popup-overlay';
         overlay.className = 'mp-calib-overlay';
         overlay.innerHTML = `
           <div class="mp-calib-popup" role="dialog" aria-modal="true">
@@ -300,15 +300,15 @@
         const result = [];
         const read = id => {
             const el = document.getElementById(`hbar-val-${id}`) ||
-                       document.getElementById(`stick-val-${id}`);
+                document.getElementById(`stick-val-${id}`);
             return el ? parseInt(el.textContent, 10) || 0 : 0;
         };
 
         const chMap = [
-            { channel: 1, id: 'roll'     },
-            { channel: 2, id: 'pitch'    },
+            { channel: 1, id: 'roll' },
+            { channel: 2, id: 'pitch' },
             { channel: 3, id: 'throttle' },
-            { channel: 4, id: 'yaw'      },
+            { channel: 4, id: 'yaw' },
         ];
         chMap.forEach(({ channel, id }) => {
             const raw = read(id);
@@ -327,11 +327,11 @@
     function showStatus(msg, success) {
         const bar = document.getElementById('radio-status-bar');
         if (!bar) return;
-        bar.textContent      = msg;
-        bar.style.display    = 'block';
+        bar.textContent = msg;
+        bar.style.display = 'block';
         bar.style.background = success ? '#1a3a0a' : '#3a2000';
-        bar.style.color      = success ? '#9aff5a' : '#ffaa00';
-        bar.style.border     = `1px solid ${success ? '#5ccc00' : '#ffaa00'}`;
+        bar.style.color = success ? '#9aff5a' : '#ffaa00';
+        bar.style.border = `1px solid ${success ? '#5ccc00' : '#ffaa00'}`;
     }
 
     /* ── Map rc_channels array onto UI ──
@@ -341,10 +341,10 @@
         channels.forEach(({ channel, raw }) => {
             if (!raw || raw === 0) return;
             switch (channel) {
-                case 1:  setHbar('roll',     raw); break;
-                case 2:  setVstick('pitch',    raw); break;
-                case 3:  setVstick('throttle', raw); break;
-                case 4:  setHbar('yaw',      raw); break;
+                case 1: setHbar('roll', raw); break;
+                case 2: setVstick('pitch', raw); break;
+                case 3: setVstick('throttle', raw); break;
+                case 4: setHbar('yaw', raw); break;
                 default:
                     if (channel >= 5 && channel <= 14)
                         setRbox(channel, raw);
@@ -353,21 +353,21 @@
         });
     }
 
-    /* ── Mock animation — only while no drone is connected ── */
-    function startMockAnimation() {
-        return setInterval(() => {
-            ['pitch', 'throttle'].forEach(id => {
-                setVstick(id, Math.round(PWM_MIN + Math.random() * 1000));
-            });
-            ['roll', 'yaw'].forEach(id => {
-                setHbar(id, Math.round(PWM_MIN + Math.random() * 1000));
-            });
-            for (let ch = 5; ch <= 14; ch++) {
-                const active = ch <= 9 && Math.random() > 0.25;
-                setRbox(ch, active ? Math.round(PWM_MIN + Math.random() * 1000) : 0);
-            }
-        }, 80);
-    }
+    // /* ── Mock animation — only while no drone is connected ── */
+    // function startMockAnimation() {
+    //     return setInterval(() => {
+    //         ['pitch', 'throttle'].forEach(id => {
+    //             setVstick(id, Math.round(PWM_MIN + Math.random() * 1000));
+    //         });
+    //         ['roll', 'yaw'].forEach(id => {
+    //             setHbar(id, Math.round(PWM_MIN + Math.random() * 1000));
+    //         });
+    //         for (let ch = 5; ch <= 14; ch++) {
+    //             const active = ch <= 9 && Math.random() > 0.25;
+    //             setRbox(ch, active ? Math.round(PWM_MIN + Math.random() * 1000) : 0);
+    //         }
+    //     }, 80);
+    // }
 
     /* ── Resolve the shared GCS WebSocket ──────────────────────────────────
      *
@@ -407,18 +407,18 @@
     function patchWebsocketJs(onMsg) {
         // Pattern 1: websocket.js exposes window.wsHandlers = { type: fn, ... }
         if (window.wsHandlers && typeof window.wsHandlers === 'object') {
-            window.wsHandlers['rc_channels']               = onMsg;
+            window.wsHandlers['rc_channels'] = onMsg;
             window.wsHandlers['radio_calibration_complete'] = onMsg;
-            window.wsHandlers['radio_calibration_status']  = onMsg;
+            window.wsHandlers['radio_calibration_status'] = onMsg;
             console.log('[CalibRadio] Patched into window.wsHandlers');
             return;
         }
 
         // Pattern 2: websocket.js exposes window.registerWsHandler(type, fn)
         if (typeof window.registerWsHandler === 'function') {
-            window.registerWsHandler('rc_channels',               onMsg);
+            window.registerWsHandler('rc_channels', onMsg);
             window.registerWsHandler('radio_calibration_complete', onMsg);
-            window.registerWsHandler('radio_calibration_status',  onMsg);
+            window.registerWsHandler('radio_calibration_status', onMsg);
             console.log('[CalibRadio] Registered via window.registerWsHandler');
             return;
         }
@@ -451,8 +451,8 @@
 
         const { toast } = window.SwUtil || {};
         let mockTimer = null;
-        let running   = false;
-        const btn     = document.getElementById('radioStartBtn');
+        let running = false;
+        const btn = document.getElementById('radioStartBtn');
 
         // Resolve socket — may be in CONNECTING state, that's fine
         let socket = resolveSocket(injectedSocket);
@@ -514,10 +514,10 @@
                         chans.forEach(({ channel, trim }) => {
                             const raw = trim ?? 1500;
                             switch (channel) {
-                                case 1: setHbar('roll',     raw); break;
-                                case 2: setVstick('pitch',    raw); break;
+                                case 1: setHbar('roll', raw); break;
+                                case 2: setVstick('pitch', raw); break;
                                 case 3: setVstick('throttle', raw); break;
-                                case 4: setHbar('yaw',      raw); break;
+                                case 4: setHbar('yaw', raw); break;
                                 default:
                                     if (channel >= 5 && channel <= 14)
                                         setRbox(channel, raw);
@@ -605,18 +605,14 @@
             const sent = wsSend(socket, { type: 'start_radio_calibration', sysid });
 
             if (!sent) {
-                // No live drone — run mock so the panel isn't dead
-                console.warn('[CalibRadio] No WebSocket connection — running mock animation');
-                if (mockTimer) clearInterval(mockTimer);
-                mockTimer = startMockAnimation();
+                // No live drone — bars remain static until real data arrives
+                console.warn('[CalibRadio] No WebSocket connection — waiting for drone to connect');
             }
-            // When sent=true: backend streams rc_channels → bars update live,
-            // no mock needed.
+            // When sent=true: backend streams rc_channels → bars update live.
         });
 
-        // Start mock immediately so bars aren't all-zero at load time.
-        // Self-cancels the moment real rc_channels data arrives.
-        mockTimer = startMockAnimation();
+        // Bars remain at their default centre position until real rc_channels
+        // data arrives from a connected drone/radio transmitter.
 
         console.log('[CalibRadio] Attached to socket', socket.url ?? socket);
     }
