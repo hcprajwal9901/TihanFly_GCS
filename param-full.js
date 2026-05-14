@@ -1022,10 +1022,27 @@ function init() {
             if (p && p.trim()) wsSend({ type: 'param_load_file', path: p.trim() });
         });
 
-        if (!window._fpBound && window.ws) {
+        // Listen to CustomEvents dispatched by websocket.js — these survive
+        // WebSocket reconnects because they are on window, not on window.ws.
+        if (!window._fpBound) {
             window._fpBound = true;
-            window.ws.addEventListener('message', evt => {
-                try { const d = JSON.parse(evt.data); if (d.type && d.type.startsWith('param_')) handleMessage(d); } catch (_) {}
+
+            const paramTypes = [
+                'param_load_start', 'param_load_progress', 'param_load_complete',
+                'param_value', 'param_all', 'param_set_sent',
+                'param_file_saved', 'param_file_loaded', 'param_error'
+            ];
+            paramTypes.forEach(evtName => {
+                window.addEventListener(evtName, e => handleMessage(e.detail));
+            });
+
+            // After a reconnect websocket.js fires 'ws_connected'; re-request
+            // if the panel is still open and no params are in memory yet.
+            window.addEventListener('ws_connected', () => {
+                if (document.getElementById('panel-param-full') &&
+                    Object.keys(allParams).length === 0) {
+                    wsSend({ type: 'param_request_list' });
+                }
             });
         }
 

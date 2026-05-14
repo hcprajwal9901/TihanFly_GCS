@@ -1,0 +1,271 @@
+/**
+ * servo-output.css — TiHANFly GCS
+ * Servo / Motor Output panel — QGC / Mission Planner style.
+ * Inherits design tokens from settings-window.css (:root variables).
+ * Uses .fs-* classes from failsafe.css for shared sync-strip & badge styles.
+ */
+
+/* ── Table wrapper ──────────────────────────────────────────────────────────── */
+.so-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: auto;
+    max-height: calc(100vh - 320px);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--r-md);
+    background: var(--bg-raised);
+    margin-bottom: 4px;
+}
+
+/* ── Table ──────────────────────────────────────────────────────────────────── */
+.so-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    table-layout: fixed;
+}
+
+/* ── Thead ──────────────────────────────────────────────────────────────────── */
+.so-thead-row {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg-surface, #1a1f2e);
+}
+
+.so-th {
+    padding: 10px 12px;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border-subtle);
+    white-space: nowrap;
+}
+
+.so-th-ch   { width: 52px;  }
+.so-th-pos  { width: 150px; }
+.so-th-rev  { width: 64px;  }
+.so-th-fn   { width: 180px; }
+.so-th-pwm  { width: 80px;  }
+
+/* ── Body rows ──────────────────────────────────────────────────────────────── */
+.so-row {
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background 0.22s ease;
+}
+
+.so-row:last-child { border-bottom: none; }
+
+.so-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.so-row.so-row-saved {
+    background: rgba(0, 217, 126, 0.07);
+}
+
+.so-row.so-row-pending {
+    background: rgba(255, 170, 0, 0.05);
+}
+
+/* ── Cells ──────────────────────────────────────────────────────────────────── */
+.so-cell {
+    padding: 9px 12px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.so-cell-ch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-align: center;
+}
+
+/* ── Channel number ──────────────────────────────────────────────────────────── */
+.so-ch-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+/* ── LED indicator ──────────────────────────────────────────────────────────── */
+.so-led {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #333a4a;
+    border: 1px solid #444e62;
+    flex-shrink: 0;
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.so-led.so-led-active {
+    background: #3ddc84;
+    border-color: #2ab86a;
+    box-shadow: 0 0 6px rgba(61, 220, 132, 0.6);
+    animation: soPulse 2s ease-in-out infinite;
+}
+
+.so-led.so-led-motor {
+    background: #52b9ff;
+    border-color: #3a9de0;
+    box-shadow: 0 0 6px rgba(82, 185, 255, 0.6);
+}
+
+@keyframes soPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.6; }
+}
+
+/* ── Position bar ───────────────────────────────────────────────────────────── */
+.so-pos-bar {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 4px;
+}
+
+.so-pos-fill {
+    height: 100%;
+    width: 50%;
+    background: linear-gradient(90deg, var(--accent, #e6007e) 0%, #ff4da6 100%);
+    border-radius: 4px;
+    transition: width 0.25s ease;
+    box-shadow: 0 0 8px rgba(230, 0, 126, 0.35);
+}
+
+.so-pos-lbl {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    display: block;
+    text-align: center;
+}
+
+/* ── Reverse checkbox ───────────────────────────────────────────────────────── */
+.so-rev-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+}
+
+.so-rev-chk {
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+}
+
+.so-rev-box {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border-subtle, #2e3649);
+    border-radius: 4px;
+    background: #1e2330;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+    flex-shrink: 0;
+}
+
+.so-rev-chk:checked + .so-rev-box {
+    background: var(--accent, #e6007e);
+    border-color: var(--accent, #e6007e);
+}
+
+.so-rev-chk:checked + .so-rev-box::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 8px;
+    border: 2px solid #fff;
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg) translate(-1px, -1px);
+}
+
+/* ── Function select ────────────────────────────────────────────────────────── */
+.so-fn-sel {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    background-color: #1e2330;
+    color: #dde1ed;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e6007e' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding: 5px 28px 5px 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.so-fn-sel:focus {
+    border-color: var(--accent, #e6007e);
+    background-color: rgba(230, 0, 126, 0.08);
+    box-shadow: 0 0 0 3px rgba(230, 0, 126, 0.10);
+    outline: none;
+}
+
+.so-fn-sel option {
+    background-color: #1e2330;
+    color: #dde1ed;
+}
+
+/* ── PWM number inputs ──────────────────────────────────────────────────────── */
+.so-pwm-input {
+    width: 100%;
+    background: #1e2330;
+    color: #dde1ed;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 5px 7px;
+    font-family: var(--mono);
+    font-size: 12px;
+    text-align: center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
+.so-pwm-input::-webkit-outer-spin-button,
+.so-pwm-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.so-pwm-input:focus {
+    border-color: var(--accent, #e6007e);
+    background-color: rgba(230, 0, 126, 0.08);
+    box-shadow: 0 0 0 3px rgba(230, 0, 126, 0.10);
+    outline: none;
+}
+
+/* ── Save strip override ────────────────────────────────────────────────────── */
+.so-save-strip {
+    gap: 10px;
+}
+
+/* ── Responsive: consolidate on smaller panels ──────────────────────────────── */
+@media (max-width: 680px) {
+    .so-th-pos,
+    .so-cell-pos { display: none; }
+
+    .so-th-fn  { width: auto; }
+    .so-th-pwm { width: 64px; }
+}

@@ -73,6 +73,11 @@ public:
     void setSendCallback     (SendCb      cb);
     void setTransportCallback(TransportCb cb);
 
+    /** Update the target sysid/compid to match the active vehicle. Call this
+     *  whenever a new vehicle is discovered or the active vehicle changes.
+     *  Thread-safe (uses atomic stores). */
+    void setVehicleInfo(int sysid, int compid);
+
     // ── MAVLink inbound (call from link-manager for every incoming message) ──
     void processMessage(const mavlink_message_t& msg);
 

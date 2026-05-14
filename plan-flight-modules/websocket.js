@@ -662,6 +662,54 @@ function handleBackendMessage(message) {
             window.dispatchEvent(new CustomEvent('param_value', { detail: message }));
             break;
 
+        // ── Bulk parameter cache dump (response to param_get_all) ─────────────
+        case 'param_all':
+            window.dispatchEvent(new CustomEvent('param_value', { detail: message }));
+            window.dispatchEvent(new CustomEvent('param_all', { detail: message }));
+            break;
+
+        // ── Parameter load lifecycle ──────────────────────────────────────────
+        case 'param_load_start':
+            console.log('[Params] Load started:', message.message);
+            window.MsgConsole?.info('📋 ' + (message.message || 'Loading parameters…'));
+            window.dispatchEvent(new CustomEvent('param_load_start', { detail: message }));
+            break;
+
+        case 'param_load_progress':
+            // High-frequency — dispatch only, no console spam
+            window.dispatchEvent(new CustomEvent('param_load_progress', { detail: message }));
+            break;
+
+        case 'param_load_complete':
+            console.log('[Params] Load complete:', message.message);
+            window.MsgConsole?.success('✅ ' + (message.message || 'Parameters loaded'));
+            window.dispatchEvent(new CustomEvent('param_load_complete', { detail: message }));
+            break;
+
+        // ── Parameter write acknowledgements ──────────────────────────────────
+        case 'param_set_sent':
+            console.log('[Params] Set sent:', message.param_id, '=', message.value);
+            window.dispatchEvent(new CustomEvent('calibration_ws_message', { detail: message }));
+            window.dispatchEvent(new CustomEvent('param_set_sent', { detail: message }));
+            break;
+
+        case 'param_file_saved':
+            window.MsgConsole?.success('💾 ' + (message.message || 'Params saved'));
+            window.dispatchEvent(new CustomEvent('param_file_saved', { detail: message }));
+            break;
+
+        case 'param_file_loaded':
+            window.MsgConsole?.success('📂 ' + (message.message || 'Params loaded from file'));
+            window.dispatchEvent(new CustomEvent('param_file_loaded', { detail: message }));
+            break;
+
+        case 'param_error':
+            console.warn('[Params] Error:', message.message);
+            window.MsgConsole?.error('⚠️ Param: ' + (message.message || 'Parameter error'));
+            window.dispatchEvent(new CustomEvent('calibration_ws_message', { detail: message }));
+            window.dispatchEvent(new CustomEvent('param_error', { detail: message }));
+            break;
+
         // ── Flight plan ACK ───────────────────────────────────────────────────
         case 'flight_plan_ack':
             window.handleFlightPlanAck?.(message);

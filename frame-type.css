@@ -1,0 +1,344 @@
+/**
+ * frame-type.css — TiHANFly GCS
+ * Frame Type Selection Panel
+ */
+
+/* ── Info banner ─────────────────────────────────────────────────────────────── */
+.ft-info-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: linear-gradient(135deg, rgba(66, 153, 225, 0.10), rgba(99, 179, 237, 0.06));
+    border: 1px solid rgba(66, 153, 225, 0.30);
+    border-left: 4px solid #4299e1;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+}
+
+.ft-info-icon {
+    font-size: 18px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.ft-info-text { flex: 1; }
+
+.ft-info-title {
+    font-weight: 700;
+    color: #63b3ed;
+    font-size: 13px;
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+}
+
+.ft-info-body {
+    font-size: 12px;
+    color: var(--text-secondary, #a0aec0);
+    line-height: 1.6;
+}
+
+.ft-info-body strong {
+    color: #f6ad55;
+}
+
+/* ── Current values card ─────────────────────────────────────────────────────── */
+.ft-current-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ft-current-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.ft-current-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted, #718096);
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    flex-shrink: 0;
+}
+
+.ft-current-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: #81e6d9;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.ft-read-btn {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 16px;
+    background: rgba(66, 153, 225, 0.12);
+    border: 1px solid rgba(66, 153, 225, 0.35);
+    border-radius: 6px;
+    color: #63b3ed;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    margin-top: 4px;
+}
+
+.ft-read-btn:hover {
+    background: rgba(66, 153, 225, 0.22);
+    border-color: rgba(66, 153, 225, 0.55);
+    box-shadow: 0 3px 12px rgba(66, 153, 225, 0.2);
+    transform: translateY(-1px);
+}
+
+.ft-read-btn:active {
+    transform: translateY(0);
+}
+
+/* ── Selectors grid ──────────────────────────────────────────────────────────── */
+.ft-selectors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+/* ── Individual selector card ────────────────────────────────────────────────── */
+.ft-selector-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: border-color 0.2s;
+}
+
+.ft-selector-card:hover {
+    border-color: rgba(66, 153, 225, 0.25);
+}
+
+.ft-selector-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ft-selector-icon {
+    width: 34px;
+    height: 34px;
+    background: rgba(66, 153, 225, 0.12);
+    border: 1px solid rgba(66, 153, 225, 0.25);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #63b3ed;
+    flex-shrink: 0;
+}
+
+.ft-selector-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary, #e2e8f0);
+    margin-bottom: 2px;
+}
+
+.ft-selector-param {
+    font-size: 10px;
+    font-weight: 600;
+    color: #f6ad55;
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    letter-spacing: 0.5px;
+}
+
+/* ── Select dropdown ─────────────────────────────────────────────────────────── */
+.ft-select {
+    width: 100%;
+    padding: 9px 12px;
+    background: rgba(10, 16, 30, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 7px;
+    color: var(--text-primary, #e2e8f0);
+    font-size: 13px;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: auto;
+}
+
+.ft-select:focus {
+    border-color: rgba(66, 153, 225, 0.5);
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.12);
+}
+
+.ft-select option {
+    background: #0d1b2e;
+    color: #e2e8f0;
+    font-size: 13px;
+}
+
+/* ── Description text ────────────────────────────────────────────────────────── */
+.ft-select-desc {
+    font-size: 11px;
+    color: var(--text-muted, #718096);
+    line-height: 1.5;
+    min-height: 32px;
+}
+
+/* ── Write button (per card) ─────────────────────────────────────────────────── */
+.ft-write-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, rgba(72, 187, 120, 0.15), rgba(56, 161, 105, 0.08));
+    border: 1px solid rgba(72, 187, 120, 0.35);
+    border-radius: 7px;
+    color: #68d391;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    letter-spacing: 0.2px;
+    margin-top: auto;
+}
+
+.ft-write-btn:hover {
+    background: linear-gradient(135deg, rgba(72, 187, 120, 0.25), rgba(56, 161, 105, 0.15));
+    border-color: rgba(72, 187, 120, 0.55);
+    box-shadow: 0 4px 14px rgba(72, 187, 120, 0.2);
+    transform: translateY(-1px);
+}
+
+.ft-write-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.ft-write-btn-type {
+    background: linear-gradient(135deg, rgba(159, 122, 234, 0.15), rgba(128, 90, 213, 0.08));
+    border-color: rgba(159, 122, 234, 0.35);
+    color: #b794f4;
+}
+
+.ft-write-btn-type:hover {
+    background: linear-gradient(135deg, rgba(159, 122, 234, 0.25), rgba(128, 90, 213, 0.15));
+    border-color: rgba(159, 122, 234, 0.55);
+    box-shadow: 0 4px 14px rgba(159, 122, 234, 0.2);
+    transform: translateY(-1px);
+}
+
+/* ── Write Both row ──────────────────────────────────────────────────────────── */
+.ft-write-both-row {
+    margin-bottom: 14px;
+}
+
+.ft-write-both-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px;
+    background: linear-gradient(135deg, rgba(66, 153, 225, 0.18), rgba(49, 130, 206, 0.10));
+    border: 1px solid rgba(66, 153, 225, 0.4);
+    border-radius: 9px;
+    color: #63b3ed;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    letter-spacing: 0.3px;
+}
+
+.ft-write-both-btn:hover {
+    background: linear-gradient(135deg, rgba(66, 153, 225, 0.28), rgba(49, 130, 206, 0.18));
+    border-color: rgba(66, 153, 225, 0.6);
+    box-shadow: 0 5px 18px rgba(66, 153, 225, 0.22);
+    transform: translateY(-1px);
+}
+
+.ft-write-both-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* ── Reboot notice ───────────────────────────────────────────────────────────── */
+.ft-reboot-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(246, 173, 85, 0.06);
+    border: 1px solid rgba(246, 173, 85, 0.2);
+    border-radius: 7px;
+    font-size: 11px;
+    color: #f6ad55;
+    margin-bottom: 14px;
+}
+
+.ft-reboot-notice svg {
+    flex-shrink: 0;
+    color: #f6ad55;
+}
+
+/* ── Status strip ────────────────────────────────────────────────────────────── */
+.ft-status-strip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 7px;
+}
+
+.ft-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: background 0.3s;
+}
+
+.ft-dot-idle    { background: #718096; }
+.ft-dot-running { background: #4caf50; animation: ft-pulse 0.8s ease-in-out infinite alternate; }
+.ft-dot-ok      { background: #48bb78; }
+.ft-dot-error   { background: #f44336; }
+
+@keyframes ft-pulse {
+    from { opacity: 0.3; transform: scale(0.8); }
+    to   { opacity: 1;   transform: scale(1.2); }
+}
+
+.ft-status-text {
+    font-size: 12px;
+    color: var(--text-muted, #718096);
+    flex: 1;
+}
+
+/* ── Responsive: stack on narrow settings panels ─────────────────────────────── */
+@media (max-width: 520px) {
+    .ft-selectors {
+        grid-template-columns: 1fr;
+    }
+}

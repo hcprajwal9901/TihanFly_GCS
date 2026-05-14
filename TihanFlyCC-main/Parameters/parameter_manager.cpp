@@ -33,6 +33,14 @@ void ParameterManager::setTransportCallback(TransportCb cb)
     transport_cb_ = std::move(cb);
 }
 
+void ParameterManager::setVehicleInfo(int sysid, int compid)
+{
+    sysid_  = sysid;
+    compid_ = compid;
+    std::cout << "[ParameterManager] Target updated → sysid=" << sysid_
+              << " compid=" << compid_ << "\n";
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 //  MAVLink Inbound Dispatcher
 // ─────────────────────────────────────────────────────────────────────────────
@@ -191,7 +199,7 @@ void ParameterManager::requestParameter(const std::string& param_name)
     req.param_index      = -1;   // -1 → look up by name, not index
 
     std::memset(req.param_id, 0, sizeof(req.param_id));
-    std::strncpy(req.param_id, param_name.c_str(), sizeof(req.param_id) - 1);
+    std::strncpy(req.param_id, param_name.c_str(), sizeof(req.param_id));
 
     mavlink_message_t mavmsg;
     mavlink_msg_param_request_read_encode(
@@ -211,6 +219,17 @@ void ParameterManager::setParameter(const std::string& param_name,
         return;
     }
 
+    // Attempt to resolve the true parameter type from the cache.
+    // ArduPilot will silently ignore PARAM_SET if the type doesn't match exactly.
+    {
+        std::lock_guard<std::mutex> lk(mutex_);
+        auto it = params_.find(param_name);
+        if (it != params_.end())
+        {
+            type = it->second.type;
+        }
+    }
+
     // Build PARAM_SET message
     mavlink_param_set_t ps{};
     ps.target_system    = static_cast<uint8_t>(sysid_);
@@ -219,7 +238,7 @@ void ParameterManager::setParameter(const std::string& param_name,
     ps.param_type       = type;
 
     std::memset(ps.param_id, 0, sizeof(ps.param_id));
-    std::strncpy(ps.param_id, param_name.c_str(), sizeof(ps.param_id) - 1);
+    std::strncpy(ps.param_id, param_name.c_str(), sizeof(ps.param_id));
 
     mavlink_message_t mavmsg;
     mavlink_msg_param_set_encode(

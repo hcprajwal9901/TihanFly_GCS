@@ -774,6 +774,7 @@ static void wire_modules_to_active_vehicle()
     param_manager.setTransportCallback(mavlink_via_vehicle);
 
     flightMode  .setVehicleInfo(vehicle_ptr->sysid(), vehicle_ptr->compid());
+    param_manager.setVehicleInfo(vehicle_ptr->sysid(), vehicle_ptr->compid());
 
     std::cout << "[GCS] Sub-modules wired to vehicle sysid="
               << vehicle_ptr->sysid() << "\n";
@@ -2376,6 +2377,79 @@ void start_websocket(CommandManager* cmd_manager)
                                           << ports.size() << " port(s).\n";
                             }
 
+                            // ── Motor Test ────────────────────────────────────────────
+                            // Frontend sends:
+                            //   { type:"motor_test", motor_index:1, throttle_pct:15,
+                            //     duration_sec:2 }
+                            // motor_index 0 = all motors (sequential); 1-N = specific motor.
+                            // throttle_pct 0 with duration_sec 0 = emergency stop.
+                            // Uses MAV_CMD_DO_MOTOR_TEST (209):
+                            //   param1 = motor instance (1-based)
+                            //   param2 = throttle type (0 = percent)
+                            //   param3 = throttle value (0-100 %)
+                            //   param4 = timeout (seconds)
+                            //   param5 = motor count (0/1 = one motor)
+                            //   param6 = motor test order (0 = default)
+                            // ─────────────────────────────────────────────────────────
+                            else if (type == "motor_test")
+                            {
+                                int   motor_index  = j.value("motor_index",  1);
+                                float throttle_pct = static_cast<float>(j.value("throttle_pct", 0));
+                                float duration_sec = static_cast<float>(j.value("duration_sec", 2));
+
+                                std::shared_ptr<Vehicle> mv;
+                                if (g_vehicle_manager)
+                                    mv = g_vehicle_manager->get_active_vehicle();
+
+                                if (!mv)
+                                {
+                                    std::cout << "[MotorTest] No active vehicle\n";
+                                    json ack;
+                                    ack["type"]        = "motor_test_ack";
+                                    ack["motor_index"] = motor_index;
+                                    ack["status"]      = "error";
+                                    ack["message"]     = "No drone connected.";
+                                    send_ws_safe(ack.dump());
+                                }
+                                else
+                                {
+                                    std::cout << "[MotorTest] motor=" << motor_index
+                                              << " throttle=" << throttle_pct << "%"
+                                              << " duration=" << duration_sec << "s\n";
+
+                                    // Clamp throttle to 0-100
+                                    if (throttle_pct < 0)   throttle_pct = 0;
+                                    if (throttle_pct > 100) throttle_pct = 100;
+
+                                    mavlink_message_t      mav_msg;
+                                    mavlink_command_long_t mav_cmd{};
+                                    mav_cmd.target_system    = static_cast<uint8_t>(mv->sysid());
+                                    mav_cmd.target_component = static_cast<uint8_t>(mv->compid());
+                                    mav_cmd.command          = MAV_CMD_DO_MOTOR_TEST;
+                                    mav_cmd.confirmation     = 0;
+                                    mav_cmd.param1           = static_cast<float>(motor_index);
+                                    mav_cmd.param2           = 0;   // MOTOR_TEST_THROTTLE_PERCENT
+                                    mav_cmd.param3           = throttle_pct;
+                                    mav_cmd.param4           = duration_sec;
+                                    mav_cmd.param5           = 0;   // motor count: 0 = one
+                                    mav_cmd.param6           = 0;   // order: default
+                                    mav_cmd.param7           = 0;
+
+                                    mavlink_msg_command_long_encode(
+                                        255, MAV_COMP_ID_MISSIONPLANNER,
+                                        &mav_msg, &mav_cmd);
+
+                                    mv->send_mavlink(mav_msg);
+
+                                    json ack;
+                                    ack["type"]        = "motor_test_ack";
+                                    ack["motor_index"] = motor_index;
+                                    ack["status"]      = "ok";
+                                    ack["message"]     = "Command sent";
+                                    send_ws_safe(ack.dump());
+                                }
+                            }
+
                             else if (handle_param_ws_command(type, j, param_manager))
                             {
                                 // handled by parameter_ws_handler.h
@@ -2691,6 +2765,21 @@ int main()
             [](const mavlink_message_t& m){ flightMode.processMessage(m); });
 
         wire_modules_to_active_vehicle();
+
+        // ── Request parameters on every new vehicle connection ─────────────────
+        // This fires whenever a drone first sends a heartbeat on any link.
+        // It guarantees param load regardless of whether active_connection
+        // changed (e.g. serial dropout/reconnect keeps active_connection=SERIAL
+        // so the heartbeat block's `new_connection != active_connection` guard
+        // would skip the request).
+        std::thread([vehicle]() {
+            std::this_thread::sleep_for(std::chrono::milliseconds(500)); // brief settle
+            param_manager.requestAllParameters();
+            flightMode.requestParams();
+            std::cout << "[GCS] Auto param-load triggered for sysid="
+                      << vehicle->sysid() << "\n";
+        }).detach();
+
         send_status();   // immediately push updated vehicle list to UI
     });
 
@@ -2698,8 +2787,8 @@ int main()
         [&](int sysid)
     {
         std::cout << "[GCS] Vehicle sysid=" << sysid << " lost\n";
-        drone_connected  = false;
-        active_connection = "NONE";
+        drone_connected   = false;
+        active_connection = "NONE";  // reset so next heartbeat always re-wires
         send_status();
     });
 

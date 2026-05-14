@@ -37,6 +37,10 @@
         'flight-modes'  : 'FlightModes',
         'failsafe'      : 'Failsafe',      // Battery + RC Failsafe configuration
         'geofence'      : 'Geofence',      // Geofence boundary configuration
+        'servo-output'  : 'ServoOutput',   // Servo / Motor output channel config
+        'motor-test'    : 'MotorTest',     // MAV_CMD_DO_MOTOR_TEST
+        'frame-type'    : 'FrameType',     // FRAME_CLASS + FRAME_TYPE parameter writer
+        'initial-tune'  : 'InitialTune',   // Initial tune: battery / prop parameter wizard
     };
 
     // Track which panels have already been initialised
@@ -157,6 +161,50 @@
           Geofence
         </button>
 
+        <div class="settings-sidebar-label">Outputs</div>
+
+        <button class="settings-nav-btn" data-panel="servo-output">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="9" width="4" height="6" rx="1"/>
+            <rect x="10" y="6" width="4" height="12" rx="1"/>
+            <rect x="18" y="9" width="4" height="6" rx="1"/>
+            <line x1="6" y1="12" x2="10" y2="12"/>
+            <line x1="14" y1="12" x2="18" y2="12"/>
+          </svg>
+          Servo Output
+        </button>
+
+        <button class="settings-nav-btn" data-panel="motor-test">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83
+                     M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+          </svg>
+          Motor Test
+        </button>
+
+        <div class="settings-sidebar-label">Airframe</div>
+
+        <button class="settings-nav-btn" data-panel="frame-type">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/>
+            <line x1="12" y1="2" x2="12" y2="22"/>
+            <line x1="2" y1="8.5" x2="22" y2="8.5"/>
+            <line x1="2" y1="15.5" x2="22" y2="15.5"/>
+          </svg>
+          Frame Type
+        </button>
+
+        <button class="settings-nav-btn" data-panel="initial-tune">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+            <polyline points="7 8 12 13 17 8"/>
+          </svg>
+          Initial Tune
+        </button>
+
       </div>
 
       <!-- PANEL HOST — each panel module renders into here -->
@@ -173,6 +221,10 @@
         <div class="settings-panel"        id="panel-flight-modes"></div>
         <div class="settings-panel"        id="panel-failsafe"></div>
         <div class="settings-panel"        id="panel-geofence"></div>
+        <div class="settings-panel"        id="panel-servo-output"></div>
+        <div class="settings-panel"        id="panel-motor-test"></div>
+        <div class="settings-panel"        id="panel-frame-type"></div>
+        <div class="settings-panel"        id="panel-initial-tune"></div>
       </div>
 
     </div><!-- /settings-body -->

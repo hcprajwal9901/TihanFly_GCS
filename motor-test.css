@@ -1,0 +1,395 @@
+/**
+ * motor-test.css — TiHANFly GCS
+ * Motor Test Panel — QGC-style
+ */
+
+/* ── Safety warning banner ──────────────────────────────────────────────────── */
+.mt-warning-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: linear-gradient(135deg, rgba(255, 160, 0, 0.12), rgba(255, 100, 0, 0.08));
+    border: 1px solid rgba(255, 160, 0, 0.4);
+    border-left: 4px solid #ffa000;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+}
+
+.mt-warning-icon {
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.mt-warning-text {
+    flex: 1;
+}
+
+.mt-warning-title {
+    font-weight: 700;
+    color: #ffa000;
+    font-size: 13px;
+    margin-bottom: 4px;
+    letter-spacing: 0.3px;
+}
+
+.mt-warning-body {
+    font-size: 12px;
+    color: var(--text-secondary, #a0aec0);
+    line-height: 1.6;
+}
+
+/* ── Safety lock overlay ────────────────────────────────────────────────────── */
+.mt-lock-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: rgba(10, 14, 24, 0.6);
+    border: 1px solid rgba(255, 160, 0, 0.25);
+    border-radius: 10px;
+    padding: 40px 24px;
+    text-align: center;
+    margin-bottom: 20px;
+    backdrop-filter: blur(4px);
+}
+
+.mt-lock-icon {
+    font-size: 36px;
+    opacity: 0.6;
+}
+
+.mt-lock-msg {
+    font-size: 13px;
+    color: var(--text-secondary, #a0aec0);
+    max-width: 340px;
+    line-height: 1.6;
+}
+
+.mt-acknowledge-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background: linear-gradient(135deg, #ffa000, #e65100);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.3px;
+    box-shadow: 0 3px 12px rgba(255, 160, 0, 0.3);
+}
+
+.mt-acknowledge-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 18px rgba(255, 160, 0, 0.45);
+}
+
+.mt-acknowledge-btn:active {
+    transform: translateY(0);
+}
+
+/* ── Controls section ───────────────────────────────────────────────────────── */
+.mt-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.mt-control-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    padding: 14px 16px;
+}
+
+.mt-control-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted, #718096);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 10px;
+}
+
+/* Throttle slider */
+.mt-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mt-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+    border-radius: 3px;
+    background: linear-gradient(
+        to right,
+        #4caf50 0%,
+        #4caf50 var(--slider-pct, 15%),
+        rgba(255,255,255,0.1) var(--slider-pct, 15%),
+        rgba(255,255,255,0.1) 100%
+    );
+    outline: none;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.mt-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #4caf50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.25);
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+}
+
+.mt-slider::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+.mt-slider-val {
+    min-width: 42px;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 700;
+    color: #4caf50;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Duration input */
+.mt-duration-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mt-duration-input {
+    width: 70px;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 5px;
+    color: var(--text-primary, #e2e8f0);
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.mt-duration-input:focus {
+    border-color: rgba(66, 153, 225, 0.5);
+    background: rgba(66, 153, 225, 0.05);
+}
+
+.mt-duration-unit {
+    font-size: 12px;
+    color: var(--text-muted, #718096);
+}
+
+/* ── Motor grid ──────────────────────────────────────────────────────────────── */
+.mt-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted, #718096);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.mt-motor-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.mt-motor-btn {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 16px 8px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: var(--text-secondary, #a0aec0);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    user-select: none;
+}
+
+.mt-motor-btn:hover:not(:disabled) {
+    background: rgba(66, 153, 225, 0.1);
+    border-color: rgba(66, 153, 225, 0.4);
+    color: #63b3ed;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(66, 153, 225, 0.2);
+}
+
+.mt-motor-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.mt-motor-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.mt-motor-btn.mt-running {
+    background: rgba(76, 175, 80, 0.12);
+    border-color: rgba(76, 175, 80, 0.5);
+    color: #81c784;
+    box-shadow: 0 0 16px rgba(76, 175, 80, 0.2), inset 0 0 12px rgba(76, 175, 80, 0.05);
+}
+
+.mt-motor-num {
+    font-size: 20px;
+    font-weight: 800;
+    color: inherit;
+    line-height: 1;
+}
+
+.mt-motor-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: inherit;
+    opacity: 0.8;
+}
+
+/* Running spinner dot */
+.mt-motor-btn.mt-running::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4caf50;
+    animation: mt-pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes mt-pulse {
+    from { opacity: 0.3; transform: scale(0.8); }
+    to   { opacity: 1;   transform: scale(1.2); }
+}
+
+/* ── Action row ──────────────────────────────────────────────────────────────── */
+.mt-action-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.mt-btn-all {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    background: linear-gradient(135deg, rgba(66, 153, 225, 0.15), rgba(99, 179, 237, 0.08));
+    border: 1px solid rgba(66, 153, 225, 0.35);
+    border-radius: 8px;
+    color: #63b3ed;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.mt-btn-all:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(66, 153, 225, 0.25), rgba(99, 179, 237, 0.15));
+    border-color: rgba(66, 153, 225, 0.55);
+    box-shadow: 0 4px 14px rgba(66, 153, 225, 0.2);
+    transform: translateY(-1px);
+}
+
+.mt-btn-all:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.mt-btn-stop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(229, 57, 53, 0.08));
+    border: 1px solid rgba(244, 67, 54, 0.35);
+    border-radius: 8px;
+    color: #ef5350;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.mt-btn-stop:hover {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.25), rgba(229, 57, 53, 0.15));
+    border-color: rgba(244, 67, 54, 0.55);
+    box-shadow: 0 4px 14px rgba(244, 67, 54, 0.2);
+    transform: translateY(-1px);
+}
+
+.mt-btn-stop:active {
+    transform: translateY(0);
+}
+
+/* ── Status strip ────────────────────────────────────────────────────────────── */
+.mt-status-strip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 7px;
+    margin-top: 14px;
+}
+
+.mt-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted, #718096);
+    flex-shrink: 0;
+    transition: background 0.3s;
+}
+
+.mt-status-dot.mt-dot-idle    { background: #718096; }
+.mt-status-dot.mt-dot-running { background: #4caf50; animation: mt-pulse 0.8s ease-in-out infinite alternate; }
+.mt-status-dot.mt-dot-error   { background: #f44336; }
+.mt-status-dot.mt-dot-ok      { background: #4caf50; }
+
+.mt-status-text {
+    font-size: 12px;
+    color: var(--text-muted, #718096);
+    flex: 1;
+}
+
+/* Content inside a disabled overlay */
+.mt-content { transition: opacity 0.25s ease; }
+.mt-content.mt-locked { opacity: 0.3; pointer-events: none; user-select: none; }
