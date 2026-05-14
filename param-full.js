@@ -783,10 +783,36 @@
     };
 
     // Generic RC channel metadata lookup (RC1_MIN → RC_MIN pattern)
+// Parses a legacy r-string like "0:Disabled,1:RTL,2:Land" into an options array.
+// Returns null if r does not look like an options list.
+function parseOptionsFromRange(r) {
+    if (!r) return null;
+    // Must contain at least one  "digit:word" pair separated by commas
+    if (!/[-\d.]+:[^,]+/.test(r)) return null;
+    // Must not look like a plain numeric range like "0 - 100"
+    if (/^-?[\d.]+ - -?[\d.]+$/.test(r.trim())) return null;
+    const parts = r.split(',');
+    const opts = [];
+    for (const p of parts) {
+        const idx = p.indexOf(':');
+        if (idx < 0) return null; // malformed
+        opts.push({ code: p.slice(0, idx).trim(), label: p.slice(idx + 1).trim() });
+    }
+    return opts.length ? opts : null;
+}
+
 function getMeta(name) {
     if (externalMeta[name]) return externalMeta[name];
     const m = META[name];
-    if (m) return m;
+    if (m) {
+        // Upgrade legacy META entry: convert r-string options into options array
+        if (!m._upgraded) {
+            const opts = parseOptionsFromRange(m.r);
+            if (opts) { m.options = opts; }
+            m._upgraded = true;
+        }
+        return m;
+    }
     if (/^INS\d+_ACC/.test(name))  return { d:'INS accelerometer parameter', u:'', r:'' };
     if (/^INS\d+_GYR/.test(name))  return { d:'INS gyro parameter', u:'', r:'' };
     if (/^INS_GYR\d+/.test(name))  return { d:'INS gyro calibration', u:'', r:'' };
@@ -813,10 +839,41 @@ function getMeta(name) {
 let externalMeta = {};
 
 function loadExternalMeta() {
-    return fetch('param_metadata.json')
-        .then(res => { if (!res.ok) throw new Error('not found'); return res.json(); })
-        .then(data => { externalMeta = data; console.log('[ParamFull] External metadata loaded:', Object.keys(data).length, 'entries'); })
-        .catch(() => console.log('[ParamFull] No param_metadata.json — using built-in META only'));
+    // Build a list of candidate URLs to try in order:
+    //  1. Electron packaged app: param_metadata.json is in extraResources → resources/
+    //     process.resourcesPath is available in both main and renderer in Electron.
+    //  2. Dev mode: relative path next to the HTML file.
+    const candidates = [];
+
+    // Packaged Electron: resourcesPath points to the resources/ folder inside the exe
+    if (typeof process !== 'undefined' && process.resourcesPath) {
+        // Convert Windows path to a file:// URL
+        const rp = process.resourcesPath.replace(/\\/g, '/');
+        candidates.push('file:///' + rp + '/param_metadata.json');
+    }
+
+    // Dev / browser fallback: relative fetch
+    candidates.push('param_metadata.json');
+
+    function tryNext(urls) {
+        if (!urls.length) {
+            console.log('[ParamFull] param_metadata.json not found in any location — using built-in META only');
+            return Promise.resolve();
+        }
+        const url = urls[0];
+        return fetch(url)
+            .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+            .then(data => {
+                externalMeta = data;
+                console.log('[ParamFull] Metadata loaded from', url, '—', Object.keys(data).length, 'entries');
+            })
+            .catch(err => {
+                console.log('[ParamFull] Could not load from', url, '—', err.message, '— trying next…');
+                return tryNext(urls.slice(1));
+            });
+    }
+
+    return tryNext(candidates);
 }
     // ── State ─────────────────────────────────────────────────────────────────
     let allParams   = {};
@@ -871,102 +928,250 @@ function handleMessage(data) {
         if(r){ r.classList.remove('param-dirty','param-sent'); if(state) r.classList.add('param-'+state); }
     }
 
+    function makeValueCell(p, m) {
+        const val = p.value;
+        if (m && m.options && m.options.length) {
+            // Dropdown / combobox
+            let html = '<select class="param-val-select" data-original="'+val+'">';
+            let matched = false;
+            m.options.forEach(o => {
+                const sel = (parseFloat(o.code) === parseFloat(val) || o.code === String(val)) ? ' selected' : '';
+                if (sel) matched = true;
+                html += '<option value="'+escH(o.code)+'"'+sel+'>'+escH(o.code)+' — '+escH(o.label)+'</option>';
+            });
+            if (!matched) html += '<option value="'+escH(String(val))+'" selected>'+escH(fmtV(val))+' (custom)</option>';
+            html += '</select>';
+            return '<td class="fp-v fp-v-sel">'+html+'</td>';
+        }
+        return '<td class="fp-v"><input class="param-val-input" data-original="'+val+'" value="'+fmtV(val)+'"></td>';
+    }
+
+    function makeRangeCell(m) {
+        if (!m) return '<td class="fp-r">—</td>';
+        if (m.isBitmask && m.bitmask && m.bitmask.length) {
+            const bits = m.bitmask.map(b => '<span class="fp-bit"><b>bit'+escH(b.bit)+'</b> '+escH(b.label)+'</span>').join(' ');
+            return '<td class="fp-r fp-r-bits">'+bits+'</td>';
+        }
+        if (m.options && m.options.length) {
+            // Already shown in select — just show count
+            const preview = m.options.slice(0,3).map(o=>escH(o.code)+':'+escH(o.label)).join(', ');
+            const more = m.options.length > 3 ? ' <span class="fp-more">+'+( m.options.length-3)+' more</span>' : '';
+            return '<td class="fp-r fp-r-opts">'+preview+more+'</td>';
+        }
+        if (m.r) {
+            const incHtml = m.inc ? ' <span class="fp-inc">step '+escH(m.inc)+'</span>' : '';
+            return '<td class="fp-r"><span class="fp-range-badge">'+escH(m.r)+'</span>'+incHtml+'</td>';
+        }
+        return '<td class="fp-r">—</td>';
+    }
+
+    function makeDescCell(m) {
+        if (!m || !m.d) return '<td class="fp-d">—</td>';
+        let html = '<div class="fp-desc-text">'+escH(m.d)+'</div>';
+        if (m.reboot) html += '<span class="fp-reboot-badge">Reboot Required</span>';
+        if (m.ut) html += '<span class="fp-unit-text">Unit: '+escH(m.ut)+'</span>';
+        return '<td class="fp-d">'+html+'</td>';
+    }
+
     function makeRowHTML(p) {
-        const m=getMeta(p.name);
-        return '<td class="fp-n">'+escH(p.name)+'</td>'+
-               '<td class="fp-v"><input class="param-val-input" data-original="'+p.value+'" value="'+fmtV(p.value)+'"></td>'+
-               '<td class="fp-u">'+escH(m.u||'\u2014')+'</td>'+
-               '<td class="fp-r">'+escH(m.r||'\u2014')+'</td>'+
-               '<td class="fp-d">'+escH(m.d||'\u2014')+'</td>';
+        const m = getMeta(p.name);
+        const unitText = (m && m.u) ? escH(m.u) : '—';
+        return '<td class="fp-n"><span class="fp-param-name">'+escH(p.name)+'</span></td>'+
+               makeValueCell(p, m)+
+               '<td class="fp-u">'+unitText+'</td>'+
+               makeRangeCell(m)+
+               makeDescCell(m);
     }
 
 function attachRowEvents(row) {
-    const input=row.querySelector('.param-val-input'); if(!input) return;
-    const name=row.dataset.param;
-    input.addEventListener('focus', ()=>input.removeAttribute('readonly'));
-    input.addEventListener('input', ()=>{
-        const orig=parseFloat(input.dataset.original), cur=parseFloat(input.value);
-        if(!isNaN(cur)&&cur!==orig){ dirtyParams[name]=cur; row.classList.add('param-dirty'); row.classList.remove('param-sent'); }
-        else { delete dirtyParams[name]; row.classList.remove('param-dirty'); }
-    });
-    input.addEventListener('keydown', e=>{
-        // Bug #2 fixed: name → param_id
-        if(e.key==='Enter'){ const v=parseFloat(input.value); if(!isNaN(v)) wsSend({type:'param_set', param_id:name, value:v}); input.blur(); }
-        if(e.key==='Escape'){ input.value=fmtV(parseFloat(input.dataset.original)); delete dirtyParams[name]; row.classList.remove('param-dirty'); input.blur(); }
-    });
+    const name = row.dataset.param;
+
+    // --- Text input (numeric) ---
+    const input = row.querySelector('.param-val-input');
+    if (input) {
+        input.addEventListener('focus', () => input.removeAttribute('readonly'));
+        input.addEventListener('input', () => {
+            const orig = parseFloat(input.dataset.original), cur = parseFloat(input.value);
+            if (!isNaN(cur) && cur !== orig) { dirtyParams[name] = cur; row.classList.add('param-dirty'); row.classList.remove('param-sent'); }
+            else { delete dirtyParams[name]; row.classList.remove('param-dirty'); }
+        });
+        input.addEventListener('keydown', e => {
+            if (e.key === 'Enter') { const v = parseFloat(input.value); if (!isNaN(v)) wsSend({ type: 'param_set', param_id: name, value: v }); input.blur(); }
+            if (e.key === 'Escape') { input.value = fmtV(parseFloat(input.dataset.original)); delete dirtyParams[name]; row.classList.remove('param-dirty'); input.blur(); }
+        });
+    }
+
+    // --- Select / combobox ---
+    // Behaves same as numeric input: marks dirty, waits for "Write Changed" button.
+    const sel = row.querySelector('.param-val-select');
+    if (sel) {
+        sel.addEventListener('change', () => {
+            const orig = parseFloat(sel.dataset.original), cur = parseFloat(sel.value);
+            if (!isNaN(cur) && cur !== orig) {
+                dirtyParams[name] = cur;
+                row.classList.add('param-dirty');
+                row.classList.remove('param-sent');
+            } else {
+                delete dirtyParams[name];
+                row.classList.remove('param-dirty');
+            }
+        });
+    }
 }
 
     function upsertRow(name) {
-        const tbody=document.getElementById('fpBody'); if(!tbody) return;
-        const p=allParams[name]; if(!p) return;
-        let row=tbody.querySelector('tr[data-param="'+CSS.escape(name)+'"]');
-        if(!row){
-            row=document.createElement('tr'); row.dataset.param=name; row.innerHTML=makeRowHTML(p);
-            let ins=false;
-            for(const r of Array.from(tbody.querySelectorAll('tr[data-param]')))
-                if(r.dataset.param>name){ tbody.insertBefore(row,r); ins=true; break; }
-            if(!ins) tbody.appendChild(row);
+        const tbody = document.getElementById('fpBody'); if (!tbody) return;
+        const p = allParams[name]; if (!p) return;
+        let row = tbody.querySelector('tr[data-param="'+CSS.escape(name)+'"]');
+        if (!row) {
+            row = document.createElement('tr'); row.dataset.param = name; row.innerHTML = makeRowHTML(p);
+            let ins = false;
+            for (const r of Array.from(tbody.querySelectorAll('tr[data-param]')))
+                if (r.dataset.param > name) { tbody.insertBefore(row, r); ins = true; break; }
+            if (!ins) tbody.appendChild(row);
             attachRowEvents(row);
         } else {
-            const inp=row.querySelector('.param-val-input');
-            if(inp&&document.activeElement!==inp){ inp.value=fmtV(p.value); inp.dataset.original=p.value; }
+            // Update numeric input
+            const inp = row.querySelector('.param-val-input');
+            if (inp && document.activeElement !== inp) { inp.value = fmtV(p.value); inp.dataset.original = p.value; }
+            // Update select
+            const sel = row.querySelector('.param-val-select');
+            if (sel && document.activeElement !== sel) {
+                sel.dataset.original = p.value;
+                // Try to select matching option
+                for (const opt of sel.options) {
+                    if (parseFloat(opt.value) === parseFloat(p.value)) { sel.value = opt.value; break; }
+                }
+            }
         }
     }
 
     function rebuildTable() {
-        const tbody=document.getElementById('fpBody'); if(!tbody) return;
-        const q=(document.getElementById('fpSearch')?.value||'').toLowerCase();
-        const sorted=Object.values(allParams).sort((a,b)=>a.name.localeCompare(b.name));
-        tbody.innerHTML=''; let vis=0;
-        sorted.forEach(p=>{
-            const m=getMeta(p.name);
-            const match=!q||p.name.toLowerCase().includes(q)||(m.d||'').toLowerCase().includes(q)||(m.r||'').toLowerCase().includes(q);
-            const row=document.createElement('tr');
-            row.dataset.param=p.name; row.style.display=match?'':'none';
-            row.innerHTML=makeRowHTML(p); tbody.appendChild(row); attachRowEvents(row);
-            if(match) vis++;
+        const tbody = document.getElementById('fpBody'); if (!tbody) return;
+        const q    = (document.getElementById('fpSearch')?.value || '').toLowerCase();
+        const type = (document.getElementById('fpFilterType')?.value || 'all');
+        const sorted = Object.values(allParams).sort((a, b) => a.name.localeCompare(b.name));
+        tbody.innerHTML = ''; let vis = 0;
+        sorted.forEach(p => {
+            const m = getMeta(p.name);
+            // Text match
+            const textOk = !q || p.name.toLowerCase().includes(q)
+                || (m.d || '').toLowerCase().includes(q)
+                || (m.r || '').toLowerCase().includes(q)
+                || (m.u || '').toLowerCase().includes(q);
+            // Type filter
+            let typeOk = true;
+            if (type === 'options')  typeOk = !!(m.options && m.options.length);
+            else if (type === 'bitmask') typeOk = !!m.isBitmask;
+            else if (type === 'range')   typeOk = !!(m.r && !m.options && !m.isBitmask);
+            else if (type === 'reboot')  typeOk = !!m.reboot;
+            const match = textOk && typeOk;
+            const row = document.createElement('tr');
+            row.dataset.param = p.name;
+            row.style.display = match ? '' : 'none';
+            row.innerHTML = makeRowHTML(p);
+            tbody.appendChild(row);
+            attachRowEvents(row);
+            if (match) vis++;
         });
-        setStatus(vis+' parameters'+(q?' (filtered)':' loaded'));
+        setStatus(vis + ' parameters' + (q || type !== 'all' ? ' (filtered)' : ' loaded'));
     }
 
     function filterTable() {
-        const q=(document.getElementById('fpSearch')?.value||'').toLowerCase();
-        let vis=0;
-        document.querySelectorAll('#fpBody tr[data-param]').forEach(r=>{
-            const match=!q||r.textContent.toLowerCase().includes(q);
-            r.style.display=match?'':'none'; if(match) vis++;
+        const q    = (document.getElementById('fpSearch')?.value || '').toLowerCase();
+        const type = (document.getElementById('fpFilterType')?.value || 'all');
+        let vis = 0;
+        document.querySelectorAll('#fpBody tr[data-param]').forEach(r => {
+            const name = r.dataset.param;
+            const m    = getMeta(name);
+            // Text filter
+            const textOk = !q || r.textContent.toLowerCase().includes(q);
+            // Type filter
+            let typeOk = true;
+            if (type === 'options')  typeOk = !!(m && m.options && m.options.length);
+            else if (type === 'bitmask') typeOk = !!(m && m.isBitmask);
+            else if (type === 'range')   typeOk = !!(m && m.r && !m.options && !m.isBitmask);
+            else if (type === 'reboot')  typeOk = !!(m && m.reboot);
+            const match = textOk && typeOk;
+            r.style.display = match ? '' : 'none';
+            if (match) vis++;
         });
-        setStatus(vis+' parameters'+(q?' (filtered)':' loaded'));
+        setStatus(vis + ' parameters' + (q || type !== 'all' ? ' (filtered)' : ' loaded'));
     }
 
     function fmtV(v){ if(Number.isInteger(v)) return String(v); return parseFloat(v.toPrecision(7)).toString(); }
     function escH(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
     function injectCSS() {
-        if(document.getElementById('fp-style')) return;
-        const s=document.createElement('style'); s.id='fp-style';
-        s.textContent=`
+        if (document.getElementById('fp-style')) return;
+        const s = document.createElement('style'); s.id = 'fp-style';
+        s.textContent = `
+/* ── Table layout ── */
 .fp-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px}
-.fp-table thead th{position:sticky;top:0;z-index:1;background:var(--bg-raised,#1a1a2e);padding:8px 10px;text-align:left;font-size:11px;font-weight:600;color:var(--text-muted,#888);border-bottom:1px solid var(--border-muted,#333);white-space:nowrap;text-transform:uppercase;letter-spacing:.5px}
-.fp-table tbody tr{border-bottom:1px solid var(--border-muted,#1e1e1e)}
-.fp-table tbody tr:hover{background:rgba(255,255,255,.03)}
-.fp-n{width:180px;font-family:monospace;font-size:12px;color:var(--text-primary,#eee);padding:7px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fp-v{width:100px;padding:4px 8px;text-align:right}
-.fp-u{width:70px;padding:7px 6px;color:var(--text-muted,#888);font-size:11px;white-space:nowrap}
-.fp-r{width:230px;padding:7px 8px;color:var(--text-muted,#999);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fp-d{width:auto;padding:7px 10px;color:var(--text-secondary,#bbb);font-size:12px}
-.param-val-input{background:transparent;border:none;color:var(--accent,#E6007E);font-size:12px;font-family:monospace;text-align:right;width:100%;outline:none;cursor:pointer}
-.param-val-input:focus{background:var(--accent-dim,rgba(230,0,126,.1));border-radius:3px;padding:1px 4px}
-tr.param-dirty td{background:rgba(230,180,0,.05)}
-tr.param-sent td{background:rgba(0,200,80,.05)}`;
+.fp-table thead th{position:sticky;top:0;z-index:2;background:var(--bg-raised,#1a1a2e);padding:9px 10px;text-align:left;font-size:10px;font-weight:700;color:var(--text-muted,#888);border-bottom:2px solid var(--border-muted,#333);white-space:nowrap;text-transform:uppercase;letter-spacing:.8px}
+.fp-table tbody tr{border-bottom:1px solid rgba(255,255,255,.04);transition:background .12s}
+.fp-table tbody tr:hover{background:rgba(255,255,255,.04)}
+
+/* ── Column widths ── */
+.fp-n{width:190px;padding:8px 10px;vertical-align:middle}
+.fp-v{width:160px;padding:5px 8px;text-align:right;vertical-align:middle}
+.fp-v-sel{width:210px;padding:4px 6px;vertical-align:middle}
+.fp-u{width:64px;padding:8px 6px;color:var(--text-muted,#888);font-size:11px;white-space:nowrap;vertical-align:middle}
+.fp-r{width:240px;padding:7px 8px;vertical-align:top}
+.fp-d{width:auto;padding:7px 10px;vertical-align:top}
+
+/* ── Parameter name badge ── */
+.fp-param-name{font-family:monospace;font-size:12px;color:var(--text-primary,#eee);background:rgba(230,0,126,.08);border:1px solid rgba(230,0,126,.18);border-radius:4px;padding:2px 6px;display:inline-block;white-space:nowrap;max-width:170px;overflow:hidden;text-overflow:ellipsis}
+
+/* ── Numeric input ── */
+.param-val-input{background:transparent;border:1px solid transparent;color:var(--accent,#E6007E);font-size:13px;font-family:monospace;text-align:right;width:100%;outline:none;cursor:pointer;border-radius:4px;padding:3px 6px;transition:all .15s}
+.param-val-input:hover{border-color:rgba(230,0,126,.3);background:rgba(230,0,126,.04)}
+.param-val-input:focus{background:var(--accent-dim,rgba(230,0,126,.1));border-color:var(--accent,#E6007E);box-shadow:0 0 0 2px rgba(230,0,126,.15)}
+
+/* ── Select / combobox ── */
+.param-val-select{width:100%;background:var(--bg-surface,#111827);border:1px solid var(--border-muted,#333);color:var(--accent,#E6007E);font-size:12px;font-family:monospace;border-radius:6px;padding:5px 8px;outline:none;cursor:pointer;transition:border-color .15s}
+.param-val-select:hover{border-color:rgba(230,0,126,.5)}
+.param-val-select:focus{border-color:var(--accent,#E6007E);box-shadow:0 0 0 2px rgba(230,0,126,.2)}
+.param-val-select option{background:var(--bg-surface,#111827);color:var(--text-primary,#eee)}
+
+/* ── Range badge ── */
+.fp-range-badge{display:inline-block;background:rgba(100,200,255,.08);border:1px solid rgba(100,200,255,.2);color:rgba(120,210,255,.85);font-size:11px;border-radius:4px;padding:1px 6px;font-family:monospace;white-space:nowrap}
+.fp-inc{font-size:10px;color:var(--text-muted,#666);margin-left:4px}
+
+/* ── Bitmask bits ── */
+.fp-r-bits{vertical-align:top;padding:6px 8px}
+.fp-bit{display:inline-block;background:rgba(180,120,255,.10);border:1px solid rgba(180,120,255,.25);border-radius:4px;font-size:10px;padding:1px 5px;margin:2px 2px 2px 0;color:rgba(200,160,255,.9);white-space:nowrap}
+.fp-bit b{color:rgba(210,180,255,1);font-size:9px;margin-right:2px}
+
+/* ── Options summary ── */
+.fp-r-opts{font-size:10px;color:var(--text-muted,#888);vertical-align:middle}
+.fp-more{font-size:9px;color:rgba(230,0,126,.7);margin-left:2px}
+
+/* ── Description cell ── */
+.fp-desc-text{color:var(--text-secondary,#bbb);font-size:12px;line-height:1.5}
+.fp-reboot-badge{display:inline-block;background:rgba(255,150,0,.12);border:1px solid rgba(255,150,0,.3);color:rgba(255,190,50,.9);font-size:9px;border-radius:4px;padding:1px 6px;margin-top:4px;margin-right:4px;font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+.fp-unit-text{display:inline-block;font-size:10px;color:var(--text-muted,#666);margin-top:4px;font-style:italic}
+
+/* ── Dirty / sent rows ── */
+tr.param-dirty .fp-param-name{border-color:rgba(230,180,0,.5);background:rgba(230,180,0,.1)}
+tr.param-dirty td{background:rgba(230,180,0,.04)}
+tr.param-sent .fp-param-name{border-color:rgba(0,220,100,.4);background:rgba(0,220,100,.08)}
+tr.param-sent td{background:rgba(0,200,80,.04)}`;
         document.head.appendChild(s);
     }
 
     function render() {
         return `<div class="settings-panel-title">Full Parameter List</div>
 <div class="calib-card param-full-card">
-  <div class="param-toolbar">
-    <input type="text" class="param-search-bar" id="fpSearch" placeholder="Search by name, description or options\u2026">
+  <div class="param-toolbar" style="gap:10px;flex-wrap:wrap">
+    <input type="text" class="param-search-bar" id="fpSearch" placeholder="\uD83D\uDD0D Search by name, description, units or options\u2026">
+    <select id="fpFilterType" class="param-search-bar" style="flex:0 0 auto;width:160px">
+      <option value="all">All Parameters</option>
+      <option value="options">With Options (dropdowns)</option>
+      <option value="bitmask">Bitmask Parameters</option>
+      <option value="range">Numeric Range Only</option>
+      <option value="reboot">Reboot Required</option>
+    </select>
     <button class="calib-btn calib-btn-secondary" id="fpRefreshBtn" style="white-space:nowrap">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
       Refresh
@@ -982,10 +1187,10 @@ tr.param-sent td{background:rgba(0,200,80,.05)}`;
     <table class="fp-table">
       <thead><tr>
         <th class="fp-n">Parameter</th>
-        <th class="fp-v" style="text-align:right">Value</th>
+        <th class="fp-v" style="text-align:right">Value / Select</th>
         <th class="fp-u">Units</th>
         <th class="fp-r">Range / Options</th>
-        <th class="fp-d">Description</th>
+        <th class="fp-d">Full Description</th>
       </tr></thead>
       <tbody id="fpBody"></tbody>
     </table>
@@ -1007,6 +1212,7 @@ function init() {
 
     loadExternalMeta().then(() => {
         document.getElementById('fpSearch')?.addEventListener('input', filterTable);
+        document.getElementById('fpFilterType')?.addEventListener('change', filterTable);
         document.getElementById('fpRefreshBtn')?.addEventListener('click', () => wsSend({ type: 'param_request_list' }));
 
         document.getElementById('fpWriteBtn')?.addEventListener('click', () => {

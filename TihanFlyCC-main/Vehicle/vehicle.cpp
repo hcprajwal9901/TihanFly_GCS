@@ -158,8 +158,15 @@ void Vehicle::register_handler(uint32_t msgid, MessageHandler handler)
 bool Vehicle::is_alive() const
 {
     std::lock_guard<std::mutex> lock(heartbeat_mtx_);
+    // 8-second window (was 5 s).
+    // ArduPilot heartbeats at 1 Hz.  USB serial under heavy parameter
+    // download load can cause async_read_some callbacks to be delayed,
+    // starving the heartbeat update by several seconds.  8 s gives 7
+    // consecutive missed beats of tolerance before eviction, which avoids
+    // false-positive disconnects while still detecting a true cable pull
+    // within a reasonable time.
     return (std::chrono::steady_clock::now() - last_heartbeat_)
-           < std::chrono::seconds(5);
+           < std::chrono::seconds(8);
 }
 
 AccelCalibration& Vehicle::accel_calib()

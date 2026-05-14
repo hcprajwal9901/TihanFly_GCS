@@ -17,7 +17,7 @@
   },
   "build": {
     "appId": "com.tihan.fly",
-    "productName": "TihanFly",
+    "productName": "TihanFly-C++",
     "win": {
       "target": "portable",
       "icon": "resources/icon/tihan.png"
@@ -28,14 +28,31 @@
     "portable": {
       "artifactName": "${productName}-${version}.exe"
     },
+    "files": [
+      "**/*",
+      "!parse_ardupilot_params.py",
+      "!test_parsed.json",
+      "!build_dist/**",
+      "!build_dist_*/**",
+      "!TihanFlyCC-main/**",
+      "!video_server.py",
+      "!video_server.spec",
+      "!*.ps1",
+      "!*.sh"
+    ],
     "extraResources": [
       {
         "from": "TihanFlyCC-main/build/Release",
         "to": "backend",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       },
-      "video_server.exe"
+      "video_server.exe",
+      {
+        "from": "param_metadata.json",
+        "to": "param_metadata.json"
+      }
     ]
   }
 }
-

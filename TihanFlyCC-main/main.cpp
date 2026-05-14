@@ -1090,9 +1090,24 @@ void start_serial_monitor(asio::io_context& io,
 
                 for (auto it = g_serial_ports.begin(); it != g_serial_ports.end(); )
                 {
-                    if (!port_still_exists(it->first))
+                    // A port is dead if:
+                    //  (a) it physically disappeared from the OS (unplugged), OR
+                    //  (b) ASIO closed it internally after a receive error.
+                    //      do_receive() now calls serial_.close() on error so
+                    //      is_open() returns false — zombie-port detection.
+                    //      Without this check a USB glitch would leave the port
+                    //      "present" but not reading, and the vehicle manager
+                    //      would timeout-evict the vehicle every ~5 s without
+                    //      ever recovering the serial read loop.
+                    bool transport_dead = it->second.transport &&
+                                         !it->second.transport->is_open();
+                    bool device_gone   = !port_still_exists(it->first);
+
+                    if (device_gone || transport_dead)
                     {
-                        std::cout << "[Serial] Unplugged: " << it->first
+                        std::cout << "[Serial] "
+                                  << (transport_dead ? "Dead (internal error)" : "Unplugged")
+                                  << ": " << it->first
                                   << " link_id=" << it->second.link_id << "\n";
 
                         json port_evt;
@@ -3256,5 +3271,27 @@ int main()
     // Camera/MJPEG removed — video is handled via RTSP in the Electron layer
 
     std::cout << "[GCS] TiHANFly started\n";
-    io.run();
+
+    // ── Multi-thread the io_context ──────────────────────────────────────────
+    // CRITICAL FIX: Previously io.run() ran on a single thread.
+    // When ArduPilot floods the serial port with parameter packets
+    // after initial connection, the single thread gets fully occupied
+    // dispatching MAVLink parse/send_ws_safe() callbacks — starving the
+    // async_read_some re-arm chain.  Heartbeats queue up unread, the
+    // vehicle hits its 5-second liveness timeout, gets evicted, and the
+    // UI shows the connect/disconnect loop.  UDP is unaffected because
+    // its recv callback is less frequent.
+    //
+    // Fix: run io_context on N threads (min 2, at most hardware concurrency)
+    // so serial reads and WebSocket I/O can proceed in parallel.
+    {
+        unsigned n = std::max(2u, std::thread::hardware_concurrency());
+        std::cout << "[GCS] io_context running on " << n << " threads\n";
+        std::vector<std::thread> io_threads;
+        io_threads.reserve(n);
+        for (unsigned i = 0; i < n; ++i)
+            io_threads.emplace_back([&io]{ io.run(); });
+        for (auto& t : io_threads)
+            t.join();
+    }
 }

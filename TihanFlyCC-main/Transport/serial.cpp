@@ -65,9 +65,19 @@ void SerialTransport::do_receive()
             {
                 // Port was closed (stop() called) or a hardware error occurred.
                 // Do NOT re-arm — spinning on a closed/errored port wastes CPU.
-                // The serial monitor thread will reopen and call start() again.
-                if (ec != asio::error::operation_aborted)
-                    std::cout << "[Serial] Receive error: " << ec.message() << "\n";
+                // IMPORTANT: close the port on any real error so the serial
+                // monitor thread detects it as gone and reopens it cleanly.
+                // Without this close(), the port stays zombie-open in
+                // g_serial_ports and is never recovered after a USB glitch.
+                if (ec == asio::error::operation_aborted)
+                {
+                    // Normal shutdown via stop() — port already closed.
+                    return;
+                }
+                std::cout << "[Serial] Receive error: " << ec.message()
+                          << " — closing port for monitor to reopen\n";
+                asio::error_code close_ec;
+                serial_.close(close_ec);
                 return;
             }
 
