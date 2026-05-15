@@ -119,7 +119,7 @@ void FlightMode::setTransportCallback(std::function<void(const mavlink_message_t
 
 void FlightMode::pushStatus()
 {
-    broadcastStatus(activeMode_, lastPwm_);
+    broadcastStatus(sysid_, activeModeMap_[sysid_], lastPwmMap_[sysid_]);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -128,6 +128,8 @@ void FlightMode::pushStatus()
 
 void FlightMode::processMessage(const mavlink_message_t& msg)
 {
+    const uint8_t sid = msg.sysid;
+
     // ── RC_CHANNELS (id 65) — flight-mode channel (ch5) ──────────────────────
     if (msg.msgid == MAVLINK_MSG_ID_RC_CHANNELS)
     {
@@ -137,29 +139,35 @@ void FlightMode::processMessage(const mavlink_message_t& msg)
         uint16_t pwm  = rc.chan5_raw;
         int      slot = pwmToSlot(pwm);
 
-        if (pwm != lastPwm_ || slot != lastSlot_)
-        {
-            const bool slotChanged = (slot != lastSlot_);
+        // Initialize maps if missing
+        if (slotModesMap_.find(sid) == slotModesMap_.end()) {
+            slotModesMap_[sid] = {0, 0, 0, 0, 0, 0};
+        }
 
-            lastPwm_  = pwm;
-            lastSlot_ = slot;
+        if (pwm != lastPwmMap_[sid] || slot != lastSlotMap_[sid])
+        {
+            const bool slotChanged = (slot != lastSlotMap_[sid]);
+
+            lastPwmMap_[sid]  = pwm;
+            lastSlotMap_[sid] = slot;
 
             // ── Resolve slot → configured FLTMODE param → CopterMode ──────────
             // This is the key fix: instead of waiting for the next HEARTBEAT,
             // we immediately look up the mode configured for this slot in the
-            // local slotModes_ cache (populated from PARAM_VALUE messages).
-            CopterMode slotMode = modeFromId(slotModes_[slot]);
-            activeMode_ = slotMode;
+            // local slotModesMap_ cache (populated from PARAM_VALUE messages).
+            CopterMode slotMode = modeFromId(slotModesMap_[sid][slot]);
+            activeModeMap_[sid] = slotMode;
 
             // Broadcast raw PWM change (lightweight, for PWM indicator)
             json jpwm;
-            jpwm["type"] = "flight_mode_pwm";
-            jpwm["slot"] = slot;
-            jpwm["pwm"]  = pwm;
+            jpwm["type"]  = "flight_mode_pwm";
+            jpwm["sysid"] = sid;
+            jpwm["slot"]  = slot;
+            jpwm["pwm"]   = pwm;
             if (send_cb_) send_cb_(jpwm.dump());
 
             // Broadcast full status with resolved mode name
-            broadcastStatus(activeMode_, pwm);
+            broadcastStatus(sid, activeModeMap_[sid], pwm);
 
             // Log only when the RC switch actually moves to a new slot.
             // Suppresses constant 1499/1500 PWM jitter noise.
@@ -167,44 +175,35 @@ void FlightMode::processMessage(const mavlink_message_t& msg)
             {
                 json jlog;
                 jlog["event"] = "flight_mode_change";
+                jlog["sysid"] = sid;
                 jlog["pwm"]   = pwm;
                 jlog["slot"]  = slot;
-                jlog["mode"]  = modeName(activeMode_);
+                jlog["mode"]  = modeName(activeModeMap_[sid]);
                 std::cout << "[FlightMode] " << jlog.dump() << "\n";
             }
         }
     }
 
     // ── HEARTBEAT — armed-state tracking + mode correction ───────────────────
-    //
-    // ArduPilot behaviour when DISARMED:
-    //   custom_mode reflects the last *commanded* mode (RC switch OR GCS command).
-    //   The heartbeat IS the authoritative source for GCS-commanded mode changes
-    //   while disarmed — e.g. "set mode GUIDED" from the UI while on the bench.
-    //   The old rule (RC slot wins when known) was discarding GCS commands.
-    //
-    // ArduPilot behaviour when ARMED:
-    //   custom_mode reliably tracks the active mode, so heartbeat IS ground truth.
-    //
-    // Rule applied here:
-    //   • Always track the armed state from base_mode.
-    //   • If ARMED   → heartbeat mode wins (failsafe, GCS command, etc.).
-    //   • If DISARMED → heartbeat mode always wins (it reflects GCS commands too).
-    //     RC_CHANNELS still updates activeMode_ immediately on switch changes,
-    //     but the heartbeat can correct it (e.g. GCS override while disarmed).
     else if (msg.msgid == MAVLINK_MSG_ID_HEARTBEAT)
     {
         mavlink_heartbeat_t hb;
         mavlink_msg_heartbeat_decode(&msg, &hb);
 
         const bool isArmed = (hb.base_mode & MAV_MODE_FLAG_SAFETY_ARMED) != 0;
-        if (isArmed != isArmed_)
+        
+        if (isArmedMap_.find(sid) == isArmedMap_.end()) {
+            isArmedMap_[sid] = !isArmed; // force initial trigger
+        }
+        
+        if (isArmed != isArmedMap_[sid])
         {
-            isArmed_ = isArmed;
+            isArmedMap_[sid] = isArmed;
             
             // Broadcast armed/disarmed event to frontend
             json jevt;
             jevt["type"]    = "event";
+            jevt["sysid"]   = sid;
             jevt["event"]   = isArmed ? "armed" : "disarmed";
             jevt["message"] = isArmed ? "Motors Armed" : "Motors Disarmed";
             if (send_cb_) send_cb_(jevt.dump());
@@ -212,15 +211,16 @@ void FlightMode::processMessage(const mavlink_message_t& msg)
 
         CopterMode hbMode = modeFromId(static_cast<uint8_t>(hb.custom_mode));
 
+        if (activeModeMap_.find(sid) == activeModeMap_.end()) {
+            activeModeMap_[sid] = CopterMode::UNKNOWN;
+        }
+
         // Both armed and disarmed: heartbeat is always authoritative.
-        // The RC_CHANNELS handler still provides immediate feedback on RC
-        // switch changes, but the heartbeat corrects any GCS-commanded
-        // overrides (e.g. "set mode GUIDED" while disarmed on the bench).
-        if (hbMode != activeMode_ && hbMode != CopterMode::UNKNOWN)
+        if (hbMode != activeModeMap_[sid] && hbMode != CopterMode::UNKNOWN)
         {
-            activeMode_ = hbMode;
-            broadcastStatus(activeMode_, lastPwm_);
-            std::cout << "[FlightMode] Mode (heartbeat, "
+            activeModeMap_[sid] = hbMode;
+            broadcastStatus(sid, activeModeMap_[sid], lastPwmMap_[sid]);
+            std::cout << "[FlightMode] Sysid " << (int)sid << " Mode (heartbeat, "
                       << (isArmed ? "armed" : "disarmed") << ") → "
                       << modeName(hbMode) << "\n";
         }
@@ -243,11 +243,17 @@ void FlightMode::processMessage(const mavlink_message_t& msg)
             {
                 auto mode_id = static_cast<uint8_t>(pv.param_value);
 
+                // Initialize maps if missing
+                if (slotModesMap_.find(sid) == slotModesMap_.end()) {
+                    slotModesMap_[sid] = {0, 0, 0, 0, 0, 0};
+                }
+
                 // ── Cache the mode ID so RC_CHANNELS can use it immediately ──
-                slotModes_[i] = mode_id;
+                slotModesMap_[sid][i] = mode_id;
 
                 json j;
                 j["type"]    = "flight_mode_param";
+                j["sysid"]   = sid;
                 j["slot"]    = i;
                 j["mode_id"] = static_cast<int>(mode_id);
                 j["mode"]    = modeName(modeFromId(mode_id));
@@ -302,13 +308,18 @@ void FlightMode::saveFlightModes(const std::array<uint8_t, NUM_SLOTS>& modes)
         return;
     }
 
+    // Initialize map if missing
+    if (slotModesMap_.find(sysid_) == slotModesMap_.end()) {
+        slotModesMap_[sysid_] = {0, 0, 0, 0, 0, 0};
+    }
+
     for (int i = 0; i < NUM_SLOTS; ++i)
     {
         // ── Update local cache first ─────────────────────────────────────────
-        // This keeps slotModes_ consistent with what was just written so that
+        // This keeps slotModesMap_ consistent with what was just written so that
         // the RC_CHANNELS handler immediately reflects the new configuration
         // without waiting for the autopilot PARAM_VALUE echo.
-        slotModes_[i] = modes[i];
+        slotModesMap_[sysid_][i] = modes[i];
 
         sendParamSet(PARAM_NAMES[i], static_cast<float>(modes[i]));
     }
@@ -316,6 +327,7 @@ void FlightMode::saveFlightModes(const std::array<uint8_t, NUM_SLOTS>& modes)
     // Single structured log — one line for the whole save operation
     json jlog;
     jlog["event"] = "flight_modes_saved";
+    jlog["sysid"] = sysid_;
     json arr = json::array();
     for (int i = 0; i < NUM_SLOTS; ++i)
     {
@@ -330,6 +342,7 @@ void FlightMode::saveFlightModes(const std::array<uint8_t, NUM_SLOTS>& modes)
 
     json j;
     j["type"]    = "flight_mode_saved";
+    j["sysid"]   = sysid_;
     j["message"] = "Flight modes saved to autopilot.";
     if (send_cb_) send_cb_(j.dump());
 }
@@ -345,15 +358,16 @@ int FlightMode::pwmToSlot(uint16_t pwm) const
     return NUM_SLOTS - 1;
 }
 
-void FlightMode::broadcastStatus(CopterMode mode, uint16_t pwm)
+void FlightMode::broadcastStatus(uint8_t sysid, CopterMode mode, uint16_t pwm)
 {
     if (!send_cb_) return;
 
     json j;
-    j["type"] = "flight_mode_status";
-    j["mode"] = modeName(mode);
-    j["pwm"]  = pwm;
-    j["slot"] = pwmToSlot(pwm);
+    j["type"]  = "flight_mode_status";
+    j["sysid"] = sysid;
+    j["mode"]  = modeName(mode);
+    j["pwm"]   = pwm;
+    j["slot"]  = pwmToSlot(pwm);
     send_cb_(j.dump());
 }
 

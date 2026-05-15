@@ -275,8 +275,14 @@
 
         const ws = window.ws || window.socket || window.GCS?.ws;
         if (ws && ws.readyState === WebSocket.OPEN) {
-            ws.send(JSON.stringify({ type: 'save_flight_modes', modes }));
-            console.log('[FlightModes] Sent save_flight_modes:', modes);
+            if (window.sendToSelected) {
+                window.sendToSelected({ type: 'save_flight_modes', modes });
+                console.log('[FlightModes] Broadcasted save_flight_modes:', modes);
+            } else {
+                ws.send(JSON.stringify({ type: 'save_flight_modes', modes }));
+                console.log('[FlightModes] Sent save_flight_modes:', modes);
+            }
+            
             // Button will be re-enabled by the flight_mode_saved WS message.
             // Fallback: re-enable after 5 s in case the echo never arrives.
             setTimeout(() => {

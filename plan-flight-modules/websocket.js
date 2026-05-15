@@ -31,12 +31,12 @@ const WS_URL = 'ws://127.0.0.1:9002';
 
 window.ws = null;
 
-let reconnectAttempts     = 0;
-let reconnectTimer        = null;
-let heartbeatTimer        = null;
+let reconnectAttempts = 0;
+let reconnectTimer = null;
+let heartbeatTimer = null;
 let isIntentionallyClosed = false;
-let telemetryRequested    = false; // [FIX #11] guard against repeated requests
-let _lastStatusKey        = null;  // dedup guard: only log on real state changes
+let telemetryRequested = false; // [FIX #11] guard against repeated requests
+let _lastStatusKey = null;  // dedup guard: only log on real state changes
 
 // ── [FIX #13] Multi-vehicle selected sysid ───────────────────────────────────
 // Default 1 (first/only drone in a single-vehicle setup).
@@ -54,26 +54,26 @@ window.selectedSysId = 1;
  */
 function updateVehicleSelector(vehicles) {
     const wrap = document.getElementById('vehicleSelectorWrap');
-    const sel  = document.getElementById('vehicleSelector');
+    const sel = document.getElementById('vehicleSelector');
     if (!sel || !wrap) return;
 
     const prevValue = sel.value;
 
     sel.innerHTML = '';
     vehicles.forEach(function (v) {
-        const opt         = document.createElement('option');
-        opt.value         = v.sysid;
-        opt.textContent   = 'Drone ' + v.sysid;
+        const opt = document.createElement('option');
+        opt.value = v.sysid;
+        opt.textContent = 'Drone ' + v.sysid;
         sel.appendChild(opt);
     });
 
     // Restore previous selection if still alive
     const stillAlive = Array.prototype.some.call(sel.options, o => o.value === prevValue);
     if (stillAlive && prevValue) {
-        sel.value            = prevValue;
+        sel.value = prevValue;
         window.selectedSysId = parseInt(prevValue, 10);
     } else if (sel.options.length > 0) {
-        sel.value            = sel.options[0].value;
+        sel.value = sel.options[0].value;
         window.selectedSysId = parseInt(sel.value, 10);
     }
 
@@ -95,13 +95,13 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // [FIX #12] Queue for firmware messages that arrive before the handler is ready
-const _firmwareMsgQueue   = [];
-let   _firmwareQueueTimer = null;
+const _firmwareMsgQueue = [];
+let _firmwareQueueTimer = null;
 
 const MAX_RECONNECT_ATTEMPTS = 10;
-const BASE_RECONNECT_MS      = 3000;
-const MAX_RECONNECT_MS       = 30000;
-const HEARTBEAT_INTERVAL_MS  = 15000;
+const BASE_RECONNECT_MS = 3000;
+const MAX_RECONNECT_MS = 30000;
+const HEARTBEAT_INTERVAL_MS = 15000;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // [FIX #12] Firmware message delivery — queue + flush
@@ -242,10 +242,10 @@ function stopHeartbeat() {
  */
 function detachHandlers(sock) {
     if (!sock) return;
-    sock.onopen    = null;
+    sock.onopen = null;
     sock.onmessage = null;
-    sock.onerror   = null;
-    sock.onclose   = null;
+    sock.onerror = null;
+    sock.onclose = null;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -336,7 +336,7 @@ function initWebSocket() {
 
             // [FIX #11] Reset so the next successful connection can request telemetry
             telemetryRequested = false;
-            _lastStatusKey     = null; // reset so reconnect logs a fresh 'connected' message
+            _lastStatusKey = null; // reset so reconnect logs a fresh 'connected' message
 
             updateConnectionStatus('disconnected');
             window.MsgConsole?.warning('Connection lost');
@@ -375,7 +375,7 @@ function scheduleReconnect() {
     }
 
     // Exponential backoff: 3s, 6s, 12s … capped at MAX_RECONNECT_MS
-    const base  = Math.min(BASE_RECONNECT_MS * Math.pow(2, reconnectAttempts), MAX_RECONNECT_MS);
+    const base = Math.min(BASE_RECONNECT_MS * Math.pow(2, reconnectAttempts), MAX_RECONNECT_MS);
     const delay = base + Math.random() * 1000; // add up to 1s jitter
 
     reconnectAttempts++;
@@ -399,9 +399,12 @@ function handleBackendMessage(message) {
             const lat = message.latitude;
             const lng = message.longitude;
             const hdg = message.heading ?? 0;
-            if (window.tmap?.updateDronePosition && lat !== undefined && lng !== undefined) {
+            const sid = message.sysid ?? 1;
+            if (window.tmap?.updateDronePositionForSysid && lat !== undefined && lng !== undefined) {
+                window.tmap.updateDronePositionForSysid(sid, lat, lng, hdg);
+                console.log(`[WS] GPS (D-${sid}) → ${lat.toFixed(6)}, ${lng.toFixed(6)}, hdg=${hdg.toFixed(1)}°`);
+            } else if (window.tmap?.updateDronePosition && lat !== undefined && lng !== undefined) {
                 window.tmap.updateDronePosition(lat, lng, hdg);
-                console.log(`[WS] GPS → ${lat.toFixed(6)}, ${lng.toFixed(6)}, hdg=${hdg.toFixed(1)}°`);
             }
             break;
         }
@@ -414,15 +417,24 @@ function handleBackendMessage(message) {
         // ── Attitude (roll/pitch/yaw) ─────────────────────────────────────────
         case 'attitude': {
             const toDeg = (180 / Math.PI);
-            if (window.TelemetryDisplay?.update) {
-                window.TelemetryDisplay.update({
-                    roll:  (message.roll  ?? 0) * toDeg,
-                    pitch: (message.pitch ?? 0) * toDeg,
-                    yaw:   (message.yaw   ?? 0) * toDeg
-                });
-            }
-            if (window.compass?.updateTelemetry) {
-                window.compass.updateTelemetry({ heading: (message.yaw ?? 0) * toDeg });
+            const sid = message.sysid ?? 1;
+            
+            // If a specific drone is selected, show its telemetry.
+            // If 'All Drones' (0) is selected, show the primary drone's telemetry (first in list)
+            const targetSysId = window.selectedSysId === 0 ? (window._primarySysId || 1) : window.selectedSysId;
+
+            // Only update the main telemetry dials for the currently selected/primary drone
+            if (sid === targetSysId) {
+                if (window.TelemetryDisplay?.update) {
+                    window.TelemetryDisplay.update({
+                        roll: (message.roll ?? 0) * toDeg,
+                        pitch: (message.pitch ?? 0) * toDeg,
+                        yaw: (message.yaw ?? 0) * toDeg
+                    });
+                }
+                if (window.compass?.updateTelemetry) {
+                    window.compass.updateTelemetry({ heading: (message.yaw ?? 0) * toDeg });
+                }
             }
             break;
         }
@@ -437,11 +449,25 @@ function handleBackendMessage(message) {
             // The backend populates message.vehicles = [{ sysid:1 }, { sysid:2 }, …]
             // so the dropdown always reflects exactly which drones are alive.
             if (Array.isArray(message.vehicles)) {
-                updateVehicleSelector(message.vehicles);
+                window._lastVehicleCount = message.vehicles.length;
+                updateVehicleSelector(message.vehicles, message.dyn_udp_links || []);
+
+                // Update map markers for all live vehicles from the 1Hz status broadcast
+                // (This ensures drones that aren't sending fast GPS streams still appear)
+                if (window.tmap?.updateDronePositionForSysid && window.tmap?.pruneStaleVehicleMarkers) {
+                    const activeSysids = message.vehicles.map(v => v.sysid);
+                    message.vehicles.forEach(v => {
+                        if (v.lat !== undefined && v.lon !== undefined && v.lat !== 0 && v.lon !== 0) {
+                            const hdg = (v.yaw !== undefined) ? (v.yaw * (180 / Math.PI)) : 0;
+                            window.tmap.updateDronePositionForSysid(v.sysid, v.lat, v.lon, hdg);
+                        }
+                    });
+                    window.tmap.pruneStaleVehicleMarkers(activeSysids);
+                }
             }
 
             if (message.connected) {
-                const link     = message.connection || 'Unknown';
+                const link = message.connection || 'Unknown';
                 const stateKey = 'connected:' + link;
 
                 updateConnectionStatus('connected', link);
@@ -511,16 +537,16 @@ function handleBackendMessage(message) {
 
         // ── STATUSTEXT ────────────────────────────────────────────────────────
         case 'statustext': {
-            if (message.level === 'error')        window.MsgConsole?.error(message.message);
+            if (message.level === 'error') window.MsgConsole?.error(message.message);
             else if (message.level === 'warning') window.MsgConsole?.warning(message.message);
-            else                                  window.MsgConsole?.info(message.message);
+            else window.MsgConsole?.info(message.message);
             break;
         }
 
         // ── Auto takeoff progress ─────────────────────────────────────────────
         case 'takeoff_progress': {
             if (message.step === 'complete') window.MsgConsole?.success('\ud83d\ude80 ' + message.message);
-            else                             window.MsgConsole?.info('\ud83d\ude80 ' + message.message);
+            else window.MsgConsole?.info('\ud83d\ude80 ' + message.message);
             break;
         }
 
@@ -579,8 +605,15 @@ function handleBackendMessage(message) {
 
         // ── Drone MAVProxy / STATUSTEXT messages ─────────────────────────────
         case 'drone_console': {
-            const text     = message.text     || '';
+            let text = message.text || '';
             const severity = message.severity || 'info';
+            const sysid = message.sysid;
+
+            // Prefix sysid if multiple drones are connected
+            if (sysid !== undefined && window._lastVehicleCount > 1) {
+                text = `Drone ${sysid}: ${text}`;
+            }
+
             if (text && window.MsgConsole) {
                 window.MsgConsole.log(text, severity);
             }
@@ -715,6 +748,22 @@ function handleBackendMessage(message) {
             window.handleFlightPlanAck?.(message);
             break;
 
+        // ── Multi-vehicle connection manager ACKs ─────────────────────────────
+        case 'connect_vehicle_ack':
+        case 'disconnect_vehicle_ack':
+            if (typeof window._mvHandleMessage === 'function')
+                window._mvHandleMessage(message);
+            if (typeof window.CommLink?.processMessage === 'function')
+                window.CommLink.processMessage(message);
+            break;
+
+        // ── Manual comm-link ACKs (Comm Links settings panel) ─────────────────
+        case 'manual_connect_ack':
+        case 'manual_disconnect_ack':
+            if (typeof window.CommLink?.processMessage === 'function')
+                window.CommLink.processMessage(message);
+            break;
+
         default:
             // Suppress noisy unknown-type logs for known-unhandled types
             if (!['ping', 'pong'].includes(message.type)) {
@@ -731,14 +780,23 @@ function handleBackendMessage(message) {
 function handleTelemetryUpdate(data) {
     if (!data) return;
 
-    if (window.TelemetryDisplay) {
-        window.TelemetryDisplay.update(data);
-    }
+    const targetSysId = window.selectedSysId === 0 ? (window._primarySysId || 1) : (window.selectedSysId || 1);
+    const sid = data.sysid ?? 1;
 
-    // GPS inside a telemetry bundle — only update position if present.
-    // Direct 'gps' messages (handled above) take the faster path.
-    if (data.latitude && data.longitude && window.tmap?.updateDronePosition) {
-        window.tmap.updateDronePosition(data.latitude, data.longitude, data.heading);
+    if (sid === targetSysId) {
+        if (window.TelemetryDisplay) {
+            window.TelemetryDisplay.update(data);
+        }
+        
+        // GPS inside a telemetry bundle — only update position if present.
+        // Direct 'gps' messages (handled above) take the faster path.
+        if (data.latitude && data.longitude) {
+            if (window.tmap?.updateDronePositionForSysid) {
+                window.tmap.updateDronePositionForSysid(sid, data.latitude, data.longitude, data.heading);
+            } else if (window.tmap?.updateDronePosition) {
+                window.tmap.updateDronePosition(data.latitude, data.longitude, data.heading);
+            }
+        }
     }
 }
 
@@ -787,13 +845,19 @@ function sendCommand(command, params = {}) {
         return false;
     }
     const payload = {
-        id:      Date.now(),
-        type:    'command',
+        id: Date.now(),
+        type: 'command',
         command,
-        sysid:   window.selectedSysId ?? 1,   // [FIX #13] route to selected drone
         params
     };
     console.log('[WS] sendCommand →', payload);
+    
+    if (window.sendToSelected) {
+        window.sendToSelected(payload);
+        return true;
+    }
+    
+    payload.sysid = window.selectedSysId ?? 1;
     return safeSend(payload);
 }
 
@@ -836,9 +900,9 @@ function updateConnectionStatus(state, link) {
     if (!el) return;
 
     const labels = {
-        connected:    { text: '🟢 Drone connected (' + (link || 'Unknown') + ')', color: '#22c55e' },
-        waiting:      { text: '🟡 Waiting for drone…',                            color: '#facc15' },
-        disconnected: { text: '⚫ Backend disconnected',                           color: '#6b7280' },
+        connected: { text: '🟢 Drone connected (' + (link || 'Unknown') + ')', color: '#22c55e' },
+        waiting: { text: '🟡 Waiting for drone…', color: '#facc15' },
+        disconnected: { text: '⚫ Backend disconnected', color: '#6b7280' },
     };
 
     const entry = labels[state];

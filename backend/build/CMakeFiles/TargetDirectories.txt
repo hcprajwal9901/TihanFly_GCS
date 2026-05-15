@@ -1,3 +1,0 @@
-/home/tihan_0512/Pictures/TflyGCS/backend/build/CMakeFiles/tihanfly_server.dir
-/home/tihan_0512/Pictures/TflyGCS/backend/build/CMakeFiles/edit_cache.dir
-/home/tihan_0512/Pictures/TflyGCS/backend/build/CMakeFiles/rebuild_cache.dir

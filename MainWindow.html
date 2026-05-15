@@ -125,6 +125,10 @@
                 if (!msg || !msg.type) return;
 
                 if (msg.type === 'gps' || msg.type === 'telemetry') {
+                    var targetSysId = window.selectedSysId === 0 ? (window._primarySysId || 1) : (window.selectedSysId || 1);
+                    var sid = msg.sysid !== undefined ? msg.sysid : 1;
+                    if (sid !== targetSysId) return;
+
                     var updated = false;
                     if (msg.satellites !== undefined)       { window.TelemetryStore.satellites     = msg.satellites;       updated = true; }
                     if (msg.battery !== undefined)          { window.TelemetryStore.batteryPercent = msg.battery;          updated = true; }
@@ -152,22 +156,31 @@
                 }
 
                 if (msg.type === 'flight_mode_status' && msg.mode !== undefined) {
-                    window.TelemetryStore.mode = formatModeStr(msg.mode);
-                    updateHeaderUI();
+                    var targetSysId = window.selectedSysId === 0 ? (window._primarySysId || 1) : (window.selectedSysId || 1);
+                    var sid = msg.sysid !== undefined ? msg.sysid : 1;
+                    if (sid === targetSysId) {
+                        window.TelemetryStore.mode = formatModeStr(msg.mode);
+                        updateHeaderUI();
+                    }
                 }
 
                 if (msg.type === 'status' && Array.isArray(msg.vehicles)) {
                     if (typeof window.updateVehicleSelector === 'function') {
-                        window.updateVehicleSelector(msg.vehicles);
+                        window.updateVehicleSelector(msg.vehicles, msg.dyn_udp_links || []);
                     }
                     var selectedId = window.selectedSysId || 1;
                     var v = msg.vehicles.find(function(vh) { return vh.sysid === selectedId; }) || msg.vehicles[0];
                     if (v) {
                         var updated = false;
-                        if (v.mode !== undefined) { 
+                        if (v.mode !== undefined) {
                             window.TelemetryStore.mode = formatModeStr(v.mode);
-                            updated = true; 
+                            updated = true;
                         }
+                        // New richer fields from Vehicle::TelemetryCache
+                        if (v.battery_pct !== undefined && v.battery_pct >= 0) { window.TelemetryStore.batteryPercent = v.battery_pct; updated = true; }
+                        if (v.battery_v   !== undefined && v.battery_v   >  0) { window.TelemetryStore.batteryVoltage = v.battery_v;   updated = true; }
+                        if (v.num_sats    !== undefined) { window.TelemetryStore.satellites = v.num_sats; updated = true; }
+                        // Legacy compat fields
                         if (v.battery !== undefined) { window.TelemetryStore.batteryPercent = v.battery; updated = true; }
                         if (v.voltage !== undefined) { window.TelemetryStore.batteryVoltage = v.voltage; updated = true; }
                         if (updated) updateHeaderUI();
@@ -260,6 +273,8 @@
     <link rel="stylesheet" href="initial-tune.css">
     <!-- camera controls: photo capture, video recording, gimbal panel -->
     <link rel="stylesheet" href="camera-controls.css">
+    <!-- communication link panel -->
+    <link rel="stylesheet" href="comm-link.css">
 
 
 </head>
@@ -400,84 +415,56 @@
                         transition: background .3s;
                     }
 
-                    #vehicleSelectorWrap {
-                        display: none;
-                        align-items: center;
-                        gap: 4px;
-                        margin-right: 10px;
-                        background: rgba(10, 16, 30, 0.85);
-                        border: 1px solid #1e3a5f;
-                        border-radius: 8px;
-                        padding: 3px;
-                    }
-
-                    .mv-drone-tab {
-                        display: flex;
-                        align-items: center;
-                        gap: 6px;
-                        padding: 4px 11px;
-                        border-radius: 6px;
-                        font-size: 11px;
-                        font-weight: 600;
-                        font-family: 'JetBrains Mono', 'Courier New', monospace;
-                        letter-spacing: 0.6px;
-                        cursor: pointer;
-                        border: 1px solid transparent;
-                        color: #6a85a8;
-                        background: transparent;
-                        transition: all 0.18s ease;
-                        white-space: nowrap;
-                        user-select: none;
-                    }
-
-                    .mv-drone-tab:hover {
-                        color: #a8c4e0;
-                        background: rgba(82, 185, 255, 0.07);
-                        border-color: rgba(82, 185, 255, 0.15);
-                    }
-
-                    .mv-drone-tab.mv-active {
-                        color: #52b9ff;
-                        background: rgba(82, 185, 255, 0.12);
-                        border-color: rgba(82, 185, 255, 0.35);
-                    }
-
-                    .mv-drone-tab .mv-dot {
-                        width: 6px;
-                        height: 6px;
-                        border-radius: 50%;
-                        background: #3ddc84;
-                        flex-shrink: 0;
-                        box-shadow: 0 0 4px rgba(61, 220, 132, 0.6);
-                        animation: dronePulse 1.8s ease-in-out infinite;
-                    }
-
-                    .mv-drone-tab .mv-dot.mv-warn {
-                        background: #ffb830;
-                        box-shadow: 0 0 4px rgba(255, 184, 48, 0.6);
-                    }
-
-                    .mv-drone-tab .mv-dot.mv-err {
-                        background: #ff4d4d;
-                        box-shadow: 0 0 4px rgba(255, 77, 77, 0.6);
-                    }
 
                     #vehicleSelector {
                         display: none !important;
                     }
                 </style>
 
-                <div id="droneCountBadge">
-                    <span id="droneCountDot"></span>
-                    <span id="droneCountText">0 DRONES</span>
+                <!-- Drone Dropdown Wrapper -->
+                <div style="position: relative; display: flex; align-items: center; margin-right: 15px;">
+                    <div id="droneCountBadge" 
+                         style="cursor: pointer;" 
+                         onclick="document.getElementById('vehicleSelectorWrap').classList.toggle('show-dropdown')"
+                         title="Click to view drone list">
+                        <span id="droneCountDot"></span>
+                        <span id="droneCountText">0 DRONES</span>
+                        <span style="font-size: 0.7rem; margin-left: 4px; opacity: 0.8;">▼</span>
+                    </div>
+
+                    <!-- ⚡ Connect Vehicle button — always visible -->
+                    <button id="mvAddDroneBtn"
+                        title="Connect another vehicle"
+                        onclick="if(typeof window.openConnectionManager==='function')window.openConnectionManager();"
+                        style="
+                            background: linear-gradient(135deg,#0d2b45,#07111f);
+                            border: 1px solid #1e7a8a;
+                            border-radius: 8px;
+                            color: #4fc3f7;
+                            font-size: 1rem;
+                            font-weight: 700;
+                            width: 34px;
+                            height: 34px;
+                            cursor: pointer;
+                            flex-shrink: 0;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            transition: background .2s, border-color .2s;
+                            margin-left: 8px;
+                        "
+                        onmouseenter="this.style.background='linear-gradient(135deg,#1565c0,#0d47a1)';this.style.borderColor='#4fc3f7';"
+                        onmouseleave="this.style.background='linear-gradient(135deg,#0d2b45,#07111f)';this.style.borderColor='#1e7a8a';">
+                        +
+                    </button>
+
+                    <div id="vehicleSelectorWrap">
+                        <!-- drone tabs injected by updateVehicleSelector() -->
+                        <select id="vehicleSelector"><!-- options kept for JS compat --></select>
+                    </div>
                 </div>
 
-                <div id="vehicleSelectorWrap">
-                    <!-- drone tabs injected by updateVehicleSelector() -->
-                    <select id="vehicleSelector"><!-- options kept for JS compat --></select>
-                </div>
-
-                <img src="resources/icon/tihan.png" class="dx4-logo" alt="DX4 Logo" style="margin-left:15px;">
+                <img src="resources/icon/tihan.png" class="dx4-logo" alt="DX4 Logo">
             </div>
         </div>
 
@@ -1488,6 +1475,8 @@
     <script src="frame-type.js"></script>
     <!-- Initial Tune Parameters panel -->
     <script src="initial-tune.js"></script>
+    <!-- Communication Link panel -->
+    <script src="comm-link.js"></script>
     <!-- NFZ/weather-restriction not yet implemented -->
 
 </body>

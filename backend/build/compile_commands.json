@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/tihan_0512/Pictures/TflyGCS/backend/build",
-  "command": "/usr/lib/ccache/c++ -DBOOST_SYSTEM_DYN_LINK -DBOOST_SYSTEM_NO_LIB -I/home/tihan_0512/Pictures/TflyGCS/backend -I/usr/include/mysql -O3 -DNDEBUG -std=gnu++17 -Wall -Wextra -O2 -o CMakeFiles/tihanfly_server.dir/main.cpp.o -c /home/tihan_0512/Pictures/TflyGCS/backend/main.cpp",
-  "file": "/home/tihan_0512/Pictures/TflyGCS/backend/main.cpp",
-  "output": "CMakeFiles/tihanfly_server.dir/main.cpp.o"
-}
-]

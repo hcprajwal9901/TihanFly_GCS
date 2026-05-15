@@ -41,6 +41,7 @@
         'motor-test'    : 'MotorTest',     // MAV_CMD_DO_MOTOR_TEST
         'frame-type'    : 'FrameType',     // FRAME_CLASS + FRAME_TYPE parameter writer
         'initial-tune'  : 'InitialTune',   // Initial tune: battery / prop parameter wizard
+        'comm-link'     : 'CommLink',      // Communication Link manager (TCP/UDP/Serial)
     };
 
     // Track which panels have already been initialised
@@ -205,6 +206,18 @@
           Initial Tune
         </button>
 
+        <div class="settings-sidebar-label">Connection</div>
+
+        <button class="settings-nav-btn" data-panel="comm-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            <line x1="12" y1="12" x2="12" y2="16"/>
+            <line x1="10" y1="14" x2="14" y2="14"/>
+          </svg>
+          Comm Links
+        </button>
+
       </div>
 
       <!-- PANEL HOST — each panel module renders into here -->
@@ -225,6 +238,7 @@
         <div class="settings-panel"        id="panel-motor-test"></div>
         <div class="settings-panel"        id="panel-frame-type"></div>
         <div class="settings-panel"        id="panel-initial-tune"></div>
+        <div class="settings-panel"        id="panel-comm-link"></div>
       </div>
 
     </div><!-- /settings-body -->

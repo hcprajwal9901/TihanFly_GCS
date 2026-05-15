@@ -87,6 +87,9 @@ void Vehicle::process_message(const mavlink_message_t& msg)
     if (msg.msgid == MAVLINK_MSG_ID_HEARTBEAT)
         update_heartbeat();
 
+    // Always update the telemetry cache, then dispatch to registered handlers
+    update_telemetry(msg);
+
     std::vector<MessageHandler> handlers_copy;
     {
         std::lock_guard<std::mutex> lock(handlers_mtx_);
@@ -97,6 +100,110 @@ void Vehicle::process_message(const mavlink_message_t& msg)
 
     for (auto& handler : handlers_copy)
         handler(msg);
+}
+
+// ---------------------------------------------------------------------------
+// Telemetry cache update
+// Decodes inbound MAVLink frames that carry state we want to expose via
+// the accessor methods below.  All writes are protected by telem_mtx_.
+// ---------------------------------------------------------------------------
+
+static const char* copter_mode_name(uint32_t custom_mode)
+{
+    static const char* names[] = {
+        "STABILIZE","ACRO","ALT_HOLD","AUTO","GUIDED","LOITER",
+        "RTL","CIRCLE","LAND","DRIFT","SPORT","FLIP","AUTOTUNE",
+        "POSHOLD","BRAKE","THROW","AVOID_ADSB","GUIDED_NOGPS",
+        "SMART_RTL","FLOWHOLD","FOLLOW","ZIGZAG","SYSTEMID",
+        "AUTOROTATE","AUTO_RTL"
+    };
+    if (custom_mode < sizeof(names)/sizeof(names[0]))
+        return names[custom_mode];
+    return "UNKNOWN";
+}
+
+void Vehicle::update_telemetry(const mavlink_message_t& msg)
+{
+    switch (msg.msgid)
+    {
+    case MAVLINK_MSG_ID_HEARTBEAT:
+    {
+        mavlink_heartbeat_t hb;
+        mavlink_msg_heartbeat_decode(&msg, &hb);
+        std::lock_guard<std::mutex> lk(telem_mtx_);
+        telem_.armed = (hb.base_mode & MAV_MODE_FLAG_SAFETY_ARMED) != 0;
+        telem_.mode  = copter_mode_name(hb.custom_mode);
+        break;
+    }
+    case MAVLINK_MSG_ID_SYS_STATUS:
+    {
+        mavlink_sys_status_t ss;
+        mavlink_msg_sys_status_decode(&msg, &ss);
+        std::lock_guard<std::mutex> lk(telem_mtx_);
+        if (ss.voltage_battery != UINT16_MAX)
+            telem_.battery_v = ss.voltage_battery / 1000.f;
+        if (ss.battery_remaining >= 0)
+            telem_.battery_pct = ss.battery_remaining;
+        break;
+    }
+    case MAVLINK_MSG_ID_BATTERY_STATUS:
+    {
+        mavlink_battery_status_t bs;
+        mavlink_msg_battery_status_decode(&msg, &bs);
+        std::lock_guard<std::mutex> lk(telem_mtx_);
+        if (bs.battery_remaining >= 0)
+            telem_.battery_pct = bs.battery_remaining;
+        float total = 0.f; int n = 0;
+        for (int i = 0; i < 10; ++i)
+            if (bs.voltages[i] != UINT16_MAX) { total += bs.voltages[i]; ++n; }
+        if (n > 0) telem_.battery_v = total / 1000.f;
+        break;
+    }
+    case MAVLINK_MSG_ID_ATTITUDE:
+    {
+        mavlink_attitude_t att;
+        mavlink_msg_attitude_decode(&msg, &att);
+        std::lock_guard<std::mutex> lk(telem_mtx_);
+        telem_.roll  = att.roll;
+        telem_.pitch = att.pitch;
+        telem_.yaw_rad = att.yaw;
+        break;
+    }
+    case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
+    {
+        mavlink_global_position_int_t gp;
+        mavlink_msg_global_position_int_decode(&msg, &gp);
+        std::lock_guard<std::mutex> lk(telem_mtx_);
+        telem_.lat     = gp.lat / 1e7;
+        telem_.lon     = gp.lon / 1e7;
+        telem_.alt_msl = gp.alt  / 1000.f;
+        break;
+    }
+    case MAVLINK_MSG_ID_GPS_RAW_INT:
+    {
+        mavlink_gps_raw_int_t gps;
+        mavlink_msg_gps_raw_int_decode(&msg, &gps);
+        std::lock_guard<std::mutex> lk(telem_mtx_);
+        telem_.gps_fix  = gps.fix_type;
+        telem_.num_sats = gps.satellites_visible;
+        if (gps.fix_type >= 2) {
+            telem_.lat     = gps.lat / 1e7;
+            telem_.lon     = gps.lon / 1e7;
+            telem_.alt_msl = gps.alt  / 1000.f;
+        }
+        break;
+    }
+    case MAVLINK_MSG_ID_VFR_HUD:
+    {
+        mavlink_vfr_hud_t hud;
+        mavlink_msg_vfr_hud_decode(&msg, &hud);
+        std::lock_guard<std::mutex> lk(telem_mtx_);
+        telem_.alt_msl = hud.alt;   // barometric alt — prefer over GPS MSL
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 void Vehicle::update_heartbeat()
@@ -158,15 +265,84 @@ void Vehicle::register_handler(uint32_t msgid, MessageHandler handler)
 bool Vehicle::is_alive() const
 {
     std::lock_guard<std::mutex> lock(heartbeat_mtx_);
-    // 8-second window (was 5 s).
-    // ArduPilot heartbeats at 1 Hz.  USB serial under heavy parameter
-    // download load can cause async_read_some callbacks to be delayed,
-    // starving the heartbeat update by several seconds.  8 s gives 7
-    // consecutive missed beats of tolerance before eviction, which avoids
-    // false-positive disconnects while still detecting a true cable pull
-    // within a reasonable time.
     return (std::chrono::steady_clock::now() - last_heartbeat_)
            < std::chrono::seconds(8);
+}
+
+// ---------------------------------------------------------------------------
+// Telemetry accessors
+// ---------------------------------------------------------------------------
+
+bool Vehicle::is_armed() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.armed;
+}
+
+std::string Vehicle::flight_mode_string() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.mode;
+}
+
+int Vehicle::battery_remaining() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.battery_pct;
+}
+
+float Vehicle::battery_voltage() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.battery_v;
+}
+
+uint8_t Vehicle::gps_fix_type() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.gps_fix;
+}
+
+uint8_t Vehicle::gps_satellites() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.num_sats;
+}
+
+double Vehicle::latitude() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.lat;
+}
+
+double Vehicle::longitude() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.lon;
+}
+
+float Vehicle::altitude_msl() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.alt_msl;
+}
+
+float Vehicle::roll() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.roll;
+}
+
+float Vehicle::pitch() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.pitch;
+}
+
+float Vehicle::yaw() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.yaw_rad;
 }
 
 AccelCalibration& Vehicle::accel_calib()

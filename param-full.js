@@ -881,9 +881,23 @@ function loadExternalMeta() {
     let isLoading   = false;
 
     function wsSend(obj) {
-        if (window.ws && window.ws.readyState === WebSocket.OPEN)
-            window.ws.send(JSON.stringify(obj));
-        else console.warn('[ParamFull] WS not open');
+        if (window.ws && window.ws.readyState === WebSocket.OPEN) {
+            // Broadcast param_set to all drones when "All Drones" (sysid=0) is selected
+            if (obj.type === 'param_set' && window.selectedSysId === 0 && window.activeSysids && window.activeSysids.length > 0) {
+                window.activeSysids.forEach(sysid => {
+                    window.ws.send(JSON.stringify({ ...obj, sysid }));
+                });
+                console.log('[ParamFull] Broadcasted param_set to all drones:', obj);
+            } else {
+                // Single target: inject sysid so backend routes correctly
+                const msg = (window.selectedSysId && window.selectedSysId > 0)
+                    ? { ...obj, sysid: window.selectedSysId }
+                    : obj;
+                window.ws.send(JSON.stringify(msg));
+            }
+        } else {
+            console.warn('[ParamFull] WS not open');
+        }
     }
 
 function handleMessage(data) {
@@ -996,7 +1010,11 @@ function attachRowEvents(row) {
             else { delete dirtyParams[name]; row.classList.remove('param-dirty'); }
         });
         input.addEventListener('keydown', e => {
-            if (e.key === 'Enter') { const v = parseFloat(input.value); if (!isNaN(v)) wsSend({ type: 'param_set', param_id: name, value: v }); input.blur(); }
+            if (e.key === 'Enter') {
+                const v = parseFloat(input.value);
+                if (!isNaN(v)) wsSend({ type: 'param_set', param_id: name, value: v });
+                input.blur();
+            }
             if (e.key === 'Escape') { input.value = fmtV(parseFloat(input.dataset.original)); delete dirtyParams[name]; row.classList.remove('param-dirty'); input.blur(); }
         });
     }

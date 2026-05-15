@@ -8,6 +8,8 @@
 #include <chrono>
 #include <stdexcept>
 #include <memory>
+#include <string>
+#include <cstring>
 
 // Forward declarations
 class LinkManager;
@@ -96,8 +98,26 @@ public:
     // ---------------------------------------------------------------
     bool is_alive() const;
 
+    // ---------------------------------------------------------------
+    // Telemetry accessors  (cached from inbound MAVLink messages)
+    // Thread-safe — protected by telem_mtx_.
+    // ---------------------------------------------------------------
+    bool        is_armed()            const;
+    std::string flight_mode_string()  const;   // e.g. "GUIDED"
+    int         battery_remaining()   const;   // 0-100, -1 = unknown
+    float       battery_voltage()     const;   // Volts, 0 = unknown
+    uint8_t     gps_fix_type()        const;   // MAV_GPS_FIX_TYPE
+    uint8_t     gps_satellites()      const;
+    double      latitude()            const;   // degrees
+    double      longitude()           const;   // degrees
+    float       altitude_msl()        const;   // metres
+    float       roll()                const;   // radians
+    float       pitch()               const;   // radians
+    float       yaw()                 const;   // radians
+
 private:
     void update_heartbeat();
+    void update_telemetry(const mavlink_message_t& msg);  // called from process_message
 
     int sysid_;
     int compid_;
@@ -112,6 +132,24 @@ private:
 
     std::chrono::steady_clock::time_point last_heartbeat_;
     mutable std::mutex heartbeat_mtx_;
+
+    // ── Cached telemetry (updated by update_telemetry) ───────────
+    struct TelemetryCache {
+        bool        armed          = false;
+        std::string mode           = "UNKNOWN";
+        int         battery_pct    = -1;     // -1 = not received yet
+        float       battery_v      = 0.f;
+        uint8_t     gps_fix        = 0;
+        uint8_t     num_sats       = 0;
+        double      lat            = 0.0;
+        double      lon            = 0.0;
+        float       alt_msl        = 0.f;
+        float       roll           = 0.f;
+        float       pitch          = 0.f;
+        float       yaw_rad        = 0.f;
+    };
+    TelemetryCache     telem_;
+    mutable std::mutex telem_mtx_;
 
     // Per-vehicle calibration — owned here, created on first use via unique_ptr
     // to avoid a circular include between vehicle.h and accel_calibration.h.

@@ -389,19 +389,40 @@
       setStatusBanner('No modified channels to write.', 'info');
       return;
     }
-    if (!state.wsReady) {
+
+    // Prefer the shared window.ws used by the rest of the GCS
+    const sharedWs = window.ws;
+    if (sharedWs && sharedWs.readyState === WebSocket.OPEN) {
+      const isAllDrones = (window.selectedSysId === 0) &&
+                          window.activeSysids && window.activeSysids.length > 0;
+
+      dirtyChannels.forEach(ch => {
+        const base = { type: 'param_set', param_id: ch.name, value: Number(ch.value) };
+        if (isAllDrones) {
+          window.activeSysids.forEach(sysid => {
+            sharedWs.send(JSON.stringify({ ...base, sysid }));
+          });
+          console.info(`[ParamSwitch] Broadcasted param_set ${ch.name} = ${ch.value} to all drones`);
+        } else {
+          const sysid = (window.selectedSysId && window.selectedSysId > 0) ? window.selectedSysId : 1;
+          sharedWs.send(JSON.stringify({ ...base, sysid }));
+          console.info(`[ParamSwitch] → param_set ${ch.name} = ${ch.value} to drone ${sysid}`);
+        }
+      });
+    } else if (state.wsReady && ws) {
+      // Fallback to module-private ws (no broadcast support)
+      if (!state.wsReady) {
+        setStatusBanner('WebSocket not connected. Cannot write parameters.', 'error');
+        return;
+      }
+      dirtyChannels.forEach(ch => {
+        wsSend({ type: 'param_set', param_id: ch.name, value: Number(ch.value) });
+        console.info(`[ParamSwitch] → param_set ${ch.name} = ${ch.value}`);
+      });
+    } else {
       setStatusBanner('WebSocket not connected. Cannot write parameters.', 'error');
       return;
     }
-
-    dirtyChannels.forEach(ch => {
-      wsSend({
-        type:     'param_set',
-        param_id: ch.name,
-        value:    Number(ch.value),
-      });
-      console.info(`[ParamSwitch] → param_set ${ch.name} = ${ch.value}`);
-    });
 
     state.dirty.clear();
     rebuildGrid();

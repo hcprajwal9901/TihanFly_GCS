@@ -116,7 +116,9 @@ public:
     // Mission upload
     // -----------------------------------------------------------------------
     void upload_mission(int request_id,
-                        const std::vector<WaypointItem>& waypoints);
+                        const std::vector<WaypointItem>& waypoints,
+                        uint8_t target_sysid = 1,
+                        uint8_t target_compid = 0);
 
     void on_mission_request(uint16_t seq);
     void on_mission_ack(uint8_t type);
@@ -155,4 +157,6 @@ private:
     std::vector<WaypointItem> pending_mission_;
     int                       mission_request_id_ = 0;
     std::atomic<bool>         mission_in_progress_{false};
+    uint8_t                   mission_target_sysid_ = 1;
+    uint8_t                   mission_target_compid_ = 0;
 };

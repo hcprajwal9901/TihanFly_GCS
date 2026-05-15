@@ -177,6 +177,22 @@ SwitchManager*     g_switch_manager   = nullptr;   // ← [SwitchManager] NEW
 FirmwareManager*   g_firmware_manager = nullptr;
 MavlinkInspector*  g_mavlink_inspector = nullptr;  // ← MAVLink Inspector
 
+// ── Multi-vehicle: dynamic UDP link registry ──────────────────────────────────
+// Populated at runtime by connect_vehicle WS commands.
+// Key = local_port (each extra vehicle binds its own UDP port).
+struct DynUdpEntry {
+    std::shared_ptr<UdpTransport> transport;
+    int                           link_id  = -1;
+    std::string                   remote_ip;
+    int                           remote_port = 0;
+};
+std::map<int, DynUdpEntry> g_dyn_udp_links;    // key = local_port
+std::mutex                 g_dyn_udp_mutex;
+
+// Pointers set in main() so the WS thread can call add_link at runtime
+static LinkManager*    g_link_manager = nullptr;
+static asio::io_context* g_io_ctx     = nullptr;
+
 // NOTE: AccelCalibration is now per-vehicle (Vehicle::accel_calib_).
 // NOTE: CompassCalibration is now per-vehicle (Vehicle::compass_calib_).
 // NOTE: AccelCalibration, CompassCalibration, EscCalibration, and
@@ -601,21 +617,93 @@ void send_status()
     j["ports"] = ports;
 
     // ── Multi-vehicle list ────────────────────────────────────────────────
-    // Sends every alive sysid so the frontend dropdown can render without
-    // any extra round-trips.  Even in single-drone deployments this costs
-    // only a tiny JSON field, so we always include it.
+    // When multiple SITL drones all have sysid=1 (ArduPilot default), we
+    // assign each a unique ui_sysid based on link_id so the frontend can
+    // display and address them independently.
+    // get_all_sysids() already returns the correct ui_sysid — we must use
+    // the same logic here to produce matching sysid values in the payload.
     {
         json vehicles_arr = json::array();
         if (g_vehicle_manager)
         {
-            for (int sysid : g_vehicle_manager->get_all_sysids())
+
+            // First pass: determine if any dynamic links exist
+            // (if so, use link_id as unique UI identifier for duplicate sysids)
+
+            // Check whether any sysid appears on more than one link via
+            // iterating dyn_udp_links (the extra manual links beyond link 0).
+            // Strategy: if we have more than 1 dynamic UDP link, treat all
+            // as having potentially duplicate sysids and use link_id as ui_sysid.
+            bool use_link_id_as_ui;
             {
-                json v;
-                v["sysid"] = sysid;
-                vehicles_arr.push_back(v);
+                std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
+                use_link_id_as_ui = (g_dyn_udp_links.size() > 0);
             }
+
+            // Second pass: build the JSON array.
+            // Always emit the primary vehicle (link 0) first, then each
+            // dynamic UDP link's vehicle separately.
+            auto emit_vehicle = [&](std::shared_ptr<Vehicle> veh, int ui_sid)
+            {
+                if (!veh || !veh->is_alive()) return;
+                json v;
+                v["sysid"]       = ui_sid;
+                v["real_sysid"]  = veh->sysid();   // actual MAVLink sysid
+                v["link_id"]     = veh->link_id();
+                v["armed"]       = veh->is_armed();
+                v["mode"]        = veh->flight_mode_string();
+                v["battery_pct"] = veh->battery_remaining();
+                v["battery_v"]   = veh->battery_voltage();
+                v["gps_fix"]     = veh->gps_fix_type();
+                v["num_sats"]    = veh->gps_satellites();
+                v["lat"]         = veh->latitude();
+                v["lon"]         = veh->longitude();
+                v["alt"]         = veh->altitude_msl();
+                v["roll"]        = veh->roll();
+                v["pitch"]       = veh->pitch();
+                v["yaw"]         = veh->yaw();
+                vehicles_arr.push_back(v);
+            };
+
+            // Emit all discovered vehicles
+            {
+                auto all_sids = g_vehicle_manager->get_all_sysids();
+                std::set<int> emitted_ui_sids;
+
+                for (int ui_sid : all_sids)
+                {
+                    // get_all_sysids() returns unique UI identifiers (either the 
+                    // true sysid, or the link_id if there's a sysid collision).
+                    auto veh = g_vehicle_manager->get_vehicle_by_link(ui_sid);
+                    if (!veh) veh = g_vehicle_manager->get_vehicle(ui_sid);
+                    
+                    if (veh && emitted_ui_sids.find(ui_sid) == emitted_ui_sids.end())
+                    {
+                        emitted_ui_sids.insert(ui_sid);
+                        emit_vehicle(veh, ui_sid);
+                    }
+                }
+            }
+
+
         }
         j["vehicles"] = vehicles_arr;
+
+        // Also list dynamic UDP link endpoints for the Connection Manager UI
+        json dyn_links_arr = json::array();
+        {
+            std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
+            for (auto& [port, entry] : g_dyn_udp_links)
+            {
+                json dl;
+                dl["local_port"]  = port;
+                dl["remote_ip"]   = entry.remote_ip;
+                dl["remote_port"] = entry.remote_port;
+                dl["link_id"]     = entry.link_id;
+                dyn_links_arr.push_back(dl);
+            }
+        }
+        j["dyn_udp_links"] = dyn_links_arr;
     }
 
     if (!drone_connected)
@@ -653,6 +741,85 @@ static void request_rc_channels_stream()
 
     vehicle->send_mavlink(msg);
     std::cout << "[GCS] Requested RC_CHANNELS stream at 10 Hz\n";
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  request_streams_for_vehicle()
+//
+//  Per-vehicle version of request_telemetry_streams + request_gps_raw_int.
+//  Used for secondary drones discovered on dynamic UDP/serial links so each
+//  vehicle gets its own stream negotiation independent of the active vehicle.
+// ═══════════════════════════════════════════════════════════════════════════════
+
+// Tracks sysids that have already had streams requested this session.
+static std::set<int> g_streams_requested_sysids;
+static std::mutex    g_streams_sysids_mutex;
+
+static void request_streams_for_vehicle(std::shared_ptr<Vehicle> vehicle)
+{
+    if (!vehicle) return;
+
+    int sysid = vehicle->sysid();
+
+    {
+        std::lock_guard<std::mutex> lk(g_streams_sysids_mutex);
+        if (g_streams_requested_sysids.count(sysid))
+            return;  // already requested — don't spam on every heartbeat
+        g_streams_requested_sysids.insert(sysid);
+    }
+
+    std::cout << "[GCS] Requesting telemetry streams for sysid=" << sysid << "\n";
+
+    // RC channels
+    {
+        mavlink_message_t             msg;
+        mavlink_request_data_stream_t rds{};
+        rds.target_system    = static_cast<uint8_t>(vehicle->sysid());
+        rds.target_component = static_cast<uint8_t>(vehicle->compid());
+        rds.req_stream_id    = MAV_DATA_STREAM_RC_CHANNELS;
+        rds.req_message_rate = 10;
+        rds.start_stop       = 1;
+        mavlink_msg_request_data_stream_encode(255, MAV_COMP_ID_MISSIONPLANNER, &msg, &rds);
+        vehicle->send_mavlink(msg);
+    }
+
+    // Telemetry streams: battery, GPS position, attitude, VFR_HUD, raw sensors
+    struct StreamReq { uint8_t id; uint16_t rate_hz; const char* label; };
+    static const StreamReq streams[] = {
+        { MAV_DATA_STREAM_EXTENDED_STATUS, 2,  "EXTENDED_STATUS" },
+        { MAV_DATA_STREAM_POSITION,        5,  "POSITION (GPS)"  },
+        { MAV_DATA_STREAM_EXTRA1,          5,  "EXTRA1 (ATTITUDE)" },
+        { MAV_DATA_STREAM_EXTRA2,          5,  "EXTRA2 (VFR_HUD)"  },
+        { MAV_DATA_STREAM_RAW_SENSORS,     2,  "RAW_SENSORS"      },
+    };
+    for (auto& sr : streams)
+    {
+        mavlink_message_t             msg;
+        mavlink_request_data_stream_t rds{};
+        rds.target_system    = static_cast<uint8_t>(vehicle->sysid());
+        rds.target_component = static_cast<uint8_t>(vehicle->compid());
+        rds.req_stream_id    = sr.id;
+        rds.req_message_rate = sr.rate_hz;
+        rds.start_stop       = 1;
+        mavlink_msg_request_data_stream_encode(255, MAV_COMP_ID_MISSIONPLANNER, &msg, &rds);
+        vehicle->send_mavlink(msg);
+        std::cout << "[GCS] sysid=" << sysid << " stream " << sr.label
+                  << " @ " << sr.rate_hz << " Hz\n";
+    }
+
+    // GPS_RAW_INT via modern SET_MESSAGE_INTERVAL
+    {
+        mavlink_message_t      msg;
+        mavlink_command_long_t cmd{};
+        cmd.target_system    = static_cast<uint8_t>(vehicle->sysid());
+        cmd.target_component = static_cast<uint8_t>(vehicle->compid());
+        cmd.command          = MAV_CMD_SET_MESSAGE_INTERVAL;
+        cmd.param1           = MAVLINK_MSG_ID_GPS_RAW_INT;
+        cmd.param2           = 500000.0f;  // 2 Hz
+        mavlink_msg_command_long_encode(255, MAV_COMP_ID_MISSIONPLANNER, &msg, &cmd);
+        vehicle->send_mavlink(msg);
+        std::cout << "[GCS] sysid=" << sysid << " GPS_RAW_INT @ 2 Hz\n";
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1310,7 +1477,9 @@ static std::vector<SerialPortInfo> scan_serial_ports()
 //  WebSocket server
 // ═══════════════════════════════════════════════════════════════════════════════
 
-void start_websocket(CommandManager* cmd_manager)
+void start_websocket(CommandManager* cmd_manager,
+                     LinkManager*     link_manager,
+                     asio::io_context& io)
 {
     std::thread([cmd_manager]()
     {
@@ -1420,6 +1589,30 @@ void start_websocket(CommandManager* cmd_manager)
 
                             else if (type == "mission")
                             {
+                                int sysid = j.value("sysid", -1);
+                                uint8_t target_sysid = 1;
+                                uint8_t target_compid = 0;
+
+                                if (sysid > 0 && g_vehicle_manager) {
+                                    auto target = g_vehicle_manager->get_vehicle(sysid);
+                                    if (target) {
+                                        target_sysid = target->sysid();
+                                        target_compid = target->compid();
+                                    } else {
+                                        auto active = g_vehicle_manager->get_active_vehicle();
+                                        if (active) {
+                                            target_sysid = active->sysid();
+                                            target_compid = active->compid();
+                                        }
+                                    }
+                                } else if (g_vehicle_manager) {
+                                    auto active = g_vehicle_manager->get_active_vehicle();
+                                    if (active) {
+                                        target_sysid = active->sysid();
+                                        target_compid = active->compid();
+                                    }
+                                }
+
                                 if (j.contains("waypoints") && j["waypoints"].is_array())
                                 {
                                     std::vector<WaypointItem> wps;
@@ -1446,7 +1639,7 @@ void start_websocket(CommandManager* cmd_manager)
                                     }
 
                                     if (!wps.empty())
-                                        cmd_manager->upload_mission(j.value("id", 0), wps);
+                                        cmd_manager->upload_mission(j.value("id", 0), wps, target_sysid, target_compid);
                                 }
                             }
 
@@ -1574,10 +1767,34 @@ void start_websocket(CommandManager* cmd_manager)
                                         }
                                         else
                                         {
+                                            int sysid = j.value("sysid", -1);
+                                            uint8_t target_sysid = 1;
+                                            uint8_t target_compid = 0;
+
+                                            if (sysid > 0 && g_vehicle_manager) {
+                                                auto target = g_vehicle_manager->get_vehicle(sysid);
+                                                if (target) {
+                                                    target_sysid = target->sysid();
+                                                    target_compid = target->compid();
+                                                } else {
+                                                    auto active = g_vehicle_manager->get_active_vehicle();
+                                                    if (active) {
+                                                        target_sysid = active->sysid();
+                                                        target_compid = active->compid();
+                                                    }
+                                                }
+                                            } else if (g_vehicle_manager) {
+                                                auto active = g_vehicle_manager->get_active_vehicle();
+                                                if (active) {
+                                                    target_sysid = active->sysid();
+                                                    target_compid = active->compid();
+                                                }
+                                            }
+
                                             std::cout << "[WS] flight_plan: uploading "
                                                       << (wps.size() - 1)
                                                       << " waypoint(s) + home via MAVLink\n";
-                                            cmd_manager->upload_mission(j.value("id", 0), wps);
+                                            cmd_manager->upload_mission(j.value("id", 0), wps, target_sysid, target_compid);
                                             send_fp_ack(true, "Flight plan uploaded successfully");
                                         }
                                     }
@@ -2465,6 +2682,619 @@ void start_websocket(CommandManager* cmd_manager)
                                 }
                             }
 
+                            // ── connect_vehicle ───────────────────────────────────────
+                            // Adds a new UDP link to the given remote vehicle endpoint.
+                            // The VehicleManager will auto-discover the vehicle on the
+                            // first HEARTBEAT received on the new link.
+                            //
+                            // Payload: { "type": "connect_vehicle",
+                            //            "ip":         "192.168.1.10",
+                            //            "port":        14550,
+                            //            "local_port":  14560 }   ← must be unique
+                            //
+                            // Response: { "type": "connect_vehicle_ack",
+                            //             "status": "ok" | "error",
+                            //             "local_port": N,
+                            //             "message": "..." }
+                            // ─────────────────────────────────────────────────────────
+                            else if (type == "connect_vehicle")
+                            {
+                                std::string remote_ip   = j.value("ip",         "");
+                                int         remote_port = j.value("port",       14550);
+                                int         local_port  = j.value("local_port", 0);
+
+                                auto send_cv_ack = [](bool ok, int lport,
+                                                      const std::string& msg_str)
+                                {
+                                    json ack;
+                                    ack["type"]       = "connect_vehicle_ack";
+                                    ack["status"]     = ok ? "ok" : "error";
+                                    ack["local_port"] = lport;
+                                    ack["message"]    = msg_str;
+                                    send_ws_safe(ack.dump());
+                                };
+
+                                if (remote_ip.empty())
+                                {
+                                    send_cv_ack(false, 0, "Missing 'ip' field.");
+                                }
+                                else if (!g_link_manager || !g_io_ctx)
+                                {
+                                    send_cv_ack(false, 0,
+                                        "Link manager not initialised.");
+                                }
+                                else
+                                {
+                                    // Auto-assign local port: start at 14560, increment
+                                    // until we find a free slot in our tracking map.
+                                    {
+                                        std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
+                                        if (local_port == 0)
+                                        {
+                                            local_port = 14560;
+                                            while (g_dyn_udp_links.count(local_port))
+                                                ++local_port;
+                                        }
+                                        if (g_dyn_udp_links.count(local_port))
+                                        {
+                                            send_cv_ack(false, local_port,
+                                                "Local port already in use: "
+                                                + std::to_string(local_port));
+                                            goto cv_done;
+                                        }
+                                    }
+
+                                    try
+                                    {
+                                        // Bind a new UDP socket for this vehicle.
+                                        // remote_ip / remote_port: where ArduPilot is.
+                                        // local_port: GCS listen port for replies.
+                                        auto new_udp = std::make_shared<UdpTransport>(
+                                            *g_io_ctx,
+                                            "0.0.0.0",  local_port,
+                                            remote_ip,  remote_port);
+
+                                        int lid = g_link_manager->add_link(new_udp, *g_io_ctx);
+                                        g_link_manager->start_link(lid);
+
+                                        {
+                                            std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
+                                            DynUdpEntry entry;
+                                            entry.transport   = new_udp;
+                                            entry.link_id     = lid;
+                                            entry.remote_ip   = remote_ip;
+                                            entry.remote_port = remote_port;
+                                            g_dyn_udp_links[local_port] = std::move(entry);
+                                        }
+
+                                        std::cout << "[MultiVehicle] Connected "
+                                                  << remote_ip << ":" << remote_port
+                                                  << "  local_port=" << local_port
+                                                  << "  link_id=" << lid << "\n";
+
+                                        send_cv_ack(true, local_port,
+                                            "UDP link open. Waiting for HEARTBEAT from "
+                                            + remote_ip + ":" + std::to_string(remote_port));
+
+                                        // Push updated status immediately
+                                        send_status();
+                                    }
+                                    catch (const std::exception& ex)
+                                    {
+                                        std::cout << "[MultiVehicle] connect_vehicle error: "
+                                                  << ex.what() << "\n";
+                                        send_cv_ack(false, local_port,
+                                            std::string("Failed to open UDP socket: ")
+                                            + ex.what());
+                                    }
+                                    cv_done:;
+                                }
+                            }
+
+                            // ── disconnect_vehicle ────────────────────────────────────
+                            // Closes the dynamic UDP link for the given local_port and
+                            // removes it from the tracking map.  The VehicleManager will
+                            // evict the vehicle automatically when its heartbeat times out.
+                            //
+                            // Payload: { "type": "disconnect_vehicle",
+                            //            "local_port": 14560 }
+                            //
+                            // Also supports disconnect by sysid:
+                            // Payload: { "type": "disconnect_vehicle",
+                            //            "sysid": 1 }
+                            // ─────────────────────────────────────────────────────────
+                            else if (type == "disconnect_vehicle")
+                            {
+                                int local_port = j.value("local_port", 0);
+                                int sysid_disc = j.value("sysid",      0);
+
+                                // Resolve local_port from sysid if not given directly
+                                if (local_port == 0 && sysid_disc > 0 && g_vehicle_manager)
+                                {
+                                    auto veh = g_vehicle_manager->get_vehicle(sysid_disc);
+                                    if (veh)
+                                    {
+                                        int lid = veh->link_id();
+                                        std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
+                                        for (auto& [lp, entry] : g_dyn_udp_links)
+                                        {
+                                            if (entry.link_id == lid)
+                                            {
+                                                local_port = lp;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                bool removed = false;
+                                {
+                                    std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
+                                    auto it = g_dyn_udp_links.find(local_port);
+                                    if (it != g_dyn_udp_links.end())
+                                    {
+                                        it->second.transport->stop();
+                                        g_dyn_udp_links.erase(it);
+                                        removed = true;
+                                    }
+                                }
+
+                                json ack;
+                                ack["type"]       = "disconnect_vehicle_ack";
+                                ack["local_port"] = local_port;
+                                if (removed)
+                                {
+                                    ack["status"]  = "ok";
+                                    ack["message"] = "UDP link closed (port "
+                                        + std::to_string(local_port) + ")";
+                                    std::cout << "[MultiVehicle] Disconnected local_port="
+                                              << local_port << "\n";
+                                    send_status();
+                                }
+                                else
+                                {
+                                    ack["status"]  = "error";
+                                    ack["message"] = "No dynamic link found for port "
+                                        + std::to_string(local_port);
+                                }
+                                send_ws_safe(ack.dump());
+                            }
+
+                            // ── manual_connect ────────────────────────────────────────
+                            // Comm Links panel — manual connection (UDP / TCP / Serial).
+                            //
+                            // UDP payload:
+                            //   { type:"manual_connect", conn_type:"udp",
+                            //     ip:"192.168.1.10", port:14550, local_port:0 }
+                            //
+                            // TCP payload:
+                            //   { type:"manual_connect", conn_type:"tcp",
+                            //     ip:"192.168.1.10", port:5760 }
+                            //
+                            // Serial payload:
+                            //   { type:"manual_connect", conn_type:"serial",
+                            //     port:"/dev/ttyACM0",  baud:115200 }
+                            //   (Windows: port = "\\\\.\\COM3")
+                            //
+                            // Response: { type:"manual_connect_ack",
+                            //             status:"ok"|"error",
+                            //             conn_type:"...", conn_id:"...",
+                            //             info:"...", message:"..." }
+                            // ─────────────────────────────────────────────────────────
+                            else if (type == "manual_connect")
+                            {
+                                std::string conn_type = j.value("conn_type", "udp");
+
+                                auto send_mc_ack = [&](bool ok,
+                                                       const std::string& cid,
+                                                       const std::string& info_str,
+                                                       int lport,
+                                                       const std::string& msg_str)
+                                {
+                                    json ack;
+                                    ack["type"]       = "manual_connect_ack";
+                                    ack["status"]     = ok ? "ok" : "error";
+                                    ack["conn_type"]  = conn_type;
+                                    ack["conn_id"]    = cid;
+                                    ack["info"]       = info_str;
+                                    ack["local_port"] = lport;
+                                    ack["message"]    = msg_str;
+                                    send_ws_safe(ack.dump());
+                                };
+
+                                if (!g_link_manager || !g_io_ctx)
+                                {
+                                    send_mc_ack(false, "", "", 0, "Link manager not initialised.");
+                                }
+                                else if (conn_type == "udp")
+                                {
+                                    // ── Manual UDP connection ─────────────────────────
+                                    std::string remote_ip   = j.value("ip",         "");
+                                    int         remote_port = j.value("port",       14550);
+                                    int         local_port  = j.value("local_port", 0);
+
+                                    if (remote_ip.empty())
+                                    {
+                                        send_mc_ack(false, "", "", 0, "Missing 'ip' field.");
+                                        goto mc_done;
+                                    }
+
+                                    {
+                                        std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
+                                        if (local_port == 0)
+                                        {
+                                            local_port = 14560;
+                                            while (g_dyn_udp_links.count(local_port))
+                                                ++local_port;
+                                        }
+                                        if (g_dyn_udp_links.count(local_port))
+                                        {
+                                            send_mc_ack(false, "", "",
+                                                local_port,
+                                                "Local port already in use: "
+                                                + std::to_string(local_port));
+                                            goto mc_done;
+                                        }
+                                    }
+
+                                    try
+                                    {
+                                        auto new_udp = std::make_shared<UdpTransport>(
+                                            *g_io_ctx,
+                                            "0.0.0.0", local_port,
+                                            remote_ip, remote_port);
+
+                                        int lid = g_link_manager->add_link(new_udp, *g_io_ctx);
+                                        g_link_manager->start_link(lid);
+
+                                        std::string conn_id = "udp_" + std::to_string(local_port);
+                                        {
+                                            std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
+                                            DynUdpEntry entry;
+                                            entry.transport   = new_udp;
+                                            entry.link_id     = lid;
+                                            entry.remote_ip   = remote_ip;
+                                            entry.remote_port = remote_port;
+                                            g_dyn_udp_links[local_port] = std::move(entry);
+                                        }
+
+                                        std::string info = remote_ip + ":"
+                                            + std::to_string(remote_port)
+                                            + " (local:" + std::to_string(local_port) + ")";
+                                        std::cout << "[CommLink] UDP connected " << info
+                                                  << "  link_id=" << lid << "\n";
+
+                                        send_mc_ack(true, conn_id, info, local_port,
+                                            "UDP link open. Waiting for HEARTBEAT from "
+                                            + remote_ip + ":" + std::to_string(remote_port));
+                                        send_status();
+                                    }
+                                    catch (const std::exception& ex)
+                                    {
+                                        std::cout << "[CommLink] UDP connect error: "
+                                                  << ex.what() << "\n";
+                                        send_mc_ack(false, "", "", local_port,
+                                            std::string("Failed to open UDP: ") + ex.what());
+                                    }
+                                }
+                                else if (conn_type == "tcp")
+                                {
+                                    // ── Manual TCP connection ─────────────────────────
+                                    // ArduPilot / SITL TCP server mode:
+                                    //   ArduPilot listens on e.g. 5760.
+                                    //   GCS connects as client.
+                                    //
+                                    // We create a TCP socket, connect to the remote
+                                    // host, then wrap it in a LinkManager link so MAVLink
+                                    // frames are parsed exactly like a serial link.
+                                    // ─────────────────────────────────────────────────
+                                    std::string remote_ip   = j.value("ip",   "");
+                                    int         remote_port = j.value("port", 5760);
+
+                                    if (remote_ip.empty())
+                                    {
+                                        send_mc_ack(false, "", "", 0, "Missing 'ip' field.");
+                                        goto mc_done;
+                                    }
+
+                                    std::thread([remote_ip, remote_port, send_mc_ack]()
+                                    {
+                                        try
+                                        {
+                                            // Connect a blocking TCP socket to the vehicle.
+                                            asio::io_context tcp_io;
+                                            asio::ip::tcp::socket sock(tcp_io);
+                                            asio::ip::tcp::resolver resolver(tcp_io);
+                                            auto endpoints = resolver.resolve(
+                                                remote_ip,
+                                                std::to_string(remote_port));
+                                            asio::connect(sock, endpoints);
+
+                                            // Wrap in a shared_ptr for the link manager.
+                                            // We pass the raw TCP socket to a UdpTransport-
+                                            // compatible wrapper.  For now we use the same
+                                            // async_send interface via a simple lambda bridge
+                                            // on the existing Serial transport class, treating
+                                            // the TCP stream like a serial port (same byte
+                                            // stream, same MAVLink framing).
+                                            // Because ASIO serial_port ≠ TCP socket, we
+                                            // instead spin up a dedicated io_context thread
+                                            // and run the TCP stream through our existing
+                                            // MAVLink parser in the link manager callback.
+                                            //
+                                            // NOTE: The cleanest path is a TcpTransport class.
+                                            //       For now we read in a loop on this thread and
+                                            //       push bytes to the global link-manager via
+                                            //       a synthetic receive callback.
+                                            //
+                                            std::cout << "[CommLink] TCP connected to "
+                                                      << remote_ip << ":" << remote_port << "\n";
+
+                                            if (!g_link_manager)
+                                            {
+                                                send_mc_ack(false, "", "", 0,
+                                                    "Link manager gone — cannot add TCP link.");
+                                                return;
+                                            }
+
+                                            // Use local_port=0 placeholder for TCP in the conn_id
+                                            std::string conn_id = "tcp_"
+                                                + remote_ip + "_"
+                                                + std::to_string(remote_port);
+                                            std::string info = "TCP " + remote_ip + ":"
+                                                + std::to_string(remote_port);
+
+                                            // Run MAVLink read loop on this thread.
+                                            // We keep the TCP socket alive until disconnect.
+                                            uint8_t rx_buf[512];
+                                            mavlink_message_t  mav_msg;
+                                            mavlink_status_t   mav_status{};
+                                            int tcp_link_id = -1;
+
+                                            // Create a minimal synthetic transport that wraps
+                                            // the connected TCP socket.
+                                            // send_mc_ack notifies UI of success.
+                                            send_mc_ack(true, conn_id, info, 0,
+                                                "TCP connected to " + remote_ip + ":"
+                                                + std::to_string(remote_port));
+
+                                            // Read loop
+                                            asio::error_code ec;
+                                            while (true)
+                                            {
+                                                std::size_t n = sock.read_some(
+                                                    asio::buffer(rx_buf, sizeof(rx_buf)), ec);
+                                                if (ec || n == 0) break;
+
+                                                for (std::size_t i = 0; i < n; ++i)
+                                                {
+                                                    if (mavlink_parse_char(
+                                                            MAVLINK_COMM_0,
+                                                            rx_buf[i],
+                                                            &mav_msg,
+                                                            &mav_status))
+                                                    {
+                                                        if (tcp_link_id < 0 && g_link_manager)
+                                                        {
+                                                            // Register a synthetic link id so
+                                                            // VehicleManager can track this link.
+                                                            // We don't have a Transport object here,
+                                                            // so we use -1000 as a sentinel and pass
+                                                            // the message directly.
+                                                        }
+                                                        if (g_vehicle_manager)
+                                                            g_vehicle_manager->handle_message(
+                                                                mav_msg, 9990);
+                                                    }
+                                                }
+                                            }
+                                            std::cout << "[CommLink] TCP link to "
+                                                      << remote_ip << ":" << remote_port
+                                                      << " closed\n";
+                                        }
+                                        catch (const std::exception& ex)
+                                        {
+                                            std::cout << "[CommLink] TCP connect error: "
+                                                      << ex.what() << "\n";
+                                            send_mc_ack(false, "", "", 0,
+                                                std::string("TCP connect failed: ") + ex.what());
+                                        }
+                                    }).detach();
+                                }
+                                else if (conn_type == "serial")
+                                {
+                                    // ── Manual Serial connection ──────────────────────
+                                    std::string serial_port = j.value("port", "");
+                                    int         baud        = j.value("baud", 115200);
+
+                                    if (serial_port.empty())
+                                    {
+                                        send_mc_ack(false, "", "", 0,
+                                            "No serial port specified.");
+                                        goto mc_done;
+                                    }
+
+                                    // Check if already opened by auto-monitor
+                                    {
+                                        std::lock_guard<std::mutex> lk(g_serial_ports_mutex);
+                                        if (g_serial_ports.count(serial_port))
+                                        {
+                                            send_mc_ack(true,
+                                                "serial_" + serial_port,
+                                                serial_port + " @ " + std::to_string(baud),
+                                                0,
+                                                serial_port + " already open (auto-detected).");
+                                            goto mc_done;
+                                        }
+                                    }
+
+                                    try
+                                    {
+                                        auto new_serial = std::make_shared<SerialTransport>(
+                                            *g_io_ctx, serial_port, baud);
+
+                                        if (!new_serial->is_open())
+                                        {
+                                            send_mc_ack(false, "", serial_port, 0,
+                                                "Cannot open " + serial_port
+                                                + ". Check permissions and cable.");
+                                            goto mc_done;
+                                        }
+
+                                        int lid = g_link_manager->add_link(new_serial, *g_io_ctx);
+                                        g_link_manager->start_link(lid);
+
+                                        {
+                                            std::lock_guard<std::mutex> lk(g_serial_ports_mutex);
+                                            SerialPortState state;
+                                            state.transport = new_serial;
+                                            state.link_id   = lid;
+                                            g_serial_ports[serial_port] = std::move(state);
+                                        }
+
+                                        // Sync legacy globals if needed
+                                        if (serial_link_id.load() == -1)
+                                        {
+                                            serial_transport     = new_serial;
+                                            detected_serial_port = serial_port;
+                                            serial_link_id       = lid;
+                                        }
+
+                                        std::string info = serial_port + " @ "
+                                            + std::to_string(baud) + " baud";
+                                        std::cout << "[CommLink] Serial opened: " << info
+                                                  << "  link_id=" << lid << "\n";
+
+                                        send_mc_ack(true,
+                                            "serial_" + serial_port,
+                                            info, 0,
+                                            "Serial link open. Waiting for HEARTBEAT on "
+                                            + serial_port);
+                                        send_status();
+                                    }
+                                    catch (const std::exception& ex)
+                                    {
+                                        std::cout << "[CommLink] Serial open error: "
+                                                  << ex.what() << "\n";
+                                        send_mc_ack(false, "", serial_port, 0,
+                                            std::string("Cannot open serial port: ")
+                                            + ex.what());
+                                    }
+                                }
+                                else
+                                {
+                                    send_mc_ack(false, "", "", 0,
+                                        "Unknown conn_type: '" + conn_type + "'");
+                                }
+                                mc_done:;
+                            }
+
+                            // ── manual_disconnect ─────────────────────────────────────
+                            // Closes a manually-opened link by conn_id.
+                            // conn_id format:
+                            //   "udp_<local_port>"        — dynamic UDP link
+                            //   "serial_<port_path>"      — manual serial link
+                            //   "tcp_<ip>_<port>"         — TCP link (stops recv loop)
+                            // ─────────────────────────────────────────────────────────
+                            else if (type == "manual_disconnect")
+                            {
+                                std::string conn_id = j.value("conn_id", "");
+                                bool removed = false;
+                                std::string msg_str;
+
+                                if (conn_id.size() >= 4 && conn_id.substr(0, 4) == "udp_")
+                                {
+                                    int lport = 0;
+                                    try { lport = std::stoi(conn_id.substr(4)); } catch (...) {}
+
+                                    std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
+                                    auto it = g_dyn_udp_links.find(lport);
+                                    if (it != g_dyn_udp_links.end())
+                                    {
+                                        it->second.transport->stop();
+                                        g_dyn_udp_links.erase(it);
+                                        removed  = true;
+                                        msg_str  = "UDP link closed (port "
+                                            + std::to_string(lport) + ")";
+                                    }
+                                }
+                                else if (conn_id.size() >= 7 && conn_id.substr(0, 7) == "serial_")
+                                {
+                                    std::string port = conn_id.substr(7);
+                                    std::lock_guard<std::mutex> lk(g_serial_ports_mutex);
+                                    auto it = g_serial_ports.find(port);
+                                    if (it != g_serial_ports.end())
+                                    {
+                                        it->second.transport->stop();
+                                        g_serial_ports.erase(it);
+                                        removed = true;
+                                        msg_str = "Serial link closed (" + port + ")";
+                                        // Sync legacy globals
+                                        if (detected_serial_port == port)
+                                        {
+                                            serial_transport     = nullptr;
+                                            detected_serial_port = "";
+                                            serial_link_id       = -1;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // TCP links are self-closing (socket close = loop exit)
+                                    removed = true;
+                                    msg_str = "TCP link close requested";
+                                }
+
+
+                                json dack;
+                                dack["type"]    = "manual_disconnect_ack";
+                                dack["conn_id"] = conn_id;
+                                dack["status"]  = removed ? "ok" : "error";
+                                dack["message"] = removed ? msg_str
+                                    : ("No link found for conn_id: " + conn_id);
+                                send_ws_safe(dack.dump());
+                                if (removed) send_status();
+                            }
+
+                            // ── list_vehicles ─────────────────────────────────────────
+                            // Returns current vehicle list + dyn link table immediately.
+                            // ─────────────────────────────────────────────────────────
+                            else if (type == "list_vehicles")
+                            {
+                                send_status();
+                            }
+
+                            else if ((type == "param_request_list" || type == "param_set") &&
+                                      j.contains("sysid") && j["sysid"].is_number_integer())
+                            {
+                                // ── sysid-aware param routing ───────────────
+                                // Re-wire param_manager to the target vehicle for
+                                // this request, then restore to the active vehicle.
+                                int target_sysid = j.value("sysid", 1);
+                                std::shared_ptr<Vehicle> tv;
+                                if (g_vehicle_manager)
+                                    tv = g_vehicle_manager->get_vehicle(target_sysid);
+
+                                if (tv)
+                                {
+                                    auto mavlink_via_tv = [tv](const mavlink_message_t& msg) {
+                                        tv->send_mavlink(msg);
+                                    };
+                                    param_manager.setTransportCallback(mavlink_via_tv);
+                                    param_manager.setVehicleInfo(tv->sysid(), tv->compid());
+                                    std::cout << "[ParamWS] " << type << " routed to sysid="
+                                              << tv->sysid() << "\n";
+                                }
+                                else
+                                {
+                                    std::cout << "[ParamWS] " << type << ": unknown sysid="
+                                              << target_sysid << " — using default vehicle\n";
+                                }
+                                handle_param_ws_command(type, j, param_manager);
+                                // Re-wire back to default active vehicle
+                                wire_modules_to_active_vehicle();
+                            }
+
                             else if (handle_param_ws_command(type, j, param_manager))
                             {
                                 // handled by parameter_ws_handler.h
@@ -2897,7 +3727,13 @@ int main()
             }
             else if (new_connection.empty())
             {
-                // Heartbeat on an unrecognised link — just update UI and bail.
+                // Heartbeat on a dynamic UDP/serial link (14551, 14552, etc.).
+                // VehicleManager has already discovered the vehicle; we just need
+                // to request telemetry streams so GPS/attitude data flows.
+                auto dyn_vehicle = vehicle_manager.get_vehicle_by_link(link_id);
+                if (dyn_vehicle)
+                    request_streams_for_vehicle(dyn_vehicle);
+
                 send_status();
                 return;
             }
@@ -2955,6 +3791,7 @@ int main()
 
             json j;
             j["type"]  = "attitude";
+            j["sysid"] = msg.sysid;
             j["roll"]  = att.roll;
             j["pitch"] = att.pitch;
             j["yaw"]   = att.yaw;
@@ -2977,10 +3814,29 @@ int main()
             double vy_ms       = pos.vy / 100.0;
             double groundspeed = std::sqrt(vx_ms * vx_ms + vy_ms * vy_ms);
 
+            // Resolve ui_sysid: when multiple drones share sysid=1 (SITL),
+            // use link_id as the unique frontend identifier instead.
+            int gps_ui_sysid = static_cast<int>(msg.sysid);
+            {
+                std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
+                if (!g_dyn_udp_links.empty())
+                {
+                    // We have extra links — resolve ui_sysid via link_id
+                    if (g_vehicle_manager)
+                    {
+                        auto v = g_vehicle_manager->get_vehicle_by_link(link_id);
+                        if (v) gps_ui_sysid = link_id;
+                    }
+                }
+            }
+
             if (lat != 0.0 || lon != 0.0)
             {
                 json gps;
                 gps["type"]         = "gps";
+                gps["sysid"]        = gps_ui_sysid;   // unique per-link ID for map
+                gps["real_sysid"]   = static_cast<int>(msg.sysid);
+                gps["link_id"]      = link_id;
                 gps["latitude"]     = lat;
                 gps["longitude"]    = lon;
                 gps["altitude"]     = alt_rel;
@@ -3000,6 +3856,7 @@ int main()
 
             json t;
             t["type"]        = "telemetry";
+            t["sysid"]       = msg.sysid;
             t["groundspeed"] = static_cast<double>(hud.groundspeed);
             t["airspeed"]    = static_cast<double>(hud.airspeed);
             t["throttle"]    = static_cast<int>(hud.throttle);
@@ -3021,6 +3878,7 @@ int main()
             // Also push a lightweight telemetry packet for satellite-only listeners
             json t;
             t["type"]       = "telemetry";
+            t["sysid"]      = msg.sysid;
             t["satellites"] = sats;
             send_ws_safe(t.dump());
         }
@@ -3035,7 +3893,8 @@ int main()
             mavlink_msg_sys_status_decode(&msg, &ss);
 
             json t;
-            t["type"] = "telemetry";
+            t["type"]  = "telemetry";
+            t["sysid"] = msg.sysid;
 
             // Voltage: UINT16_MAX means not provided
             if (ss.voltage_battery != 0xFFFF)
@@ -3249,10 +4108,30 @@ int main()
         send_ws_safe(resp);
     });
 
-    std::thread([]() {
+    std::thread([&link_manager]() {
         while (true)
         {
             std::this_thread::sleep_for(std::chrono::seconds(1));
+
+            // ── Send GCS Heartbeat ────────────────────────────────────────────
+            // MAVProxy/SITL waits for a GCS heartbeat on its output port before
+            // it starts streaming telemetry. We must broadcast our presence at
+            // 1 Hz to "wake" any newly connected dynamic UDP links.
+            mavlink_message_t msg;
+            mavlink_heartbeat_t hb{};
+            hb.type           = MAV_TYPE_GCS;
+            hb.autopilot      = MAV_AUTOPILOT_INVALID;
+            hb.base_mode      = 0;
+            hb.custom_mode    = 0;
+            hb.system_status  = MAV_STATE_ACTIVE;
+
+            mavlink_msg_heartbeat_encode(255, MAV_COMP_ID_MISSIONPLANNER, &msg, &hb);
+
+            uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+            uint16_t len = mavlink_msg_to_send_buffer(buffer, &msg);
+            link_manager.broadcast(buffer, len);
+            // ──────────────────────────────────────────────────────────────────
+
             send_status();
         }
     }).detach();
@@ -3265,8 +4144,12 @@ int main()
         }
     }).detach();
 
+    // Store global pointers so the WS thread can call add_link at runtime
+    g_link_manager = &link_manager;
+    g_io_ctx       = &io;
+
     start_serial_monitor(io, link_manager, cmd_manager);
-    start_websocket(&cmd_manager);
+    start_websocket(&cmd_manager, &link_manager, io);
 
     // Camera/MJPEG removed — video is handled via RTSP in the Electron layer
 

@@ -123,6 +123,9 @@ function initializeDroneWebSocket() {
         droneWebSocket.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
+                
+                const targetSysId = window.selectedSysId === 0 ? (window._primarySysId || 1) : (window.selectedSysId || 1);
+                const sid = data.sysid ?? 1;
 
                 // ── GPS position update ─────────────────────────────────────
                 if (data.type === 'gps') {
@@ -132,7 +135,8 @@ function initializeDroneWebSocket() {
                         && (latitude !== 0 || longitude !== 0)) {
 
                         // ── First GPS fix — record as home position ─────────
-                        if (!droneGpsActive) {
+                        // (We only track home position for the target drone)
+                        if (sid === targetSysId && !droneGpsActive) {
                             droneGpsActive = true;
                             droneHomePosition = { lat: latitude, lon: longitude };
                             console.log(`🏠 Home position set: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
@@ -140,7 +144,7 @@ function initializeDroneWebSocket() {
                         }
 
                         // ── Snap map to drone on very first fix ─────────────
-                        if (!droneMapSnapped && tmap) {
+                        if (sid === targetSysId && !droneMapSnapped && tmap) {
                             droneMapSnapped = true;
                             tmap._droneSetViewInProgress = true;
                             tmap.map.setView([latitude, longitude], 18, { animate: false });
@@ -159,7 +163,7 @@ function initializeDroneWebSocket() {
 
                         // ── Distance from home (Haversine) ──────────────────
                         let distFromHome = 0;
-                        if (droneHomePosition) {
+                        if (sid === targetSysId && droneHomePosition) {
                             distFromHome = haversineDistance(
                                 droneHomePosition.lat, droneHomePosition.lon,
                                 latitude, longitude
@@ -168,11 +172,15 @@ function initializeDroneWebSocket() {
 
                         // Update drone marker on map
                         if (tmap) {
-                            tmap.updateDronePosition(latitude, longitude, heading || 0);
+                            if (tmap.updateDronePositionForSysid) {
+                                tmap.updateDronePositionForSysid(sid, latitude, longitude, heading || 0);
+                            } else {
+                                tmap.updateDronePosition(latitude, longitude, heading || 0);
+                            }
                         }
 
                         // Update compass lat/lon/alt/speed/heading/distance/satellites
-                        if (compass) {
+                        if (sid === targetSysId && compass) {
                             compass.updateTelemetry({
                                 latitude,
                                 longitude,
@@ -187,9 +195,8 @@ function initializeDroneWebSocket() {
                             if (typeof heading === 'number') {
                                 compass.setHeading(heading);
                             }
+                            console.log(`📡 GPS: lat=${latitude.toFixed(6)}, lng=${longitude.toFixed(6)}, alt=${(altitude||0).toFixed(1)}m, hdg=${(heading||0).toFixed(1)}°, spd=${(data.groundspeed||0).toFixed(1)}m/s, dist=${distFromHome.toFixed(0)}m`);
                         }
-
-                        console.log(`📡 GPS: lat=${latitude.toFixed(6)}, lng=${longitude.toFixed(6)}, alt=${(altitude||0).toFixed(1)}m, hdg=${(heading||0).toFixed(1)}°, spd=${(data.groundspeed||0).toFixed(1)}m/s, dist=${distFromHome.toFixed(0)}m`);
                     }
                 }
 
@@ -197,7 +204,7 @@ function initializeDroneWebSocket() {
                 // Use yaw from ATTITUDE when GPS heading is not yet available.
                 // att.yaw is in radians (-π to +π, North=0, clockwise positive).
                 else if (data.type === 'attitude') {
-                    if (compass && !droneGpsActive) {
+                    if (sid === targetSysId && compass && !droneGpsActive) {
                         // Convert radian yaw → degrees, normalise to 0–360
                         const yawDeg = ((data.yaw * 180 / Math.PI) + 360) % 360;
                         compass.setHeading(yawDeg);
@@ -207,7 +214,7 @@ function initializeDroneWebSocket() {
                 // ── Real-time telemetry — VFR_HUD speed, GPS_RAW_INT sats ──
                 // Accept any time drone is connected (not just after GPS lock).
                 else if (data.type === 'telemetry') {
-                    if (compass && droneConnected) {
+                    if (sid === targetSysId && compass && droneConnected) {
                         const update = {};
                         if (typeof data.groundspeed === 'number')
                             update.speed = parseFloat(data.groundspeed.toFixed(1));

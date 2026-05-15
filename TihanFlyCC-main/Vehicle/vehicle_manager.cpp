@@ -243,13 +243,17 @@ VehicleManager::get_vehicle(int sysid) const
 {
     std::lock_guard<std::mutex> lock(mutex_);
 
-    // Search by sysid since the map key is now "sysid:link_id"
+    std::shared_ptr<Vehicle> found_dead = nullptr;
     for (const auto& [key, vehicle] : vehicles_)
     {
         if (vehicle && vehicle->sysid() == sysid)
-            return vehicle;
+        {
+            if (vehicle->is_alive())
+                return vehicle;
+            found_dead = vehicle;
+        }
     }
-    return nullptr;
+    return found_dead;
 }
 
 // ---------------------------------------------------------------------------

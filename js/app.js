@@ -398,7 +398,12 @@ class CompassBackend {
         };
 
         try {
-            this.ws.send(JSON.stringify(message));
+            if (window.sendToSelected) {
+                window.sendToSelected(message);
+            } else {
+                message.sysid = window.selectedSysId || 1;
+                this.ws.send(JSON.stringify(message));
+            }
             console.log('📤 Sent command:', command, params);
             return true;
         } catch (error) {

@@ -24,6 +24,48 @@
 console.log('🚀 Mission Send Module Loading...');
 
 // ============================================================================
+// QUEUE FOR BROADCASTING MISSIONS
+// ============================================================================
+
+window.missionQueue = [];
+window.missionQueueBusy = false;
+window.missionQueueTimer = null;
+
+window.pumpMissionQueue = function() {
+    if (window.missionQueueTimer) {
+        clearTimeout(window.missionQueueTimer);
+        window.missionQueueTimer = null;
+    }
+    
+    if (window.missionQueue.length === 0) {
+        window.missionQueueBusy = false;
+        return;
+    }
+    window.missionQueueBusy = true;
+    const msg = window.missionQueue.shift();
+    if (window.ws && window.ws.readyState === WebSocket.OPEN) {
+        window.ws.send(JSON.stringify(msg));
+        console.log(`📤 Dequeued and sent mission/markers to drone sysid=${msg.sysid}`);
+        
+        // 5-second timeout in case backend/drone doesn't ACK
+        window.missionQueueTimer = setTimeout(() => {
+            console.warn(`⚠️ Mission ACK timeout for drone sysid=${msg.sysid}, proceeding with queue...`);
+            window.pumpMissionQueue();
+        }, 5000);
+    } else {
+        console.error('❌ WebSocket not open, dropping queued mission');
+        window.pumpMissionQueue(); // Try next
+    }
+};
+
+window.queueMissionPayload = function(msg) {
+    window.missionQueue.push(msg);
+    if (!window.missionQueueBusy) {
+        window.pumpMissionQueue();
+    }
+};
+
+// ============================================================================
 // ROUTER
 // ============================================================================
 
@@ -126,8 +168,17 @@ PlanFlightMode.prototype.sendMarkersToDrone = function() {
     }
 
     try {
-        window.ws.send(JSON.stringify(message));
-        console.log('✅ Send Markers message sent to backend');
+        if (window.selectedSysId === 0 && window.activeSysids && window.activeSysids.length > 0) {
+            window.activeSysids.forEach(sysid => {
+                const msg = { ...message, sysid: sysid };
+                window.queueMissionPayload(msg);
+            });
+            console.log('✅ Send Markers queued for all drones');
+        } else {
+            message.sysid = window.selectedSysId || 1;
+            window.queueMissionPayload(message);
+            console.log(`✅ Send Markers queued for drone ${message.sysid}`);
+        }
         showSentPayloadOverlay(flightPlan);
     } catch (err) {
         console.error('❌ Failed to send markers:', err);
@@ -287,8 +338,17 @@ PlanFlightMode.prototype.sendMissionToDrone = function() {
     }
 
     try {
-        window.ws.send(JSON.stringify(message));
-        console.log('✅ Mission sent to backend');
+        if (window.selectedSysId === 0 && window.activeSysids && window.activeSysids.length > 0) {
+            window.activeSysids.forEach(sysid => {
+                const msg = { ...message, sysid: sysid };
+                window.queueMissionPayload(msg);
+            });
+            console.log('✅ Mission queued for all drones');
+        } else {
+            message.sysid = window.selectedSysId || 1;
+            window.queueMissionPayload(message);
+            console.log(`✅ Mission queued for drone ${message.sysid}`);
+        }
 
         // Show the same "Mission Uploaded" popup as the Send Markers button
         const summaryPayload = {
@@ -317,22 +377,26 @@ PlanFlightMode.prototype.sendMissionToDrone = function() {
 function handleMissionAck(message) {
     console.log('📋 Mission ACK received:', message);
     if (message.status === 'success') {
-        if (window.MsgConsole) window.MsgConsole.success('Mission uploaded ✅');
+        if (window.MsgConsole) window.MsgConsole.success(`Mission uploaded ✅ (Drone ${message.sysid || ''})`);
     } else {
-        if (window.MsgConsole) window.MsgConsole.error('Mission upload failed: ' + (message.message || 'unknown error'));
+        if (window.MsgConsole) window.MsgConsole.error(`Mission upload failed (Drone ${message.sysid || ''}): ` + (message.message || 'unknown error'));
     }
+    setTimeout(() => window.pumpMissionQueue(), 500); // small delay to let drone settle
 }
 window.handleMissionAck = handleMissionAck;
 
 function handleFlightPlanAck(message) {
     console.log('📋 Flight Plan ACK received:', message);
+    // Note: If backend converts flight_plan to mission, it actually sends mission_ack instead.
+    // If it uses flight_plan_ack, we handle it here:
     if (message.status === 'success') {
         console.log('✅ Markers received by drone');
-        if (window.MsgConsole) window.MsgConsole.success('Markers delivered to drone ✅');
+        if (window.MsgConsole) window.MsgConsole.success(`Markers delivered to drone ✅ (Drone ${message.sysid || ''})`);
     } else {
         console.error('❌ Flight plan send failed:', message.message);
-        if (window.MsgConsole) window.MsgConsole.error('Send markers failed: ' + (message.message || 'unknown error'));
+        if (window.MsgConsole) window.MsgConsole.error(`Send markers failed (Drone ${message.sysid || ''}): ` + (message.message || 'unknown error'));
     }
+    setTimeout(() => window.pumpMissionQueue(), 500);
 }
 window.handleFlightPlanAck = handleFlightPlanAck;
 

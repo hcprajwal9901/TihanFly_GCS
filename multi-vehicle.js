@@ -1,174 +1,436 @@
 /**
- * multi-vehicle.js
- * TiHANFly GCS — Multi-Vehicle Support
+ * multi-vehicle.js  —  TiHANFly GCS  (v2)
  *
- * The WebSocket is intercepted at constructor level inside MainWindow.html
- * (the <script> block in <head>, before any other scripts).  That patch:
- *   • Stores every socket as window.ws
- *   • Attaches an addEventListener('message') that calls
- *     window.updateVehicleSelector(msg.vehicles) on every status packet
- *
- * So this file only needs to:
- *   1. Define sendToSelected(payload)
- *   2. Define updateVehicleSelector(sysids)   ← renders drone tab strip
- *   3. Wire tab click events
- *
- * No polling, no onmessage wrapping, no dependency on websocket.js internals.
+ * Adds:
+ *   • sendToSelected(payload)         — routes any command to the selected sysid
+ *   • updateVehicleSelector(vehicles) — renders telemetry cards for every drone
+ *   • Connection Manager modal        — connect_vehicle / disconnect_vehicle
+ *   • Fleet count badge updates
  *
  * Load order: AFTER websocket.js, BEFORE app.js.
  */
 
-// ── sendToSelected(payload) ──────────────────────────────────────────────────
+'use strict';
+
+// ── State ────────────────────────────────────────────────────────────────────
+window.selectedSysId = 1;
+let _dynLinks = [];   // copy of dyn_udp_links from last status packet
+
+// ── sendToSelected ────────────────────────────────────────────────────────────
 function sendToSelected(payload) {
     if (!window.ws || window.ws.readyState !== WebSocket.OPEN) {
-        console.warn('[MultiVehicle] sendToSelected: socket not open — dropped', payload);
+        console.warn('[MV] sendToSelected: socket not open', payload);
         return;
     }
-    payload.sysid = window.selectedSysId ?? 1;
-    window.ws.send(JSON.stringify(payload));
-    console.log('[MultiVehicle] sendToSelected → sysid=' + payload.sysid, payload);
+    if (window.selectedSysId === 0 && window.activeSysids && window.activeSysids.length > 0) {
+        window.activeSysids.forEach(sysid => {
+            const msg = { ...payload, sysid: sysid };
+            window.ws.send(JSON.stringify(msg));
+        });
+        console.log('[MV] Broadcasted to all drones:', payload.type || payload.cmd_id);
+    } else {
+        payload.sysid = window.selectedSysId ?? 1;
+        window.ws.send(JSON.stringify(payload));
+    }
 }
 window.sendToSelected = sendToSelected;
 
-
-// ── updateVehicleSelector(sysids) ────────────────────────────────────────────
+// ── updateVehicleSelector(vehicles) ─────────────────────────────────────────
 /**
- * Accepts both formats from the backend:
- *   [{"sysid": 1, "battery": 92, "mode": "HOLD", "armed": true}]
- *   [{"sysid": 1}, {"sysid": 2}]
- *   [1, 2]   ← plain integers (also supported)
+ * Called from the WebSocket 'status' message handler.
+ * vehicles = array of:
+ *   { sysid, armed, mode, battery_pct, battery_v,
+ *     gps_fix, num_sats, lat, lon, alt, link_id }
+ * dyn_links = array of:
+ *   { local_port, remote_ip, remote_port, link_id }
  */
-function updateVehicleSelector(sysids) {
-    if (!Array.isArray(sysids)) sysids = [];
+function updateVehicleSelector(vehicles, dynLinks) {
+    if (!Array.isArray(vehicles)) vehicles = [];
+    _dynLinks = Array.isArray(dynLinks) ? dynLinks : [];
 
-    // Normalise to [{id, battery, armed, mode}]
-    var vehicles = sysids.map(function(item) {
-        if (item !== null && typeof item === 'object') {
-            return {
-                id:      item.sysid,
-                battery: typeof item.battery === 'number' ? item.battery : null,
-                armed:   !!item.armed,
-                mode:    item.mode || null
-            };
-        }
-        return { id: item, battery: null, armed: false, mode: null };
-    }).filter(function(v) {
-        return typeof v.id === 'number' && v.id > 0;
-    });
+    const count = vehicles.length;
+    const ids   = vehicles.map(v => (typeof v === 'object' ? v.sysid : v));
+    window.activeSysids = ids;
 
-    var count = vehicles.length;
-    var ids   = vehicles.map(function(v) { return v.id; });
-
-    // ── 1. Fleet count badge ─────────────────────────────────────────────────
-    var badge    = document.getElementById('droneCountBadge');
-    var dot      = document.getElementById('droneCountDot');
-    var countTxt = document.getElementById('droneCountText');
-
+    // ── Fleet count badge ────────────────────────────────────────────────────
+    const badge    = document.getElementById('droneCountBadge');
+    const dot      = document.getElementById('droneCountDot');
+    const countTxt = document.getElementById('droneCountText');
     if (badge && dot && countTxt) {
         countTxt.textContent = count + (count === 1 ? ' DRONE' : ' DRONES');
-        if (count > 0) {
-            badge.style.color       = '#4fc3f7';
-            badge.style.borderColor = '#1e4a7a';
-            dot.style.background    = '#4ade80';
-            dot.style.boxShadow     = '0 0 5px rgba(74,222,128,0.7)';
-            dot.style.animation     = 'dronePulse 1.4s ease-in-out infinite';
-        } else {
-            badge.style.color       = '#e57373';
-            badge.style.borderColor = '#2e3a4a';
-            dot.style.background    = '#e57373';
-            dot.style.boxShadow     = 'none';
-            dot.style.animation     = 'none';
-        }
+        const ok = count > 0;
+        badge.style.color       = ok ? '#4fc3f7' : '#e57373';
+        badge.style.borderColor = ok ? '#1e4a7a' : '#2e3a4a';
+        dot.style.background    = ok ? '#4ade80' : '#e57373';
+        dot.style.boxShadow     = ok ? '0 0 5px rgba(74,222,128,0.7)' : 'none';
+        dot.style.animation     = ok ? 'dronePulse 1.4s ease-in-out infinite' : 'none';
     }
 
-    // ── 2. Tab strip (only shown for 2+ drones) ──────────────────────────────
-    var wrap = document.getElementById('vehicleSelectorWrap');
-    var sel  = document.getElementById('vehicleSelector');   // hidden, kept for compat
+    // ── Normalise vehicles ────────────────────────────────────────────────────
+    const list = vehicles.map(item => {
+        if (item !== null && typeof item === 'object') return item;
+        return { sysid: item };
+    }).filter(v => typeof v.sysid === 'number' && v.sysid > 0);
 
+    // ── Hidden <select> (legacy compat) ──────────────────────────────────────
+    const sel = document.getElementById('vehicleSelector');
+    if (sel) {
+        const prev = sel.value;
+        sel.innerHTML = '';
+        ids.forEach(id => {
+            const o = document.createElement('option');
+            o.value = id; o.textContent = 'Drone ' + id;
+            sel.appendChild(o);
+        });
+        sel.value = ids.includes(+prev) ? prev : ids[0];
+    }
+
+    // ── Preserve selected sysid ───────────────────────────────────────────────
+    if (window.selectedSysId !== 0 && !ids.includes(window.selectedSysId)) {
+        window.selectedSysId = ids[0] ?? 1;
+    }
+
+    // ── Tab strip wrapper ─────────────────────────────────────────────────────
+    const wrap = document.getElementById('vehicleSelectorWrap');
     if (!wrap) return;
 
-    if (count <= 1) {
-        wrap.style.display = 'none';
-        if (count === 1) {
-            window.selectedSysId = ids[0];
-            if (sel) {
-                sel.innerHTML = '';
-                var o = document.createElement('option');
-                o.value = ids[0]; o.textContent = ids[0]; sel.appendChild(o);
-                sel.value = ids[0];
-            }
-        }
-        return;
-    }
+    // Remove old vehicle tabs (keep the Add button)
+    wrap.querySelectorAll('.mv-drone-tab').forEach(el => el.remove());
 
-    wrap.style.display = 'flex';
+    // (Removed inline display override to let dropdown CSS handle visibility)
 
-    var prevSysId = window.selectedSysId ?? ids[0];
-    if (ids.indexOf(prevSysId) === -1) prevSysId = ids[0];
-    window.selectedSysId = prevSysId;
+    // ── Build one card per drone ──────────────────────────────────────────────
+    list.forEach(v => {
+        const tab = document.createElement('div');
+        const isActive = v.sysid === window.selectedSysId;
+        tab.className = 'mv-drone-tab' + (isActive ? ' mv-active' : '');
+        tab.dataset.sysid = v.sysid;
 
-    // Remove old tabs; keep the hidden <select>
-    Array.from(wrap.querySelectorAll('.mv-drone-tab')).forEach(function(el) { el.remove(); });
+        const pct  = typeof v.battery_pct === 'number' ? v.battery_pct : -1;
+        const batV = typeof v.battery_v   === 'number' ? v.battery_v.toFixed(1) : '–';
+        const mode = v.mode  || '–';
+        const sats = v.num_sats ?? '–';
+        const fix  = v.gps_fix ?? 0;
+        const armed = !!v.armed;
 
-    // Rebuild hidden <select> for backward compat
-    if (sel) {
-        sel.innerHTML = '';
-        ids.forEach(function(id) {
-            var opt = document.createElement('option');
-            opt.value = id; opt.textContent = id; sel.appendChild(opt);
-        });
-        sel.value = prevSysId;
-    }
+        // battery colour class
+        let dotCls = 'mv-dot';
+        if (pct >= 0 && pct < 20)      dotCls += ' mv-err';
+        else if (pct >= 0 && pct < 40) dotCls += ' mv-warn';
 
-    // Build one tab per drone
-    vehicles.forEach(function(v) {
-        var tab = document.createElement('div');
-        tab.className = 'mv-drone-tab' + (v.id === prevSysId ? ' mv-active' : '');
-        tab.dataset.sysid = v.id;
+        // GPS fix label
+        const fixStr = ['NO GPS','No Fix','2D Fix','3D Fix','DGPS','RTK Float','RTK Fixed'][fix] || '–';
 
-        // Dot colour: low battery = amber/red, else green
-        var dotClass = 'mv-dot';
-        if (v.battery !== null && v.battery < 20)       dotClass += ' mv-err';
-        else if (v.battery !== null && v.battery < 40)  dotClass += ' mv-warn';
+        tab.innerHTML = `
+          <div class="mv-tab-top">
+            <span class="${dotCls}"></span>
+            <span class="mv-label">D-${v.sysid}</span>
+            <span class="mv-arm-badge ${armed ? 'mv-armed' : 'mv-disarmed'}">${armed ? 'ARMED' : 'DSRM'}</span>
+          </div>
+          <div class="mv-tab-row"><span class="mv-ico">✈</span>${mode}</div>
+          <div class="mv-tab-row"><span class="mv-ico">🔋</span>${pct >= 0 ? pct + '% ' + batV + 'V' : '–'}</div>
+          <div class="mv-tab-row"><span class="mv-ico">📡</span>${fixStr} · ${sats} sats</div>`;
 
-        // Label: "D-1" or "D-1 · 84%" when battery is available
-        var label = 'D-' + v.id;
-        if (v.battery !== null) label += ' · ' + v.battery + '%';
-
-        tab.innerHTML = '<span class="' + dotClass + '"></span>' + label;
-
-        tab.addEventListener('click', function() {
-            window.selectedSysId = v.id;
-            wrap.querySelectorAll('.mv-drone-tab').forEach(function(t) {
-                t.classList.remove('mv-active');
-            });
+        tab.addEventListener('click', () => {
+            window.selectedSysId = v.sysid;
+            wrap.querySelectorAll('.mv-drone-tab').forEach(t => t.classList.remove('mv-active'));
             tab.classList.add('mv-active');
-            if (sel) sel.value = v.id;
-            console.log('[MultiVehicle] Active drone → sysid=' + v.id);
-
-            // Brief highlight flash
-            tab.style.transition = 'none';
-            tab.style.borderColor = 'rgba(82,185,255,0.8)';
-            setTimeout(function() {
-                tab.style.transition = '';
-                tab.style.borderColor = '';
-            }, 450);
+            if (sel) sel.value = v.sysid;
+            console.log('[MV] Active drone → sysid=' + v.sysid);
         });
 
-        if (sel) wrap.insertBefore(tab, sel);
-        else     wrap.appendChild(tab);
+        // Insert tab into wrap
+        wrap.appendChild(tab);
     });
+
+    // ── Build "All Drones" card if >1 drone ──────────────────────────────────
+    if (list.length > 1) {
+        const tab = document.createElement('div');
+        const isActive = window.selectedSysId === 0;
+        tab.className = 'mv-drone-tab' + (isActive ? ' mv-active' : '');
+        tab.dataset.sysid = 0;
+
+        tab.innerHTML = `
+          <div class="mv-tab-top">
+            <span class="mv-dot" style="background:#b388ff;box-shadow:0 0 5px #b388ff;"></span>
+            <span class="mv-label">All Drones</span>
+            <span class="mv-arm-badge" style="background:transparent;border:1px solid #b388ff;color:#b388ff;">FLEET</span>
+          </div>
+          <div class="mv-tab-row"><span class="mv-ico">👥</span>${list.length} Vehicles Connected</div>
+          <div class="mv-tab-row"><span class="mv-ico">⚡</span>Broadcast Commands</div>
+        `;
+
+        tab.addEventListener('click', () => {
+            window.selectedSysId = 0;
+            wrap.querySelectorAll('.mv-drone-tab').forEach(t => t.classList.remove('mv-active'));
+            tab.classList.add('mv-active');
+            if (sel) {
+                // Try to keep it pointing to something valid, or 0 if supported
+                let opt = Array.from(sel.options).find(o => o.value == 0);
+                if (!opt) {
+                    opt = document.createElement('option');
+                    opt.value = 0;
+                    opt.textContent = 'All Drones';
+                    sel.appendChild(opt);
+                }
+                sel.value = 0;
+            }
+            console.log('[MV] Active drone → ALL (sysid=0)');
+            
+            // Force an update to show the first drone's data on compass/header
+            if (list.length > 0) {
+                window._primarySysId = list[0].sysid;
+            }
+        });
+
+        wrap.appendChild(tab);
+    }
+    
+    if (list.length > 0) {
+        window._primarySysId = list[0].sysid;
+    }
 }
 window.updateVehicleSelector = updateVehicleSelector;
 
+// ── Connection Manager modal ──────────────────────────────────────────────────
+function buildConnectionManagerModal() {
+    if (document.getElementById('mvConnModal')) return;
 
-// ── Hidden <select> change — kept for any legacy code that reads vehicleSelector ──
+    const modal = document.createElement('div');
+    modal.id = 'mvConnModal';
+    modal.style.cssText = `
+        display:none;position:fixed;inset:0;z-index:9999;
+        background:rgba(0,0,0,.65);backdrop-filter:blur(4px);
+        align-items:center;justify-content:center;`;
+
+    modal.innerHTML = `
+      <div style="background:#0d1b2e;border:1px solid #1e4a7a;border-radius:12px;
+                  padding:24px;min-width:340px;max-width:440px;width:90%;
+                  box-shadow:0 8px 40px rgba(0,0,0,.6);font-family:inherit;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+          <h3 style="margin:0;color:#4fc3f7;font-size:1rem;letter-spacing:.06em;">⚡ CONNECT VEHICLE</h3>
+          <button id="mvConnClose" style="background:none;border:none;color:#7ba3c4;font-size:1.2rem;cursor:pointer;">✕</button>
+        </div>
+
+        <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;">Remote IP</label>
+        <input id="mvRemoteIp" type="text" placeholder="192.168.1.10" value="127.0.0.1"
+          style="width:100%;box-sizing:border-box;background:#07111f;border:1px solid #1e4a7a;
+                 color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;margin-bottom:12px;">
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          <div>
+            <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;">Remote Port</label>
+            <input id="mvRemotePort" type="number" value="14550"
+              style="width:100%;box-sizing:border-box;background:#07111f;border:1px solid #1e4a7a;
+                     color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;">
+          </div>
+          <div>
+            <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;">Local Port <span style="color:#4a6a8a">(auto)</span></label>
+            <input id="mvLocalPort" type="number" placeholder="auto"
+              style="width:100%;box-sizing:border-box;background:#07111f;border:1px solid #1e4a7a;
+                     color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;">
+          </div>
+        </div>
+
+        <button id="mvConnectBtn"
+          style="width:100%;padding:10px;background:linear-gradient(135deg,#1565c0,#0d47a1);
+                 border:none;border-radius:8px;color:#fff;font-size:.9rem;font-weight:600;
+                 cursor:pointer;letter-spacing:.04em;margin-bottom:10px;
+                 transition:opacity .2s;">
+          CONNECT
+        </button>
+
+        <div id="mvConnStatus" style="color:#7ba3c4;font-size:.8rem;min-height:20px;text-align:center;"></div>
+
+        <hr style="border-color:#1e4a7a;margin:16px 0 12px;">
+        <div style="color:#7ba3c4;font-size:.78rem;margin-bottom:8px;">Active UDP Links</div>
+        <div id="mvLinkList" style="max-height:130px;overflow-y:auto;"></div>
+      </div>`;
+
+    document.body.appendChild(modal);
+
+    // Close
+    document.getElementById('mvConnClose').onclick = () => modal.style.display = 'none';
+    modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+
+    // Connect button
+    document.getElementById('mvConnectBtn').onclick = () => {
+        const ip    = document.getElementById('mvRemoteIp').value.trim();
+        const rport = parseInt(document.getElementById('mvRemotePort').value) || 14550;
+        const lport = parseInt(document.getElementById('mvLocalPort').value)  || 0;
+        const status = document.getElementById('mvConnStatus');
+        if (!ip) { status.style.color='#e57373'; status.textContent='Enter a remote IP address.'; return; }
+        status.style.color = '#4fc3f7';
+        status.textContent = 'Opening UDP socket…';
+        if (window.ws && window.ws.readyState === WebSocket.OPEN) {
+            window.ws.send(JSON.stringify({ type:'connect_vehicle', ip, port:rport, local_port:lport }));
+        } else {
+            status.style.color = '#e57373';
+            status.textContent = 'WebSocket not connected.';
+        }
+    };
+}
+
+function openConnectionManager() {
+    buildConnectionManagerModal();
+    _renderLinkList();
+    document.getElementById('mvConnModal').style.display = 'flex';
+}
+window.openConnectionManager = openConnectionManager;
+
+// Render active dynamic link list inside modal
+function _renderLinkList() {
+    const list = document.getElementById('mvLinkList');
+    if (!list) return;
+    if (_dynLinks.length === 0) {
+        list.innerHTML = '<div style="color:#4a6a8a;font-size:.8rem;text-align:center;">No extra links active</div>';
+        return;
+    }
+    list.innerHTML = _dynLinks.map(dl => `
+      <div style="display:flex;align-items:center;justify-content:space-between;
+                  background:#07111f;border:1px solid #1e4a7a;border-radius:6px;
+                  padding:7px 10px;margin-bottom:6px;font-size:.8rem;color:#b0cce0;">
+        <span>:${dl.local_port} → ${dl.remote_ip}:${dl.remote_port}</span>
+        <button data-lport="${dl.local_port}"
+          style="background:#7f1d1d;border:none;border-radius:5px;color:#fca5a5;
+                 padding:3px 8px;cursor:pointer;font-size:.75rem;">
+          ✕ Disconnect
+        </button>
+      </div>`).join('');
+
+    list.querySelectorAll('button[data-lport]').forEach(btn => {
+        btn.onclick = () => {
+            const lp = parseInt(btn.dataset.lport);
+            if (window.ws && window.ws.readyState === WebSocket.OPEN) {
+                window.ws.send(JSON.stringify({ type:'disconnect_vehicle', local_port:lp }));
+                btn.textContent = '…'; btn.disabled = true;
+            }
+        };
+    });
+}
+
+// ── Handle backend acknowledgements ──────────────────────────────────────────
+function handleMvMessage(msg) {
+    if (msg.type === 'connect_vehicle_ack') {
+        const status = document.getElementById('mvConnStatus');
+        if (!status) return;
+        if (msg.status === 'ok') {
+            status.style.color = '#4ade80';
+            status.textContent = '✓ ' + msg.message;
+        } else {
+            status.style.color = '#e57373';
+            status.textContent = '✗ ' + msg.message;
+        }
+        return;
+    }
+    if (msg.type === 'disconnect_vehicle_ack') {
+        _renderLinkList();
+    }
+}
+window._mvHandleMessage = handleMvMessage;
+
+// ── Add "+" button to the vehicle selector wrap ───────────────────────────────
+function ensureAddButton() {
+    const wrap = document.getElementById('vehicleSelectorWrap');
+    if (!wrap || wrap.querySelector('#mvAddDroneBtn')) return;
+    const btn = document.createElement('button');
+    btn.id = 'mvAddDroneBtn';
+    btn.title = 'Connect another vehicle';
+    btn.textContent = '+';
+    btn.style.cssText = `
+        background:linear-gradient(135deg,#1e4a7a,#0d2b45);
+        border:1px solid #1e7a8a;border-radius:8px;
+        color:#4fc3f7;font-size:1.1rem;font-weight:700;
+        width:42px;height:42px;cursor:pointer;flex-shrink:0;
+        transition:background .2s;`;
+    btn.onmouseenter = () => btn.style.background = 'linear-gradient(135deg,#1565c0,#0d47a1)';
+    btn.onmouseleave = () => btn.style.background = 'linear-gradient(135deg,#1e4a7a,#0d2b45)';
+    btn.onclick = () => openConnectionManager();
+    wrap.appendChild(btn);
+}
+
+// ── Hook into the WebSocket status message ────────────────────────────────────
+// The global ws 'message' handler in MainWindow.html (or websocket.js) already
+// calls window.updateVehicleSelector.  We patch it here to also pass dyn_links.
+(function patchStatusHandler() {
+    const _orig = window.updateVehicleSelector;
+    // updateVehicleSelector is already our function above — this is a no-op shim
+    // kept for safety if another script re-assigns it.
+    window._mvPatchedHandler = true;
+})();
+
+// Wire hidden <select> change for any legacy code
 (function wireDropdown() {
-    var sel = document.getElementById('vehicleSelector');
+    const sel = document.getElementById('vehicleSelector');
     if (!sel) { document.addEventListener('DOMContentLoaded', wireDropdown); return; }
     sel.addEventListener('change', function () {
         window.selectedSysId = parseInt(this.value, 10);
-        console.log('[MultiVehicle] (select fallback) Active drone → sysid=' + window.selectedSysId);
     });
-    console.log('[MultiVehicle] wired ✓  initial sysid=' + (window.selectedSysId ?? 1));
+    console.log('[MV] wired ✓  initial sysid=' + (window.selectedSysId ?? 1));
+})();
+
+
+
+// Inject card styles
+(function injectStyles() {
+    if (document.getElementById('mvStyles')) return;
+    const s = document.createElement('style');
+    s.id = 'mvStyles';
+    s.textContent = `
+    #vehicleSelectorWrap {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 5px;
+        flex-direction: column; gap: 8px; align-items: stretch;
+        padding: 8px;
+        background: rgba(10, 20, 35, 0.95);
+        border: 1px solid #1e4a7a;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        z-index: 10000;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    #vehicleSelectorWrap.show-dropdown {
+        display: flex !important;
+    }
+    .mv-drone-tab {
+        background: linear-gradient(160deg, #0d1b2e, #07111f);
+        border: 1px solid #1e4a7a;
+        border-radius: 10px;
+        padding: 8px 12px;
+        cursor: pointer;
+        min-width: 160px;
+        font-size: .78rem;
+        color: #7ba3c4;
+        transition: border-color .2s, background .2s;
+        flex-shrink: 0;
+    }
+    .mv-drone-tab:hover   { border-color: #2e8aaf; background: #0d2b45; }
+    .mv-drone-tab.mv-active {
+        border-color: #4fc3f7;
+        background: linear-gradient(160deg, #0d2b45, #071a30);
+        color: #cce8ff;
+    }
+    .mv-tab-top { display:flex; align-items:center; gap:6px; margin-bottom:5px; }
+    .mv-label { font-weight:700; color:#b0d8f5; font-size:.85rem; }
+    .mv-arm-badge {
+        font-size:.65rem; font-weight:700; border-radius:4px;
+        padding:1px 5px; letter-spacing:.05em; margin-left:auto;
+    }
+    .mv-armed    { background:#7f1d1d; color:#fca5a5; }
+    .mv-disarmed { background:#1e3a1e; color:#86efac; }
+    .mv-tab-row { display:flex; align-items:center; gap:5px; margin-top:3px; line-height:1.4; }
+    .mv-ico { font-size:.75rem; width:14px; text-align:center; }
+    .mv-dot {
+        width:8px; height:8px; border-radius:50%;
+        background:#4ade80; box-shadow:0 0 5px rgba(74,222,128,.6);
+        animation: dronePulse 1.4s ease-in-out infinite; flex-shrink:0;
+    }
+    .mv-dot.mv-warn { background:#facc15; box-shadow:0 0 5px rgba(250,204,21,.6); }
+    .mv-dot.mv-err  { background:#e57373; box-shadow:0 0 5px rgba(229,115,115,.6); animation:none; }
+    `;
+    document.head.appendChild(s);
 })();

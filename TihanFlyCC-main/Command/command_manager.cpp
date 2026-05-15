@@ -360,7 +360,9 @@ void CommandManager::execute(const Command& cmd)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 void CommandManager::upload_mission(int                              request_id,
-                                     const std::vector<WaypointItem>& waypoints)
+                                     const std::vector<WaypointItem>& waypoints,
+                                     uint8_t target_sysid,
+                                     uint8_t target_compid)
 {
     if (!active_transport)
     {
@@ -386,8 +388,10 @@ void CommandManager::upload_mission(int                              request_id,
 
     pending_mission_    = waypoints;
     mission_request_id_ = request_id;
+    mission_target_sysid_ = target_sysid;
+    mission_target_compid_ = target_compid;
     std::cout << "[Mission] Starting upload of "
-              << waypoints.size() << " waypoints\n";
+              << waypoints.size() << " waypoints to sysid=" << (int)target_sysid << "\n";
     send_mission_count();
 }
 
@@ -395,7 +399,7 @@ void CommandManager::send_mission_count()
 {
     mavlink_message_t msg;
     mavlink_msg_mission_count_pack(
-        255, 200, &msg, 1, 0,
+        255, 200, &msg, mission_target_sysid_, mission_target_compid_,
         static_cast<uint16_t>(pending_mission_.size()),
         MAV_MISSION_TYPE_MISSION, 0);
 
@@ -419,7 +423,7 @@ void CommandManager::send_mission_item(uint16_t seq)
     mavlink_message_t msg;
     mavlink_msg_mission_item_int_pack(
         255, 200, &msg,
-        1, 0,                                     // target_system, target_component
+        mission_target_sysid_, mission_target_compid_,            // target_system, target_component
         seq,
         wp.frame,
         wp.command,

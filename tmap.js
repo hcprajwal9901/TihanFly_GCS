@@ -508,19 +508,49 @@ disableWeatherClicks() {
      * @param {number} heading  - Heading   (degrees, 0 = North)
      */
     updateDronePosition(lat, lng, heading = 0) {
+        this.updateDronePositionForSysid(1, lat, lng, heading);
+    }
+
+    /**
+     * Update the drone marker for a specific vehicle (sysid-keyed).
+     * @param {number} sysid
+     * @param {number} lat
+     * @param {number} lng
+     * @param {number} heading  degrees
+     */
+    updateDronePositionForSysid(sysid, lat, lng, heading = 0) {
+        if (!lat || !lng) return;
+
+        // Initialize droneMarkers if it doesn't exist
+        if (!this.droneMarkers) {
+            this.droneMarkers = {};
+            this.droneAutoPan = true;
+            this._gpsFixCount = 0;
+        }
+
+        // Pick a stable colour per sysid
+        const COLOURS = ['#E6007E','#00c8ff','#ffe033','#4ade80','#f97316','#a78bfa'];
+        const colour  = COLOURS[(sysid - 1) % COLOURS.length] || '#E6007E';
 
         // ── Build icon HTML ───────────────────────────────────────────────
         const iconHtml = `
             <div class="drone-marker-wrap" style="
                 width: 48px; height: 48px;
                 position: relative;
-                transform: rotate(${heading}deg);
-                transition: transform 0.4s ease;
             ">
                 <img src="resources/icon/drone.svg"
                      style="width:48px; height:48px; position:absolute; inset:0;
-                            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));"
+                            transform: rotate(${heading}deg); transition: transform 0.4s ease;
+                            filter: drop-shadow(0 2px 6px ${colour});"
                      alt="drone" />
+                <div style="
+                    position:absolute;bottom:-16px;left:50%;
+                    transform:translateX(-50%);
+                    background:rgba(0,0,0,.7);color:#fff;
+                    font-size:10px;font-weight:700;
+                    padding:1px 5px;border-radius:3px;
+                    white-space:nowrap;
+                ">D-${sysid}</div>
             </div>`;
 
         // ── Inject CSS keyframes once ─────────────────────────────────────
@@ -538,8 +568,26 @@ disableWeatherClicks() {
             document.head.appendChild(style);
         }
 
-        // ── Create marker on very first GPS fix ───────────────────────────
-        if (!this.droneMarker) {
+        if (this.droneMarkers[sysid]) {
+            // Update marker position, icon and heading
+            this.droneMarkers[sysid].setLatLng([lat, lng]);
+
+            const updatedIcon = L.divIcon({
+                className: 'leaflet-drone-icon',
+                html: iconHtml,
+                iconSize:   [48, 48],
+                iconAnchor: [24, 24]
+            });
+            this.droneMarkers[sysid].setIcon(updatedIcon);
+
+            if (this.droneMarkers[sysid].isPopupOpen()) {
+                const latEl = document.getElementById(`drone-popup-lat-${sysid}`);
+                const lngEl = document.getElementById(`drone-popup-lng-${sysid}`);
+                if (latEl) latEl.textContent = `Lat: ${lat.toFixed(6)}`;
+                if (lngEl) lngEl.textContent = `Lng: ${lng.toFixed(6)}`;
+            }
+        } else {
+            // Create new marker
             const icon = L.divIcon({
                 className: 'leaflet-drone-icon',
                 html: iconHtml,
@@ -547,64 +595,38 @@ disableWeatherClicks() {
                 iconAnchor: [24, 24]
             });
 
-            this.droneMarker = L.marker([lat, lng], {
+            const marker = L.marker([lat, lng], {
                 icon,
                 zIndexOffset: 2000,
                 interactive: true
             }).addTo(this.map);
 
-            this.droneMarker.bindPopup(`
-                <b>🚁 Drone</b><br>
-                <span id="drone-popup-lat">Lat: ${lat.toFixed(6)}</span><br>
-                <span id="drone-popup-lng">Lng: ${lng.toFixed(6)}</span>
+            marker.bindPopup(`
+                <b>🚁 Drone ${sysid}</b><br>
+                <span id="drone-popup-lat-${sysid}">Lat: ${lat.toFixed(6)}</span><br>
+                <span id="drone-popup-lng-${sysid}">Lng: ${lng.toFixed(6)}</span>
             `);
 
-            // auto-pan ON by default
-            this.droneAutoPan  = true;
-            // counts how many GPS fixes we have received so far
-            this._gpsFixCount  = 0;
-
-            console.log('✅ Drone marker created at', lat.toFixed(6), lng.toFixed(6));
-
-        } else {
-            // ── Update marker position, icon and heading ──────────────────
-            this.droneMarker.setLatLng([lat, lng]);
-
-            // Refresh icon so markers.png is always rendered
-            const updatedIcon = L.divIcon({
-                className: 'leaflet-drone-icon',
-                html: iconHtml,
-                iconSize:   [48, 48],
-                iconAnchor: [24, 24]
-            });
-            this.droneMarker.setIcon(updatedIcon);
-
-            if (this.droneMarker.isPopupOpen()) {
-                const latEl = document.getElementById('drone-popup-lat');
-                const lngEl = document.getElementById('drone-popup-lng');
-                if (latEl) latEl.textContent = `Lat: ${lat.toFixed(6)}`;
-                if (lngEl) lngEl.textContent = `Lng: ${lng.toFixed(6)}`;
-            }
+            this.droneMarkers[sysid] = marker;
+            console.log(`✅ Drone marker created for sysid=${sysid} at ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
         }
 
-        // ── Auto-pan logic ────────────────────────────────────────────────
-        if (!this.droneAutoPan) return;
+        // ── Auto-pan logic (only for sysid 1 or selected) ─────────────────
+        const isTarget = window.selectedSysId === sysid || (window.selectedSysId === 0 && sysid === (window._primarySysId || 1));
+        
+        if (!this.droneAutoPan || !isTarget) return;
 
         this._gpsFixCount = (this._gpsFixCount || 0) + 1;
 
-        // Snaps the map to the drone on connection.
-        // We do this for the first 20 fixes (~5 seconds at 4 Hz) because
-        // data-persistence.js may try to restore the last saved view asynchronously.
         if (this._gpsFixCount <= 20) {
             this.map.setView([lat, lng], 17, { animate: false });
             if (this._gpsFixCount === 1 || this._gpsFixCount === 20) {
-                console.log(`🚁 [fix ${this._gpsFixCount}] Snapped map to drone: ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+                console.log(`🚁 [fix ${this._gpsFixCount}] Snapped map to drone ${sysid}: ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
             }
             if (this._gpsFixCount === 20) {
-                this.droneAutoPan = false; // Disable after initial lock-on
+                this.droneAutoPan = false;
                 console.log('🚁 Initial map lock complete. Auto-pan disabled.');
             }
-            return;
         }
     }
 

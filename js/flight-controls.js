@@ -122,7 +122,11 @@ class FlightControlButtons {
         };
         
         console.log("📤 Sending command:", command);
-        this.ws.send(JSON.stringify(command));
+        if (window.sendToSelected) {
+            window.sendToSelected(command);
+        } else {
+            this.ws.send(JSON.stringify(command));
+        }
     }
 
     handleBackendResponse(data) {

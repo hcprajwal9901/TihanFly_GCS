@@ -32,6 +32,7 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
+#include <map>
 
 // ── Flight-mode IDs (ArduCopter 4.x) ─────────────────────────────────────────
 enum class CopterMode : uint8_t {
@@ -126,10 +127,10 @@ private:
     int sysid_  = 1;
     int compid_ = 1;
 
-    uint16_t   lastPwm_    = 0;
-    int        lastSlot_   = -1;       // -1 = no RC data received yet
-    CopterMode activeMode_ = CopterMode::UNKNOWN;
-    bool       isArmed_    = false;    // tracked from heartbeat base_mode
+    std::map<uint8_t, uint16_t>   lastPwmMap_;
+    std::map<uint8_t, int>        lastSlotMap_;
+    std::map<uint8_t, CopterMode> activeModeMap_;
+    std::map<uint8_t, bool>       isArmedMap_;
 
     /**
      * Local cache of FLTMODE1-6 values as reported by the autopilot via
@@ -140,13 +141,13 @@ private:
      *   • saveFlightModes() so the cache stays consistent with what was just
      *     written, without waiting for the autopilot echo.
      */
-    std::array<uint8_t, NUM_SLOTS> slotModes_      = {0, 0, 0, 0, 0, 0};
+    std::map<uint8_t, std::array<uint8_t, NUM_SLOTS>> slotModesMap_;
     bool                           paramsRequested_ = false; // request sent once per connect
 
     std::function<void(const std::string&)>       send_cb_;
     std::function<void(const mavlink_message_t&)> transport_cb_;
 
     int  pwmToSlot      (uint16_t pwm) const;
-    void broadcastStatus(CopterMode mode, uint16_t pwm);
+    void broadcastStatus(uint8_t sysid, CopterMode mode, uint16_t pwm);
     void sendParamSet   (const char* param_id, float value);
 };
