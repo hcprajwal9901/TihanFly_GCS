@@ -19,33 +19,32 @@ let _dynLinks = [];   // copy of dyn_udp_links from last status packet
 
 function setSelectedSysId(id) {
     window.selectedSysId = id;
-    // update all dropdowns to match
-    document.querySelectorAll('.mv-drone-selector-dropdown, #vehicleSelector').forEach(sel => {
+    document.querySelectorAll('.mv-drone-selector-dropdown, #vehicleSelector').forEach(function(sel) {
         if (sel.value != id) sel.value = id;
     });
-    // update tabs
-    const wrap = document.getElementById('vehicleSelectorWrap');
+    var wrap = document.getElementById('vehicleSelectorWrap');
     if (wrap) {
-        wrap.querySelectorAll('.mv-drone-tab').forEach(t => t.classList.remove('mv-active'));
-        const tab = wrap.querySelector(`.mv-drone-tab[data-sysid="${id}"]`);
+        wrap.querySelectorAll('.mv-drone-tab').forEach(function(t) { t.classList.remove('mv-active'); });
+        var tab = wrap.querySelector('.mv-drone-tab[data-sysid="' + id + '"]');
         if (tab) tab.classList.add('mv-active');
     }
-    console.log('[MV] Active drone \u2192 sysid=' + id);
+    console.log('[MV] Active drone => sysid=' + id);
     window.dispatchEvent(new CustomEvent('vehicle_selected', { detail: { sysid: id } }));
 }
 window.setSelectedSysId = setSelectedSysId;
 
 function buildDroneSelectorHtml() {
-    if (!window.activeSysids || window.activeSysids.length <= 1) return '';
-    let html = `<div class="drone-selector-wrap" style="margin-bottom:10px; display:flex; align-items:center; gap:10px; background:var(--bg-raised,#1a1a2e); padding:8px 12px; border-radius:6px; border:1px solid var(--border-muted,#333);">
-        <span style="color:var(--text-muted,#888); font-size:13px; font-weight:600;">Target Drone:</span>
-        <select class="mv-drone-selector-dropdown" onchange="window.setSelectedSysId(parseInt(this.value, 10))" style="background:var(--bg-surface,#111827); color:var(--accent,#4fc3f7); border:1px solid var(--border-muted,#333); padding:4px 8px; border-radius:4px; outline:none; font-family:monospace; min-width:100px;">`;
-    
-    window.activeSysids.forEach(id => {
-        html += `<option value="${id}" ${window.selectedSysId === id ? 'selected' : ''}>D${id}</option>`;
+    if (!window.activeSysids || window.activeSysids.length === 0) return '';
+    var html = '<div class="drone-selector-wrap" style="margin-bottom:10px;display:flex;align-items:center;gap:10px;background:var(--bg-raised,#1a1a2e);padding:8px 12px;border-radius:6px;border:1px solid var(--border-muted,#333);">'
+        + '<span style="color:var(--text-muted,#888);font-size:13px;font-weight:600;">Target Drone:</span>'
+        + '<select class="mv-drone-selector-dropdown" onchange="window.setSelectedSysId(parseInt(this.value,10))" style="background:var(--bg-surface,#111827);color:var(--accent,#4fc3f7);border:1px solid var(--border-muted,#333);padding:4px 8px;border-radius:4px;outline:none;font-family:monospace;min-width:100px;">';
+    window.activeSysids.forEach(function(id) {
+        html += '<option value="' + id + '"' + (window.selectedSysId === id ? ' selected' : '') + '>D' + id + '</option>';
     });
-    html += `<option value="0" ${window.selectedSysId === 0 ? 'selected' : ''}>All Drones</option>`;
-    html += `</select></div>`;
+    if (window.activeSysids.length > 1) {
+        html += '<option value="0"' + (window.selectedSysId === 0 ? ' selected' : '') + '>All Drones</option>';
+    }
+    html += '</select></div>';
     return html;
 }
 window.buildDroneSelectorHtml = buildDroneSelectorHtml;
@@ -132,8 +131,14 @@ function updateVehicleSelector(vehicles, dynLinks) {
     }
 
     // ── Preserve selected sysid ───────────────────────────────────────────────
-    if (window.selectedSysId !== 0 && !ids.includes(window.selectedSysId)) {
-        window.selectedSysId = ids[0] ?? 1;
+    // If the currently selected drone disappeared from the fleet, snap to the
+    // first available one.  Use setSelectedSysId() so all listeners / dropdowns
+    // are notified — a bare assignment here caused silent resets to Drone 1
+    // without firing vehicle_selected, breaking param panel routing.
+    if (window.selectedSysId !== 0 && ids.length > 0 && !ids.includes(window.selectedSysId)) {
+        setSelectedSysId(ids[0]);
+    } else if (ids.length === 0) {
+        window.selectedSysId = 1; // no drones — safe default, no event needed
     }
 
     // ── Tab strip wrapper ─────────────────────────────────────────────────────

@@ -881,22 +881,64 @@ function loadExternalMeta() {
     let isLoading   = false;
 
     function wsSend(obj) {
-        if (window.ws && window.ws.readyState === WebSocket.OPEN) {
-            // Broadcast param_set to all drones when "All Drones" (sysid=0) is selected
-            if (obj.type === 'param_set' && window.selectedSysId === 0 && window.activeSysids && window.activeSysids.length > 0) {
+        if (!window.ws || window.ws.readyState !== WebSocket.OPEN) {
+            console.warn('[ParamFull] WS not open');
+            return;
+        }
+
+        // ── param_set: single drone or broadcast to all ────────────────────────
+        if (obj.type === 'param_set') {
+            const activeSysid = window.selectedSysId;
+            console.log('[ParamFull] param_set → selectedSysId=' + activeSysid, obj.param_id);
+            if (activeSysid === 0 && window.activeSysids && window.activeSysids.length > 0) {
                 window.activeSysids.forEach(sysid => {
                     window.ws.send(JSON.stringify({ ...obj, sysid }));
                 });
                 console.log('[ParamFull] Broadcasted param_set to all drones:', obj);
             } else {
-                // Single target: inject sysid so backend routes correctly
-                const msg = (window.selectedSysId && window.selectedSysId > 0)
-                    ? { ...obj, sysid: window.selectedSysId }
-                    : obj;
-                window.ws.send(JSON.stringify(msg));
+                const sysid = (activeSysid && activeSysid > 0) ? activeSysid : 1;
+                window.ws.send(JSON.stringify({ ...obj, sysid }));
             }
+            return;
+        }
+
+        // ── param_request_list: fetch for selected drone only ─────────────────
+        // When "All Drones" is selected, we fetch the first connected drone
+        // (the primary) so the panel shows something useful.
+        if (obj.type === 'param_request_list') {
+            let targetSysid;
+            if (window.selectedSysId === 0) {
+                // All Drones mode → fetch from primary (first connected)
+                targetSysid = (window.activeSysids && window.activeSysids.length > 0)
+                    ? window.activeSysids[0]
+                    : 1;
+                console.log('[ParamFull] "All Drones" selected — fetching params from primary drone sysid=' + targetSysid);
+            } else {
+                targetSysid = window.selectedSysId > 0 ? window.selectedSysId : 1;
+            }
+            _currentParamSysid = targetSysid;
+            _updateDroneBadge();
+            window.ws.send(JSON.stringify({ ...obj, sysid: targetSysid }));
+            return;
+        }
+
+        // ── all other messages: inject sysid for single target ─────────────────
+        const sysid = (window.selectedSysId && window.selectedSysId > 0) ? window.selectedSysId : 1;
+        window.ws.send(JSON.stringify({ ...obj, sysid }));
+    }
+
+    // ── Track which drone's params are currently displayed ────────────────────
+    let _currentParamSysid = null;
+
+    function _updateDroneBadge() {
+        const badge = document.getElementById('fpDroneBadge');
+        if (!badge) return;
+        if (_currentParamSysid && _currentParamSysid > 0) {
+            badge.textContent = '📡 Drone ' + _currentParamSysid;
+            badge.style.display = 'inline-block';
         } else {
-            console.warn('[ParamFull] WS not open');
+            badge.textContent = '';
+            badge.style.display = 'none';
         }
     }
 
@@ -1179,7 +1221,13 @@ tr.param-sent td{background:rgba(0,200,80,.04)}`;
     }
 
     function render() {
-        return `<div class="settings-panel-title" style="display:flex; justify-content:space-between; align-items:center;"><span>Full Parameter List</span><div class="drone-selector-wrap-container"></div></div>
+        return `<div class="settings-panel-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+  <span>Full Parameter List</span>
+  <div style="display:flex; align-items:center; gap:10px;">
+    <span id="fpDroneBadge" style="display:none; background:rgba(79,195,247,.12); border:1px solid rgba(79,195,247,.3); color:#4fc3f7; font-size:11px; font-family:monospace; border-radius:5px; padding:3px 9px; font-weight:700; letter-spacing:.04em;"></span>
+    <div class="drone-selector-wrap-container"></div>
+  </div>
+</div>
 <div class="calib-card param-full-card">
   <div class="param-toolbar" style="gap:10px;flex-wrap:wrap">
     <input type="text" class="param-search-bar" id="fpSearch" placeholder="\uD83D\uDD0D Search by name, description, units or options\u2026">
@@ -1231,12 +1279,30 @@ function init() {
     loadExternalMeta().then(() => {
         document.getElementById('fpSearch')?.addEventListener('input', filterTable);
         document.getElementById('fpFilterType')?.addEventListener('change', filterTable);
-        document.getElementById('fpRefreshBtn')?.addEventListener('click', () => wsSend({ type: 'param_request_list' }));
+        document.getElementById('fpRefreshBtn')?.addEventListener('click', () => {
+            // Clear stale params before refreshing for a different drone
+            allParams = {}; dirtyParams = {};
+            document.getElementById('fpBody').innerHTML = '';
+            wsSend({ type: 'param_request_list' });
+        });
 
         document.getElementById('fpWriteBtn')?.addEventListener('click', () => {
             const names = Object.keys(dirtyParams);
             if (!names.length) { const { toast } = window.SwUtil || {}; if (toast) toast('No changed parameters'); return; }
-            names.forEach(n => wsSend({ type: 'param_set', param_id: n, value: dirtyParams[n] }));
+
+            if (window.selectedSysId === 0 && window.activeSysids && window.activeSysids.length > 0) {
+                // Write all dirty params to EVERY connected drone
+                names.forEach(n => {
+                    window.activeSysids.forEach(sysid => {
+                        window.ws.send(JSON.stringify({ type: 'param_set', param_id: n, value: dirtyParams[n], sysid }));
+                    });
+                });
+                const { toast } = window.SwUtil || {};
+                if (toast) toast('Writing ' + names.length + ' param(s) to all drones');
+                console.log('[ParamFull] Broadcasted ' + names.length + ' param(s) to all drones');
+            } else {
+                names.forEach(n => wsSend({ type: 'param_set', param_id: n, value: dirtyParams[n] }));
+            }
         });
 
         document.getElementById('fpSaveBtn')?.addEventListener('click', () => wsSend({ type: 'param_save_file' }));
@@ -1246,8 +1312,7 @@ function init() {
             if (p && p.trim()) wsSend({ type: 'param_load_file', path: p.trim() });
         });
 
-        // Listen to CustomEvents dispatched by websocket.js — these survive
-        // WebSocket reconnects because they are on window, not on window.ws.
+        // ── Listen to CustomEvents dispatched by websocket.js ─────────────────
         if (!window._fpBound) {
             window._fpBound = true;
 
@@ -1260,18 +1325,49 @@ function init() {
                 window.addEventListener(evtName, e => handleMessage(e.detail));
             });
 
-            // After a reconnect websocket.js fires 'ws_connected'; re-request
-            // if the panel is still open and no params are in memory yet.
+            // Re-request after reconnect if panel is open and cache is empty
             window.addEventListener('ws_connected', () => {
                 if (document.getElementById('panel-param-full') &&
                     Object.keys(allParams).length === 0) {
                     wsSend({ type: 'param_request_list' });
                 }
             });
+
+            // ── Re-fetch when the user selects a different drone ──────────────
+            window.addEventListener('vehicle_selected', () => {
+                const panelActive = document.querySelector('#panel-param-full.active') ||
+                                    document.querySelector('#panel-param-full[style*="block"]');
+                // Only auto-refresh if the Full Params panel is currently visible
+                const host2 = document.getElementById('panel-param-full');
+                if (host2 && host2.classList.contains('active')) {
+                    allParams = {}; dirtyParams = {};
+                    const tbody = document.getElementById('fpBody');
+                    if (tbody) tbody.innerHTML = '';
+                    setStatus('Switching drone — fetching parameters…');
+                    wsSend({ type: 'param_request_list' });
+                }
+            });
         }
 
-        if (Object.keys(allParams).length) { rebuildTable(); setStatus(Object.keys(allParams).length + ' parameters loaded'); }
-        else wsSend({ type: 'param_request_list' });
+        // Initialise drone badge on first open
+        const targetSysid = (window.selectedSysId && window.selectedSysId > 0)
+            ? window.selectedSysId
+            : (window.activeSysids && window.activeSysids.length > 0 ? window.activeSysids[0] : 1);
+        _currentParamSysid = targetSysid;
+        _updateDroneBadge();
+        if (window.updateAllDroneSelectors) window.updateAllDroneSelectors();
+
+        // Always re-fetch if cache is empty OR if the cached drone differs from
+        // the currently selected drone (user switched drones before opening panel)
+        if (Object.keys(allParams).length === 0 || _currentParamSysid !== targetSysid) {
+            allParams = {}; dirtyParams = {};
+            const tbody = document.getElementById('fpBody');
+            if (tbody) tbody.innerHTML = '';
+            wsSend({ type: 'param_request_list' });
+        } else {
+            rebuildTable();
+            setStatus(Object.keys(allParams).length + ' parameters loaded (cached)');
+        }
     });
 }
 

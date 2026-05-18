@@ -47,12 +47,17 @@ void ParameterManager::setVehicleInfo(int sysid, int compid)
 
 void ParameterManager::processMessage(const mavlink_message_t& msg)
 {
-    // We only care about PARAM_VALUE here; extend this switch for
-    // PARAM_EXT_VALUE or other parameter-related messages if needed.
+    // Only process PARAM_VALUE messages from the currently-targeted drone.
+    // Filtering here prevents cross-drone contamination when multiple vehicles
+    // are connected: each drone sends PARAM_VALUE replies whose sysid matches
+    // their own system ID, so we accept only the one we requested from.
+    //
+    // sysid_ == 0  is treated as "accept all" (broadcast / not yet set).
     switch (msg.msgid)
     {
         case MAVLINK_MSG_ID_PARAM_VALUE:
-            handle_param_value(msg);
+            if (sysid_ == 0 || static_cast<int>(msg.sysid) == sysid_)
+                handle_param_value(msg);
             break;
 
         default:

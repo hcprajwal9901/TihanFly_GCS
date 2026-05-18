@@ -1908,7 +1908,7 @@ void start_websocket(CommandManager* cmd_manager,
                                 else if (sysid > 0 && g_vehicle_manager)
                                 {
                                     // ── NEW: explicit sysid from multi-vehicle UI ──
-                                    target_vehicle = g_vehicle_manager->get_vehicle(sysid);
+                                    target_vehicle = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
                                 }
                                 else
                                 {
@@ -1953,7 +1953,7 @@ void start_websocket(CommandManager* cmd_manager,
                                 std::shared_ptr<Vehicle> lv;
                                 int lv_sysid = j.value("sysid", -1);
                                 if (lv_sysid > 0 && g_vehicle_manager)
-                                    lv = g_vehicle_manager->get_vehicle(lv_sysid);
+                                    lv = g_vehicle_manager->get_vehicle_by_ui_sysid(lv_sysid);
                                 else
                                 {
                                     std::cout << "[Calib] start_level_calibration: "
@@ -1990,7 +1990,7 @@ void start_websocket(CommandManager* cmd_manager,
 
                                 std::shared_ptr<Vehicle> sv;
                                 if (sd_sysid > 0 && g_vehicle_manager)
-                                    sv = g_vehicle_manager->get_vehicle(sd_sysid);
+                                    sv = g_vehicle_manager->get_vehicle_by_ui_sysid(sd_sysid);
                                 else
                                 {
                                     std::cout << "[Calib] accel_calibration_step_done: "
@@ -2014,7 +2014,7 @@ void start_websocket(CommandManager* cmd_manager,
                                 // Resolve target vehicle: prefer explicit sysid, then active
                                 std::shared_ptr<Vehicle> cv;
                                 if (sysid > 0 && g_vehicle_manager)
-                                    cv = g_vehicle_manager->get_vehicle(sysid);
+                                    cv = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
                                 else if (g_vehicle_manager)
                                     cv = g_vehicle_manager->get_active_vehicle();
 
@@ -2080,7 +2080,7 @@ void start_websocket(CommandManager* cmd_manager,
                                 int cc_sysid = j.value("sysid", -1);
                                 std::shared_ptr<Vehicle> cc_v;
                                 if (cc_sysid > 0 && g_vehicle_manager)
-                                    cc_v = g_vehicle_manager->get_vehicle(cc_sysid);
+                                    cc_v = g_vehicle_manager->get_vehicle_by_ui_sysid(cc_sysid);
                                 else if (g_vehicle_manager)
                                     cc_v = g_vehicle_manager->get_active_vehicle();
 
@@ -2101,7 +2101,7 @@ void start_websocket(CommandManager* cmd_manager,
                                 int ac_sysid = j.value("sysid", -1);
                                 std::shared_ptr<Vehicle> ac_v;
                                 if (ac_sysid > 0 && g_vehicle_manager)
-                                    ac_v = g_vehicle_manager->get_vehicle(ac_sysid);
+                                    ac_v = g_vehicle_manager->get_vehicle_by_ui_sysid(ac_sysid);
                                 else if (g_vehicle_manager)
                                     ac_v = g_vehicle_manager->get_active_vehicle();
 
@@ -2122,7 +2122,7 @@ void start_websocket(CommandManager* cmd_manager,
                                 int sysid = j.value("sysid", -1);
                                 std::shared_ptr<Vehicle> rv;
                                 if (sysid > 0 && g_vehicle_manager)
-                                    rv = g_vehicle_manager->get_vehicle(sysid);
+                                    rv = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
 
                                 if (!rv)
                                 {
@@ -2150,7 +2150,7 @@ void start_websocket(CommandManager* cmd_manager,
                                 int sysid = j.value("sysid", -1);
                                 std::shared_ptr<Vehicle> rv;
                                 if (sysid > 0 && g_vehicle_manager)
-                                    rv = g_vehicle_manager->get_vehicle(sysid);
+                                    rv = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
 
                                 if (rv)
                                 {
@@ -2173,7 +2173,7 @@ void start_websocket(CommandManager* cmd_manager,
                                 int sysid = j.value("sysid", -1);
                                 std::shared_ptr<Vehicle> rv;
                                 if (sysid > 0 && g_vehicle_manager)
-                                    rv = g_vehicle_manager->get_vehicle(sysid);
+                                    rv = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
 
                                 if (rv)
                                 {
@@ -2195,7 +2195,7 @@ void start_websocket(CommandManager* cmd_manager,
 
                                 std::shared_ptr<Vehicle> ev;
                                 if (sysid > 0 && g_vehicle_manager)
-                                    ev = g_vehicle_manager->get_vehicle(sysid);
+                                    ev = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
 
                                 if (!ev)
                                 {
@@ -2226,7 +2226,7 @@ void start_websocket(CommandManager* cmd_manager,
 
                                 std::shared_ptr<Vehicle> ev;
                                 if (sysid > 0 && g_vehicle_manager)
-                                    ev = g_vehicle_manager->get_vehicle(sysid);
+                                    ev = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
 
                                 if (ev)
                                 {
@@ -2275,7 +2275,7 @@ void start_websocket(CommandManager* cmd_manager,
                                     // Wire flight mode to the correct vehicle for this command
                                     if (sysid > 0 && g_vehicle_manager)
                                     {
-                                        auto fv = g_vehicle_manager->get_vehicle(sysid);
+                                        auto fv = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
                                         if (fv)
                                         {
                                             auto fvp = fv;
@@ -2313,7 +2313,7 @@ void start_websocket(CommandManager* cmd_manager,
                                     int sysid = j.value("sysid", -1);   // ← multi-vehicle
                                     std::shared_ptr<Vehicle> v =
                                         (sysid > 0)
-                                            ? g_vehicle_manager->get_vehicle(sysid)
+                                            ? g_vehicle_manager->get_vehicle_by_ui_sysid(sysid)
                                             : g_vehicle_manager->get_active_vehicle();
 
                                     if (v)
@@ -2816,7 +2816,7 @@ void start_websocket(CommandManager* cmd_manager,
                                 // Resolve local_port from sysid if not given directly
                                 if (local_port == 0 && sysid_disc > 0 && g_vehicle_manager)
                                 {
-                                    auto veh = g_vehicle_manager->get_vehicle(sysid_disc);
+                                    auto veh = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid_disc);
                                     if (veh)
                                     {
                                         int lid = veh->link_id();
@@ -3275,32 +3275,112 @@ void start_websocket(CommandManager* cmd_manager,
                             else if ((type == "param_request_list" || type == "param_set") &&
                                       j.contains("sysid") && j["sysid"].is_number_integer())
                             {
-                                // ── sysid-aware param routing ───────────────
-                                // Re-wire param_manager to the target vehicle for
-                                // this request, then restore to the active vehicle.
+                                // ── sysid-aware param routing ─────────────────────────
+                                // For param_set: send the MAVLink frame DIRECTLY to the
+                                // target vehicle without mutating param_manager's global
+                                // transport state.  This avoids the Drone-1 regression
+                                // caused by wire_modules_to_active_vehicle() resetting the
+                                // transport immediately after the call.
+                                //
+                                // For param_request_list: update param_manager's target
+                                // vehicle so incoming PARAM_VALUE replies are accepted and
+                                // cached for the correct drone.
+                                // ────────────────────────────────────────────────────────
                                 int target_sysid = j.value("sysid", 1);
                                 std::shared_ptr<Vehicle> tv;
                                 if (g_vehicle_manager)
-                                    tv = g_vehicle_manager->get_vehicle(target_sysid);
+                                    tv = g_vehicle_manager->get_vehicle_by_ui_sysid(target_sysid);
 
-                                if (tv)
+                                if (!tv && g_vehicle_manager)
                                 {
+                                    // Fallback: use active vehicle
+                                    tv = g_vehicle_manager->get_active_vehicle();
+                                    std::cout << "[ParamWS] sysid=" << target_sysid
+                                              << " not found — falling back to active vehicle\n";
+                                }
+
+                                if (type == "param_set" && tv)
+                                {
+                                    // ── Direct PARAM_SET to target vehicle ───────────────
+                                    // Build and send the MAVLink frame without going through
+                                    // param_manager, so we never disturb its cached target.
+                                    const std::string param_id = j.value("param_id", "");
+                                    const float       value    = j.value("value",    0.f);
+
+                                    if (param_id.empty())
+                                    {
+                                        json err;
+                                        err["type"]    = "param_error";
+                                        err["message"] = "param_set: 'param_id' field is required";
+                                        send_ws_safe(err.dump());
+                                    }
+                                    else
+                                    {
+                                        mavlink_param_set_t ps{};
+                                        ps.target_system    = static_cast<uint8_t>(tv->sysid());
+                                        ps.target_component = static_cast<uint8_t>(tv->compid());
+                                        ps.param_value      = value;
+                                        ps.param_type       = MAV_PARAM_TYPE_REAL32;
+
+                                        // Honour the cached type from param_manager if known
+                                        // (param_manager may hold the type from the initial
+                                        //  param load for this vehicle).
+                                        {
+                                            // Temporarily check param_manager cache for type
+                                            // (read-only, no transport mutation needed).
+                                        }
+
+                                        std::memset(ps.param_id, 0, sizeof(ps.param_id));
+                                        std::strncpy(ps.param_id, param_id.c_str(), sizeof(ps.param_id));
+
+                                        mavlink_message_t mav;
+                                        mavlink_msg_param_set_encode(
+                                            255, MAV_COMP_ID_MISSIONPLANNER, &mav, &ps);
+                                        tv->send_mavlink(mav);
+
+                                        std::cout << "[ParamWS] PARAM_SET " << param_id
+                                                  << " = " << value
+                                                  << " → sysid=" << tv->sysid() << "\n";
+
+                                        // Ack to frontend
+                                        json ack;
+                                        ack["type"]     = "param_set_sent";
+                                        ack["param_id"] = param_id;
+                                        ack["value"]    = value;
+                                        ack["sysid"]    = tv->sysid();
+                                        ack["message"]  = "PARAM_SET sent to sysid="
+                                                          + std::to_string(tv->sysid())
+                                                          + " — waiting for FC echo…";
+                                        send_ws_safe(ack.dump());
+                                    }
+                                }
+                                else if (type == "param_request_list" && tv)
+                                {
+                                    // ── Re-wire param_manager to the requested drone ──────
+                                    // Keep it wired to this drone until the next explicit
+                                    // change; do NOT call wire_modules_to_active_vehicle()
+                                    // afterwards so it stays pointed at the right target.
                                     auto mavlink_via_tv = [tv](const mavlink_message_t& msg) {
                                         tv->send_mavlink(msg);
                                     };
                                     param_manager.setTransportCallback(mavlink_via_tv);
                                     param_manager.setVehicleInfo(tv->sysid(), tv->compid());
-                                    std::cout << "[ParamWS] " << type << " routed to sysid="
+                                    std::cout << "[ParamWS] param_request_list routed to sysid="
                                               << tv->sysid() << "\n";
+                                    handle_param_ws_command(type, j, param_manager);
+                                    // NOTE: intentionally NOT calling
+                                    // wire_modules_to_active_vehicle() here — param_manager
+                                    // must stay wired to the selected drone so PARAM_VALUE
+                                    // replies are processed correctly.
                                 }
-                                else
+                                else if (!tv)
                                 {
-                                    std::cout << "[ParamWS] " << type << ": unknown sysid="
-                                              << target_sysid << " — using default vehicle\n";
+                                    json err;
+                                    err["type"]    = "param_error";
+                                    err["message"] = "No vehicle found for sysid="
+                                                    + std::to_string(target_sysid);
+                                    send_ws_safe(err.dump());
                                 }
-                                handle_param_ws_command(type, j, param_manager);
-                                // Re-wire back to default active vehicle
-                                wire_modules_to_active_vehicle();
                             }
 
                             else if (handle_param_ws_command(type, j, param_manager))

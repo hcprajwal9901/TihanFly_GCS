@@ -82,7 +82,21 @@
 
     // ── WebSocket helper ────────────────────────────────────────────────────
     function send(obj) {
-        if (typeof window.safeSend === 'function') window.safeSend(obj);
+        if (typeof window.safeSend !== 'function') return;
+        
+        const activeSysid = window.selectedSysId;
+        
+        // If writing parameters and "All Drones" is selected, broadcast to all
+        if (obj.type === 'param_set' && activeSysid === 0 && window.activeSysids && window.activeSysids.length > 0) {
+            window.activeSysids.forEach(sysid => {
+                window.safeSend({ ...obj, sysid });
+            });
+            return;
+        }
+
+        // Otherwise (or if fetching), target the specific drone
+        const targetSysid = (activeSysid && activeSysid > 0) ? activeSysid : 1;
+        window.safeSend({ ...obj, sysid: targetSysid });
     }
 
     // ── Status helpers ──────────────────────────────────────────────────────

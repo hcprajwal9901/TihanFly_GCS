@@ -359,6 +359,17 @@ document.addEventListener('DOMContentLoaded', () => {
         window.sendCommand('DISARM');
     });
 
+    // ── FORCE ARM ──────────────────────────────────────────────────────────
+    const forceArmBtn = document.getElementById('forceArmBtn');
+    if (forceArmBtn) {
+        forceArmBtn.addEventListener('click', () => {
+            console.log('📤 FORCE ARM → sysid=' + (window.selectedSysId ?? 1));
+            window.sendCommand('FORCE_ARM');
+            // Optimistically update the regular arm button state
+            armToggle.setArmedState(true);
+        });
+    }
+
     // ── TAKEOFF / LAND / RTL ───────────────────────────────────────────────
     const flightControls = new FlightControlButtons();
 

@@ -203,6 +203,14 @@ void CommandManager::execute(const Command& cmd)
             MAV_CMD_COMPONENT_ARM_DISARM,
             0, 1, 0, 0, 0, 0, 0, 0);
     }
+    else if (cmd.name == "FORCE_ARM")
+    {
+        mavlink_msg_command_long_pack(
+            255, 200, &message,
+            target_sysid, target_compid,
+            MAV_CMD_COMPONENT_ARM_DISARM,
+            0, 1, 21196, 0, 0, 0, 0, 0);
+    }
     else if (cmd.name == "DISARM")
     {
         mavlink_msg_command_long_pack(

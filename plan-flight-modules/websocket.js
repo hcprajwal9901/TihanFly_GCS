@@ -195,18 +195,33 @@ function snapMapToHome() {
     }
 }
 
-/**
- * Send a message only if the socket is open.
- * All internal and external sends must go through this.
- *
- * @param {object} payload  - Object to JSON-serialize and send
- * @returns {boolean}       - true if sent, false otherwise
- */
 function safeSend(payload) {
     if (!window.ws || window.ws.readyState !== WebSocket.OPEN) {
         console.warn('[WS] safeSend: socket not open, message dropped:', payload);
         return false;
     }
+
+    // Auto-inject sysid for commands/params if missing (Global fix for all panels)
+    if (payload.sysid === undefined && payload.type) {
+        const type = payload.type;
+        const needsSysid = ['command', 'param_set', 'param_request_one', 'param_request_list', 'mission', 'request'].includes(type);
+        
+        if (needsSysid) {
+            const activeSysid = window.selectedSysId;
+            
+            // Broadcast "set" commands to all drones if "All Drones" is selected
+            if (activeSysid === 0 && ['param_set', 'command', 'mission'].includes(type) && window.activeSysids && window.activeSysids.length > 0) {
+                window.activeSysids.forEach(sysid => {
+                    window.ws.send(JSON.stringify({ ...payload, sysid }));
+                });
+                return true;
+            }
+            
+            // Otherwise target specific drone or default to Drone 1
+            payload.sysid = (activeSysid && activeSysid > 0) ? activeSysid : 1;
+        }
+    }
+
     window.ws.send(JSON.stringify(payload));
     return true;
 }
@@ -609,9 +624,22 @@ function handleBackendMessage(message) {
             const severity = message.severity || 'info';
             const sysid = message.sysid;
 
-            // Prefix sysid if multiple drones are connected
-            if (sysid !== undefined && window._lastVehicleCount > 1) {
-                text = `Drone ${sysid}: ${text}`;
+            // Determine how many drones are live (activeSysids is more reliable
+            // than _lastVehicleCount which may not be set yet on first messages)
+            const droneCount = (window.activeSysids && window.activeSysids.length > 0)
+                ? window.activeSysids.length
+                : (window._lastVehicleCount || 1);
+
+            // When a specific drone is selected (not "All Drones"),
+            // filter the console to show only that drone's messages.
+            const selected = window.selectedSysId;
+            if (selected && selected !== 0 && sysid !== undefined && sysid !== selected) {
+                break; // message is from a different drone — suppress it
+            }
+
+            // Prefix with drone ID when multiple drones are connected
+            if (sysid !== undefined && droneCount > 1) {
+                text = `[D${sysid}] ${text}`;
             }
 
             if (text && window.MsgConsole) {
@@ -881,7 +909,9 @@ function sendMission(waypointItems) {
         return false;
     }
 
-    const sent = safeSend({ id: Date.now(), type: 'mission', waypoints: waypointItems });
+    const payload = { id: Date.now(), type: 'mission', waypoints: waypointItems };
+    payload.sysid = window.selectedSysId ?? 1;
+    const sent = safeSend(payload);
     if (sent) {
         console.log(`[WS] Mission upload: ${waypointItems.length} waypoints`);
         window.MsgConsole?.info(`Uploading ${waypointItems.length} waypoints…`);

@@ -373,15 +373,47 @@
 
   /* ─── MAVLink helpers ────────────────────────────────────────────────────── */
   function readParamsFromFC() {
-    if (!state.wsReady) {
+    // Prefer the shared window.ws used by the rest of the GCS
+    const sharedWs = window.ws;
+    if (!sharedWs || sharedWs.readyState !== WebSocket.OPEN) {
       setStatusBanner('WebSocket not connected. Cannot read parameters.', 'error');
       return;
     }
-    wsSend({ type: 'param_request_list' });
-    console.info('[ParamSwitch] → param_request_list');
+
+    // Determine target sysid
+    let targetSysid;
+    if (window.selectedSysId === 0) {
+      // "All Drones" selected → fetch from primary drone
+      targetSysid = (window.activeSysids && window.activeSysids.length > 0)
+        ? window.activeSysids[0]
+        : 1;
+      console.info('[ParamSwitch] "All Drones" selected — fetching switch params from primary drone sysid=' + targetSysid);
+    } else {
+      targetSysid = (window.selectedSysId && window.selectedSysId > 0) ? window.selectedSysId : 1;
+    }
+
+    _currentSwitchSysid = targetSysid;
+    _updateSwitchBadge();
+
+    sharedWs.send(JSON.stringify({ type: 'param_request_list', sysid: targetSysid }));
+    console.info('[ParamSwitch] → param_request_list sysid=' + targetSysid);
 
     state.dirty.clear();
     rebuildGrid();
+  }
+
+  // ── Track which drone's switch options are displayed ────────────────────
+  let _currentSwitchSysid = null;
+
+  function _updateSwitchBadge() {
+    const badge = document.getElementById('swDroneBadge');
+    if (!badge) return;
+    if (_currentSwitchSysid && _currentSwitchSysid > 0) {
+      badge.textContent = '📡 Drone ' + _currentSwitchSysid;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
   }
 
   function writeParamsToFC(dirtyChannels) {
@@ -508,8 +540,12 @@
       </svg>
     </div>
     <div class="sw-header-text">
-      <h4>RC Switch Options</h4><div class="drone-selector-wrap-container" style="position:absolute; right:20px; top:20px;"></div>
+      <h4>RC Switch Options</h4>
       <p>Assign functions to RC channels 5–12. Changes apply on Write to FC.</p>
+    </div>
+    <div style="margin-left:auto; display:flex; align-items:center; gap:10px;">
+      <span id="swDroneBadge" style="display:none; background:rgba(79,195,247,.12); border:1px solid rgba(79,195,247,.3); color:#4fc3f7; font-size:11px; font-family:monospace; border-radius:5px; padding:3px 9px; font-weight:700; letter-spacing:.04em;"></span>
+      <div class="drone-selector-wrap-container"></div>
     </div>
     <div class="sw-header-stats">
       <div class="sw-stat">
@@ -662,13 +698,37 @@
       setStatusBanner('Switch options reset to FC defaults (not yet written to FC)', 'info');
     });
 
-    // ── FIX: Connect WebSocket, and if it's already open from a previous
-    //         visit to this panel, immediately fetch the current FC values
-    //         so dropdowns are never stuck showing "Do Nothing".
+    // ── Connect WebSocket, and if it's already open, immediately fetch ────────
     connectWebSocket();
     if (ws && ws.readyState === WebSocket.OPEN) {
       readParamsFromFC();
     }
+
+    // ── Re-fetch when user switches drone (if panel is active) ───────────────
+    if (!window._swBoundVehicle) {
+      window._swBoundVehicle = true;
+      window.addEventListener('vehicle_selected', () => {
+        const host2 = document.getElementById('panel-param-switch');
+        if (host2 && host2.classList.contains('active')) {
+          // Reset local cache
+          Object.values(channelMap).forEach(rec => {
+            rec.fcValue = null;
+            rec.defaultValue = null;
+            rec.value = 0;
+          });
+          state.dirty.clear();
+          rebuildGrid();
+          setStatusBanner('Switching drone — fetching switch options…', 'info');
+          readParamsFromFC();
+        }
+      });
+    }
+
+    // Initialise badge
+    _currentSwitchSysid = (window.selectedSysId && window.selectedSysId > 0)
+      ? window.selectedSysId
+      : (window.activeSysids && window.activeSysids.length > 0 ? window.activeSysids[0] : 1);
+    _updateSwitchBadge();
 
     console.log('✅ ParamSwitch module ready (MAVLink WebSocket bridge)');
   }
