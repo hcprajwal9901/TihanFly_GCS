@@ -21,10 +21,13 @@ void Link::start()
         {
             mavlink_message_t msg;
             mavlink_status_t status;
+            
+            // Use a unique channel for this link. MAVLINK_COMM_NUM_BUFFERS is usually 16.
+            uint8_t chan = static_cast<uint8_t>(id_ % MAVLINK_COMM_NUM_BUFFERS);
 
             for (size_t i = 0; i < len; i++)
             {
-                if (mavlink_parse_char(MAVLINK_COMM_0,
+                if (mavlink_parse_char(chan,
                                        data[i],
                                        &msg,
                                        &status))

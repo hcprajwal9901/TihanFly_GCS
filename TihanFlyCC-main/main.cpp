@@ -627,19 +627,6 @@ void send_status()
         if (g_vehicle_manager)
         {
 
-            // First pass: determine if any dynamic links exist
-            // (if so, use link_id as unique UI identifier for duplicate sysids)
-
-            // Check whether any sysid appears on more than one link via
-            // iterating dyn_udp_links (the extra manual links beyond link 0).
-            // Strategy: if we have more than 1 dynamic UDP link, treat all
-            // as having potentially duplicate sysids and use link_id as ui_sysid.
-            bool use_link_id_as_ui;
-            {
-                std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
-                use_link_id_as_ui = (g_dyn_udp_links.size() > 0);
-            }
-
             // Second pass: build the JSON array.
             // Always emit the primary vehicle (link 0) first, then each
             // dynamic UDP link's vehicle separately.
@@ -667,15 +654,12 @@ void send_status()
 
             // Emit all discovered vehicles
             {
-                auto all_sids = g_vehicle_manager->get_all_sysids();
+                auto all_ui_sids = g_vehicle_manager->get_all_ui_sysids();
                 std::set<int> emitted_ui_sids;
 
-                for (int ui_sid : all_sids)
+                for (int ui_sid : all_ui_sids)
                 {
-                    // get_all_sysids() returns unique UI identifiers (either the 
-                    // true sysid, or the link_id if there's a sysid collision).
-                    auto veh = g_vehicle_manager->get_vehicle_by_link(ui_sid);
-                    if (!veh) veh = g_vehicle_manager->get_vehicle(ui_sid);
+                    auto veh = g_vehicle_manager->get_vehicle_by_ui_sysid(ui_sid);
                     
                     if (veh && emitted_ui_sids.find(ui_sid) == emitted_ui_sids.end())
                     {
@@ -1572,18 +1556,17 @@ void start_websocket(CommandManager* cmd_manager,
                                 // Vehicle and tell CommandManager to use it for this send
                                 // cycle.  Falls back to get_active_vehicle() (unchanged
                                 // single-drone behaviour) when sysid is absent or unknown.
+                                std::shared_ptr<Vehicle> target_veh = nullptr;
                                 if (sysid > 0 && g_vehicle_manager)
                                 {
-                                    auto target = g_vehicle_manager->get_vehicle(sysid);
-                                    if (target)
-                                        cmd_manager->set_active_vehicle(target);
-                                    else
-                                        std::cout << "[WS] command: unknown sysid="
+                                    target_veh = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
+                                    if (!target_veh)
+                                        std::cout << "[WS] command: unknown ui_sysid="
                                                   << sysid << " — using active vehicle\n";
                                 }
 
                                 if (!cmd_name.empty())
-                                    cmd_manager->add_command(id, cmd_name, p1, p2, mode_name);
+                                    cmd_manager->add_command(id, cmd_name, p1, p2, mode_name, target_veh);
                                 cmd_manager->process();
                             }
 
@@ -1592,17 +1575,20 @@ void start_websocket(CommandManager* cmd_manager,
                                 int sysid = j.value("sysid", -1);
                                 uint8_t target_sysid = 1;
                                 uint8_t target_compid = 0;
+                                std::shared_ptr<Vehicle> target_veh_shared;
 
                                 if (sysid > 0 && g_vehicle_manager) {
-                                    auto target = g_vehicle_manager->get_vehicle(sysid);
+                                    auto target = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
                                     if (target) {
                                         target_sysid = target->sysid();
                                         target_compid = target->compid();
+                                        target_veh_shared = target;
                                     } else {
                                         auto active = g_vehicle_manager->get_active_vehicle();
                                         if (active) {
                                             target_sysid = active->sysid();
                                             target_compid = active->compid();
+                                            target_veh_shared = active;
                                         }
                                     }
                                 } else if (g_vehicle_manager) {
@@ -1610,6 +1596,7 @@ void start_websocket(CommandManager* cmd_manager,
                                     if (active) {
                                         target_sysid = active->sysid();
                                         target_compid = active->compid();
+                                        target_veh_shared = active;
                                     }
                                 }
 
@@ -1639,7 +1626,12 @@ void start_websocket(CommandManager* cmd_manager,
                                     }
 
                                     if (!wps.empty())
-                                        cmd_manager->upload_mission(j.value("id", 0), wps, target_sysid, target_compid);
+                                        // Pass the resolved vehicle so the handshake
+                                        // uses its own link/transport (multi-vehicle fix)
+                                        cmd_manager->upload_mission(
+                                            j.value("id", 0), wps,
+                                            target_sysid, target_compid,
+                                            target_veh_shared.get());
                                 }
                             }
 
@@ -1770,17 +1762,23 @@ void start_websocket(CommandManager* cmd_manager,
                                             int sysid = j.value("sysid", -1);
                                             uint8_t target_sysid = 1;
                                             uint8_t target_compid = 0;
+                                            std::shared_ptr<Vehicle> target_veh_shared;
 
                                             if (sysid > 0 && g_vehicle_manager) {
-                                                auto target = g_vehicle_manager->get_vehicle(sysid);
+                                                // BUG FIX: was get_vehicle(sysid) — must use
+                                                // get_vehicle_by_ui_sysid() since all SITL
+                                                // drones share sysid=1
+                                                auto target = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
                                                 if (target) {
                                                     target_sysid = target->sysid();
                                                     target_compid = target->compid();
+                                                    target_veh_shared = target;
                                                 } else {
                                                     auto active = g_vehicle_manager->get_active_vehicle();
                                                     if (active) {
                                                         target_sysid = active->sysid();
                                                         target_compid = active->compid();
+                                                        target_veh_shared = active;
                                                     }
                                                 }
                                             } else if (g_vehicle_manager) {
@@ -1788,13 +1786,20 @@ void start_websocket(CommandManager* cmd_manager,
                                                 if (active) {
                                                     target_sysid = active->sysid();
                                                     target_compid = active->compid();
+                                                    target_veh_shared = active;
                                                 }
                                             }
 
                                             std::cout << "[WS] flight_plan: uploading "
                                                       << (wps.size() - 1)
-                                                      << " waypoint(s) + home via MAVLink\n";
-                                            cmd_manager->upload_mission(j.value("id", 0), wps, target_sysid, target_compid);
+                                                      << " waypoint(s) + home via MAVLink"
+                                                      << " to ui_sysid=" << sysid << "\n";
+                                            // Pass the resolved vehicle so the handshake
+                                            // goes through the correct drone's link
+                                            cmd_manager->upload_mission(
+                                                j.value("id", 0), wps,
+                                                target_sysid, target_compid,
+                                                target_veh_shared.get());
                                             send_fp_ack(true, "Flight plan uploaded successfully");
                                         }
                                     }
@@ -3050,6 +3055,9 @@ void start_websocket(CommandManager* cmd_manager,
                                             mavlink_message_t  mav_msg;
                                             mavlink_status_t   mav_status{};
                                             int tcp_link_id = -1;
+                                            
+                                            static std::atomic<int> s_tcp_chan_counter{8};
+                                            uint8_t tcp_chan = static_cast<uint8_t>(s_tcp_chan_counter.fetch_add(1) % 16);
 
                                             // Create a minimal synthetic transport that wraps
                                             // the connected TCP socket.
@@ -3069,7 +3077,7 @@ void start_websocket(CommandManager* cmd_manager,
                                                 for (std::size_t i = 0; i < n; ++i)
                                                 {
                                                     if (mavlink_parse_char(
-                                                            MAVLINK_COMM_0,
+                                                            tcp_chan,
                                                             rx_buf[i],
                                                             &mav_msg,
                                                             &mav_status))
@@ -3784,14 +3792,24 @@ int main()
             cmd_manager.on_mission_ack(ack.type);
         }
 
-        else if (msg.msgid == MAVLINK_MSG_ID_ATTITUDE)
+        int ui_sysid = static_cast<int>(msg.sysid);
+        if (g_vehicle_manager)
+        {
+            auto v = g_vehicle_manager->get_vehicle_by_link(link_id);
+            if (!v || v->sysid() != msg.sysid)
+                v = g_vehicle_manager->get_vehicle(msg.sysid);
+            if (v)
+                ui_sysid = v->ui_sysid();
+        }
+
+        if (msg.msgid == MAVLINK_MSG_ID_ATTITUDE)
         {
             mavlink_attitude_t att;
             mavlink_msg_attitude_decode(&msg, &att);
 
             json j;
             j["type"]  = "attitude";
-            j["sysid"] = msg.sysid;
+            j["sysid"] = ui_sysid;
             j["roll"]  = att.roll;
             j["pitch"] = att.pitch;
             j["yaw"]   = att.yaw;
@@ -3814,27 +3832,11 @@ int main()
             double vy_ms       = pos.vy / 100.0;
             double groundspeed = std::sqrt(vx_ms * vx_ms + vy_ms * vy_ms);
 
-            // Resolve ui_sysid: when multiple drones share sysid=1 (SITL),
-            // use link_id as the unique frontend identifier instead.
-            int gps_ui_sysid = static_cast<int>(msg.sysid);
-            {
-                std::lock_guard<std::mutex> lk(g_dyn_udp_mutex);
-                if (!g_dyn_udp_links.empty())
-                {
-                    // We have extra links — resolve ui_sysid via link_id
-                    if (g_vehicle_manager)
-                    {
-                        auto v = g_vehicle_manager->get_vehicle_by_link(link_id);
-                        if (v) gps_ui_sysid = link_id;
-                    }
-                }
-            }
-
             if (lat != 0.0 || lon != 0.0)
             {
                 json gps;
                 gps["type"]         = "gps";
-                gps["sysid"]        = gps_ui_sysid;   // unique per-link ID for map
+                gps["sysid"]        = ui_sysid;   // unique per-link ID for map
                 gps["real_sysid"]   = static_cast<int>(msg.sysid);
                 gps["link_id"]      = link_id;
                 gps["latitude"]     = lat;
@@ -3856,7 +3858,7 @@ int main()
 
             json t;
             t["type"]        = "telemetry";
-            t["sysid"]       = msg.sysid;
+            t["sysid"]       = ui_sysid;
             t["groundspeed"] = static_cast<double>(hud.groundspeed);
             t["airspeed"]    = static_cast<double>(hud.airspeed);
             t["throttle"]    = static_cast<int>(hud.throttle);
@@ -3878,7 +3880,7 @@ int main()
             // Also push a lightweight telemetry packet for satellite-only listeners
             json t;
             t["type"]       = "telemetry";
-            t["sysid"]      = msg.sysid;
+            t["sysid"]      = ui_sysid;
             t["satellites"] = sats;
             send_ws_safe(t.dump());
         }
@@ -3894,7 +3896,7 @@ int main()
 
             json t;
             t["type"]  = "telemetry";
-            t["sysid"] = msg.sysid;
+            t["sysid"] = ui_sysid;
 
             // Voltage: UINT16_MAX means not provided
             if (ss.voltage_battery != 0xFFFF)
@@ -3926,6 +3928,7 @@ int main()
 
                 json t;
                 t["type"] = "telemetry";
+                t["sysid"] = ui_sysid;
                 t["rssi"] = rssi_pct;
                 send_ws_safe(t.dump());
             }
@@ -3958,7 +3961,7 @@ int main()
             con["type"]     = "drone_console";
             con["text"]     = text;
             con["severity"] = severity_str;
-            con["sysid"]    = (int)msg.sysid;
+            con["sysid"]    = ui_sysid;
             send_ws_safe(con.dump());
 
             std::cout << "[DRONE] " << text << "\n";

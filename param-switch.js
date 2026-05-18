@@ -508,7 +508,7 @@
       </svg>
     </div>
     <div class="sw-header-text">
-      <h4>RC Switch Options</h4>
+      <h4>RC Switch Options</h4><div class="drone-selector-wrap-container" style="position:absolute; right:20px; top:20px;"></div>
       <p>Assign functions to RC channels 5–12. Changes apply on Write to FC.</p>
     </div>
     <div class="sw-header-stats">

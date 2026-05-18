@@ -143,11 +143,14 @@
     // ── Full panel HTML ───────────────────────────────────────────────────────
     function buildHTML() {
         return `
-        <div class="settings-panel-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
-                <polygon points="5 3 19 12 5 21 5 3"/>
-            </svg>
-            Flight Modes
+        <div class="settings-panel-title" style="display:flex; justify-content:space-between; align-items:center;">
+            <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                Flight Modes
+            </span>
+            <div class="drone-selector-wrap-container"></div>
         </div>
 
         <div class="fm-wrap">

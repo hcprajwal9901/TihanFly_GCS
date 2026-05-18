@@ -116,6 +116,12 @@ public:
     // drone-selector dropdown.
     // -----------------------------------------------------------------------
     std::vector<int> get_all_sysids() const;
+    std::vector<int> get_all_ui_sysids() const;
+
+    // -----------------------------------------------------------------------
+    // UI Sysid lookup — returns the Vehicle matching the stable UI ID.
+    // -----------------------------------------------------------------------
+    std::shared_ptr<Vehicle> get_vehicle_by_ui_sysid(int ui_sysid) const;
 
     // -----------------------------------------------------------------------
     // Lifecycle callbacks

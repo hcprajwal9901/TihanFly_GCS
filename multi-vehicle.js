@@ -14,7 +14,48 @@
 
 // ── State ────────────────────────────────────────────────────────────────────
 window.selectedSysId = 1;
+window.activeSysids = [];
 let _dynLinks = [];   // copy of dyn_udp_links from last status packet
+
+function setSelectedSysId(id) {
+    window.selectedSysId = id;
+    // update all dropdowns to match
+    document.querySelectorAll('.mv-drone-selector-dropdown, #vehicleSelector').forEach(sel => {
+        if (sel.value != id) sel.value = id;
+    });
+    // update tabs
+    const wrap = document.getElementById('vehicleSelectorWrap');
+    if (wrap) {
+        wrap.querySelectorAll('.mv-drone-tab').forEach(t => t.classList.remove('mv-active'));
+        const tab = wrap.querySelector(`.mv-drone-tab[data-sysid="${id}"]`);
+        if (tab) tab.classList.add('mv-active');
+    }
+    console.log('[MV] Active drone \u2192 sysid=' + id);
+    window.dispatchEvent(new CustomEvent('vehicle_selected', { detail: { sysid: id } }));
+}
+window.setSelectedSysId = setSelectedSysId;
+
+function buildDroneSelectorHtml() {
+    if (!window.activeSysids || window.activeSysids.length <= 1) return '';
+    let html = `<div class="drone-selector-wrap" style="margin-bottom:10px; display:flex; align-items:center; gap:10px; background:var(--bg-raised,#1a1a2e); padding:8px 12px; border-radius:6px; border:1px solid var(--border-muted,#333);">
+        <span style="color:var(--text-muted,#888); font-size:13px; font-weight:600;">Target Drone:</span>
+        <select class="mv-drone-selector-dropdown" onchange="window.setSelectedSysId(parseInt(this.value, 10))" style="background:var(--bg-surface,#111827); color:var(--accent,#4fc3f7); border:1px solid var(--border-muted,#333); padding:4px 8px; border-radius:4px; outline:none; font-family:monospace; min-width:100px;">`;
+    
+    window.activeSysids.forEach(id => {
+        html += `<option value="${id}" ${window.selectedSysId === id ? 'selected' : ''}>D${id}</option>`;
+    });
+    html += `<option value="0" ${window.selectedSysId === 0 ? 'selected' : ''}>All Drones</option>`;
+    html += `</select></div>`;
+    return html;
+}
+window.buildDroneSelectorHtml = buildDroneSelectorHtml;
+
+function updateAllDroneSelectors() {
+    document.querySelectorAll('.drone-selector-wrap-container').forEach(container => {
+        container.innerHTML = buildDroneSelectorHtml();
+    });
+}
+
 
 // ── sendToSelected ────────────────────────────────────────────────────────────
 function sendToSelected(payload) {
@@ -82,7 +123,12 @@ function updateVehicleSelector(vehicles, dynLinks) {
             o.value = id; o.textContent = 'Drone ' + id;
             sel.appendChild(o);
         });
-        sel.value = ids.includes(+prev) ? prev : ids[0];
+        if (ids.length > 1) {
+            const o = document.createElement('option');
+            o.value = 0; o.textContent = 'All Drones';
+            sel.appendChild(o);
+        }
+        sel.value = (prev == '0' || ids.includes(+prev)) ? prev : ids[0];
     }
 
     // ── Preserve selected sysid ───────────────────────────────────────────────
@@ -132,11 +178,7 @@ function updateVehicleSelector(vehicles, dynLinks) {
           <div class="mv-tab-row"><span class="mv-ico">📡</span>${fixStr} · ${sats} sats</div>`;
 
         tab.addEventListener('click', () => {
-            window.selectedSysId = v.sysid;
-            wrap.querySelectorAll('.mv-drone-tab').forEach(t => t.classList.remove('mv-active'));
-            tab.classList.add('mv-active');
-            if (sel) sel.value = v.sysid;
-            console.log('[MV] Active drone → sysid=' + v.sysid);
+            window.setSelectedSysId(v.sysid);
         });
 
         // Insert tab into wrap
@@ -161,34 +203,20 @@ function updateVehicleSelector(vehicles, dynLinks) {
         `;
 
         tab.addEventListener('click', () => {
-            window.selectedSysId = 0;
-            wrap.querySelectorAll('.mv-drone-tab').forEach(t => t.classList.remove('mv-active'));
-            tab.classList.add('mv-active');
-            if (sel) {
-                // Try to keep it pointing to something valid, or 0 if supported
-                let opt = Array.from(sel.options).find(o => o.value == 0);
-                if (!opt) {
-                    opt = document.createElement('option');
-                    opt.value = 0;
-                    opt.textContent = 'All Drones';
-                    sel.appendChild(opt);
-                }
-                sel.value = 0;
-            }
-            console.log('[MV] Active drone → ALL (sysid=0)');
-            
-            // Force an update to show the first drone's data on compass/header
             if (list.length > 0) {
                 window._primarySysId = list[0].sysid;
             }
+            window.setSelectedSysId(0);
         });
 
         wrap.appendChild(tab);
     }
     
-    if (list.length > 0) {
+    if (list.length > 0 && window.selectedSysId === 0) {
         window._primarySysId = list[0].sysid;
     }
+    
+    updateAllDroneSelectors();
 }
 window.updateVehicleSelector = updateVehicleSelector;
 
@@ -212,24 +240,73 @@ function buildConnectionManagerModal() {
           <button id="mvConnClose" style="background:none;border:none;color:#7ba3c4;font-size:1.2rem;cursor:pointer;">✕</button>
         </div>
 
-        <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;">Remote IP</label>
-        <input id="mvRemoteIp" type="text" placeholder="192.168.1.10" value="127.0.0.1"
+        <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;">Protocol</label>
+        <select id="mvConnProtocol"
           style="width:100%;box-sizing:border-box;background:#07111f;border:1px solid #1e4a7a;
                  color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;margin-bottom:12px;">
+            <option value="udp">UDP</option>
+            <option value="tcp">TCP</option>
+            <option value="serial">Serial / USB</option>
+        </select>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-          <div>
-            <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;">Remote Port</label>
-            <input id="mvRemotePort" type="number" value="14550"
+        <!-- UDP Form -->
+        <div id="mvFormUdp">
+            <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;">GCS Listen Port ⭐</label>
+            <input id="mvLocalPort" type="number" placeholder="e.g. 11040" min="1024" max="65535"
               style="width:100%;box-sizing:border-box;background:#07111f;border:1px solid #1e4a7a;
-                     color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;">
-          </div>
-          <div>
-            <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;">Local Port <span style="color:#4a6a8a">(auto)</span></label>
-            <input id="mvLocalPort" type="number" placeholder="auto"
+                     color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;margin-bottom:12px;">
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;opacity:0.6;">
+              <div>
+                <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;" title="Auto-detected from first packet received">Remote IP (auto)</label>
+                <input id="mvRemoteIp" type="text" placeholder="127.0.0.1" value="127.0.0.1"
+                  style="width:100%;box-sizing:border-box;background:#07111f;border:1px solid #1e4a7a;
+                         color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;">
+              </div>
+              <div>
+                <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;" title="Auto-detected from first packet received">Remote Port (auto)</label>
+                <input id="mvRemotePort" type="number" placeholder="auto" value="0"
+                  style="width:100%;box-sizing:border-box;background:#07111f;border:1px solid #1e4a7a;
+                         color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;">
+              </div>
+            </div>
+        </div>
+
+        <!-- TCP Form -->
+        <div id="mvFormTcp" style="display:none;">
+            <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;">TCP IP</label>
+            <input id="mvTcpIp" type="text" placeholder="127.0.0.1" value="127.0.0.1"
               style="width:100%;box-sizing:border-box;background:#07111f;border:1px solid #1e4a7a;
-                     color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;">
-          </div>
+                     color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;margin-bottom:12px;">
+
+            <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;">TCP Port</label>
+            <input id="mvTcpPort" type="number" value="5760"
+              style="width:100%;box-sizing:border-box;background:#07111f;border:1px solid #1e4a7a;
+                     color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;margin-bottom:12px;">
+        </div>
+
+        <!-- Serial Form -->
+        <div id="mvFormSerial" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <label style="color:#7ba3c4;font-size:.78rem;">Serial Port</label>
+                <button id="mvRefreshPorts" style="background:none;border:none;color:#4fc3f7;cursor:pointer;font-size:.78rem;">🔄 Refresh</button>
+            </div>
+            <select id="mvSerialPort"
+              style="width:100%;box-sizing:border-box;background:#07111f;border:1px solid #1e4a7a;
+                     color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;margin-bottom:12px;">
+                <option value="">Scanning...</option>
+            </select>
+
+            <label style="color:#7ba3c4;font-size:.78rem;display:block;margin-bottom:4px;">Baud Rate</label>
+            <select id="mvSerialBaud"
+              style="width:100%;box-sizing:border-box;background:#07111f;border:1px solid #1e4a7a;
+                     color:#e0f0ff;border-radius:6px;padding:8px 10px;font-size:.9rem;margin-bottom:12px;">
+                <option value="57600">57600 (RFD900x default)</option>
+                <option value="115200" selected>115200</option>
+                <option value="230400">230400</option>
+                <option value="460800">460800</option>
+                <option value="921600">921600</option>
+            </select>
         </div>
 
         <button id="mvConnectBtn"
@@ -243,11 +320,23 @@ function buildConnectionManagerModal() {
         <div id="mvConnStatus" style="color:#7ba3c4;font-size:.8rem;min-height:20px;text-align:center;"></div>
 
         <hr style="border-color:#1e4a7a;margin:16px 0 12px;">
-        <div style="color:#7ba3c4;font-size:.78rem;margin-bottom:8px;">Active UDP Links</div>
+        <div style="color:#7ba3c4;font-size:.78rem;margin-bottom:8px;">Active Dynamic Links</div>
         <div id="mvLinkList" style="max-height:130px;overflow-y:auto;"></div>
       </div>`;
 
     document.body.appendChild(modal);
+
+    // Form toggling
+    document.getElementById('mvConnProtocol').addEventListener('change', (e) => {
+        const type = e.target.value;
+        document.getElementById('mvFormUdp').style.display = type === 'udp' ? 'block' : 'none';
+        document.getElementById('mvFormTcp').style.display = type === 'tcp' ? 'block' : 'none';
+        document.getElementById('mvFormSerial').style.display = type === 'serial' ? 'block' : 'none';
+        if (type === 'serial') _refreshMvPorts();
+    });
+
+    // Serial port refresh
+    document.getElementById('mvRefreshPorts').onclick = _refreshMvPorts;
 
     // Close
     document.getElementById('mvConnClose').onclick = () => modal.style.display = 'none';
@@ -255,20 +344,69 @@ function buildConnectionManagerModal() {
 
     // Connect button
     document.getElementById('mvConnectBtn').onclick = () => {
-        const ip    = document.getElementById('mvRemoteIp').value.trim();
-        const rport = parseInt(document.getElementById('mvRemotePort').value) || 14550;
-        const lport = parseInt(document.getElementById('mvLocalPort').value)  || 0;
+        const type = document.getElementById('mvConnProtocol').value;
         const status = document.getElementById('mvConnStatus');
-        if (!ip) { status.style.color='#e57373'; status.textContent='Enter a remote IP address.'; return; }
-        status.style.color = '#4fc3f7';
-        status.textContent = 'Opening UDP socket…';
-        if (window.ws && window.ws.readyState === WebSocket.OPEN) {
-            window.ws.send(JSON.stringify({ type:'connect_vehicle', ip, port:rport, local_port:lport }));
-        } else {
+
+        if (!window.ws || window.ws.readyState !== WebSocket.OPEN) {
             status.style.color = '#e57373';
             status.textContent = 'WebSocket not connected.';
+            return;
+        }
+
+        if (type === 'udp') {
+            const remoteIp   = (document.getElementById('mvRemoteIp')?.value || '').trim() || '127.0.0.1';
+            const rport = parseInt(document.getElementById('mvRemotePort').value) || 0;
+            const lport = parseInt(document.getElementById('mvLocalPort').value)  || 0;
+            
+            if (!lport) { status.style.color='#e57373'; status.textContent='Enter the GCS Listen Port (e.g. 11040).'; return; }
+            
+            status.style.color = '#4fc3f7';
+            status.textContent = 'Opening UDP socket…';
+            
+            window.ws.send(JSON.stringify({ 
+                type: 'connect_vehicle', 
+                ip: remoteIp, 
+                port: rport || 1, 
+                local_port: lport 
+            }));
+        } else if (type === 'tcp') {
+            const ip    = document.getElementById('mvTcpIp').value.trim();
+            const port  = parseInt(document.getElementById('mvTcpPort').value) || 5760;
+            if (!ip) { status.style.color='#e57373'; status.textContent='Enter TCP IP address.'; return; }
+            status.style.color = '#4fc3f7';
+            status.textContent = 'Connecting to TCP server…';
+            window.ws.send(JSON.stringify({ type:'manual_connect', conn_type:'tcp', ip, port }));
+        } else if (type === 'serial') {
+            const port = document.getElementById('mvSerialPort').value;
+            const baud = parseInt(document.getElementById('mvSerialBaud').value) || 115200;
+            if (!port) { status.style.color='#e57373'; status.textContent='Select a serial port.'; return; }
+            status.style.color = '#4fc3f7';
+            status.textContent = 'Opening Serial port…';
+            window.ws.send(JSON.stringify({ type:'manual_connect', conn_type:'serial', port, baud }));
         }
     };
+}
+
+function _refreshMvPorts() {
+    if (typeof window.safeSend === 'function') window.safeSend({ type: 'list_serial_ports' });
+    else if (window.ws && window.ws.readyState === WebSocket.OPEN) window.ws.send(JSON.stringify({ type: 'list_serial_ports' }));
+    
+    setTimeout(() => {
+        const sel = document.getElementById('mvSerialPort');
+        if (!sel) return;
+        sel.innerHTML = '';
+        const ports = window._vcLastKnownPorts || [];
+        if (ports.length === 0) {
+            sel.innerHTML = '<option value="">No ports found</option>';
+        } else {
+            ports.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.port;
+                opt.textContent = `${p.port} - ${p.description || 'Serial Device'}`;
+                sel.appendChild(opt);
+            });
+        }
+    }, 200);
 }
 
 function openConnectionManager() {
@@ -311,19 +449,20 @@ function _renderLinkList() {
 
 // ── Handle backend acknowledgements ──────────────────────────────────────────
 function handleMvMessage(msg) {
-    if (msg.type === 'connect_vehicle_ack') {
+    if (msg.type === 'connect_vehicle_ack' || msg.type === 'manual_connect_ack') {
         const status = document.getElementById('mvConnStatus');
         if (!status) return;
         if (msg.status === 'ok') {
             status.style.color = '#4ade80';
-            status.textContent = '✓ ' + msg.message;
+            status.textContent = '✓ ' + (msg.message || 'Connected successfully');
+            _renderLinkList();
         } else {
             status.style.color = '#e57373';
-            status.textContent = '✗ ' + msg.message;
+            status.textContent = '✗ ' + (msg.message || 'Connection failed');
         }
         return;
     }
-    if (msg.type === 'disconnect_vehicle_ack') {
+    if (msg.type === 'disconnect_vehicle_ack' || msg.type === 'manual_disconnect_ack') {
         _renderLinkList();
     }
 }

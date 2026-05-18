@@ -1,0 +1,283 @@
+/**
+ * pid-tuning.css — TiHANFly GCS
+ * PID Tuning panel — QGroundControl-style dense parameter grid.
+ * Inherits design tokens from settings-window.css.
+ */
+
+/* ── Panel root ───────────────────────────────────────────────────────────── */
+.pid-wrap {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--text-secondary);
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+/* ── Row of groups (horizontal flex row) ─────────────────────────────────── */
+.pid-row-groups {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+/* ── Parameter group box (fieldset-style) ────────────────────────────────── */
+.pid-group {
+    border: 1px solid var(--border-muted);
+    border-radius: 5px;
+    padding: 10px 12px 10px 12px;
+    background: var(--bg-raised);
+    flex: 1;
+    min-width: 155px;
+}
+
+/* Title as inline header with accent colour + separator line */
+.pid-group-title {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--accent);
+    font-family: var(--mono);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(230, 0, 126, 0.22);
+}
+
+/* ── Single param row: label + input ─────────────────────────────────────── */
+.pid-param-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.pid-param-row:last-child { margin-bottom: 0; }
+
+.pid-param-label {
+    min-width: 62px;
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    font-family: var(--mono);
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.pid-param-input {
+    flex: 1;
+    min-width: 0;
+    width: 80px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-muted);
+    border-radius: 3px;
+    color: var(--text-primary);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 7px;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+    -moz-appearance: textfield;
+}
+
+.pid-param-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(230, 0, 126, 0.12);
+}
+
+.pid-param-input::-webkit-inner-spin-button,
+.pid-param-input::-webkit-outer-spin-button {
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+/* Select inside a group (RC options, Tune, etc.) */
+.pid-param-select {
+    flex: 1;
+    min-width: 0;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-muted);
+    border-radius: 3px;
+    color: var(--text-primary);
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 6px;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%234a5170' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    padding-right: 24px;
+}
+
+.pid-param-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(230, 0, 126, 0.12);
+}
+
+/* ── Lock checkbox row ───────────────────────────────────────────────────── */
+.pid-lock-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 10px;
+    padding: 6px 10px;
+    background: rgba(230, 0, 126, 0.05);
+    border: 1px solid rgba(230, 0, 126, 0.18);
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    width: fit-content;
+}
+
+.pid-lock-checkbox {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.pid-lock-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-family: var(--sans);
+}
+
+/* ── Divider / section gap ───────────────────────────────────────────────── */
+.pid-section-gap {
+    height: 4px;
+}
+
+/* ── Status strip ─────────────────────────────────────────────────────────── */
+.pid-status-strip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--r-md);
+    margin-bottom: 10px;
+}
+
+.pid-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: background .2s, box-shadow .2s;
+}
+
+.pid-dot-idle    { background: var(--text-muted); }
+.pid-dot-running { background: var(--warn); box-shadow: 0 0 8px rgba(255,170,0,.5); animation: pidPulse 1s ease-in-out infinite; }
+.pid-dot-ok      { background: var(--good); box-shadow: 0 0 8px rgba(0,217,126,.4); }
+.pid-dot-error   { background: var(--bad);  box-shadow: 0 0 8px rgba(255,71,87,.4); }
+
+@keyframes pidPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: .35; }
+}
+
+.pid-status-text {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+    flex: 1;
+}
+
+/* ── Bottom action bar ───────────────────────────────────────────────────── */
+.pid-btn-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    padding: 14px 0 4px;
+}
+
+.pid-write-btn,
+.pid-refresh-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 36px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: var(--sans);
+    cursor: pointer;
+    border: none;
+    letter-spacing: 0.2px;
+    transition: all .18s ease;
+}
+
+.pid-write-btn {
+    background: linear-gradient(135deg, #7ab648 0%, #5a9628 100%);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(122, 182, 72, 0.40);
+}
+
+.pid-write-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #8dd158 0%, #6db034 100%);
+    box-shadow: 0 6px 20px rgba(122, 182, 72, 0.55);
+    transform: translateY(-1px);
+}
+
+.pid-refresh-btn {
+    background: linear-gradient(135deg, #5d8a3a 0%, #3d6a1a 100%);
+    color: #cde8a8;
+    box-shadow: 0 4px 14px rgba(80, 140, 50, 0.35);
+}
+
+.pid-refresh-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #6fa040 0%, #4d7a20 100%);
+    box-shadow: 0 6px 20px rgba(80, 140, 50, 0.50);
+    transform: translateY(-1px);
+}
+
+.pid-write-btn:disabled,
+.pid-refresh-btn:disabled {
+    opacity: .40;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* ── Velocity XY + Basic Filters side-by-side ─────────────────────────────── */
+.pid-col-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 155px;
+}
+
+/* ── Harmonic notch wider span ─────────────────────────────────────────────── */
+.pid-group-wide {
+    flex: 2;
+    min-width: 280px;
+}
+
+/* ── Two-column param layout inside a group ─────────────────────────────────── */
+.pid-params-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px 16px;
+}
+
+/* ── Separator line inside group ─────────────────────────────────────────────── */
+.pid-group-sep {
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    margin: 8px 0;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
+@media (max-width: 700px) {
+    .pid-row-groups { flex-direction: column; }
+    .pid-group, .pid-col-stack { min-width: 100%; }
+}

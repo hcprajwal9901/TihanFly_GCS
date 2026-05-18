@@ -26,7 +26,7 @@ public:
 
     // link_manager must remain valid for the lifetime of this Vehicle.
     Vehicle(int sysid, int compid, int link_id,
-            LinkManager* link_manager);
+            LinkManager* link_manager, int ui_sysid);
 
     // Destructor must be defined in vehicle.cpp (where AccelCalibration is
     // a complete type) so that unique_ptr<AccelCalibration>'s deleter is
@@ -36,9 +36,10 @@ public:
     // ---------------------------------------------------------------
     // Identity
     // ---------------------------------------------------------------
-    int sysid()   const;
-    int compid()  const;
-    int link_id() const;
+    int sysid()    const;
+    int compid()   const;
+    int link_id()  const;
+    int ui_sysid() const;
 
     // ---------------------------------------------------------------
     // Runtime link switching
@@ -122,6 +123,7 @@ private:
     int sysid_;
     int compid_;
     int link_id_;
+    int ui_sysid_;
 
     LinkManager* link_manager_;   // never null after construction
 

@@ -1179,7 +1179,7 @@ tr.param-sent td{background:rgba(0,200,80,.04)}`;
     }
 
     function render() {
-        return `<div class="settings-panel-title">Full Parameter List</div>
+        return `<div class="settings-panel-title" style="display:flex; justify-content:space-between; align-items:center;"><span>Full Parameter List</span><div class="drone-selector-wrap-container"></div></div>
 <div class="calib-card param-full-card">
   <div class="param-toolbar" style="gap:10px;flex-wrap:wrap">
     <input type="text" class="param-search-bar" id="fpSearch" placeholder="\uD83D\uDD0D Search by name, description, units or options\u2026">

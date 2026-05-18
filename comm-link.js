@@ -124,20 +124,25 @@ window.CommLink = (function () {
       <div class="cl-section-title">UDP Settings</div>
       <div class="cl-form">
         <div class="cl-form-row">
-          <label>Remote IP</label>
+          <label>GCS Listen Port ⭐</label>
+          <input class="cl-input" type="number" id="clListenPort"
+                 placeholder="e.g. 11040" min="1024" max="65535">
+        </div>
+        <div class="cl-form-row" style="opacity:0.6;">
+          <label title="Auto-detected from first packet received">Remote IP (auto)</label>
           <input class="cl-input" type="text" id="clIpInput"
                  placeholder="127.0.0.1" value="127.0.0.1">
         </div>
-        <div class="cl-form-row">
-          <label>Remote Port</label>
+        <div class="cl-form-row" style="opacity:0.6;">
+          <label title="Auto-detected from first packet received">Remote Port (auto)</label>
           <input class="cl-input" type="number" id="clPortInput"
-                 placeholder="e.g. 14550" min="1" max="65535" value="14550">
+                 placeholder="auto" min="1" max="65535" value="0">
         </div>
-        <div class="cl-form-row">
-          <label>Local Port (Optional)</label>
-          <input class="cl-input" type="number" id="clListenPort"
-                 placeholder="auto" min="1024" max="65535">
-        </div>
+      </div>
+      <div style="font-size:11px;color:#aaa;margin-top:4px;padding:0 4px;">
+        ⭐ Set <strong>GCS Listen Port</strong> to match your SITL/MAVProxy
+        <code>--out=udp:127.0.0.1:<em>PORT</em></code> value (e.g. 11040).
+        Remote IP/Port are auto-detected from the first received packet.
       </div>
     </div>
 
@@ -371,12 +376,18 @@ window.CommLink = (function () {
         } else {  // UDP
             const listenPort = parseInt(document.getElementById('clListenPort')?.value) || 0;
             const remoteIp   = (document.getElementById('clIpInput')?.value || '').trim() || '127.0.0.1';
-            const remotePort = parseInt(document.getElementById('clPortInput')?.value) || 14550;
+            const remotePort = parseInt(document.getElementById('clPortInput')?.value) || 0;
+
+            if (!listenPort) {
+                _setStatus('error', 'Enter the GCS Listen Port (e.g. 11040).');
+                if (btn) { btn.disabled = false; btn.textContent = '🔗 Connect'; }
+                return;
+            }
 
             _ws_send({
                 type: 'connect_vehicle',
                 ip: remoteIp,
-                port: remotePort,
+                port: remotePort || 1,   // backend will auto-update from first received packet
                 local_port: listenPort
             });
         }

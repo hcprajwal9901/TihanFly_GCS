@@ -41,6 +41,7 @@
         'motor-test'    : 'MotorTest',     // MAV_CMD_DO_MOTOR_TEST
         'frame-type'    : 'FrameType',     // FRAME_CLASS + FRAME_TYPE parameter writer
         'initial-tune'  : 'InitialTune',   // Initial tune: battery / prop parameter wizard
+        'pid-tuning'    : 'PIDTuning',     // PID Tuning: Roll / Pitch / Yaw / Alt / Velocity
         'comm-link'     : 'CommLink',      // Communication Link manager (TCP/UDP/Serial)
     };
 
@@ -206,6 +207,20 @@
           Initial Tune
         </button>
 
+        <div class="settings-sidebar-label">Tuning</div>
+
+        <button class="settings-nav-btn" data-panel="pid-tuning">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+            <rect x="15" y="10" width="6" height="4" rx="1"/>
+            <rect x="9" y="4" width="6" height="4" rx="1"/>
+            <rect x="3" y="14" width="6" height="4" rx="1"/>
+          </svg>
+          PID Tuning
+        </button>
+
         <div class="settings-sidebar-label">Connection</div>
 
         <button class="settings-nav-btn" data-panel="comm-link">
@@ -238,6 +253,7 @@
         <div class="settings-panel"        id="panel-motor-test"></div>
         <div class="settings-panel"        id="panel-frame-type"></div>
         <div class="settings-panel"        id="panel-initial-tune"></div>
+        <div class="settings-panel"        id="panel-pid-tuning"></div>
         <div class="settings-panel"        id="panel-comm-link"></div>
       </div>
 
@@ -320,6 +336,7 @@
             bindSidebar();
             // Init the default visible panel (calib-accel) immediately
             initPanel('calib-accel');
+            if (window.updateAllDroneSelectors) window.updateAllDroneSelectors();
         }
         const overlay = document.getElementById('settingsOverlay');
         overlay.style.display = 'flex';
@@ -364,6 +381,7 @@
                 // This is the correct place to call ParamSwitch.init() —
                 // the host div exists in the DOM at this point.
                 initPanel(panelKey);
+                if (window.updateAllDroneSelectors) window.updateAllDroneSelectors();
             });
         });
     }

@@ -242,7 +242,7 @@
         ).join('\n');
 
         return `
-<div class="settings-panel-title">Frame Type</div>
+<div class="settings-panel-title" style="display:flex; justify-content:space-between; align-items:center;"><span>Frame Type</span><div class="drone-selector-wrap-container"></div></div>
 
 <!-- Info banner -->
 <div class="ft-info-banner">

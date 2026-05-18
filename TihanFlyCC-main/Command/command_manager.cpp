@@ -65,13 +65,7 @@ void CommandManager::set_vehicle_manager(VehicleManager* vm)
     direct_vehicle_  = nullptr;   // clear Mode A so only one mode is active
 }
 
-// One-shot vehicle override — consumed in process() after executing commands.
-// Calling this routes the next process() cycle to the given vehicle regardless
-// of Mode A / Mode B configuration, then resets to normal routing.
-void CommandManager::set_active_vehicle(std::shared_ptr<Vehicle> vehicle)
-{
-    override_vehicle_ = std::move(vehicle);
-}
+// removed set_active_vehicle
 
 void CommandManager::set_transport(std::shared_ptr<Transport> transport)
 {
@@ -97,16 +91,12 @@ void CommandManager::set_transport(std::shared_ptr<Transport> transport)
 //      • All known vehicles have timed out (VehicleManager evicted them).
 // ───────────────────────────────────────────────────────────────────────────────
 
-Vehicle* CommandManager::resolve_vehicle() const
+Vehicle* CommandManager::resolve_vehicle(const Command& cmd) const
 {
-    // ── One-shot override (set by set_active_vehicle()) ───────────────────────
-    // Takes priority over both Mode A and Mode B.  Consumed here so it never
-    // bleeds into the next unrelated process() cycle.
-    if (override_vehicle_)
+    // ── Command-specific override ─────────────────────────────────────────────
+    if (cmd.target_vehicle)
     {
-        Vehicle* v = override_vehicle_.get();
-        override_vehicle_.reset();   // consume — next call uses normal routing
-        return v;
+        return cmd.target_vehicle.get();
     }
 
     // ── Mode A: direct pointer ────────────────────────────────────────────────
@@ -135,12 +125,13 @@ Vehicle* CommandManager::resolve_vehicle() const
 //  Command queue  (thread-safe)
 // ═══════════════════════════════════════════════════════════════════════════════
 
-void CommandManager::add_command(int id, const std::string& cmd,
+void CommandManager::add_command(int id, const std::string& cmd_name,
                                   float p1, float p2,
-                                  const std::string& mode)
+                                  const std::string& mode,
+                                  std::shared_ptr<Vehicle> target)
 {
     std::lock_guard<std::mutex> lock(queue_mutex_);
-    queue_.push({id, cmd, p1, p2, mode});
+    queue_.push({id, cmd_name, p1, p2, mode, target});
 }
 
 void CommandManager::process()
@@ -193,7 +184,7 @@ void CommandManager::execute(const Command& cmd)
     // In Mode B this calls VehicleManager::get_active_vehicle() and returns
     // the raw pointer to the first live Vehicle.  The shared_ptr keeping that
     // Vehicle alive is held by VehicleManager, which outlives this call.
-    Vehicle* vehicle = resolve_vehicle();
+    Vehicle* vehicle = resolve_vehicle(cmd);
     if (!vehicle)
         return;
 
@@ -232,19 +223,28 @@ void CommandManager::execute(const Command& cmd)
     }
     else if (cmd.name == "LAND")
     {
+        // Use DO_SET_MODE to explicitly set the mode to LAND (9) instead of NAV_LAND 
+        // to avoid unintended mode mapping side-effects (e.g. DRIFT).
         mavlink_msg_command_long_pack(
             255, 200, &message,
             target_sysid, target_compid,
-            MAV_CMD_NAV_LAND,
-            0, 0, 0, 0, 0, 0, 0, 0);
+            MAV_CMD_DO_SET_MODE,
+            0,
+            MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
+            9.0f,  // ArduCopter LAND mode
+            0, 0, 0, 0, 0);
     }
     else if (cmd.name == "RTL")
     {
+        // Use DO_SET_MODE to explicitly set the mode to RTL (6) instead of NAV_RETURN_TO_LAUNCH
         mavlink_msg_command_long_pack(
             255, 200, &message,
             target_sysid, target_compid,
-            MAV_CMD_NAV_RETURN_TO_LAUNCH,
-            0, 0, 0, 0, 0, 0, 0, 0);
+            MAV_CMD_DO_SET_MODE,
+            0,
+            MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,
+            6.0f,  // ArduCopter RTL mode
+            0, 0, 0, 0, 0);
     }
     else if (cmd.name == "SET_MODE")
     {
@@ -362,12 +362,15 @@ void CommandManager::execute(const Command& cmd)
 void CommandManager::upload_mission(int                              request_id,
                                      const std::vector<WaypointItem>& waypoints,
                                      uint8_t target_sysid,
-                                     uint8_t target_compid)
+                                     uint8_t target_compid,
+                                     Vehicle* vehicle)
 {
-    if (!active_transport)
+    // When a Vehicle* is supplied, we route through its link (multi-vehicle).
+    // Otherwise we require active_transport (legacy serial path).
+    if (!vehicle && !active_transport)
     {
-        std::cout << "[Mission] ERROR: no active transport — "
-                     "call set_transport() before upload_mission()\n";
+        std::cout << "[Mission] ERROR: no active transport and no target vehicle — "
+                     "call set_transport() or pass a Vehicle* to upload_mission()\n";
         if (response_callback_)
         {
             json res;
@@ -386,12 +389,14 @@ void CommandManager::upload_mission(int                              request_id,
         return;
     }
 
-    pending_mission_    = waypoints;
-    mission_request_id_ = request_id;
-    mission_target_sysid_ = target_sysid;
+    pending_mission_       = waypoints;
+    mission_request_id_    = request_id;
+    mission_target_sysid_  = target_sysid;
     mission_target_compid_ = target_compid;
+    mission_target_vehicle_ = vehicle;   // nullptr → use active_transport
     std::cout << "[Mission] Starting upload of "
-              << waypoints.size() << " waypoints to sysid=" << (int)target_sysid << "\n";
+              << waypoints.size() << " waypoints to sysid=" << (int)target_sysid
+              << (vehicle ? " (via vehicle link)" : " (via active_transport)") << "\n";
     send_mission_count();
 }
 
@@ -403,9 +408,17 @@ void CommandManager::send_mission_count()
         static_cast<uint16_t>(pending_mission_.size()),
         MAV_MISSION_TYPE_MISSION, 0);
 
-    uint8_t  buf[MAVLINK_MAX_PACKET_LEN];
-    uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
-    active_transport->async_send(buf, len);
+    if (mission_target_vehicle_)
+    {
+        // Multi-vehicle path: route through the vehicle's own link/transport
+        mission_target_vehicle_->send_mavlink(msg);
+    }
+    else
+    {
+        uint8_t  buf[MAVLINK_MAX_PACKET_LEN];
+        uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
+        active_transport->async_send(buf, len);
+    }
     std::cout << "[Mission] Sent MISSION_COUNT=" << pending_mission_.size() << "\n";
 }
 
@@ -435,9 +448,17 @@ void CommandManager::send_mission_item(uint16_t seq)
         wp.altitude,                               // z = altitude (float, metres)
         MAV_MISSION_TYPE_MISSION);
 
-    uint8_t  buf[MAVLINK_MAX_PACKET_LEN];
-    uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
-    active_transport->async_send(buf, len);
+    if (mission_target_vehicle_)
+    {
+        // Multi-vehicle path: route through the vehicle's own link/transport
+        mission_target_vehicle_->send_mavlink(msg);
+    }
+    else
+    {
+        uint8_t  buf[MAVLINK_MAX_PACKET_LEN];
+        uint16_t len = mavlink_msg_to_send_buffer(buf, &msg);
+        active_transport->async_send(buf, len);
+    }
 
     std::cout << "[Mission] Sent ITEM_INT seq=" << seq
               << " cmd=" << wp.command
@@ -457,7 +478,8 @@ void CommandManager::on_mission_request(uint16_t seq)
 void CommandManager::on_mission_ack(uint8_t type)
 {
     std::cout << "[Mission] MISSION_ACK type=" << static_cast<int>(type) << "\n";
-    mission_in_progress_ = false;
+    mission_in_progress_    = false;
+    mission_target_vehicle_ = nullptr;  // release vehicle reference
 
     if (response_callback_)
     {

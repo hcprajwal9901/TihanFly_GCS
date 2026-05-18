@@ -26,6 +26,7 @@
 #include "flight_mode.h"
 #include <nlohmann/json.hpp>
 #include <cstring>
+#include <cctype>
 
 using json = nlohmann::json;
 
@@ -71,8 +72,13 @@ std::string FlightMode::modeName(CopterMode m)
 
 CopterMode FlightMode::modeFromName(const std::string& name)
 {
+    std::string upper_name = name;
+    for (char &c : upper_name) {
+        c = std::toupper(static_cast<unsigned char>(c));
+    }
+
     for (const auto& e : MODE_TABLE)
-        if (name == e.name) return e.mode;
+        if (upper_name == e.name) return e.mode;
     return CopterMode::UNKNOWN;
 }
 

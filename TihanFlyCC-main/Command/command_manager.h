@@ -50,6 +50,7 @@ struct Command {
     float       param1    = 0;
     float       param2    = 0;
     std::string mode_name;
+    std::shared_ptr<Vehicle> target_vehicle;
 };
 
 // ── MAVLink mission item ──────────────────────────────────────────────────────
@@ -85,18 +86,7 @@ public:
     void set_vehicle_manager(VehicleManager* vm);
 
     // -----------------------------------------------------------------------
-    // One-shot vehicle override for the next process() call.
-    //
-    // When the frontend sends a command with an explicit sysid, main.cpp
-    // looks up that Vehicle via VehicleManager::get_vehicle(sysid) and passes
-    // it here so the command is routed to the right drone.
-    //
-    // The override is consumed (reset to nullptr) inside process() after the
-    // command executes, so it never bleeds into the next unrelated command.
-    //
-    // Falls back to the normal Mode A / Mode B routing if not set.
-    // -----------------------------------------------------------------------
-    void set_active_vehicle(std::shared_ptr<Vehicle> vehicle);
+    // Removed set_active_vehicle in favor of passing target directly to add_command.
 
     // -----------------------------------------------------------------------
     // Transport — required only for mission upload (low-level handshake).
@@ -109,16 +99,21 @@ public:
     // -----------------------------------------------------------------------
     void add_command(int id, const std::string& cmd,
                      float p1 = 0, float p2 = 0,
-                     const std::string& mode = "");
+                     const std::string& mode = "",
+                     std::shared_ptr<Vehicle> target = nullptr);
     void process();
 
     // -----------------------------------------------------------------------
     // Mission upload
+    //   vehicle — when non-null, mission items are sent via that vehicle's
+    //             own link (correct per-drone transport in multi-vehicle mode).
+    //             When null, falls back to active_transport (legacy/serial).
     // -----------------------------------------------------------------------
     void upload_mission(int request_id,
                         const std::vector<WaypointItem>& waypoints,
                         uint8_t target_sysid = 1,
-                        uint8_t target_compid = 0);
+                        uint8_t target_compid = 0,
+                        Vehicle* vehicle = nullptr);
 
     void on_mission_request(uint16_t seq);
     void on_mission_ack(uint8_t type);
@@ -130,7 +125,7 @@ public:
 
 private:
     void     execute(const Command& cmd);
-    Vehicle* resolve_vehicle() const;   // sysid-free; honours active mode
+    Vehicle* resolve_vehicle(const Command& cmd) const;   // sysid-free; honours active mode
     void     send_mission_count();
     void     send_mission_item(uint16_t seq);
 
@@ -138,11 +133,6 @@ private:
     // Exactly one of these is non-null at a time.
     Vehicle*        direct_vehicle_  = nullptr;   // Mode A
     VehicleManager* vehicle_manager_ = nullptr;   // Mode B
-
-    // One-shot override set by set_active_vehicle(); consumed in process().
-    // Takes priority over both Mode A and Mode B for a single process() cycle.
-    // mutable so resolve_vehicle() const can reset it after consuming.
-    mutable std::shared_ptr<Vehicle> override_vehicle_;
 
     // ── Transport (mission upload only) ──────────────────────────────────────
     std::shared_ptr<Transport> active_transport;
@@ -159,4 +149,7 @@ private:
     std::atomic<bool>         mission_in_progress_{false};
     uint8_t                   mission_target_sysid_ = 1;
     uint8_t                   mission_target_compid_ = 0;
+    // When set, mission items are sent via this vehicle's link (not active_transport).
+    // Cleared when upload completes.
+    Vehicle*                  mission_target_vehicle_ = nullptr;
 };

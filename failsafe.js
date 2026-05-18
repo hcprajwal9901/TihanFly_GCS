@@ -206,7 +206,7 @@
     // ── Panel HTML ──────────────────────────────────────────────────────────
     function buildPanelHTML() {
         return `
-<div class="settings-panel-title">Failsafe</div>
+<div class="settings-panel-title" style="display:flex; justify-content:space-between; align-items:center;"><span>Failsafe</span><div class="drone-selector-wrap-container"></div></div>
 
 <!-- Sync status strip -->
 <div class="fs-sync-strip">

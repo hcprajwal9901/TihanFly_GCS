@@ -30,30 +30,38 @@ console.log('🚀 Mission Send Module Loading...');
 window.missionQueue = [];
 window.missionQueueBusy = false;
 window.missionQueueTimer = null;
+window._missionInFlightSysid = null;  // tracks which drone's ACK we're waiting for
 
 window.pumpMissionQueue = function() {
     if (window.missionQueueTimer) {
         clearTimeout(window.missionQueueTimer);
         window.missionQueueTimer = null;
     }
-    
+
     if (window.missionQueue.length === 0) {
         window.missionQueueBusy = false;
+        window._missionInFlightSysid = null;
         return;
     }
     window.missionQueueBusy = true;
     const msg = window.missionQueue.shift();
+    window._missionInFlightSysid = msg.sysid;
+
     if (window.ws && window.ws.readyState === WebSocket.OPEN) {
         window.ws.send(JSON.stringify(msg));
-        console.log(`📤 Dequeued and sent mission/markers to drone sysid=${msg.sysid}`);
-        
-        // 5-second timeout in case backend/drone doesn't ACK
+        console.log(`📤 Queued mission/markers sent → sysid=${msg.sysid} (${window.missionQueue.length} remaining)`);
+
+        // 6-second fallback in case backend/drone never ACKs
         window.missionQueueTimer = setTimeout(() => {
-            console.warn(`⚠️ Mission ACK timeout for drone sysid=${msg.sysid}, proceeding with queue...`);
+            console.warn(`⚠️ Mission ACK timeout for sysid=${msg.sysid}, advancing queue...`);
+            window._missionInFlightSysid = null;
+            window.missionQueueBusy = false;
             window.pumpMissionQueue();
-        }, 5000);
+        }, 6000);
     } else {
-        console.error('❌ WebSocket not open, dropping queued mission');
+        console.error('❌ WebSocket not open, dropping queued mission for sysid=' + msg.sysid);
+        window._missionInFlightSysid = null;
+        window.missionQueueBusy = false;
         window.pumpMissionQueue(); // Try next
     }
 };
@@ -63,6 +71,35 @@ window.queueMissionPayload = function(msg) {
     if (!window.missionQueueBusy) {
         window.pumpMissionQueue();
     }
+};
+
+/**
+ * Called by ACK handlers. Only advances the queue once per in-flight drone,
+ * regardless of how many ACK types the backend sends (flight_plan_ack + mission_ack).
+ * @param {number|string} ackedSysid - The sysid from the ACK message
+ */
+window.advanceMissionQueue = function(ackedSysid) {
+    // Ignore spurious / duplicate ACKs for a sysid that isn't the current in-flight one
+    if (window._missionInFlightSysid === null) {
+        console.log(`[Queue] Ignoring extra ACK for sysid=${ackedSysid} — queue already advanced`);
+        return;
+    }
+    if (ackedSysid !== undefined && ackedSysid !== window._missionInFlightSysid) {
+        console.log(`[Queue] ACK sysid=${ackedSysid} doesn't match in-flight sysid=${window._missionInFlightSysid}, ignoring`);
+        return;
+    }
+
+    // Clear in-flight marker so subsequent duplicate ACKs are ignored
+    window._missionInFlightSysid = null;
+    window.missionQueueBusy = false;
+
+    if (window.missionQueueTimer) {
+        clearTimeout(window.missionQueueTimer);
+        window.missionQueueTimer = null;
+    }
+
+    // Small delay so the drone can settle between uploads
+    setTimeout(() => window.pumpMissionQueue(), 400);
 };
 
 // ============================================================================
@@ -381,7 +418,9 @@ function handleMissionAck(message) {
     } else {
         if (window.MsgConsole) window.MsgConsole.error(`Mission upload failed (Drone ${message.sysid || ''}): ` + (message.message || 'unknown error'));
     }
-    setTimeout(() => window.pumpMissionQueue(), 500); // small delay to let drone settle
+    // Use advanceMissionQueue — guards against the duplicate flight_plan_ack that
+    // also fires for this same drone, preventing queue skip-ahead with 3+ drones.
+    window.advanceMissionQueue(message.sysid);
 }
 window.handleMissionAck = handleMissionAck;
 
@@ -396,7 +435,9 @@ function handleFlightPlanAck(message) {
         console.error('❌ Flight plan send failed:', message.message);
         if (window.MsgConsole) window.MsgConsole.error(`Send markers failed (Drone ${message.sysid || ''}): ` + (message.message || 'unknown error'));
     }
-    setTimeout(() => window.pumpMissionQueue(), 500);
+    // Use advanceMissionQueue — guards against the duplicate mission_ack that
+    // also fires for this same drone, preventing queue skip-ahead with 3+ drones.
+    window.advanceMissionQueue(message.sysid);
 }
 window.handleFlightPlanAck = handleFlightPlanAck;
 

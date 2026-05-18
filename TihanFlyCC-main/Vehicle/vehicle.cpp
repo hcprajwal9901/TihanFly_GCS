@@ -12,10 +12,11 @@
 // ---------------------------------------------------------------------------
 
 Vehicle::Vehicle(int sysid, int compid, int link_id,
-                 LinkManager* link_manager)
+                 LinkManager* link_manager, int ui_sysid)
     : sysid_(sysid),
       compid_(compid),
       link_id_(link_id),
+      ui_sysid_(ui_sysid),
       link_manager_(link_manager),
       last_heartbeat_(std::chrono::steady_clock::now()),
       accel_calib_(std::make_unique<AccelCalibration>()),
@@ -51,8 +52,9 @@ Vehicle::~Vehicle() = default;
 // Identity accessors
 // ---------------------------------------------------------------------------
 
-int Vehicle::sysid()   const { return sysid_;   }
-int Vehicle::compid()  const { return compid_;  }
+int Vehicle::sysid()    const { return sysid_;    }
+int Vehicle::compid()   const { return compid_;   }
+int Vehicle::ui_sysid() const { return ui_sysid_; }
 
 int Vehicle::link_id() const
 {
@@ -111,11 +113,33 @@ void Vehicle::process_message(const mavlink_message_t& msg)
 static const char* copter_mode_name(uint32_t custom_mode)
 {
     static const char* names[] = {
-        "STABILIZE","ACRO","ALT_HOLD","AUTO","GUIDED","LOITER",
-        "RTL","CIRCLE","LAND","DRIFT","SPORT","FLIP","AUTOTUNE",
-        "POSHOLD","BRAKE","THROW","AVOID_ADSB","GUIDED_NOGPS",
-        "SMART_RTL","FLOWHOLD","FOLLOW","ZIGZAG","SYSTEMID",
-        "AUTOROTATE","AUTO_RTL"
+        "STABILIZE",    // 0
+        "ACRO",         // 1
+        "ALT_HOLD",     // 2
+        "AUTO",         // 3
+        "GUIDED",       // 4
+        "LOITER",       // 5
+        "RTL",          // 6
+        "CIRCLE",       // 7
+        "POSITION",     // 8  (deprecated)
+        "LAND",         // 9
+        "OF_LOITER",    // 10 (deprecated)
+        "DRIFT",        // 11
+        "SPORT",        // 12
+        "FLIP",         // 13
+        "AUTOTUNE",     // 14
+        "POSHOLD",      // 15
+        "BRAKE",        // 16
+        "THROW",        // 17
+        "AVOID_ADSB",   // 18
+        "GUIDED_NOGPS", // 19
+        "SMART_RTL",    // 20
+        "FLOWHOLD",     // 21
+        "FOLLOW",       // 22
+        "ZIGZAG",       // 23
+        "SYSTEMID",     // 24
+        "AUTOROTATE",   // 25
+        "AUTO_RTL"      // 26
     };
     if (custom_mode < sizeof(names)/sizeof(names[0]))
         return names[custom_mode];

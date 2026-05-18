@@ -167,7 +167,7 @@
         }
 
         return `
-<div class="settings-panel-title">Motor Test</div>
+<div class="settings-panel-title" style="display:flex; justify-content:space-between; align-items:center;"><span>Motor Test</span><div class="drone-selector-wrap-container"></div></div>
 
 <!-- Safety warning banner -->
 <div class="mt-warning-banner">

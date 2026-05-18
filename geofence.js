@@ -290,7 +290,7 @@
         const actionOpts = ACTION_OPTS.map(o => `<option value="${o.v}">${o.label}</option>`).join('');
 
         return `
-<div class="settings-panel-title">Geofence</div>
+<div class="settings-panel-title" style="display:flex; justify-content:space-between; align-items:center;"><span>Geofence</span><div class="drone-selector-wrap-container"></div></div>
 
 <!-- ── Enable toggle ── -->
 <div class="gf-enable-card" id="gf-enable-card">

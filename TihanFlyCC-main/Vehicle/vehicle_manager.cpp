@@ -142,16 +142,30 @@ if (sysid == 0)
                 }
             }
 
+            int ui_sysid = sysid;
+            bool duplicate;
+            do {
+                duplicate = false;
+                for (const auto& [k, v] : vehicles_) {
+                    if (v && v->ui_sysid() == ui_sysid) {
+                        duplicate = true;
+                        ui_sysid++;
+                        break;
+                    }
+                }
+            } while (duplicate);
+
             vehicle = std::make_shared<Vehicle>(
-                sysid, compid, link_id, link_manager_);
+                sysid, compid, link_id, link_manager_, ui_sysid);
 
             vehicles_[key] = vehicle;
             is_new = true;
 
             std::cout << "[VehicleManager] New vehicle discovered:"
-                      << " sysid="   << sysid
-                      << " compid="  << compid
-                      << " link_id=" << link_id
+                      << " sysid="     << sysid
+                      << " ui_sysid="  << ui_sysid
+                      << " compid="    << compid
+                      << " link_id="   << link_id
                       << '\n';
         }
         else
@@ -282,34 +296,46 @@ std::vector<int> VehicleManager::get_all_sysids() const
 {
     std::lock_guard<std::mutex> lock(mutex_);
 
-    // Collect all live vehicles. If two vehicles share the same sysid
-    // (both ArduPilot boards default to SYSID_THISMAV=1), we expose them
-    // to the UI as sysid=link_id so the dropdown shows distinct entries.
     std::vector<int> result;
     result.reserve(vehicles_.size());
-
-    bool has_duplicate_sysids = false;
-    std::unordered_map<int, int> sysid_count;
-    for (const auto& [key, vehicle] : vehicles_)
-        if (vehicle && vehicle->is_alive())
-            sysid_count[vehicle->sysid()]++;
-    for (auto& [sid, cnt] : sysid_count)
-        if (cnt > 1) { has_duplicate_sysids = true; break; }
 
     for (const auto& [key, vehicle] : vehicles_)
     {
         if (vehicle && vehicle->is_alive())
-        {
-            // Use link_id as the UI sysid when duplicates exist, so each
-            // drone gets a unique number in the frontend dropdown.
-            int ui_sysid = (has_duplicate_sysids && sysid_count[vehicle->sysid()] > 1)
-                           ? vehicle->link_id()
-                           : vehicle->sysid();
-            result.push_back(ui_sysid);
-        }
+            result.push_back(vehicle->sysid());
     }
 
     return result;
+}
+
+std::vector<int> VehicleManager::get_all_ui_sysids() const
+{
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    std::vector<int> result;
+    result.reserve(vehicles_.size());
+
+    for (const auto& [key, vehicle] : vehicles_)
+    {
+        if (vehicle && vehicle->is_alive())
+            result.push_back(vehicle->ui_sysid());
+    }
+
+    return result;
+}
+
+std::shared_ptr<Vehicle>
+VehicleManager::get_vehicle_by_ui_sysid(int ui_sysid) const
+{
+    std::lock_guard<std::mutex> lock(mutex_);
+
+    for (const auto& [key, vehicle] : vehicles_)
+    {
+        if (vehicle && vehicle->is_alive() && vehicle->ui_sysid() == ui_sysid)
+            return vehicle;
+    }
+
+    return nullptr;
 }
 
 // ---------------------------------------------------------------------------

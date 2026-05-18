@@ -177,7 +177,7 @@
         ).join('\n');
 
         return `
-<div class="settings-panel-title">Initial Tune Parameters</div>
+<div class="settings-panel-title" style="display:flex; justify-content:space-between; align-items:center;"><span>Initial Tune Parameters</span><div class="drone-selector-wrap-container"></div></div>
 
 <!-- Prerequisites banner -->
 <div class="it-prereq-banner">
