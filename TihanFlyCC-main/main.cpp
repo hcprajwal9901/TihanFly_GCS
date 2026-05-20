@@ -200,7 +200,7 @@ static asio::io_context* g_io_ctx     = nullptr;
 // vehicle->compass_calib() / vehicle->esc_calib() / vehicle->radio_calib().
 FlightMode         flightMode;
 
-ParameterManager param_manager(1, 1);
+ParameterManager param_manager(1, 1, "./param_cache");
 
 std::string detected_serial_port;
 bool        udp_port_bound = false;
@@ -649,6 +649,7 @@ void send_status()
                 v["roll"]        = veh->roll();
                 v["pitch"]       = veh->pitch();
                 v["yaw"]         = veh->yaw();
+                v["speed"]       = veh->speed();
                 vehicles_arr.push_back(v);
             };
 
@@ -3722,6 +3723,11 @@ int main()
         std::cout << "[GCS] Vehicle sysid=" << sysid << " lost\n";
         drone_connected   = false;
         active_connection = "NONE";  // reset so next heartbeat always re-wires
+
+        // Delete the per-sysid parameter cache so stale data
+        // is not served on the next reconnect from a different session.
+        param_manager.deleteCache(sysid);
+
         send_status();
     });
 
@@ -4260,4 +4266,7 @@ int main()
         for (auto& t : io_threads)
             t.join();
     }
+
+    // -- Clean shutdown -- delete all parameter cache files
+    param_manager.deleteAllCaches();
 }

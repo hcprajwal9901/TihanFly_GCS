@@ -117,6 +117,46 @@ if(nlohmann_json_FOUND)
     target_link_libraries(TiHANFly nlohmann_json::nlohmann_json)
 endif()
 
+# ── std::filesystem linker fix (GCC 8 / Ubuntu 18.04) ────────────────────────
+# GCC 9+ and Clang 7+: std::filesystem is in libstdc++/libc++ — no extra flag.
+# GCC 8 (Ubuntu 18.04): std::filesystem is in a separate -lstdc++fs library.
+# This block auto-detects which case applies, so the same CMakeLists.txt
+# compiles correctly on:
+#   • Windows  (MSVC)            — no flag needed
+#   • Ubuntu 20.04+ x86_64       — GCC 9+, no flag needed
+#   • Ubuntu 18.04 x86_64        — GCC 8, needs -lstdc++fs
+#   • Ubuntu 20.04+ ARM64        — GCC 9+, no flag needed  (Raspberry Pi 4/5,
+#                                    Jetson, etc.)
+#   • Any Clang 7+               — no flag needed
+if(NOT MSVC)
+    include(CheckCXXSourceCompiles)
+    set(CMAKE_REQUIRED_FLAGS "-std=c++17")
+    check_cxx_source_compiles("
+        #include <filesystem>
+        int main() { std::filesystem::path p; return 0; }
+    " HAS_STD_FILESYSTEM)
+
+    if(NOT HAS_STD_FILESYSTEM)
+        # Try with -lstdc++fs (GCC 8)
+        set(CMAKE_REQUIRED_LIBRARIES "stdc++fs")
+        check_cxx_source_compiles("
+            #include <filesystem>
+            int main() { std::filesystem::path p; return 0; }
+        " HAS_STD_FILESYSTEM_WITH_LIB)
+        unset(CMAKE_REQUIRED_LIBRARIES)
+
+        if(HAS_STD_FILESYSTEM_WITH_LIB)
+            target_link_libraries(TiHANFly stdc++fs)
+            message(STATUS "Linking -lstdc++fs for std::filesystem (GCC 8)")
+        else()
+            message(WARNING "std::filesystem not found — build may fail")
+        endif()
+    else()
+        message(STATUS "std::filesystem built-in (GCC 9+ / Clang 7+)")
+    endif()
+endif()
+
+
 # ── Optional: copy binary to project root after build ─────────────────────────
 # add_custom_command(TARGET TiHANFly POST_BUILD
 #     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:TiHANFly> ${PROJECT_SOURCE_DIR}/TiHANFly

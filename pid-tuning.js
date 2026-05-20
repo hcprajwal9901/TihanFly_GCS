@@ -389,12 +389,13 @@
         // Refresh / Read all params from FC
         document.getElementById('pid-refresh-btn')?.addEventListener('click', () => {
             setStatus('running', `Reading ${ALL_PARAMS.length} parameters from drone…`);
+            // Use param_request_one (supported by backend); stagger 80ms apart to avoid flooding
             ALL_PARAMS.forEach((id, i) => {
-                setTimeout(() => send({ type: 'param_fetch', param_id: id }), i * 50);
+                setTimeout(() => send({ type: 'param_request_one', name: id }), i * 80);
             });
             setTimeout(() => {
-                setStatus('idle', 'Read request sent. Waiting for drone response…');
-            }, ALL_PARAMS.length * 50 + 200);
+                setStatus('idle', 'Read requests sent. Waiting for drone response…');
+            }, ALL_PARAMS.length * 80 + 200);
         });
 
         // Write all visible params to FC

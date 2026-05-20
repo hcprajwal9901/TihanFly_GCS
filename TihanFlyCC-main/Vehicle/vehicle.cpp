@@ -125,21 +125,24 @@ static const char* copter_mode_name(uint32_t custom_mode)
         "LAND",         // 9
         "OF_LOITER",    // 10 (deprecated)
         "DRIFT",        // 11
-        "SPORT",        // 12
-        "FLIP",         // 13
-        "AUTOTUNE",     // 14
-        "POSHOLD",      // 15
-        "BRAKE",        // 16
-        "THROW",        // 17
-        "AVOID_ADSB",   // 18
-        "GUIDED_NOGPS", // 19
-        "SMART_RTL",    // 20
-        "FLOWHOLD",     // 21
-        "FOLLOW",       // 22
-        "ZIGZAG",       // 23
-        "SYSTEMID",     // 24
-        "AUTOROTATE",   // 25
-        "AUTO_RTL"      // 26
+        "RESERVED_12",  // 12 (unused)
+        "SPORT",        // 13
+        "FLIP",         // 14
+        "AUTOTUNE",     // 15
+        "POSHOLD",      // 16
+        "BRAKE",        // 17
+        "THROW",        // 18
+        "AVOID_ADSB",   // 19
+        "GUIDED_NOGPS", // 20
+        "SMART_RTL",    // 21
+        "FLOWHOLD",     // 22
+        "FOLLOW",       // 23
+        "ZIGZAG",       // 24
+        "SYSTEMID",     // 25
+        "AUTOROTATE",   // 26
+        "AUTO_RTL",     // 27
+        "TURTLE",       // 28
+        "RATE_ACRO"     // 29
     };
     if (custom_mode < sizeof(names)/sizeof(names[0]))
         return names[custom_mode];
@@ -223,6 +226,7 @@ void Vehicle::update_telemetry(const mavlink_message_t& msg)
         mavlink_msg_vfr_hud_decode(&msg, &hud);
         std::lock_guard<std::mutex> lk(telem_mtx_);
         telem_.alt_msl = hud.alt;   // barometric alt — prefer over GPS MSL
+        telem_.speed = hud.groundspeed;
         break;
     }
     default:
@@ -367,6 +371,12 @@ float Vehicle::yaw() const
 {
     std::lock_guard<std::mutex> lk(telem_mtx_);
     return telem_.yaw_rad;
+}
+
+float Vehicle::speed() const
+{
+    std::lock_guard<std::mutex> lk(telem_mtx_);
+    return telem_.speed;
 }
 
 AccelCalibration& Vehicle::accel_calib()

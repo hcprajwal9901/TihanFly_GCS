@@ -115,16 +115,25 @@
     }
 
     // ── Fetch all channel params from the FC ─────────────────────────────────
+    // OPTIMISED: stagger requests 40ms apart to avoid flooding the MAVLink link.
+    // Priority order: FUNCTION first (populates the LED indicator), then PWM params.
+    // Total time for 16 channels × 5 params = 80 requests × 40ms ≈ 3.2s max.
     function refreshParams() {
         setBadge('so-conn-badge', 'loading', '⟳ Fetching from FC…');
+        for (let n = 1; n <= NUM_CHANNELS; n++) channels[n].loaded = 0;
+
+        // Build ordered request list: FUNCTION comes first so the grid fills left-to-right
+        const requests = [];
+        const SUFFIXES = ['FUNCTION', 'REVERSED', 'MIN', 'TRIM', 'MAX'];
+        // Prioritise FUNCTION for all channels first, then the rest
+        for (let n = 1; n <= NUM_CHANNELS; n++) requests.push(pName(n, 'FUNCTION'));
         for (let n = 1; n <= NUM_CHANNELS; n++) {
-            channels[n].loaded = 0;
-            requestParam(pName(n, 'FUNCTION'));
-            requestParam(pName(n, 'REVERSED'));
-            requestParam(pName(n, 'MIN'));
-            requestParam(pName(n, 'TRIM'));
-            requestParam(pName(n, 'MAX'));
+            SUFFIXES.slice(1).forEach(s => requests.push(pName(n, s)));
         }
+
+        requests.forEach((name, i) => {
+            setTimeout(() => requestParam(name), i * 40);
+        });
     }
 
     // ── Incoming message handler ─────────────────────────────────────────────

@@ -201,7 +201,7 @@ void CommandManager::execute(const Command& cmd)
             255, 200, &message,
             target_sysid, target_compid,
             MAV_CMD_COMPONENT_ARM_DISARM,
-            0, 1, 0, 0, 0, 0, 0, 0);
+            0, 1.0f, 0.0f, 0, 0, 0, 0, 0);
     }
     else if (cmd.name == "FORCE_ARM")
     {
@@ -209,7 +209,7 @@ void CommandManager::execute(const Command& cmd)
             255, 200, &message,
             target_sysid, target_compid,
             MAV_CMD_COMPONENT_ARM_DISARM,
-            0, 1, 21196, 0, 0, 0, 0, 0);
+            0, 1.0f, 21196.0f, 0, 0, 0, 0, 0);
     }
     else if (cmd.name == "DISARM")
     {
@@ -217,7 +217,7 @@ void CommandManager::execute(const Command& cmd)
             255, 200, &message,
             target_sysid, target_compid,
             MAV_CMD_COMPONENT_ARM_DISARM,
-            0, 0, 0, 0, 0, 0, 0, 0);
+            0, 0.0f, 0.0f, 0, 0, 0, 0, 0);
     }
     else if (cmd.name == "TAKEOFF")
     {
@@ -265,6 +265,7 @@ void CommandManager::execute(const Command& cmd)
             {"Acro",          1},
             {"ALT_HOLD",      2},
             {"Altitude Hold", 2},
+            {"Alt Hold",      2},
             {"AUTO",          3},
             {"Auto",          3},
             {"GUIDED",        4},
@@ -286,22 +287,32 @@ void CommandManager::execute(const Command& cmd)
             {"AutoTune",      15},
             {"POSHOLD",       16},
             {"Position Hold", 16},
+            {"Position",      16},
+            {"Pos Hold",      16},
             {"BRAKE",         17},
             {"Brake",         17},
             {"THROW",         18},
             {"Throw",         18},
             {"AVOID_ADSB",    19},
+            {"Avoid ADSB",    19},
             {"GUIDED_NOGPS",  20},
+            {"Guided No GPS", 20},
             {"SMART_RTL",     21},
             {"Smart RTL",     21},
             {"FLOWHOLD",      22},
+            {"Flow Hold",     22},
             {"FOLLOW",        23},
+            {"Follow",        23},
             {"Follow Me",     23},
             {"ZIGZAG",        24},
             {"Zigzag",        24},
+            {"ZigZag",        24},
             {"SYSTEMID",      25},
+            {"System ID",     25},
             {"AUTOROTATE",    26},
+            {"Heli Autorotate", 26},
             {"AUTO_RTL",      27},
+            {"Auto RTL",      27},
         };
 
         int custom_mode = 0;

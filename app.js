@@ -34,6 +34,7 @@ function initializeApplication() {
         initializeCompass();
         initializeVideo();
         initializeVideoMaximize();
+        initializeUIAppearance();
 
         // Step 3: Wait a bit more, then integrate everything
         setTimeout(() => {
@@ -204,10 +205,19 @@ function initializeDroneWebSocket() {
                 // Use yaw from ATTITUDE when GPS heading is not yet available.
                 // att.yaw is in radians (-π to +π, North=0, clockwise positive).
                 else if (data.type === 'attitude') {
-                    if (sid === targetSysId && compass && !droneGpsActive) {
-                        // Convert radian yaw → degrees, normalise to 0–360
-                        const yawDeg = ((data.yaw * 180 / Math.PI) + 360) % 360;
-                        compass.setHeading(yawDeg);
+                    if (sid === targetSysId) {
+                        // Update TelemetryStore for the HUD so roll/pitch move smoothly at high-hz
+                        if (window.TelemetryStore) {
+                            window.TelemetryStore.roll = data.roll;
+                            window.TelemetryStore.pitch = data.pitch;
+                            window.TelemetryStore.yaw = data.yaw;
+                        }
+
+                        if (compass && !droneGpsActive) {
+                            // Convert radian yaw → degrees, normalise to 0–360
+                            const yawDeg = ((data.yaw * 180 / Math.PI) + 360) % 360;
+                            compass.setHeading(yawDeg);
+                        }
                     }
                 }
 
@@ -943,6 +953,123 @@ window.GCS = {
     droneAutoPan: (on) => tmap?.setDroneAutoPan(on),
     isDroneActive: () => droneGpsActive,
 };
+
+// ============================================================================
+// UI APPEARANCE SETTINGS & DRAGGABILITY
+// ============================================================================
+function makeDraggable(element) {
+    if (!element) return;
+    
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    
+    element.style.cursor = 'move';
+    
+    element.addEventListener('mousedown', dragMouseDown);
+
+    function dragMouseDown(e) {
+        const tagName = e.target.tagName.toLowerCase();
+        if (['button', 'input', 'select', 'textarea'].includes(tagName)) return;
+        
+        if (e.target.closest('.minimal-console-messages')) return;
+        if (e.target.closest('#videoMaxBtn')) return;
+
+        e.preventDefault();
+        
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        
+        const rect = element.getBoundingClientRect();
+        
+        element.style.transition = 'none';
+        
+        element.style.top = rect.top + 'px';
+        element.style.left = rect.left + 'px';
+        element.style.bottom = 'auto';
+        element.style.right = 'auto';
+        
+        document.addEventListener('mouseup', closeDragElement);
+        document.addEventListener('mousemove', elementDrag);
+    }
+
+    function elementDrag(e) {
+        e.preventDefault();
+        
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        
+        element.style.top = (element.offsetTop - pos2) + "px";
+        element.style.left = (element.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        document.removeEventListener('mouseup', closeDragElement);
+        document.removeEventListener('mousemove', elementDrag);
+        
+        element.style.transition = '';
+    }
+}
+
+function initializeUIAppearance() {
+    console.log('👁️ Initializing UI Appearance settings...');
+    const btn = document.getElementById('uiAppearanceBtn');
+    const dropdown = document.getElementById('uiAppearanceDropdown');
+    const chevron = document.getElementById('uiAppearanceChevron');
+    
+    if (!btn || !dropdown) return;
+    
+    // Toggle dropdown
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isVisible = dropdown.style.display === 'flex';
+        
+        if (isVisible) {
+            dropdown.style.opacity = '0';
+            dropdown.style.transform = 'translateY(-10px)';
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+            setTimeout(() => { dropdown.style.display = 'none'; }, 200);
+        } else {
+            dropdown.style.display = 'flex';
+            setTimeout(() => {
+                dropdown.style.opacity = '1';
+                dropdown.style.transform = 'translateY(0)';
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+            }, 10);
+        }
+    });
+    
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+        if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.opacity = '0';
+            dropdown.style.transform = 'translateY(-10px)';
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+            setTimeout(() => { dropdown.style.display = 'none'; }, 200);
+        }
+    });
+    
+    // Toggles
+    const toggleCamera1 = document.getElementById('toggleCamera1');
+    const toggleConsole = document.getElementById('toggleMessageViewer');
+    
+    const videoContainer = document.getElementById('videoContainer');
+    const consoleContainer = document.querySelector('.minimal-console-container');
+    
+    if (toggleCamera1 && videoContainer) {
+        toggleCamera1.addEventListener('change', (e) => {
+            videoContainer.style.display = e.target.checked ? '' : 'none';
+        });
+        makeDraggable(videoContainer);
+    }
+    
+    if (toggleConsole && consoleContainer) {
+        toggleConsole.addEventListener('change', (e) => {
+            consoleContainer.style.display = e.target.checked ? '' : 'none';
+        });
+        makeDraggable(consoleContainer);
+    }
+}
 
 // ============================================================================
 // AUTO-START

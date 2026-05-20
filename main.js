@@ -58,28 +58,52 @@ function _filtersFor(mimeType) {
 
 app.whenReady().then(() => {
     // ── C++ MAVLink backend ──────────────────────────────────────────────────
-    // Video streaming is handled by video_server.py (spawned by the backend
-    // when the user clicks Connect). No relay server needed.
+    // The backend binary is spawned with its working directory (cwd) set to a
+    // writable location so that ./param_cache and any other relative-path data
+    // files are created there.
+    //
+    // • Dev mode  : cwd = directory containing the binary (original behaviour).
+    // • Packaged  : cwd = app.getPath('userData')
+    //               Windows → %APPDATA%\TiHANFly
+    //               Linux   → ~/.config/TiHANFly
+    //               macOS   → ~/Library/Application Support/TiHANFly
+    //   The resources/ folder inside an asar/AppImage is READ-ONLY, so we
+    //   must not use path.dirname(candidate) when packaged.
+
+    const userDataDir = app.getPath('userData');
+    // Ensure the userData dir exists (Electron usually creates it, but be safe)
+    if (!fs.existsSync(userDataDir)) fs.mkdirSync(userDataDir, { recursive: true });
+
+    // Candidate list covers: packaged Windows, packaged Linux, dev Windows, dev Linux
     const backendCandidates = [
-        app.isPackaged ? path.join(process.resourcesPath, 'backend', 'TiHANFly.exe') : null,
+        // ── Packaged ──────────────────────────────────────────────────────────
+        app.isPackaged ? path.join(process.resourcesPath, 'backend', 'TiHANFly.exe')  : null,
+        app.isPackaged ? path.join(process.resourcesPath, 'backend', 'TiHANFly')      : null,
+        // ── Development ───────────────────────────────────────────────────────
         path.join(__dirname, 'TihanFlyCC-main', 'build', 'Release', 'TiHANFly.exe'),
+        path.join(__dirname, 'TihanFlyCC-main', 'build', 'Release', 'TiHANFly'),
         path.join(__dirname, 'build', 'Release', 'TiHANFly.exe'),
+        path.join(__dirname, 'build', 'Release', 'TiHANFly'),
         path.join(__dirname, 'tihanfly_server'),
     ].filter(Boolean);
 
     for (const candidate of backendCandidates) {
+        if (!fs.existsSync(candidate)) continue;
         try {
-            const fs = require('fs');
-            if (!fs.existsSync(candidate)) continue;
+            // Use userData as cwd when packaged so param_cache is writable.
+            // In dev mode fall back to the binary's own directory (keeps existing behaviour).
+            const spawnCwd = app.isPackaged ? userDataDir : path.dirname(candidate);
 
-            backendProcess = spawn(candidate, [], { cwd: path.dirname(candidate) });
+            backendProcess = spawn(candidate, [], { cwd: spawnCwd });
             backendProcess.stdout && backendProcess.stdout.on('data', d =>
                 process.stdout.write('[Backend] ' + d));
             backendProcess.stderr && backendProcess.stderr.on('data', d =>
                 process.stderr.write('[Backend] ' + d));
             backendProcess.on('error', err =>
                 console.error('[Backend] Process error:', err.message));
+
             console.log('[Main] Backend started:', candidate);
+            console.log('[Main] Backend cwd:', spawnCwd);
             break;
         } catch (err) {
             console.warn('[Main] Could not start backend candidate:', candidate, '-', err.message);
@@ -87,7 +111,7 @@ app.whenReady().then(() => {
     }
 
     if (!backendProcess) {
-        console.warn('[Main] No backend binary found — start TiHANFly.exe manually.');
+        console.warn('[Main] No backend binary found — start TiHANFly manually.');
     }
 
     createWindow();
@@ -95,7 +119,14 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
     if (backendProcess) {
-        try { backendProcess.kill(); } catch (_) {}
+        try {
+            // Graceful shutdown: SIGTERM first, SIGKILL after 3 s if still running
+            backendProcess.kill('SIGTERM');
+            setTimeout(() => {
+                try { backendProcess.kill('SIGKILL'); } catch (_) {}
+            }, 3000);
+        } catch (_) {}
     }
     app.quit();
 });
+
