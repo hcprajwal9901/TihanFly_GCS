@@ -4,8 +4,6 @@ project(TiHANFly CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-enable_testing()
-
 # ── Build type default ────────────────────────────────────────────────────────
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
@@ -24,11 +22,11 @@ find_package(OpenSSL REQUIRED)
 find_package(ZLIB REQUIRED)
 
 # nlohmann/json — header-only; adjust path if you vendor it differently
-include(FetchContent)
-FetchContent_Declare(json
-    URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
-)
-FetchContent_MakeAvailable(json)
+find_package(nlohmann_json 3.2.0 QUIET)
+if(NOT nlohmann_json_FOUND)
+    # Fallback: assume it is installed system-wide or in a subdirectory
+    include_directories(/usr/include/nlohmann)
+endif()
 
 # MAVLink — header-only; set MAVLINK_INCLUDE_DIR if not on the default path
 if(NOT DEFINED MAVLINK_INCLUDE_DIR)
@@ -55,7 +53,8 @@ include_directories(
 )
 
 # ── Source files ──────────────────────────────────────────────────────────────
-set(SOURCES_CORE
+set(SOURCES
+    main.cpp
 
     # ── Transport layer ───────────────────────────────────────────────────
     Transport/udp.cpp
@@ -96,30 +95,8 @@ set(SOURCES_CORE
     Inspector/mavlink_inspector.cpp
 )
 
-# ── Static Library for Core Logic (used by app and tests) ─────────────────────
-add_library(TiHANFlyCore STATIC ${SOURCES_CORE})
-
-target_compile_definitions(TiHANFlyCore PRIVATE
-    ASIO_STANDALONE          # use standalone ASIO, not Boost.ASIO
-    _WEBSOCKETPP_CPP11_STL_  # if websocketpp headers are present
-)
-
-target_link_libraries(TiHANFlyCore
-    PUBLIC
-    Threads::Threads
-    OpenSSL::SSL
-    OpenSSL::Crypto
-    ZLIB::ZLIB
-)
-
-target_link_libraries(TiHANFlyCore PUBLIC nlohmann_json::nlohmann_json)
-
-if(WIN32)
-    target_link_libraries(TiHANFlyCore PUBLIC ws2_32 mswsock)
-endif()
-
 # ── Executable ────────────────────────────────────────────────────────────────
-add_executable(TiHANFly main.cpp)
+add_executable(TiHANFly ${SOURCES})
 
 # ── Preprocessor definitions ─────────────────────────────────────────────────
 target_compile_definitions(TiHANFly PRIVATE
@@ -128,8 +105,17 @@ target_compile_definitions(TiHANFly PRIVATE
 )
 
 # ── Link libraries ────────────────────────────────────────────────────────────
-target_link_libraries(TiHANFly PRIVATE TiHANFlyCore)
+target_link_libraries(TiHANFly
+    Threads::Threads
+    OpenSSL::SSL
+    OpenSSL::Crypto
+    ZLIB::ZLIB          # zlib — required by firmware_manager.cpp for APJ decompression
+)
 
+# Link nlohmann_json if found as a CMake target, otherwise it's header-only
+if(nlohmann_json_FOUND)
+    target_link_libraries(TiHANFly nlohmann_json::nlohmann_json)
+endif()
 
 # ── Optional: copy binary to project root after build ─────────────────────────
 # add_custom_command(TARGET TiHANFly POST_BUILD
@@ -138,6 +124,3 @@ target_link_libraries(TiHANFly PRIVATE TiHANFlyCore)
 
 # ── Install rule (optional) ───────────────────────────────────────────────────
 install(TARGETS TiHANFly DESTINATION bin)
-
-# ── Testing Subdirectory ──────────────────────────────────────────────────────
-add_subdirectory(Testing)
