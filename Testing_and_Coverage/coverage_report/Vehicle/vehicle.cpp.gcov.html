@@ -1,0 +1,466 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - Vehicle/vehicle.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">Vehicle</a> - vehicle.cpp<span style="font-size: 80%;"> (source / <a href="vehicle.cpp.func-sort-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">146</td>
+            <td class="headerCovTableEntry">155</td>
+            <td class="headerCovTableEntryHi">94.2 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2026-05-20 18:12:01</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">27</td>
+            <td class="headerCovTableEntry">29</td>
+            <td class="headerCovTableEntryHi">93.1 %</td>
+          </tr>
+          <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : #include &quot;vehicle.h&quot;</a>
+<a name="2"><span class="lineNum">       2 </span>            : #include &quot;../Link/link_manager.h&quot;   // full definition needed for send()</a>
+<a name="3"><span class="lineNum">       3 </span>            : #include &quot;../calibration/accel_calibration.h&quot;</a>
+<a name="4"><span class="lineNum">       4 </span>            : #include &quot;../calibration/compass_calibration.h&quot;</a>
+<a name="5"><span class="lineNum">       5 </span>            : #include &quot;../calibration/esc_calibration.h&quot;</a>
+<a name="6"><span class="lineNum">       6 </span>            : #include &quot;../calibration/radio_calibration.h&quot;</a>
+<a name="7"><span class="lineNum">       7 </span>            : </a>
+<a name="8"><span class="lineNum">       8 </span>            : #include &lt;iostream&gt;</a>
+<a name="9"><span class="lineNum">       9 </span>            : </a>
+<a name="10"><span class="lineNum">      10 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="11"><span class="lineNum">      11 </span>            : // Construction</a>
+<a name="12"><span class="lineNum">      12 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="13"><span class="lineNum">      13 </span>            : </a>
+<a name="14"><span class="lineNum">      14 </span><span class="lineCov">          6 : Vehicle::Vehicle(int sysid, int compid, int link_id,</span></a>
+<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          6 :                  LinkManager* link_manager, int ui_sysid)</span></a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          6 :     : sysid_(sysid),</span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineCov">          6 :       compid_(compid),</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          6 :       link_id_(link_id),</span></a>
+<a name="19"><span class="lineNum">      19 </span><span class="lineCov">          6 :       ui_sysid_(ui_sysid),</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">          6 :       link_manager_(link_manager),</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">          6 :       last_heartbeat_(std::chrono::steady_clock::now()),</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">          6 :       accel_calib_(std::make_unique&lt;AccelCalibration&gt;()),</span></a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">          6 :       compass_calib_(std::make_unique&lt;CompassCalibration&gt;()),</span></a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineCov">          6 :       esc_calib_(std::make_unique&lt;EscCalibration&gt;()),</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">         12 :       radio_calib_(std::make_unique&lt;RadioCalibration&gt;())</span></a>
+<a name="26"><span class="lineNum">      26 </span>            : {</a>
+<a name="27"><span class="lineNum">      27 </span><span class="lineCov">          6 :     if (!link_manager_)</span></a>
+<a name="28"><span class="lineNum">      28 </span><span class="lineNoCov">          0 :         throw std::invalid_argument(</span></a>
+<a name="29"><span class="lineNum">      29 </span><span class="lineNoCov">          0 :             &quot;[Vehicle] link_manager must not be null&quot;);</span></a>
+<a name="30"><span class="lineNum">      30 </span>            : </a>
+<a name="31"><span class="lineNum">      31 </span>            :     // Inject this vehicle's identity into its calibration instances immediately.</a>
+<a name="32"><span class="lineNum">      32 </span><span class="lineCov">          6 :     accel_calib_-&gt;setVehicleInfo(sysid_, compid_);</span></a>
+<a name="33"><span class="lineNum">      33 </span><span class="lineCov">          6 :     compass_calib_-&gt;setVehicleInfo(sysid_, compid_);</span></a>
+<a name="34"><span class="lineNum">      34 </span><span class="lineCov">          6 :     esc_calib_-&gt;setVehicleInfo(sysid_, compid_);</span></a>
+<a name="35"><span class="lineNum">      35 </span><span class="lineCov">          6 :     radio_calib_-&gt;setVehicleInfo(sysid_, compid_);</span></a>
+<a name="36"><span class="lineNum">      36 </span>            : </a>
+<a name="37"><span class="lineNum">      37 </span>            :     std::cout &lt;&lt; &quot;[Vehicle] Created sysid=&quot; &lt;&lt; sysid_</a>
+<a name="38"><span class="lineNum">      38 </span><span class="lineCov">         12 :               &lt;&lt; &quot; link_id=&quot; &lt;&lt; link_id_ &lt;&lt; '\n';</span></a>
+<a name="39"><span class="lineNum">      39 </span><span class="lineCov">          6 : }</span></a>
+<a name="40"><span class="lineNum">      40 </span>            : </a>
+<a name="41"><span class="lineNum">      41 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="42"><span class="lineNum">      42 </span>            : // Destruction</a>
+<a name="43"><span class="lineNum">      43 </span>            : //</a>
+<a name="44"><span class="lineNum">      44 </span>            : // Defined here (not in the header) so that unique_ptr&lt;AccelCalibration&gt;'s</a>
+<a name="45"><span class="lineNum">      45 </span>            : // deleter is instantiated in this TU, where AccelCalibration is a complete</a>
+<a name="46"><span class="lineNum">      46 </span>            : // type.  vehicle.h only forward-declares it.</a>
+<a name="47"><span class="lineNum">      47 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="48"><span class="lineNum">      48 </span>            : </a>
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">          6 : Vehicle::~Vehicle() = default;</span></a>
+<a name="50"><span class="lineNum">      50 </span>            : </a>
+<a name="51"><span class="lineNum">      51 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="52"><span class="lineNum">      52 </span>            : // Identity accessors</a>
+<a name="53"><span class="lineNum">      53 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="54"><span class="lineNum">      54 </span>            : </a>
+<a name="55"><span class="lineNum">      55 </span><span class="lineCov">          6 : int Vehicle::sysid()    const { return sysid_;    }</span></a>
+<a name="56"><span class="lineNum">      56 </span><span class="lineNoCov">          0 : int Vehicle::compid()   const { return compid_;   }</span></a>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">          5 : int Vehicle::ui_sysid() const { return ui_sysid_; }</span></a>
+<a name="58"><span class="lineNum">      58 </span>            : </a>
+<a name="59"><span class="lineNum">      59 </span><span class="lineCov">          2 : int Vehicle::link_id() const</span></a>
+<a name="60"><span class="lineNum">      60 </span>            : {</a>
+<a name="61"><span class="lineNum">      61 </span><span class="lineCov">          2 :     std::lock_guard&lt;std::mutex&gt; lock(link_id_mtx_);</span></a>
+<a name="62"><span class="lineNum">      62 </span><span class="lineCov">          2 :     return link_id_;</span></a>
+<a name="63"><span class="lineNum">      63 </span>            : }</a>
+<a name="64"><span class="lineNum">      64 </span>            : </a>
+<a name="65"><span class="lineNum">      65 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="66"><span class="lineNum">      66 </span>            : // Runtime link switching</a>
+<a name="67"><span class="lineNum">      67 </span>            : //</a>
+<a name="68"><span class="lineNum">      68 </span>            : // Called from main.cpp whenever the active transport changes (Serial ↔ UDP).</a>
+<a name="69"><span class="lineNum">      69 </span>            : // All subsequent send_mavlink() calls will use the updated link_id.</a>
+<a name="70"><span class="lineNum">      70 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="71"><span class="lineNum">      71 </span>            : </a>
+<a name="72"><span class="lineNum">      72 </span><span class="lineNoCov">          0 : void Vehicle::set_link_id(int new_link_id)</span></a>
+<a name="73"><span class="lineNum">      73 </span>            : {</a>
+<a name="74"><span class="lineNum">      74 </span><span class="lineNoCov">          0 :     std::lock_guard&lt;std::mutex&gt; lock(link_id_mtx_);</span></a>
+<a name="75"><span class="lineNum">      75 </span><span class="lineNoCov">          0 :     if (link_id_ != new_link_id)</span></a>
+<a name="76"><span class="lineNum">      76 </span>            :     {</a>
+<a name="77"><span class="lineNum">      77 </span>            :         std::cout &lt;&lt; &quot;[Vehicle] link_id changed: &quot; &lt;&lt; link_id_</a>
+<a name="78"><span class="lineNum">      78 </span><span class="lineNoCov">          0 :                   &lt;&lt; &quot; → &quot; &lt;&lt; new_link_id &lt;&lt; '\n';</span></a>
+<a name="79"><span class="lineNum">      79 </span><span class="lineNoCov">          0 :         link_id_ = new_link_id;</span></a>
+<a name="80"><span class="lineNum">      80 </span>            :     }</a>
+<a name="81"><span class="lineNum">      81 </span><span class="lineNoCov">          0 : }</span></a>
+<a name="82"><span class="lineNum">      82 </span>            : </a>
+<a name="83"><span class="lineNum">      83 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="84"><span class="lineNum">      84 </span>            : // Inbound path</a>
+<a name="85"><span class="lineNum">      85 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="86"><span class="lineNum">      86 </span>            : </a>
+<a name="87"><span class="lineNum">      87 </span><span class="lineCov">         13 : void Vehicle::process_message(const mavlink_message_t&amp; msg)</span></a>
+<a name="88"><span class="lineNum">      88 </span>            : {</a>
+<a name="89"><span class="lineNum">      89 </span><span class="lineCov">         13 :     if (msg.msgid == MAVLINK_MSG_ID_HEARTBEAT)</span></a>
+<a name="90"><span class="lineNum">      90 </span><span class="lineCov">          5 :         update_heartbeat();</span></a>
+<a name="91"><span class="lineNum">      91 </span>            : </a>
+<a name="92"><span class="lineNum">      92 </span>            :     // Always update the telemetry cache, then dispatch to registered handlers</a>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">         13 :     update_telemetry(msg);</span></a>
+<a name="94"><span class="lineNum">      94 </span>            : </a>
+<a name="95"><span class="lineNum">      95 </span>            :     std::vector&lt;MessageHandler&gt; handlers_copy;</a>
+<a name="96"><span class="lineNum">      96 </span>            :     {</a>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         13 :         std::lock_guard&lt;std::mutex&gt; lock(handlers_mtx_);</span></a>
+<a name="98"><span class="lineNum">      98 </span><span class="lineCov">         13 :         auto it = handlers_.find(msg.msgid);</span></a>
+<a name="99"><span class="lineNum">      99 </span><span class="lineCov">         13 :         if (it != handlers_.end())</span></a>
+<a name="100"><span class="lineNum">     100 </span><span class="lineCov">          2 :             handlers_copy = it-&gt;second;</span></a>
+<a name="101"><span class="lineNum">     101 </span>            :     }</a>
+<a name="102"><span class="lineNum">     102 </span>            : </a>
+<a name="103"><span class="lineNum">     103 </span><span class="lineCov">         15 :     for (auto&amp; handler : handlers_copy)</span></a>
+<a name="104"><span class="lineNum">     104 </span>            :         handler(msg);</a>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         13 : }</span></a>
+<a name="106"><span class="lineNum">     106 </span>            : </a>
+<a name="107"><span class="lineNum">     107 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="108"><span class="lineNum">     108 </span>            : // Telemetry cache update</a>
+<a name="109"><span class="lineNum">     109 </span>            : // Decodes inbound MAVLink frames that carry state we want to expose via</a>
+<a name="110"><span class="lineNum">     110 </span>            : // the accessor methods below.  All writes are protected by telem_mtx_.</a>
+<a name="111"><span class="lineNum">     111 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="112"><span class="lineNum">     112 </span>            : </a>
+<a name="113"><span class="lineNum">     113 </span>            : static const char* copter_mode_name(uint32_t custom_mode)</a>
+<a name="114"><span class="lineNum">     114 </span>            : {</a>
+<a name="115"><span class="lineNum">     115 </span>            :     static const char* names[] = {</a>
+<a name="116"><span class="lineNum">     116 </span>            :         &quot;STABILIZE&quot;,    // 0</a>
+<a name="117"><span class="lineNum">     117 </span>            :         &quot;ACRO&quot;,         // 1</a>
+<a name="118"><span class="lineNum">     118 </span>            :         &quot;ALT_HOLD&quot;,     // 2</a>
+<a name="119"><span class="lineNum">     119 </span>            :         &quot;AUTO&quot;,         // 3</a>
+<a name="120"><span class="lineNum">     120 </span>            :         &quot;GUIDED&quot;,       // 4</a>
+<a name="121"><span class="lineNum">     121 </span>            :         &quot;LOITER&quot;,       // 5</a>
+<a name="122"><span class="lineNum">     122 </span>            :         &quot;RTL&quot;,          // 6</a>
+<a name="123"><span class="lineNum">     123 </span>            :         &quot;CIRCLE&quot;,       // 7</a>
+<a name="124"><span class="lineNum">     124 </span>            :         &quot;POSITION&quot;,     // 8  (deprecated)</a>
+<a name="125"><span class="lineNum">     125 </span>            :         &quot;LAND&quot;,         // 9</a>
+<a name="126"><span class="lineNum">     126 </span>            :         &quot;OF_LOITER&quot;,    // 10 (deprecated)</a>
+<a name="127"><span class="lineNum">     127 </span>            :         &quot;DRIFT&quot;,        // 11</a>
+<a name="128"><span class="lineNum">     128 </span>            :         &quot;SPORT&quot;,        // 12</a>
+<a name="129"><span class="lineNum">     129 </span>            :         &quot;FLIP&quot;,         // 13</a>
+<a name="130"><span class="lineNum">     130 </span>            :         &quot;AUTOTUNE&quot;,     // 14</a>
+<a name="131"><span class="lineNum">     131 </span>            :         &quot;POSHOLD&quot;,      // 15</a>
+<a name="132"><span class="lineNum">     132 </span>            :         &quot;BRAKE&quot;,        // 16</a>
+<a name="133"><span class="lineNum">     133 </span>            :         &quot;THROW&quot;,        // 17</a>
+<a name="134"><span class="lineNum">     134 </span>            :         &quot;AVOID_ADSB&quot;,   // 18</a>
+<a name="135"><span class="lineNum">     135 </span>            :         &quot;GUIDED_NOGPS&quot;, // 19</a>
+<a name="136"><span class="lineNum">     136 </span>            :         &quot;SMART_RTL&quot;,    // 20</a>
+<a name="137"><span class="lineNum">     137 </span>            :         &quot;FLOWHOLD&quot;,     // 21</a>
+<a name="138"><span class="lineNum">     138 </span>            :         &quot;FOLLOW&quot;,       // 22</a>
+<a name="139"><span class="lineNum">     139 </span>            :         &quot;ZIGZAG&quot;,       // 23</a>
+<a name="140"><span class="lineNum">     140 </span>            :         &quot;SYSTEMID&quot;,     // 24</a>
+<a name="141"><span class="lineNum">     141 </span>            :         &quot;AUTOROTATE&quot;,   // 25</a>
+<a name="142"><span class="lineNum">     142 </span>            :         &quot;AUTO_RTL&quot;      // 26</a>
+<a name="143"><span class="lineNum">     143 </span>            :     };</a>
+<a name="144"><span class="lineNum">     144 </span><span class="lineCov">          5 :     if (custom_mode &lt; sizeof(names)/sizeof(names[0]))</span></a>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">          5 :         return names[custom_mode];</span></a>
+<a name="146"><span class="lineNum">     146 </span>            :     return &quot;UNKNOWN&quot;;</a>
+<a name="147"><span class="lineNum">     147 </span>            : }</a>
+<a name="148"><span class="lineNum">     148 </span>            : </a>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">         13 : void Vehicle::update_telemetry(const mavlink_message_t&amp; msg)</span></a>
+<a name="150"><span class="lineNum">     150 </span>            : {</a>
+<a name="151"><span class="lineNum">     151 </span><span class="lineCov">         13 :     switch (msg.msgid)</span></a>
+<a name="152"><span class="lineNum">     152 </span>            :     {</a>
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">          5 :     case MAVLINK_MSG_ID_HEARTBEAT:</span></a>
+<a name="154"><span class="lineNum">     154 </span>            :     {</a>
+<a name="155"><span class="lineNum">     155 </span>            :         mavlink_heartbeat_t hb;</a>
+<a name="156"><span class="lineNum">     156 </span><span class="lineCov">          5 :         mavlink_msg_heartbeat_decode(&amp;msg, &amp;hb);</span></a>
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">          5 :         std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="158"><span class="lineNum">     158 </span><span class="lineCov">          5 :         telem_.armed = (hb.base_mode &amp; MAV_MODE_FLAG_SAFETY_ARMED) != 0;</span></a>
+<a name="159"><span class="lineNum">     159 </span><span class="lineCov">         10 :         telem_.mode  = copter_mode_name(hb.custom_mode);</span></a>
+<a name="160"><span class="lineNum">     160 </span>            :         break;</a>
+<a name="161"><span class="lineNum">     161 </span>            :     }</a>
+<a name="162"><span class="lineNum">     162 </span><span class="lineCov">          1 :     case MAVLINK_MSG_ID_SYS_STATUS:</span></a>
+<a name="163"><span class="lineNum">     163 </span>            :     {</a>
+<a name="164"><span class="lineNum">     164 </span>            :         mavlink_sys_status_t ss;</a>
+<a name="165"><span class="lineNum">     165 </span><span class="lineCov">          1 :         mavlink_msg_sys_status_decode(&amp;msg, &amp;ss);</span></a>
+<a name="166"><span class="lineNum">     166 </span><span class="lineCov">          1 :         std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="167"><span class="lineNum">     167 </span><span class="lineCov">          1 :         if (ss.voltage_battery != UINT16_MAX)</span></a>
+<a name="168"><span class="lineNum">     168 </span><span class="lineCov">          1 :             telem_.battery_v = ss.voltage_battery / 1000.f;</span></a>
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">          1 :         if (ss.battery_remaining &gt;= 0)</span></a>
+<a name="170"><span class="lineNum">     170 </span><span class="lineCov">          1 :             telem_.battery_pct = ss.battery_remaining;</span></a>
+<a name="171"><span class="lineNum">     171 </span>            :         break;</a>
+<a name="172"><span class="lineNum">     172 </span>            :     }</a>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">          1 :     case MAVLINK_MSG_ID_BATTERY_STATUS:</span></a>
+<a name="174"><span class="lineNum">     174 </span>            :     {</a>
+<a name="175"><span class="lineNum">     175 </span>            :         mavlink_battery_status_t bs;</a>
+<a name="176"><span class="lineNum">     176 </span><span class="lineCov">          1 :         mavlink_msg_battery_status_decode(&amp;msg, &amp;bs);</span></a>
+<a name="177"><span class="lineNum">     177 </span><span class="lineCov">          1 :         std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="178"><span class="lineNum">     178 </span><span class="lineCov">          1 :         if (bs.battery_remaining &gt;= 0)</span></a>
+<a name="179"><span class="lineNum">     179 </span><span class="lineCov">          1 :             telem_.battery_pct = bs.battery_remaining;</span></a>
+<a name="180"><span class="lineNum">     180 </span>            :         float total = 0.f; int n = 0;</a>
+<a name="181"><span class="lineNum">     181 </span><span class="lineCov">         11 :         for (int i = 0; i &lt; 10; ++i)</span></a>
+<a name="182"><span class="lineNum">     182 </span><span class="lineCov">         10 :             if (bs.voltages[i] != UINT16_MAX) { total += bs.voltages[i]; ++n; }</span></a>
+<a name="183"><span class="lineNum">     183 </span><span class="lineCov">          1 :         if (n &gt; 0) telem_.battery_v = total / 1000.f;</span></a>
+<a name="184"><span class="lineNum">     184 </span>            :         break;</a>
+<a name="185"><span class="lineNum">     185 </span>            :     }</a>
+<a name="186"><span class="lineNum">     186 </span><span class="lineCov">          1 :     case MAVLINK_MSG_ID_ATTITUDE:</span></a>
+<a name="187"><span class="lineNum">     187 </span>            :     {</a>
+<a name="188"><span class="lineNum">     188 </span>            :         mavlink_attitude_t att;</a>
+<a name="189"><span class="lineNum">     189 </span><span class="lineCov">          1 :         mavlink_msg_attitude_decode(&amp;msg, &amp;att);</span></a>
+<a name="190"><span class="lineNum">     190 </span><span class="lineCov">          1 :         std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="191"><span class="lineNum">     191 </span><span class="lineCov">          1 :         telem_.roll  = att.roll;</span></a>
+<a name="192"><span class="lineNum">     192 </span><span class="lineCov">          1 :         telem_.pitch = att.pitch;</span></a>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">          1 :         telem_.yaw_rad = att.yaw;</span></a>
+<a name="194"><span class="lineNum">     194 </span>            :         break;</a>
+<a name="195"><span class="lineNum">     195 </span>            :     }</a>
+<a name="196"><span class="lineNum">     196 </span><span class="lineCov">          1 :     case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:</span></a>
+<a name="197"><span class="lineNum">     197 </span>            :     {</a>
+<a name="198"><span class="lineNum">     198 </span>            :         mavlink_global_position_int_t gp;</a>
+<a name="199"><span class="lineNum">     199 </span><span class="lineCov">          1 :         mavlink_msg_global_position_int_decode(&amp;msg, &amp;gp);</span></a>
+<a name="200"><span class="lineNum">     200 </span><span class="lineCov">          1 :         std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="201"><span class="lineNum">     201 </span><span class="lineCov">          1 :         telem_.lat     = gp.lat / 1e7;</span></a>
+<a name="202"><span class="lineNum">     202 </span><span class="lineCov">          1 :         telem_.lon     = gp.lon / 1e7;</span></a>
+<a name="203"><span class="lineNum">     203 </span><span class="lineCov">          1 :         telem_.alt_msl = gp.alt  / 1000.f;</span></a>
+<a name="204"><span class="lineNum">     204 </span>            :         break;</a>
+<a name="205"><span class="lineNum">     205 </span>            :     }</a>
+<a name="206"><span class="lineNum">     206 </span><span class="lineCov">          1 :     case MAVLINK_MSG_ID_GPS_RAW_INT:</span></a>
+<a name="207"><span class="lineNum">     207 </span>            :     {</a>
+<a name="208"><span class="lineNum">     208 </span>            :         mavlink_gps_raw_int_t gps;</a>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">          1 :         mavlink_msg_gps_raw_int_decode(&amp;msg, &amp;gps);</span></a>
+<a name="210"><span class="lineNum">     210 </span><span class="lineCov">          1 :         std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="211"><span class="lineNum">     211 </span><span class="lineCov">          1 :         telem_.gps_fix  = gps.fix_type;</span></a>
+<a name="212"><span class="lineNum">     212 </span><span class="lineCov">          1 :         telem_.num_sats = gps.satellites_visible;</span></a>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">          1 :         if (gps.fix_type &gt;= 2) {</span></a>
+<a name="214"><span class="lineNum">     214 </span><span class="lineCov">          1 :             telem_.lat     = gps.lat / 1e7;</span></a>
+<a name="215"><span class="lineNum">     215 </span><span class="lineCov">          1 :             telem_.lon     = gps.lon / 1e7;</span></a>
+<a name="216"><span class="lineNum">     216 </span><span class="lineCov">          1 :             telem_.alt_msl = gps.alt  / 1000.f;</span></a>
+<a name="217"><span class="lineNum">     217 </span>            :         }</a>
+<a name="218"><span class="lineNum">     218 </span>            :         break;</a>
+<a name="219"><span class="lineNum">     219 </span>            :     }</a>
+<a name="220"><span class="lineNum">     220 </span><span class="lineCov">          1 :     case MAVLINK_MSG_ID_VFR_HUD:</span></a>
+<a name="221"><span class="lineNum">     221 </span>            :     {</a>
+<a name="222"><span class="lineNum">     222 </span>            :         mavlink_vfr_hud_t hud;</a>
+<a name="223"><span class="lineNum">     223 </span><span class="lineCov">          1 :         mavlink_msg_vfr_hud_decode(&amp;msg, &amp;hud);</span></a>
+<a name="224"><span class="lineNum">     224 </span><span class="lineCov">          1 :         std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="225"><span class="lineNum">     225 </span><span class="lineCov">          1 :         telem_.alt_msl = hud.alt;   // barometric alt — prefer over GPS MSL</span></a>
+<a name="226"><span class="lineNum">     226 </span>            :         break;</a>
+<a name="227"><span class="lineNum">     227 </span>            :     }</a>
+<a name="228"><span class="lineNum">     228 </span>            :     default:</a>
+<a name="229"><span class="lineNum">     229 </span>            :         break;</a>
+<a name="230"><span class="lineNum">     230 </span>            :     }</a>
+<a name="231"><span class="lineNum">     231 </span><span class="lineCov">         13 : }</span></a>
+<a name="232"><span class="lineNum">     232 </span>            : </a>
+<a name="233"><span class="lineNum">     233 </span><span class="lineCov">          5 : void Vehicle::update_heartbeat()</span></a>
+<a name="234"><span class="lineNum">     234 </span>            : {</a>
+<a name="235"><span class="lineNum">     235 </span><span class="lineCov">          5 :     std::lock_guard&lt;std::mutex&gt; lock(heartbeat_mtx_);</span></a>
+<a name="236"><span class="lineNum">     236 </span><span class="lineCov">          5 :     last_heartbeat_ = std::chrono::steady_clock::now();</span></a>
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">          5 : }</span></a>
+<a name="238"><span class="lineNum">     238 </span>            : </a>
+<a name="239"><span class="lineNum">     239 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="240"><span class="lineNum">     240 </span>            : // Outbound path</a>
+<a name="241"><span class="lineNum">     241 </span>            : //</a>
+<a name="242"><span class="lineNum">     242 </span>            : //   Vehicle.send_mavlink()</a>
+<a name="243"><span class="lineNum">     243 </span>            : //         │</a>
+<a name="244"><span class="lineNum">     244 </span>            : //         ▼</a>
+<a name="245"><span class="lineNum">     245 </span>            : //   LinkManager.send(link_id)   ← routes to the link this vehicle is on</a>
+<a name="246"><span class="lineNum">     246 </span>            : //         │</a>
+<a name="247"><span class="lineNum">     247 </span>            : //         ▼</a>
+<a name="248"><span class="lineNum">     248 </span>            : //   Link.write_bytes(buf, len)</a>
+<a name="249"><span class="lineNum">     249 </span>            : //         │</a>
+<a name="250"><span class="lineNum">     250 </span>            : //         ▼</a>
+<a name="251"><span class="lineNum">     251 </span>            : //   Transport (UDP / Serial)</a>
+<a name="252"><span class="lineNum">     252 </span>            : //         │</a>
+<a name="253"><span class="lineNum">     253 </span>            : //         ▼</a>
+<a name="254"><span class="lineNum">     254 </span>            : //   Drone (ArduPilot)</a>
+<a name="255"><span class="lineNum">     255 </span>            : //</a>
+<a name="256"><span class="lineNum">     256 </span>            : // link_id_ is set at construction and updated by set_link_id() whenever</a>
+<a name="257"><span class="lineNum">     257 </span>            : // the active transport changes (Serial ↔ UDP failover).</a>
+<a name="258"><span class="lineNum">     258 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="259"><span class="lineNum">     259 </span>            : </a>
+<a name="260"><span class="lineNum">     260 </span><span class="lineCov">          1 : void Vehicle::send_mavlink(const mavlink_message_t&amp; msg)</span></a>
+<a name="261"><span class="lineNum">     261 </span>            : {</a>
+<a name="262"><span class="lineNum">     262 </span>            :     uint8_t buf[MAVLINK_MAX_PACKET_LEN];</a>
+<a name="263"><span class="lineNum">     263 </span><span class="lineCov">          1 :     const uint16_t len = mavlink_msg_to_send_buffer(buf, &amp;msg);</span></a>
+<a name="264"><span class="lineNum">     264 </span>            : </a>
+<a name="265"><span class="lineNum">     265 </span>            :     int lid;</a>
+<a name="266"><span class="lineNum">     266 </span>            :     {</a>
+<a name="267"><span class="lineNum">     267 </span><span class="lineCov">          1 :         std::lock_guard&lt;std::mutex&gt; lock(link_id_mtx_);</span></a>
+<a name="268"><span class="lineNum">     268 </span><span class="lineCov">          1 :         lid = link_id_;</span></a>
+<a name="269"><span class="lineNum">     269 </span>            :     }</a>
+<a name="270"><span class="lineNum">     270 </span>            : </a>
+<a name="271"><span class="lineNum">     271 </span>            :     // LinkManager.send(lid) → Link.write_bytes() → Transport → Drone</a>
+<a name="272"><span class="lineNum">     272 </span><span class="lineCov">          1 :     link_manager_-&gt;send(lid, buf, len);</span></a>
+<a name="273"><span class="lineNum">     273 </span><span class="lineCov">          1 : }</span></a>
+<a name="274"><span class="lineNum">     274 </span>            : </a>
+<a name="275"><span class="lineNum">     275 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="276"><span class="lineNum">     276 </span>            : // Handler registry</a>
+<a name="277"><span class="lineNum">     277 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="278"><span class="lineNum">     278 </span>            : </a>
+<a name="279"><span class="lineNum">     279 </span><span class="lineCov">          2 : void Vehicle::register_handler(uint32_t msgid, MessageHandler handler)</span></a>
+<a name="280"><span class="lineNum">     280 </span>            : {</a>
+<a name="281"><span class="lineNum">     281 </span><span class="lineCov">          2 :     std::lock_guard&lt;std::mutex&gt; lock(handlers_mtx_);</span></a>
+<a name="282"><span class="lineNum">     282 </span>            :     handlers_[msgid].push_back(std::move(handler));</a>
+<a name="283"><span class="lineNum">     283 </span><span class="lineCov">          2 : }</span></a>
+<a name="284"><span class="lineNum">     284 </span>            : </a>
+<a name="285"><span class="lineNum">     285 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="286"><span class="lineNum">     286 </span>            : // Liveness</a>
+<a name="287"><span class="lineNum">     287 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="288"><span class="lineNum">     288 </span>            : </a>
+<a name="289"><span class="lineNum">     289 </span><span class="lineCov">          9 : bool Vehicle::is_alive() const</span></a>
+<a name="290"><span class="lineNum">     290 </span>            : {</a>
+<a name="291"><span class="lineNum">     291 </span><span class="lineCov">          9 :     std::lock_guard&lt;std::mutex&gt; lock(heartbeat_mtx_);</span></a>
+<a name="292"><span class="lineNum">     292 </span><span class="lineCov">          9 :     return (std::chrono::steady_clock::now() - last_heartbeat_)</span></a>
+<a name="293"><span class="lineNum">     293 </span><span class="lineCov">          9 :            &lt; std::chrono::seconds(8);</span></a>
+<a name="294"><span class="lineNum">     294 </span>            : }</a>
+<a name="295"><span class="lineNum">     295 </span>            : </a>
+<a name="296"><span class="lineNum">     296 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="297"><span class="lineNum">     297 </span>            : // Telemetry accessors</a>
+<a name="298"><span class="lineNum">     298 </span>            : // ---------------------------------------------------------------------------</a>
+<a name="299"><span class="lineNum">     299 </span>            : </a>
+<a name="300"><span class="lineNum">     300 </span><span class="lineCov">          1 : bool Vehicle::is_armed() const</span></a>
+<a name="301"><span class="lineNum">     301 </span>            : {</a>
+<a name="302"><span class="lineNum">     302 </span><span class="lineCov">          1 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="303"><span class="lineNum">     303 </span><span class="lineCov">          1 :     return telem_.armed;</span></a>
+<a name="304"><span class="lineNum">     304 </span>            : }</a>
+<a name="305"><span class="lineNum">     305 </span>            : </a>
+<a name="306"><span class="lineNum">     306 </span><span class="lineCov">          1 : std::string Vehicle::flight_mode_string() const</span></a>
+<a name="307"><span class="lineNum">     307 </span>            : {</a>
+<a name="308"><span class="lineNum">     308 </span><span class="lineCov">          1 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="309"><span class="lineNum">     309 </span><span class="lineCov">          1 :     return telem_.mode;</span></a>
+<a name="310"><span class="lineNum">     310 </span>            : }</a>
+<a name="311"><span class="lineNum">     311 </span>            : </a>
+<a name="312"><span class="lineNum">     312 </span><span class="lineCov">          2 : int Vehicle::battery_remaining() const</span></a>
+<a name="313"><span class="lineNum">     313 </span>            : {</a>
+<a name="314"><span class="lineNum">     314 </span><span class="lineCov">          2 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="315"><span class="lineNum">     315 </span><span class="lineCov">          2 :     return telem_.battery_pct;</span></a>
+<a name="316"><span class="lineNum">     316 </span>            : }</a>
+<a name="317"><span class="lineNum">     317 </span>            : </a>
+<a name="318"><span class="lineNum">     318 </span><span class="lineCov">          2 : float Vehicle::battery_voltage() const</span></a>
+<a name="319"><span class="lineNum">     319 </span>            : {</a>
+<a name="320"><span class="lineNum">     320 </span><span class="lineCov">          2 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="321"><span class="lineNum">     321 </span><span class="lineCov">          2 :     return telem_.battery_v;</span></a>
+<a name="322"><span class="lineNum">     322 </span>            : }</a>
+<a name="323"><span class="lineNum">     323 </span>            : </a>
+<a name="324"><span class="lineNum">     324 </span><span class="lineCov">          1 : uint8_t Vehicle::gps_fix_type() const</span></a>
+<a name="325"><span class="lineNum">     325 </span>            : {</a>
+<a name="326"><span class="lineNum">     326 </span><span class="lineCov">          1 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="327"><span class="lineNum">     327 </span><span class="lineCov">          1 :     return telem_.gps_fix;</span></a>
+<a name="328"><span class="lineNum">     328 </span>            : }</a>
+<a name="329"><span class="lineNum">     329 </span>            : </a>
+<a name="330"><span class="lineNum">     330 </span><span class="lineCov">          1 : uint8_t Vehicle::gps_satellites() const</span></a>
+<a name="331"><span class="lineNum">     331 </span>            : {</a>
+<a name="332"><span class="lineNum">     332 </span><span class="lineCov">          1 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="333"><span class="lineNum">     333 </span><span class="lineCov">          1 :     return telem_.num_sats;</span></a>
+<a name="334"><span class="lineNum">     334 </span>            : }</a>
+<a name="335"><span class="lineNum">     335 </span>            : </a>
+<a name="336"><span class="lineNum">     336 </span><span class="lineCov">          2 : double Vehicle::latitude() const</span></a>
+<a name="337"><span class="lineNum">     337 </span>            : {</a>
+<a name="338"><span class="lineNum">     338 </span><span class="lineCov">          2 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="339"><span class="lineNum">     339 </span><span class="lineCov">          2 :     return telem_.lat;</span></a>
+<a name="340"><span class="lineNum">     340 </span>            : }</a>
+<a name="341"><span class="lineNum">     341 </span>            : </a>
+<a name="342"><span class="lineNum">     342 </span><span class="lineCov">          1 : double Vehicle::longitude() const</span></a>
+<a name="343"><span class="lineNum">     343 </span>            : {</a>
+<a name="344"><span class="lineNum">     344 </span><span class="lineCov">          1 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="345"><span class="lineNum">     345 </span><span class="lineCov">          1 :     return telem_.lon;</span></a>
+<a name="346"><span class="lineNum">     346 </span>            : }</a>
+<a name="347"><span class="lineNum">     347 </span>            : </a>
+<a name="348"><span class="lineNum">     348 </span><span class="lineCov">          2 : float Vehicle::altitude_msl() const</span></a>
+<a name="349"><span class="lineNum">     349 </span>            : {</a>
+<a name="350"><span class="lineNum">     350 </span><span class="lineCov">          2 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="351"><span class="lineNum">     351 </span><span class="lineCov">          2 :     return telem_.alt_msl;</span></a>
+<a name="352"><span class="lineNum">     352 </span>            : }</a>
+<a name="353"><span class="lineNum">     353 </span>            : </a>
+<a name="354"><span class="lineNum">     354 </span><span class="lineCov">          1 : float Vehicle::roll() const</span></a>
+<a name="355"><span class="lineNum">     355 </span>            : {</a>
+<a name="356"><span class="lineNum">     356 </span><span class="lineCov">          1 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="357"><span class="lineNum">     357 </span><span class="lineCov">          1 :     return telem_.roll;</span></a>
+<a name="358"><span class="lineNum">     358 </span>            : }</a>
+<a name="359"><span class="lineNum">     359 </span>            : </a>
+<a name="360"><span class="lineNum">     360 </span><span class="lineCov">          1 : float Vehicle::pitch() const</span></a>
+<a name="361"><span class="lineNum">     361 </span>            : {</a>
+<a name="362"><span class="lineNum">     362 </span><span class="lineCov">          1 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="363"><span class="lineNum">     363 </span><span class="lineCov">          1 :     return telem_.pitch;</span></a>
+<a name="364"><span class="lineNum">     364 </span>            : }</a>
+<a name="365"><span class="lineNum">     365 </span>            : </a>
+<a name="366"><span class="lineNum">     366 </span><span class="lineCov">          1 : float Vehicle::yaw() const</span></a>
+<a name="367"><span class="lineNum">     367 </span>            : {</a>
+<a name="368"><span class="lineNum">     368 </span><span class="lineCov">          1 :     std::lock_guard&lt;std::mutex&gt; lk(telem_mtx_);</span></a>
+<a name="369"><span class="lineNum">     369 </span><span class="lineCov">          1 :     return telem_.yaw_rad;</span></a>
+<a name="370"><span class="lineNum">     370 </span>            : }</a>
+<a name="371"><span class="lineNum">     371 </span>            : </a>
+<a name="372"><span class="lineNum">     372 </span><span class="lineCov">          1 : AccelCalibration&amp; Vehicle::accel_calib()</span></a>
+<a name="373"><span class="lineNum">     373 </span>            : {</a>
+<a name="374"><span class="lineNum">     374 </span><span class="lineCov">          1 :     return *accel_calib_;</span></a>
+<a name="375"><span class="lineNum">     375 </span>            : }</a>
+<a name="376"><span class="lineNum">     376 </span>            : </a>
+<a name="377"><span class="lineNum">     377 </span><span class="lineCov">          1 : CompassCalibration&amp; Vehicle::compass_calib()</span></a>
+<a name="378"><span class="lineNum">     378 </span>            : {</a>
+<a name="379"><span class="lineNum">     379 </span><span class="lineCov">          1 :     return *compass_calib_;</span></a>
+<a name="380"><span class="lineNum">     380 </span>            : }</a>
+<a name="381"><span class="lineNum">     381 </span>            : </a>
+<a name="382"><span class="lineNum">     382 </span><span class="lineCov">          1 : EscCalibration&amp; Vehicle::esc_calib()</span></a>
+<a name="383"><span class="lineNum">     383 </span>            : {</a>
+<a name="384"><span class="lineNum">     384 </span><span class="lineCov">          1 :     return *esc_calib_;</span></a>
+<a name="385"><span class="lineNum">     385 </span>            : }</a>
+<a name="386"><span class="lineNum">     386 </span>            : </a>
+<a name="387"><span class="lineNum">     387 </span><span class="lineCov">          1 : RadioCalibration&amp; Vehicle::radio_calib()</span></a>
+<a name="388"><span class="lineNum">     388 </span>            : {</a>
+<a name="389"><span class="lineNum">     389 </span><span class="lineCov">          1 :     return *radio_calib_;</span></a>
+<a name="390"><span class="lineNum">     390 </span>            : }</a>
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.14</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

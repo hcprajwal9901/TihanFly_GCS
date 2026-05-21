@@ -6,6 +6,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 enable_testing()
 
+# ── Coverage Configuration ───────────────────────────────────────────────────
+option(ENABLE_COVERAGE "Enable Code Coverage testing" OFF)
+if(ENABLE_COVERAGE)
+    add_compile_options(--coverage)
+    add_link_options(--coverage)
+endif()
+
 # ── Build type default ────────────────────────────────────────────────────────
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
@@ -94,6 +101,9 @@ set(SOURCES_CORE
 
     # ── MAVLink Inspector ─────────────────────────────────────────────────
     Inspector/mavlink_inspector.cpp
+    
+    # ── Parser ────────────────────────────────────────────────────────────
+    Parser/mavlink_parser.cpp
 )
 
 # ── Static Library for Core Logic (used by app and tests) ─────────────────────
@@ -140,4 +150,4 @@ target_link_libraries(TiHANFly PRIVATE TiHANFlyCore)
 install(TARGETS TiHANFly DESTINATION bin)
 
 # ── Testing Subdirectory ──────────────────────────────────────────────────────
-add_subdirectory(Testing)
+add_subdirectory(../Testing_and_Coverage/Backend_Tests ${CMAKE_CURRENT_BINARY_DIR}/Backend_Tests_build)

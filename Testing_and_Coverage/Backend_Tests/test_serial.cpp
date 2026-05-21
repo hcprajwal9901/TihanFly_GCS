@@ -64,6 +64,21 @@ TEST_F(SerialTransportTest, ReceivedDataFirstByteMatches) {
         EXPECT_EQ(received_data[0], 9);
     }
 }
+
+TEST_F(SerialTransportTest, AsyncSendValidData) {
+    std::vector<uint8_t> send_data = {10, 11, 12};
+    serial->async_send(send_data.data(), send_data.size());
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    
+    char buf[10];
+    int n = read(master_fd, buf, sizeof(buf));
+    EXPECT_EQ(n, 3);
+    if(n == 3) {
+        EXPECT_EQ(buf[0], 10);
+        EXPECT_EQ(buf[1], 11);
+        EXPECT_EQ(buf[2], 12);
+    }
+}
 #endif
 
 // This test runs on all platforms (including Windows)
@@ -94,5 +109,14 @@ TEST(SerialTransportInvalidPortTest, StopDoesNotCrash) {
     auto serial = std::make_shared<SerialTransport>(io, "INVALID_COM_PORT", 57600);
     EXPECT_NO_THROW({
         serial->stop();
+    });
+}
+
+TEST(SerialTransportInvalidPortTest, AsyncSendDoesNotCrash) {
+    asio::io_context io;
+    auto serial = std::make_shared<SerialTransport>(io, "INVALID_COM_PORT", 57600);
+    EXPECT_NO_THROW({
+        std::vector<uint8_t> dummy = {1};
+        serial->async_send(dummy.data(), dummy.size());
     });
 }
