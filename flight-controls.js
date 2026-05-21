@@ -131,7 +131,8 @@ class FlightControlButtons {
     confirmTakeoff() {
         this.setExecutingState(this.takeoffBtn, 'TAKEOFF');
         if (this.callbacks.onTakeoff) this.callbacks.onTakeoff(this.takeoffSettings);
-        this.hideTakeoffModal();
+        this.modal.classList.remove('active'); // forcefully close modal
+        setTimeout(() => this.clearExecutingState(), 6000);
     }
 
     executeLand() {
@@ -374,8 +375,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const flightControls = new FlightControlButtons();
 
     flightControls.onTakeoff((settings) => {
-        console.log('📤 TAKEOFF → altitude:', settings.altitude, 'm');
-        window.sendCommand('TAKEOFF', { altitude: settings.altitude, speed: settings.speed });
+        console.log('📤 AUTO TAKEOFF SEQUENCE INITIATED → altitude:', settings.altitude, 'm');
+        
+        // Step 1: Change mode to GUIDED
+        if (window.MsgConsole) window.MsgConsole.info('🔄 Step 1/3 — Setting mode → GUIDED…');
+        window.sendCommand('SET_MODE', { mode: 'GUIDED' });
+
+        // Step 2: Arm the motors after a delay
+        setTimeout(() => {
+            if (window.MsgConsole) window.MsgConsole.info('🔒 Step 2/3 — Arming drone…');
+            window.sendCommand('ARM');
+            if (window.ArmControl) window.ArmControl.setArmedState(true);
+        }, 1200);
+
+        // Step 3: Takeoff after arming settles
+        setTimeout(() => {
+            if (window.MsgConsole) window.MsgConsole.info(`🛫 Step 3/3 — Taking off to ${settings.altitude} m…`);
+            window.sendCommand('TAKEOFF', { altitude: settings.altitude, speed: settings.speed });
+        }, 3500);
     });
 
     flightControls.onLand(() => {

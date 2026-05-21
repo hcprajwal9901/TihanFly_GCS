@@ -772,9 +772,9 @@ static void request_streams_for_vehicle(std::shared_ptr<Vehicle> vehicle)
     struct StreamReq { uint8_t id; uint16_t rate_hz; const char* label; };
     static const StreamReq streams[] = {
         { MAV_DATA_STREAM_EXTENDED_STATUS, 2,  "EXTENDED_STATUS" },
-        { MAV_DATA_STREAM_POSITION,        5,  "POSITION (GPS)"  },
-        { MAV_DATA_STREAM_EXTRA1,          5,  "EXTRA1 (ATTITUDE)" },
-        { MAV_DATA_STREAM_EXTRA2,          5,  "EXTRA2 (VFR_HUD)"  },
+        { MAV_DATA_STREAM_POSITION,       10,  "POSITION (GPS)"  },
+        { MAV_DATA_STREAM_EXTRA1,         20,  "EXTRA1 (ATTITUDE)" },
+        { MAV_DATA_STREAM_EXTRA2,         10,  "EXTRA2 (VFR_HUD)"  },
         { MAV_DATA_STREAM_RAW_SENSORS,     2,  "RAW_SENSORS"      },
     };
     for (auto& sr : streams)
@@ -837,9 +837,9 @@ static void request_telemetry_streams()
 
     static const StreamReq streams[] = {
         { MAV_DATA_STREAM_EXTENDED_STATUS, 2,  "EXTENDED_STATUS (SYS_STATUS/battery)" },
-        { MAV_DATA_STREAM_POSITION,        5,  "POSITION (GPS)"   },
-        { MAV_DATA_STREAM_EXTRA1,          5,  "EXTRA1 (ATTITUDE)" },
-        { MAV_DATA_STREAM_EXTRA2,          5,  "EXTRA2 (VFR_HUD)"  },
+        { MAV_DATA_STREAM_POSITION,       10,  "POSITION (GPS)"   },
+        { MAV_DATA_STREAM_EXTRA1,         20,  "EXTRA1 (ATTITUDE)" },
+        { MAV_DATA_STREAM_EXTRA2,         10,  "EXTRA2 (VFR_HUD)"  },
         { MAV_DATA_STREAM_RAW_SENSORS,     2,  "RAW_SENSORS (GPS_RAW_INT)" },
     };
 

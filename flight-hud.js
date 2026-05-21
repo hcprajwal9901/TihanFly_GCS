@@ -22,7 +22,7 @@
     // Smoothing factor must be between 0.0 and 1.0. 
     // 0.45 gives a very fast response time (settles in ~40ms) while still providing 
     // enough interpolation to avoid the "stuck" jumpiness of higher values.
-    const SMOOTH_FACTOR = 0.78;
+    const SMOOTH_FACTOR = 0.45;
 
     function init() {
         const hudContainer = document.getElementById('hudContainer');
