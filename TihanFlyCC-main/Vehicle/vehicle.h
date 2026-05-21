@@ -115,6 +115,7 @@ public:
     float       roll()                const;   // radians
     float       pitch()               const;   // radians
     float       yaw()                 const;   // radians
+    float       speed()               const;   // m/s (from VFR_HUD)
 
 private:
     void update_heartbeat();
@@ -149,6 +150,7 @@ private:
         float       roll           = 0.f;
         float       pitch          = 0.f;
         float       yaw_rad        = 0.f;
+        float       speed          = 0.f;
     };
     TelemetryCache     telem_;
     mutable std::mutex telem_mtx_;

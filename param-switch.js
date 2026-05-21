@@ -10,7 +10,7 @@
  *   Flight Controller (ArduPilot)
  *
  * WebSocket messages sent (GCS → Backend):
- *   { "type": "param_request_list" }
+ *   { "type": "param_request_one", "name": "RC5_OPTION" }  ← one per channel (8 total)
  *   { "type": "param_set", "param_id": "RC6_OPTION", "value": 9 }
  *
  * WebSocket messages received (Backend → GCS):
@@ -373,7 +373,9 @@
 
   /* ─── MAVLink helpers ────────────────────────────────────────────────────── */
   function readParamsFromFC() {
-    // Prefer the shared window.ws used by the rest of the GCS
+    // ── OPTIMISED: only request the 8 RC_OPTION params, not the full list ──
+    // This replaces the old param_request_list (which fetched ALL ~700 params)
+    // with 8 targeted param_request_one calls — dramatically faster over WiFi.
     const sharedWs = window.ws;
     if (!sharedWs || sharedWs.readyState !== WebSocket.OPEN) {
       setStatusBanner('WebSocket not connected. Cannot read parameters.', 'error');
@@ -395,8 +397,24 @@
     _currentSwitchSysid = targetSysid;
     _updateSwitchBadge();
 
-    sharedWs.send(JSON.stringify({ type: 'param_request_list', sysid: targetSysid }));
-    console.info('[ParamSwitch] → param_request_list sysid=' + targetSysid);
+    // Request only the 8 RC_OPTION parameters (staggered 80 ms apart to avoid packet flooding)
+    const paramNames = Object.values(channelMap).map(ch => ch.name);
+    setStatusBanner('Fetching RC switch options…', 'info');
+    setProgressVisible(true, 0, 0, paramNames.length);
+
+    paramNames.forEach((name, i) => {
+      setTimeout(() => {
+        sharedWs.send(JSON.stringify({ type: 'param_request_one', name, sysid: targetSysid }));
+        const pct = Math.round(((i + 1) / paramNames.length) * 100);
+        setProgressVisible(true, pct, i + 1, paramNames.length);
+        if (i === paramNames.length - 1) {
+          // Hide progress bar after the last request has been sent
+          setTimeout(() => setProgressVisible(false), 1200);
+        }
+      }, i * 80);
+    });
+
+    console.info(`[ParamSwitch] → ${paramNames.length} param_request_one messages for RC_OPTION params (sysid=${targetSysid})`);
 
     state.dirty.clear();
     rebuildGrid();

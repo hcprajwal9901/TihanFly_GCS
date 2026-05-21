@@ -664,9 +664,9 @@ void AccelCalibration::startLevelCalibration()
     cmd.confirmation     = 0;
     cmd.param1           = 0;
     cmd.param2           = 0;
-    cmd.param3           = 1;   // level calibrate
+    cmd.param3           = 0;   
     cmd.param4           = 0;
-    cmd.param5           = 0;
+    cmd.param5           = 2;   // 2 = board level calibration
     cmd.param6           = 0;
     cmd.param7           = 0;
 

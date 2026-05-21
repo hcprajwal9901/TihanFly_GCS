@@ -30,6 +30,7 @@
     const PANEL_MODULES = {
         'calib-accel'   : 'CalibAccel',
         'calib-compass' : 'CalibCompass',
+        'calib-level'   : 'panel_calib_level',
         'calib-radio'   : 'CalibRadio',
         'calib-esc'     : 'CalibESC',
         'param-switch'  : 'ParamSwitch',   // RC Switch Options (RC5–RC12 OPTION params)
@@ -93,6 +94,15 @@
             <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
           </svg>
           Compass
+        </button>
+
+        <button class="settings-nav-btn" data-panel="calib-level">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect>
+            <line x1="12" y1="6" x2="12" y2="18"></line>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+          </svg>
+          Level
         </button>
 
         <button class="settings-nav-btn" data-panel="calib-radio">
@@ -242,6 +252,7 @@
       <div class="settings-content" id="settingsContent">
         <div class="settings-panel active" id="panel-calib-accel"></div>
         <div class="settings-panel"        id="panel-calib-compass"></div>
+        <div class="settings-panel"        id="panel-calib-level"></div>
         <div class="settings-panel"        id="panel-calib-radio"></div>
         <div class="settings-panel"        id="panel-calib-esc"></div>
         <div class="settings-panel"        id="panel-param-switch"></div>

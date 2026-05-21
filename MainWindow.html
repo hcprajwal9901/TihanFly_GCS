@@ -59,6 +59,10 @@
                 distFromHome: 0.0,    // horizontal metres — for geofence radius check
                 homeLat: null,
                 homeLng: null,
+                roll: 0.0,
+                pitch: 0.0,
+                yaw: 0.0,
+                speed: 0.0, // We'll compute or use default if not present
             };
 
             function updateHeaderUI() {
@@ -104,7 +108,7 @@
 
             function formatModeStr(m) {
                 if (typeof m === 'number') {
-                    var modes = {0: 'Stabilize', 1: 'Acro', 2: 'Alt Hold', 3: 'Auto', 4: 'Guided', 5: 'Loiter', 6: 'RTL', 9: 'Land', 16: 'Pos Hold'};
+                    var modes = { 0: 'Stabilize', 1: 'Acro', 2: 'Alt Hold', 3: 'Auto', 4: 'Guided', 5: 'Loiter', 6: 'RTL', 9: 'Land', 16: 'Pos Hold' };
                     return modes[m] || ('Mode ' + m);
                 }
                 if (typeof m === 'string') {
@@ -114,7 +118,7 @@
                         'POSHOLD': 'Pos Hold', 'SMART_RTL': 'Smart RTL', 'AUTO_RTL': 'Auto RTL'
                     };
                     if (friendly[m.toUpperCase()]) return friendly[m.toUpperCase()];
-                    return m.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, function(l) { return l.toUpperCase(); });
+                    return m.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, function (l) { return l.toUpperCase(); });
                 }
                 return String(m);
             }
@@ -130,24 +134,24 @@
                     if (sid !== targetSysId) return;
 
                     var updated = false;
-                    if (msg.satellites !== undefined)       { window.TelemetryStore.satellites     = msg.satellites;       updated = true; }
-                    if (msg.battery !== undefined)          { window.TelemetryStore.batteryPercent = msg.battery;          updated = true; }
-                    if (msg.battery_percent !== undefined)  { window.TelemetryStore.batteryPercent = msg.battery_percent;  updated = true; }
-                    if (msg.voltage !== undefined)          { window.TelemetryStore.batteryVoltage = msg.voltage;          updated = true; }
-                    if (msg.battery_voltage !== undefined)  { window.TelemetryStore.batteryVoltage = msg.battery_voltage;  updated = true; }
-                    if (msg.rssi !== undefined)             { window.TelemetryStore.signalStrength = msg.rssi;             updated = true; }
-                    if (msg.signal !== undefined)           { window.TelemetryStore.signalStrength = msg.signal;           updated = true; }
+                    if (msg.satellites !== undefined) { window.TelemetryStore.satellites = msg.satellites; updated = true; }
+                    if (msg.battery !== undefined) { window.TelemetryStore.batteryPercent = msg.battery; updated = true; }
+                    if (msg.battery_percent !== undefined) { window.TelemetryStore.batteryPercent = msg.battery_percent; updated = true; }
+                    if (msg.voltage !== undefined) { window.TelemetryStore.batteryVoltage = msg.voltage; updated = true; }
+                    if (msg.battery_voltage !== undefined) { window.TelemetryStore.batteryVoltage = msg.battery_voltage; updated = true; }
+                    if (msg.rssi !== undefined) { window.TelemetryStore.signalStrength = msg.rssi; updated = true; }
+                    if (msg.signal !== undefined) { window.TelemetryStore.signalStrength = msg.signal; updated = true; }
                     // Geofence telemetry fields
-                    if (msg.altitude !== undefined)         { window.TelemetryStore.altitude      = parseFloat(msg.altitude);       updated = true; }
-                    if (msg.alt !== undefined)              { window.TelemetryStore.altitude      = parseFloat(msg.alt);            updated = true; }
-                    if (msg.relative_alt !== undefined)     { window.TelemetryStore.altitude      = parseFloat(msg.relative_alt);   updated = true; }
-                    if (msg.dist_from_home !== undefined)   { window.TelemetryStore.distFromHome  = parseFloat(msg.dist_from_home); updated = true; }
+                    if (msg.altitude !== undefined) { window.TelemetryStore.altitude = parseFloat(msg.altitude); updated = true; }
+                    if (msg.alt !== undefined) { window.TelemetryStore.altitude = parseFloat(msg.alt); updated = true; }
+                    if (msg.relative_alt !== undefined) { window.TelemetryStore.altitude = parseFloat(msg.relative_alt); updated = true; }
+                    if (msg.dist_from_home !== undefined) { window.TelemetryStore.distFromHome = parseFloat(msg.dist_from_home); updated = true; }
                     // Compute distFromHome from lat/lng if provided
                     if (msg.lat !== undefined && msg.lng !== undefined) {
                         if (window.TelemetryStore.homeLat !== null && window.TelemetryStore.homeLng !== null) {
                             var dlat = (msg.lat - window.TelemetryStore.homeLat) * 111320;
                             var dlng = (msg.lng - window.TelemetryStore.homeLng) * 111320 * Math.cos(msg.lat * Math.PI / 180);
-                            window.TelemetryStore.distFromHome = Math.sqrt(dlat*dlat + dlng*dlng);
+                            window.TelemetryStore.distFromHome = Math.sqrt(dlat * dlat + dlng * dlng);
                         }
                     }
                     if (msg.home_lat !== undefined) { window.TelemetryStore.homeLat = msg.home_lat; }
@@ -169,7 +173,7 @@
                         window.updateVehicleSelector(msg.vehicles, msg.dyn_udp_links || []);
                     }
                     var selectedId = window.selectedSysId || 1;
-                    var v = msg.vehicles.find(function(vh) { return vh.sysid === selectedId; }) || msg.vehicles[0];
+                    var v = msg.vehicles.find(function (vh) { return vh.sysid === selectedId; }) || msg.vehicles[0];
                     if (v) {
                         var updated = false;
                         if (v.mode !== undefined) {
@@ -178,11 +182,19 @@
                         }
                         // New richer fields from Vehicle::TelemetryCache
                         if (v.battery_pct !== undefined && v.battery_pct >= 0) { window.TelemetryStore.batteryPercent = v.battery_pct; updated = true; }
-                        if (v.battery_v   !== undefined && v.battery_v   >  0) { window.TelemetryStore.batteryVoltage = v.battery_v;   updated = true; }
-                        if (v.num_sats    !== undefined) { window.TelemetryStore.satellites = v.num_sats; updated = true; }
+                        if (v.battery_v !== undefined && v.battery_v > 0) { window.TelemetryStore.batteryVoltage = v.battery_v; updated = true; }
+                        if (v.num_sats !== undefined) { window.TelemetryStore.satellites = v.num_sats; updated = true; }
                         // Legacy compat fields
                         if (v.battery !== undefined) { window.TelemetryStore.batteryPercent = v.battery; updated = true; }
                         if (v.voltage !== undefined) { window.TelemetryStore.batteryVoltage = v.voltage; updated = true; }
+
+                        // HUD telemetry
+                        if (v.roll !== undefined) window.TelemetryStore.roll = v.roll;
+                        if (v.pitch !== undefined) window.TelemetryStore.pitch = v.pitch;
+                        if (v.yaw !== undefined) window.TelemetryStore.yaw = v.yaw;
+                        if (v.alt !== undefined) window.TelemetryStore.altitude = v.alt;
+                        if (v.speed !== undefined) window.TelemetryStore.speed = v.speed;
+
                         if (updated) updateHeaderUI();
                     }
                 }
@@ -277,7 +289,8 @@
     <link rel="stylesheet" href="comm-link.css">
     <!-- PID Tuning panel -->
     <link rel="stylesheet" href="pid-tuning.css">
-
+    <!-- Flight HUD -->
+    <link rel="stylesheet" href="flight-hud.css">
 
 </head>
 
@@ -384,6 +397,48 @@
                 </div>
             </div>
 
+            <!-- UI Appearance Selector -->
+            <div id="uiAppearanceWrap"
+                style="position: relative; display: flex; align-items: center; margin-left: 10px;">
+                <button id="uiAppearanceBtn" title="UI Appearance Settings"
+                    style="background: rgb(255, 255, 255); border: 1px solid rgba(0, 0, 0, 0.15); border-radius: 6px; color: rgb(51, 51, 51); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0px 14px; height: 36px; box-shadow: rgba(0, 0, 0, 0.05) 0px 2px 5px; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); flex-shrink: 0; position: relative; overflow: hidden; font-size: 13.5px; font-family: &quot;Segoe UI&quot;, system-ui, sans-serif;">
+                    <span style="font-weight:600; margin-right:6px; pointer-events:none;">Appearance</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                        style="pointer-events:none; transition: transform 0.3s;" id="uiAppearanceChevron">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div id="uiAppearanceDropdown"
+                    style="position: absolute; top: calc(100% + 12px); right: 0px; background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 8px; min-width: 200px; z-index: 99999; box-shadow: rgba(0, 0, 0, 0.6) 0px 16px 40px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset; display: none; flex-direction: column; gap: 4px; transform-origin: right top; transition: all 0.2s ease-out; opacity: 0; transform: translateY(-10px);">
+
+                    <label
+                        style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 8px; cursor: pointer; color: #fff; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; transition: background 0.2s;"
+                        onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+                        onmouseout="this.style.background='transparent'">
+                        <span>Camera</span>
+                        <input type="checkbox" id="toggleCamera1" checked
+                            style="accent-color: #4fc3f7; width: 16px; height: 16px; cursor: pointer;">
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 8px; cursor: pointer; color: #fff; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; transition: background 0.2s;"
+                        onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+                        onmouseout="this.style.background='transparent'">
+                        <span>Message Viewer</span>
+                        <input type="checkbox" id="toggleMessageViewer" checked
+                            style="accent-color: #4fc3f7; width: 16px; height: 16px; cursor: pointer;">
+                    </label>
+                    <label
+                        style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 8px; cursor: pointer; color: #fff; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; transition: background 0.2s;"
+                        onmouseover="this.style.background='rgba(255,255,255,0.1)'"
+                        onmouseout="this.style.background='transparent'">
+                        <span>HUD</span>
+                        <input type="checkbox" id="toggleHud"
+                            style="accent-color: #4fc3f7; width: 16px; height: 16px; cursor: pointer;">
+                    </label>
+                </div>
+            </div>
+
             <!-- Right Section: Multi-vehicle strip (v1) + DX4 Logo -->
             <div class="header-right">
 
@@ -425,18 +480,16 @@
 
                 <!-- Drone Dropdown Wrapper -->
                 <div style="position: relative; display: flex; align-items: center; margin-right: 15px;">
-                    <div id="droneCountBadge" 
-                         style="cursor: pointer;" 
-                         onclick="document.getElementById('vehicleSelectorWrap').classList.toggle('show-dropdown')"
-                         title="Click to view drone list">
+                    <div id="droneCountBadge" style="cursor: pointer;"
+                        onclick="document.getElementById('vehicleSelectorWrap').classList.toggle('show-dropdown')"
+                        title="Click to view drone list">
                         <span id="droneCountDot"></span>
                         <span id="droneCountText">0 DRONES</span>
                         <span style="font-size: 0.7rem; margin-left: 4px; opacity: 0.8;">▼</span>
                     </div>
 
                     <!-- ⚡ Connect Vehicle button — always visible -->
-                    <button id="mvAddDroneBtn"
-                        title="Connect another vehicle"
+                    <button id="mvAddDroneBtn" title="Connect another vehicle"
                         onclick="if(typeof window.openConnectionManager==='function')window.openConnectionManager();"
                         style="
                             background: linear-gradient(135deg,#0d2b45,#07111f);
@@ -471,11 +524,22 @@
         </div>
 
         <!-- Content Area: Map + Video -->
-        <div class="content-area">
+        <div class="content-area" style="position: relative;">
             <div id="map"></div>
             <div id="videoContainer">
                 <div id="videoStream"></div>
                 <button id="videoMaxBtn" title="Toggle Video Fullscreen">⛶</button>
+            </div>
+            <!-- HUD Floating Window -->
+            <div id="hudContainer">
+                <!-- Drag / Title bar -->
+                <div id="hudTitleBar">
+                    <span class="hud-title-label">Flight HUD</span>
+                    <div class="hud-controls">
+                        <button class="hud-ctrl-btn hud-close" id="hudCloseBtn" title="Close HUD">✕</button>
+                    </div>
+                </div>
+                <canvas id="hudCanvas"></canvas>
             </div>
         </div>
 
@@ -496,10 +560,13 @@
                 <span class="btn-label" id="armBtnLabel">ARM</span>
             </button>
 
-            <button id="forceArmBtn" class="flight-btn force-arm-btn" title="Force Arm" style="background-color: #7b1fa2; border-color: #9c27b0;">
+            <button id="forceArmBtn" class="flight-btn force-arm-btn" title="Force Arm"
+                style="background-color: #f57c00; border-color: #ef6c00;">
                 <svg class="btn-icon arm-svg-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L4 6V12C4 16.4 7.4 20.5 12 22C16.6 20.5 20 16.4 20 12V6L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-                    <path d="M12 8v4l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 2L4 6V12C4 16.4 7.4 20.5 12 22C16.6 20.5 20 16.4 20 12V6L12 2Z" stroke="currentColor"
+                        stroke-width="2" stroke-linejoin="round" />
+                    <path d="M12 8v4l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
                 </svg>
                 <span class="btn-label" id="forceArmBtnLabel">FORCE ARM</span>
             </button>
@@ -542,30 +609,30 @@
                     <div class="flight-mode-list">
                         <button class="mode-item active-mode" data-mode="Stabilize"><span class="mode-dot"></span><span
                                 class="mode-name">Stabilize</span><span class="mode-tag basic">BASIC</span></button>
-                        <button class="mode-item" data-mode="Acro"><span class="mode-dot"></span><span
-                                class="mode-name">Acro</span><span class="mode-tag expert">EXPERT</span></button>
                         <button class="mode-item" data-mode="Altitude Hold"><span class="mode-dot"></span><span
                                 class="mode-name">Altitude Hold</span><span class="mode-tag basic">BASIC</span></button>
+                        <button class="mode-item" data-mode="Position"><span class="mode-dot"></span><span
+                                class="mode-name">Position</span><span class="mode-tag gps">GPS</span></button>
                         <button class="mode-item" data-mode="Auto"><span class="mode-dot"></span><span
                                 class="mode-name">Auto</span><span class="mode-tag auto">AUTO</span></button>
                         <button class="mode-item" data-mode="Guided"><span class="mode-dot"></span><span
                                 class="mode-name">Guided</span><span class="mode-tag auto">AUTO</span></button>
                         <button class="mode-item" data-mode="Loiter"><span class="mode-dot"></span><span
                                 class="mode-name">Loiter</span><span class="mode-tag gps">GPS</span></button>
+                        <button class="mode-item" data-mode="Land"><span class="mode-dot"></span><span
+                                class="mode-name">Land</span><span class="mode-tag basic">BASIC</span></button>
                         <button class="mode-item" data-mode="RTL"><span class="mode-dot"></span><span
                                 class="mode-name">RTL</span><span class="mode-tag gps">GPS</span></button>
                         <button class="mode-item" data-mode="Circle"><span class="mode-dot"></span><span
                                 class="mode-name">Circle</span><span class="mode-tag gps">GPS</span></button>
-                        <button class="mode-item" data-mode="Land"><span class="mode-dot"></span><span
-                                class="mode-name">Land</span><span class="mode-tag basic">BASIC</span></button>
                         <button class="mode-item" data-mode="Smart RTL"><span class="mode-dot"></span><span
                                 class="mode-name">Smart RTL</span><span class="mode-tag gps">GPS</span></button>
                         <button class="mode-item" data-mode="Drift"><span class="mode-dot"></span><span
                                 class="mode-name">Drift</span><span class="mode-tag expert">EXPERT</span></button>
                         <button class="mode-item" data-mode="Sport"><span class="mode-dot"></span><span
                                 class="mode-name">Sport</span><span class="mode-tag expert">EXPERT</span></button>
-                        <button class="mode-item" data-mode="Position"><span class="mode-dot"></span><span
-                                class="mode-name">Position</span><span class="mode-tag gps">GPS</span></button>
+                        <button class="mode-item" data-mode="Acro"><span class="mode-dot"></span><span
+                                class="mode-name">Acro</span><span class="mode-tag expert">EXPERT</span></button>
                         <button class="mode-item" data-mode="Follow Me"><span class="mode-dot"></span><span
                                 class="mode-name">Follow Me</span><span class="mode-tag gps">GPS</span></button>
                     </div>
@@ -1462,6 +1529,7 @@
     <script src="multi-vehicle.js"></script>
     <script src="app.js?v=3"></script>
     <script src="settings-window.js"></script>
+    <script src="calib-level.js"></script>
     <script src="calib-accel.js"></script>
     <script src="calib-compass.js"></script>
     <script src="calib-radio.js"></script>
@@ -1489,6 +1557,8 @@
     <script src="pid-tuning.js"></script>
     <!-- Communication Link panel -->
     <script src="comm-link.js"></script>
+    <!-- Flight HUD -->
+    <script src="flight-hud.js"></script>
     <!-- NFZ/weather-restriction not yet implemented -->
 
 </body>

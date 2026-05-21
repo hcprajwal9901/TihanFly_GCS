@@ -68,13 +68,12 @@
     /**
      * Read FRAME_CLASS and FRAME_TYPE from the backend.
      *
-     * Strategy (matches how the C++ backend works):
-     *  1. Ask for the full in-memory cache via param_get_all — instant, no
-     *     MAVLink round-trip needed.  The cache is already populated because
-     *     the backend auto-runs requestAllParameters() on first drone connect.
-     *  2. If the two params are found in the cache we are done.
-     *  3. If NOT found (cache empty / drone not yet loaded), fall back to
-     *     param_request_list which triggers a full MAVLink refresh.
+     * Strategy:
+     *  1. Ask the backend's in-memory cache via param_get_all — instant, no
+     *     MAVLink round-trip needed.
+     *  2. If the two params are NOT found in the cache, fall back to two
+     *     targeted param_request_one calls (NOT a full param_request_list).
+     *     This avoids loading all ~700 parameters just for 2 values.
      */
     function readParamsFromDrone() {
         setStatus('running', 'Reading parameters from drone cache…');
@@ -82,12 +81,14 @@
         // Step 1: query the backend's in-memory cache (no MAVLink needed)
         send({ type: 'param_get_all' });
 
-        // Step 2: after 800 ms, if values still null, fall back to full refresh
+        // Step 2: after 800 ms, if values still null, request ONLY these 2 params
         setTimeout(() => {
             if (currentFrameClass === null || currentFrameType === null) {
-                console.log('[FrameType] Cache miss — triggering full param_request_list');
-                setStatus('running', 'Cache empty — requesting full parameter load from drone…');
-                send({ type: 'param_request_list' });
+                console.log('[FrameType] Cache miss — requesting FRAME_CLASS and FRAME_TYPE individually');
+                setStatus('running', 'Cache empty — requesting FRAME_CLASS and FRAME_TYPE from drone…');
+                // Targeted requests only — no full param_request_list needed
+                send({ type: 'param_request_one', name: 'FRAME_CLASS' });
+                setTimeout(() => send({ type: 'param_request_one', name: 'FRAME_TYPE' }), 200);
             }
         }, 800);
     }

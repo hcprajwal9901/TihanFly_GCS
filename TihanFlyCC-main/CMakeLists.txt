@@ -31,11 +31,11 @@ find_package(OpenSSL REQUIRED)
 find_package(ZLIB REQUIRED)
 
 # nlohmann/json — header-only; adjust path if you vendor it differently
-include(FetchContent)
-FetchContent_Declare(json
-    URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
-)
-FetchContent_MakeAvailable(json)
+find_package(nlohmann_json 3.2.0 QUIET)
+if(NOT nlohmann_json_FOUND)
+    # Fallback: assume it is installed system-wide or in a subdirectory
+    include_directories(/usr/include/nlohmann)
+endif()
 
 # MAVLink — header-only; set MAVLINK_INCLUDE_DIR if not on the default path
 if(NOT DEFINED MAVLINK_INCLUDE_DIR)
@@ -62,7 +62,8 @@ include_directories(
 )
 
 # ── Source files ──────────────────────────────────────────────────────────────
-set(SOURCES_CORE
+set(SOURCES
+    main.cpp
 
     # ── Transport layer ───────────────────────────────────────────────────
     Transport/udp.cpp
@@ -106,30 +107,8 @@ set(SOURCES_CORE
     Parser/mavlink_parser.cpp
 )
 
-# ── Static Library for Core Logic (used by app and tests) ─────────────────────
-add_library(TiHANFlyCore STATIC ${SOURCES_CORE})
-
-target_compile_definitions(TiHANFlyCore PRIVATE
-    ASIO_STANDALONE          # use standalone ASIO, not Boost.ASIO
-    _WEBSOCKETPP_CPP11_STL_  # if websocketpp headers are present
-)
-
-target_link_libraries(TiHANFlyCore
-    PUBLIC
-    Threads::Threads
-    OpenSSL::SSL
-    OpenSSL::Crypto
-    ZLIB::ZLIB
-)
-
-target_link_libraries(TiHANFlyCore PUBLIC nlohmann_json::nlohmann_json)
-
-if(WIN32)
-    target_link_libraries(TiHANFlyCore PUBLIC ws2_32 mswsock)
-endif()
-
 # ── Executable ────────────────────────────────────────────────────────────────
-add_executable(TiHANFly main.cpp)
+add_executable(TiHANFly ${SOURCES})
 
 # ── Preprocessor definitions ─────────────────────────────────────────────────
 target_compile_definitions(TiHANFly PRIVATE
@@ -138,7 +117,56 @@ target_compile_definitions(TiHANFly PRIVATE
 )
 
 # ── Link libraries ────────────────────────────────────────────────────────────
-target_link_libraries(TiHANFly PRIVATE TiHANFlyCore)
+target_link_libraries(TiHANFly
+    Threads::Threads
+    OpenSSL::SSL
+    OpenSSL::Crypto
+    ZLIB::ZLIB          # zlib — required by firmware_manager.cpp for APJ decompression
+)
+
+# Link nlohmann_json if found as a CMake target, otherwise it's header-only
+if(nlohmann_json_FOUND)
+    target_link_libraries(TiHANFly nlohmann_json::nlohmann_json)
+endif()
+
+# ── std::filesystem linker fix (GCC 8 / Ubuntu 18.04) ────────────────────────
+# GCC 9+ and Clang 7+: std::filesystem is in libstdc++/libc++ — no extra flag.
+# GCC 8 (Ubuntu 18.04): std::filesystem is in a separate -lstdc++fs library.
+# This block auto-detects which case applies, so the same CMakeLists.txt
+# compiles correctly on:
+#   • Windows  (MSVC)            — no flag needed
+#   • Ubuntu 20.04+ x86_64       — GCC 9+, no flag needed
+#   • Ubuntu 18.04 x86_64        — GCC 8, needs -lstdc++fs
+#   • Ubuntu 20.04+ ARM64        — GCC 9+, no flag needed  (Raspberry Pi 4/5,
+#                                    Jetson, etc.)
+#   • Any Clang 7+               — no flag needed
+if(NOT MSVC)
+    include(CheckCXXSourceCompiles)
+    set(CMAKE_REQUIRED_FLAGS "-std=c++17")
+    check_cxx_source_compiles("
+        #include <filesystem>
+        int main() { std::filesystem::path p; return 0; }
+    " HAS_STD_FILESYSTEM)
+
+    if(NOT HAS_STD_FILESYSTEM)
+        # Try with -lstdc++fs (GCC 8)
+        set(CMAKE_REQUIRED_LIBRARIES "stdc++fs")
+        check_cxx_source_compiles("
+            #include <filesystem>
+            int main() { std::filesystem::path p; return 0; }
+        " HAS_STD_FILESYSTEM_WITH_LIB)
+        unset(CMAKE_REQUIRED_LIBRARIES)
+
+        if(HAS_STD_FILESYSTEM_WITH_LIB)
+            target_link_libraries(TiHANFly stdc++fs)
+            message(STATUS "Linking -lstdc++fs for std::filesystem (GCC 8)")
+        else()
+            message(WARNING "std::filesystem not found — build may fail")
+        endif()
+    else()
+        message(STATUS "std::filesystem built-in (GCC 9+ / Clang 7+)")
+    endif()
+endif()
 
 
 # ── Optional: copy binary to project root after build ─────────────────────────

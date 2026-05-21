@@ -200,7 +200,7 @@ static asio::io_context* g_io_ctx     = nullptr;
 // vehicle->compass_calib() / vehicle->esc_calib() / vehicle->radio_calib().
 FlightMode         flightMode;
 
-ParameterManager param_manager(1, 1);
+ParameterManager param_manager(1, 1, "./param_cache");
 
 std::string detected_serial_port;
 bool        udp_port_bound = false;
@@ -649,6 +649,7 @@ void send_status()
                 v["roll"]        = veh->roll();
                 v["pitch"]       = veh->pitch();
                 v["yaw"]         = veh->yaw();
+                v["speed"]       = veh->speed();
                 vehicles_arr.push_back(v);
             };
 
@@ -771,9 +772,9 @@ static void request_streams_for_vehicle(std::shared_ptr<Vehicle> vehicle)
     struct StreamReq { uint8_t id; uint16_t rate_hz; const char* label; };
     static const StreamReq streams[] = {
         { MAV_DATA_STREAM_EXTENDED_STATUS, 2,  "EXTENDED_STATUS" },
-        { MAV_DATA_STREAM_POSITION,        5,  "POSITION (GPS)"  },
-        { MAV_DATA_STREAM_EXTRA1,          5,  "EXTRA1 (ATTITUDE)" },
-        { MAV_DATA_STREAM_EXTRA2,          5,  "EXTRA2 (VFR_HUD)"  },
+        { MAV_DATA_STREAM_POSITION,       10,  "POSITION (GPS)"  },
+        { MAV_DATA_STREAM_EXTRA1,         20,  "EXTRA1 (ATTITUDE)" },
+        { MAV_DATA_STREAM_EXTRA2,         10,  "EXTRA2 (VFR_HUD)"  },
         { MAV_DATA_STREAM_RAW_SENSORS,     2,  "RAW_SENSORS"      },
     };
     for (auto& sr : streams)
@@ -836,9 +837,9 @@ static void request_telemetry_streams()
 
     static const StreamReq streams[] = {
         { MAV_DATA_STREAM_EXTENDED_STATUS, 2,  "EXTENDED_STATUS (SYS_STATUS/battery)" },
-        { MAV_DATA_STREAM_POSITION,        5,  "POSITION (GPS)"   },
-        { MAV_DATA_STREAM_EXTRA1,          5,  "EXTRA1 (ATTITUDE)" },
-        { MAV_DATA_STREAM_EXTRA2,          5,  "EXTRA2 (VFR_HUD)"  },
+        { MAV_DATA_STREAM_POSITION,       10,  "POSITION (GPS)"   },
+        { MAV_DATA_STREAM_EXTRA1,         20,  "EXTRA1 (ATTITUDE)" },
+        { MAV_DATA_STREAM_EXTRA2,         10,  "EXTRA2 (VFR_HUD)"  },
         { MAV_DATA_STREAM_RAW_SENSORS,     2,  "RAW_SENSORS (GPS_RAW_INT)" },
     };
 
@@ -3722,6 +3723,11 @@ int main()
         std::cout << "[GCS] Vehicle sysid=" << sysid << " lost\n";
         drone_connected   = false;
         active_connection = "NONE";  // reset so next heartbeat always re-wires
+
+        // Delete the per-sysid parameter cache so stale data
+        // is not served on the next reconnect from a different session.
+        param_manager.deleteCache(sysid);
+
         send_status();
     });
 
@@ -4260,4 +4266,7 @@ int main()
         for (auto& t : io_threads)
             t.join();
     }
+
+    // -- Clean shutdown -- delete all parameter cache files
+    param_manager.deleteAllCaches();
 }
