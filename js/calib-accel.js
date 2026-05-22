@@ -20,36 +20,36 @@
     'use strict';
 
     // ── Icons ─────────────────────────────────────────────────────────────────
-    const PLAY  = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
-    const NEXT  = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>`;
-    const WARN  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
+    const PLAY = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+    const NEXT = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>`;
+    const WARN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`;
     const CHECK = `<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="9 12 11 14 15 10"/></svg>`;
 
     // ── Face images & descriptors ─────────────────────────────────────────────
     const FACE_IMG = {
-        'level'  : 'resources/calibration/accel_down.png',
-        'left'   : 'resources/calibration/accel_left.png',
-        'right'  : 'resources/calibration/accel_right.png',
-        'nose-up': 'resources/calibration/accel_back.png',
-        'nose-dn': 'resources/calibration/accel_front.png',
-        'back'   : 'resources/calibration/accel_up.png',
+        'level': '../resources/calibration/accel_down.png',
+        'left': '../resources/calibration/accel_left.png',
+        'right': '../resources/calibration/accel_right.png',
+        'nose-up': '../resources/calibration/accel_back.png',
+        'nose-dn': '../resources/calibration/accel_front.png',
+        'back': '../resources/calibration/accel_up.png',
     };
 
     const FACES = [
-        { key: 'level',   label: 'Level',   wsStep: 'level'       },  // pos 1
-        { key: 'left',    label: 'Left',    wsStep: 'left'        },  // pos 2
-        { key: 'right',   label: 'Right',   wsStep: 'right'       },  // pos 3
-        { key: 'nose-dn', label: 'Nose Dn', wsStep: 'nose_down'   },  // pos 4
-        { key: 'nose-up', label: 'Nose Up', wsStep: 'nose_up'     },  // pos 5
-        { key: 'back',    label: 'Back',    wsStep: 'upside_down' },  // pos 6
+        { key: 'level', label: 'Level', wsStep: 'level' },  // pos 1
+        { key: 'left', label: 'Left', wsStep: 'left' },  // pos 2
+        { key: 'right', label: 'Right', wsStep: 'right' },  // pos 3
+        { key: 'nose-dn', label: 'Nose Dn', wsStep: 'nose_down' },  // pos 4
+        { key: 'nose-up', label: 'Nose Up', wsStep: 'nose_up' },  // pos 5
+        { key: 'back', label: 'Back', wsStep: 'upside_down' },  // pos 6
     ];
 
     const STEP_MAP = {
-        'level'      : 0,
-        'left'       : 1,
-        'right'      : 2,
-        'nose_down'  : 3,
-        'nose_up'    : 4,
+        'level': 0,
+        'left': 1,
+        'right': 2,
+        'nose_down': 3,
+        'nose_up': 4,
         'upside_down': 5,
     };
 
@@ -211,12 +211,12 @@ ${buildSuccessModal()}
                     + 'font-family:sans-serif;color:#fff;max-width:360px;'
                     + 'box-shadow:0 4px 16px rgba(0,0,0,.35);transition:opacity .4s;';
                 d.style.background = type === 'error' ? '#c0392b'
-                                   : type === 'warn'  ? '#e67e22'
-                                   :                    '#27ae60';
+                    : type === 'warn' ? '#e67e22'
+                        : '#27ae60';
                 d.textContent = msg;
                 document.body.appendChild(d);
                 setTimeout(() => { d.style.opacity = '0'; }, 2800);
-                setTimeout(() => { d.remove(); },            3200);
+                setTimeout(() => { d.remove(); }, 3200);
             }
         };
         const { setStatus, toast } = SwUtilSafe;
@@ -236,24 +236,24 @@ ${buildSuccessModal()}
         }
 
         // ── State ────────────────────────────────────────────────────────────
-        let currentStep     = -1;      // FACES[] index currently shown
-        let doneCount       = 0;
-        let totalPositions  = 0;
-        let displayingStep  = false;   // true: drone requested position, user must act
+        let currentStep = -1;      // FACES[] index currently shown
+        let doneCount = 0;
+        let totalPositions = 0;
+        let displayingStep = false;   // true: drone requested position, user must act
         let waitingForDrone = false;   // true: user clicked Next, locked until drone replies
-        let positionQueue   = [];
+        let positionQueue = [];
         let calibrationEnded = false;  // true after done/failed — blocks all sends
-        let lastSentWsStep  = null;    // duplicate-send guard
+        let lastSentWsStep = null;    // duplicate-send guard
 
         // Selected drone — set by drone selector dropdown.
         // Both are sent in every WS message so the backend can route by either.
         // -1 = not yet set (single-drone: backend uses whichever vehicle is alive).
         let selectedLinkId = -1;
-        let selectedSysId  = -1;
+        let selectedSysId = -1;
 
         // Locked at Start-click so mid-calibration drone-selector changes
         // don't reroute step confirmations to a different drone.
-        let activeSysId  = -1;
+        let activeSysId = -1;
         let activeLinkId = -1;
 
         // Populated by vehicle_list messages from the backend.
@@ -268,14 +268,14 @@ ${buildSuccessModal()}
 
         function buildDroneSelector() {
             const wrap = document.getElementById('accelDroneSelector');
-            const sel  = document.getElementById('accelDroneSelect');
+            const sel = document.getElementById('accelDroneSelect');
             if (!wrap || !sel) return;
 
             if (connectedVehicles.length <= 1) {
                 wrap.style.display = 'none';
                 if (connectedVehicles.length === 1) {
                     selectedLinkId = connectedVehicles[0].link_id ?? -1;
-                    selectedSysId  = connectedVehicles[0].sysid  ?? -1;
+                    selectedSysId = connectedVehicles[0].sysid ?? -1;
                 }
                 return;
             }
@@ -291,7 +291,7 @@ ${buildSuccessModal()}
 
             // Resolve both ids from selected option
             const opt = sel.options[sel.selectedIndex];
-            selectedSysId  = parseInt(sel.value, 10);
+            selectedSysId = parseInt(sel.value, 10);
             selectedLinkId = opt ? parseInt(opt.dataset.link, 10) : -1;
         }
 
@@ -303,10 +303,10 @@ ${buildSuccessModal()}
 
         function refreshProgress(done) {
             const total = totalPositions > 0 ? totalPositions : 6;
-            const bar   = document.getElementById('accelBar');
-            const pct   = document.getElementById('accelPct');
+            const bar = document.getElementById('accelBar');
+            const pct = document.getElementById('accelPct');
             if (bar) bar.style.width = (done / total * 100) + '%';
-            if (pct) pct.textContent  = done + ' / ' + total;
+            if (pct) pct.textContent = done + ' / ' + total;
         }
 
         function updateHint(text) {
@@ -316,9 +316,9 @@ ${buildSuccessModal()}
 
         function showError(text) {
             const banner = document.getElementById('accelErrorBanner');
-            const span   = document.getElementById('accelErrorText');
+            const span = document.getElementById('accelErrorText');
             if (banner) banner.style.display = 'flex';
-            if (span)   span.textContent = text;
+            if (span) span.textContent = text;
         }
 
         function hideError() {
@@ -367,12 +367,12 @@ ${buildSuccessModal()}
 
         // ── Attitude display ─────────────────────────────────────────────────
         function updateAttitudeDisplay(roll, pitch) {
-            const box      = document.getElementById('accelAttitudeBox');
-            const rollVal  = document.getElementById('accelRollVal');
+            const box = document.getElementById('accelAttitudeBox');
+            const rollVal = document.getElementById('accelRollVal');
             const pitchVal = document.getElementById('accelPitchVal');
             if (!box) return;
             box.style.display = 'flex';
-            if (rollVal)  rollVal.textContent  = (roll  * 180 / Math.PI).toFixed(1);
+            if (rollVal) rollVal.textContent = (roll * 180 / Math.PI).toFixed(1);
             if (pitchVal) pitchVal.textContent = (pitch * 180 / Math.PI).toFixed(1);
         }
 
@@ -384,8 +384,8 @@ ${buildSuccessModal()}
         // ── Success modal ────────────────────────────────────────────────────
         function showModal() {
             const modal = document.getElementById('accelModal');
-            const stat  = document.getElementById('accelModalPositions');
-            if (stat)  stat.textContent = doneCount + ' / ' + (totalPositions || doneCount);
+            const stat = document.getElementById('accelModalPositions');
+            if (stat) stat.textContent = doneCount + ' / ' + (totalPositions || doneCount);
             if (modal) modal.classList.add('visible');
         }
         function hideModal() {
@@ -399,17 +399,17 @@ ${buildSuccessModal()}
             if (displayingStep || positionQueue.length === 0) return;
 
             const item = positionQueue.shift();
-            const idx  = item.idx;
+            const idx = item.idx;
 
             cancelSafetyTimer();
 
             // Mark previous step done when backend confirms next step
             if (currentStep >= 0 && currentStep < idx) markStepDone(currentStep);
 
-            currentStep     = idx;
-            displayingStep  = true;
+            currentStep = idx;
+            displayingStep = true;
             waitingForDrone = false;
-            lastSentWsStep  = null;   // new position — allow user to send
+            lastSentWsStep = null;   // new position — allow user to send
 
             hideError();
 
@@ -434,8 +434,8 @@ ${buildSuccessModal()}
             activeSysId = -1; activeLinkId = -1;
 
             document.getElementById('accelStartBtn').style.display = 'inline-flex';
-            document.getElementById('accelNextBtn').style.display  = 'none';
-            document.getElementById('accelOkBtn').style.display    = 'none';
+            document.getElementById('accelNextBtn').style.display = 'none';
+            document.getElementById('accelOkBtn').style.display = 'none';
 
             updateHint('');
             hideError();
@@ -449,7 +449,7 @@ ${buildSuccessModal()}
         function handleCalibMessage(data) {
             const relevant = [
                 'calibration_status', 'calibration_step', 'calibration_result',
-                'calibration_error',  'calibration_timeout',
+                'calibration_error', 'calibration_timeout',
                 'calib_attitude', 'attitude',
             ];
             if (!relevant.includes(data.type)) return;
@@ -467,8 +467,8 @@ ${buildSuccessModal()}
                 cancelSafetyTimer();
                 showError('⚠️ ' + (data.message || 'Error — hold steady and click Next again.'));
                 waitingForDrone = false;
-                displayingStep  = true;
-                lastSentWsStep  = null;   // allow retry
+                displayingStep = true;
+                lastSentWsStep = null;   // allow retry
                 setNextBtnNormal();
                 return;
             }
@@ -478,8 +478,8 @@ ${buildSuccessModal()}
                 cancelSafetyTimer();
                 showError('⏱ ' + (data.message || 'No response — hold drone in position and click Next, or Reset.'));
                 waitingForDrone = false;
-                displayingStep  = true;
-                lastSentWsStep  = null;
+                displayingStep = true;
+                lastSentWsStep = null;
                 setNextBtnNormal();
                 return;
             }
@@ -540,11 +540,11 @@ ${buildSuccessModal()}
             // ── Calibration complete or failed ────────────────────────────────
             if (data.type === 'calibration_result') {
                 cancelSafetyTimer();
-                displayingStep   = false;
-                waitingForDrone  = false;
-                positionQueue    = [];
+                displayingStep = false;
+                waitingForDrone = false;
+                positionQueue = [];
                 calibrationEnded = true;
-                lastSentWsStep   = null;
+                lastSentWsStep = null;
                 hideError();
                 if (data.total_steps > 0) totalPositions = data.total_steps;
 
@@ -553,14 +553,14 @@ ${buildSuccessModal()}
                     host.querySelectorAll('.calib-cube-face.active').forEach(f => f.classList.remove('active'));
 
                     document.getElementById('accelNextBtn').style.display = 'none';
-                    document.getElementById('accelOkBtn').style.display   = 'inline-flex';
+                    document.getElementById('accelOkBtn').style.display = 'inline-flex';
                     updateHint('');
                     setStatus('accelStatus', 'COMPLETE', 'good');
                     toast('✅ Accelerometer calibration complete!');
                 }
 
                 if (data.step === 'failed') {
-                    document.getElementById('accelNextBtn').style.display  = 'none';
+                    document.getElementById('accelNextBtn').style.display = 'none';
                     document.getElementById('accelStartBtn').style.display = 'inline-flex';
                     host.querySelectorAll('.calib-cube-face.active').forEach(f => f.classList.remove('active'));
                     currentStep = -1;
@@ -600,7 +600,7 @@ ${buildSuccessModal()}
         // ── Start button ──────────────────────────────────────────────────────
         document.getElementById('accelDroneSelect')?.addEventListener('change', (e) => {
             const opt = e.target.options[e.target.selectedIndex];
-            selectedSysId  = parseInt(e.target.value, 10);
+            selectedSysId = parseInt(e.target.value, 10);
             selectedLinkId = opt ? parseInt(opt.dataset.link, 10) : -1;
             console.log('[CalibAccel] Target drone sysid=' + selectedSysId + ' link_id=' + selectedLinkId);
         });
@@ -615,8 +615,8 @@ ${buildSuccessModal()}
             lastSentWsStep = null;
 
             document.getElementById('accelStartBtn').style.display = 'none';
-            document.getElementById('accelNextBtn').style.display  = 'inline-flex';
-            document.getElementById('accelOkBtn').style.display    = 'none';
+            document.getElementById('accelNextBtn').style.display = 'inline-flex';
+            document.getElementById('accelOkBtn').style.display = 'none';
             setNextBtnWaiting();
 
             updateHint('Waiting for drone to request first position…');
@@ -626,7 +626,7 @@ ${buildSuccessModal()}
             // Lock the target drone for the entire calibration session.
             // Use window.selectedSysId from multi-vehicle.js if the local
             // selector has not resolved a vehicle yet (single-drone path).
-            activeSysId  = selectedSysId  > 0 ? selectedSysId  : (window.selectedSysId ?? -1);
+            activeSysId = selectedSysId > 0 ? selectedSysId : (window.selectedSysId ?? -1);
             activeLinkId = selectedLinkId >= 0 ? selectedLinkId : -1;
 
             sendWS({ type: 'start_accel_calibration', sysid: activeSysId, link_id: activeLinkId });
@@ -635,9 +635,9 @@ ${buildSuccessModal()}
 
         // ── Next Position button ──────────────────────────────────────────────
         document.getElementById('accelNextBtn')?.addEventListener('click', () => {
-            if (calibrationEnded)  return;
-            if (waitingForDrone)   return;
-            if (!displayingStep)   return;
+            if (calibrationEnded) return;
+            if (waitingForDrone) return;
+            if (!displayingStep) return;
             if (currentStep < 0 || currentStep >= FACES.length) return;
 
             const wsStep = FACES[currentStep].wsStep;
@@ -649,7 +649,7 @@ ${buildSuccessModal()}
             }
 
             waitingForDrone = false;
-            displayingStep  = false;
+            displayingStep = false;
 
             setNextBtnWaiting();
             hideError();
@@ -669,8 +669,8 @@ ${buildSuccessModal()}
                 if (!calibrationEnded && !displayingStep) {
                     console.warn('[CalibAccel] Drone silent for 8 s — re-enabling Next (recovery mode)');
                     waitingForDrone = false;
-                    displayingStep  = true;
-                    lastSentWsStep  = null;
+                    displayingStep = true;
+                    lastSentWsStep = null;
                     setNextBtnNormal();
                     updateHint('No response from drone — hold position and click Next, or Reset.');
                     showError('⚠️ No drone response for 8 s — retry or Reset.');
@@ -679,8 +679,8 @@ ${buildSuccessModal()}
         });
 
         // ── OK / modal / reset buttons ────────────────────────────────────────
-        document.getElementById('accelOkBtn')?.addEventListener('click',         () => showModal());
-        document.getElementById('accelModalOkBtn')?.addEventListener('click',    () => hideModal());
+        document.getElementById('accelOkBtn')?.addEventListener('click', () => showModal());
+        document.getElementById('accelModalOkBtn')?.addEventListener('click', () => hideModal());
         document.getElementById('accelModalRecalBtn')?.addEventListener('click', () => resetAll());
         document.getElementById('accelModal')?.addEventListener('click', e => {
             if (e.target.id === 'accelModal') hideModal();

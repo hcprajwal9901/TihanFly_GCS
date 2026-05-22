@@ -86,6 +86,13 @@ public:
                               const std::string& cache_dir = "./param_cache");
     ~ParameterManager();
 
+    /** Override the cache file key (default = sysid_).
+     *  Set this to ui_sysid so that multiple drones that share the same
+     *  real MAVLink sysid=1 (ArduPilot default in multi-port mode) each
+     *  get a distinct cache file:  param_cache/sysid_<key>.json
+     *  Thread-safe — must be called before requestAllParameters(). */
+    void setCacheKey(int key);
+
     // ── Dependency injection ─────────────────────────────────────────────────
     void setSendCallback     (SendCb      cb);
     void setTransportCallback(TransportCb cb);
@@ -116,10 +123,12 @@ public:
     void setParameter(const std::string& param_name, float value,
                       uint8_t type = MAV_PARAM_TYPE_REAL32);
 
-    // ── Cache management ─────────────────────────────────────────────────────
+    // ── Cache management ─────────────────────────────────────────────────
 
-    /** Delete the cache file for a given sysid. Call when that drone disconnects. */
-    void deleteCache(int sysid);
+    /** Delete the cache file identified by cache_key (= ui_sysid).
+     *  Call when that drone disconnects.  The key must match what was set
+     *  via setCacheKey() — it is the ui_sysid, not the real MAVLink sysid. */
+    void deleteCache(int cache_key);
 
     /** Delete ALL cache files. Call on backend shutdown. */
     void deleteAllCaches();
@@ -150,6 +159,15 @@ private:
     std::thread          retry_thread_;
     std::atomic<bool>    retry_stop_    { false };
 
+    // ── Debounced post-set cache write ───────────────────────────────────────
+    // Each setParameter() call resets a 2-second timer.  When the timer fires
+    // (i.e. no further PARAM_SET for 2 s) the updated params_ map is flushed
+    // to disk.  This avoids N disk writes when the user applies N params at once.
+    std::thread           save_timer_thread_;
+    std::atomic<bool>     save_timer_stop_  { false };
+    std::atomic<int64_t>  save_timer_deadline_ms_ { 0 };  // epoch ms
+    void schedule_cache_save();   // arms/re-arms the 2-second timer
+
     // Tuning constants (WiFi-optimised)
     static constexpr int RETRY_INTERVAL_MS  = 200;  // ms between retry passes
     static constexpr int REQUEST_SPACING_MS = 10;   // ms between individual requests in a pass
@@ -160,10 +178,11 @@ private:
     // ── Disk cache ───────────────────────────────────────────────────────────
     std::string          cache_dir_;
     std::mutex           cache_mutex_;
+    int                  cache_key_;    // key used for cache filename (= ui_sysid when set)
 
-    std::string   cache_path(int sysid) const;
-    bool          load_cache_file(int sysid);   // returns true if cache was found & loaded
-    void          save_cache_file();            // saves current params_ for sysid_
+    std::string   cache_path() const;           // uses cache_key_
+    bool          load_cache_file();            // returns true if cache was found & loaded
+    void          save_cache_file();            // saves current params_ keyed by cache_key_
     void          save_cache_async();           // fires save_cache_file() in a detached thread
 
     SendCb      send_cb_;

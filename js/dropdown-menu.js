@@ -37,8 +37,10 @@ class DropdownMenuStrip {
         }
 
         // Start with dropdown hidden and flight controls visible
+        this.stripContainer.style.display = 'none';
         this.stripContainer.classList.add('hidden');
         if (this.flightControlsStrip) {
+            this.flightControlsStrip.style.display = 'flex';
             this.flightControlsStrip.classList.remove('hidden');
         }
 
@@ -91,11 +93,13 @@ class DropdownMenuStrip {
         console.log('📋 Showing dropdown menu, hiding flight controls');
         
         if (this.stripContainer) {
+            this.stripContainer.style.display = 'flex';
             this.stripContainer.classList.remove('hidden');
             this.isVisible = true;
         }
 
         if (this.flightControlsStrip) {
+            this.flightControlsStrip.style.display = 'none';
             this.flightControlsStrip.classList.add('hidden');
         }
 
@@ -108,12 +112,14 @@ class DropdownMenuStrip {
         console.log('🎮 Hiding dropdown menu, showing flight controls');
         
         if (this.stripContainer) {
+            this.stripContainer.style.display = 'none';
             this.stripContainer.classList.add('hidden');
             this.isVisible = false;
             this.clearActiveStates();
         }
 
         if (this.flightControlsStrip) {
+            this.flightControlsStrip.style.display = 'flex';
             this.flightControlsStrip.classList.remove('hidden');
         }
 
@@ -194,24 +200,20 @@ class DropdownMenuStrip {
         }, 150);
     }
 
-    handleVehicleConfig() {
-        this.hideAndShowFlightControls();
-        setTimeout(() => {
-            if (window.VehicleConfig) {
-                window.VehicleConfig.open();
-            } else {
-                console.error('❌ VehicleConfig not loaded!');
-            }
-        }, 150);
-    }
-
-    handleAppSettings() {
-        if (window.SettingsWindow) {
-            SettingsWindow.open();
+handleVehicleConfig() {
+    this.hideAndShowFlightControls();
+    setTimeout(() => {
+        if (window.VehicleConfig) {
+            window.VehicleConfig.open();
         } else {
-            console.error('❌ SettingsWindow not loaded!');
+            console.error('❌ VehicleConfig not loaded!');
         }
-    }
+    }, 150);
+}
+
+handleAppSettings() {
+    SettingsWindow.open();
+}
 
     setActiveButton(button) {
         this.activeButton = button;
@@ -249,6 +251,7 @@ class DropdownMenuStrip {
         this.toggleWithFlightControls();
     }
 }
+
 
 // ============================================================================
 // AUTO-INITIALIZATION

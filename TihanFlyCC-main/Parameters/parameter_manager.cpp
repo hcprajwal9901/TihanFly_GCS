@@ -27,7 +27,8 @@ using Clock = std::chrono::steady_clock;
 
 ParameterManager::ParameterManager(int sysid, int compid,
                                    const std::string& cache_dir)
-    : sysid_(sysid), compid_(compid), cache_dir_(cache_dir)
+    : sysid_(sysid), compid_(compid), cache_dir_(cache_dir),
+      cache_key_(sysid)  // default: keyed by real sysid; override via setCacheKey(ui_sysid)
 {
     // Ensure cache directory exists
     try { fs::create_directories(cache_dir_); }
@@ -42,10 +43,22 @@ ParameterManager::ParameterManager(int sysid, int compid,
 ParameterManager::~ParameterManager()
 {
     stop_retry_thread();
+
+    // Stop the debounced-save timer thread if it is running.
+    save_timer_stop_.store(true);
+    if (save_timer_thread_.joinable())
+        save_timer_thread_.join();
 }
 
 void ParameterManager::setSendCallback(SendCb cb)      { send_cb_      = std::move(cb); }
 void ParameterManager::setTransportCallback(TransportCb cb) { transport_cb_ = std::move(cb); }
+
+void ParameterManager::setCacheKey(int key)
+{
+    cache_key_ = key;
+    std::cout << "[ParameterManager] Cache key set → " << key
+              << " (file: sysid_" << key << ".json)\n";
+}
 
 void ParameterManager::setVehicleInfo(int sysid, int compid)
 {
@@ -169,7 +182,7 @@ void ParameterManager::requestAllParameters()
 
     // ── Step 1: serve cached snapshot immediately (if available) ─────────────
     // This makes the Full Params panel appear instantly on reconnect.
-    const bool had_cache = load_cache_file(sysid_);
+    const bool had_cache = load_cache_file();
 
     // ── Step 2: reset for fresh load ─────────────────────────────────────────
     {
@@ -387,6 +400,12 @@ void ParameterManager::setParameter(const std::string& param_name,
         }
     }
 
+    // Persist the change to the cache so the next reconnect serves the
+    // updated value instantly instead of the old pre-change value.
+    // Uses a debounced 2-second timer to avoid N disk writes for N rapid
+    // PARAM_SET calls (e.g. loading a full .param file).
+    schedule_cache_save();
+
     json ack;
     ack["type"]     = "param_set_sent";
     ack["param_id"] = param_name;
@@ -421,14 +440,14 @@ json ParameterManager::getAllParametersJson() const
 //  Disk Cache
 // ─────────────────────────────────────────────────────────────────────────────
 
-std::string ParameterManager::cache_path(int sysid) const
+std::string ParameterManager::cache_path() const
 {
-    return cache_dir_ + "/sysid_" + std::to_string(sysid) + ".json";
+    return cache_dir_ + "/sysid_" + std::to_string(cache_key_) + ".json";
 }
 
-bool ParameterManager::load_cache_file(int sysid)
+bool ParameterManager::load_cache_file()
 {
-    const std::string path = cache_path(sysid);
+    const std::string path = cache_path();   // uses cache_key_
     if (!fs::exists(path)) return false;
 
     try
@@ -485,7 +504,7 @@ bool ParameterManager::load_cache_file(int sysid)
 
 void ParameterManager::save_cache_file()
 {
-    const std::string path = cache_path(sysid_);
+    const std::string path = cache_path();   // uses cache_key_ (= ui_sysid)
     try
     {
         std::lock_guard<std::mutex> lk(cache_mutex_);
@@ -511,9 +530,10 @@ void ParameterManager::save_cache_async()
     std::thread([this]() { save_cache_file(); }).detach();
 }
 
-void ParameterManager::deleteCache(int sysid)
+void ParameterManager::deleteCache(int cache_key)
 {
-    const std::string path = cache_path(sysid);
+    // Build the path from the supplied key (= ui_sysid, not real sysid)
+    const std::string path = cache_dir_ + "/sysid_" + std::to_string(cache_key) + ".json";
     try
     {
         if (fs::exists(path))
@@ -575,6 +595,52 @@ void ParameterManager::stop_retry_thread()
     if (retry_thread_.joinable())
         retry_thread_.join();
     retry_stop_.store(false); // reset for next use
+}
+
+// ───────────────────────────────────────────────────────────────────────────────
+//  schedule_cache_save
+//
+//  Arms (or re-arms) a 2-second debounce timer.  When no further setParameter
+//  call fires within those 2 seconds, save_cache_file() is called once.
+//
+//  A single long-lived background thread is lazily created the first time this
+//  is called and lives until the ParameterManager is destroyed.  The thread
+//  polls every 200 ms; when it sees the deadline has passed it writes the file
+//  and clears the deadline.
+// ───────────────────────────────────────────────────────────────────────────────
+void ParameterManager::schedule_cache_save()
+{
+    // Set deadline = now + 2000 ms
+    const int64_t deadline = std::chrono::duration_cast<std::chrono::milliseconds>(
+        Clock::now().time_since_epoch()).count() + 2000;
+    save_timer_deadline_ms_.store(deadline);
+
+    // Lazily start the timer thread (only once)
+    if (!save_timer_thread_.joinable())
+    {
+        save_timer_stop_.store(false);
+        save_timer_thread_ = std::thread([this]()
+        {
+            while (!save_timer_stop_.load())
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
+                const int64_t dl = save_timer_deadline_ms_.load();
+                if (dl == 0) continue;   // no pending save
+
+                const int64_t now = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    Clock::now().time_since_epoch()).count();
+
+                if (now >= dl)
+                {
+                    // Clear deadline first so re-entrant calls set a new one
+                    save_timer_deadline_ms_.store(0);
+                    save_cache_file();
+                    std::cout << "[ParameterManager] Cache flushed after param change\n";
+                }
+            }
+        });
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

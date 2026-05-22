@@ -13,6 +13,7 @@
     left: 20px; /* Same as flight controls */
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 12px;  /* Match flight controls */
     z-index: 2000;
     pointer-events: none;
@@ -22,6 +23,8 @@
     border-radius: 16px;
     border: 2px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    width: 96px;
+    box-sizing: border-box;
 }
 
 .dropdown-menu-strip * {
@@ -42,14 +45,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 12px 10px;  /* Match flight controls */
+    padding: 12px 2px;  /* Match flight controls */
     background: transparent;
     border: none;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 50px;  /* Match flight controls */
+    width: 100%;  /* Match flight controls */
     min-height: 50px;  /* Match flight controls */
+    box-sizing: border-box;
 }
 
 .dropdown-menu-btn:hover {
@@ -133,12 +137,13 @@
         left: 15px;
         gap: 10px;  /* Match flight controls */
         padding: 10px;  /* Match flight controls */
+        width: 88px;
     }
 
     .dropdown-menu-btn {
-        width: 68px;  /* Match flight controls */
+        width: 100%;  /* Match flight controls */
         min-height: 68px;  /* Match flight controls */
-        padding: 10px 8px;  /* Match flight controls */
+        padding: 10px 2px;  /* Match flight controls */
     }
 
     .dropdown-btn-icon {
@@ -157,12 +162,13 @@
         left: 12px;
         gap: 8px;  /* Match flight controls */
         padding: 8px;
+        width: 78px;
     }
 
     .dropdown-menu-btn {
-        width: 62px;  /* Match flight controls */
+        width: 100%;  /* Match flight controls */
         min-height: 62px;  /* Match flight controls */
-        padding: 8px 6px;  /* Match flight controls */
+        padding: 8px 2px;  /* Match flight controls */
     }
 
     .dropdown-btn-icon {
@@ -182,12 +188,13 @@
         left: 10px;
         gap: 6px;
         padding: 8px;
+        width: 72px;
     }
 
     .dropdown-menu-btn {
-        width: 56px;  /* Match flight controls */
+        width: 100%;  /* Match flight controls */
         min-height: 56px;  /* Match flight controls */
-        padding: 8px 5px;  /* Match flight controls */
+        padding: 8px 2px;  /* Match flight controls */
     }
 
     .dropdown-btn-icon {
@@ -207,11 +214,13 @@
         left: 12px;
         gap: 8px;
         padding: 8px;
+        width: 78px;
     }
 
     .dropdown-menu-btn {
-        width: 58px;  /* Match flight controls */
+        width: 100%;  /* Match flight controls */
         min-height: 58px;  /* Match flight controls */
+        padding: 8px 2px;
     }
 
     .dropdown-btn-icon {

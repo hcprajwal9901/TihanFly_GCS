@@ -57,12 +57,12 @@ class CompassEnhanced {
                 <div class="compass-widget">
                     <div class="compass-svg-container">
                         <!-- Static compass dial background -->
-                        <img src="resources/compassInstrumentDial.svg" 
+                        <img src="../resources/compassInstrumentDial.svg" 
                              class="compass-dial-static" 
                              alt="Compass Dial">
                         
                         <!-- Rotating compass needle/arrow -->
-                        <img src="resources/compassInstrumentArrow.svg" 
+                        <img src="../resources/compassInstrumentArrow.svg" 
                              class="compass-arrow-rotating" 
                              id="compassArrow"
                              alt="Compass Arrow">
@@ -303,11 +303,11 @@ class CompassEnhanced {
     setHeading(degrees) {
         this.heading = degrees % 360;
         if (this.heading < 0) this.heading += 360;
-        
+
         if (this.compassElement) {
             this.compassElement.style.transform = `translate(-50%, -50%) rotate(${this.heading}deg)`;
         }
-        
+
         const headingValue = document.getElementById('headingValue');
         if (headingValue) {
             headingValue.textContent = Math.round(this.heading) + '°';

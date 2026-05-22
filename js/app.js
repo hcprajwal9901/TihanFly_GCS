@@ -1,6 +1,6 @@
 /**
  * Main Application Script - app.js
- * UPDATED: Added Compass Backend Integration for WebSocket telemetry
+ * Frontend Only (Backend/WebSocket removed)
  */
 
 console.log('🚀 TiHANFly GCS Application Starting...');
@@ -11,13 +11,13 @@ console.log('🚀 TiHANFly GCS Application Starting...');
 
 var tmap = null;
 var compass = null;
-var compassBackend = null; // NEW: Backend integration
 var videoStream = null;
 var flightControls = null;
 var messageConsole = null;
 var weatherDashboard = null;
 var waypointManager = null;
 var homeMarker = null;
+var droneWebSocket = null;
 
 // ============================================================================
 // INITIALIZATION
@@ -25,21 +25,27 @@ var homeMarker = null;
 
 function initializeApplication() {
     console.log('⚙️ Initializing application components...');
-    
+
     // Step 1: Initialize Map FIRST
     initializeMap();
-    
+
     // Step 2: Wait for map to be ready, then initialize other components
     setTimeout(() => {
         initializeCompass();
         initializeVideo();
         initializeVideoMaximize();
-        
+        initializeUIAppearance();
+
         // Step 3: Wait a bit more, then integrate everything
         setTimeout(() => {
             integrateComponents();
         }, 500);
     }, 500);
+
+    // Step 4: Connect to backend WebSocket for live drone GPS
+    initializeDroneWebSocket();
+
+    // Note: data-persistence override guard is handled inside data-persistence.js
 }
 
 // ============================================================================
@@ -48,66 +54,341 @@ function initializeApplication() {
 
 function initializeMap() {
     console.log('🗺️ Initializing map...');
-    
+
     try {
         const defaultLat = 17.60172258544661;
         const defaultLng = 78.12699163814133;
         const defaultZoom = 18;
-        
+
         tmap = new TMap('map', [defaultLat, defaultLng], defaultZoom, false);
         window.tmap = tmap;
-        
+
         console.log('✅ Map initialized');
         console.log('✅ window.tmap is now available');
-        
-        // Add static locations with simple home marker
-        addStaticLocations();
-        
+
     } catch (error) {
         console.error('❌ Error initializing map:', error);
     }
 }
 
 // ============================================================================
-// STATIC LOCATIONS WITH SIMPLE PNG HOME MARKER
+// DRONE WEBSOCKET - Receive live GPS from backend
 // ============================================================================
 
-function addStaticLocations() {
-    console.log('📍 Adding static location markers...');
-    
-    if (!tmap) {
-        console.error('❌ Map not initialized, cannot add static locations');
-        return;
-    }
-    
-    try {
-        // Add Simple Home Marker
-        homeMarker = tmap.addRotatingHomeMarker(
-            17.60244305205114,
-            78.12687671185479,
-            'Home Location',
-            {
-                iconSize: [80, 80],
-                iconAnchor: [20, 40],
-                iconUrl: 'resources/icon/home.png',
-                labelOffset: [0, 5],
-                permanentLabel: false,
-                labelColor: '#FFCC00',
-            }
-        );
-        
-        console.log('✅ Simple Home Marker added: Home Location');
-        console.log(`📍 Total markers on map: ${tmap.getMarkerCount()}`);
-        
-        if (window.MsgConsole) {
-            window.MsgConsole.success('🏠 Home Marker loaded');
-            window.MsgConsole.info('📍 Static locations loaded');
-        }
-        
-    } catch (error) {
-        console.error('❌ Error adding static locations:', error);
-    }
+// Flag: true once drone is MAVLink-connected (status.connected = true)
+var droneConnected = false;
+
+// Flag: true once we get at least one real GPS fix (lat/lon non-zero)
+var droneGpsActive = false;
+
+// Flag: true once map has been snapped to the real drone position at least once.
+// Prevents data-persistence.js from restoring an old saved view and overriding the drone snap.
+var droneMapSnapped = false;
+
+// Home position — set on first GPS fix, used to compute DIST on compass.
+var droneHomePosition = null;  // { lat, lon }
+
+// ── Haversine great-circle distance (metres) ─────────────────────────────────
+function haversineDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371000; // Earth radius in metres
+    const φ1 = lat1 * Math.PI / 180;
+    const φ2 = lat2 * Math.PI / 180;
+    const Δφ = (lat2 - lat1) * Math.PI / 180;
+    const Δλ = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2)
+        + Math.cos(φ1) * Math.cos(φ2)
+        * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
+
+function initializeDroneWebSocket() {
+    const WS_URL = 'ws://127.0.0.1:9002';
+    const RECONNECT_DELAY_MS = 3000;
+
+    // Tracks drone connection state — only log to console on actual changes
+    let droneConnectionState = null;  // e.g. 'connected:UDP', 'disconnected'
+
+    function connect() {
+        console.log('🔌 Connecting to drone backend WebSocket...');
+
+        droneWebSocket = new WebSocket(WS_URL);
+
+        droneWebSocket.onopen = () => {
+            console.log('✅ Drone WebSocket connected');
+            setHeaderStatus('Connecting...', 'connecting');
+            if (window.MsgConsole) {
+                window.MsgConsole.success('🔌 Backend connected');
+            }
+        };
+
+        droneWebSocket.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                
+                const targetSysId = window.selectedSysId === 0 ? (window._primarySysId || 1) : (window.selectedSysId || 1);
+                const sid = data.sysid ?? 1;
+
+                // ── GPS position update ─────────────────────────────────────
+                if (data.type === 'gps') {
+                    const { latitude, longitude, altitude, heading } = data;
+
+                    if (typeof latitude === 'number' && typeof longitude === 'number'
+                        && (latitude !== 0 || longitude !== 0)) {
+
+                        // ── First GPS fix — record as home position ─────────
+                        // (We only track home position for the target drone)
+                        if (sid === targetSysId && !droneGpsActive) {
+                            droneGpsActive = true;
+                            droneHomePosition = { lat: latitude, lon: longitude };
+                            console.log(`🏠 Home position set: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+                            setHeaderStatus('GPS Lock', 'ready');
+                        }
+
+                        // ── Snap map to drone on very first fix ─────────────
+                        if (sid === targetSysId && !droneMapSnapped && tmap) {
+                            droneMapSnapped = true;
+                            tmap._droneSetViewInProgress = true;
+                            tmap.map.setView([latitude, longitude], 18, { animate: false });
+                            tmap._droneSetViewInProgress = false;
+                            if (typeof tmap.setDroneAutoPan === 'function') {
+                                tmap.setDroneAutoPan(true);
+                            } else {
+                                tmap.droneAutoPan = true;
+                                tmap._gpsFixCount = 0;
+                            }
+                            console.log(`🎯 MAP SNAPPED to drone: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+                            if (window.MsgConsole) {
+                                window.MsgConsole.success(`🎯 Map locked to drone GPS`);
+                            }
+                        }
+
+                        // ── Distance from home (Haversine) ──────────────────
+                        let distFromHome = 0;
+                        if (sid === targetSysId && droneHomePosition) {
+                            distFromHome = haversineDistance(
+                                droneHomePosition.lat, droneHomePosition.lon,
+                                latitude, longitude
+                            );
+                        }
+
+                        // Update drone marker on map
+                        if (tmap) {
+                            if (tmap.updateDronePositionForSysid) {
+                                tmap.updateDronePositionForSysid(sid, latitude, longitude, heading || 0);
+                            } else {
+                                tmap.updateDronePosition(latitude, longitude, heading || 0);
+                            }
+                        }
+
+                        // Update compass lat/lon/alt/speed/heading/distance/satellites
+                        if (sid === targetSysId && compass) {
+                            compass.updateTelemetry({
+                                latitude,
+                                longitude,
+                                altitude: altitude || 0,
+                                distance: distFromHome,
+                                speed: typeof data.groundspeed === 'number'
+                                    ? parseFloat(data.groundspeed.toFixed(1)) : undefined,
+                                satellites: typeof data.satellites === 'number'
+                                    ? data.satellites : undefined
+                            });
+                            // GPS heading takes priority over attitude yaw
+                            if (typeof heading === 'number') {
+                                compass.setHeading(heading);
+                            }
+                            console.log(`📡 GPS: lat=${latitude.toFixed(6)}, lng=${longitude.toFixed(6)}, alt=${(altitude||0).toFixed(1)}m, hdg=${(heading||0).toFixed(1)}°, spd=${(data.groundspeed||0).toFixed(1)}m/s, dist=${distFromHome.toFixed(0)}m`);
+                        }
+                    }
+                }
+
+                // ── ATTITUDE — heading/yaw available immediately on connect ─
+                // Use yaw from ATTITUDE when GPS heading is not yet available.
+                // att.yaw is in radians (-π to +π, North=0, clockwise positive).
+                else if (data.type === 'attitude') {
+                    if (sid === targetSysId) {
+                        // Update TelemetryStore for the HUD so roll/pitch move smoothly at high-hz
+                        if (window.TelemetryStore) {
+                            window.TelemetryStore.roll = data.roll;
+                            window.TelemetryStore.pitch = data.pitch;
+                            window.TelemetryStore.yaw = data.yaw;
+                        }
+
+                        if (compass && !droneGpsActive) {
+                            // Convert radian yaw → degrees, normalise to 0–360
+                            const yawDeg = ((data.yaw * 180 / Math.PI) + 360) % 360;
+                            compass.setHeading(yawDeg);
+                        }
+                    }
+                }
+
+                // ── Real-time telemetry — VFR_HUD speed, GPS_RAW_INT sats ──
+                // Accept any time drone is connected (not just after GPS lock).
+                else if (data.type === 'telemetry') {
+                    if (sid === targetSysId && compass && droneConnected) {
+                        const update = {};
+                        if (typeof data.groundspeed === 'number')
+                            update.speed = parseFloat(data.groundspeed.toFixed(1));
+                        if (typeof data.satellites === 'number')
+                            update.satellites = data.satellites;
+                        if (typeof data.altitude === 'number')
+                            update.altitude = parseFloat(data.altitude.toFixed(1));
+                        if (Object.keys(update).length > 0) compass.updateTelemetry(update);
+                    }
+                }
+
+                // ── Connection status update ────────────────────────────────
+                else if (data.type === 'status') {
+                    const connected = data.connected;
+                    const connection = data.connection || 'NONE';
+                    const stateKey = connected ? `connected:${connection}` : 'disconnected';
+
+                    if (stateKey !== droneConnectionState) {
+                        droneConnectionState = stateKey;
+
+                        if (connected) {
+                            droneConnected = true;
+                            setHeaderStatus(`${connection}`, 'ready');
+                            if (window.MsgConsole) {
+                                window.MsgConsole.success(`🚁 Drone connected via ${connection}`);
+                            }
+                        } else {
+                            droneConnected = false;
+                            droneGpsActive = false;
+                            droneHomePosition = null;   // clear so next connect re-captures home
+                            setHeaderStatus('Waiting for Drone', 'waiting');
+                            // ── Reset compass to zeros when drone goes offline ─
+                            if (compass) {
+                                compass.setHeading(0);
+                                compass.updateTelemetry({
+                                    latitude: 0, longitude: 0,
+                                    altitude: 0, speed: 0,
+                                    distance: 0, satellites: 0
+                                });
+                            }
+                            if (tmap && homeMarker) {
+                                droneMapSnapped = false;
+                                tmap._droneSetViewInProgress = true;
+                                tmap.map.setView([homeMarker.lat, homeMarker.lng], 18, { animate: true });
+                                tmap._droneSetViewInProgress = false;
+                            }
+                            if (window.MsgConsole) {
+                                window.MsgConsole.info('⏳ Waiting for drone...');
+                            }
+                        }
+                    } else {
+                        if (connected) setHeaderStatus(`${ connection } `, 'ready');
+                                  else           setHeaderStatus('Waiting for Drone', 'waiting');
+                    }
+                }
+
+                // ── Drone MAVProxy console message ──────────────────────────
+                // NOTE: drone_console is handled exclusively by websocket.js
+                // (plan-flight-modules/websocket.js) which is the canonical WS
+                // manager. Handling it here too caused every STATUSTEXT from the
+                // drone to appear TWICE in the message console.
+                // else if (data.type === 'drone_console') { ... }
+
+            } catch (e) {
+                console.warn('⚠️ WS message parse error:', e);
+            }
+        };
+
+        droneWebSocket.onclose = () => {
+            console.warn('⚠️ Drone WebSocket disconnected. Retrying in 3s...');
+            setHeaderStatus('Disconnected', 'error');
+            droneConnected = false;
+            droneGpsActive = false;
+            droneHomePosition = null;
+            droneMapSnapped = false;
+            droneConnectionState = null;
+            // ── Reset compass to zeros on backend disconnect ───────────────
+            if (compass) {
+                compass.setHeading(0);
+                compass.updateTelemetry({
+                    latitude: 0, longitude: 0,
+                    altitude: 0, speed: 0,
+                    distance: 0, satellites: 0
+                });
+            }
+            if (window.MsgConsole) {
+                window.MsgConsole.warning('🔌 Backend disconnected — reconnecting...');
+            }
+            // ── Snap map back to static home location ─────────────────────
+            if (tmap && homeMarker) {
+                tmap._droneSetViewInProgress = true;
+                tmap.map.setView([homeMarker.lat, homeMarker.lng], 18, { animate: true });
+                tmap._droneSetViewInProgress = false;
+                console.log('🏠 GPS lost — map snapped back to home location');
+            }
+            droneWebSocket = null;
+            setTimeout(connect, RECONNECT_DELAY_MS);
+        };
+
+
+        droneWebSocket.onerror = (err) => {
+            console.error('❌ Drone WebSocket error:', err);
+        };
+    }
+
+    connect();
+
+    // Expose for debugging
+    window.DroneWS = {
+        send: (msg) => {
+            if (droneWebSocket && droneWebSocket.readyState === WebSocket.OPEN) {
+                droneWebSocket.send(JSON.stringify(msg));
+            } else {
+                console.warn('⚠️ WebSocket not connected');
+            }
+        },
+        status: () => droneWebSocket ? droneWebSocket.readyState : 'null'
+    };
+
+    console.log('✅ Drone WebSocket handler initialized');
+}
+
+
+
+// // ============================================================================
+// // STATIC LOCATIONS WITH SIMPLE PNG HOME MARKER
+// // ============================================================================
+
+// function addStaticLocations() {
+//     console.log('📍 Adding static location markers...');
+
+//     if (!tmap) {
+//         console.error('❌ Map not initialized, cannot add static locations');
+//         return;
+//     }
+
+//     try {
+//         // Add Simple Home Marker
+//         homeMarker = tmap.addRotatingHomeMarker(
+//             17.60244305205114,
+//             78.12687671185479,
+//             'Home Location',
+//             {
+//                 iconSize: [80, 80],
+//                 iconAnchor: [20, 40],
+//                 iconUrl: 'resources/icon/home.png',
+//                 labelOffset: [0, 5],
+//                 permanentLabel: false,
+//                 labelColor: '#FFCC00',
+//             }
+//         );
+
+//         console.log('✅ Simple Home Marker added: Home Location');
+//         console.log(`📍 Total markers on map: ${ tmap.getMarkerCount() } `);
+
+//         if (window.MsgConsole) {
+//             window.MsgConsole.success('🏠 Home Marker loaded');
+//             window.MsgConsole.info('📍 Static locations loaded');
+//         }
+
+//     } catch (error) {
+//         console.error('❌ Error adding static locations:', error);
+//     }
+// }
 
 // ============================================================================
 // COMPASS INITIALIZATION
@@ -115,340 +396,26 @@ function addStaticLocations() {
 
 function initializeCompass() {
     console.log('🧭 Initializing compass...');
-    
+
     try {
         compass = new CompassEnhanced('map');
         window.compass = compass;
-        
+
+        // Start at zero — real values arrive once the drone connects.
+        // Do NOT seed with static lat/lon; that would show mock data.
         compass.updateTelemetry({
-            latitude: 17.60172258544661,
-            longitude: 78.12699163814133,
-            altitude: 0,
-            speed: 0,
-            distance: 0,
-            satellites: 12
-        });
-        
-        console.log('✅ Compass initialized');
-        
-        // Initialize compass backend integration
-        initializeCompassBackend();
-        
-    } catch (error) {
-        console.error('❌ Error initializing compass:', error);
-    }
-}
-
-// ============================================================================
-// COMPASS BACKEND INTEGRATION - NEW
-// ============================================================================
-
-function initializeCompassBackend() {
-    console.log('📡 Initializing Compass Backend Integration...');
-    
-    if (!compass) {
-        console.error('❌ Compass not initialized, cannot start backend');
-        return;
-    }
-    
-    try {
-        compassBackend = new CompassBackend(compass, 'ws://localhost:9002');
-        window.compassBackend = compassBackend;
-        console.log('✅ Compass Backend initialized');
-    } catch (error) {
-        console.error('❌ Error initializing compass backend:', error);
-    }
-}
-
-/**
- * CompassBackend Class - Handles WebSocket communication for telemetry
- */
-class CompassBackend {
-    constructor(compassInstance, websocketUrl = 'ws://localhost:9002') {
-        this.compass = compassInstance;
-        this.ws = null;
-        this.websocketUrl = websocketUrl;
-        this.isConnected = false;
-        this.reconnectInterval = 3000;
-        this.reconnectTimer = null;
-        this.reconnectAttempts = 0;
-        this.maxReconnectAttempts = 10;
-        
-        // Telemetry data cache
-        this.telemetryCache = {
-            heading: 0,
             latitude: 0,
             longitude: 0,
             altitude: 0,
             speed: 0,
             distance: 0,
-            satellites: 0,
-            battery: 100
-        };
-        
-        // Connection status indicator elements
-        this.statusBadge = document.querySelector('.status-badge');
-        this.batteryIndicator = document.querySelector('.battery-indicator .indicator-text');
-        this.gpsIndicator = document.querySelector('.indicator-item img[alt="GPS"]')?.parentElement;
-        
-        this.init();
-    }
-
-    init() {
-        console.log('📡 Starting WebSocket connection...');
-        this.connect();
-    }
-
-    connect() {
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            console.log('⚠️  Already connected to WebSocket');
-            return;
-        }
-
-        try {
-            console.log(`🔌 Connecting to ${this.websocketUrl}...`);
-            this.ws = new WebSocket(this.websocketUrl);
-
-            this.ws.onopen = () => {
-                this.isConnected = true;
-                this.reconnectAttempts = 0;
-                console.log('✅ WebSocket connected - Telemetry streaming active');
-                
-                this.updateConnectionStatus(true);
-                
-                if (this.reconnectTimer) {
-                    clearTimeout(this.reconnectTimer);
-                    this.reconnectTimer = null;
-                }
-                
-                if (window.MsgConsole) {
-                    window.MsgConsole.success('📡 Backend connected');
-                }
-            };
-
-            this.ws.onmessage = (event) => {
-                this.handleMessage(event.data);
-            };
-
-            this.ws.onerror = (error) => {
-                console.error('❌ WebSocket error:', error);
-            };
-
-            this.ws.onclose = () => {
-                this.isConnected = false;
-                console.log('🔌 WebSocket disconnected');
-                
-                this.updateConnectionStatus(false);
-                
-                if (window.MsgConsole) {
-                    window.MsgConsole.warning('📡 Backend disconnected');
-                }
-                
-                this.scheduleReconnect();
-            };
-
-        } catch (error) {
-            console.error('❌ Failed to create WebSocket:', error);
-            this.scheduleReconnect();
-        }
-    }
-
-    scheduleReconnect() {
-        if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-            console.log('❌ Max reconnection attempts reached');
-            if (window.MsgConsole) {
-                window.MsgConsole.error('Connection failed - Max attempts reached');
-            }
-            return;
-        }
-
-        if (!this.reconnectTimer) {
-            this.reconnectAttempts++;
-            console.log(`🔄 Reconnecting in ${this.reconnectInterval / 1000}s... (Attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
-            
-            this.reconnectTimer = setTimeout(() => {
-                this.reconnectTimer = null;
-                this.connect();
-            }, this.reconnectInterval);
-        }
-    }
-
-    handleMessage(data) {
-        try {
-            const message = JSON.parse(data);
-            
-            switch (message.type) {
-                case 'telemetry':
-                    this.handleTelemetry(message.data);
-                    break;
-                    
-                case 'status':
-                    this.handleStatus(message);
-                    break;
-                    
-                case 'command_response':
-                    this.handleCommandResponse(message);
-                    break;
-                    
-                default:
-                    console.log('📨 Received message:', message);
-            }
-            
-        } catch (error) {
-            console.error('❌ Error parsing message:', error);
-        }
-    }
-
-    handleTelemetry(data) {
-        // Update cache
-        Object.assign(this.telemetryCache, data);
-        
-        // Update compass heading
-        if (data.heading !== undefined) {
-            this.compass.setHeading(data.heading);
-        }
-        
-        // Update all telemetry values in compass
-        this.compass.updateTelemetry({
-            latitude: data.latitude,
-            longitude: data.longitude,
-            altitude: data.altitude,
-            speed: data.speed,
-            distance: data.distance,
-            satellites: data.satellites
+            satellites: 0
         });
-        
-        // Update header indicators
-        this.updateHeaderIndicators(data);
-    }
 
-    handleStatus(message) {
-        console.log('📊 Status:', message);
-        
-        if (window.MsgConsole) {
-            const statusText = message.result || message.message || 'Status update';
-            const statusType = message.result === 'accepted' ? 'success' : 'info';
-            window.MsgConsole.addMessage(statusText, statusType);
-        }
-    }
+        console.log('✅ Compass initialized');
 
-    handleCommandResponse(message) {
-        console.log('📝 Command Response:', message);
-        
-        if (window.MsgConsole) {
-            const cmdText = `${message.command}: ${message.message || message.result}`;
-            const cmdType = message.success ? 'success' : 'error';
-            window.MsgConsole.addMessage(cmdText, cmdType);
-        }
-    }
-
-    updateConnectionStatus(connected) {
-        if (this.statusBadge) {
-            if (connected) {
-                this.statusBadge.textContent = 'Connected';
-                this.statusBadge.className = 'status-badge ready';
-            } else {
-                this.statusBadge.textContent = 'Disconnected';
-                this.statusBadge.className = 'status-badge';
-            }
-        }
-    }
-
-    updateHeaderIndicators(data) {
-        // Update battery indicator
-        if (data.battery !== undefined && this.batteryIndicator) {
-            this.batteryIndicator.textContent = `${data.battery}%`;
-            
-            // Change battery icon based on level (if you have different battery icons)
-            const batteryIcon = this.batteryIndicator.previousElementSibling;
-            if (batteryIcon) {
-                if (data.battery < 20) {
-                    batteryIcon.src = 'resources/BatteryRed.svg';
-                } else if (data.battery < 50) {
-                    batteryIcon.src = 'resources/BatteryYellow.svg';
-                } else {
-                    batteryIcon.src = 'resources/BatteryGreen.svg';
-                }
-            }
-        }
-        
-        // Update GPS satellite count
-        if (data.satellites !== undefined) {
-            const gpsText = document.querySelector('.indicator-item img[alt="GPS"]')?.parentElement?.querySelector('.indicator-text');
-            if (gpsText) {
-                gpsText.textContent = data.satellites;
-            }
-        }
-    }
-
-    sendCommand(command, params = {}) {
-        if (!this.isConnected || !this.ws || this.ws.readyState !== WebSocket.OPEN) {
-            console.warn('⚠️  Cannot send command: WebSocket not connected');
-            if (window.MsgConsole) {
-                window.MsgConsole.warning('Cannot send command: Not connected');
-            }
-            return false;
-        }
-
-        const message = {
-            type: 'command',
-            command: command,
-            params: params,
-            timestamp: Date.now()
-        };
-
-        try {
-            if (window.sendToSelected) {
-                window.sendToSelected(message);
-            } else {
-                message.sysid = window.selectedSysId || 1;
-                this.ws.send(JSON.stringify(message));
-            }
-            console.log('📤 Sent command:', command, params);
-            return true;
-        } catch (error) {
-            console.error('❌ Error sending command:', error);
-            if (window.MsgConsole) {
-                window.MsgConsole.error('Error sending command');
-            }
-            return false;
-        }
-    }
-
-    requestTelemetry() {
-        const request = {
-            type: 'request',
-            request: 'telemetry',
-            timestamp: Date.now()
-        };
-        
-        if (this.isConnected && this.ws && this.ws.readyState === WebSocket.OPEN) {
-            this.ws.send(JSON.stringify(request));
-        }
-    }
-
-    disconnect() {
-        if (this.reconnectTimer) {
-            clearTimeout(this.reconnectTimer);
-            this.reconnectTimer = null;
-        }
-        
-        if (this.ws) {
-            this.ws.close();
-            this.ws = null;
-        }
-        
-        this.isConnected = false;
-        this.updateConnectionStatus(false);
-        console.log('🔌 Disconnected from WebSocket');
-    }
-
-    getTelemetry() {
-        return { ...this.telemetryCache };
-    }
-
-    isConnectionActive() {
-        return this.isConnected;
+    } catch (error) {
+        console.error('❌ Error initializing compass:', error);
     }
 }
 
@@ -458,16 +425,24 @@ class CompassBackend {
 
 function initializeVideo() {
     console.log('📹 Initializing video stream...');
-    
+
     try {
-        if (typeof VideoStream !== 'undefined') {
-            videoStream = new VideoStream('videoStream');
-            window.videoStream = videoStream;
-            console.log('✅ Video stream initialized');
+        // video-stream.js exposes window.VideoStream as a plain object (not a class).
+        // The old code tried to call `new VideoStream(...)` which throws.
+        // UltraSmoothVideoManager auto-initialises via initializeUltraSmoothVideo()
+        // which is called by video-stream.js itself on DOMContentLoaded.
+        // We just store a reference here for GCS.video() to return.
+        if (typeof initializeUltraSmoothVideo !== 'undefined') {
+            initializeUltraSmoothVideo().then(mgr => {
+                videoStream = mgr;
+                window.videoStream = mgr;
+                console.log('✅ Video stream manager ready');
+            });
         } else {
-            console.log('ℹ️ VideoStream class not found, skipping video initialization');
+            console.log('ℹ️ video-stream.js not loaded, skipping video initialization');
         }
-        
+
+
     } catch (error) {
         console.error('❌ Error initializing video:', error);
     }
@@ -479,125 +454,138 @@ function initializeVideo() {
 
 function initializeVideoMaximize() {
     console.log('📺 Initializing Click-to-Maximize Video Handler...');
-    
+
     let isVideoMaximized = false;
-    
+
     const videoContainer = document.getElementById('videoContainer');
     const mapContainer = document.getElementById('map');
-    
+
     if (!videoContainer || !mapContainer) {
         console.error('❌ Required elements not found for video maximize');
         return;
     }
-    
+
+    // ── Wire the maximize/minimize button ─────────────────────────────────
     const maxBtn = document.getElementById('videoMaxBtn');
     if (maxBtn) {
-        maxBtn.style.display = 'none';
-        console.log('🔒 Maximize button hidden - using click to toggle');
+        maxBtn.style.display = '';
+        maxBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleVideoMaximize();
+        });
     }
-    
+
     function toggleVideoMaximize() {
         isVideoMaximized = !isVideoMaximized;
-        
+
         if (isVideoMaximized) {
             console.log('🔲 Maximizing video...');
-            
+
             videoContainer.classList.add('maximized');
             mapContainer.classList.add('minimized');
-            videoContainer.style.cursor = 'zoom-out';
-            
+            if (maxBtn) maxBtn.innerHTML = _iconMinimize();
+
             console.log('✅ Video maximized, map minimized');
-            
+
             if (window.MsgConsole) {
-                window.MsgConsole.info('Video maximized - Click video or map to restore');
+                window.MsgConsole.info('Video maximized — press V or click ⧆ to restore');
             }
-            
+
             setTimeout(() => {
                 if (window.tmap && window.tmap.map) {
                     window.tmap.map.invalidateSize();
                     console.log('🗺️ Map resized for PIP mode');
                 }
             }, 100);
-            
+
         } else {
             console.log('🔳 Restoring default view...');
-            
+
             videoContainer.classList.remove('maximized');
             mapContainer.classList.remove('minimized');
-            videoContainer.style.cursor = 'zoom-in';
-            
+            if (maxBtn) maxBtn.innerHTML = _iconMaximize();
+
             console.log('✅ Default view restored');
-            
+
             if (window.MsgConsole) {
                 window.MsgConsole.info('Default view restored');
             }
-            
+
             const resizeAttempts = [100, 300, 500, 800];
             resizeAttempts.forEach((delay) => {
                 setTimeout(() => {
                     if (window.tmap && window.tmap.map) {
                         window.tmap.map.invalidateSize();
-                        
+
                         window.tmap.map.eachLayer((layer) => {
                             if (layer.redraw) {
                                 layer.redraw();
                             }
                         });
-                        
-                        console.log(`🔄 Map resize attempt at ${delay}ms`);
+
+                        console.log(`🔄 Map resize attempt at ${ delay } ms`);
                     }
                 }, delay);
             });
         }
     }
-    
-    videoContainer.addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-            return;
-        }
-        
-        console.log('🖱️ Video container clicked - toggling view');
-        toggleVideoMaximize();
-    });
-    
+
+
+
     mapContainer.addEventListener('click', (e) => {
         if (mapContainer.classList.contains('minimized')) {
             console.log('🗺️ Minimized map clicked - restoring...');
-            
+
             toggleVideoMaximize();
-            
+
             setTimeout(() => {
                 if (window.tmap && window.tmap.map) {
                     console.log('🔄 Force reloading map...');
                     window.tmap.map.invalidateSize();
-                    
+
                     window.tmap.map.eachLayer((layer) => {
                         if (layer.redraw) {
                             layer.redraw();
                         }
                     });
-                    
+
                     console.log('✅ Map reloaded successfully');
                 }
             }, 200);
-            
+
             e.stopPropagation();
             e.preventDefault();
         }
     }, true);
-    
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'v' || e.key === 'V') {
-            if (document.activeElement.tagName !== 'INPUT' && 
+            if (document.activeElement.tagName !== 'INPUT' &&
                 document.activeElement.tagName !== 'TEXTAREA') {
                 toggleVideoMaximize();
             }
         }
     });
-    
-    videoContainer.style.cursor = 'zoom-in';
+
     videoContainer.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-    
+
+    // SVG icon helpers
+    function _iconMaximize() {
+        return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+            <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+        </svg>`;
+    }
+    function _iconMinimize() {
+        return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/>
+            <line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/>
+        </svg>`;
+    }
+    if (maxBtn) maxBtn.innerHTML = _iconMaximize();
+
     window.VideoMaximize = {
         toggle: toggleVideoMaximize,
         isMaximized: () => isVideoMaximized,
@@ -608,7 +596,7 @@ function initializeVideoMaximize() {
             if (isVideoMaximized) toggleVideoMaximize();
         }
     };
-    
+
     console.log('✅ Click-to-Maximize Video Handler Ready');
 }
 
@@ -618,22 +606,21 @@ function initializeVideoMaximize() {
 
 function integrateComponents() {
     console.log('🔗 Integrating components...');
-    
+
     flightControls = window.flightControls;
     messageConsole = window.minimalConsole || window.MsgConsole;
     weatherDashboard = window.weatherDashboard;
-    
+
     // ✅ IMPORTANT: Wait for WaypointManager to initialize
     waypointManager = window.WaypointManager;
-    
+
     if (!waypointManager) {
         console.warn('⚠️ WaypointManager not initialized yet, waiting...');
-        
-        // Wait and retry
+
         let retries = 0;
         const checkInterval = setInterval(() => {
             retries++;
-            
+
             if (window.WaypointManager) {
                 clearInterval(checkInterval);
                 waypointManager = window.WaypointManager;
@@ -645,41 +632,33 @@ function integrateComponents() {
                 finishIntegration(); // Continue anyway
             }
         }, 200);
-        
+
         return;
     }
-    
+
     finishIntegration();
 }
 
 function finishIntegration() {
     console.log('🔗 Finishing component integration...');
-    
+
     integrateWeatherDashboard();
     integrateFlightControls();
     integrateWaypointManager();
-    
+
     // Initialize MissionFile if not already initialized
     if (!window.MissionFile && typeof initializeMissionFileManager === 'function') {
         console.log('📄 Initializing MissionFile...');
         initializeMissionFileManager();
     }
-    
-    // Don't start demo updates if backend is connected
-    if (!compassBackend || !compassBackend.isConnected) {
-        startDemoUpdates();
-    }
-    
+
+
     console.log('✅ All components integrated');
-    
+
     if (window.MsgConsole) {
         window.MsgConsole.success('🚁 TiHANFly GCS Ready');
         window.MsgConsole.info('🏠 Simple home marker active');
         window.MsgConsole.info('Click video to maximize - Click PLAN to enter flight planning');
-        
-        if (compassBackend && compassBackend.isConnected) {
-            window.MsgConsole.success('📡 Backend telemetry active');
-        }
     }
 }
 
@@ -689,98 +668,80 @@ function finishIntegration() {
 
 function integrateWeatherDashboard() {
     console.log('🌤️ Integrating Weather Dashboard with priority system...');
-    
+
     if (!tmap) {
         console.error('❌ Map not found, cannot integrate weather dashboard');
         return;
     }
-    
+
     if (!weatherDashboard) {
         console.error('❌ Weather Dashboard not found');
         return;
     }
-    
+
     tmap.enableClick();
     console.log('✅ Map click enabled');
-    
+
     tmap.onClick((lat, lng, e) => {
-        console.log(`🖱️ Map clicked at: ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
-        
+        console.log(`🖱️ Map clicked at: ${ lat.toFixed(6) }, ${ lng.toFixed(6) } `);
+
         if (window.WaypointManager && window.WaypointManager.currentMode) {
-            console.log(`📍 WAYPOINT MODE ACTIVE: ${window.WaypointManager.currentMode}`);
+            console.log(`📍 WAYPOINT MODE ACTIVE: ${ window.WaypointManager.currentMode } `);
             console.log('Routing click to WaypointManager...');
             window.WaypointManager.handleMapClick(lat, lng, e);
             return;
         }
-        
+
         if (window.PlanFlight && window.PlanFlight.isActive && window.PlanFlight.isActive()) {
             console.log('🗺️ Plan Flight mode active but no waypoint action - ignoring click');
             return;
         }
-        
+
         console.log('🌤️ Normal mode - showing weather');
         weatherDashboard.onMapClick(lat, lng);
-        
+
         if (window.MsgConsole) {
-            window.MsgConsole.info(`Weather: ${lat.toFixed(4)}, ${lng.toFixed(4)}`);
+            window.MsgConsole.info(`Weather: ${ lat.toFixed(4) }, ${ lng.toFixed(4) } `);
         }
     });
-    
+
     console.log('✅ Weather Dashboard integrated with smart priority system');
 }
 
 // ============================================================================
-// FLIGHT CONTROLS INTEGRATION - UPDATED WITH BACKEND
+// FLIGHT CONTROLS INTEGRATION
 // ============================================================================
 
 function integrateFlightControls() {
     console.log('🎮 Integrating Flight Controls...');
-    
+
     if (!flightControls) {
         console.log('ℹ️ Flight Controls not found, skipping integration');
         return;
     }
-    
+
     flightControls.onTakeoff((settings) => {
         console.log('🚀 TAKEOFF initiated:', settings);
-        
-        // Send to backend if connected
-        if (compassBackend && compassBackend.isConnected) {
-            compassBackend.sendCommand('TAKEOFF', { altitude: settings.altitude });
-        }
-        
         if (window.MsgConsole) {
             window.MsgConsole.takeoff(settings.altitude);
         }
     });
-    
+
     flightControls.onLand(() => {
         console.log('🛬 LAND initiated');
-        
-        // Send to backend if connected
-        if (compassBackend && compassBackend.isConnected) {
-            compassBackend.sendCommand('LAND');
-        }
-        
         if (window.MsgConsole) {
             window.MsgConsole.land();
         }
     });
-    
+
     flightControls.onRTL(() => {
         console.log('🏠 RTL initiated');
-        
-        // Send to backend if connected
-        if (compassBackend && compassBackend.isConnected) {
-            compassBackend.sendCommand('RTL');
-        }
-        
         if (window.MsgConsole) {
             window.MsgConsole.rtl();
         }
     });
-    
-    console.log('✅ Flight Controls integrated with backend support');
+
+    console.log('✅ Flight Controls integrated');
 }
 
 // ============================================================================
@@ -789,54 +750,39 @@ function integrateFlightControls() {
 
 function integrateWaypointManager() {
     console.log('📍 Integrating Waypoint Manager...');
-    
+
     if (!waypointManager) {
         console.warn('⚠️ Waypoint Manager not found, skipping integration');
         return;
     }
-    
+
     console.log('✅ Waypoint Manager integrated');
 }
 
-// ============================================================================
-// DEMO DATA UPDATES (Only if backend not connected)
-// ============================================================================
-
-function startDemoUpdates() {
-    console.log('📊 Starting demo data updates...');
-    
-    let currentHeading = 0;
-    setInterval(() => {
-        if (compass && (!compassBackend || !compassBackend.isConnected)) {
-            currentHeading = (currentHeading + 5) % 360;
-            compass.setHeading(currentHeading);
-        }
-    }, 2000);
-    
-    setInterval(() => {
-        if (compass && (!compassBackend || !compassBackend.isConnected)) {
-            const randomAlt = (Math.random() * 50).toFixed(1);
-            const randomSpeed = (Math.random() * 10).toFixed(1);
-            
-            compass.updateTelemetry({
-                altitude: parseFloat(randomAlt),
-                speed: parseFloat(randomSpeed),
-                satellites: Math.floor(Math.random() * 5) + 10
-            });
-        }
-    }, 5000);
-}
+// (Demo data simulator removed — compass shows real drone data or zeros only)
 
 // ============================================================================
 // UTILITY FUNCTIONS
 // ============================================================================
+
+/**
+ * Update the header status badge text and style.
+ * @param {string} text    - Label to show
+ * @param {'ready'|'waiting'|'connecting'|'error'} state
+ */
+function setHeaderStatus(text, state = 'ready') {
+    const badge = document.querySelector('.status-badge');
+    if (!badge) return;
+    badge.textContent = text;
+    badge.className = 'status-badge ' + state;
+}
 
 function addCustomLocation(lat, lng, name, options = {}) {
     if (!tmap) {
         console.error('❌ Map not initialized');
         return null;
     }
-    
+
     const defaultOptions = {
         iconColor: '#E6007E',
         labelDirection: 'right',
@@ -844,14 +790,14 @@ function addCustomLocation(lat, lng, name, options = {}) {
         permanentLabel: true,
         ...options
     };
-    
+
     const marker = tmap.addStaticLocation(lat, lng, name, defaultOptions);
-    console.log(`✅ Added custom location: ${name} at ${lat}, ${lng}`);
-    
+    console.log(`✅ Added custom location: ${ name } at ${ lat }, ${ lng } `);
+
     if (window.MsgConsole) {
-        window.MsgConsole.success(`📍 Added: ${name}`);
+        window.MsgConsole.success(`📍 Added: ${ name } `);
     }
-    
+
     return marker;
 }
 
@@ -860,7 +806,7 @@ function addCustomHomeMarker(lat, lng, name = 'Home', options = {}) {
         console.error('❌ Map not initialized');
         return null;
     }
-    
+
     const defaultOptions = {
         iconSize: [40, 40],
         iconAnchor: [20, 40],
@@ -872,14 +818,14 @@ function addCustomHomeMarker(lat, lng, name = 'Home', options = {}) {
         labelBgColor: 'rgba(230, 0, 126, 0.9)',
         ...options
     };
-    
+
     const marker = tmap.addRotatingHomeMarker(lat, lng, name, defaultOptions);
-    console.log(`✅ Added home marker: ${name} at ${lat}, ${lng}`);
-    
+    console.log(`✅ Added home marker: ${ name } at ${ lat }, ${ lng } `);
+
     if (window.MsgConsole) {
-        window.MsgConsole.success(`🏠 Added: ${name}`);
+        window.MsgConsole.success(`🏠 Added: ${ name } `);
     }
-    
+
     return marker;
 }
 
@@ -898,7 +844,7 @@ function goHome() {
 function centerOnLocation(lat, lng, zoom = 15) {
     if (tmap) {
         tmap.setCenter(lat, lng, zoom);
-        console.log(`🎯 Map centered on ${lat}, ${lng}`);
+        console.log(`🎯 Map centered on ${ lat }, ${ lng } `);
     }
 }
 
@@ -916,8 +862,6 @@ function debugComponents() {
     console.log('================================');
     console.log('Map (tmap):', !!tmap);
     console.log('Compass:', !!compass);
-    console.log('Compass Backend:', !!compassBackend);
-    console.log('Backend Connected:', compassBackend?.isConnected || false);
     console.log('Video Stream:', !!videoStream);
     console.log('Flight Controls:', !!flightControls);
     console.log('Message Console:', !!messageConsole);
@@ -927,72 +871,21 @@ function debugComponents() {
     console.log('Video Maximize:', !!window.VideoMaximize);
     console.log('Home Marker:', !!homeMarker);
     console.log('================================');
-    
+
     if (tmap) {
         console.log('Map click enabled:', tmap.clickEnabled);
         console.log('Total markers:', tmap.getMarkerCount());
         console.log('Marker coordinates:', tmap.getMarkerCoordinates());
     }
-    
+
     if (homeMarker) {
         console.log('Home marker location:', homeMarker.lat, homeMarker.lng);
     }
-    
+
     if (waypointManager) {
         console.log('Waypoints:', waypointManager.getWaypoints().length);
         console.log('Current mode:', waypointManager.currentMode);
     }
-    
-    if (compassBackend) {
-        console.log('Telemetry Cache:', compassBackend.getTelemetry());
-    }
-}
-
-// ============================================================================
-// BACKEND CONTROL FUNCTIONS - NEW
-// ============================================================================
-
-function sendTakeoffCommand(altitude = 10) {
-    if (compassBackend && compassBackend.isConnected) {
-        return compassBackend.sendCommand('TAKEOFF', { altitude: altitude });
-    } else {
-        console.warn('⚠️  Backend not connected');
-        if (window.MsgConsole) {
-            window.MsgConsole.warning('Backend not connected');
-        }
-        return false;
-    }
-}
-
-function sendLandCommand() {
-    if (compassBackend && compassBackend.isConnected) {
-        return compassBackend.sendCommand('LAND');
-    } else {
-        console.warn('⚠️  Backend not connected');
-        return false;
-    }
-}
-
-function sendRTLCommand() {
-    if (compassBackend && compassBackend.isConnected) {
-        return compassBackend.sendCommand('RTL');
-    } else {
-        console.warn('⚠️  Backend not connected');
-        return false;
-    }
-}
-
-function getBackendStatus() {
-    if (!compassBackend) {
-        return { connected: false, message: 'Backend not initialized' };
-    }
-    
-    return {
-        connected: compassBackend.isConnected,
-        url: compassBackend.websocketUrl,
-        reconnectAttempts: compassBackend.reconnectAttempts,
-        telemetry: compassBackend.getTelemetry()
-    };
 }
 
 // ============================================================================
@@ -1003,32 +896,37 @@ window.GCS = {
     // Component references
     map: () => tmap,
     compass: () => compass,
-    backend: () => compassBackend,
     video: () => videoStream,
     flightControls: () => flightControls,
     weather: () => weatherDashboard,
     waypoints: () => waypointManager,
     home: () => homeMarker,
-    
+
     // Utility functions
     testWeather: testWeather,
     debug: debugComponents,
-    
+
     // Location functions
     addLocation: addCustomLocation,
     addHomeMarker: addCustomHomeMarker,
     centerOn: centerOnLocation,
     goHome: goHome,
-    
+
     // Quick actions
     showWeather: () => window.Weather?.show(),
     hideWeather: () => window.Weather?.hide(),
-    
+
     // Video actions
     maximizeVideo: () => window.VideoMaximize?.maximize(),
     minimizeVideo: () => window.VideoMaximize?.minimize(),
     toggleVideo: () => window.VideoMaximize?.toggle(),
-    
+
+    // Webcam actions
+    startWebcam: () => window.VideoStream?.startWebcam(),
+    stopWebcam: () => window.VideoStream?.stopWebcam(),
+    toggleWebcam: () => window.VideoStream?.toggleWebcam(),
+    isWebcamActive: () => window.VideoStream?.isWebcamActive() ?? false,
+
     // Waypoint actions
     addWaypoint: () => {
         if (waypointManager) {
@@ -1037,20 +935,141 @@ window.GCS = {
         }
     },
     clearWaypoints: () => waypointManager?.clearAllWaypoints(),
-    
+
     // Mode switching
     enterPlanMode: () => window.PlanFlight?.enter(),
     exitPlanMode: () => window.PlanFlight?.exit(),
-    
-    // Backend commands - NEW
-    takeoff: sendTakeoffCommand,
-    land: sendLandCommand,
-    rtl: sendRTLCommand,
-    backendStatus: getBackendStatus,
-    reconnect: () => compassBackend?.connect(),
-    disconnect: () => compassBackend?.disconnect(),
-    getTelemetry: () => compassBackend?.getTelemetry() || null,
+
+    // Drone GPS helpers
+    centerOnDrone: () => {
+        if (tmap && tmap.droneMarker) {
+            const pos = tmap.droneMarker.getLatLng();
+            tmap.setCenter(pos.lat, pos.lng, 18);
+            console.log(`🚁 Centered on drone: ${ pos.lat.toFixed(6) }, ${ pos.lng.toFixed(6) } `);
+        } else {
+            console.warn('⚠️ No drone marker yet');
+        }
+    },
+    droneAutoPan: (on) => tmap?.setDroneAutoPan(on),
+    isDroneActive: () => droneGpsActive,
 };
+
+// ============================================================================
+// UI APPEARANCE SETTINGS & DRAGGABILITY
+// ============================================================================
+function makeDraggable(element) {
+    if (!element) return;
+    
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    
+    element.style.cursor = 'move';
+    
+    element.addEventListener('mousedown', dragMouseDown);
+
+    function dragMouseDown(e) {
+        const tagName = e.target.tagName.toLowerCase();
+        if (['button', 'input', 'select', 'textarea'].includes(tagName)) return;
+        
+        if (e.target.closest('.minimal-console-messages')) return;
+        if (e.target.closest('#videoMaxBtn')) return;
+
+        e.preventDefault();
+        
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        
+        const rect = element.getBoundingClientRect();
+        
+        element.style.transition = 'none';
+        
+        element.style.top = rect.top + 'px';
+        element.style.left = rect.left + 'px';
+        element.style.bottom = 'auto';
+        element.style.right = 'auto';
+        
+        document.addEventListener('mouseup', closeDragElement);
+        document.addEventListener('mousemove', elementDrag);
+    }
+
+    function elementDrag(e) {
+        e.preventDefault();
+        
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        
+        element.style.top = (element.offsetTop - pos2) + "px";
+        element.style.left = (element.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+        document.removeEventListener('mouseup', closeDragElement);
+        document.removeEventListener('mousemove', elementDrag);
+        
+        element.style.transition = '';
+    }
+}
+
+function initializeUIAppearance() {
+    console.log('👁️ Initializing UI Appearance settings...');
+    const btn = document.getElementById('uiAppearanceBtn');
+    const dropdown = document.getElementById('uiAppearanceDropdown');
+    const chevron = document.getElementById('uiAppearanceChevron');
+    
+    if (!btn || !dropdown) return;
+    
+    // Toggle dropdown
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isVisible = dropdown.style.display === 'flex';
+        
+        if (isVisible) {
+            dropdown.style.opacity = '0';
+            dropdown.style.transform = 'translateY(-10px)';
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+            setTimeout(() => { dropdown.style.display = 'none'; }, 200);
+        } else {
+            dropdown.style.display = 'flex';
+            setTimeout(() => {
+                dropdown.style.opacity = '1';
+                dropdown.style.transform = 'translateY(0)';
+                if (chevron) chevron.style.transform = 'rotate(180deg)';
+            }, 10);
+        }
+    });
+    
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+        if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.style.opacity = '0';
+            dropdown.style.transform = 'translateY(-10px)';
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+            setTimeout(() => { dropdown.style.display = 'none'; }, 200);
+        }
+    });
+    
+    // Toggles
+    const toggleCamera1 = document.getElementById('toggleCamera1');
+    const toggleConsole = document.getElementById('toggleMessageViewer');
+    
+    const videoContainer = document.getElementById('videoContainer');
+    const consoleContainer = document.querySelector('.minimal-console-container');
+    
+    if (toggleCamera1 && videoContainer) {
+        toggleCamera1.addEventListener('change', (e) => {
+            videoContainer.style.display = e.target.checked ? '' : 'none';
+        });
+        makeDraggable(videoContainer);
+    }
+    
+    if (toggleConsole && consoleContainer) {
+        toggleConsole.addEventListener('change', (e) => {
+            consoleContainer.style.display = e.target.checked ? '' : 'none';
+        });
+        makeDraggable(consoleContainer);
+    }
+}
 
 // ============================================================================
 // AUTO-START
@@ -1065,7 +1084,6 @@ if (document.readyState === 'loading') {
 window.app = {
     tmap,
     compass,
-    compassBackend,
     videoStream,
     flightControls,
     weatherDashboard,
@@ -1076,28 +1094,22 @@ window.app = {
 console.log('✅ Application script loaded');
 console.log('');
 console.log('📋 Available commands:');
-console.log('  GCS.goHome()             - Center on home location');
-console.log('  GCS.testWeather()        - Test weather with home location');
-console.log('  GCS.debug()              - Show component status');
-console.log('  GCS.addHomeMarker(lat, lng, name) - Add home marker');
-console.log('  GCS.addLocation(lat, lng, name) - Add static location');
-console.log('  GCS.centerOn(lat, lng)   - Center map on location');
-console.log('  GCS.toggleVideo()        - Toggle video size');
-console.log('  GCS.addWaypoint()        - Start waypoint mode');
+console.log('  GCS.goHome()                  - Center on home location');
+console.log('  GCS.centerOnDrone()           - Jump map to live drone position');
+console.log('  GCS.droneAutoPan(true/false)  - Toggle auto-follow drone');
+console.log('  GCS.isDroneActive()           - True if real GPS is flowing');
+console.log('  GCS.testWeather()             - Test weather with home location');
+console.log('  GCS.debug()                   - Show component status');
+console.log('  GCS.addHomeMarker(lat,lng,name) - Add home marker');
+console.log('  GCS.addLocation(lat,lng,name)   - Add static location');
+console.log('  GCS.centerOn(lat,lng)           - Center map on location');
+console.log('  GCS.toggleVideo()               - Toggle video size');
+console.log('  GCS.addWaypoint()               - Start waypoint mode');
 console.log('');
-console.log('📡 Backend Commands (NEW):');
-console.log('  GCS.takeoff(altitude)    - Send takeoff command to backend');
-console.log('  GCS.land()               - Send land command to backend');
-console.log('  GCS.rtl()                - Send RTL command to backend');
-console.log('  GCS.backendStatus()      - Get backend connection status');
-console.log('  GCS.getTelemetry()       - Get current telemetry data');
-console.log('  GCS.reconnect()          - Reconnect to backend');
-console.log('  GCS.disconnect()         - Disconnect from backend');
-console.log('');
-console.log('🏠 Simple PNG Home Marker Features:');
-console.log('  - Clean PNG icon display');
-console.log('  - Click home marker to center map');
-console.log('  - Simple shadow effect');
+console.log('🚁 Live Drone GPS:');
+console.log('  - Backend sends { type:"gps", latitude, longitude, altitude, heading }');
+console.log('  - Drone marker auto-created on first GPS fix');
+console.log('  - Right-click drone marker to toggle auto-pan');
+console.log('  - Demo simulator pauses automatically when real GPS flows');
 console.log('');
 console.log('💡 TIP: Click anywhere on video to maximize/minimize!');
-console.log('💡 TIP: Backend auto-connects to ws://localhost:9002');

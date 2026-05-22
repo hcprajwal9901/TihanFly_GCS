@@ -60,9 +60,9 @@ class WaypointContextMenu {
             { action: 'jump', label: 'Jump', icon: '🔄', hasSubmenu: true },
             { type: 'separator' },
             { action: 'rtl', label: 'RTL', icon: '🏠' },
+            { action: 'set-hover', label: 'Set Hover (Loiter)', icon: '⭕' },
             { action: 'land', label: 'Land', icon: '🛬' },
-            { action: 'takeoff', label: 'Takeoff', icon: '🛫' },
-            { action: 'do-set-roi', label: 'DO_SET_ROI', icon: '🎯' },
+            { action: 'set-waypoint', label: 'Set Waypoint (reset)', icon: '📍' },
             { action: 'clear-mission', label: 'Clear Mission', icon: '🧹' },
             { type: 'separator' },
             { action: 'polygon', label: 'Polygon', icon: '⬡', hasSubmenu: true },
@@ -197,6 +197,14 @@ class WaypointContextMenu {
                 
             case 'clear-mission':
                 this.clearMission();
+                break;
+                
+            case 'set-hover':
+                this.setHoverHere();
+                break;
+                
+            case 'set-waypoint':
+                this.resetToWaypoint();
                 break;
                 
             case 'rtl':
@@ -450,16 +458,86 @@ class WaypointContextMenu {
     }
     
     returnToLaunch() {
+        if (!this.currentWaypoint) {
+            if (window.MsgConsole) {
+                window.MsgConsole.warning('Right-click a waypoint first to set it as RTL');
+            }
+            return;
+        }
+        
+        // Mark this waypoint as RTL — the send pipeline will map it to
+        // MAV_CMD_NAV_RETURN_TO_LAUNCH when uploading to the drone.
+        this.currentWaypoint.type    = 'rtl';
+        this.currentWaypoint.command = 20; // MAV_CMD_NAV_RETURN_TO_LAUNCH
+        
+        // Update the marker popup to reflect the new command
+        if (this.currentWaypoint.marker) {
+            const wp = this.currentWaypoint;
+            const popupContent = `
+                <div style="text-align: center; font-family: Arial, sans-serif;">
+                    <strong style="color: #E6007E;">Waypoint ${wp.id}</strong><br>
+                    <span style="color:#f59e0b;font-weight:bold;">⚡ RTL</span><br>
+                    <small>Lat: ${wp.lat.toFixed(6)}<br>
+                    Lng: ${wp.lng.toFixed(6)}<br>
+                    Alt: ${wp.altitude || 50}m</small>
+                </div>
+            `;
+            wp.marker.setPopupContent(popupContent);
+        }
+        
         if (window.MsgConsole) {
-            window.MsgConsole.info('Click on map to set RTL position');
+            window.MsgConsole.success(`Waypoint ${this.currentWaypoint.id} set as RTL`);
         }
         
-        if (this.waypointManager) {
-            this.waypointManager.startAddingReturnPoint();
-        }
-        
-        console.log('🏠 RTL mode activated');
+        console.log(`🏠 Waypoint ${this.currentWaypoint.id} marked as RTL`);
     }
+
+    setHoverHere() {
+        if (!this.currentWaypoint) {
+            if (window.MsgConsole) window.MsgConsole.warning('Right-click a waypoint first to set it as Hover');
+            return;
+        }
+
+        this.currentWaypoint.type    = 'hover';
+        this.currentWaypoint.command = 17; // MAV_CMD_NAV_LOITER_UNLIM
+
+        if (this.currentWaypoint.marker) {
+            const wp = this.currentWaypoint;
+            wp.marker.setPopupContent(`
+                <div style="text-align:center;font-family:Arial,sans-serif;">
+                    <strong style="color:#E6007E;">Waypoint ${wp.id}</strong><br>
+                    <span style="color:#6366f1;font-weight:bold;">⭕ HOVER (Loiter)</span><br>
+                    <small>Lat: ${wp.lat.toFixed(6)}<br>Lng: ${wp.lng.toFixed(6)}<br>Alt: ${wp.altitude || 50}m</small>
+                </div>`);
+        }
+
+        if (window.MsgConsole) window.MsgConsole.success(`Waypoint ${this.currentWaypoint.id} set as Hover`);
+        console.log(`⭕ Waypoint ${this.currentWaypoint.id} marked as Hover`);
+    }
+
+    resetToWaypoint() {
+        if (!this.currentWaypoint) {
+            if (window.MsgConsole) window.MsgConsole.warning('Right-click a waypoint first to reset it');
+            return;
+        }
+
+        // Clear any special type/command — drone will use NAV_WAYPOINT (fly-through)
+        this.currentWaypoint.type    = 'waypoint';
+        this.currentWaypoint.command = 16; // MAV_CMD_NAV_WAYPOINT
+
+        if (this.currentWaypoint.marker) {
+            const wp = this.currentWaypoint;
+            wp.marker.setPopupContent(`
+                <div style="text-align:center;font-family:Arial,sans-serif;">
+                    <strong style="color:#E6007E;">Waypoint ${wp.id}</strong><br>
+                    <small>Lat: ${wp.lat.toFixed(6)}<br>Lng: ${wp.lng.toFixed(6)}<br>Alt: ${wp.altitude || 50}m</small>
+                </div>`);
+        }
+
+        if (window.MsgConsole) window.MsgConsole.success(`Waypoint ${this.currentWaypoint.id} reset to Waypoint`);
+        console.log(`📍 Waypoint ${this.currentWaypoint.id} reset to NAV_WAYPOINT`);
+    }
+
     
     landHere() {
         if (!this.currentWaypoint) {

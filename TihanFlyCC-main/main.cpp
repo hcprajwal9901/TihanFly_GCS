@@ -190,8 +190,41 @@ std::map<int, DynUdpEntry> g_dyn_udp_links;    // key = local_port
 std::mutex                 g_dyn_udp_mutex;
 
 // Pointers set in main() so the WS thread can call add_link at runtime
-static LinkManager*    g_link_manager = nullptr;
-static asio::io_context* g_io_ctx     = nullptr;
+static LinkManager*      g_link_manager = nullptr;
+static asio::io_context* g_io_ctx       = nullptr;
+
+// ── Graceful shutdown ─────────────────────────────────────────────────────────
+// Set by the OS signal / console-ctrl handler.  Any thread may read this to
+// detect that shutdown is in progress.
+static std::atomic<bool> g_shutdown_flag{false};
+
+// Forward-declared here; body is after main() globals are fully initialised.
+static void perform_clean_shutdown();
+
+#ifdef _WIN32
+// Windows: catches Ctrl+C, Ctrl+Break, console close, logoff, system shutdown.
+static BOOL WINAPI console_ctrl_handler(DWORD event)
+{
+    switch (event)
+    {
+        case CTRL_C_EVENT:
+        case CTRL_BREAK_EVENT:
+        case CTRL_CLOSE_EVENT:
+        case CTRL_LOGOFF_EVENT:
+        case CTRL_SHUTDOWN_EVENT:
+            perform_clean_shutdown();
+            return TRUE;  // handled — do not call default handler
+        default:
+            return FALSE;
+    }
+}
+#else
+// POSIX: catches Ctrl+C (SIGINT) and kill (SIGTERM).
+static void posix_signal_handler(int /*sig*/)
+{
+    perform_clean_shutdown();
+}
+#endif
 
 // NOTE: AccelCalibration is now per-vehicle (Vehicle::accel_calib_).
 // NOTE: CompassCalibration is now per-vehicle (Vehicle::compass_calib_).
@@ -241,6 +274,36 @@ static std::string log_base64_encode(const uint8_t* data, std::size_t len)
         out += (i + 2 < len) ? B64[v & 0x3F] : '=';
     }
     return out;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+//  perform_clean_shutdown()
+//
+//  Called by the OS signal / console-ctrl handler on Ctrl+C, Ctrl+Break,
+//  console close, SIGINT, or SIGTERM.  Safe to call from any thread.
+//
+//  Two-pronged approach:
+//   1. Delete cache files immediately (belt) — handles the case where the
+//      process is killed hard and main() never reaches deleteAllCaches().
+//   2. Stop the io_context (suspenders) — lets io_threads unblock so main()
+//      falls through normally and also calls deleteAllCaches() as a second
+//      sweep (handles any files created between now and full exit).
+// ═══════════════════════════════════════════════════════════════════════════════
+
+static void perform_clean_shutdown()
+{
+    // Prevent re-entrant calls (e.g. double Ctrl+C)
+    if (g_shutdown_flag.exchange(true)) return;
+
+    std::cout << "\n[GCS] Shutdown signal received — cleaning up...\n";
+
+    // 1. Delete param cache NOW (before io threads wind down)
+    param_manager.deleteAllCaches();
+    std::cout << "[GCS] Parameter cache cleared.\n";
+
+    // 2. Stop io_context → unblocks io.run() threads → main() can exit
+    if (g_io_ctx)
+        g_io_ctx->stop();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -744,16 +807,21 @@ static void request_streams_for_vehicle(std::shared_ptr<Vehicle> vehicle)
 {
     if (!vehicle) return;
 
-    int sysid = vehicle->sysid();
+    // Dedup by ui_sysid (not real sysid) — in multi-port mode all ArduPilot
+    // drones default to sysid=1, so keying by real sysid would treat every
+    // secondary drone as already-handled and skip their stream setup entirely.
+    int ui_sysid = vehicle->ui_sysid();
+    int sysid    = vehicle->sysid();
 
     {
         std::lock_guard<std::mutex> lk(g_streams_sysids_mutex);
-        if (g_streams_requested_sysids.count(sysid))
+        if (g_streams_requested_sysids.count(ui_sysid))
             return;  // already requested — don't spam on every heartbeat
-        g_streams_requested_sysids.insert(sysid);
+        g_streams_requested_sysids.insert(ui_sysid);
     }
 
-    std::cout << "[GCS] Requesting telemetry streams for sysid=" << sysid << "\n";
+    std::cout << "[GCS] Requesting telemetry streams for sysid=" << sysid
+              << " (ui_sysid=" << ui_sysid << ")\n";
 
     // RC channels
     {
@@ -927,9 +995,10 @@ static void wire_modules_to_active_vehicle()
 
     flightMode  .setVehicleInfo(vehicle_ptr->sysid(), vehicle_ptr->compid());
     param_manager.setVehicleInfo(vehicle_ptr->sysid(), vehicle_ptr->compid());
+    param_manager.setCacheKey(vehicle_ptr->ui_sysid());  // unique cache per drone (multi-port safe)
 
     std::cout << "[GCS] Sub-modules wired to vehicle sysid="
-              << vehicle_ptr->sysid() << "\n";
+              << vehicle_ptr->sysid() << " (ui_sysid=" << vehicle_ptr->ui_sysid() << ")\n";
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -3366,8 +3435,9 @@ void start_websocket(CommandManager* cmd_manager,
                                     };
                                     param_manager.setTransportCallback(mavlink_via_tv);
                                     param_manager.setVehicleInfo(tv->sysid(), tv->compid());
+                                    param_manager.setCacheKey(tv->ui_sysid());  // unique cache key per drone
                                     std::cout << "[ParamWS] param_request_list routed to sysid="
-                                              << tv->sysid() << "\n";
+                                              << tv->sysid() << " ui_sysid=" << tv->ui_sysid() << "\n";
                                     handle_param_ws_command(type, j, param_manager);
                                     // NOTE: intentionally NOT calling
                                     // wire_modules_to_active_vehicle() here — param_manager
@@ -3698,35 +3768,71 @@ int main()
         vehicle->register_handler(MAVLINK_MSG_ID_PARAM_VALUE,
             [](const mavlink_message_t& m){ flightMode.processMessage(m); });
 
-        wire_modules_to_active_vehicle();
+        // ── Wire modules to the active (first/primary) vehicle only ──────────
+        // wire_modules_to_active_vehicle() points the shared param_manager at
+        // whatever get_active_vehicle() returns (sysid of the first drone).
+        // We only call it for the PRIMARY vehicle.  For swarm secondaries we
+        // skip it entirely — param_manager must stay pointed at the vehicle
+        // whose load is already in flight, and requestAllParameters() must NOT
+        // be called again because stop_retry_thread() inside it does a blocking
+        // join() that stalls the MAVLink RX thread for every new swarm member,
+        // eventually causing the backend to appear frozen / terminate.
+        //
+        // Secondary drone parameters can be fetched on demand when the user
+        // opens the Full Params panel for that drone (the WS handler at
+        // "param_request_list" with a sysid field already handles this
+        // correctly via per-vehicle routing).
+        {
+            bool is_primary_vehicle = false;
+            if (g_vehicle_manager)
+            {
+                auto all = g_vehicle_manager->get_all_sysids();
+                // Primary = only one vehicle alive (the one just registered)
+                is_primary_vehicle = (all.size() <= 1);
+            }
 
-        // ── Request parameters on every new vehicle connection ─────────────────
-        // This fires whenever a drone first sends a heartbeat on any link.
-        // It guarantees param load regardless of whether active_connection
-        // changed (e.g. serial dropout/reconnect keeps active_connection=SERIAL
-        // so the heartbeat block's `new_connection != active_connection` guard
-        // would skip the request).
-        std::thread([vehicle]() {
-            std::this_thread::sleep_for(std::chrono::milliseconds(500)); // brief settle
-            param_manager.requestAllParameters();
-            flightMode.requestParams();
-            std::cout << "[GCS] Auto param-load triggered for sysid="
-                      << vehicle->sysid() << "\n";
-        }).detach();
+            if (is_primary_vehicle)
+            {
+                wire_modules_to_active_vehicle();
+
+                std::thread([vehicle]() {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500)); // brief settle
+                    param_manager.requestAllParameters();
+                    flightMode.requestParams();
+                    std::cout << "[GCS] Auto param-load triggered for sysid="
+                              << vehicle->sysid() << "\n";
+                }).detach();
+            }
+            else
+            {
+                // Swarm secondary — just request flight-mode params so the
+                // mode indicator works.  Do NOT touch param_manager transport
+                // or call requestAllParameters().
+                std::thread([vehicle]() {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                    flightMode.requestParams();
+                    std::cout << "[GCS] Swarm secondary sysid="
+                              << vehicle->sysid()
+                              << " — skipping auto param-load (use UI to fetch)\n";
+                }).detach();
+            }
+        }
 
         send_status();   // immediately push updated vehicle list to UI
     });
 
     vehicle_manager.set_on_vehicle_lost(
-        [&](int sysid)
+        [&](int sysid, int ui_sysid)
     {
-        std::cout << "[GCS] Vehicle sysid=" << sysid << " lost\n";
+        std::cout << "[GCS] Vehicle sysid=" << sysid
+                  << " (ui_sysid=" << ui_sysid << ") lost\n";
         drone_connected   = false;
         active_connection = "NONE";  // reset so next heartbeat always re-wires
 
-        // Delete the per-sysid parameter cache so stale data
-        // is not served on the next reconnect from a different session.
-        param_manager.deleteCache(sysid);
+        // Delete the per-vehicle parameter cache keyed by ui_sysid.
+        // Using ui_sysid (not real sysid) prevents cache file collision when
+        // multiple drones share sysid=1 (ArduPilot default in multi-port mode).
+        param_manager.deleteCache(ui_sysid);
 
         send_status();
     });
@@ -4236,6 +4342,22 @@ int main()
     // Store global pointers so the WS thread can call add_link at runtime
     g_link_manager = &link_manager;
     g_io_ctx       = &io;
+
+    // ── Install graceful-shutdown handlers ────────────────────────────────────
+    // These run perform_clean_shutdown() which:
+    //   • Deletes all param cache files immediately
+    //   • Stops the io_context so io_threads unblock and main() can exit
+    // Covers: Ctrl+C, Ctrl+Break, console close, SIGINT, SIGTERM, and
+    // Windows logoff / system shutdown events.
+#ifdef _WIN32
+    SetConsoleCtrlHandler(console_ctrl_handler, TRUE);
+    std::cout << "[GCS] Windows console-ctrl handler installed\n";
+#else
+    signal(SIGINT,  posix_signal_handler);
+    signal(SIGTERM, posix_signal_handler);
+    std::cout << "[GCS] POSIX signal handlers installed (SIGINT, SIGTERM)\n";
+#endif
+    // ─────────────────────────────────────────────────────────────────────────
 
     start_serial_monitor(io, link_manager, cmd_manager);
     start_websocket(&cmd_manager, &link_manager, io);
