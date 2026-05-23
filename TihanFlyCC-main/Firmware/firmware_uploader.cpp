@@ -110,13 +110,13 @@ static std::string hex32(uint32_t v)
 // Port management
 // ─────────────────────────────────────────────────────────────────────
 
-bool FirmwareUploader::open_port(const std::string& port_path, int baud)
+bool FirmwareUploader::open_port(const std::string& port, int baud)
 {
     try {
         if (port_.is_open())
             port_.close();
 
-        port_.open(port_path);
+        port_.open(port);
 
         using SP = asio::serial_port;
         port_.set_option(SP::baud_rate(static_cast<unsigned>(baud)));
@@ -125,11 +125,11 @@ bool FirmwareUploader::open_port(const std::string& port_path, int baud)
         port_.set_option(SP::parity(SP::parity::none));
         port_.set_option(SP::flow_control(SP::flow_control::none));
 
-        log("→ Port " + port_path + " opened @ " + std::to_string(baud) + " baud");
+        log("→ Port " + port + " opened @ " + std::to_string(baud) + " baud");
         return true;
     }
     catch (const std::exception& e) {
-        log("❌ Failed to open port '" + port_path + "': " + e.what());
+        log("❌ Failed to open port '" + port + "': " + e.what());
         return false;
     }
 }
@@ -650,7 +650,7 @@ uint32_t FirmwareUploader::compute_padded_crc(const std::vector<uint8_t>& image,
 // ─────────────────────────────────────────────────────────────────────
 // flash() — public entry point
 // ─────────────────────────────────────────────────────────────────────
-bool FirmwareUploader::flash(const std::string&          port_path,
+bool FirmwareUploader::flash(const std::string&          port,
                               int                         boot_baud,
                               const std::vector<uint8_t>& firmware_image,
                               uint32_t                    expected_board_id)
@@ -663,7 +663,7 @@ bool FirmwareUploader::flash(const std::string&          port_path,
     }
 
     // ── 1. Open port ──────────────────────────────────────────────────
-    if (!open_port(port_path, boot_baud)) return false;
+    if (!open_port(port, boot_baud)) return false;
 
     // ── 2. Enter bootloader ───────────────────────────────────────────
     if (!enter_bootloader()) {

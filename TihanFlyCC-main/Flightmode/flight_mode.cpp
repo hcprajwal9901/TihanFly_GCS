@@ -146,9 +146,7 @@ void FlightMode::processMessage(const mavlink_message_t& msg)
         int      slot = pwmToSlot(pwm);
 
         // Initialize maps if missing
-        if (slotModesMap_.find(sid) == slotModesMap_.end()) {
-            slotModesMap_[sid] = {0, 0, 0, 0, 0, 0};
-        }
+        slotModesMap_.try_emplace(sid, std::array<uint8_t, NUM_SLOTS>{0, 0, 0, 0, 0, 0});
 
         if (pwm != lastPwmMap_[sid] || slot != lastSlotMap_[sid])
         {
@@ -198,9 +196,7 @@ void FlightMode::processMessage(const mavlink_message_t& msg)
 
         const bool isArmed = (hb.base_mode & MAV_MODE_FLAG_SAFETY_ARMED) != 0;
         
-        if (isArmedMap_.find(sid) == isArmedMap_.end()) {
-            isArmedMap_[sid] = !isArmed; // force initial trigger
-        }
+        isArmedMap_.try_emplace(sid, !isArmed); // force initial trigger
         
         if (isArmed != isArmedMap_[sid])
         {
@@ -217,9 +213,7 @@ void FlightMode::processMessage(const mavlink_message_t& msg)
 
         CopterMode hbMode = modeFromId(static_cast<uint8_t>(hb.custom_mode));
 
-        if (activeModeMap_.find(sid) == activeModeMap_.end()) {
-            activeModeMap_[sid] = CopterMode::UNKNOWN;
-        }
+        activeModeMap_.try_emplace(sid, CopterMode::UNKNOWN);
 
         // Both armed and disarmed: heartbeat is always authoritative.
         if (hbMode != activeModeMap_[sid] && hbMode != CopterMode::UNKNOWN)
@@ -250,9 +244,7 @@ void FlightMode::processMessage(const mavlink_message_t& msg)
                 auto mode_id = static_cast<uint8_t>(pv.param_value);
 
                 // Initialize maps if missing
-                if (slotModesMap_.find(sid) == slotModesMap_.end()) {
-                    slotModesMap_[sid] = {0, 0, 0, 0, 0, 0};
-                }
+                slotModesMap_.try_emplace(sid, std::array<uint8_t, NUM_SLOTS>{0, 0, 0, 0, 0, 0});
 
                 // ── Cache the mode ID so RC_CHANNELS can use it immediately ──
                 slotModesMap_[sid][i] = mode_id;
@@ -315,9 +307,7 @@ void FlightMode::saveFlightModes(const std::array<uint8_t, NUM_SLOTS>& modes)
     }
 
     // Initialize map if missing
-    if (slotModesMap_.find(sysid_) == slotModesMap_.end()) {
-        slotModesMap_[sysid_] = {0, 0, 0, 0, 0, 0};
-    }
+    slotModesMap_.try_emplace(sysid_, std::array<uint8_t, NUM_SLOTS>{0, 0, 0, 0, 0, 0});
 
     for (int i = 0; i < NUM_SLOTS; ++i)
     {

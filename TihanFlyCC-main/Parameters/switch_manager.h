@@ -90,7 +90,7 @@ public:
     // respond with a PARAM_VALUE message which the ParameterManager (or a
     // registered Vehicle handler) can use to confirm the written value.
     // -----------------------------------------------------------------------
-    void request_param_read(int channel);
+    void request_param_read(int channel) const;
 
     // -----------------------------------------------------------------------
     // clear_pending()
@@ -135,7 +135,7 @@ private:
 
     // Core send logic — shared by set_switch_option() and write_all_pending().
     // Caller must hold vehicle → this method does NOT lock mutex_ itself.
-    void send_param_set(int                           channel,
+    static void send_param_set(int                           channel,
                         int                           option_value,
                         const std::shared_ptr<class Vehicle>& vehicle);
 

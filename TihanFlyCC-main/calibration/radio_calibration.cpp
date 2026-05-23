@@ -295,9 +295,11 @@ void RadioCalibration::processMessage(const mavlink_message_t& msg)
 
 const RadioCalibration::ChannelData& RadioCalibration::channel(int idx) const
 {
-    static ChannelData dummy{};
     if (idx < 0 || idx >= NUM_CHANNELS)
+    {
+        static ChannelData dummy{};
         return dummy;
+    }
     return channels_[idx];
 }
 

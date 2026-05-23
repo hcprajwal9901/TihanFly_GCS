@@ -60,9 +60,8 @@ float MavlinkInspector::MessageEntry::rate_hz() const
     auto now    = std::chrono::steady_clock::now();
     auto cutoff = now - std::chrono::seconds(MavlinkInspector::RATE_WINDOW_SEC);
 
-    int in_window = 0;
-    for (auto& ts : timestamps)
-        if (ts >= cutoff) ++in_window;
+    int in_window = std::count_if(timestamps.begin(), timestamps.end(),
+                                   [&](const auto& ts){ return ts >= cutoff; });
 
     if (in_window < 2) return 0.0f;
 
@@ -152,12 +151,12 @@ void MavlinkInspector::broadcast_snapshot()
 
         std::vector<std::pair<uint32_t, const MessageEntry*>> sorted;
         sorted.reserve(entries_.size());
-        for (auto& kv : entries_)
+        for (const auto& kv : entries_)
             sorted.push_back({kv.first, &kv.second});
         std::sort(sorted.begin(), sorted.end(),
-                  [](auto& a, auto& b){ return a.first < b.first; });
+                  [](const auto& a, const auto& b){ return a.first < b.first; });
 
-        for (auto& [id, ep] : sorted)
+        for (const auto& [id, ep] : sorted)
         {
             const MessageEntry& e = *ep;
             if (!first_msg) json += ',';
@@ -177,7 +176,7 @@ void MavlinkInspector::broadcast_snapshot()
             json += ",\"fields\":{";
 
             bool first_field = true;
-            for (auto& [fname, fval] : e.fields)
+            for (const auto& [fname, fval] : e.fields)
             {
                 if (!first_field) json += ',';
                 first_field = false;

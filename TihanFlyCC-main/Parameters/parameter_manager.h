@@ -108,8 +108,10 @@ public:
     // ── Commands (called from WebSocket handler) ─────────────────────────────
 
     /** Send PARAM_REQUEST_LIST; loads cache snapshot first (if available) for
-     *  instant UI feedback; then refreshes from FC in the background. */
-    void requestAllParameters();
+     *  instant UI feedback; then refreshes from FC in the background.
+     *  @param force  If false (auto-trigger), silently skips if a load is already
+     *                running.  If true (user Refresh), always restarts. */
+    void requestAllParameters(bool force = true);
 
     /** Send PARAM_REQUEST_READ for a single named parameter. */
     void requestParameter(const std::string& param_name);
@@ -128,7 +130,7 @@ public:
     /** Delete the cache file identified by cache_key (= ui_sysid).
      *  Call when that drone disconnects.  The key must match what was set
      *  via setCacheKey() — it is the ui_sysid, not the real MAVLink sysid. */
-    void deleteCache(int cache_key);
+    void deleteCache(int cache_key) const;
 
     /** Delete ALL cache files. Call on backend shutdown. */
     void deleteAllCaches();
@@ -168,12 +170,14 @@ private:
     std::atomic<int64_t>  save_timer_deadline_ms_ { 0 };  // epoch ms
     void schedule_cache_save();   // arms/re-arms the 2-second timer
 
-    // Tuning constants (WiFi-optimised)
-    static constexpr int RETRY_INTERVAL_MS  = 200;  // ms between retry passes
-    static constexpr int REQUEST_SPACING_MS = 10;   // ms between individual requests in a pass
-    static constexpr int MAX_RETRY_BATCH    = 200;  // max missing params per pass
+    // ── QGC/MP-style tuning constants ────────────────────────────────────────
+    static constexpr int RETRY_INTERVAL_MS  = 500;   // ms to wait after flooding requests
+    static constexpr int REQUEST_SPACING_MS = 1;     // ms between individual PARAM_REQUEST_READ
+    static constexpr int MAX_RETRY_BATCH    = 2000;  // effectively unlimited for 1046 params
     static constexpr int LOAD_TIMEOUT_MS    = 300000; // 5-minute hard timeout
-    static constexpr int RELIST_TIMEOUT_MS  = 3000;   // re-send PARAM_REQUEST_LIST if no count after 3 s
+    static constexpr int RELIST_TIMEOUT_MS  = 3000;   // re-send list if no count after 3 s
+    static constexpr int STREAM_IDLE_MS     = 200;    // ms without new params = stream done
+    static constexpr int MAX_GRACE_MS       = 1500;   // max adaptive grace period
 
     // ── Disk cache ───────────────────────────────────────────────────────────
     std::string          cache_dir_;
@@ -192,7 +196,7 @@ private:
     void handle_param_value   (const mavlink_message_t& msg);
     void push_param_update    (const Parameter& p) const;
     void push_load_progress   () const;
-    void push_error           (const std::string& msg) const;
+    void push_error           (const std::string& message) const;
     void request_by_index     (uint16_t index);
     void retry_loop           ();
     void stop_retry_thread    ();

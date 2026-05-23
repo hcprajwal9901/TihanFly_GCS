@@ -97,7 +97,7 @@ public:
     // -----------------------------------------------------------------------
     // Command queue  (thread-safe)
     // -----------------------------------------------------------------------
-    void add_command(int id, const std::string& cmd,
+    void add_command(int id, const std::string& cmd_name,
                      float p1 = 0, float p2 = 0,
                      const std::string& mode = "",
                      std::shared_ptr<Vehicle> target = nullptr);

@@ -3124,7 +3124,6 @@ void start_websocket(CommandManager* cmd_manager,
                                             uint8_t rx_buf[512];
                                             mavlink_message_t  mav_msg;
                                             mavlink_status_t   mav_status{};
-                                            int tcp_link_id = -1;
                                             
                                             static std::atomic<int> s_tcp_chan_counter{8};
                                             uint8_t tcp_chan = static_cast<uint8_t>(s_tcp_chan_counter.fetch_add(1) % 16);
@@ -3152,14 +3151,6 @@ void start_websocket(CommandManager* cmd_manager,
                                                             &mav_msg,
                                                             &mav_status))
                                                     {
-                                                        if (tcp_link_id < 0 && g_link_manager)
-                                                        {
-                                                            // Register a synthetic link id so
-                                                            // VehicleManager can track this link.
-                                                            // We don't have a Transport object here,
-                                                            // so we use -1000 as a sentinel and pass
-                                                            // the message directly.
-                                                        }
                                                         if (g_vehicle_manager)
                                                             g_vehicle_manager->handle_message(
                                                                 mav_msg, 9990);
@@ -3795,13 +3786,14 @@ int main()
             {
                 wire_modules_to_active_vehicle();
 
-                std::thread([vehicle]() {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(500)); // brief settle
-                    param_manager.requestAllParameters();
-                    flightMode.requestParams();
-                    std::cout << "[GCS] Auto param-load triggered for sysid="
-                              << vehicle->sysid() << "\n";
-                }).detach();
+                // ── NOTE: Do NOT call param_manager.requestAllParameters() here.
+                // The heartbeat handler (new_connection != active_connection path)
+                // fires within milliseconds of on_new_vehicle and is the single
+                // authoritative place to trigger parameter loading.  Calling it
+                // here too (with a 500 ms delay) kills the already-running retry
+                // thread and restarts the load from scratch — wasting 5–10 seconds.
+                std::cout << "[GCS] Primary vehicle sysid="
+                          << vehicle->sysid() << " wired — param load via heartbeat handler\n";
             }
             else
             {
@@ -3953,7 +3945,9 @@ int main()
                 request_rc_channels_stream();
                 request_telemetry_streams();          // GPS, ATTITUDE, VFR_HUD streams
                 request_gps_raw_int_via_command();    // GPS_RAW_INT via SET_MESSAGE_INTERVAL
-                param_manager.requestAllParameters();
+                // force=false: skip if a load is already running (avoids restarting
+                // a good in-progress load every time the connection type is re-detected).
+                param_manager.requestAllParameters(/*force=*/false);
                 flightMode.requestParams();
             }
 

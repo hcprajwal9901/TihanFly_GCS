@@ -135,7 +135,7 @@ int SwitchManager::write_all_pending()
 // the reply and update the UI.
 // ─────────────────────────────────────────────────────────────────────────────
 
-void SwitchManager::request_param_read(int channel)
+void SwitchManager::request_param_read(int channel) const
 {
     auto vehicle = vehicle_manager_->get_active_vehicle();
     if (!vehicle)

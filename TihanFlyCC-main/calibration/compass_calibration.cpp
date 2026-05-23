@@ -474,8 +474,7 @@ void CompassCalibration::handleCommandAck(const mavlink_command_ack_t& ack)
 
 void CompassCalibration::handleStatusText(const mavlink_statustext_t& st)
 {
-    std::string text(st.text, sizeof(st.text));
-    text = text.substr(0, text.find('\0'));  // Null-terminate
+    std::string text(st.text, strnlen(st.text, sizeof(st.text)));
 
     std::cout << "[Compass] STATUSTEXT: " << text << "\n";
 
@@ -1023,35 +1022,6 @@ void CompassCalibration::sendResultJSON(const std::string& status,
         j["compass_id"] = compass_id;
 
     send_cb_(j.dump());
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
-//  MAVLINK MESSAGE NAME
-// ═══════════════════════════════════════════════════════════════════════════════
-
-std::string CompassCalibration::mavlinkMsgName(uint32_t msgid)
-{
-    switch (msgid)
-    {
-        case MAVLINK_MSG_ID_HEARTBEAT:           return "HEARTBEAT";
-        case MAVLINK_MSG_ID_SYS_STATUS:          return "SYS_STATUS";
-        case MAVLINK_MSG_ID_ATTITUDE:            return "ATTITUDE";
-        case MAVLINK_MSG_ID_COMMAND_LONG:        return "COMMAND_LONG";
-        case MAVLINK_MSG_ID_COMMAND_ACK:         return "COMMAND_ACK";
-        case MAVLINK_MSG_ID_STATUSTEXT:          return "STATUSTEXT";
-        case MAVLINK_MSG_ID_MAG_CAL_PROGRESS:    return "MAG_CAL_PROGRESS";
-        case MAVLINK_MSG_ID_MAG_CAL_REPORT:      return "MAG_CAL_REPORT";
-        case MAVLINK_MSG_ID_PARAM_VALUE:         return "PARAM_VALUE";
-        case MAVLINK_MSG_ID_GPS_RAW_INT:         return "GPS_RAW_INT";
-        case MAVLINK_MSG_ID_VFR_HUD:             return "VFR_HUD";
-        case MAVLINK_MSG_ID_GLOBAL_POSITION_INT: return "GLOBAL_POSITION_INT";
-        case MAVLINK_MSG_ID_RAW_IMU:             return "RAW_IMU";
-        case MAVLINK_MSG_ID_SCALED_IMU2:         return "SCALED_IMU2";
-        case MAVLINK_MSG_ID_BATTERY_STATUS:      return "BATTERY_STATUS";
-        case MAVLINK_MSG_ID_AUTOPILOT_VERSION:   return "AUTOPILOT_VERSION";
-        default:
-            return "MSG#" + std::to_string(msgid);
-    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════

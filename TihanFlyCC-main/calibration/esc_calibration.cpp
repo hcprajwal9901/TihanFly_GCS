@@ -303,5 +303,5 @@ sendStatus("power_cycle",
            "ESCs will beep max throttle, then min throttle, then FC reboots normally.",
            false);
 
-calibrating_.store(false);calibrating_.store(false);
+calibrating_.store(false);
 }

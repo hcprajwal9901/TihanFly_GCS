@@ -38,7 +38,7 @@ private:
     asio::ip::udp::endpoint reply_endpoint_;   // updated on every receive
     std::mutex              endpoint_mutex_;
 
-    uint8_t buffer_[2048];
+    uint8_t buffer_[2048]{};
 
     ReceiveCallback callback_;
 

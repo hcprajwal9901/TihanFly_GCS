@@ -10,10 +10,9 @@
 CameraCapture::CameraCapture() : CameraCapture(Config{}) {}
 
 CameraCapture::CameraCapture(const Config& cfg)
-    : cfg_(cfg)
-{
-    last_frame_time_ = std::chrono::steady_clock::now();
-}
+    : cfg_(cfg),
+      last_frame_time_(std::chrono::steady_clock::now())
+{}
 
 CameraCapture::~CameraCapture()
 {
@@ -51,7 +50,7 @@ void CameraCapture::stop()
     std::cout << "[Camera] Capture stopped\n";
 }
 
-std::vector<uint8_t> CameraCapture::read_frame()
+std::vector<uint8_t> CameraCapture::read_frame() const
 {
     std::lock_guard<std::mutex> lock(buf_mutex_);
     return front_; // copy of latest encoded frame

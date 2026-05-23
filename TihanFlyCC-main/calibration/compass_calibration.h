@@ -287,6 +287,5 @@ private:
                           const std::string& message,
                           int compass_id = -1);
 
-    static std::string mavlinkMsgName(uint32_t msgid);
     static std::string calStatusToString(uint8_t status);
 };
