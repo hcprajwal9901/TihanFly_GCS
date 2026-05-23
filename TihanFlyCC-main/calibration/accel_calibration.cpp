@@ -602,7 +602,6 @@ void AccelCalibration::startAccelCalibration()
     pendingPosition  = 0;
     stepIndex_       = 0;
     preConfirmedPos_ = 0;
-    cancelPending_   = false;
 
     // Cancel any stale calibration state on the drone.
     {
@@ -653,7 +652,7 @@ void AccelCalibration::startLevelCalibration()
         return;
     }
 
-    std::cout << "[LevelCalib] Sending MAV_CMD_PREFLIGHT_CALIBRATION param3=1\n";
+    std::cout << "[LevelCalib] Sending MAV_CMD_PREFLIGHT_CALIBRATION param5=2\n";
 
     mavlink_message_t msg;
     mavlink_command_long_t cmd{};

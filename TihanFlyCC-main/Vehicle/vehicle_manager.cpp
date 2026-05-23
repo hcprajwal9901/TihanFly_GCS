@@ -195,7 +195,7 @@ if (sysid == 0)
 
 void VehicleManager::check_timeouts()
 {
-    std::vector<int> lost_sysids;
+    std::vector<std::pair<int,int>> lost_vehicles;  // {sysid, ui_sysid}
 
     {
         std::lock_guard<std::mutex> lock(mutex_);
@@ -207,7 +207,8 @@ void VehicleManager::check_timeouts()
                 std::cout << "[VehicleManager] Vehicle " << it->second->sysid()
                           << " (link=" << it->second->link_id()
                           << ") timed out — removing\n";
-                lost_sysids.push_back(it->second->sysid());
+                lost_vehicles.push_back({it->second->sysid(),
+                                         it->second->ui_sysid()});
                 it = vehicles_.erase(it);
             }
             else
@@ -218,8 +219,8 @@ void VehicleManager::check_timeouts()
     }
 
     if (on_vehicle_lost_)
-        for (int sysid : lost_sysids)
-            on_vehicle_lost_(sysid);
+        for (auto& [sysid, ui_sysid] : lost_vehicles)
+            on_vehicle_lost_(sysid, ui_sysid);
 }
 
 // ---------------------------------------------------------------------------

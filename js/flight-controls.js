@@ -1,61 +1,51 @@
 /**
- * Flight Control Buttons Handler with Takeoff Modal
- * Integrated WebSocket Communication with Command IDs
+ * flight-controls.js
+ * TiHANFly GCS — Flight control UI buttons (ARM, TAKEOFF, LAND, RTL, MODE)
+ *
+ * IMPORTANT: This file does NOT manage the WebSocket connection.
+ * websocket.js owns the connection and defines window.sendCommand.
+ * Load websocket.js BEFORE this file in your HTML.
+ *
+ * Button click flow:
+ *   UI button → window.sendCommand(name, params)   ← defined in websocket.js
+ *     → { type:"command", command:<n>, id:<n>, sysid:<selectedSysId>, params:{…} }
+ *       → C++ CommandManager → Vehicle(sysid) → LinkManager → Transport → Drone
+ *
+ * [Multi-vehicle] sysid injection is handled entirely inside websocket.js
+ * sendCommand().  This file does NOT need to know about selectedSysId at all —
+ * it just calls window.sendCommand() and websocket.js stamps the right sysid.
  */
 
-// Command IDs (must match backend)
-const CMD = {
-    TAKEOFF: 1,
-    LAND: 2,
-    RTL: 3,
-    ARM: 4,
-    DISARM: 5,
-    GOTO: 6,
-    SET_MODE: 7
-};
+/* ============================================================================
+   FLIGHT CONTROL BUTTONS  (Takeoff · Land · RTL)
+   ============================================================================ */
 
 class FlightControlButtons {
     constructor() {
-        this.takeoffBtn = null;
-        this.landBtn = null;
-        this.rtlBtn = null;
-        this.modal = null;
-        this.progressSection = null;
-        
-        this.isExecuting = false;
+        this.takeoffBtn      = null;
+        this.landBtn         = null;
+        this.rtlBtn          = null;
+        this.modal           = null;
+
+        this.isExecuting    = false;
         this.currentCommand = null;
-        
-        this.takeoffSettings = {
-            altitude: 10,
-            speed: 2
-        };
-        
-        this.callbacks = {
-            onTakeoff: null,
-            onLand: null,
-            onRTL: null
-        };
-        
-        // WebSocket connection
-        this.ws = null;
-        this.isConnected = false;
-        
+
+        this.takeoffSettings = { altitude: 10, speed: 2 };
+        this.callbacks = { onTakeoff: null, onLand: null, onRTL: null };
+
         this.initialize();
-        this.initializeWebSocket();
     }
 
     initialize() {
-        this.takeoffBtn = document.getElementById('takeoffBtn');
-        this.landBtn = document.getElementById('landBtn');
-        this.rtlBtn = document.getElementById('rtlBtn');
-        this.modal = document.getElementById('takeoffModal');
-        this.progressSection = document.getElementById('progressSection');
+        this.takeoffBtn      = document.getElementById('takeoffBtn');
+        this.landBtn         = document.getElementById('landBtn');
+        this.rtlBtn          = document.getElementById('rtlBtn');
+        this.modal           = document.getElementById('takeoffModal');
 
         if (!this.takeoffBtn || !this.landBtn || !this.rtlBtn) {
             console.error('❌ Flight control buttons not found in DOM');
             return;
         }
-
         if (!this.modal) {
             console.error('❌ Takeoff modal not found in DOM');
             return;
@@ -63,456 +53,380 @@ class FlightControlButtons {
 
         this.attachEventListeners();
         this.attachModalListeners();
-        
+
+        // Clear executing state when backend confirms the command succeeded
+        window.addEventListener('calibration_ws_message', (e) => {
+            const msg = e.detail;
+            if (msg.type === 'response' && msg.command === this.currentCommand) {
+                this.clearExecutingState();
+            }
+        });
+
         console.log('✅ Flight Control Buttons initialized');
     }
 
-    initializeWebSocket() {
-        console.log('🔌 Connecting to WebSocket backend...');
-        
-        this.ws = new WebSocket("ws://localhost:9002");
-        
-        this.ws.onopen = () => {
-            console.log("✅ WebSocket connected to backend");
-            this.isConnected = true;
-            if (window.MsgConsole) {
-                window.MsgConsole.success("🔌 Backend connected");
-            }
-        };
-        
-        this.ws.onclose = () => {
-            console.log("❌ WebSocket disconnected from backend");
-            this.isConnected = false;
-            if (window.MsgConsole) {
-                window.MsgConsole.error("🔌 Backend disconnected");
-            }
-            
-            // Auto-reconnect after 3 seconds
-            setTimeout(() => {
-                console.log("🔄 Attempting to reconnect...");
-                this.initializeWebSocket();
-            }, 3000);
-        };
-        
-        this.ws.onerror = (error) => {
-            console.error("❌ WebSocket error:", error);
-            if (window.MsgConsole) {
-                window.MsgConsole.error("Connection error");
-            }
-        };
-        
-        this.ws.onmessage = (e) => {
-            this.handleBackendResponse(e.data);
-        };
-    }
-
-    sendCommand(cmdId, params = {}) {
-        if (!this.isConnected) {
-            console.error("❌ Backend not connected");
-            if (window.MsgConsole) {
-                window.MsgConsole.error("Backend not connected");
-            }
-            return;
-        }
-        
-        const command = {
-            cmd_id: cmdId,
-            params: params,
-            timestamp: Date.now()
-        };
-        
-        console.log("📤 Sending command:", command);
-        if (window.sendToSelected) {
-            window.sendToSelected(command);
-        } else {
-            this.ws.send(JSON.stringify(command));
-        }
-    }
-
-    handleBackendResponse(data) {
-        try {
-            const response = JSON.parse(data);
-            console.log("📩 Backend response:", response);
-            
-            if (response.success) {
-                if (window.MsgConsole) {
-                    window.MsgConsole.success(`✅ CMD ${response.cmd_id}: ${response.message}`);
-                }
-                
-                // Handle successful command completion
-                this.handleCommandSuccess(response.cmd_id, response);
-            } else {
-                if (window.MsgConsole) {
-                    window.MsgConsole.error(`❌ CMD ${response.cmd_id}: ${response.message}`);
-                }
-                
-                // Handle command failure
-                this.handleCommandFailure(response.cmd_id, response);
-            }
-            
-        } catch (error) {
-            console.error("Failed to parse backend response:", error);
-        }
-    }
-
-    handleCommandSuccess(cmdId, response) {
-        switch (cmdId) {
-            case CMD.TAKEOFF:
-                console.log("✅ Takeoff acknowledged by backend");
-                // Progress animation already running
-                break;
-                
-            case CMD.LAND:
-                console.log("✅ Landing acknowledged by backend");
-                setTimeout(() => {
-                    this.clearExecutingState();
-                }, 3000);
-                break;
-                
-            case CMD.RTL:
-                console.log("✅ RTL acknowledged by backend");
-                setTimeout(() => {
-                    this.clearExecutingState();
-                }, 3000);
-                break;
-        }
-    }
-
-   
-
     attachEventListeners() {
         this.takeoffBtn.addEventListener('click', () => {
-            console.log('🚁 Takeoff button clicked');
-            if (!this.isExecuting) {
-                this.showTakeoffModal();
-            }
+            if (!this.isExecuting) this.showTakeoffModal();
         });
-
         this.landBtn.addEventListener('click', () => {
-            console.log('🛬 Land button clicked');
-            if (!this.isExecuting) {
-                this.executeLand();
-            }
+            if (!this.isExecuting) this.executeLand();
         });
-
         this.rtlBtn.addEventListener('click', () => {
-            console.log('🏠 RTL button clicked');
-            if (!this.isExecuting) {
-                this.executeRTL();
-            }
+            if (!this.isExecuting) this.executeRTL();
         });
     }
 
     attachModalListeners() {
-        const closeBtn = document.getElementById('modalCloseBtn');
-        const cancelBtn = document.getElementById('modalCancelBtn');
-        const confirmBtn = document.getElementById('modalConfirmBtn');
-        const altitudeSlider = document.getElementById('altitudeSlider');
-        const speedSlider = document.getElementById('speedSlider');
-        const altitudeValue = document.getElementById('altitudeValue');
-        const speedValue = document.getElementById('speedValue');
-        
+        const closeBtn       = document.getElementById('modalCloseBtn');
+        const cancelBtn      = document.getElementById('modalCancelBtn');
+        const confirmBtn     = document.getElementById('modalConfirmBtn');
+        const altitudeInput = document.getElementById('altitudeInput');
+        const speedInput    = document.getElementById('speedInput');
+
         if (!closeBtn || !cancelBtn || !confirmBtn) {
             console.error('❌ Modal buttons not found');
             return;
         }
-        
-        closeBtn.addEventListener('click', () => {
-            console.log('Modal close button clicked');
-            this.hideTakeoffModal();
-        });
-        
-        cancelBtn.addEventListener('click', () => {
-            console.log('Modal cancel button clicked');
-            this.hideTakeoffModal();
-        });
-        
-        confirmBtn.addEventListener('click', () => {
-            console.log('Modal confirm button clicked');
-            this.confirmTakeoff();
-        });
-        
+
+        closeBtn.addEventListener('click',   () => this.hideTakeoffModal());
+        cancelBtn.addEventListener('click',  () => this.hideTakeoffModal());
+        confirmBtn.addEventListener('click', () => this.confirmTakeoff());
+
         this.modal.addEventListener('click', (e) => {
-            if (e.target === this.modal) {
-                console.log('Modal backdrop clicked');
-                this.hideTakeoffModal();
-            }
+            if (e.target === this.modal) this.hideTakeoffModal();
         });
-        
-        // Altitude slider listener
-        if (altitudeSlider) {
-            altitudeSlider.addEventListener('input', (e) => {
+
+        if (altitudeInput) {
+            altitudeInput.addEventListener('input', (e) => {
                 this.takeoffSettings.altitude = parseFloat(e.target.value);
-                if (altitudeValue) {
-                    altitudeValue.textContent = `${this.takeoffSettings.altitude} m`;
-                }
-                console.log('Altitude set to:', this.takeoffSettings.altitude);
             });
         }
-        
-        // Speed slider listener
-        if (speedSlider) {
-            speedSlider.addEventListener('input', (e) => {
+        if (speedInput) {
+            speedInput.addEventListener('input', (e) => {
                 this.takeoffSettings.speed = parseFloat(e.target.value);
-                if (speedValue) {
-                    speedValue.textContent = `${this.takeoffSettings.speed.toFixed(1)} m/s`;
-                }
-                console.log('Speed set to:', this.takeoffSettings.speed);
             });
         }
     }
 
     showTakeoffModal() {
-        console.log('📋 Opening takeoff modal');
         this.modal.classList.add('active');
-        this.progressSection.classList.remove('active');
         document.getElementById('modalActions').style.display = 'flex';
-        
-        // Set slider values
-        const altitudeSlider = document.getElementById('altitudeSlider');
-        const speedSlider = document.getElementById('speedSlider');
-        const altitudeValue = document.getElementById('altitudeValue');
-        const speedValue = document.getElementById('speedValue');
-        
-        if (altitudeSlider) {
-            altitudeSlider.value = this.takeoffSettings.altitude;
-            if (altitudeValue) {
-                altitudeValue.textContent = `${this.takeoffSettings.altitude} m`;
-            }
+
+        const altitudeInput = document.getElementById('altitudeInput');
+        const speedInput    = document.getElementById('speedInput');
+
+        if (altitudeInput) {
+            altitudeInput.value = this.takeoffSettings.altitude;
         }
-        
-        if (speedSlider) {
-            speedSlider.value = this.takeoffSettings.speed;
-            if (speedValue) {
-                speedValue.textContent = `${this.takeoffSettings.speed.toFixed(1)} m/s`;
-            }
+        if (speedInput) {
+            speedInput.value = this.takeoffSettings.speed;
         }
     }
 
     hideTakeoffModal() {
-        if (!this.isExecuting) {
-            console.log('📋 Closing takeoff modal');
-            this.modal.classList.remove('active');
-        } else {
-            console.log('⚠️ Cannot close modal during execution');
-        }
+        if (!this.isExecuting) this.modal.classList.remove('active');
     }
 
     confirmTakeoff() {
-        console.log('🚁 TAKEOFF command initiated');
-        console.log(`  Altitude: ${this.takeoffSettings.altitude}m`);
-        console.log(`  Speed: ${this.takeoffSettings.speed}m/s`);
-        
-        document.getElementById('modalActions').style.display = 'none';
-        this.progressSection.classList.add('active');
-        
         this.setExecutingState(this.takeoffBtn, 'TAKEOFF');
-        this.simulateTakeoffProgress();
-        
-        // Send command to backend with CMD ID
-        this.sendCommand(CMD.TAKEOFF, {
-            altitude: this.takeoffSettings.altitude,
-            speed: this.takeoffSettings.speed
-        });
-        
-        if (this.callbacks.onTakeoff) {
-            this.callbacks.onTakeoff(this.takeoffSettings);
-        }
-    }
-
-    simulateTakeoffProgress() {
-        const progressFill = document.getElementById('progressBarFill');
-        const progressPercentage = document.getElementById('progressPercentage');
-        const progressStatus = document.getElementById('progressStatus');
-        
-        const duration = (this.takeoffSettings.altitude / this.takeoffSettings.speed) * 1000;
-        const startTime = Date.now();
-        
-        const statusMessages = [
-            'Initiating takeoff sequence...',
-            'Motors armed - lifting off...',
-            'Climbing to target altitude...',
-            'Approaching target altitude...',
-            'Stabilizing at target altitude...',
-            'Takeoff complete!'
-        ];
-        
-        const updateProgress = () => {
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min((elapsed / duration) * 100, 100);
-            
-            progressFill.style.width = progress + '%';
-            progressPercentage.textContent = Math.round(progress) + '%';
-            
-            const statusIndex = Math.min(
-                Math.floor((progress / 100) * statusMessages.length),
-                statusMessages.length - 1
-            );
-            progressStatus.textContent = statusMessages[statusIndex];
-            
-            if (progress < 100) {
-                requestAnimationFrame(updateProgress);
-            } else {
-                setTimeout(() => {
-                    this.completeTakeoff();
-                }, 1000);
-            }
-        };
-        
-        updateProgress();
-    }
-
-    completeTakeoff() {
-        console.log('✅ TAKEOFF completed successfully');
-        this.clearExecutingState();
-        
-        setTimeout(() => {
-            this.hideTakeoffModal();
-            this.resetProgressBar();
-        }, 1500);
-    }
-
-    resetProgressBar() {
-        document.getElementById('progressBarFill').style.width = '0%';
-        document.getElementById('progressPercentage').textContent = '0%';
-        document.getElementById('progressStatus').textContent = 'Initiating takeoff...';
+        if (this.callbacks.onTakeoff) this.callbacks.onTakeoff(this.takeoffSettings);
+        this.modal.classList.remove('active'); // forcefully close modal
+        setTimeout(() => this.clearExecutingState(), 6000);
     }
 
     executeLand() {
-        console.log('🛬 LAND command initiated');
         this.setExecutingState(this.landBtn, 'LAND');
-        
-        // Send command to backend with CMD ID
-        this.sendCommand(CMD.LAND);
-        
-        if (this.callbacks.onLand) {
-            this.callbacks.onLand();
-        }
+        if (this.callbacks.onLand) this.callbacks.onLand();
+        setTimeout(() => this.clearExecutingState(), 6000);
     }
 
     executeRTL() {
-        console.log('🏠 RTL command initiated');
         this.setExecutingState(this.rtlBtn, 'RTL');
-        
-        // Send command to backend with CMD ID
-        this.sendCommand(CMD.RTL);
-        
-        if (this.callbacks.onRTL) {
-            this.callbacks.onRTL();
-        }
+        if (this.callbacks.onRTL) this.callbacks.onRTL();
+        setTimeout(() => this.clearExecutingState(), 6000);
     }
 
     setExecutingState(button, command) {
-        this.isExecuting = true;
+        this.isExecuting    = true;
         this.currentCommand = command;
         button.classList.add('executing');
         this.disableAllButtons();
-        console.log(`⏳ Executing ${command}...`);
     }
 
     clearExecutingState() {
-        this.isExecuting = false;
+        this.isExecuting    = false;
         this.currentCommand = null;
-        
         this.takeoffBtn.classList.remove('executing');
         this.landBtn.classList.remove('executing');
         this.rtlBtn.classList.remove('executing');
-        
         this.enableAllButtons();
-        console.log('✅ Command execution completed');
     }
 
     disableAllButtons() {
         this.takeoffBtn.disabled = true;
-        this.landBtn.disabled = true;
-        this.rtlBtn.disabled = true;
+        this.landBtn.disabled    = true;
+        this.rtlBtn.disabled     = true;
     }
 
     enableAllButtons() {
         this.takeoffBtn.disabled = false;
-        this.landBtn.disabled = false;
-        this.rtlBtn.disabled = false;
+        this.landBtn.disabled    = false;
+        this.rtlBtn.disabled     = false;
     }
 
-    onTakeoff(callback) {
-        this.callbacks.onTakeoff = callback;
-        console.log('✅ Takeoff callback registered');
-    }
+    onTakeoff(cb) { this.callbacks.onTakeoff = cb; }
+    onLand(cb)    { this.callbacks.onLand    = cb; }
+    onRTL(cb)     { this.callbacks.onRTL     = cb; }
 
-    onLand(callback) {
-        this.callbacks.onLand = callback;
-        console.log('✅ Land callback registered');
-    }
-
-    onRTL(callback) {
-        this.callbacks.onRTL = callback;
-        console.log('✅ RTL callback registered');
-    }
-
-    completeCommand() {
-        if (this.isExecuting) {
-            console.log(`✅ ${this.currentCommand} command completed`);
-            this.clearExecutingState();
-        }
-    }
-
-    
-
-    show() {
-        const container = document.querySelector('.flight-controls-strip');
-        if (container) {
-            container.style.display = 'flex';
-        }
-    }
-
-    hide() {
-        const container = document.querySelector('.flight-controls-strip');
-        if (container) {
-            container.style.display = 'none';
-        }
-    }
-
-    isCommandExecuting() {
-        return this.isExecuting;
-    }
-
-    getCurrentCommand() {
-        return this.currentCommand;
-    }
-
-    getTakeoffSettings() {
-        return { ...this.takeoffSettings };
-    }
-
-    getConnectionStatus() {
-        return this.isConnected;
-    }
+    show() { const c = document.querySelector('.flight-controls-strip'); if (c) c.style.display = 'flex'; }
+    hide() { const c = document.querySelector('.flight-controls-strip'); if (c) c.style.display = 'none'; }
+    isCommandExecuting() { return this.isExecuting; }
+    getCurrentCommand()  { return this.currentCommand; }
+    getTakeoffSettings() { return { ...this.takeoffSettings }; }
 }
 
-// Initialize on DOM load
+/* ============================================================================
+   FLIGHT MODE SELECTOR
+   Opens panel to the RIGHT of the strip so it never covers console messages.
+   ============================================================================ */
+
+class FlightModeSelector {
+    constructor() {
+        this.currentMode = 'STABILIZE';
+        this.panel       = null;
+        this.btn         = null;
+        this.badge       = null;
+        this.isOpen      = false;
+        this.init();
+    }
+
+    init() {
+        this.btn   = document.getElementById('flightModeBtn');
+        this.panel = document.getElementById('flightModePanel');
+        this.badge = document.getElementById('activeModeDisplay');
+
+        if (!this.btn || !this.panel) {
+            console.error('❌ FlightModeSelector: elements not found');
+            return;
+        }
+
+        this.btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.isOpen ? this.close() : this.open();
+        });
+
+        this.panel.querySelectorAll('.mode-item').forEach(item => {
+            item.addEventListener('click', () => this.select(item.dataset.mode, item));
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!this.btn.contains(e.target) && !this.panel.contains(e.target)) this.close();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') this.close();
+        });
+
+        console.log('✅ FlightModeSelector initialized');
+    }
+
+    open() {
+        const rect        = this.btn.getBoundingClientRect();
+        const panelHeight = this.panel.offsetHeight || 380;
+
+        this.panel.style.left = (rect.right + 8) + 'px';
+        let topPos = rect.bottom - panelHeight;
+        if (topPos < 10) topPos = 10;
+        this.panel.style.top = topPos + 'px';
+
+        this.panel.classList.add('open');
+        this.isOpen = true;
+    }
+
+    close() {
+        this.panel.classList.remove('open');
+        this.isOpen = false;
+    }
+
+    /** User tapped a mode row in the panel */
+    select(mode, el) {
+        this.currentMode = mode;
+
+        this.panel.querySelectorAll('.mode-item').forEach(i => i.classList.remove('active-mode'));
+        el.classList.add('active-mode');
+
+        if (this.badge) this.badge.textContent = mode.toUpperCase();
+
+        console.log('✈️ Flight Mode selected:', mode);
+
+        // Dispatch so the flightModeChanged listener can call sendCommand
+        window.dispatchEvent(new CustomEvent('flightModeChanged', { detail: { mode } }));
+
+        setTimeout(() => this.close(), 180);
+    }
+
+    /** Called from websocket.js flight_mode_status / flight_mode_changed handler */
+    setMode(mode) {
+        if (!mode) return;
+        this.currentMode = mode;
+        if (this.badge) this.badge.textContent = mode.toUpperCase();
+
+        const item = this.panel?.querySelector(`[data-mode="${mode}"]`);
+        if (item) {
+            this.panel.querySelectorAll('.mode-item').forEach(i => i.classList.remove('active-mode'));
+            item.classList.add('active-mode');
+        }
+    }
+
+    getCurrentMode() { return this.currentMode; }
+}
+
+/* ============================================================================
+   ARM / DISARM TOGGLE
+   ============================================================================ */
+
+class ArmToggle {
+    constructor() {
+        this.isArmed = false;
+        this.btn     = null;
+        this.label   = null;
+        this.icon    = null;
+        this.callbacks = { onArm: null, onDisarm: null };
+        this.init();
+    }
+
+    init() {
+        this.btn   = document.getElementById('armBtn');
+        this.label = document.getElementById('armBtnLabel');
+        this.icon  = document.getElementById('armBtnIcon');
+
+        if (!this.btn) { console.error('❌ ArmToggle: #armBtn not found'); return; }
+
+        this.btn.addEventListener('click', () => this.toggle());
+        console.log('✅ ArmToggle initialized');
+    }
+
+    toggle() { this.isArmed ? this.disarm() : this.arm(); }
+
+    setArmedState(isArmed) {
+        if (this.isArmed === isArmed) return;
+        this.isArmed = isArmed;
+        if (isArmed) {
+            this.btn.classList.add('armed');
+            if (this.label) this.label.textContent = 'DISARM';
+            if (this.icon)  this.icon.alt = 'Disarm';
+            console.log('🔴 UI State: Drone ARMED');
+        } else {
+            this.btn.classList.remove('armed');
+            if (this.label) this.label.textContent = 'ARM';
+            if (this.icon)  this.icon.alt = 'Arm';
+            console.log('🟢 UI State: Drone DISARMED');
+        }
+    }
+
+    arm() {
+        this.setArmedState(true);
+        if (this.callbacks.onArm) this.callbacks.onArm();
+    }
+
+    disarm() {
+        this.setArmedState(false);
+        if (this.callbacks.onDisarm) this.callbacks.onDisarm();
+    }
+
+    onArm(cb)    { this.callbacks.onArm    = cb; }
+    onDisarm(cb) { this.callbacks.onDisarm = cb; }
+    getState()   { return this.isArmed; }
+}
+
+/* ============================================================================
+   INIT ON DOM READY
+   ============================================================================ */
+
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 Initializing Flight Control Buttons...');
-    window.flightControls = new FlightControlButtons();
-    
-    // Expose CMD constants globally for debugging
-    window.CMD = CMD;
+    console.log('🚀 Initializing Flight Controls');
+
+    // ── ARM / DISARM ───────────────────────────────────────────────────────
+    const armToggle = new ArmToggle();
+
+    armToggle.onArm(() => {
+        console.log('📤 ARM → sysid=' + (window.selectedSysId ?? 1));
+        window.sendCommand('ARM');
+    });
+
+    armToggle.onDisarm(() => {
+        console.log('📤 DISARM → sysid=' + (window.selectedSysId ?? 1));
+        window.sendCommand('DISARM');
+    });
+
+    // ── FORCE ARM ──────────────────────────────────────────────────────────
+    const forceArmBtn = document.getElementById('forceArmBtn');
+    if (forceArmBtn) {
+        forceArmBtn.addEventListener('click', () => {
+            console.log('📤 FORCE ARM → sysid=' + (window.selectedSysId ?? 1));
+            window.sendCommand('FORCE_ARM');
+            // Optimistically update the regular arm button state
+            armToggle.setArmedState(true);
+        });
+    }
+
+    // ── TAKEOFF / LAND / RTL ───────────────────────────────────────────────
+    const flightControls = new FlightControlButtons();
+
+    flightControls.onTakeoff((settings) => {
+        console.log('📤 AUTO TAKEOFF SEQUENCE INITIATED → altitude:', settings.altitude, 'm');
+        
+        // Step 1: Change mode to GUIDED
+        if (window.MsgConsole) window.MsgConsole.info('🔄 Step 1/3 — Setting mode → GUIDED…');
+        window.sendCommand('SET_MODE', { mode: 'GUIDED' });
+
+        // Step 2: Arm the motors after a delay
+        setTimeout(() => {
+            if (window.MsgConsole) window.MsgConsole.info('🔒 Step 2/3 — Arming drone…');
+            window.sendCommand('ARM');
+            if (window.ArmControl) window.ArmControl.setArmedState(true);
+        }, 1200);
+
+        // Step 3: Takeoff after arming settles
+        setTimeout(() => {
+            if (window.MsgConsole) window.MsgConsole.info(`🛫 Step 3/3 — Taking off to ${settings.altitude} m…`);
+            window.sendCommand('TAKEOFF', { altitude: settings.altitude, speed: settings.speed });
+        }, 3500);
+    });
+
+    flightControls.onLand(() => {
+        console.log('📤 LAND →');
+        window.sendCommand('LAND');
+    });
+
+    flightControls.onRTL(() => {
+        console.log('📤 RTL →');
+        window.sendCommand('RTL');
+    });
+
+    // ── FLIGHT MODE SELECTOR ───────────────────────────────────────────────
+    const flightModeSelector = new FlightModeSelector();
+
+    // User picked a mode → send to drone
+    window.addEventListener('flightModeChanged', (e) => {
+        const mode = e.detail.mode;
+        console.log('📤 SET_MODE →', mode);
+        window.sendCommand('SET_MODE', { mode });
+    });
+
+    // Backend reported active mode (via flight_mode_changed CustomEvent
+    // dispatched by websocket.js flight_mode_status handler) → sync badge
+    window.addEventListener('flight_mode_changed', (e) => {
+        flightModeSelector.setMode(e.detail.mode);
+    });
+
+    // ── Expose globals ─────────────────────────────────────────────────────
+    window.FlightControls     = flightControls;
+    window.ArmControl         = armToggle;
+    window.FlightModeSelector = flightModeSelector;
+
+    console.log('✅ Flight Controls fully initialized');
 });
 
-// Global helper function for manual testing
-window.sendDroneCommand = (cmdId, params = {}) => {
-    if (window.flightControls) {
-        window.flightControls.sendCommand(cmdId, params);
-    } else {
-        console.error('Flight controls not initialized');
-    }
-};
-
 console.log('%c🚁 Flight Control System Ready', 'color: #22c55e; font-size: 14px; font-weight: bold;');
-console.log('%cCommand IDs:', 'color: #FFCC00; font-weight: bold;');
-console.log('%c  1 = TAKEOFF', 'color: #3b82f6;');
-console.log('%c  2 = LAND', 'color: #3b82f6;');
-console.log('%c  3 = RTL', 'color: #3b82f6;');
-console.log('%cTest commands:', 'color: #FFCC00; font-weight: bold;');
-console.log('%c  sendDroneCommand(1, {altitude: 15})', 'color: #22c55e;');
-console.log('%c  sendDroneCommand(2)', 'color: #22c55e;');
-console.log('%c  sendDroneCommand(3)', 'color: #22c55e;');

@@ -853,7 +853,7 @@ function loadExternalMeta() {
     }
 
     // Dev / browser fallback: relative fetch
-    candidates.push('param_metadata.json');
+    candidates.push('../param_metadata.json');
 
     function tryNext(urls) {
         if (!urls.length) {

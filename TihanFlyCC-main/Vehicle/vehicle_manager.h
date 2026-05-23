@@ -127,7 +127,7 @@ public:
     // Lifecycle callbacks
     // -----------------------------------------------------------------------
     using NewVehicleCallback  = std::function<void(std::shared_ptr<Vehicle>)>;
-    using VehicleLostCallback = std::function<void(int sysid)>;
+    using VehicleLostCallback = std::function<void(int sysid, int ui_sysid)>;
 
     void set_on_new_vehicle (NewVehicleCallback  cb);
     void set_on_vehicle_lost(VehicleLostCallback cb);

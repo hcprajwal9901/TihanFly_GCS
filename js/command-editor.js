@@ -1,5 +1,5 @@
 /**
- * Command Editor Panel Handler - COMPLETE VERSION WITH REACTIVE UPDATES
+ * Command Editor Panel Handler - COMPLETE VERSION
  * Manages Mission, Waypoints, Fence, and Rally tabs
  */
 
@@ -164,7 +164,7 @@ class CommandEditor {
     }
 
     // ========================================================================
-    // WAYPOINT MANAGEMENT - WITH REACTIVE UPDATES
+    // WAYPOINT MANAGEMENT
     // ========================================================================
     
     attachWaypointListeners() {
@@ -202,31 +202,7 @@ class CommandEditor {
             });
         }
         
-        // ✅ NEW: Add real-time change listener for waypoint type dropdown
-        const typeField = document.getElementById('waypointTypeField');
-        if (typeField) {
-            typeField.addEventListener('change', (e) => {
-                console.log(`🔄 Waypoint type changed to: ${e.target.value}`);
-                // Auto-save when type changes
-                this.saveWaypointChanges(true);
-            });
-        }
-        
-        // ✅ NEW: Add real-time listeners for other fields (optional)
-        const latField = document.getElementById('waypointLatField');
-        const lngField = document.getElementById('waypointLngField');
-        const altField = document.getElementById('waypointAltField');
-        
-        [latField, lngField, altField].forEach(field => {
-            if (field) {
-                field.addEventListener('blur', () => {
-                    console.log(`🔄 Field ${field.id} changed, auto-saving...`);
-                    this.saveWaypointChanges(true);
-                });
-            }
-        });
-        
-        console.log('✅ Waypoint listeners attached (with reactive updates)');
+        console.log('✅ Waypoint listeners attached');
     }
     
     setWaypointManager(waypointManager) {
@@ -277,32 +253,30 @@ class CommandEditor {
         waypointList.innerHTML = '';
         
         waypoints.forEach((waypoint, index) => {
-            const item = this.createWaypointItem(waypoint, index + 1);
+            const item = this.createWaypointListItem(waypoint, index + 1);
             waypointList.appendChild(item);
         });
         
-        console.log(`✅ Waypoint list refreshed with ${waypoints.length} items`);
+        console.log(`✅ Displayed ${waypoints.length} waypoints`);
     }
     
-    createWaypointItem(waypoint, displayNumber) {
+    createWaypointListItem(waypoint, displayNumber) {
         const item = document.createElement('div');
         item.className = 'waypoint-item';
-        
-        if (this.selectedWaypointId === waypoint.id) {
-            item.classList.add('selected');
-        }
+        item.dataset.waypointId = waypoint.id;
         
         const type = waypoint.type || 'waypoint';
+        const typeLabel = type.charAt(0).toUpperCase() + type.slice(1);
         
         item.innerHTML = `
             <div class="waypoint-item-header">
-                <div class="waypoint-item-number">#${displayNumber}</div>
-                <div class="waypoint-item-type">${type}</div>
+                <span class="waypoint-item-number">WP ${displayNumber}</span>
+                <span class="waypoint-item-type">${typeLabel}</span>
             </div>
             <div class="waypoint-item-coords">
                 <div><strong>Lat:</strong> <span>${waypoint.lat.toFixed(6)}</span></div>
                 <div><strong>Lng:</strong> <span>${waypoint.lng.toFixed(6)}</span></div>
-                <div><strong>Alt:</strong> <span>${waypoint.altitude || 50}m</span></div>
+                <div><strong>Alt:</strong> <span>${waypoint.altitude}m</span></div>
             </div>
         `;
         
@@ -315,238 +289,410 @@ class CommandEditor {
     }
     
     showWaypointList() {
-        const waypointListSection = document.getElementById('waypointsPanel');
+        const waypointsPanel = document.getElementById('waypointsPanel');
         const detailsPanel = document.getElementById('waypointDetailsPanel');
         
-        if (waypointListSection) {
-            // Show list elements, hide details
-            const listElements = waypointListSection.querySelectorAll('.waypoint-list-header, .empty-state, .waypoint-list');
-            listElements.forEach(el => el.style.display = '');
-        }
-        
-        if (detailsPanel) {
-            detailsPanel.style.display = 'none';
-        }
+        if (waypointsPanel) waypointsPanel.style.display = 'block';
+        if (detailsPanel) detailsPanel.style.display = 'none';
         
         this.selectedWaypointId = null;
-        this.refreshWaypointList();
     }
     
     editWaypoint(waypointId) {
         if (!this.waypointManager) return;
         
-        const waypoints = this.waypointManager.getWaypoints ? 
-                          this.waypointManager.getWaypoints() : 
-                          this.waypointManager.waypoints;
-        
-        const waypoint = waypoints.find(wp => wp.id === waypointId);
-        if (!waypoint) {
-            console.error(`❌ Waypoint ${waypointId} not found`);
-            return;
-        }
+        const waypoint = this.waypointManager.waypoints.find(wp => wp.id === waypointId);
+        if (!waypoint) return;
         
         this.selectedWaypointId = waypointId;
         
-        // Hide list elements
-        const waypointListSection = document.getElementById('waypointsPanel');
-        if (waypointListSection) {
-            const listElements = waypointListSection.querySelectorAll('.waypoint-list-header, .empty-state, .waypoint-list');
-            listElements.forEach(el => el.style.display = 'none');
-        }
-        
-        // Show details panel
+        const waypointsPanel = document.getElementById('waypointsPanel');
         const detailsPanel = document.getElementById('waypointDetailsPanel');
-        if (detailsPanel) {
-            detailsPanel.style.display = 'block';
-        }
         
-        // Populate form fields
-        const wpIndex = waypoints.findIndex(wp => wp.id === waypointId);
-        document.getElementById('editingWaypointTitle').textContent = `Waypoint ${wpIndex + 1}`;
-        document.getElementById('waypointIdField').value = waypointId;
+        if (waypointsPanel) waypointsPanel.style.display = 'none';
+        if (detailsPanel) detailsPanel.style.display = 'block';
+        
+        const waypointIndex = this.waypointManager.waypoints.findIndex(wp => wp.id === waypointId);
+        document.getElementById('editingWaypointTitle').textContent = `Waypoint ${waypointIndex + 1}`;
+        document.getElementById('waypointIdField').value = waypoint.id;
         document.getElementById('waypointLatField').value = waypoint.lat;
         document.getElementById('waypointLngField').value = waypoint.lng;
         document.getElementById('waypointAltField').value = waypoint.altitude || 50;
         document.getElementById('waypointTypeField').value = waypoint.type || 'waypoint';
-        
-        console.log(`✅ Editing waypoint ${waypointId}`);
     }
     
-    /**
-     * ✅ ENHANCED: Save waypoint changes with backend communication
-     * @param {boolean} silent - If true, don't show success message
-     */
-    saveWaypointChanges(silent = false) {
-        if (!this.waypointManager || !this.selectedWaypointId) {
-            console.error('❌ No waypoint selected or manager not set');
-            return;
-        }
+    saveWaypointChanges() {
+        if (!this.waypointManager || this.selectedWaypointId === null) return;
         
-        const waypoints = this.waypointManager.getWaypoints ? 
-                          this.waypointManager.getWaypoints() : 
-                          this.waypointManager.waypoints;
+        const waypoint = this.waypointManager.waypoints.find(wp => wp.id === this.selectedWaypointId);
+        if (!waypoint) return;
         
-        const waypoint = waypoints.find(wp => wp.id === this.selectedWaypointId);
-        if (!waypoint) {
-            console.error(`❌ Waypoint ${this.selectedWaypointId} not found`);
-            return;
-        }
-        
-        // Get updated values from form
         const newLat = parseFloat(document.getElementById('waypointLatField').value);
         const newLng = parseFloat(document.getElementById('waypointLngField').value);
         const newAlt = parseFloat(document.getElementById('waypointAltField').value);
         const newType = document.getElementById('waypointTypeField').value;
         
-        console.log(`💾 Saving waypoint ${this.selectedWaypointId}:`, {
-            lat: newLat,
-            lng: newLng,
-            altitude: newAlt,
-            type: newType
-        });
+        if (isNaN(newLat) || isNaN(newLng) || isNaN(newAlt)) {
+            if (window.MsgConsole) {
+                window.MsgConsole.error('Invalid coordinates or altitude');
+            }
+            return;
+        }
         
-        // Update waypoint object
         waypoint.lat = newLat;
         waypoint.lng = newLng;
         waypoint.altitude = newAlt;
         waypoint.type = newType;
         
-        // ✅ Send update to backend
-        this.sendWaypointUpdate(waypoint);
-        
-        // Update the marker on the map if waypointManager has the method
-        if (this.waypointManager.updateWaypointMarker) {
-            this.waypointManager.updateWaypointMarker(waypoint);
+        if (waypoint.marker) {
+            waypoint.marker.setLatLng([newLat, newLng]);
         }
         
-        // Refresh the waypoint list to show updated type
-        this.refreshWaypointList();
-        
-        if (!silent && window.MsgConsole) {
-            window.MsgConsole.success('Waypoint updated successfully');
+        if (this.waypointManager.updateRoute) {
+            this.waypointManager.updateRoute();
         }
-        
-        console.log(`✅ Waypoint ${this.selectedWaypointId} updated`);
-    }
-    
-    /**
-     * ✅ NEW: Send waypoint update to backend
-     */
-    sendWaypointUpdate(waypoint) {
-        if (!window.ws || window.ws.readyState !== WebSocket.OPEN) {
-            console.warn('⚠️ WebSocket not connected, cannot send update');
-            return;
+        if (this.waypointManager.updateStats) {
+            this.waypointManager.updateStats();
         }
-        
-        const message = {
-            type: 'plan_flight_mission',
-            action: 'update_waypoint',
-            id: waypoint.id,
-            waypoint: {
-                id: waypoint.id,
-                lat: waypoint.lat,
-                lng: waypoint.lng,
-                altitude: waypoint.altitude,
-                type: waypoint.type
-            }
-        };
-        
-        console.log('📤 Sending waypoint update to backend:', message);
-        
-        try {
-            window.ws.send(JSON.stringify(message));
-            console.log('✅ Waypoint update sent to backend');
-        } catch (error) {
-            console.error('❌ Error sending waypoint update:', error);
-        }
-    }
-    
-    deleteSelectedWaypoint() {
-        if (!this.waypointManager || !this.selectedWaypointId) {
-            console.error('❌ No waypoint selected');
-            return;
-        }
-        
-        if (!confirm('Are you sure you want to delete this waypoint?')) {
-            return;
-        }
-        
-        console.log(`🗑️ Deleting waypoint ${this.selectedWaypointId}`);
-        
-        // Delete from waypoint manager
-        if (this.waypointManager.deleteWaypoint) {
-            this.waypointManager.deleteWaypoint(this.selectedWaypointId);
-        } else {
-            const waypoints = this.waypointManager.waypoints;
-            const index = waypoints.findIndex(wp => wp.id === this.selectedWaypointId);
-            if (index !== -1) {
-                waypoints.splice(index, 1);
-            }
-        }
-        
-        // Send delete to backend
-        this.sendWaypointDelete(this.selectedWaypointId);
         
         if (window.MsgConsole) {
-            window.MsgConsole.success('Waypoint deleted');
+            window.MsgConsole.success(`Waypoint ${waypoint.id} updated`);
         }
         
         this.showWaypointList();
         this.refreshWaypointList();
     }
     
-    /**
-     * ✅ NEW: Send waypoint delete to backend
-     */
-    sendWaypointDelete(waypointId) {
-        if (!window.ws || window.ws.readyState !== WebSocket.OPEN) {
-            console.warn('⚠️ WebSocket not connected, cannot send delete');
+    deleteSelectedWaypoint() {
+        if (!this.waypointManager || this.selectedWaypointId === null) return;
+        
+        if (!confirm(`Delete waypoint ${this.selectedWaypointId}?`)) {
             return;
         }
         
-        const message = {
-            type: 'plan_flight_mission',
-            action: 'delete_waypoint',
-            id: waypointId
-        };
-        
-        console.log('📤 Sending waypoint delete to backend:', message);
-        
-        try {
-            window.ws.send(JSON.stringify(message));
-            console.log('✅ Waypoint delete sent to backend');
-        } catch (error) {
-            console.error('❌ Error sending waypoint delete:', error);
+        if (this.waypointManager.removeWaypoint) {
+            this.waypointManager.removeWaypoint(this.selectedWaypointId);
         }
+        
+        if (window.MsgConsole) {
+            window.MsgConsole.success(`Waypoint ${this.selectedWaypointId} deleted`);
+        }
+        
+        this.showWaypointList();
+        this.refreshWaypointList();
     }
 
     // ========================================================================
-    // FENCE MANAGEMENT (PLACEHOLDER)
+    // FENCE MANAGEMENT
     // ========================================================================
     
     attachFenceListeners() {
-        console.log('✅ Fence listeners attached (placeholder)');
+        const refreshFenceBtn = document.getElementById('refreshFenceBtn');
+        if (refreshFenceBtn) {
+            refreshFenceBtn.addEventListener('click', () => {
+                console.log('🔄 Refresh fence button clicked');
+                this.refreshFenceList();
+            });
+        }
+        
+        const backToFenceBtn = document.getElementById('backToFenceListBtn');
+        if (backToFenceBtn) {
+            backToFenceBtn.addEventListener('click', () => {
+                this.showFenceList();
+            });
+        }
+        
+        const saveFenceBtn = document.getElementById('saveFenceBtn');
+        if (saveFenceBtn) {
+            saveFenceBtn.addEventListener('click', () => {
+                this.saveFenceChanges();
+            });
+        }
+        
+        const deleteFenceBtn = document.getElementById('deleteFenceBtn');
+        if (deleteFenceBtn) {
+            deleteFenceBtn.addEventListener('click', () => {
+                this.deleteSelectedFence();
+            });
+        }
+        
+        console.log('✅ Fence listeners attached');
     }
     
     setPolygonManager(polygonManager) {
         this.polygonManager = polygonManager;
         console.log('✅ Polygon manager set in Command Editor');
+        this.refreshFenceList();
     }
     
     refreshFenceList() {
-        console.log('🔄 Refreshing fence list (placeholder)...');
+        console.log('🔄 Refreshing fence list...');
+        
+        const fenceList = document.getElementById('fenceList');
+        const emptyFenceState = document.getElementById('emptyFenceState');
+        const fenceCountDisplay = document.getElementById('fenceCountDisplay');
+        
+        if (!fenceList || !emptyFenceState || !fenceCountDisplay) {
+            console.error('❌ Fence list elements not found');
+            return;
+        }
+        
+        // Get fences from PolygonManager
+        const fences = window.PolygonManager ? (window.PolygonManager.polygons || []) : [];
+        
+        console.log(`📊 Found ${fences.length} fences to display`);
+        
+        fenceCountDisplay.textContent = `${fences.length} Fence${fences.length !== 1 ? 's' : ''}`;
+        
+        if (fences.length === 0) {
+            emptyFenceState.style.display = 'block';
+            fenceList.style.display = 'none';
+            return;
+        }
+        
+        emptyFenceState.style.display = 'none';
+        fenceList.style.display = 'flex';
+        fenceList.innerHTML = '';
+        
+        fences.forEach((fence, index) => {
+            const item = this.createFenceListItem(fence, index + 1);
+            fenceList.appendChild(item);
+        });
+        
+        console.log(`✅ Displayed ${fences.length} fences`);
+    }
+    
+    createFenceListItem(fence, displayNumber) {
+        const item = document.createElement('div');
+        item.className = 'fence-item';
+        item.dataset.fenceId = fence.id;
+        
+        const pointCount = fence.points ? fence.points.length : 0;
+        
+        item.innerHTML = `
+            <div class="fence-item-header">
+                <span class="fence-item-number">🚧 Fence ${displayNumber}</span>
+                <span class="fence-item-type">Inclusion</span>
+            </div>
+            <div class="fence-item-info">
+                <div><strong>Points:</strong> <span>${pointCount}</span></div>
+                <div><strong>Type:</strong> <span>Polygon</span></div>
+            </div>
+        `;
+        
+        item.addEventListener('click', () => {
+            console.log(`🚧 Fence ${fence.id} clicked`);
+            this.editFence(fence.id);
+        });
+        
+        return item;
+    }
+    
+    showFenceList() {
+        const fenceListSection = document.querySelector('.fence-list-section');
+        const detailsPanel = document.getElementById('fenceDetailsPanel');
+        
+        if (fenceListSection) fenceListSection.style.display = 'block';
+        if (detailsPanel) detailsPanel.style.display = 'none';
+        
+        this.selectedFenceId = null;
+    }
+    
+    editFence(fenceId) {
+        this.selectedFenceId = fenceId;
+        
+        const fenceListSection = document.querySelector('.fence-list-section');
+        const detailsPanel = document.getElementById('fenceDetailsPanel');
+        
+        if (fenceListSection) fenceListSection.style.display = 'none';
+        if (detailsPanel) detailsPanel.style.display = 'block';
+        
+        document.getElementById('editingFenceTitle').textContent = `Fence ${fenceId}`;
+        document.getElementById('fenceIdField').value = fenceId;
+        document.getElementById('fenceTypeField').value = 'inclusion';
+        
+        const fence = window.PolygonManager?.polygons.find(p => p.id === fenceId);
+        if (fence) {
+            document.getElementById('fencePointCountField').value = fence.points ? fence.points.length : 0;
+        }
+    }
+    
+    saveFenceChanges() {
+        if (window.MsgConsole) {
+            window.MsgConsole.success('Fence updated');
+        }
+        this.showFenceList();
+    }
+    
+    deleteSelectedFence() {
+        if (!confirm('Delete this fence?')) return;
+        
+        if (window.PolygonManager) {
+            window.PolygonManager.clearPolygon();
+        }
+        
+        if (window.MsgConsole) {
+            window.MsgConsole.success('Fence deleted');
+        }
+        
+        this.showFenceList();
+        this.refreshFenceList();
     }
 
     // ========================================================================
-    // RALLY MANAGEMENT (PLACEHOLDER)
+    // RALLY MANAGEMENT
     // ========================================================================
     
     attachRallyListeners() {
-        console.log('✅ Rally listeners attached (placeholder)');
+        const refreshRallyBtn = document.getElementById('refreshRallyBtn');
+        if (refreshRallyBtn) {
+            refreshRallyBtn.addEventListener('click', () => {
+                console.log('🔄 Refresh rally button clicked');
+                this.refreshRallyList();
+            });
+        }
+        
+        const backToRallyBtn = document.getElementById('backToRallyListBtn');
+        if (backToRallyBtn) {
+            backToRallyBtn.addEventListener('click', () => {
+                this.showRallyList();
+            });
+        }
+        
+        const saveRallyBtn = document.getElementById('saveRallyBtn');
+        if (saveRallyBtn) {
+            saveRallyBtn.addEventListener('click', () => {
+                this.saveRallyChanges();
+            });
+        }
+        
+        const deleteRallyBtn = document.getElementById('deleteRallyBtn');
+        if (deleteRallyBtn) {
+            deleteRallyBtn.addEventListener('click', () => {
+                this.deleteSelectedRally();
+            });
+        }
+        
+        console.log('✅ Rally listeners attached');
     }
     
     refreshRallyList() {
-        console.log('🔄 Refreshing rally list (placeholder)...');
+        console.log('🔄 Refreshing rally list...');
+        
+        const rallyList = document.getElementById('rallyList');
+        const emptyRallyState = document.getElementById('emptyRallyState');
+        const rallyCountDisplay = document.getElementById('rallyCountDisplay');
+        
+        if (!rallyList || !emptyRallyState || !rallyCountDisplay) {
+            console.error('❌ Rally list elements not found');
+            return;
+        }
+        
+        console.log(`📊 Found ${this.rallyPoints.length} rally points`);
+        
+        rallyCountDisplay.textContent = `${this.rallyPoints.length} Rally Point${this.rallyPoints.length !== 1 ? 's' : ''}`;
+        
+        if (this.rallyPoints.length === 0) {
+            emptyRallyState.style.display = 'block';
+            rallyList.style.display = 'none';
+            return;
+        }
+        
+        emptyRallyState.style.display = 'none';
+        rallyList.style.display = 'flex';
+        rallyList.innerHTML = '';
+        
+        this.rallyPoints.forEach((rally, index) => {
+            const item = this.createRallyListItem(rally, index + 1);
+            rallyList.appendChild(item);
+        });
+        
+        console.log(`✅ Displayed ${this.rallyPoints.length} rally points`);
+    }
+    
+    createRallyListItem(rally, displayNumber) {
+        const item = document.createElement('div');
+        item.className = 'rally-item';
+        item.dataset.rallyId = rally.id;
+        
+        item.innerHTML = `
+            <div class="rally-item-header">
+                <span class="rally-item-number">📍 Rally ${displayNumber}</span>
+            </div>
+            <div class="rally-item-coords">
+                <div><strong>Lat:</strong> <span>${rally.lat.toFixed(6)}</span></div>
+                <div><strong>Lng:</strong> <span>${rally.lng.toFixed(6)}</span></div>
+                <div><strong>Alt:</strong> <span>${rally.altitude}m</span></div>
+            </div>
+        `;
+        
+        item.addEventListener('click', () => {
+            console.log(`📍 Rally ${rally.id} clicked`);
+            this.editRally(rally.id);
+        });
+        
+        return item;
+    }
+    
+    showRallyList() {
+        const rallyListSection = document.querySelector('.rally-list-section');
+        const detailsPanel = document.getElementById('rallyDetailsPanel');
+        
+        if (rallyListSection) rallyListSection.style.display = 'block';
+        if (detailsPanel) detailsPanel.style.display = 'none';
+        
+        this.selectedRallyId = null;
+    }
+    
+    editRally(rallyId) {
+        const rally = this.rallyPoints.find(r => r.id === rallyId);
+        if (!rally) return;
+        
+        this.selectedRallyId = rallyId;
+        
+        const rallyListSection = document.querySelector('.rally-list-section');
+        const detailsPanel = document.getElementById('rallyDetailsPanel');
+        
+        if (rallyListSection) rallyListSection.style.display = 'none';
+        if (detailsPanel) detailsPanel.style.display = 'block';
+        
+        document.getElementById('editingRallyTitle').textContent = `Rally Point ${rallyId}`;
+        document.getElementById('rallyIdField').value = rallyId;
+        document.getElementById('rallyLatField').value = rally.lat;
+        document.getElementById('rallyLngField').value = rally.lng;
+        document.getElementById('rallyAltField').value = rally.altitude;
+    }
+    
+    saveRallyChanges() {
+        const rally = this.rallyPoints.find(r => r.id === this.selectedRallyId);
+        if (!rally) return;
+        
+        rally.lat = parseFloat(document.getElementById('rallyLatField').value);
+        rally.lng = parseFloat(document.getElementById('rallyLngField').value);
+        rally.altitude = parseFloat(document.getElementById('rallyAltField').value);
+        
+        if (window.MsgConsole) {
+            window.MsgConsole.success('Rally point updated');
+        }
+        
+        this.showRallyList();
+        this.refreshRallyList();
+    }
+    
+    deleteSelectedRally() {
+        if (!confirm('Delete this rally point?')) return;
+        
+        const index = this.rallyPoints.findIndex(r => r.id === this.selectedRallyId);
+        if (index !== -1) {
+            this.rallyPoints.splice(index, 1);
+        }
+        
+        if (window.MsgConsole) {
+            window.MsgConsole.success('Rally point deleted');
+        }
+        
+        this.showRallyList();
+        this.refreshRallyList();
     }
     
     addRallyPoint(lat, lng, altitude = 50) {
@@ -617,7 +763,7 @@ if (document.readyState === 'loading') {
     initializeCommandEditor();
 }
 
-console.log('✅ Command Editor Script Loaded (with reactive updates)');
+console.log('✅ Command Editor Script Loaded');
 
 // ============================================================================
 // CSS INJECTION FOR FENCE & RALLY ITEMS

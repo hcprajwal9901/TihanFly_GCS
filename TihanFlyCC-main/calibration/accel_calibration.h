@@ -34,7 +34,7 @@ public:
         FAILED
     };
 
-    AccelCalibState accelState      = AccelCalibState::IDLE;
+    std::atomic<AccelCalibState> accelState{AccelCalibState::IDLE};
     int             pendingPosition = 0;    // 0 = none pending
 
     // Send MAV_CMD_PREFLIGHT_CALIBRATION (param5=1) to start calibration.

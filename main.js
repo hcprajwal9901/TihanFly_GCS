@@ -21,7 +21,7 @@ function createWindow() {
         }
     });
 
-    mainWindow.loadFile('MainWindow.html');
+    mainWindow.loadFile('pages/MainWindow.html');
     mainWindow.on('closed', () => { mainWindow = null; });
 }
 
@@ -57,6 +57,25 @@ function _filtersFor(mimeType) {
 }
 
 app.whenReady().then(() => {
+    // ── Google Maps tile header fix ──────────────────────────────────────────
+    // Electron's default User-Agent is blocked by Google's tile servers.
+    // We intercept all requests to mt*.google.com and inject a real browser
+    // UA + Referer so tiles are served normally.
+    const { session } = require('electron');
+    session.defaultSession.webRequest.onBeforeSendHeaders(
+        { urls: ['https://mt0.google.com/*', 'https://mt1.google.com/*',
+                 'https://mt2.google.com/*', 'https://mt3.google.com/*'] },
+        (details, callback) => {
+            details.requestHeaders['User-Agent'] =
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' +
+                'AppleWebKit/537.36 (KHTML, like Gecko) ' +
+                'Chrome/124.0.0.0 Safari/537.36';
+            details.requestHeaders['Referer'] = 'https://www.google.com/';
+            callback({ requestHeaders: details.requestHeaders });
+        }
+    );
+
+
     // ── C++ MAVLink backend ──────────────────────────────────────────────────
     // The backend binary is spawned with its working directory (cwd) set to a
     // writable location so that ./param_cache and any other relative-path data

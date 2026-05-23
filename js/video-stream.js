@@ -1,556 +1,355 @@
 /**
- * ULTRA-SMOOTH Video Stream Handler - ZERO LAG, TV-QUALITY
- * Optimized for real-time, buttery-smooth streaming like live TV
+ * video-stream.js — TiHANFly GCS
+ *
+ * Simple RTSP live video using Python MJPEG server (no ffmpeg, no JSMpeg).
+ *
+ * Flow:
+ *   1. User enters rtsp://... and clicks CONNECT
+ *   2. Frontend sends {type:"start_video", rtsp_url:"..."} over existing WebSocket
+ *   3. C++ backend spawns video_server.py which reads RTSP via OpenCV
+ *      and serves MJPEG on http://localhost:5001/video
+ *   4. Frontend shows <img src="http://localhost:5001/video"> — done!
+ *
+ * Requirements:  pip install opencv-python
  */
 
-class UltraSmoothVideoHandler {
-    constructor(containerId, placeholderImage = null) {
-        this.container = document.getElementById(containerId);
-        this.placeholderImage = placeholderImage;
-        this.imgElement = null;
-        this.isStreaming = false;
-        this.streamUrl = null;
-        this.reconnectAttempts = 0;
-        this.maxReconnectAttempts = 3;
-        this.healthCheckInterval = null;
-        this.serverCheckDelay = 15000; // Only check server health every 15 seconds
-        
-        this.init();
-    }
+const VideoStreamController = (() => {
 
-    init() {
-        if (this.placeholderImage) {
-            this.showPlaceholder();
-        }
-    }
+    // ── State ─────────────────────────────────────────────────────────────────
+    let connected = false;
+    let uiBuilt   = false;
+    const MJPEG_URL = 'http://localhost:5001/video';
+    const VIDEO_PORT = 5001;
 
-    /**
-     * Start ULTRA-SMOOTH stream - Maximum performance, minimum lag
-     */
-    startStream(url) {
-        console.log('⚡ Starting ULTRA-SMOOTH stream:', url);
-        
-        this.stopStream();
-        this.streamUrl = url;
-        this.clearContainer();
+    // ── DOM refs ──────────────────────────────────────────────────────────────
+    let imgEl, statusDot, statusText, rtspInput, connectBtn, disconnectBtn, statusBadge;
 
-        // Create OPTIMIZED image element for live streaming
-        this.imgElement = document.createElement('img');
-        
-        // ULTRA-CRITICAL: Maximum performance CSS
-        this.imgElement.style.cssText = `
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            image-rendering: auto;
-            image-rendering: -webkit-optimize-contrast;
-            backface-visibility: hidden;
-            transform: translateZ(0);
-            will-change: contents;
-        `;
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Build the UI
+    // ─────────────────────────────────────────────────────────────────────────
+    function buildUI() {
+        const container = document.getElementById('videoStream');
+        if (!container || uiBuilt) return;
+        uiBuilt = true;
 
-        // CRITICAL: Fastest loading settings
-        this.imgElement.loading = 'eager';
-        this.imgElement.decoding = 'async';
-        
-        // Connection handler - SIMPLE, no heavy processing
-        this.imgElement.onload = () => {
-            if (!this.isStreaming) {
-                console.log('✅ Stream LIVE - Smooth playback active');
-                this.isStreaming = true;
-                this.reconnectAttempts = 0;
-                this.updateStatus('LIVE', true);
-            }
-        };
-
-        // Error handler - ONLY show placeholder on real errors
-        this.imgElement.onerror = (e) => {
-            console.error('❌ Stream connection error');
-            this.isStreaming = false;
-            this.updateStatus('NO SIGNAL', false);
-            this.showPlaceholder();
-            this.scheduleReconnect();
-        };
-
-        // CRITICAL: NO cache busting for maximum speed
-        // Cache busting causes reconnections and lag
-        
-        // Append to container
-        this.container.appendChild(this.imgElement);
-        
-        // Set source to start streaming
-        this.imgElement.src = url;
-        
-        // Start lightweight health monitoring
-        this.startLightweightHealthCheck();
-    }
-
-    /**
-     * Lightweight health check - only check server, don't interfere with stream
-     */
-    startLightweightHealthCheck() {
-        this.stopHealthCheck();
-        
-        // Only check if server is alive every 15 seconds
-        // Don't touch the stream itself
-        this.healthCheckInterval = setInterval(() => {
-            if (!this.isStreaming && this.streamUrl) {
-                // Only try to reconnect if we're not streaming
-                this.checkServerHealth();
-            }
-        }, this.serverCheckDelay);
-    }
-
-    /**
-     * Check if server is responding (only when not streaming)
-     */
-    async checkServerHealth() {
-        if (!this.streamUrl) return;
-        
-        const statusUrl = this.streamUrl.replace('/video_feed', '/status');
-        
-        try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 2000);
-            
-            const response = await fetch(statusUrl, { 
-                signal: controller.signal,
-                cache: 'no-cache'
-            });
-            
-            clearTimeout(timeoutId);
-            
-            if (response.ok) {
-                const data = await response.json();
-                if (data.camera_active && !this.isStreaming) {
-                    console.log('🔄 Server back online - reconnecting...');
-                    this.startStream(this.streamUrl);
-                }
-            }
-        } catch (error) {
-            // Silent fail - server not ready yet
-        }
-    }
-
-    /**
-     * Schedule reconnection attempt
-     */
-    scheduleReconnect() {
-        if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-            console.log('⛔ Max reconnect attempts - waiting for server...');
-            return;
-        }
-        
-        this.reconnectAttempts++;
-        const delay = 3000 * this.reconnectAttempts; // 3s, 6s, 9s
-        
-        console.log(`🔄 Reconnect attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts} in ${delay}ms`);
-        
-        setTimeout(() => {
-            if (this.streamUrl && !this.isStreaming) {
-                this.startStream(this.streamUrl);
-            }
-        }, delay);
-    }
-
-    /**
-     * Stop health monitoring
-     */
-    stopHealthCheck() {
-        if (this.healthCheckInterval) {
-            clearInterval(this.healthCheckInterval);
-            this.healthCheckInterval = null;
-        }
-    }
-
-    /**
-     * Stop stream and show placeholder
-     */
-    stopStream() {
-        console.log('🛑 Stopping stream');
-        
-        this.isStreaming = false;
-        this.streamUrl = null;
-        this.reconnectAttempts = 0;
-        this.stopHealthCheck();
-        
-        if (this.imgElement) {
-            this.imgElement.onload = null;
-            this.imgElement.onerror = null;
-            this.imgElement.src = '';
-        }
-        
-        this.clearContainer();
-        this.showPlaceholder();
-        this.updateStatus('NO SIGNAL', false);
-    }
-
-    /**
-     * Show placeholder image - FULL SCREEN
-     */
-    showPlaceholder() {
-        console.log('🖼️ Showing placeholder image');
-        
-        if (this.imgElement && this.imgElement.parentNode) {
-            this.imgElement.parentNode.removeChild(this.imgElement);
-            this.imgElement = null;
-        } else {
-            this.clearContainer();
-        }
-
-        if (this.placeholderImage) {
-            const placeholder = document.createElement('img');
-            placeholder.src = this.placeholderImage;
-            placeholder.alt = 'No Signal - Waiting for video stream';
-            placeholder.style.cssText = `
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                object-position: center;
-                opacity: 1;
-                background: #000;
-                display: block;
-                position: absolute;
-                top: 0;
-                left: 0;
-            `;
-            
-            placeholder.onerror = () => {
-                console.error('❌ Placeholder failed to load');
-                this.showTextFallback();
-            };
-            
-            placeholder.onload = () => {
-                console.log('✅ Placeholder displayed');
-            };
-            
-            this.container.appendChild(placeholder);
-        } else {
-            this.showTextFallback();
-        }
-    }
-    
-    /**
-     * Text fallback
-     */
-    showTextFallback() {
-        this.clearContainer();
-        
-        const div = document.createElement('div');
-        div.style.cssText = `
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 24px;
-            font-weight: bold;
+        container.style.cssText = `
+            position: relative;
+            width: 100%; height: 100%;
             background: #000;
-            text-align: center;
-            padding: 20px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            overflow: hidden;
         `;
-        div.innerHTML = `
-            <div style="font-size: 48px; margin-bottom: 20px;">📡</div>
-            <div>NO SIGNAL</div>
-            <div style="font-size: 14px; margin-top: 10px; opacity: 0.7;">Waiting for video stream...</div>
+
+        // ── Live video image ──────────────────────────────────────────────────
+        imgEl = document.createElement('img');
+        imgEl.id  = 'mjpegFrame';
+        imgEl.alt = '';
+        imgEl.style.cssText = `
+            width: 100%; height: 100%;
+            object-fit: contain;
+            display: none;
+            background: #000;
         `;
-        this.container.appendChild(div);
+        imgEl.onerror = () => {
+            // Stream dropped
+            if (connected) {
+                setStatus('NO SIGNAL', false);
+                imgEl.style.display = 'none';
+                connected = false;
+                if (connectBtn)    { connectBtn.style.display = 'inline-block'; connectBtn.disabled = false; }
+                if (disconnectBtn) disconnectBtn.style.display = 'none';
+            }
+        };
+        container.appendChild(imgEl);
+
+        // ── No-signal placeholder ─────────────────────────────────────────────
+        const placeholder = document.createElement('div');
+        placeholder.id = 'noSignalPlaceholder';
+        placeholder.style.cssText = `
+            position: absolute;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 10px; pointer-events: none;
+        `;
+        placeholder.innerHTML = `
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+            </svg>
+            <span style="color:rgba(255,255,255,0.25);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;">NO SIGNAL</span>
+        `;
+        container.appendChild(placeholder);
+
+        // ── Control overlay ───────────────────────────────────────────────────
+        const overlay = document.createElement('div');
+        overlay.id = 'rtspOverlay';
+        overlay.style.cssText = `
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            padding: 12px 14px 10px;
+            display: flex; align-items: center; gap: 8px;
+            transition: opacity 0.3s;
+        `;
+
+        // Status badge
+        const badge = document.createElement('div');
+        badge.style.cssText = `
+            display: flex; align-items: center; gap: 6px;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px; padding: 4px 10px; flex-shrink: 0;
+        `;
+        statusDot = document.createElement('span');
+        statusDot.style.cssText = `
+            width: 8px; height: 8px; border-radius: 50%;
+            background: #555; display: inline-block; transition: background 0.3s;
+        `;
+        statusText = document.createElement('span');
+        statusText.style.cssText = `
+            font-size: 11px; font-weight: 700; letter-spacing: 1px;
+            color: #aaa; font-family: 'JetBrains Mono', monospace;
+        `;
+        statusText.textContent = 'NO SIGNAL';
+        badge.appendChild(statusDot);
+        badge.appendChild(statusText);
+        overlay.appendChild(badge);
+
+        // RTSP URL input
+        rtspInput = document.createElement('input');
+        rtspInput.type = 'text';
+        rtspInput.id   = 'rtspUrlInput';
+        rtspInput.placeholder = 'rtsp://192.168.1.10:554/stream  or  rtmp://host/app/stream';
+        rtspInput.value = localStorage.getItem('gcs_rtsp_url') || '';
+        rtspInput.style.cssText = `
+            flex: 1;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 6px; color: #e0e0e0;
+            font-size: 12px; font-family: 'JetBrains Mono', monospace;
+            padding: 5px 10px; outline: none; min-width: 0;
+        `;
+        rtspInput.addEventListener('keydown', e => { if (e.key === 'Enter') connect(); });
+        overlay.appendChild(rtspInput);
+
+        // Connect button
+        connectBtn = document.createElement('button');
+        connectBtn.textContent = '▶ CONNECT';
+        connectBtn.id = 'rtspConnectBtn';
+        connectBtn.style.cssText = `
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border: none; border-radius: 6px;
+            color: #fff; font-size: 11px; font-weight: 700;
+            letter-spacing: 0.8px; padding: 5px 12px; cursor: pointer;
+            white-space: nowrap; transition: opacity 0.2s;
+            font-family: 'JetBrains Mono', monospace;
+        `;
+        connectBtn.addEventListener('click', connect);
+        overlay.appendChild(connectBtn);
+
+        // Disconnect button
+        disconnectBtn = document.createElement('button');
+        disconnectBtn.textContent = '■ STOP';
+        disconnectBtn.id = 'rtspDisconnectBtn';
+        disconnectBtn.style.cssText = `
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            border: none; border-radius: 6px;
+            color: #fff; font-size: 11px; font-weight: 700;
+            letter-spacing: 0.8px; padding: 5px 12px; cursor: pointer;
+            white-space: nowrap; display: none; transition: opacity 0.2s;
+            font-family: 'JetBrains Mono', monospace;
+        `;
+        disconnectBtn.addEventListener('click', disconnect);
+        overlay.appendChild(disconnectBtn);
+
+        container.appendChild(overlay);
+
+        // Fade overlay when mouse leaves
+        container.addEventListener('mouseenter', () => overlay.style.opacity = '1');
+        container.addEventListener('mouseleave', () => overlay.style.opacity = '0.25');
+        overlay.style.opacity = '0.25';
+
+        // Listen for video_status reply from C++ backend
+        _installWsListener();
     }
 
-    /**
-     * Clear container
-     */
-    clearContainer() {
-        while (this.container.firstChild) {
-            this.container.removeChild(this.container.firstChild);
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Listen for video_status events dispatched by websocket.js
+    //  Using a CustomEvent on window is reconnect-safe — no need to re-attach
+    //  when window.ws is replaced after a backend disconnect/reconnect.
+    // ─────────────────────────────────────────────────────────────────────────
+    function _installWsListener() {
+        window.addEventListener('video_status', (evt) => {
+            const msg = evt.detail;
+            if (!msg) return;
+            if (msg.status === 'ready') {
+                _showStream(msg.url || MJPEG_URL);
+            } else if (msg.status === 'stopped') {
+                _hideStream();
+            } else if (msg.status === 'error') {
+                setStatus('ERROR', false);
+                if (connectBtn) connectBtn.disabled = false;
+                console.error('[VideoStream] Backend error:', msg.message);
+                window.MsgConsole?.error('Video: ' + msg.message);
+            }
+        });
+        console.log('[VideoStream] WS listener installed');
+    }
+
+
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Connect
+    // ─────────────────────────────────────────────────────────────────────────
+    function connect() {
+        const url = rtspInput ? rtspInput.value.trim() : '';
+        if (!url) { alert('Please enter an RTSP URL.'); return; }
+
+        localStorage.setItem('gcs_rtsp_url', url);
+
+        setStatus('CONNECTING…', false);
+        if (connectBtn)    { connectBtn.disabled = true; }
+        if (disconnectBtn) disconnectBtn.style.display = 'none';
+
+        // Ask C++ backend to spawn video_server.py
+        _wsSend({ type: 'start_video', rtsp_url: url });
+        console.log('[VideoStream] Sent start_video:', url);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Disconnect
+    // ─────────────────────────────────────────────────────────────────────────
+    function disconnect() {
+        _wsSend({ type: 'stop_video' });
+        _hideStream();
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Helpers
+    // ─────────────────────────────────────────────────────────────────────────
+    function _showStream(url) {
+        connected = true;
+        let retryCount = 0;
+        const MAX_RETRIES = 6;
+
+        const placeholder = document.getElementById('noSignalPlaceholder');
+        if (placeholder) placeholder.style.display = 'none';
+        setStatus('CONNECTING…', false);
+
+        function tryLoad() {
+            imgEl.src = '';                         // clear first to force reload
+            imgEl.src = url + '?t=' + Date.now();
         }
-        this.imgElement = null;
-    }
 
-    /**
-     * Take snapshot
-     */
-    takeSnapshot() {
-        if (!this.isStreaming || !this.imgElement) {
-            console.warn('⚠️ No active stream');
-            alert('No active video stream to capture!');
-            return null;
-        }
-
-        try {
-            const canvas = document.createElement('canvas');
-            canvas.width = this.imgElement.naturalWidth || 1280;
-            canvas.height = this.imgElement.naturalHeight || 720;
-            
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(this.imgElement, 0, 0);
-            
-            const dataUrl = canvas.toDataURL('image/png');
-            
-            const link = document.createElement('a');
-            link.href = dataUrl;
-            link.download = `snapshot_${new Date().toISOString().replace(/[:.]/g, '-')}.png`;
-            link.click();
-            
-            console.log('✅ Snapshot saved');
-            return dataUrl;
-        } catch (error) {
-            console.error('❌ Snapshot failed:', error);
-            alert('Failed to capture snapshot!');
-            return null;
-        }
-    }
-
-    /**
-     * Update UI status
-     */
-    updateStatus(text, isActive) {
-        const statusElement = document.querySelector('.video-status');
-        if (!statusElement) return;
-
-        const statusText = statusElement.querySelector('span');
-        if (statusText) {
-            statusText.textContent = text;
-        }
-
-        statusElement.classList.toggle('live', isActive);
-        statusElement.classList.toggle('no-signal', !isActive);
-    }
-
-    /**
-     * Status check
-     */
-    isVideoStreaming() {
-        return this.isStreaming;
-    }
-
-    /**
-     * Force reconnect
-     */
-    reconnect() {
-        if (this.streamUrl) {
-            console.log('🔄 Manual reconnect');
-            this.reconnectAttempts = 0;
-            this.startStream(this.streamUrl);
-        }
-    }
-}
-
-// ============================================================================
-// ULTRA-SMOOTH VIDEO MANAGER
-// ============================================================================
-
-class UltraSmoothVideoManager {
-    constructor() {
-        this.config = {
-            serverUrls: [
-                'http://192.168.20.205:5000/video_feed',
-                'http://localhost:5000/video_feed',
-                'http://127.0.0.1:5000/video_feed',
-            ],
-            currentServerIndex: 0,
-            autoConnect: true,
-            placeholderImage: 'resources/chakrahyoh.jpg',
-            serverTestTimeout: 2000
+        imgEl.onload = () => {
+            // First frame arrived — stream is live
+            setStatus('LIVE', true);
+            if (connectBtn)    { connectBtn.style.display = 'none'; connectBtn.disabled = false; }
+            if (disconnectBtn) disconnectBtn.style.display = 'inline-block';
         };
 
-        this.handler = null;
-        this.activeServerUrl = null;
-    }
-
-    /**
-     * Test server
-     */
-    async testServer(url) {
-        const statusUrl = url.replace('/video_feed', '/status');
-        
-        try {
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), this.config.serverTestTimeout);
-            
-            const response = await fetch(statusUrl, { signal: controller.signal });
-            clearTimeout(timeoutId);
-            
-            if (response.ok) {
-                const data = await response.json();
-                if (data.camera_active) {
-                    console.log(`✅ Server found: ${url}`);
-                    return true;
-                }
-            }
-        } catch (error) {
-            // Silent fail
-        }
-        
-        return false;
-    }
-
-    /**
-     * Find active server
-     */
-    async findActiveServer() {
-        console.log('🔍 Finding video server...');
-        
-        for (const url of this.config.serverUrls) {
-            if (await this.testServer(url)) {
-                this.activeServerUrl = url;
-                return url;
-            }
-        }
-        
-        console.error('❌ No active server found');
-        return null;
-    }
-
-    /**
-     * Initialize
-     */
-    async initialize() {
-        console.log('⚡ Initializing ULTRA-SMOOTH Video System');
-
-        this.handler = new UltraSmoothVideoHandler(
-            'videoStream',
-            this.config.placeholderImage
-        );
-
-        this.handler.showPlaceholder();
-
-        if (this.config.autoConnect) {
-            const serverUrl = await this.findActiveServer();
-            
-            if (serverUrl) {
-                setTimeout(() => {
-                    console.log('🔌 Connecting to video server...');
-                    this.connectToServer(serverUrl);
-                }, 500);
+        imgEl.onerror = () => {
+            if (connected && retryCount < MAX_RETRIES) {
+                retryCount++;
+                console.log(`[VideoStream] img load failed, retry ${retryCount}/${MAX_RETRIES} in 1s…`);
+                setStatus(`STARTING… (${retryCount}/${MAX_RETRIES})`, false);
+                setTimeout(tryLoad, 1000);
             } else {
-                console.log('📝 Waiting for server to start...');
+                // Give up
+                connected = false;
+                imgEl.style.display = 'none';
+                if (placeholder) placeholder.style.display = 'flex';
+                setStatus('NO SIGNAL', false);
+                if (connectBtn)    { connectBtn.style.display = 'inline-block'; connectBtn.disabled = false; }
+                if (disconnectBtn) disconnectBtn.style.display = 'none';
+                console.error('[VideoStream] Stream failed after retries.');
             }
-        }
-        
-        console.log('✅ ULTRA-SMOOTH Video System Ready');
-    }
-
-    /**
-     * Connect to server
-     */
-    connectToServer(url) {
-        console.log(`🔌 Connecting: ${url}`);
-        this.activeServerUrl = url;
-        this.handler.startStream(url);
-    }
-
-    /**
-     * Connect
-     */
-    connect() {
-        if (this.activeServerUrl) {
-            this.connectToServer(this.activeServerUrl);
-        } else {
-            this.findActiveServer().then(url => {
-                if (url) {
-                    this.connectToServer(url);
-                }
-            });
-        }
-    }
-
-    /**
-     * Disconnect
-     */
-    disconnect() {
-        console.log('🔌 Disconnecting');
-        this.handler.stopStream();
-    }
-
-    /**
-     * Reconnect
-     */
-    reconnect() {
-        this.handler.reconnect();
-    }
-
-    /**
-     * Snapshot
-     */
-    takeSnapshot() {
-        return this.handler.takeSnapshot();
-    }
-
-    /**
-     * Status
-     */
-    isStreaming() {
-        return this.handler ? this.handler.isVideoStreaming() : false;
-    }
-
-    /**
-     * Change source
-     */
-    changeSource(url) {
-        console.log('🔄 Changing source:', url);
-        this.activeServerUrl = url;
-        this.handler.stopStream();
-        this.connectToServer(url);
-    }
-
-    /**
-     * Info
-     */
-    getServerInfo() {
-        return {
-            activeUrl: this.activeServerUrl,
-            isStreaming: this.isStreaming(),
-            availableServers: this.config.serverUrls
         };
+
+        imgEl.style.display = 'block';
+        tryLoad();
     }
-}
 
-// ============================================================================
-// GLOBAL INSTANCE
-// ============================================================================
+    function _hideStream() {
+        connected = false;
+        imgEl.src = '';
+        imgEl.style.display = 'none';
 
-let ultraSmoothVideo = null;
+        const placeholder = document.getElementById('noSignalPlaceholder');
+        if (placeholder) placeholder.style.display = 'flex';
 
-async function initializeUltraSmoothVideo() {
-    if (!ultraSmoothVideo) {
-        ultraSmoothVideo = new UltraSmoothVideoManager();
-        await ultraSmoothVideo.initialize();
+        setStatus('NO SIGNAL', false);
+        if (connectBtn)    { connectBtn.style.display = 'inline-block'; connectBtn.disabled = false; }
+        if (disconnectBtn) disconnectBtn.style.display = 'none';
     }
-    return ultraSmoothVideo;
-}
 
-function getUltraSmoothVideo() {
-    return ultraSmoothVideo || initializeUltraSmoothVideo();
-}
+    function _wsSend(obj) {
+        if (window.ws && window.ws.readyState === WebSocket.OPEN) {
+            window.ws.send(JSON.stringify(obj));
+        } else {
+            console.warn('[VideoStream] WebSocket not ready, command dropped:', obj.type);
+        }
+    }
 
-// ============================================================================
-// GLOBAL API
-// ============================================================================
+    function setStatus(label, live) {
+        if (statusDot)  statusDot.style.background  = live ? '#22c55e' : '#555';
+        if (statusText) {
+            statusText.textContent = label;
+            statusText.style.color = live ? '#22c55e' : '#aaa';
+        }
+        if (statusBadge) {
+            statusBadge.classList.toggle('live',      live);
+            statusBadge.classList.toggle('no-signal', !live);
+            const s = statusBadge.querySelector('span');
+            if (s) s.textContent = label;
+        }
+    }
 
+    // ─────────────────────────────────────────────────────────────────────────
+    //  Public API (backward-compatible)
+    // ─────────────────────────────────────────────────────────────────────────
+    return {
+        init()          { buildUI(); },
+        connect,
+        disconnect,
+        isStreaming()   { return connected; },
+        setRtspUrl(u)   { if (rtspInput) rtspInput.value = u; },
+        getRtspUrl()    { return rtspInput ? rtspInput.value : ''; },
+        takeSnapshot() {
+            if (!imgEl || !imgEl.src) { alert('No video active.'); return null; }
+            // Draw current frame onto a canvas and download
+            const canvas = document.createElement('canvas');
+            canvas.width  = imgEl.naturalWidth  || 1280;
+            canvas.height = imgEl.naturalHeight || 720;
+            canvas.getContext('2d').drawImage(imgEl, 0, 0);
+            const link = document.createElement('a');
+            link.download = `snapshot_${new Date().toISOString().replace(/[:.]/g,'-')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            return link.href;
+        }
+    };
+
+})();
+
+/* ── Backward-compatible shim ──────────────────────────────────────────────── */
 window.VideoStream = {
-    connect: () => getUltraSmoothVideo().then(v => v.connect()),
-    disconnect: () => getUltraSmoothVideo().then(v => v.disconnect()),
-    reconnect: () => getUltraSmoothVideo().then(v => v.reconnect()),
-    takeSnapshot: () => getUltraSmoothVideo().then(v => v.takeSnapshot()),
-    changeSource: (url) => getUltraSmoothVideo().then(v => v.changeSource(url)),
-    isStreaming: () => ultraSmoothVideo ? ultraSmoothVideo.isStreaming() : false,
-    getManager: () => getUltraSmoothVideo(),
-    getServerInfo: () => ultraSmoothVideo ? ultraSmoothVideo.getServerInfo() : null
+    connect:      () => VideoStreamController.connect(),
+    disconnect:   () => VideoStreamController.disconnect(),
+    reconnect:    () => VideoStreamController.connect(),
+    isStreaming:  () => VideoStreamController.isStreaming(),
+    takeSnapshot: () => VideoStreamController.takeSnapshot(),
+    setRtspUrl:   (u) => VideoStreamController.setRtspUrl(u),
+    getRtspUrl:   () => VideoStreamController.getRtspUrl(),
 };
 
-// Auto-initialize
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeUltraSmoothVideo);
-} else {
-    initializeUltraSmoothVideo();
+/* ── Auto-init ─────────────────────────────────────────────────────────────── */
+function _initVideoStream() {
+    VideoStreamController.init();
+    console.log('[VideoStream] RTSP video stream controller ready');
 }
 
-console.log('%c⚡ ULTRA-SMOOTH VIDEO READY - TV-QUALITY STREAMING', 'color: #0f0; font-weight: bold; font-size: 16px;');
-console.log('%c📺 Zero-lag, buttery smooth video like live TV', 'color: #0af;');
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _initVideoStream);
+} else {
+    _initVideoStream();
+}

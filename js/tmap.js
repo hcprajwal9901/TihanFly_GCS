@@ -23,9 +23,6 @@ class TMap {
         // Store markers
         this.markers = [];
         
-        // Per-vehicle drone markers  { sysid -> L.Marker }
-        this.droneMarkers = {};
-        
         // Click handler control
         this.clickEnabled = false;
         this.clickCallback = null;
@@ -51,9 +48,9 @@ class TMap {
                     const x = coords.x;
                     const y = coords.y;
                     const z = this._getZoomForUrl();
-                    
+
                     if (z > 22) return '';
-                    
+
                     const server = (x + y) % 4;
                     return `https://mt${server}.google.com/vt/lyrs=s&x=${x}&y=${y}&z=${z}`;
                 }
@@ -61,7 +58,7 @@ class TMap {
 
             new GoogleSatellite('', {
                 maxZoom: 22,
-                attribution: '© Google'
+                attribution: '\u00a9 Google'
             }).addTo(this.map);
         }
     }
@@ -81,7 +78,7 @@ class TMap {
         const defaults = {
             iconSize: [80, 80],
             iconAnchor: [20, 40],
-            iconUrl: 'resources/icon/home.png',
+            iconUrl: '../resources/icon/home.png',
             permanentLabel: true,
             labelOffset: [0, 5],
         };
@@ -498,10 +495,24 @@ disableWeatherClicks() {
         });
         return marker;
     }
+    // ========================================================================
+    // DRONE POSITION - Live GPS marker updated from WebSocket backend
+    // ========================================================================
+
+    /**
+     * Update (or create) the live drone position marker on the map.
+     * Called every time a { type:"gps" } JSON frame arrives from the backend (~4 Hz).
+     *
+     * @param {number} lat      - Latitude  (degrees)
+     * @param {number} lng      - Longitude (degrees)
+     * @param {number} heading  - Heading   (degrees, 0 = North)
+     */
+    updateDronePosition(lat, lng, heading = 0) {
+        this.updateDronePositionForSysid(1, lat, lng, heading);
+    }
+
     /**
      * Update the drone marker for a specific vehicle (sysid-keyed).
-     * Creates the marker on first call, moves it on subsequent calls.
-     * heading is degrees (converted from yaw radians before calling).
      * @param {number} sysid
      * @param {number} lat
      * @param {number} lng
@@ -510,21 +521,28 @@ disableWeatherClicks() {
     updateDronePositionForSysid(sysid, lat, lng, heading = 0) {
         if (!lat || !lng) return;
 
+        // Initialize droneMarkers if it doesn't exist
+        if (!this.droneMarkers) {
+            this.droneMarkers = {};
+            this.droneAutoPan = true;
+            this._gpsFixCount = 0;
+        }
+
         // Pick a stable colour per sysid
         const COLOURS = ['#E6007E','#00c8ff','#ffe033','#4ade80','#f97316','#a78bfa'];
-        const colour  = COLOURS[(sysid - 1) % COLOURS.length];
+        const colour  = COLOURS[(sysid - 1) % COLOURS.length] || '#E6007E';
 
+        // ── Build icon HTML ───────────────────────────────────────────────
         const iconHtml = `
-            <div style="
-                width:40px;height:40px;
-                display:flex;align-items:center;justify-content:center;
-                position:relative;
+            <div class="drone-marker-wrap" style="
+                width: 48px; height: 48px;
+                position: relative;
             ">
-                <svg width="40" height="40" viewBox="0 0 40 40" style="transform:rotate(${heading}deg); transition: transform 0.2s ease;">
-                    <circle cx="20" cy="20" r="18" fill="${colour}" opacity="0.25"/>
-                    <circle cx="20" cy="20" r="12" fill="${colour}"/>
-                    <path d="M 20 8 L 23 18 L 20 15 L 17 18 Z" fill="white"/>
-                </svg>
+                <img src="../resources/icon/drone.svg"
+                     style="width:48px; height:48px; position:absolute; inset:0;
+                            transform: rotate(${heading}deg); transition: transform 0.4s ease;
+                            filter: drop-shadow(0 2px 6px ${colour});"
+                     alt="drone" />
                 <div style="
                     position:absolute;bottom:-16px;left:50%;
                     transform:translateX(-50%);
@@ -535,55 +553,91 @@ disableWeatherClicks() {
                 ">D-${sysid}</div>
             </div>`;
 
+        // ── Inject CSS keyframes once ─────────────────────────────────────
+        if (!document.getElementById('drone-marker-style')) {
+            const style = document.createElement('style');
+            style.id = 'drone-marker-style';
+            style.textContent = `
+                @keyframes drone-pulse {
+                    0%   { transform: scale(1);   opacity: 0.7; }
+                    70%  { transform: scale(2.2); opacity: 0;   }
+                    100% { transform: scale(2.2); opacity: 0;   }
+                }
+                .leaflet-drone-icon { background: transparent !important; border: none !important; }
+            `;
+            document.head.appendChild(style);
+        }
+
         if (this.droneMarkers[sysid]) {
-            // Move existing marker
+            // Update marker position, icon and heading
             this.droneMarkers[sysid].setLatLng([lat, lng]);
-            const el = this.droneMarkers[sysid].getElement();
-            if (el) {
-                const svg = el.querySelector('svg');
-                if (svg) svg.style.transform = `rotate(${heading}deg)`;
+
+            const updatedIcon = L.divIcon({
+                className: 'leaflet-drone-icon',
+                html: iconHtml,
+                iconSize:   [48, 48],
+                iconAnchor: [24, 24]
+            });
+            this.droneMarkers[sysid].setIcon(updatedIcon);
+
+            if (this.droneMarkers[sysid].isPopupOpen()) {
+                const latEl = document.getElementById(`drone-popup-lat-${sysid}`);
+                const lngEl = document.getElementById(`drone-popup-lng-${sysid}`);
+                if (latEl) latEl.textContent = `Lat: ${lat.toFixed(6)}`;
+                if (lngEl) lngEl.textContent = `Lng: ${lng.toFixed(6)}`;
             }
         } else {
             // Create new marker
-            const marker = L.marker([lat, lng], {
-                icon: L.divIcon({
-                    className: 'drone-marker',
-                    html: iconHtml,
-                    iconSize:   [40, 56],
-                    iconAnchor: [20, 20]
-                }),
-                zIndexOffset: 1000
-            }).addTo(this.map);
-
-            marker.bindPopup(`<b>🚁 Drone ${sysid}</b><br>Lat: ${lat.toFixed(6)}<br>Lng: ${lng.toFixed(6)}`);
-            marker.on('click', () => {
-                marker.bindPopup(`<b>🚁 Drone ${sysid}</b><br>Lat: ${lat.toFixed(6)}<br>Lng: ${lng.toFixed(6)}`).openPopup();
+            const icon = L.divIcon({
+                className: 'leaflet-drone-icon',
+                html: iconHtml,
+                iconSize:   [48, 48],
+                iconAnchor: [24, 24]
             });
 
-            this.droneMarkers[sysid] = marker;
-            console.log(`✅ Drone marker created for sysid=${sysid}`);
-        }
-    }
+            const marker = L.marker([lat, lng], {
+                icon,
+                zIndexOffset: 2000,
+                interactive: true
+            }).addTo(this.map);
 
-    /**
-     * Remove markers for sysids not present in activeSysids.
-     * @param {number[]} activeSysids
-     */
-    pruneStaleVehicleMarkers(activeSysids) {
-        const active = new Set(activeSysids);
-        for (const sid of Object.keys(this.droneMarkers)) {
-            if (!active.has(+sid)) {
-                this.map.removeLayer(this.droneMarkers[sid]);
-                delete this.droneMarkers[sid];
-                console.log(`🗑️ Removed stale drone marker sysid=${sid}`);
+            marker.bindPopup(`
+                <b>🚁 Drone ${sysid}</b><br>
+                <span id="drone-popup-lat-${sysid}">Lat: ${lat.toFixed(6)}</span><br>
+                <span id="drone-popup-lng-${sysid}">Lng: ${lng.toFixed(6)}</span>
+            `);
+
+            this.droneMarkers[sysid] = marker;
+            console.log(`✅ Drone marker created for sysid=${sysid} at ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+        }
+
+        // ── Auto-pan logic (only for sysid 1 or selected) ─────────────────
+        const isTarget = window.selectedSysId === sysid || (window.selectedSysId === 0 && sysid === (window._primarySysId || 1));
+        
+        if (!this.droneAutoPan || !isTarget) return;
+
+        this._gpsFixCount = (this._gpsFixCount || 0) + 1;
+
+        if (this._gpsFixCount <= 20) {
+            this.map.setView([lat, lng], 17, { animate: false });
+            if (this._gpsFixCount === 1 || this._gpsFixCount === 20) {
+                console.log(`🚁 [fix ${this._gpsFixCount}] Snapped map to drone ${sysid}: ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+            }
+            if (this._gpsFixCount === 20) {
+                this.droneAutoPan = false;
+                console.log('🚁 Initial map lock complete. Auto-pan disabled.');
             }
         }
     }
 
     /**
-     * Update drone position marker (backward-compat: always sysid=1)
+     * Toggle drone auto-pan programmatically.
+     * @param {boolean} enabled
      */
-    updateDronePosition(lat, lng, heading = 0) {
-        this.updateDronePositionForSysid(1, lat, lng, heading);
+    setDroneAutoPan(enabled) {
+        this.droneAutoPan = enabled;
+        // Reset fix counter so Phase 1 snap fires again when re-enabled
+        if (enabled) this._gpsFixCount = 0;
+        console.log(`🚁 Drone auto-pan: ${enabled ? 'ON' : 'OFF'}`);
     }
 }

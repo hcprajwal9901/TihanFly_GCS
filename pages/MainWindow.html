@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TiHANFly - Professional Drone GCS</title>
-    <link rel="icon" type="image/x-icon" href="resources/icon/tihan.png">
+    <link rel="icon" type="image/x-icon" href="../resources/icon/tihan.png">
 
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="../leaflet/leaflet.css" />
 
     <!-- ── Drone count badge pulse animation ────────────────────────────── -->
     <style>
@@ -80,12 +80,12 @@
 
                 var battIcon = document.querySelector('.battery-indicator .indicator-icon');
                 if (battIcon) {
-                    if (window.TelemetryStore.batteryPercent > 80) battIcon.src = 'resources/BatteryGreen.svg';
-                    else if (window.TelemetryStore.batteryPercent > 60) battIcon.src = 'resources/BatteryYellowGreen.svg';
-                    else if (window.TelemetryStore.batteryPercent > 40) battIcon.src = 'resources/BatteryYellow.svg';
-                    else if (window.TelemetryStore.batteryPercent > 20) battIcon.src = 'resources/BatteryOrange.svg';
-                    else if (window.TelemetryStore.batteryPercent > 5) battIcon.src = 'resources/BatteryRed.svg';
-                    else battIcon.src = 'resources/BatteryZero.svg';
+                    if (window.TelemetryStore.batteryPercent > 80) battIcon.src = '../resources/BatteryGreen.svg';
+                    else if (window.TelemetryStore.batteryPercent > 60) battIcon.src = '../resources/BatteryYellowGreen.svg';
+                    else if (window.TelemetryStore.batteryPercent > 40) battIcon.src = '../resources/BatteryYellow.svg';
+                    else if (window.TelemetryStore.batteryPercent > 20) battIcon.src = '../resources/BatteryOrange.svg';
+                    else if (window.TelemetryStore.batteryPercent > 5) battIcon.src = '../resources/BatteryRed.svg';
+                    else battIcon.src = '../resources/BatteryZero.svg';
                 }
 
                 var elSigQual = document.getElementById('signalQualText');
@@ -102,7 +102,7 @@
                     else if (window.TelemetryStore.signalStrength > 40) rank = 60;
                     else if (window.TelemetryStore.signalStrength > 20) rank = 40;
                     else if (window.TelemetryStore.signalStrength > 0) rank = 20;
-                    sigIcon.src = 'resources/signal' + rank + '.svg';
+                    sigIcon.src = '../resources/signal' + rank + '.svg';
                 }
             }
 
@@ -249,48 +249,48 @@
     </script>
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="flight-controls.css">
-    <link rel="stylesheet" href="message-console.css">
-    <link rel="stylesheet" href="weather-dashboard.css">
-    <link rel="stylesheet" href="dropdown-menu.css">
-    <link rel="stylesheet" href="plan-flight.css">
-    <link rel="stylesheet" href="command-editor.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/flight-controls.css">
+    <link rel="stylesheet" href="../css/message-console.css">
+    <link rel="stylesheet" href="../css/weather-dashboard.css">
+    <link rel="stylesheet" href="../css/dropdown-menu.css">
+    <link rel="stylesheet" href="../css/plan-flight.css">
+    <link rel="stylesheet" href="../css/command-editor.css">
 
-    <link rel="stylesheet" href="waypoint-context-menu.css">
-    <link rel="stylesheet" href="settings-window.css">
+    <link rel="stylesheet" href="../css/waypoint-context-menu.css">
+    <link rel="stylesheet" href="../css/settings-window.css">
     <!-- Settings panels: one CSS per panel -->
-    <link rel="stylesheet" href="calib-accel.css">
-    <link rel="stylesheet" href="calib-compass.css">
-    <link rel="stylesheet" href="calib-radio.css">
-    <link rel="stylesheet" href="calib-esc.css">
+    <link rel="stylesheet" href="../css/calib-accel.css">
+    <link rel="stylesheet" href="../css/calib-compass.css">
+    <link rel="stylesheet" href="../css/calib-radio.css">
+    <link rel="stylesheet" href="../css/calib-esc.css">
     <!-- v2: param-user replaces v1 param-switch (reverted) -->
-    <link rel="stylesheet" href="param-switch.css">
-    <link rel="stylesheet" href="param-full.css">
-    <link rel="stylesheet" href="vehicle-config.css">
+    <link rel="stylesheet" href="../css/param-switch.css">
+    <link rel="stylesheet" href="../css/param-full.css">
+    <link rel="stylesheet" href="../css/vehicle-config.css">
 
     <!-- flight modes panel -->
-    <link rel="stylesheet" href="flight-modes.css">
+    <link rel="stylesheet" href="../css/flight-modes.css">
     <!-- failsafe panel -->
-    <link rel="stylesheet" href="failsafe.css">
+    <link rel="stylesheet" href="../css/failsafe.css">
     <!-- geofence panel -->
-    <link rel="stylesheet" href="geofence.css">
+    <link rel="stylesheet" href="../css/geofence.css">
     <!-- servo output panel -->
-    <link rel="stylesheet" href="servo-output.css">
+    <link rel="stylesheet" href="../css/servo-output.css">
     <!-- motor test panel -->
-    <link rel="stylesheet" href="motor-test.css">
+    <link rel="stylesheet" href="../css/motor-test.css">
     <!-- frame type panel -->
-    <link rel="stylesheet" href="frame-type.css">
+    <link rel="stylesheet" href="../css/frame-type.css">
     <!-- initial tune parameters panel -->
-    <link rel="stylesheet" href="initial-tune.css">
+    <link rel="stylesheet" href="../css/initial-tune.css">
     <!-- camera controls: photo capture, video recording, gimbal panel -->
-    <link rel="stylesheet" href="camera-controls.css">
+    <link rel="stylesheet" href="../css/camera-controls.css">
     <!-- communication link panel -->
-    <link rel="stylesheet" href="comm-link.css">
+    <link rel="stylesheet" href="../css/comm-link.css">
     <!-- PID Tuning panel -->
-    <link rel="stylesheet" href="pid-tuning.css">
+    <link rel="stylesheet" href="../css/pid-tuning.css">
     <!-- Flight HUD -->
-    <link rel="stylesheet" href="flight-hud.css">
+    <link rel="stylesheet" href="../css/flight-hud.css">
 
 </head>
 
@@ -308,8 +308,8 @@
                     v2: hamburger menu icon as primary logo trigger (JS can swap).
                     v1: tihan.png logo (kept as alt, hidden by default).
                 -->
-                <img src="resources/menu.svg" class="header-logo" alt="Menu" id="tihanLogo">
-                <img src="resources/icon/tihan.png" class="header-logo" alt="TiHAN Logo" id="tihanLogoAlt"
+                <img src="../resources/menu.svg" class="header-logo" alt="Menu" id="tihanLogo">
+                <img src="../resources/icon/tihan.png" class="header-logo" alt="TiHAN Logo" id="tihanLogoAlt"
                     style="display:none;">
                 <span class="status-badge ready">Ready To Fly</span>
             </div>
@@ -318,13 +318,13 @@
             <div class="header-center">
                 <!-- Mode Indicator (v2: dynamic; v1: static "Hold") -->
                 <div class="indicator-item" id="modeIndicator">
-                    <img src="resources/mode.svg" class="indicator-icon" alt="Mode">
+                    <img src="../resources/mode.svg" class="indicator-icon" alt="Mode">
                     <span class="indicator-text" id="modeIndicatorText">Hold</span>
                 </div>
 
                 <!-- Signal/RC Indicator (v2: dynamic icon; v1: static Megaphone + values) -->
                 <div class="indicator-item" id="signalIndicator" title="RC Signal Rank">
-                    <img src="resources/Signal0.svg" class="indicator-icon" alt="Signal" id="signalIndicatorIcon">
+                    <img src="../resources/Signal0.svg" class="indicator-icon" alt="Signal" id="signalIndicatorIcon">
                     <!-- v1 fallback values — JS shows/hides as needed -->
                     <span class="indicator-text" id="signalRankText" style="display:none;">10</span>
                     <span class="indicator-subtext" id="signalQualText" style="display:none;">0.7</span>
@@ -337,12 +337,12 @@
                             style="font-size:10px;font-weight:700;color:#888;margin-right:4px;letter-spacing:0.5px;">SATS</span>
                         <span class="indicator-text" id="gpsSatCountText">--</span>
                     </div>
-                    <img src="resources/Gps.svg" class="indicator-icon" alt="GPS">
+                    <img src="../resources/Gps.svg" class="indicator-icon" alt="GPS">
                 </div>
 
                 <!-- Battery Indicator (v2: voltage + percent; v1: percent only) -->
                 <div class="indicator-item battery-indicator" title="Battery Info">
-                    <img src="resources/BatteryGreen.svg" class="indicator-icon" alt="Battery">
+                    <img src="../resources/BatteryGreen.svg" class="indicator-icon" alt="Battery">
                     <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:center;
                                 font-size:11px;margin-right:4px;font-weight:600;line-height:1.1;">
                         <span id="battVoltageText">0.0 V</span>
@@ -519,7 +519,7 @@
                     </div>
                 </div>
 
-                <img src="resources/icon/tihan.png" class="dx4-logo" alt="DX4 Logo">
+                <img src="../resources/icon/tihan.png" class="dx4-logo" alt="DX4 Logo">
             </div>
         </div>
 
@@ -572,17 +572,17 @@
             </button>
 
             <button id="takeoffBtn" class="flight-btn takeoff-btn" title="Takeoff">
-                <img src="resources/takeoff.svg" alt="Takeoff" class="btn-icon">
+                <img src="../resources/takeoff.svg" alt="Takeoff" class="btn-icon">
                 <span class="btn-label">TAKEOFF</span>
             </button>
 
             <button id="landBtn" class="flight-btn land-btn" title="Land">
-                <img src="resources/land.svg" alt="Land" class="btn-icon">
+                <img src="../resources/land.svg" alt="Land" class="btn-icon">
                 <span class="btn-label">LAND</span>
             </button>
 
             <button id="rtlBtn" class="flight-btn rtl-btn" title="Return to Launch">
-                <img src="resources/rtl.svg" alt="RTL" class="btn-icon">
+                <img src="../resources/rtl.svg" alt="RTL" class="btn-icon">
                 <span class="btn-label">RTL</span>
             </button>
 
@@ -590,7 +590,7 @@
             <div class="flight-mode-dropdown-wrapper">
                 <button id="flightModeBtn" class="flight-btn flight-mode-btn" title="Flight Modes">
                     <!-- v2 image icon (default) -->
-                    <img src="resources/mode.svg" alt="Mode" class="btn-icon mode-svg-icon" id="modeBtnImg">
+                    <img src="../resources/mode.svg" alt="Mode" class="btn-icon mode-svg-icon" id="modeBtnImg">
                     <!-- v1 inline star SVG — hidden by default; restore via JS if needed -->
                     <svg id="modeBtnSvg" class="btn-icon mode-svg-icon" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg" style="display:none;">
@@ -644,25 +644,25 @@
         <!-- DROPDOWN MENU STRIP -->
         <div class="dropdown-menu-strip" id="dropdownMenuStrip">
             <button id="planFlightBtn" class="dropdown-menu-btn" title="Plan Flight" data-action="plan-flight">
-                <img src="resources/flightplan.png" alt="Plan Flight" class="dropdown-btn-icon">
+                <img src="../resources/flightplan.png" alt="Plan Flight" class="dropdown-btn-icon">
                 <span class="dropdown-btn-label">Plan</span>
             </button>
 
             <button id="analyzeBtn" class="dropdown-menu-btn" title="Analyze Tools" data-action="analyze-tools">
-                <img src="resources/analayze.png" alt="Analyze" class="dropdown-btn-icon">
+                <img src="../resources/analayze.png" alt="Analyze" class="dropdown-btn-icon">
                 <span class="dropdown-btn-label">Analyze</span>
             </button>
 
             <button id="vehicleConfigBtn" class="dropdown-menu-btn" title="Vehicle Configuration"
                 data-action="vehicle-config">
-                <img src="resources/vechile.png" alt="Config" class="dropdown-btn-icon">
+                <img src="../resources/vechile.png" alt="Config" class="dropdown-btn-icon">
                 <span class="dropdown-btn-label">Config</span>
             </button>
 
             <!-- v2: setting.svg (semantically correct); v1 used BatteryGreen.svg -->
             <button id="appSettingsBtn" class="dropdown-menu-btn" title="Application Settings"
                 data-action="app-settings">
-                <img src="resources/setting.svg" alt="Settings" class="dropdown-btn-icon">
+                <img src="../resources/setting.svg" alt="Settings" class="dropdown-btn-icon">
                 <span class="dropdown-btn-label">Settings</span>
             </button>
         </div>
@@ -672,7 +672,7 @@
 
             <div class="plan-menu-dropdown">
                 <button class="plan-menu-btn" title="File">
-                    <img src="resources/flightplan.png" alt="File" class="plan-menu-icon">
+                    <img src="../resources/flightplan.png" alt="File" class="plan-menu-icon">
                     <span class="plan-menu-label">FILE</span>
                 </button>
                 <div class="plan-menu-content">
@@ -687,7 +687,7 @@
 
             <div class="plan-menu-dropdown">
                 <button class="plan-menu-btn" title="Takeoff">
-                    <img src="resources/takeoff.svg" alt="Takeoff" class="plan-menu-icon">
+                    <img src="../resources/takeoff.svg" alt="Takeoff" class="plan-menu-icon">
                     <span class="plan-menu-label">TAKEOFF</span>
                 </button>
                 <div class="plan-menu-content">
@@ -699,7 +699,7 @@
 
             <div class="plan-menu-dropdown">
                 <button class="plan-menu-btn" title="Waypoint">
-                    <img src="resources/Gps.svg" alt="Waypoint" class="plan-menu-icon">
+                    <img src="../resources/Gps.svg" alt="Waypoint" class="plan-menu-icon">
                     <span class="plan-menu-label">WAYPOINT</span>
                 </button>
                 <div class="plan-menu-content">
@@ -715,7 +715,7 @@
 
             <div class="plan-menu-dropdown">
                 <button class="plan-menu-btn" title="Polygon">
-                    <img src="resources/polygon.png" alt="Polygon" class="plan-menu-icon">
+                    <img src="../resources/polygon.png" alt="Polygon" class="plan-menu-icon">
                     <span class="plan-menu-label">POLYGON</span>
                 </button>
                 <div class="plan-menu-content">
@@ -732,7 +732,7 @@
 
             <div class="plan-menu-dropdown">
                 <button class="plan-menu-btn" title="Return">
-                    <img src="resources/rtl.svg" alt="Return" class="plan-menu-icon">
+                    <img src="../resources/rtl.svg" alt="Return" class="plan-menu-icon">
                     <span class="plan-menu-label">RETURN</span>
                 </button>
                 <div class="plan-menu-content">
@@ -743,7 +743,7 @@
 
             <div class="plan-menu-dropdown">
                 <button class="plan-menu-btn" title="Center">
-                    <img src="resources/analayze.png" alt="Center" class="plan-menu-icon">
+                    <img src="../resources/analayze.png" alt="Center" class="plan-menu-icon">
                     <span class="plan-menu-label">CENTER</span>
                 </button>
                 <div class="plan-menu-content">
@@ -1240,7 +1240,7 @@
             <div class="vc-drone-list" id="vcDroneList">
 
                 <div class="vc-drone-card" data-drone="ti-shadow">
-                    <div class="vc-drone-img-wrap"><img src="resources/firmware/ti-shadow.png" alt="Ti-Shadow"
+                    <div class="vc-drone-img-wrap"><img src="../resources/firmware/ti-shadow.png" alt="Ti-Shadow"
                             class="vc-drone-img"></div>
                     <div class="vc-drone-info"><span class="vc-drone-name">Ti-Shadow</span><span
                             class="vc-drone-desc">Surveillance Drone</span></div>
@@ -1264,7 +1264,7 @@
                 </div>
 
                 <div class="vc-drone-card" data-drone="spider">
-                    <div class="vc-drone-img-wrap"><img src="resources/firmware/spider.png" alt="Spider Drone"
+                    <div class="vc-drone-img-wrap"><img src="../resources/firmware/spider.png" alt="Spider Drone"
                             class="vc-drone-img"></div>
                     <div class="vc-drone-info"><span class="vc-drone-name">Spider Drone</span><span
                             class="vc-drone-desc">Hexacopter Drone</span></div>
@@ -1288,7 +1288,7 @@
                 </div>
 
                 <div class="vc-drone-card" data-drone="kala">
-                    <div class="vc-drone-img-wrap"><img src="resources/firmware/Kala.png" alt="Kala Drone"
+                    <div class="vc-drone-img-wrap"><img src="../resources/firmware/Kala.png" alt="Kala Drone"
                             class="vc-drone-img"></div>
                     <div class="vc-drone-info"><span class="vc-drone-name">Kala Drone</span><span
                             class="vc-drone-desc">Payload Dropping Drone</span></div>
@@ -1312,7 +1312,7 @@
                 </div>
 
                 <div class="vc-drone-card" data-drone="palyanka">
-                    <div class="vc-drone-img-wrap"><img src="resources/firmware/palyanka.png" alt="Palyanka Drone"
+                    <div class="vc-drone-img-wrap"><img src="../resources/firmware/palyanka.png" alt="Palyanka Drone"
                             class="vc-drone-img"></div>
                     <div class="vc-drone-info"><span class="vc-drone-name">Palyanka Drone</span><span
                             class="vc-drone-desc">Air Taxi</span></div>
@@ -1336,7 +1336,7 @@
                 </div>
 
                 <div class="vc-drone-card" data-drone="chakravyuh">
-                    <div class="vc-drone-img-wrap"><img src="resources/firmware/Chakravyuh.png" alt="Chakravyuh Drone"
+                    <div class="vc-drone-img-wrap"><img src="../resources/firmware/Chakravyuh.png" alt="Chakravyuh Drone"
                             class="vc-drone-img"></div>
                     <div class="vc-drone-info">
                         <span class="vc-drone-name">Chakrayukhan Drone</span>
@@ -1471,94 +1471,94 @@
     <!-- v2: Chart.js for log browser graphs -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="../leaflet/leaflet.js"></script>
 
     <!-- CORE MAP -->
-    <script src="tmap.js"></script>
+    <script src="../js/tmap.js"></script>
 
     <!-- UI COMPONENTS -->
 
-    <script src="compass.js"></script>
-    <script src="video-stream.js"></script>
+    <script src="../js/compass.js"></script>
+    <script src="../js/video-stream.js"></script>
     <!-- Camera controls: photo, recording, gimbal — must come after video-stream.js -->
-    <script src="camera-controls.js"></script>
-    <script src="flight-controls.js"></script>
-    <script src="messaage-console.js"></script>
-    <script src="weather-dashboard.js"></script>
+    <script src="../js/camera-controls.js"></script>
+    <script src="../js/flight-controls.js"></script>
+    <script src="../js/messaage-console.js"></script>
+    <script src="../js/weather-dashboard.js"></script>
     <!-- v2: Analyze tools + log review -->
-    <script src="analyze-tools.js"></script>
-    <script src="review-log.js"></script>
-    <script src="log-download.js"></script>
-    <script src="dropdown-menu.js"></script>
-    <script src="data-persistence.js"></script>
+    <script src="../js/analyze-tools.js"></script>
+    <script src="../js/review-log.js"></script>
+    <script src="../js/log-download.js"></script>
+    <script src="../js/dropdown-menu.js"></script>
+    <script src="../js/data-persistence.js"></script>
 
     <!-- WAYPOINT SYSTEM -->
-    <script src="waypoint-manager.js"></script>
-    <script src="waypoint-context-menu.js"></script>
+    <script src="../js/waypoint-manager.js"></script>
+    <script src="../js/waypoint-context-menu.js"></script>
 
     <!-- COMMAND EDITOR -->
-    <script src="command-editor.js"></script>
+    <script src="../js/command-editor.js"></script>
 
     <!-- MISSION FILE MANAGER -->
-    <script src="plan-flight-modules/mission-file-manager.js"></script>
+    <script src="../plan-flight-modules/mission-file-manager.js"></script>
 
     <!-- POLYGON MANAGER -->
-    <script src="plan-flight-modules/polygon-manager.js?v=9"></script>
+    <script src="../plan-flight-modules/polygon-manager.js?v=9"></script>
 
     <!-- PLAN FLIGHT MODULES -->
-    <script src="plan-flight-modules/plan-flight-core.js"></script>
-    <script src="plan-flight-modules/plan-flight-ui.js"></script>
-    <script src="plan-flight-modules/plan-flight-file.js"></script>
-    <script src="plan-flight-modules/plan-flight-takeoff.js"></script>
-    <script src="plan-flight-modules/plan-flight-waypoint.js"></script>
-    <script src="plan-flight-modules/plan-flight-polygon.js"></script>
-    <script src="plan-flight-modules/polygon-backend-integration.js"></script>
-    <script src="plan-flight-modules/plan-flight-return.js"></script>
-    <script src="plan-flight-modules/plan-flight-center.js"></script>
-    <script src="plan-flight-modules/plan-flight-weather.js"></script>
-    <script src="plan-flight-modules/plan-flight-menu-router.js"></script>
-    <script src="plan-flight-modules/websocket.js"></script>
-    <script src="plan-flight-modules/plan-flight-mission-send.js?v=2"></script>
+    <script src="../plan-flight-modules/plan-flight-core.js"></script>
+    <script src="../plan-flight-modules/plan-flight-ui.js"></script>
+    <script src="../plan-flight-modules/plan-flight-file.js"></script>
+    <script src="../plan-flight-modules/plan-flight-takeoff.js"></script>
+    <script src="../plan-flight-modules/plan-flight-waypoint.js"></script>
+    <script src="../plan-flight-modules/plan-flight-polygon.js"></script>
+    <script src="../plan-flight-modules/polygon-backend-integration.js"></script>
+    <script src="../plan-flight-modules/plan-flight-return.js"></script>
+    <script src="../plan-flight-modules/plan-flight-center.js"></script>
+    <script src="../plan-flight-modules/plan-flight-weather.js"></script>
+    <script src="../plan-flight-modules/plan-flight-menu-router.js"></script>
+    <script src="../plan-flight-modules/websocket.js"></script>
+    <script src="../plan-flight-modules/plan-flight-mission-send.js?v=2"></script>
 
     <!-- Internationalisation -->
-    <script src="i18n.js"></script>
+    <script src="../js/i18n.js"></script>
 
 
 
     <!-- MAIN APPLICATION (v=3 cache-bust from v2; must be last) -->
-    <script src="multi-vehicle.js"></script>
-    <script src="app.js?v=3"></script>
-    <script src="settings-window.js"></script>
-    <script src="calib-level.js"></script>
-    <script src="calib-accel.js"></script>
-    <script src="calib-compass.js"></script>
-    <script src="calib-radio.js"></script>
-    <script src="calib-esc.js"></script>
+    <script src="../js/multi-vehicle.js"></script>
+    <script src="../js/app.js?v=3"></script>
+    <script src="../js/settings-window.js"></script>
+    <script src="../js/calib-level.js"></script>
+    <script src="../js/calib-accel.js"></script>
+    <script src="../js/calib-compass.js"></script>
+    <script src="../js/calib-radio.js"></script>
+    <script src="../js/calib-esc.js"></script>
     <!-- v2: param-user replaces v1 param-switch (reverted) -->
-    <script src="param-switch.js"></script>
-    <script src="param-full.js"></script>
-    <script src="vehicle-config.js"></script>
+    <script src="../js/param-switch.js"></script>
+    <script src="../js/param-full.js"></script>
+    <script src="../js/vehicle-config.js"></script>
     <!-- note: analyze-tools.js already loaded above (line ~1272), do not load twice -->
     <!-- Flight modes -->
-    <script src="flight-mode.js"></script>
+    <script src="../js/flight-mode.js"></script>
     <!-- Failsafe panel -->
-    <script src="failsafe.js"></script>
+    <script src="../js/failsafe.js"></script>
     <!-- Geofence panel -->
-    <script src="geofence.js"></script>
+    <script src="../js/geofence.js"></script>
     <!-- Servo Output panel -->
-    <script src="servo-output.js"></script>
+    <script src="../js/servo-output.js"></script>
     <!-- Motor Test panel -->
-    <script src="motor-test.js"></script>
+    <script src="../js/motor-test.js"></script>
     <!-- Frame Type panel -->
-    <script src="frame-type.js"></script>
+    <script src="../js/frame-type.js"></script>
     <!-- Initial Tune Parameters panel -->
-    <script src="initial-tune.js"></script>
+    <script src="../js/initial-tune.js"></script>
     <!-- PID Tuning panel -->
-    <script src="pid-tuning.js"></script>
+    <script src="../js/pid-tuning.js"></script>
     <!-- Communication Link panel -->
-    <script src="comm-link.js"></script>
+    <script src="../js/comm-link.js"></script>
     <!-- Flight HUD -->
-    <script src="flight-hud.js"></script>
+    <script src="../js/flight-hud.js"></script>
     <!-- NFZ/weather-restriction not yet implemented -->
 
 </body>

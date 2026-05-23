@@ -27,7 +27,8 @@ using Clock = std::chrono::steady_clock;
 
 ParameterManager::ParameterManager(int sysid, int compid,
                                    const std::string& cache_dir)
-    : sysid_(sysid), compid_(compid), cache_dir_(cache_dir)
+    : sysid_(sysid), compid_(compid), cache_dir_(cache_dir),
+      cache_key_(sysid)  // default: keyed by real sysid; override via setCacheKey(ui_sysid)
 {
     // Ensure cache directory exists
     try { fs::create_directories(cache_dir_); }
@@ -42,10 +43,22 @@ ParameterManager::ParameterManager(int sysid, int compid,
 ParameterManager::~ParameterManager()
 {
     stop_retry_thread();
+
+    // Stop the debounced-save timer thread if it is running.
+    save_timer_stop_.store(true);
+    if (save_timer_thread_.joinable())
+        save_timer_thread_.join();
 }
 
 void ParameterManager::setSendCallback(SendCb cb)      { send_cb_      = std::move(cb); }
 void ParameterManager::setTransportCallback(TransportCb cb) { transport_cb_ = std::move(cb); }
+
+void ParameterManager::setCacheKey(int key)
+{
+    cache_key_ = key;
+    std::cout << "[ParameterManager] Cache key set → " << key
+              << " (file: sysid_" << key << ".json)\n";
+}
 
 void ParameterManager::setVehicleInfo(int sysid, int compid)
 {
@@ -117,47 +130,87 @@ void ParameterManager::handle_param_value(const mavlink_message_t& msg)
         }
     }
 
-    push_param_update(p);
+    // ── WebSocket dispatch ────────────────────────────────────────────────────
+    //
+    // Strategy differs between bulk load and individual requests:
+    //
+    //  Individual request (param_request_one, loading_==false):
+    //    Send param_value immediately — the UI is waiting for exactly this param.
+    //
+    //  Bulk load (param_request_list, loading_==true):
+    //    SUPPRESS individual param_value messages.  Sending 2092 WS frames
+    //    (1046 × param_value + 1046 × param_load_progress) during a fast USB
+    //    stream creates backpressure on the MAVLink RX thread, causing ~12 s
+    //    loads.  Instead:
+    //      • Send param_load_progress every PROGRESS_BATCH_SIZE params.
+    //      • On completion, send ONE param_all with the full snapshot.
+    //    This cuts WS traffic from 2092 messages to ~22, eliminating the lag.
 
-    if (loading_.load())
+    static constexpr int PROGRESS_BATCH_SIZE = 50;
+
+    if (!loading_.load())
     {
+        // Not a bulk load — individual request_one reply: send immediately.
+        push_param_update(p);
+        return;
+    }
+
+    // ── Bulk load path ────────────────────────────────────────────────────────
+    const int rcv = received_.load();
+    const int tot = total_.load();
+
+    // Batched progress update (every N params, and always at 100 %)
+    if (rcv % PROGRESS_BATCH_SIZE == 0)
         push_load_progress();
 
-        const int rcv = received_.load();
-        const int tot = total_.load();
+    if (tot > 0 && rcv >= tot)
+    {
+        loading_.store(false);
+        stop_retry_thread();
 
-        if (tot > 0 && rcv >= tot)
+        const int64_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+            Clock::now().time_since_epoch()).count() - load_start_ms_.load();
+
+        // ── One-shot bulk delivery ─────────────────────────────────────────
+        // Send ALL cached parameters in a single WS frame so the frontend
+        // can populate the full table with one DOM pass (much faster than
+        // 1046 incremental upserts).
+        if (send_cb_)
         {
-            loading_.store(false);
-            stop_retry_thread();
-
-            const int64_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-                Clock::now().time_since_epoch()).count() - load_start_ms_.load();
-
-            json done;
-            done["type"]       = "param_load_complete";
-            done["count"]      = rcv;
-            done["elapsed_ms"] = elapsed;
-            done["message"]    = "All " + std::to_string(rcv)
-                                 + " parameters loaded in "
-                                 + std::to_string(elapsed) + " ms";
-
-            std::cout << "[ParameterManager] Load complete: " << rcv
-                      << " params in " << elapsed << " ms\n";
-
-            if (send_cb_) send_cb_(done.dump());
-
-            // Save to disk cache asynchronously (non-blocking)
-            save_cache_async();
+            json all_msg;
+            all_msg["type"]   = "param_all";
+            all_msg["params"] = getAllParametersJson();
+            all_msg["cached"] = false;
+            send_cb_(all_msg.dump());
         }
+
+        // Final progress at 100 % + completion notification
+        push_load_progress();
+
+        json done;
+        done["type"]       = "param_load_complete";
+        done["count"]      = rcv;
+        done["elapsed_ms"] = elapsed;
+        done["message"]    = "All " + std::to_string(rcv)
+                             + " parameters loaded in "
+                             + std::to_string(elapsed) + " ms";
+
+        std::cout << "[ParameterManager] Load complete: " << rcv
+                  << " params in " << elapsed << " ms\n";
+
+        if (send_cb_) send_cb_(done.dump());
+
+        // Save to disk cache asynchronously (non-blocking)
+        save_cache_async();
     }
 }
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 //  Commands — called from WebSocket handler thread
 // ─────────────────────────────────────────────────────────────────────────────
 
-void ParameterManager::requestAllParameters()
+void ParameterManager::requestAllParameters(bool force)
 {
     if (!transport_cb_)
     {
@@ -165,11 +218,21 @@ void ParameterManager::requestAllParameters()
         return;
     }
 
+    // Auto-trigger guard: if a load is already running and this is not a
+    // forced user refresh, skip silently.  Without this guard, the heartbeat
+    // handler (which fires every 1 s) or reconnect logic can kill the running
+    // retry thread and restart from scratch — adding 5–10 s every time.
+    if (!force && loading_.load())
+    {
+        std::cout << "[ParameterManager] Auto-trigger skipped — load already in progress\n";
+        return;
+    }
+
     stop_retry_thread();
 
     // ── Step 1: serve cached snapshot immediately (if available) ─────────────
     // This makes the Full Params panel appear instantly on reconnect.
-    const bool had_cache = load_cache_file(sysid_);
+    const bool had_cache = load_cache_file();
 
     // ── Step 2: reset for fresh load ─────────────────────────────────────────
     {
@@ -227,30 +290,86 @@ void ParameterManager::requestAllParameters()
     {
         std::cout << "[ParameterManager] Retry thread started\n";
 
-        // 1-second initial grace period
-        for (int i = 0; i < 20 && !retry_stop_.load(); ++i)
-            std::this_thread::sleep_for(std::chrono::milliseconds(50));
-
-        // ── Re-send PARAM_REQUEST_LIST if total still unknown after 3 s ───────
-        // Handles the common case where the first list-request packet is dropped.
+        // ── Phase 1: Adaptive grace period (QGC/MP style) ─────────────────────
+        //
+        // Instead of a fixed timer, we watch the received_ counter.
+        // The moment the PARAM_REQUEST_LIST stream goes quiet for STREAM_IDLE_MS
+        // (no new param received for 200 ms), we know ArduPilot has paused and
+        // we can start filling the gaps without interfering with its burst.
+        //
+        // This prevents the biggest performance killer: sending hundreds of
+        // individual PARAM_REQUEST_READ messages while ArduPilot is still
+        // actively streaming its list, which floods its MAVLink TX queue and
+        // causes it to drop the very params it was about to send.
         {
-            auto waited = std::chrono::milliseconds(0);
+            int  last_rcv    = -1;
+            auto last_change = Clock::now();
+            bool stream_started = false;
+
+            for (int elapsed_ms = 0;
+                 elapsed_ms < MAX_GRACE_MS && !retry_stop_.load() && loading_.load();
+                 elapsed_ms += 50)
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+                const int cur = received_.load();
+                if (cur != last_rcv)
+                {
+                    last_rcv       = cur;
+                    last_change    = Clock::now();
+                    stream_started = true;
+
+                    // Already have everything — no retry needed
+                    if (total_.load() > 0 && cur >= total_.load())
+                        goto retry_thread_done;
+                }
+
+                if (stream_started)
+                {
+                    const int64_t idle_ms =
+                        std::chrono::duration_cast<std::chrono::milliseconds>(
+                            Clock::now() - last_change).count();
+                    if (idle_ms >= STREAM_IDLE_MS)
+                    {
+                        std::cout << "[ParameterManager] Stream idle "
+                                  << idle_ms << " ms — starting retry (rcv="
+                                  << cur << "/" << total_.load() << ")\n";
+                        break;  // stream paused — start retry now
+                    }
+                }
+            }
+        }
+
+        // ── Phase 2: Re-send PARAM_REQUEST_LIST if total still unknown ────────
+        {
+            int waited_ms = 0;
             while (!retry_stop_.load() && loading_.load()
                    && total_.load() <= 0
-                   && waited.count() < RELIST_TIMEOUT_MS)
+                   && waited_ms < RELIST_TIMEOUT_MS)
             {
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                waited += std::chrono::milliseconds(100);
+                waited_ms += 100;
             }
             if (!retry_stop_.load() && loading_.load() && total_.load() <= 0)
             {
-                std::cout << "[ParameterManager] No param count received — re-sending PARAM_REQUEST_LIST\n";
+                std::cout << "[ParameterManager] No param count received "
+                             "— re-sending PARAM_REQUEST_LIST\n";
                 send_list();
                 std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             }
         }
 
-        // ── Main retry loop ───────────────────────────────────────────────────
+        // ── Phase 3: Main retry loop ──────────────────────────────────────────
+        //
+        // QGC/MP algorithm:
+        //   1. Collect ALL missing indices (no batch limit).
+        //   2. Send PARAM_REQUEST_READ for each at 1 ms spacing.
+        //      At 1 ms/req, 850 missing = 850 ms to flood all requests.
+        //      ArduPilot processes them at high priority and pipelines responses
+        //      back simultaneously — much faster than the low-priority list stream.
+        //   3. Wait RETRY_INTERVAL_MS (500 ms) for all responses to arrive.
+        //   4. Repeat for any still-missing stragglers.
+        //
         while (!retry_stop_.load())
         {
             if (!loading_.load()) break;
@@ -262,7 +381,7 @@ void ParameterManager::requestAllParameters()
                 continue;
             }
 
-            // Timeout check
+            // Hard timeout
             const int64_t now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
                 Clock::now().time_since_epoch()).count();
             if ((now_ms - load_start_ms_.load()) > LOAD_TIMEOUT_MS)
@@ -273,30 +392,23 @@ void ParameterManager::requestAllParameters()
                 push_error("Parameter load timed out. Only "
                            + std::to_string(received_.load()) + "/"
                            + std::to_string(tot) + " received.");
-
-                // Save partial results anyway
                 save_cache_async();
                 break;
             }
 
-            // Collect missing index slots
+            // Collect ALL missing index slots (no batch limit — QGC style)
             std::vector<uint16_t> missing;
             {
                 std::lock_guard<std::mutex> lk(mutex_);
                 for (uint16_t idx = 0; idx < static_cast<uint16_t>(tot); ++idx)
-                {
                     if (received_indices_.find(idx) == received_indices_.end())
-                    {
                         missing.push_back(idx);
-                        if (static_cast<int>(missing.size()) >= MAX_RETRY_BATCH)
-                            break;
-                    }
-                }
             }
 
             if (missing.empty())
             {
                 if (received_.load() >= tot) break; // all done
+                // Indices all filled but name-count still short — wait
                 std::this_thread::sleep_for(std::chrono::milliseconds(RETRY_INTERVAL_MS));
                 continue;
             }
@@ -305,7 +417,10 @@ void ParameterManager::requestAllParameters()
                       << missing.size() << " missing / " << tot
                       << " (rcv=" << received_.load() << ")\n";
 
-            // Re-request each missing param with spacing (prevents buffer flood)
+            // ── Flood all requests at 1 ms spacing ─────────────────────────
+            // ArduPilot services individual PARAM_REQUEST_READ at higher
+            // priority than the background list stream, so we get responses
+            // back in ~400 params/sec regardless of how many we send.
             for (uint16_t idx : missing)
             {
                 if (retry_stop_.load() || !loading_.load()) break;
@@ -313,11 +428,12 @@ void ParameterManager::requestAllParameters()
                 std::this_thread::sleep_for(std::chrono::milliseconds(REQUEST_SPACING_MS));
             }
 
-            // Wait before next scan (interval starts after pass finishes)
+            // Wait for ArduPilot to flush its response queue before next scan
             for (int i = 0; i < RETRY_INTERVAL_MS / 50 && !retry_stop_.load(); ++i)
                 std::this_thread::sleep_for(std::chrono::milliseconds(50));
         }
 
+        retry_thread_done:
         std::cout << "[ParameterManager] Retry thread exiting\n";
     });
 }
@@ -387,6 +503,12 @@ void ParameterManager::setParameter(const std::string& param_name,
         }
     }
 
+    // Persist the change to the cache so the next reconnect serves the
+    // updated value instantly instead of the old pre-change value.
+    // Uses a debounced 2-second timer to avoid N disk writes for N rapid
+    // PARAM_SET calls (e.g. loading a full .param file).
+    schedule_cache_save();
+
     json ack;
     ack["type"]     = "param_set_sent";
     ack["param_id"] = param_name;
@@ -421,14 +543,14 @@ json ParameterManager::getAllParametersJson() const
 //  Disk Cache
 // ─────────────────────────────────────────────────────────────────────────────
 
-std::string ParameterManager::cache_path(int sysid) const
+std::string ParameterManager::cache_path() const
 {
-    return cache_dir_ + "/sysid_" + std::to_string(sysid) + ".json";
+    return cache_dir_ + "/sysid_" + std::to_string(cache_key_) + ".json";
 }
 
-bool ParameterManager::load_cache_file(int sysid)
+bool ParameterManager::load_cache_file()
 {
-    const std::string path = cache_path(sysid);
+    const std::string path = cache_path();   // uses cache_key_
     if (!fs::exists(path)) return false;
 
     try
@@ -485,7 +607,7 @@ bool ParameterManager::load_cache_file(int sysid)
 
 void ParameterManager::save_cache_file()
 {
-    const std::string path = cache_path(sysid_);
+    const std::string path = cache_path();   // uses cache_key_ (= ui_sysid)
     try
     {
         std::lock_guard<std::mutex> lk(cache_mutex_);
@@ -511,9 +633,10 @@ void ParameterManager::save_cache_async()
     std::thread([this]() { save_cache_file(); }).detach();
 }
 
-void ParameterManager::deleteCache(int sysid)
+void ParameterManager::deleteCache(int cache_key) const
 {
-    const std::string path = cache_path(sysid);
+    // Build the path from the supplied key (= ui_sysid, not real sysid)
+    const std::string path = cache_dir_ + "/sysid_" + std::to_string(cache_key) + ".json";
     try
     {
         if (fs::exists(path))
@@ -575,6 +698,52 @@ void ParameterManager::stop_retry_thread()
     if (retry_thread_.joinable())
         retry_thread_.join();
     retry_stop_.store(false); // reset for next use
+}
+
+// ───────────────────────────────────────────────────────────────────────────────
+//  schedule_cache_save
+//
+//  Arms (or re-arms) a 2-second debounce timer.  When no further setParameter
+//  call fires within those 2 seconds, save_cache_file() is called once.
+//
+//  A single long-lived background thread is lazily created the first time this
+//  is called and lives until the ParameterManager is destroyed.  The thread
+//  polls every 200 ms; when it sees the deadline has passed it writes the file
+//  and clears the deadline.
+// ───────────────────────────────────────────────────────────────────────────────
+void ParameterManager::schedule_cache_save()
+{
+    // Set deadline = now + 2000 ms
+    const int64_t deadline = std::chrono::duration_cast<std::chrono::milliseconds>(
+        Clock::now().time_since_epoch()).count() + 2000;
+    save_timer_deadline_ms_.store(deadline);
+
+    // Lazily start the timer thread (only once)
+    if (!save_timer_thread_.joinable())
+    {
+        save_timer_stop_.store(false);
+        save_timer_thread_ = std::thread([this]()
+        {
+            while (!save_timer_stop_.load())
+            {
+                std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
+                const int64_t dl = save_timer_deadline_ms_.load();
+                if (dl == 0) continue;   // no pending save
+
+                const int64_t now = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    Clock::now().time_since_epoch()).count();
+
+                if (now >= dl)
+                {
+                    // Clear deadline first so re-entrant calls set a new one
+                    save_timer_deadline_ms_.store(0);
+                    save_cache_file();
+                    std::cout << "[ParameterManager] Cache flushed after param change\n";
+                }
+            }
+        });
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

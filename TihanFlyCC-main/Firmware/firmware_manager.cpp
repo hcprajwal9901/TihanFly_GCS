@@ -687,8 +687,6 @@ void FirmwareManager::install_from_port(const std::string& port)
 
         image = std::move(pending_image_);
         label = std::move(pending_label_);
-        pending_image_.clear();
-        pending_label_.clear();
     }
 
     std::cout << "[FirmwareManager] Port appeared (" << port

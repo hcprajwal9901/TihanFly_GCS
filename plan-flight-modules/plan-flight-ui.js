@@ -45,15 +45,21 @@ PlanFlightMode.prototype.hidePlanMenuStrip = function() {
 // ========================================================================
 
 PlanFlightMode.prototype.hideElements = function() {
-    // Hide dropdown menu strip
+    // Hide dropdown menu strip and sync DropdownMenuStrip's internal state
     if (this.stripContainer) {
         this.stripContainer.style.display = 'none';
+        this.stripContainer.classList.add('hidden');
         console.log('✅ Dropdown menu strip hidden');
+    }
+    // Sync internal isVisible flag
+    if (window.DropdownStrip && window.DropdownStrip.hide) {
+        window.DropdownStrip.hide();
     }
     
     // Hide flight controls strip
     if (this.flightControlsStrip) {
         this.flightControlsStrip.style.display = 'none';
+        this.flightControlsStrip.classList.add('hidden');
         console.log('✅ Flight controls strip hidden');
     }
     
@@ -71,16 +77,24 @@ PlanFlightMode.prototype.showElements = function() {
         console.log('✅ Message console shown');
     }
     
-    // Show flight controls
+    // Show flight controls (the default strip)
     if (this.flightControlsStrip) {
         this.flightControlsStrip.style.display = 'flex';
+        this.flightControlsStrip.classList.remove('hidden');
         console.log('✅ Flight controls shown');
     }
     
-    // Show dropdown menu strip
+    // Keep dropdown menu strip hidden — it should only appear via logo toggle.
+    // Ensure DropdownMenuStrip's internal state stays in sync.
     if (this.stripContainer) {
-        this.stripContainer.style.display = 'flex';
-        console.log('✅ Dropdown menu strip shown');
+        this.stripContainer.style.display = 'none';
+        this.stripContainer.classList.add('hidden');
+        console.log('✅ Dropdown menu strip kept hidden (toggle via logo)');
+    }
+    if (window.DropdownStrip && window.DropdownStrip.hide) {
+        // Reset the internal isVisible flag without re-triggering show/hide
+        // by calling hide (which is idempotent)
+        window.DropdownStrip.hide();
     }
 };
 

@@ -12,7 +12,7 @@
     position: fixed;
     top: 80px;
     right: 20px;
-    width: 320px;
+    width: 250px;
     max-height: calc(100vh - 100px);
     z-index: 2000;
     background: rgba(245, 248, 252, 0.98);
@@ -39,7 +39,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 12px 16px;
+    padding: 8px 12px;
     background: linear-gradient(135deg, rgba(255, 204, 0, 0.15) 0%, rgba(255, 153, 51, 0.1) 100%);
     border-bottom: 2px solid rgba(255, 204, 0, 0.3);
 }
@@ -47,28 +47,28 @@
 .weather-title {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 16px;
+    gap: 6px;
+    font-size: 14px;
     font-weight: 700;
     color: #1a1a1a;
     letter-spacing: 0.5px;
 }
 
 .weather-icon-title {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     color: #FFCC00;
     filter: drop-shadow(0 2px 4px rgba(255, 204, 0, 0.3));
 }
 
 .weather-close-btn {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     border-radius: 6px;
     background: transparent;
     border: 2px solid rgba(0, 0, 0, 0.1);
     color: #1a1a1a;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     display: flex;
@@ -167,8 +167,8 @@
 .weather-content {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 16px;
+    gap: 10px;
+    padding: 10px;
     overflow-y: auto;
     max-height: calc(100vh - 180px);
 }
@@ -198,16 +198,16 @@
 .weather-location {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px;
+    gap: 8px;
+    padding: 8px;
     background: rgba(255, 204, 0, 0.08);
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px solid rgba(255, 204, 0, 0.2);
 }
 
 .location-icon {
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     color: #FFCC00;
     flex-shrink: 0;
 }
@@ -221,7 +221,7 @@
 }
 
 .location-name {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     color: #1a1a1a;
     white-space: nowrap;
@@ -230,7 +230,7 @@
 }
 
 .location-coords {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     color: #6b7280;
     font-family: 'Courier New', monospace;
@@ -243,38 +243,38 @@
 .weather-main {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 16px;
+    gap: 12px;
+    padding: 12px;
     background: linear-gradient(135deg, rgba(255, 204, 0, 0.1) 0%, rgba(255, 153, 51, 0.05) 100%);
-    border-radius: 12px;
+    border-radius: 10px;
     border: 2px solid rgba(255, 204, 0, 0.2);
 }
 
 .weather-icon-container {
-    width: 80px;
-    height: 80px;
+    width: 54px;
+    height: 54px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.5);
-    border-radius: 12px;
+    border-radius: 10px;
     flex-shrink: 0;
 }
 
 .weather-main-icon {
-    width: 64px;
-    height: 64px;
+    width: 40px;
+    height: 40px;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
 }
 
 .weather-temp-container {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
 }
 
 .weather-temp {
-    font-size: 36px;
+    font-size: 26px;
     font-weight: 800;
     color: #1a1a1a;
     line-height: 1;
@@ -282,7 +282,7 @@
 }
 
 .weather-description {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     color: #4a5568;
     text-transform: capitalize;
@@ -295,16 +295,16 @@
 .weather-details-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 8px;
 }
 
 .weather-detail-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px;
+    gap: 8px;
+    padding: 8px;
     background: rgba(255, 255, 255, 0.6);
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px solid rgba(0, 0, 0, 0.08);
     transition: all 0.2s ease;
 }
@@ -317,8 +317,8 @@
 }
 
 .detail-icon {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     color: #FFCC00;
     flex-shrink: 0;
 }
@@ -332,7 +332,7 @@
 }
 
 .detail-label {
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 600;
     color: #6b7280;
     text-transform: uppercase;
@@ -340,7 +340,7 @@
 }
 
 .detail-value {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
     color: #1a1a1a;
     white-space: nowrap;
@@ -353,14 +353,14 @@
    ============================================================================ */
 
 .weather-footer {
-    padding: 12px;
+    padding: 8px;
     background: rgba(0, 0, 0, 0.03);
-    border-radius: 8px;
+    border-radius: 6px;
     text-align: center;
 }
 
 .weather-update-time {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     color: #6b7280;
     font-style: italic;
@@ -372,83 +372,83 @@
 
 @media (max-width: 1024px) {
     .weather-dashboard {
-        width: 300px;
+        width: 230px;
         top: 70px;
         right: 15px;
     }
 
     .weather-main {
-        padding: 14px;
+        padding: 10px;
     }
 
     .weather-icon-container {
-        width: 70px;
-        height: 70px;
+        width: 48px;
+        height: 48px;
     }
 
     .weather-main-icon {
-        width: 56px;
-        height: 56px;
+        width: 36px;
+        height: 36px;
     }
 
     .weather-temp {
-        font-size: 32px;
+        font-size: 24px;
     }
 }
 
 @media (max-width: 768px) {
     .weather-dashboard {
-        width: 280px;
+        width: 210px;
         top: 65px;
         right: 12px;
     }
 
     .weather-header {
-        padding: 10px 14px;
+        padding: 8px 10px;
     }
 
     .weather-title {
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .weather-content {
-        padding: 14px;
-        gap: 14px;
-    }
-
-    .weather-main {
-        padding: 12px;
-        gap: 12px;
-    }
-
-    .weather-icon-container {
-        width: 60px;
-        height: 60px;
-    }
-
-    .weather-main-icon {
-        width: 48px;
-        height: 48px;
-    }
-
-    .weather-temp {
-        font-size: 28px;
-    }
-
-    .weather-description {
-        font-size: 13px;
-    }
-
-    .weather-details-grid {
+        padding: 8px;
         gap: 8px;
     }
 
+    .weather-main {
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .weather-icon-container {
+        width: 42px;
+        height: 42px;
+    }
+
+    .weather-main-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .weather-temp {
+        font-size: 22px;
+    }
+
+    .weather-description {
+        font-size: 11px;
+    }
+
+    .weather-details-grid {
+        gap: 6px;
+    }
+
     .weather-detail-item {
-        padding: 10px;
+        padding: 6px;
     }
 
     .detail-value {
-        font-size: 13px;
+        font-size: 11px;
     }
 }
 

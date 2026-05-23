@@ -1,5 +1,13 @@
 #include "serial.h"
 
+#ifdef _WIN32
+#  ifndef WIN32_LEAN_AND_MEAN
+#    define WIN32_LEAN_AND_MEAN
+#  endif
+#  include <windows.h>
+#endif
+
+
 SerialTransport::SerialTransport(asio::io_context& io,
                                  const std::string& port,
                                  int baudrate)
@@ -8,6 +16,20 @@ SerialTransport::SerialTransport(asio::io_context& io,
     try {
         serial_.open(port);
         serial_.set_option(asio::serial_port_base::baud_rate(baudrate));
+
+        // Expand the OS-level serial RX buffer via the native platform API.
+        // asio::socket_base::receive_buffer_size is a *socket* option and
+        // does NOT compile for asio::serial_port — use the correct API instead.
+#ifdef _WIN32
+        // SetupComm() requests a 64 KB RX queue from the Windows serial driver.
+        // This prevents overflow when ArduPilot streams the full ~30 KB param
+        // burst faster than the io_context can re-arm async_read_some.
+        SetupComm(serial_.native_handle(), 65536, 4096);
+#endif
+        // Linux: the kernel tty buffer (typically 4 KB) cannot be enlarged from
+        // user-space.  The 64 KB application-level buffer in do_receive() absorbs
+        // the burst without loss.
+
         std::cout << "[Serial] Opened " << port << "\n";
     } catch (...) {
         std::cout << "[Serial] Failed to open\n";
@@ -58,7 +80,7 @@ bool SerialTransport::is_active()
 void SerialTransport::do_receive()
 {
     serial_.async_read_some(
-        asio::buffer(buffer_, sizeof(buffer_)),
+        asio::buffer(buffer_, RECV_BUF_SIZE),
         [this](std::error_code ec, std::size_t len)
         {
             if (ec)

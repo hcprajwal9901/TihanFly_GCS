@@ -44,7 +44,7 @@ public:
 
     // Return the latest frame encoded as JPEG bytes.
     // Returns an empty vector if no frame is available yet.
-    std::vector<uint8_t> read_frame();
+    std::vector<uint8_t> read_frame() const;
 
     // True if the camera is open and has delivered a frame recently
     bool is_active() const;

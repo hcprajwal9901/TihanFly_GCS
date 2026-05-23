@@ -270,42 +270,22 @@ window.MsgConsole = {
 
 document.addEventListener('DOMContentLoaded', () => {
     initializeMinimalConsole();
-    
-    // Add mock messages for demonstration
-    setTimeout(() => {
-        window.MsgConsole.success('Drone armed and ready');
-        window.MsgConsole.success('🚁 Takeoff initiated - Target altitude: 15m');
-        window.MsgConsole.success('🛬 Landing sequence complete');
-    }, 500);
-    
-    setTimeout(() => {
-        window.MsgConsole.warning('Low battery warning - 25% remaining');
-        window.MsgConsole.warning('Strong winds detected - 15 m/s');
-        window.MsgConsole.warning('GPS signal weak - 5 satellites');
-    }, 1500);
-    
-    setTimeout(() => {
-        window.MsgConsole.error('Connection lost - attempting reconnect');
-        window.MsgConsole.error('Failed to arm motors - check battery');
-        window.MsgConsole.error('Takeoff aborted - unsafe conditions');
-    }, 2500);
-    
+
     // Hook into flight controls if available
     setTimeout(() => {
         if (window.flightControls) {
-            // Override flight control callbacks to add console messages
             window.flightControls.onTakeoff((settings) => {
                 window.MsgConsole.takeoff(settings.altitude);
             });
-            
+
             window.flightControls.onLand(() => {
                 window.MsgConsole.land();
             });
-            
+
             window.flightControls.onRTL(() => {
                 window.MsgConsole.rtl();
             });
-            
+
             console.log('✅ Minimal Console integrated with Flight Controls');
         }
     }, 1000);
