@@ -11,7 +11,7 @@
 SerialTransport::SerialTransport(asio::io_context& io,
                                  const std::string& port,
                                  int baudrate)
-    : serial_(io)
+    : serial_(io), baudrate_(baudrate)
 {
     try {
         serial_.open(port);
@@ -30,10 +30,15 @@ SerialTransport::SerialTransport(asio::io_context& io,
         // user-space.  The 64 KB application-level buffer in do_receive() absorbs
         // the burst without loss.
 
-        std::cout << "[Serial] Opened " << port << "\n";
+        std::cout << "[Serial] Opened " << port << " at " << baudrate << " baud\n";
     } catch (...) {
-        std::cout << "[Serial] Failed to open\n";
+        std::cout << "[Serial] Failed to open " << port << "\n";
     }
+}
+
+int SerialTransport::get_baudrate() const
+{
+    return baudrate_;
 }
 
 void SerialTransport::start()
@@ -79,9 +84,11 @@ bool SerialTransport::is_active()
 
 void SerialTransport::do_receive()
 {
+    auto read_buf = std::make_shared<std::vector<uint8_t>>(RECV_BUF_SIZE);
+
     serial_.async_read_some(
-        asio::buffer(buffer_, RECV_BUF_SIZE),
-        [this](std::error_code ec, std::size_t len)
+        asio::buffer(read_buf->data(), read_buf->size()),
+        [this, read_buf](std::error_code ec, std::size_t len)
         {
             if (ec)
             {
@@ -103,15 +110,18 @@ void SerialTransport::do_receive()
                 return;
             }
 
+            // Immediately re-arm the next async read before calling the callback!
+            // This ensures the OS-level serial queue is continuously emptied even if the
+            // callback takes time (e.g. processing MAVLink messages or WebSocket writes).
+            do_receive();
+
             if (len > 0)
             {
                 active_       = true;
                 last_receive_ = std::chrono::steady_clock::now();
 
                 if (callback_)
-                    callback_(buffer_, len);
+                    callback_(read_buf->data(), len);
             }
-
-            do_receive();
         });
 }

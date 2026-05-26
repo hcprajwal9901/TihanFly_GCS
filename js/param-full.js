@@ -963,7 +963,8 @@ function handleMessage(data) {
         // Bug #4 fixed: p.name → p.param_id
         (data.params||[]).forEach(p => { allParams[p.param_id] = { name:p.param_id, value:p.value, type:p.type, index:p.index }; });
         isLoading = false; showProgressBar(false);
-        setStatus(Object.keys(allParams).length + ' parameters loaded'); rebuildTable();
+        const statusText = Object.keys(allParams).length + ' parameters loaded' + (data.cached ? ' (cached)' : '');
+        setStatus(statusText); rebuildTable();
     } else if (t === 'param_set_sent') {
         // Bug #5 fixed: data.name → data.param_id
         const { toast } = window.SwUtil||{}; if (toast) toast('Set '+data.param_id+' → '+data.value);
@@ -1329,7 +1330,7 @@ function init() {
             window.addEventListener('ws_connected', () => {
                 if (document.getElementById('panel-param-full') &&
                     Object.keys(allParams).length === 0) {
-                    wsSend({ type: 'param_request_list' });
+                    wsSend({ type: 'param_get_all' });
                 }
             });
 
@@ -1343,8 +1344,8 @@ function init() {
                     allParams = {}; dirtyParams = {};
                     const tbody = document.getElementById('fpBody');
                     if (tbody) tbody.innerHTML = '';
-                    setStatus('Switching drone — fetching parameters…');
-                    wsSend({ type: 'param_request_list' });
+                    setStatus('Switching drone — loading parameters…');
+                    wsSend({ type: 'param_get_all' });
                 }
             });
         }
@@ -1363,7 +1364,7 @@ function init() {
             allParams = {}; dirtyParams = {};
             const tbody = document.getElementById('fpBody');
             if (tbody) tbody.innerHTML = '';
-            wsSend({ type: 'param_request_list' });
+            wsSend({ type: 'param_get_all' });
         } else {
             rebuildTable();
             setStatus(Object.keys(allParams).length + ' parameters loaded (cached)');

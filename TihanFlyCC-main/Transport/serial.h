@@ -24,6 +24,8 @@ public:
 
     void stop();
 
+    int get_baudrate() const override;
+
     // ✅ IMPORTANT
     bool is_open() const;
     bool is_active();
@@ -32,6 +34,7 @@ private:
     void do_receive();
 
     asio::serial_port serial_;
+    int baudrate_ = 115200;
 
     // 64 KB read buffer: absorbs a full ArduPilot parameter burst (~30 KB)
     // without stalling even if the io_context thread is briefly busy.

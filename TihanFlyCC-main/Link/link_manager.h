@@ -30,6 +30,9 @@ public:
     // ✅ Also retroactively applies to any links already added.
     void set_message_callback(MessageCallback cb);
 
+    // Get a specific link by ID.
+    std::shared_ptr<Link> get_link(int id);
+
 private:
     std::vector<std::shared_ptr<Link>> links_;
     MessageCallback callback_;

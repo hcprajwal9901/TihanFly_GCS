@@ -32,6 +32,7 @@ void Link::start()
                                        &msg,
                                        &status))
                 {
+                    valid_msg_count_.fetch_add(1, std::memory_order_relaxed);
                     if (callback_)
                         callback_(msg, id_);
                 }
@@ -47,4 +48,9 @@ void Link::set_callback(Callback cb)
 std::shared_ptr<Transport> Link::get_transport()
 {
     return transport_;
+}
+
+uint64_t Link::get_valid_msg_count() const
+{
+    return valid_msg_count_.load(std::memory_order_relaxed);
 }

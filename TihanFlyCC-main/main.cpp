@@ -997,6 +997,17 @@ static void wire_modules_to_active_vehicle()
     param_manager.setVehicleInfo(vehicle_ptr->sysid(), vehicle_ptr->compid());
     param_manager.setCacheKey(vehicle_ptr->ui_sysid());  // unique cache per drone (multi-port safe)
 
+    // Set request spacing based on link baudrate dynamically
+    if (g_link_manager)
+    {
+        auto link = g_link_manager->get_link(vehicle_ptr->link_id());
+        if (link && link->get_transport())
+        {
+            int baud = link->get_transport()->get_baudrate();
+            param_manager.setRequestSpacingFromBaudrate(baud);
+        }
+    }
+
     std::cout << "[GCS] Sub-modules wired to vehicle sysid="
               << vehicle_ptr->sysid() << " (ui_sysid=" << vehicle_ptr->ui_sysid() << ")\n";
 }
@@ -1180,6 +1191,18 @@ void start_serial_monitor(asio::io_context& io,
         // the blacklist when a port disappears and reappears (re-plug).
         std::set<std::string> prev_registry_ports;
 
+        // Auto-baudrate detection sequence (same sequence QGC / MP try)
+        const std::vector<int> AUTO_BAUDRATES = { 921600, 115200, 57600 };
+        std::map<std::string, std::size_t> port_baudrate_index;
+
+        struct ActiveBaudrateProbe {
+            std::string port_name;
+            int baudrate;
+            std::shared_ptr<SerialTransport> transport;
+            std::chrono::steady_clock::time_point opened_time;
+        };
+        std::map<int, ActiveBaudrateProbe> active_baudrate_probes;
+
         while (true)
         {
             std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -1204,6 +1227,87 @@ void start_serial_monitor(asio::io_context& io,
 
             auto now = std::chrono::steady_clock::now();
 
+            // ── Auto-Baudrate connection check ──────────────────────────────
+            for (auto it = active_baudrate_probes.begin(); it != active_baudrate_probes.end(); )
+            {
+                int link_id = it->first;
+                auto& probe = it->second;
+                auto link = link_manager.get_link(link_id);
+
+                if (!link || !probe.transport)
+                {
+                    it = active_baudrate_probes.erase(it);
+                    continue;
+                }
+
+                uint64_t msg_count = link->get_valid_msg_count();
+                if (msg_count > 0)
+                {
+                    std::cout << "[Serial] Connection locked on " << probe.port_name
+                              << " at " << probe.baudrate << " baud (" << msg_count << " msgs)\n";
+                    it = active_baudrate_probes.erase(it);
+                    continue;
+                }
+
+                const auto age_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - probe.opened_time).count();
+                
+                // Speed up connection:
+                // 1. If we got absolutely 0 bytes of raw activity for 1500 ms, we know the baudrate is wrong.
+                // 2. If we got bytes but no valid MAVLink packets after 3000 ms, the baudrate is wrong.
+                bool baudrate_failed = false;
+                std::string reason;
+
+                if (age_ms >= 1500 && !probe.transport->is_active())
+                {
+                    baudrate_failed = true;
+                    reason = "no raw bytes received after 1.5s";
+                }
+                else if (age_ms >= 3000)
+                {
+                    baudrate_failed = true;
+                    reason = "no valid MAVLink packets after 3.0s";
+                }
+
+                if (baudrate_failed)
+                {
+                    std::cout << "[Serial] " << reason << " on " << probe.port_name
+                              << " at " << probe.baudrate << " baud — trying next baudrate...\n";
+
+                    // Close the port and delete from active serial ports so it will be retried
+                    std::unique_lock<std::mutex> lock(g_serial_ports_mutex);
+                    auto sp_it = g_serial_ports.find(probe.port_name);
+                    if (sp_it != g_serial_ports.end())
+                    {
+                        sp_it->second.transport->stop();
+                        g_serial_ports.erase(sp_it);
+                    }
+                    lock.unlock();
+
+                    // If we were using this link as the legacy global link, clear it
+                    if (serial_link_id.load() == link_id)
+                    {
+                        serial_link_id.store(-1);
+                        serial_transport.reset();
+                        detected_serial_port.clear();
+                    }
+
+                    // Cycle to the next baudrate
+                    std::size_t next_idx = port_baudrate_index[probe.port_name] + 1;
+                    if (next_idx >= AUTO_BAUDRATES.size())
+                    {
+                        next_idx = 0;  // wrap around
+                        // Add to failed_ports blacklist for 30s to avoid spinning forever on noise
+                        failed_ports[probe.port_name] = now;
+                    }
+                    port_baudrate_index[probe.port_name] = next_idx;
+
+                    it = active_baudrate_probes.erase(it);
+                    continue;
+                }
+
+                ++it;
+            }
+
             // ── Open newly appeared ports ─────────────────────────────────────
             for (const auto& port : mavlink_ports)
             {
@@ -1216,7 +1320,17 @@ void start_serial_monitor(asio::io_context& io,
                 if (fit != failed_ports.end() && (now - fit->second) < RETRY_INTERVAL)
                     continue;
 
-                std::cout << "[Serial] New MAVLink port: " << port << "\n";
+                // Get the current baudrate to try
+                std::size_t b_idx = 0;
+                auto b_it = port_baudrate_index.find(port);
+                if (b_it != port_baudrate_index.end()) {
+                    b_idx = b_it->second;
+                } else {
+                    port_baudrate_index[port] = 0;
+                }
+                int baudrate_to_try = AUTO_BAUDRATES[b_idx];
+
+                std::cout << "[Serial] New MAVLink port: " << port << " — trying " << baudrate_to_try << " baud\n";
 
                 if (g_firmware_manager && g_firmware_manager->has_pending_install())
                 {
@@ -1232,9 +1346,9 @@ void start_serial_monitor(asio::io_context& io,
 
                 try
                 {
-                    auto new_serial = std::make_shared<SerialTransport>(io, port, 115200);
+                    auto new_serial = std::make_shared<SerialTransport>(io, port, baudrate_to_try);
                     if (!new_serial->is_open()) {
-                        std::cout << "[Serial] Could not open " << port << "\n";
+                        std::cout << "[Serial] Could not open " << port << " at " << baudrate_to_try << " baud\n";
                         failed_ports[port] = now;
                         continue;
                     }
@@ -1242,7 +1356,15 @@ void start_serial_monitor(asio::io_context& io,
                     int lid = link_manager.add_link(new_serial, io);
                     link_manager.start_link(lid);
                     std::cout << "[Serial] Ready on " << port
-                              << " link_id=" << lid << "\n";
+                              << " link_id=" << lid << " at " << baudrate_to_try << " baud\n";
+
+                    // Track this link for baudrate probing
+                    ActiveBaudrateProbe probe;
+                    probe.port_name = port;
+                    probe.baudrate = baudrate_to_try;
+                    probe.transport = new_serial;
+                    probe.opened_time = now;
+                    active_baudrate_probes[lid] = probe;
 
                     {
                         std::lock_guard<std::mutex> lk(g_serial_ports_mutex);
@@ -3333,7 +3455,7 @@ void start_websocket(CommandManager* cmd_manager,
                                 send_status();
                             }
 
-                            else if ((type == "param_request_list" || type == "param_set") &&
+                            else if ((type == "param_request_list" || type == "param_get_all" || type == "param_set") &&
                                       j.contains("sysid") && j["sysid"].is_number_integer())
                             {
                                 // ── sysid-aware param routing ─────────────────────────
@@ -3403,6 +3525,11 @@ void start_websocket(CommandManager* cmd_manager,
                                                   << " = " << value
                                                   << " → sysid=" << tv->sysid() << "\n";
 
+                                        // ── Update GCS Cache ────────────────────────────────
+                                        param_manager.setVehicleInfo(tv->sysid(), tv->compid());
+                                        param_manager.setCacheKey(tv->ui_sysid());
+                                        param_manager.updateParamCache(param_id, value);
+
                                         // Ack to frontend
                                         json ack;
                                         ack["type"]     = "param_set_sent";
@@ -3415,7 +3542,7 @@ void start_websocket(CommandManager* cmd_manager,
                                         send_ws_safe(ack.dump());
                                     }
                                 }
-                                else if (type == "param_request_list" && tv)
+                                else if ((type == "param_request_list" || type == "param_get_all") && tv)
                                 {
                                     // ── Re-wire param_manager to the requested drone ──────
                                     // Keep it wired to this drone until the next explicit
@@ -3427,7 +3554,7 @@ void start_websocket(CommandManager* cmd_manager,
                                     param_manager.setTransportCallback(mavlink_via_tv);
                                     param_manager.setVehicleInfo(tv->sysid(), tv->compid());
                                     param_manager.setCacheKey(tv->ui_sysid());  // unique cache key per drone
-                                    std::cout << "[ParamWS] param_request_list routed to sysid="
+                                    std::cout << "[ParamWS] " << type << " routed to sysid="
                                               << tv->sysid() << " ui_sysid=" << tv->ui_sysid() << "\n";
                                     handle_param_ws_command(type, j, param_manager);
                                     // NOTE: intentionally NOT calling

@@ -161,10 +161,31 @@ inline bool handle_param_ws_command(const std::string& type,
     if (type == "param_get_all")
     {
         std::cout << "[ParamWS] Returning cached parameter snapshot\n";
-        json resp;
-        resp["type"]   = "param_all";
-        resp["params"] = pm.getAllParametersJson();
-        send_ws_safe(resp.dump());
+        
+        // If we have a reasonably complete set of parameters in memory,
+        // or if we are currently loading, send them immediately.
+        // We define a complete set as having at least 100 parameters.
+        if (pm.isLoading() || (pm.receivedCount() >= 100 && (pm.totalCount() <= 0 || pm.receivedCount() >= pm.totalCount())))
+        {
+            std::cout << "[ParamWS] Returning active in-memory parameters (loading=" 
+                      << pm.isLoading() << ", count=" << pm.receivedCount() << ")\n";
+            json resp;
+            resp["type"]   = "param_all";
+            resp["params"] = pm.getAllParametersJson();
+            resp["cached"] = true;
+            send_ws_safe(resp.dump());
+        }
+        else
+        {
+            // Try loading from disk cache first
+            bool loaded = pm.loadCache();
+            if (!loaded)
+            {
+                // No cache file found and not currently loading — trigger a fresh load from the FC
+                std::cout << "[ParamWS] No cache found — requesting fresh load from FC\n";
+                pm.requestAllParameters(true);
+            }
+        }
         return true;
     }
 
