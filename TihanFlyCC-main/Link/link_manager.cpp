@@ -67,3 +67,10 @@ void LinkManager::set_message_callback(MessageCallback cb)
     for (auto& link : links_)
         link->set_callback(cb);
 }
+
+std::shared_ptr<Link> LinkManager::get_link(int id)
+{
+    if (id >= 0 && id < static_cast<int>(links_.size()))
+        return links_[id];
+    return nullptr;
+}

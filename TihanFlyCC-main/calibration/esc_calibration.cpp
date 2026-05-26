@@ -208,9 +208,14 @@ sendPreflight();
 for (int i = 0; i < 40 && !cancelled_.load(); ++i)
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
-// Always proceed — treat as success
-ack_received_.store(true);
-ack_result_.store(MAV_RESULT_ACCEPTED);
+// If no real ACK arrived from processMessage(), treat as success (PARAM_SET has no ACK).
+// But if processMessage() DID set a result, honour it so error branches are reachable.
+if (!ack_received_.load())
+{
+    ack_received_.store(true);
+    ack_result_.store(MAV_RESULT_ACCEPTED);
+}
+
 
         if (cancelled_.load())
         {

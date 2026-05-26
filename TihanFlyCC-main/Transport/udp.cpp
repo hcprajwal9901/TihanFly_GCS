@@ -15,6 +15,11 @@ UdpTransport::UdpTransport(asio::io_context& io,
 
     socket_.open(asio::ip::udp::v4());
     socket_.set_option(asio::socket_base::reuse_address(true));
+    
+    // Set socket receive buffer size to 256 KB to absorb bursty MAVLink traffic without OS-level drops
+    asio::socket_base::receive_buffer_size recv_buf_opt(262144);
+    socket_.set_option(recv_buf_opt);
+
     socket_.bind(local_endpoint);
 
     std::cout << "[UDP] Bound to port " << local_port << std::endl;
@@ -33,12 +38,26 @@ void UdpTransport::set_receive_callback(ReceiveCallback cb)
 
 void UdpTransport::do_receive()
 {
+    auto read_buf = std::make_shared<std::vector<uint8_t>>(2048);
+
     socket_.async_receive_from(
-        asio::buffer(buffer_, sizeof(buffer_)),
+        asio::buffer(read_buf->data(), read_buf->size()),
         sender_endpoint_,
-        [this](std::error_code ec, std::size_t len)
+        [this, read_buf](std::error_code ec, std::size_t len)
         {
-            if (!ec && len > 0)
+            if (ec)
+            {
+                if (ec == asio::error::operation_aborted) return;
+                std::cout << "[UDP] Receive error: " << ec.message() << "\n";
+                return;
+            }
+
+            // Immediately re-arm the next async read before calling the callback!
+            // This ensures the OS-level UDP queue is continuously emptied even if the
+            // callback takes time (e.g. processing MAVLink messages or WebSocket writes).
+            do_receive();
+
+            if (len > 0)
             {
                 active_       = true;
                 last_receive_ = std::chrono::steady_clock::now();
@@ -52,10 +71,8 @@ void UdpTransport::do_receive()
                 }
 
                 if (callback_)
-                    callback_(buffer_, len);
+                    callback_(read_buf->data(), len);
             }
-
-            do_receive();
         });
 }
 

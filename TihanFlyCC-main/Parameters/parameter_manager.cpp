@@ -2,11 +2,15 @@
  * parameter_manager.cpp
  * TiHANFly GCS — Parameter Manager (MAVLink ↔ WebSocket Bridge)
  *
- * Changes v2:
- *   • REQUEST_SPACING_MS reduced to 10 ms (was 20 ms) — halves retry time.
- *   • RETRY_INTERVAL_MS reduced to 200 ms (was 500 ms).
- *   • Second PARAM_REQUEST_LIST fired if total count not known after 3 s
- *     (handles first packet being dropped over WiFi).
+ * Changes v3 (WiFi-optimised):
+ *   • STREAM_IDLE_MS raised to 600 ms (was 200 ms) — tolerates WiFi jitter.
+ *   • MAX_GRACE_MS raised to 25 s (was 1.5 s) — lets the full ArduPilot
+ *     stream finish over WiFi before retries start.
+ *   • REQUEST_SPACING_MS raised to 3 ms (was 1 ms) — prevents WiFi saturation.
+ *   • RETRY_INTERVAL_MS raised to 1500 ms (was 500 ms) — allows WiFi RTT.
+ *   • Batched retries: 50 params per retry pass instead of flooding all at once.
+ *   • Mid-stream re-list: if stream stalls >4 s at <50% received, fires a
+ *     second PARAM_REQUEST_LIST to recover from WiFi drops.
  *   • Disk cache: params saved as ./param_cache/sysid_<N>.json after every
  *     successful load. On the next requestAllParameters() call the cache is
  *     pushed to the frontend instantly, then the FC refresh runs in background.
@@ -146,7 +150,7 @@ void ParameterManager::handle_param_value(const mavlink_message_t& msg)
     //      • On completion, send ONE param_all with the full snapshot.
     //    This cuts WS traffic from 2092 messages to ~22, eliminating the lag.
 
-    static constexpr int PROGRESS_BATCH_SIZE = 50;
+    static constexpr int PROGRESS_BATCH_SIZE = 10;
 
     if (!loading_.load())
     {
@@ -159,9 +163,19 @@ void ParameterManager::handle_param_value(const mavlink_message_t& msg)
     const int rcv = received_.load();
     const int tot = total_.load();
 
-    // Batched progress update (every N params, and always at 100 %)
-    if (rcv % PROGRESS_BATCH_SIZE == 0)
-        push_load_progress();
+    // Throttled progress update (at most once every 100 ms, and always at 100 %)
+    static std::atomic<int64_t> last_progress_time_ms{0};
+    const int64_t now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+        Clock::now().time_since_epoch()).count();
+
+    int64_t last = last_progress_time_ms.load();
+    if (rcv >= tot || (now_ms - last) >= 100)
+    {
+        if (last_progress_time_ms.compare_exchange_strong(last, now_ms))
+        {
+            push_load_progress();
+        }
+    }
 
     if (tot > 0 && rcv >= tot)
     {
@@ -255,6 +269,7 @@ void ParameterManager::requestAllParameters(bool force)
     received_.store(had_cache ? static_cast<int>(params_.size()) : 0);
     total_.store(0);
     loading_.store(true);
+    relist_sent_.store(false);
     load_start_ms_.store(
         std::chrono::duration_cast<std::chrono::milliseconds>(
             Clock::now().time_since_epoch()).count());
@@ -284,158 +299,191 @@ void ParameterManager::requestAllParameters(bool force)
 
     send_list();
 
+    // Send a second PARAM_REQUEST_LIST after a short gap — CUAVLink WiFi
+    // often drops the first burst entirely; a duplicate 100 ms later has
+    // a much higher chance of being processed.
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    send_list();
+
     // ── Step 4: start retry thread ────────────────────────────────────────────
-    retry_stop_.store(false);
-    retry_thread_ = std::thread([this, send_list]()
     {
-        std::cout << "[ParameterManager] Retry thread started\n";
-
-        // ── Phase 1: Adaptive grace period (QGC/MP style) ─────────────────────
-        //
-        // Instead of a fixed timer, we watch the received_ counter.
-        // The moment the PARAM_REQUEST_LIST stream goes quiet for STREAM_IDLE_MS
-        // (no new param received for 200 ms), we know ArduPilot has paused and
-        // we can start filling the gaps without interfering with its burst.
-        //
-        // This prevents the biggest performance killer: sending hundreds of
-        // individual PARAM_REQUEST_READ messages while ArduPilot is still
-        // actively streaming its list, which floods its MAVLink TX queue and
-        // causes it to drop the very params it was about to send.
+        std::lock_guard<std::mutex> lk(thread_mutex_);
+        retry_stop_.store(false);
+        retry_thread_ = std::thread([this, send_list]()
         {
-            int  last_rcv    = -1;
-            auto last_change = Clock::now();
-            bool stream_started = false;
+            std::cout << "[ParameterManager] Retry thread started\n";
 
-            for (int elapsed_ms = 0;
-                 elapsed_ms < MAX_GRACE_MS && !retry_stop_.load() && loading_.load();
-                 elapsed_ms += 50)
+            // ── Phase 1: Adaptive grace period (WiFi-optimised) ────────────────────
+            //
+            // Wait for the PARAM_REQUEST_LIST stream to finish naturally.
+            // Over WiFi ArduPilot streams ~50 params/sec → ~20 s for 1046 params.
+            // We declare the stream "done" when no new param arrives for
+            // STREAM_IDLE_MS (1000 ms) — tolerant of WiFi jitter gaps.
+            //
+            // Mid-stream re-list: if the stream stalls early and we've received
+            // <10 % of expected params, fire a second PARAM_REQUEST_LIST to
+            // recover from WiFi drops that caused the FC to stop mid-stream.
             {
-                std::this_thread::sleep_for(std::chrono::milliseconds(50));
+                int  last_rcv    = -1;
+                auto last_change = Clock::now();
+                bool stream_started = false;
 
-                const int cur = received_.load();
-                if (cur != last_rcv)
+                for (int elapsed_ms = 0;
+                     elapsed_ms < MAX_GRACE_MS && !retry_stop_.load() && loading_.load();
+                     elapsed_ms += 50)
                 {
-                    last_rcv       = cur;
-                    last_change    = Clock::now();
-                    stream_started = true;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
-                    // Already have everything — no retry needed
-                    if (total_.load() > 0 && cur >= total_.load())
-                        goto retry_thread_done;
-                }
-
-                if (stream_started)
-                {
-                    const int64_t idle_ms =
-                        std::chrono::duration_cast<std::chrono::milliseconds>(
-                            Clock::now() - last_change).count();
-                    if (idle_ms >= STREAM_IDLE_MS)
+                    const int cur = received_.load();
+                    if (cur != last_rcv)
                     {
-                        std::cout << "[ParameterManager] Stream idle "
-                                  << idle_ms << " ms — starting retry (rcv="
-                                  << cur << "/" << total_.load() << ")\n";
-                        break;  // stream paused — start retry now
+                        last_rcv       = cur;
+                        last_change    = Clock::now();
+                        stream_started = true;
+
+                        // Already have everything — no retry needed
+                        if (total_.load() > 0 && cur >= total_.load())
+                            goto retry_thread_done;
+                    }
+
+                    if (stream_started)
+                    {
+                        const int64_t idle_ms =
+                            std::chrono::duration_cast<std::chrono::milliseconds>(
+                                Clock::now() - last_change).count();
+
+                        if (idle_ms >= STREAM_IDLE_MS)
+                        {
+                            // If we received very few parameters (e.g. < 10%), try one re-list
+                            // to get a bulk stream going, rather than 1000 individual retries.
+                            if (!relist_sent_.load()
+                                && total_.load() > 0
+                                && cur < total_.load() / 10)
+                            {
+                                relist_sent_.store(true);
+                                std::cout << "[ParameterManager] Stream stalled extremely early at "
+                                          << cur << "/" << total_.load()
+                                          << " — re-sending PARAM_REQUEST_LIST\n";
+                                send_list();
+                                last_change = Clock::now();  // reset idle timer
+                                last_rcv = cur;
+                                continue;
+                            }
+
+                            std::cout << "[ParameterManager] Stream idle "
+                                      << idle_ms << " ms — starting retry (rcv="
+                                      << cur << "/" << total_.load() << ")\n";
+                            break;  // stream paused — start retry now
+                        }
                     }
                 }
             }
-        }
 
-        // ── Phase 2: Re-send PARAM_REQUEST_LIST if total still unknown ────────
-        {
-            int waited_ms = 0;
-            while (!retry_stop_.load() && loading_.load()
-                   && total_.load() <= 0
-                   && waited_ms < RELIST_TIMEOUT_MS)
+            // ── Phase 2: Re-send PARAM_REQUEST_LIST if total still unknown ────────
             {
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-                waited_ms += 100;
-            }
-            if (!retry_stop_.load() && loading_.load() && total_.load() <= 0)
-            {
-                std::cout << "[ParameterManager] No param count received "
-                             "— re-sending PARAM_REQUEST_LIST\n";
-                send_list();
-                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-            }
-        }
-
-        // ── Phase 3: Main retry loop ──────────────────────────────────────────
-        //
-        // QGC/MP algorithm:
-        //   1. Collect ALL missing indices (no batch limit).
-        //   2. Send PARAM_REQUEST_READ for each at 1 ms spacing.
-        //      At 1 ms/req, 850 missing = 850 ms to flood all requests.
-        //      ArduPilot processes them at high priority and pipelines responses
-        //      back simultaneously — much faster than the low-priority list stream.
-        //   3. Wait RETRY_INTERVAL_MS (500 ms) for all responses to arrive.
-        //   4. Repeat for any still-missing stragglers.
-        //
-        while (!retry_stop_.load())
-        {
-            if (!loading_.load()) break;
-
-            const int tot = total_.load();
-            if (tot <= 0)
-            {
-                std::this_thread::sleep_for(std::chrono::milliseconds(200));
-                continue;
+                int waited_ms = 0;
+                while (!retry_stop_.load() && loading_.load()
+                       && total_.load() <= 0
+                       && waited_ms < RELIST_TIMEOUT_MS)
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                    waited_ms += 100;
+                }
+                if (!retry_stop_.load() && loading_.load() && total_.load() <= 0)
+                {
+                    std::cout << "[ParameterManager] No param count received "
+                                 "— re-sending PARAM_REQUEST_LIST\n";
+                    send_list();
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                }
             }
 
-            // Hard timeout
-            const int64_t now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-                Clock::now().time_since_epoch()).count();
-            if ((now_ms - load_start_ms_.load()) > LOAD_TIMEOUT_MS)
+            // ── Phase 3: Self-adjusting retry loop (WiFi-optimised) ──────────────────
+            //
+            // Go through the list of missing parameters. For each missing parameter,
+            // send a request if it has not been received yet. Sleep for REQUEST_SPACING_MS
+            // after each request.
+            // At the end of each pass, if the pass took less than RETRY_INTERVAL_MS,
+            // sleep for the remainder to let responses arrive.
+            //
+            while (!retry_stop_.load())
             {
-                std::cout << "[ParameterManager] Load timeout after "
-                          << LOAD_TIMEOUT_MS / 1000 << " s\n";
-                loading_.store(false);
-                push_error("Parameter load timed out. Only "
-                           + std::to_string(received_.load()) + "/"
-                           + std::to_string(tot) + " received.");
-                save_cache_async();
-                break;
-            }
+                if (!loading_.load()) break;
 
-            // Collect ALL missing index slots (no batch limit — QGC style)
-            std::vector<uint16_t> missing;
-            {
-                std::lock_guard<std::mutex> lk(mutex_);
+                const int tot = total_.load();
+                if (tot <= 0)
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+                    continue;
+                }
+
+                // Hard timeout
+                const int64_t now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    Clock::now().time_since_epoch()).count();
+                if ((now_ms - load_start_ms_.load()) > LOAD_TIMEOUT_MS)
+                {
+                    std::cout << "[ParameterManager] Load timeout after "
+                              << LOAD_TIMEOUT_MS / 1000 << " s\n";
+                    loading_.store(false);
+                    push_error("Parameter load timed out. Only "
+                               + std::to_string(received_.load()) + "/"
+                               + std::to_string(tot) + " received.");
+                    save_cache_async();
+                    break;
+                }
+
+                // Check if we are done
+                const int rcv = received_.load();
+                if (rcv >= tot) break;
+
+                std::cout << "[ParameterManager] Retry pass: "
+                          << (tot - rcv) << " missing / " << tot
+                          << " (rcv=" << rcv << ")\n";
+
+                auto pass_start = Clock::now();
+                int requests_sent = 0;
+
                 for (uint16_t idx = 0; idx < static_cast<uint16_t>(tot); ++idx)
-                    if (received_indices_.find(idx) == received_indices_.end())
-                        missing.push_back(idx);
+                {
+                    if (retry_stop_.load() || !loading_.load()) break;
+
+                    // Check if already received
+                    {
+                        std::lock_guard<std::mutex> lk(mutex_);
+                        if (received_indices_.find(idx) != received_indices_.end())
+                            continue;
+                    }
+
+                    request_by_index(idx);
+                    requests_sent++;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(request_spacing_ms_.load(std::memory_order_relaxed)));
+                }
+
+                // If we didn't send any requests, it means everything was received during the pass
+                if (requests_sent == 0)
+                {
+                    if (received_.load() >= tot) break;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                    continue;
+                }
+
+                // Calculate how long this pass took
+                const int64_t pass_duration_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    Clock::now() - pass_start).count();
+
+                // If the pass finished quicker than RETRY_INTERVAL_MS, sleep the remainder
+                if (pass_duration_ms < RETRY_INTERVAL_MS)
+                {
+                    const int64_t sleep_time = RETRY_INTERVAL_MS - pass_duration_ms;
+                    for (int i = 0; i < sleep_time / 50 && !retry_stop_.load() && loading_.load(); ++i)
+                        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+                }
             }
 
-            if (missing.empty())
-            {
-                if (received_.load() >= tot) break; // all done
-                // Indices all filled but name-count still short — wait
-                std::this_thread::sleep_for(std::chrono::milliseconds(RETRY_INTERVAL_MS));
-                continue;
-            }
-
-            std::cout << "[ParameterManager] Retry pass: "
-                      << missing.size() << " missing / " << tot
-                      << " (rcv=" << received_.load() << ")\n";
-
-            // ── Flood all requests at 1 ms spacing ─────────────────────────
-            // ArduPilot services individual PARAM_REQUEST_READ at higher
-            // priority than the background list stream, so we get responses
-            // back in ~400 params/sec regardless of how many we send.
-            for (uint16_t idx : missing)
-            {
-                if (retry_stop_.load() || !loading_.load()) break;
-                request_by_index(idx);
-                std::this_thread::sleep_for(std::chrono::milliseconds(REQUEST_SPACING_MS));
-            }
-
-            // Wait for ArduPilot to flush its response queue before next scan
-            for (int i = 0; i < RETRY_INTERVAL_MS / 50 && !retry_stop_.load(); ++i)
-                std::this_thread::sleep_for(std::chrono::milliseconds(50));
-        }
-
-        retry_thread_done:
-        std::cout << "[ParameterManager] Retry thread exiting\n";
-    });
+            retry_thread_done:
+            std::cout << "[ParameterManager] Retry thread exiting\n";
+        });
+    }
 }
 
 void ParameterManager::requestParameter(const std::string& param_name)
@@ -671,6 +719,32 @@ void ParameterManager::deleteAllCaches()
     }
 }
 
+bool ParameterManager::loadCache()
+{
+    return load_cache_file();
+}
+
+void ParameterManager::updateParamCache(const std::string& name, float value)
+{
+    std::lock_guard<std::mutex> lk(mutex_);
+    auto it = params_.find(name);
+    if (it != params_.end())
+    {
+        it->second.value = value;
+        push_param_update(it->second);
+    }
+    else
+    {
+        Parameter p;
+        p.name = name;
+        p.value = value;
+        p.default_val = value;
+        p.default_set = true;
+        params_[name] = p;
+    }
+    schedule_cache_save();
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 //  Retry helpers
 // ─────────────────────────────────────────────────────────────────────────────
@@ -694,6 +768,7 @@ void ParameterManager::request_by_index(uint16_t index)
 
 void ParameterManager::stop_retry_thread()
 {
+    std::lock_guard<std::mutex> lk(thread_mutex_);
     retry_stop_.store(true);
     if (retry_thread_.joinable())
         retry_thread_.join();
@@ -791,6 +866,34 @@ void ParameterManager::push_error(const std::string& message) const
     j["type"]    = "param_error";
     j["message"] = message;
     send_cb_(j.dump());
+}
+
+void ParameterManager::setRequestSpacingFromBaudrate(int baudrate)
+{
+    // baudrate == -1 indicates a UDP connection (WiFi), set to 5 ms spacing (highly robust, very fast)
+    if (baudrate == -1)
+    {
+        request_spacing_ms_.store(5);
+        std::cout << "[ParameterManager] Connection is UDP (WiFi) — dynamically adjusted request spacing to 5 ms\n";
+    }
+    // High-speed serial connection (>= 921600 baud), set to 3 ms spacing
+    else if (baudrate >= 920000)
+    {
+        request_spacing_ms_.store(3);
+        std::cout << "[ParameterManager] Connection is High-Speed Serial (" << baudrate << " baud) — dynamically adjusted request spacing to 3 ms\n";
+    }
+    // Standard telemetry baudrate (e.g. 115200), set to 12 ms spacing to avoid saturating the link
+    else if (baudrate >= 115000)
+    {
+        request_spacing_ms_.store(12);
+        std::cout << "[ParameterManager] Connection is Telemetry Serial (" << baudrate << " baud) — dynamically adjusted request spacing to 12 ms\n";
+    }
+    // Low-bandwidth telemetry radio (e.g. RFD900 / 3DR Radio at 57600), set to 25 ms spacing to ensure zero packet loss
+    else
+    {
+        request_spacing_ms_.store(25);
+        std::cout << "[ParameterManager] Connection is Low-Bandwidth Radio (" << baudrate << " baud) — dynamically adjusted request spacing to 25 ms\n";
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

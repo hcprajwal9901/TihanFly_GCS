@@ -17,4 +17,6 @@ public:
                             std::size_t length) = 0;
 
     virtual void set_receive_callback(ReceiveCallback cb) = 0;
+
+    virtual int get_baudrate() const { return -1; }
 };

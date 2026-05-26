@@ -135,6 +135,15 @@ public:
     /** Delete ALL cache files. Call on backend shutdown. */
     void deleteAllCaches();
 
+    /** Load cache file. Returns true if cache was found and loaded. */
+    bool loadCache();
+
+    /** Update the cache value of a parameter directly and trigger a debounced save to disk. */
+    void updateParamCache(const std::string& name, float value);
+
+    /** Dynamically adjust request spacing based on the connection baudrate. */
+    void setRequestSpacingFromBaudrate(int baudrate);
+
     // ── Accessors ────────────────────────────────────────────────────────────
 
     /** JSON array of all cached parameters — shape matches frontend expectation. */
@@ -160,6 +169,7 @@ private:
     // ── Retry machinery ──────────────────────────────────────────────────────
     std::thread          retry_thread_;
     std::atomic<bool>    retry_stop_    { false };
+    std::atomic<bool>    relist_sent_   { false };  // prevents firing more than one mid-stream re-list
 
     // ── Debounced post-set cache write ───────────────────────────────────────
     // Each setParameter() call resets a 2-second timer.  When the timer fires
@@ -170,18 +180,21 @@ private:
     std::atomic<int64_t>  save_timer_deadline_ms_ { 0 };  // epoch ms
     void schedule_cache_save();   // arms/re-arms the 2-second timer
 
-    // ── QGC/MP-style tuning constants ────────────────────────────────────────
-    static constexpr int RETRY_INTERVAL_MS  = 500;   // ms to wait after flooding requests
-    static constexpr int REQUEST_SPACING_MS = 1;     // ms between individual PARAM_REQUEST_READ
-    static constexpr int MAX_RETRY_BATCH    = 2000;  // effectively unlimited for 1046 params
-    static constexpr int LOAD_TIMEOUT_MS    = 300000; // 5-minute hard timeout
-    static constexpr int RELIST_TIMEOUT_MS  = 3000;   // re-send list if no count after 3 s
-    static constexpr int STREAM_IDLE_MS     = 200;    // ms without new params = stream done
-    static constexpr int MAX_GRACE_MS       = 1500;   // max adaptive grace period
+    // ── QGC/MP-style tuning constants (WiFi-optimised) ────────────────────────
+    static constexpr int RETRY_INTERVAL_MS  = 500;    // ms to wait after a retry pass
+    std::atomic<int>     request_spacing_ms_{ 3 };    // ms between individual PARAM_REQUEST_READ (WiFi-safe, dynamically adjusted)
+    static constexpr int RETRY_BATCH_SIZE   = 200;    // legacy
+    static constexpr int MAX_RETRY_BATCH    = 2000;   // legacy
+    static constexpr int LOAD_TIMEOUT_MS    = 300000;  // 5-minute hard timeout
+    static constexpr int RELIST_TIMEOUT_MS  = 3000;    // re-send list if no count after 3 s
+    static constexpr int RELIST_IDLE_MS     = 3000;    // re-send list if stream stalls mid-way
+    static constexpr int STREAM_IDLE_MS     = 500;     // ms without new params = stream done
+    static constexpr int MAX_GRACE_MS       = 25000;   // 25s — let full WiFi stream finish
 
     // ── Disk cache ───────────────────────────────────────────────────────────
     std::string          cache_dir_;
     std::mutex           cache_mutex_;
+    std::mutex           thread_mutex_;
     int                  cache_key_;    // key used for cache filename (= ui_sysid when set)
 
     std::string   cache_path() const;           // uses cache_key_
