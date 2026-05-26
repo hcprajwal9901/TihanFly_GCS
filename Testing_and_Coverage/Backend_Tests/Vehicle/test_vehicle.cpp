@@ -145,7 +145,7 @@ TEST_F(VehicleTest, CustomMessageHandlerRegistration) {
 // UT-VEH-006: Vehicle Timeout & Eviction
 TEST_F(VehicleTest, VehicleTimeoutEviction) {
     int lost_sysid = 0;
-    manager->set_on_vehicle_lost([&](int sysid) {
+    manager->set_on_vehicle_lost([&](int sysid, int /*compid*/) {
         lost_sysid = sysid;
     });
 

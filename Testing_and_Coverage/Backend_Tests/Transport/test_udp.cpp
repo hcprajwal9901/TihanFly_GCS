@@ -35,9 +35,11 @@ protected:
             io_thread.join();
         }
     }
-    
+    std::vector<uint8_t> send_buf;
+
     void SendPacketAndWait(const std::vector<uint8_t>& data) {
-        udp->async_send(data.data(), data.size());
+        send_buf = data;
+        udp->async_send(send_buf.data(), send_buf.size());
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 };
