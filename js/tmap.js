@@ -640,4 +640,13 @@ disableWeatherClicks() {
         if (enabled) this._gpsFixCount = 0;
         console.log(`🚁 Drone auto-pan: ${enabled ? 'ON' : 'OFF'}`);
     }
+
+    /**
+     * Getter for backward compatibility and simple access to the selected active drone marker.
+     * @returns {object|null} The marker for the selected/active drone.
+     */
+    get droneMarker() {
+        const activeSysId = window.selectedSysId || window._primarySysId || 1;
+        return (this.droneMarkers && this.droneMarkers[activeSysId]) ? this.droneMarkers[activeSysId] : null;
+    }
 }

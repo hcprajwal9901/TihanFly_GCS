@@ -7,6 +7,7 @@ class CompassEnhanced {
     constructor(containerId = 'map') {
         this.container = document.getElementById(containerId);
         this.heading = 0;
+        this.currentRotation = 0;
         this.telemetry = {
             latitude: 0,
             longitude: 0,
@@ -301,11 +302,22 @@ class CompassEnhanced {
     }
 
     setHeading(degrees) {
-        this.heading = degrees % 360;
-        if (this.heading < 0) this.heading += 360;
+        let targetHeading = degrees % 360;
+        if (targetHeading < 0) targetHeading += 360;
+
+        // Calculate shortest path rotation difference (avoiding 360 -> 0 spin-backwards)
+        let diff = targetHeading - this.heading;
+        if (diff > 180) {
+            diff -= 360;
+        } else if (diff < -180) {
+            diff += 360;
+        }
+
+        this.currentRotation += diff;
+        this.heading = targetHeading;
 
         if (this.compassElement) {
-            this.compassElement.style.transform = `translate(-50%, -50%) rotate(${this.heading}deg)`;
+            this.compassElement.style.transform = `translate(-50%, -50%) rotate(${this.currentRotation}deg)`;
         }
 
         const headingValue = document.getElementById('headingValue');

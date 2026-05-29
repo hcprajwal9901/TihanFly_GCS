@@ -496,11 +496,12 @@ class PolygonManager {
             
             clippedLines = clippedH.concat(clippedV);
         } else if (pattern === 'rectangle') {
-            // Rectangle: keep segments where BOTH endpoints are inside the polygon
-            const allLines = this.generateRectangleLines(gridParams);
-            clippedLines = allLines.filter(line =>
-                this.pointInPolygon(line[0]) || this.pointInPolygon(line[1])
-            );
+            // Rectangle pattern: survey the actual border of the polygon
+            const pts = this.polygonPoints;
+            for (let i = 0; i < pts.length; i++) {
+                const nextPt = pts[(i + 1) % pts.length];
+                clippedLines.push([pts[i], nextPt]);
+            }
         } else if (pattern === 'circle') {
             // Circle: keep segments where at least one endpoint is inside the polygon
             const allLines = this.generateCircleLines(gridParams);

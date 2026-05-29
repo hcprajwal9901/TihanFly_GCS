@@ -7,9 +7,9 @@
 // MENU ACTION HANDLER
 // ========================================================================
 
-PlanFlightMode.prototype.handleWaypointActions = function(action) {
+PlanFlightMode.prototype.handleWaypointActions = function (action) {
     console.log(`🎯 Waypoint action triggered: ${action}`);
-    
+
     if (!window.WaypointManager) {
         console.error('❌ WaypointManager not available');
         return;
@@ -20,16 +20,16 @@ PlanFlightMode.prototype.handleWaypointActions = function(action) {
         console.log('🛑 Cancelling active polygon draw — switching to waypoint mode');
         window.PolygonManager.cancelDrawing();
     }
-    
-    switch(action) {
+
+    switch (action) {
         case 'add-waypoint':
             window.WaypointManager.startAddingWaypoint();
             break;
-            
+
         case 'delete-waypoint':
             window.WaypointManager.startDeletingWaypoint();
             break;
-            
+
         case 'clear-all':
             window.WaypointManager.clearAllWaypoints();
             break;
@@ -39,7 +39,7 @@ PlanFlightMode.prototype.handleWaypointActions = function(action) {
         // in plan-flight-menu-router.js → sendMarkersToDrone() in
         // plan-flight-mission-send.js which sends the full JSON flight
         // plan over WebSocket to the backend.
-            
+
         default:
             console.warn(`Unknown waypoint action: ${action}`);
     }
@@ -51,11 +51,11 @@ PlanFlightMode.prototype.handleWaypointActions = function(action) {
 //   window.PlanFlight.logMarkersToConsole()
 // ========================================================================
 
-PlanFlightMode.prototype.logMarkersToConsole = function() {
+PlanFlightMode.prototype.logMarkersToConsole = function () {
     console.log('\n--- 📊 EXTRACTING WAYPOINT DATA ---');
-    
+
     const waypoints = window.WaypointManager.getWaypoints();
-    
+
     if (!waypoints || waypoints.length === 0) {
         console.warn('⚠️ No waypoints found.');
         return;
@@ -63,11 +63,11 @@ PlanFlightMode.prototype.logMarkersToConsole = function() {
 
     const formattedWaypoints = waypoints.map((wp, index) => {
         return {
-            id:       String(wp.id || (index + 1)),
-            lat:      Number(wp.lat),
-            lng:      Number(wp.lng),
-            altitude: Number(wp.altitude || 50),
-            speed:    Number(wp.speed    || 10)
+            id: String(wp.id || (index + 1)),
+            lat: Number(wp.lat),
+            lng: Number(wp.lng),
+            altitude: Number(wp.altitude || 10),
+            speed: Number(wp.speed || 2)
         };
     });
 

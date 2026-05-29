@@ -553,7 +553,7 @@ static bool do_ws_handshake(tcp::socket& s)
         std::transform(lower_line.begin(), lower_line.end(), lower_line.begin(), ::tolower);
         if (lower_line.find("sec-websocket-key:") != std::string::npos)
         {
-            auto pos = line.find(":");
+            auto pos = line.find(':');
             if (pos != std::string::npos)
             {
                 key = line.substr(pos + 1);
@@ -2032,7 +2032,7 @@ void start_websocket(CommandManager* cmd_manager,
                                     };
                                     std::string script_path;
                                     for (auto& c : candidates) {
-                                        if (GetFileAttributesA(c.c_str()) != INVALID_FILE_ATTRIBUTES) {
+                                        if (std::filesystem::exists(c)) {
                                             script_path = c;
                                             break;
                                         }

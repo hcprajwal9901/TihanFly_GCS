@@ -50,7 +50,20 @@ class WaypointManager {
             this.handleMapClick(lat, lng, e);
         });
         this.tmap.disableClick();
+
+        this.tmap.onRightClick((lat, lng, e) => {
+            this.handleMapRightClick(lat, lng, e);
+        });
         console.log('✅ Map click handler set up');
+    }
+
+    handleMapRightClick(lat, lng, e) {
+        if (e && e.originalEvent) {
+            e.originalEvent.preventDefault();
+            e.originalEvent.stopPropagation();
+        }
+        console.log(`🏠 Map right-click. Setting home position at: ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+        this.setHomePosition(lat, lng);
     }
 
     handleMapClick(lat, lng, e) {
@@ -377,6 +390,16 @@ class WaypointManager {
         this.tmap.onMarkerDragEnd(this.homePosition.marker, (newLat, newLng) => {
             this.homePosition.lat = newLat;
             this.homePosition.lng = newLng;
+        });
+
+        // Remove home position on right click of the marker
+        this.homePosition.marker.on('contextmenu', (e) => {
+            if (e && e.originalEvent) {
+                e.originalEvent.stopPropagation();
+                e.originalEvent.preventDefault();
+            }
+            console.log('🏠 Right-clicked home marker. Clearing home position.');
+            this.clearHomePosition();
         });
 
         if (window.MsgConsole) {
