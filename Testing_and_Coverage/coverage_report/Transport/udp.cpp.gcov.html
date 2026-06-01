@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2026-05-20 18:12:01</td>
+            <td class="headerValue">2026-05-26 10:38:26</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">7</td>
@@ -93,14 +93,14 @@
 <a name="31"><span class="lineNum">      31 </span><span class="lineCov">          4 :     callback_ = cb;</span></a>
 <a name="32"><span class="lineNum">      32 </span><span class="lineCov">          4 : }</span></a>
 <a name="33"><span class="lineNum">      33 </span>            : </a>
-<a name="34"><span class="lineNum">      34 </span><span class="lineCov">     901204 : void UdpTransport::do_receive()</span></a>
+<a name="34"><span class="lineNum">      34 </span><span class="lineCov">     888453 : void UdpTransport::do_receive()</span></a>
 <a name="35"><span class="lineNum">      35 </span>            : {</a>
-<a name="36"><span class="lineNum">      36 </span><span class="lineCov">    1802408 :     socket_.async_receive_from(</span></a>
-<a name="37"><span class="lineNum">      37 </span><span class="lineCov">    1802408 :         asio::buffer(buffer_, sizeof(buffer_)),</span></a>
-<a name="38"><span class="lineNum">      38 </span><span class="lineCov">     901204 :         sender_endpoint_,</span></a>
-<a name="39"><span class="lineNum">      39 </span><span class="lineCov">     901207 :         [this](std::error_code ec, std::size_t len)</span></a>
+<a name="36"><span class="lineNum">      36 </span><span class="lineCov">    1776906 :     socket_.async_receive_from(</span></a>
+<a name="37"><span class="lineNum">      37 </span><span class="lineCov">    1776906 :         asio::buffer(buffer_, sizeof(buffer_)),</span></a>
+<a name="38"><span class="lineNum">      38 </span><span class="lineCov">     888453 :         sender_endpoint_,</span></a>
+<a name="39"><span class="lineNum">      39 </span><span class="lineCov">     888456 :         [this](std::error_code ec, std::size_t len)</span></a>
 <a name="40"><span class="lineNum">      40 </span>            :         {</a>
-<a name="41"><span class="lineNum">      41 </span><span class="lineCov">     901199 :             if (!ec &amp;&amp; len &gt; 0)</span></a>
+<a name="41"><span class="lineNum">      41 </span><span class="lineCov">     888448 :             if (!ec &amp;&amp; len &gt; 0)</span></a>
 <a name="42"><span class="lineNum">      42 </span>            :             {</a>
 <a name="43"><span class="lineNum">      43 </span>            :                 active_       = true;</a>
 <a name="44"><span class="lineNum">      44 </span><span class="lineCov">          4 :                 last_receive_ = std::chrono::steady_clock::now();</span></a>
@@ -117,9 +117,9 @@
 <a name="55"><span class="lineNum">      55 </span><span class="lineCov">          4 :                     callback_(buffer_, len);</span></a>
 <a name="56"><span class="lineNum">      56 </span>            :             }</a>
 <a name="57"><span class="lineNum">      57 </span>            : </a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineCov">     901199 :             do_receive();</span></a>
-<a name="59"><span class="lineNum">      59 </span><span class="lineCov">     901199 :         });</span></a>
-<a name="60"><span class="lineNum">      60 </span><span class="lineCov">     901204 : }</span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">     888448 :             do_receive();</span></a>
+<a name="59"><span class="lineNum">      59 </span><span class="lineCov">     888448 :         });</span></a>
+<a name="60"><span class="lineNum">      60 </span><span class="lineCov">     888453 : }</span></a>
 <a name="61"><span class="lineNum">      61 </span>            : </a>
 <a name="62"><span class="lineNum">      62 </span><span class="lineCov">          5 : void UdpTransport::async_send(const uint8_t* data,</span></a>
 <a name="63"><span class="lineNum">      63 </span>            :                               std::size_t length)</a>

@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2026-05-20 18:12:01</td>
+            <td class="headerValue">2026-05-26 10:38:26</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">5</td>
@@ -66,21 +66,21 @@
 <a name="4"><span class="lineNum">       4 </span>            : // ======================================================</a>
 <a name="5"><span class="lineNum">       5 </span>            : // Add a transport as a new link</a>
 <a name="6"><span class="lineNum">       6 </span>            : // ======================================================</a>
-<a name="7"><span class="lineNum">       7 </span><span class="lineCov">          9 : int LinkManager::add_link(std::shared_ptr&lt;Transport&gt; transport,</span></a>
+<a name="7"><span class="lineNum">       7 </span><span class="lineCov">         14 : int LinkManager::add_link(std::shared_ptr&lt;Transport&gt; transport,</span></a>
 <a name="8"><span class="lineNum">       8 </span>            :                           asio::io_context&amp; io)</a>
 <a name="9"><span class="lineNum">       9 </span>            : {</a>
-<a name="10"><span class="lineNum">      10 </span><span class="lineCov">          9 :     int id = static_cast&lt;int&gt;(links_.size());</span></a>
+<a name="10"><span class="lineNum">      10 </span><span class="lineCov">         14 :     int id = static_cast&lt;int&gt;(links_.size());</span></a>
 <a name="11"><span class="lineNum">      11 </span>            : </a>
 <a name="12"><span class="lineNum">      12 </span>            :     auto link = std::make_shared&lt;Link&gt;(id, transport, io);</a>
 <a name="13"><span class="lineNum">      13 </span>            : </a>
 <a name="14"><span class="lineNum">      14 </span>            :     // ✅ If callback was already set before add_link, attach it now</a>
-<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          9 :     if (callback_)</span></a>
+<a name="15"><span class="lineNum">      15 </span><span class="lineCov">         14 :     if (callback_)</span></a>
 <a name="16"><span class="lineNum">      16 </span><span class="lineCov">          2 :         link-&gt;set_callback(callback_);</span></a>
 <a name="17"><span class="lineNum">      17 </span>            : </a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          9 :     links_.push_back(link);</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">         14 :     links_.push_back(link);</span></a>
 <a name="19"><span class="lineNum">      19 </span>            : </a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">          9 :     std::cout &lt;&lt; &quot;[Link] Added link &quot; &lt;&lt; id &lt;&lt; std::endl;</span></a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineCov">          9 :     return id;</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">         14 :     std::cout &lt;&lt; &quot;[Link] Added link &quot; &lt;&lt; id &lt;&lt; std::endl;</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">         14 :     return id;</span></a>
 <a name="22"><span class="lineNum">      22 </span>            : }</a>
 <a name="23"><span class="lineNum">      23 </span>            : </a>
 <a name="24"><span class="lineNum">      24 </span>            : // ======================================================</a>
@@ -102,11 +102,11 @@
 <a name="40"><span class="lineNum">      40 </span>            : // ======================================================</a>
 <a name="41"><span class="lineNum">      41 </span>            : // Send to a specific link</a>
 <a name="42"><span class="lineNum">      42 </span>            : // ======================================================</a>
-<a name="43"><span class="lineNum">      43 </span><span class="lineCov">          4 : void LinkManager::send(int id, const uint8_t* data, std::size_t length)</span></a>
+<a name="43"><span class="lineNum">      43 </span><span class="lineCov">         18 : void LinkManager::send(int id, const uint8_t* data, std::size_t length)</span></a>
 <a name="44"><span class="lineNum">      44 </span>            : {</a>
-<a name="45"><span class="lineNum">      45 </span><span class="lineCov">          4 :     if (id &gt;= 0 &amp;&amp; id &lt; static_cast&lt;int&gt;(links_.size()))</span></a>
-<a name="46"><span class="lineNum">      46 </span><span class="lineCov">          2 :         links_[id]-&gt;get_transport()-&gt;async_send(data, length);</span></a>
-<a name="47"><span class="lineNum">      47 </span><span class="lineCov">          4 : }</span></a>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">         18 :     if (id &gt;= 0 &amp;&amp; id &lt; static_cast&lt;int&gt;(links_.size()))</span></a>
+<a name="46"><span class="lineNum">      46 </span><span class="lineCov">         18 :         links_[id]-&gt;get_transport()-&gt;async_send(data, length);</span></a>
+<a name="47"><span class="lineNum">      47 </span><span class="lineCov">         18 : }</span></a>
 <a name="48"><span class="lineNum">      48 </span>            : </a>
 <a name="49"><span class="lineNum">      49 </span>            : // ======================================================</a>
 <a name="50"><span class="lineNum">      50 </span>            : // Broadcast to all links</a>
