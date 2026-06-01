@@ -457,10 +457,23 @@ class WaypointContextMenu {
         console.log('✅ Mission cleared');
     }
     
+    isFirstTakeoffWaypoint(waypoint) {
+        if (!waypoint || !this.waypointManager) return false;
+        const index = this.waypointManager.waypoints.indexOf(waypoint);
+        return index === 0 && waypoint.type === 'takeoff';
+    }
+
     returnToLaunch() {
         if (!this.currentWaypoint) {
             if (window.MsgConsole) {
                 window.MsgConsole.warning('Right-click a waypoint first to set it as RTL');
+            }
+            return;
+        }
+
+        if (this.isFirstTakeoffWaypoint(this.currentWaypoint)) {
+            if (window.MsgConsole) {
+                window.MsgConsole.warning('Takeoff point mode cannot be changed');
             }
             return;
         }
@@ -498,6 +511,13 @@ class WaypointContextMenu {
             return;
         }
 
+        if (this.isFirstTakeoffWaypoint(this.currentWaypoint)) {
+            if (window.MsgConsole) {
+                window.MsgConsole.warning('Takeoff point mode cannot be changed');
+            }
+            return;
+        }
+
         this.currentWaypoint.type    = 'hover';
         this.currentWaypoint.command = 17; // MAV_CMD_NAV_LOITER_UNLIM
 
@@ -521,6 +541,13 @@ class WaypointContextMenu {
             return;
         }
 
+        if (this.isFirstTakeoffWaypoint(this.currentWaypoint)) {
+            if (window.MsgConsole) {
+                window.MsgConsole.warning('Takeoff point mode cannot be changed');
+            }
+            return;
+        }
+
         // Clear any special type/command — drone will use NAV_WAYPOINT (fly-through)
         this.currentWaypoint.type    = 'waypoint';
         this.currentWaypoint.command = 16; // MAV_CMD_NAV_WAYPOINT
@@ -538,7 +565,6 @@ class WaypointContextMenu {
         console.log(`📍 Waypoint ${this.currentWaypoint.id} reset to NAV_WAYPOINT`);
     }
 
-    
     landHere() {
         if (!this.currentWaypoint) {
             if (window.MsgConsole) {
@@ -547,6 +573,13 @@ class WaypointContextMenu {
             if (this.waypointManager) {
                 this.waypointManager.currentMode = 'land';
                 this.waypointManager.tmap.enableClick();
+            }
+            return;
+        }
+
+        if (this.isFirstTakeoffWaypoint(this.currentWaypoint)) {
+            if (window.MsgConsole) {
+                window.MsgConsole.warning('Takeoff point mode cannot be changed');
             }
             return;
         }

@@ -108,6 +108,7 @@ private:
 
     std::thread       retryThread_;
     std::atomic<bool> retryActive_{false};
+    std::mutex        retryMtx_;
 
     void startRetryWatcher();
     void stopRetryWatcher();
@@ -122,7 +123,7 @@ private:
     //
     // startStepTimeout()  — arms the deadline, wakes the thread.  O(1), no block.
     // cancelStepTimeout() — disarms the deadline, wakes the thread. O(1), no block.
-    // launchStepTimeoutThread() — called once on first use.
+    // launchStepTimeoutThread() — called once in the constructor.
     // The thread is joined only in the destructor.
     static constexpr int STEP_TIMEOUT_S = 30;
 
@@ -131,8 +132,7 @@ private:
     std::condition_variable    stepTimeoutCv_;
     std::atomic<bool>          stepTimeoutActive_{false};
     std::atomic<bool>          stepTimeoutArmed_{false};
-    std::atomic<std::chrono::steady_clock::time_point> stepDeadline_{
-        std::chrono::steady_clock::time_point{}};
+    std::chrono::steady_clock::time_point stepDeadline_{};
 
     void launchStepTimeoutThread();
     void startStepTimeout();    // non-blocking arm

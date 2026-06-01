@@ -356,6 +356,10 @@ function initWebSocket() {
             updateConnectionStatus('disconnected');
             window.MsgConsole?.warning('Connection lost');
 
+            if (window.tmap?.clearDroneMarkers) {
+                window.tmap.clearDroneMarkers();
+            }
+
             snapMapToHome();
 
             if (!isIntentionallyClosed) {
@@ -501,6 +505,9 @@ function handleBackendMessage(message) {
                     _lastStatusKey = 'disconnected';
                 }
                 updateConnectionStatus('waiting');
+                if (window.tmap?.clearDroneMarkers) {
+                    window.tmap.clearDroneMarkers();
+                }
                 snapMapToHome();
             }
             break;

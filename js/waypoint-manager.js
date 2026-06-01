@@ -23,7 +23,7 @@ class WaypointManager {
                 popupAnchor: [0, -32]
             }),
             home: L.icon({
-                iconUrl: '../resources/takeoff.svg',
+                iconUrl: '../resources/home.svg',
                 iconSize: [32, 32],
                 iconAnchor: [16, 32],
                 popupAnchor: [0, -32]
@@ -102,20 +102,43 @@ class WaypointManager {
         }
     }
 
-    addWaypoint(lat, lng, altitude = 50) {
-        console.log(`➕ Adding waypoint at: ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+    getDroneActualLocation() {
+        if (this.tmap && this.tmap.droneMarker) {
+            const pos = this.tmap.droneMarker.getLatLng();
+            return { lat: pos.lat, lng: pos.lng };
+        }
+        if (this.homePosition) {
+            return { lat: this.homePosition.lat, lng: this.homePosition.lng };
+        }
+        if (this.tmap && this.tmap.map) {
+            const center = this.tmap.map.getCenter();
+            return { lat: center.lat, lng: center.lng };
+        }
+        return { lat: 17.60244305205114, lng: 78.12687671185479 };
+    }
+
+    _addWaypointDirect(lat, lng, altitude = 50, type = 'waypoint', speed = 10) {
+        console.log(`➕ Adding point of type "${type}" at: ${lat.toFixed(6)}, ${lng.toFixed(6)} with speed: ${speed}`);
 
         const waypoint = {
             id: ++this.waypointCounter,
             lat: lat,
             lng: lng,
             altitude: altitude,
-            type: 'waypoint',
+            type: type,
+            speed: speed,
             marker: null
         };
 
+        let iconToUse = this.icons.waypoint;
+        if (type === 'takeoff') {
+            iconToUse = this.icons.home;
+        } else if (type === 'landing') {
+            iconToUse = this.icons.landing;
+        }
+
         waypoint.marker = this.tmap.addMarker(lat, lng, true, {
-            icon: this.icons.waypoint
+            icon: iconToUse
         });
 
         const popupContent = this.createWaypointPopup(waypoint);
@@ -152,10 +175,36 @@ class WaypointManager {
         }
 
         if (window.MsgConsole) {
-            window.MsgConsole.success(`Waypoint ${waypoint.id} added`);
+            const displayType = typeof type === 'string' ? type.charAt(0).toUpperCase() + type.slice(1) : 'Waypoint';
+            window.MsgConsole.success(`${displayType} point ${waypoint.id} added`);
         }
 
-        console.log(`✅ Waypoint ${waypoint.id} added. Total: ${this.waypoints.length}`);
+        console.log(`✅ Point ${waypoint.id} (${type}) added. Total: ${this.waypoints.length}`);
+        return waypoint;
+    }
+
+    addWaypoint(lat, lng, altitude = 50, typeOrSpeed = 'waypoint', typeFallback = 'waypoint') {
+        let type = 'waypoint';
+        let speed = 10;
+
+        if (typeof typeOrSpeed === 'number') {
+            speed = typeOrSpeed;
+            type = typeFallback;
+        } else if (typeof typeOrSpeed === 'string') {
+            type = typeOrSpeed;
+        }
+
+        console.log(`➕ addWaypoint called: lat=${lat.toFixed(6)}, lng=${lng.toFixed(6)}, altitude=${altitude}, type=${type}, speed=${speed}`);
+
+        if (this.waypoints.length === 0) {
+            if (type !== 'takeoff') {
+                const droneLoc = this.getDroneActualLocation();
+                console.log(`🛫 Prepending takeoff point at home/drone location: ${droneLoc.lat.toFixed(6)}, ${droneLoc.lng.toFixed(6)}`);
+                this._addWaypointDirect(droneLoc.lat, droneLoc.lng, 15, 'takeoff', speed);
+            }
+        }
+
+        this._addWaypointDirect(lat, lng, altitude, type, speed);
     }
 
     getWaypoints() {
@@ -313,6 +362,17 @@ class WaypointManager {
 
         const index = this.waypoints.findIndex(wp => wp.id === waypointId);
         if (index === -1) return;
+
+        // Prevent deleting the takeoff waypoint if other waypoints exist in the mission
+        if (index === 0 && this.waypoints[0].type === 'takeoff') {
+            if (this.waypoints.length > 1) {
+                if (window.MsgConsole) {
+                    window.MsgConsole.warning('Takeoff point cannot be deleted while other waypoints exist. Clear mission to reset.');
+                }
+                console.log('⚠️ Cannot delete takeoff point because other waypoints exist');
+                return;
+            }
+        }
 
         const waypoint = this.waypoints[index];
         this.tmap.removeMarker(waypoint.marker);
@@ -477,9 +537,12 @@ class WaypointManager {
     }
 
     createWaypointPopup(waypoint) {
+        const isTakeoff = waypoint.type === 'takeoff';
+        const titleText = isTakeoff ? '🛫 Takeoff (Home)' : `Waypoint ${waypoint.id}`;
+        const color = isTakeoff ? '#4ade80' : '#E6007E';
         return `
             <div style="text-align: center; font-family: Arial, sans-serif;">
-                <strong style="color: #E6007E;">Waypoint ${waypoint.id}</strong><br>
+                <strong style="color: ${color};">${titleText}</strong><br>
                 <small>Lat: ${waypoint.lat.toFixed(6)}<br>
                 Lng: ${waypoint.lng.toFixed(6)}<br>
                 Alt: ${waypoint.altitude}m</small>
@@ -607,7 +670,7 @@ class WaypointManager {
 
         if (missionData.waypoints) {
             missionData.waypoints.forEach(wp => {
-                this.addWaypoint(wp.lat, wp.lng);
+                this.addWaypoint(wp.lat, wp.lng, wp.altitude || 50, wp.type || 'waypoint');
             });
         }
 

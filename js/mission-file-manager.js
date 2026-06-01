@@ -546,8 +546,8 @@ class MissionFileManager {
         // Waypoints
         if (missionData.waypoints) {
             missionData.waypoints.forEach(wp => {
-                // MAV_CMD_NAV_WAYPOINT (16)
-                lines.push(`${index}\t0\t0\t16\t0\t0\t0\t0\t${wp.lat}\t${wp.lng}\t${wp.alt}\t1`);
+                const cmd = wp.type === 'takeoff' ? 22 : (wp.type === 'rtl' ? 20 : (wp.type === 'hover' ? 17 : (wp.type === 'landing' ? 21 : 16)));
+                lines.push(`${index}\t0\t0\t${cmd}\t0\t0\t0\t0\t${wp.lat}\t${wp.lng}\t${wp.alt}\t1`);
                 index++;
             });
         }
@@ -610,9 +610,10 @@ class MissionFileManager {
         // Waypoints
         if (missionData.waypoints) {
             missionData.waypoints.forEach(wp => {
+                const cmd = wp.type === 'takeoff' ? 22 : (wp.type === 'rtl' ? 20 : (wp.type === 'hover' ? 17 : (wp.type === 'landing' ? 21 : 16)));
                 mission.mission.items.push({
                     autoContinue: true,
-                    command: 16,
+                    command: cmd,
                     doJumpId: seq + 1,
                     frame: 3,
                     params: [0, 0, 0, 0, wp.lat, wp.lng, wp.alt],

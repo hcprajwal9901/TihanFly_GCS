@@ -1925,6 +1925,12 @@ void start_websocket(CommandManager* cmd_manager,
                                                 rtl.altitude     = item.altitude;
                                                 wps.push_back(rtl);   // item 2: trigger RTL on arrival
                                             }
+                                            else if (action == "takeoff")
+                                            {
+                                                item.seq     = seq++;
+                                                item.command = static_cast<uint16_t>(MAV_CMD_NAV_TAKEOFF);
+                                                wps.push_back(item);
+                                            }
                                             else if (action == "land")
                                             {
                                                 item.seq     = seq++;
@@ -3937,6 +3943,9 @@ int main()
             }
         }
 
+        // Request telemetry streams so GPS/attitude/VFR_HUD starts flowing immediately
+        request_streams_for_vehicle(vehicle);
+
         send_status();   // immediately push updated vehicle list to UI
     });
 
@@ -3952,6 +3961,12 @@ int main()
         // Using ui_sysid (not real sysid) prevents cache file collision when
         // multiple drones share sysid=1 (ArduPilot default in multi-port mode).
         param_manager.deleteCache(ui_sysid);
+
+        // Clear the vehicle's stream tracking so streams can be re-requested on reconnect
+        {
+            std::lock_guard<std::mutex> lk(g_streams_sysids_mutex);
+            g_streams_requested_sysids.erase(ui_sysid);
+        }
 
         send_status();
     });

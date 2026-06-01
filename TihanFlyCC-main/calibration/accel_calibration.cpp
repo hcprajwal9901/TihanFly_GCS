@@ -26,6 +26,7 @@ static constexpr float ATTITUDE_TOLERANCE_RAD = 0.52f;
 AccelCalibration::AccelCalibration()
 {
     std::cout << "[AccelCalibration] Constructed\n";
+    launchStepTimeoutThread();
 }
 
 AccelCalibration::~AccelCalibration()
@@ -136,41 +137,73 @@ void AccelCalibration::processMessage(const mavlink_message_t& msg)
             mavlink_command_ack_t ack;
             mavlink_msg_command_ack_decode(&msg, &ack);
 
-            if (accelState == AccelCalibState::IN_PROGRESS)
+            if (accelState == AccelCalibState::IN_PROGRESS || ack.command == MAV_CMD_PREFLIGHT_CALIBRATION)
             {
                 std::cout << "[Calib][RX] COMMAND_ACK"
                           << " cmd="    << ack.command
                           << " result=" << (int)ack.result << "\n";
             }
 
-            if (ack.command == MAV_CMD_PREFLIGHT_CALIBRATION &&
-                accelState  == AccelCalibState::IN_PROGRESS)
+            if (ack.command == MAV_CMD_PREFLIGHT_CALIBRATION)
             {
-                if (cancelPending_)
+                if (accelState == AccelCalibState::IN_PROGRESS)
                 {
-                    std::cout << "[Calib] Ignoring cancel ACK result="
-                              << (int)ack.result << " (cancel window)\n";
-                    break;
-                }
+                    if (cancelPending_)
+                    {
+                        std::cout << "[Calib] Ignoring cancel ACK result="
+                                  << (int)ack.result << " (cancel window)\n";
+                        break;
+                    }
 
-                if (ack.result == MAV_RESULT_ACCEPTED)
-                {
-                    std::cout << "[Calib] Drone accepted preflight calib — "
-                                 "waiting for first position request\n";
-                    stopRetryWatcher();
-                    sendCalibJSON("calibration_status", "started",
-                                  "Drone accepted — waiting for first position...");
+                    if (ack.result == MAV_RESULT_ACCEPTED)
+                    {
+                        std::cout << "[Calib] Drone accepted preflight calib — "
+                                     "waiting for first position request\n";
+                        stopRetryWatcher();
+                        sendCalibJSON("calibration_status", "started",
+                                      "Drone accepted — waiting for first position...");
+                    }
+                    else
+                    {
+                        std::cout << "[Calib] Drone REJECTED preflight calib"
+                                  << " result=" << (int)ack.result << "\n";
+                        stopRetryWatcher();
+                        cancelStepTimeout();
+                        accelState = AccelCalibState::FAILED;
+                        sendCalibJSON("calibration_result", "failed",
+                                      "Drone rejected calibration command. "
+                                      "Make sure the vehicle is disarmed and on the ground.");
+                    }
                 }
-                else
+                else if (accelState == AccelCalibState::IDLE)
                 {
-                    std::cout << "[Calib] Drone REJECTED preflight calib"
-                              << " result=" << (int)ack.result << "\n";
-                    stopRetryWatcher();
-                    cancelStepTimeout();
-                    accelState = AccelCalibState::FAILED;
-                    sendCalibJSON("calibration_result", "failed",
-                                  "Drone rejected calibration command. "
-                                  "Make sure the vehicle is disarmed and on the ground.");
+                    // Handle level calibration ACK (cmd=241, param5=2)
+                    if (ack.result == MAV_RESULT_ACCEPTED)
+                    {
+                        std::cout << "[LevelCalib] Level calibration succeeded\n";
+                        if (send_cb_)
+                        {
+                            json r;
+                            r["type"]    = "calibration_result";
+                            r["sensor"]  = "level";
+                            r["step"]    = "done";
+                            r["message"] = "Level calibration complete!";
+                            send_cb_(r.dump());
+                        }
+                    }
+                    else
+                    {
+                        std::cout << "[LevelCalib] Level calibration failed: result=" << (int)ack.result << "\n";
+                        if (send_cb_)
+                        {
+                            json r;
+                            r["type"]    = "calibration_result";
+                            r["sensor"]  = "level";
+                            r["step"]    = "failed";
+                            r["message"] = "Level calibration failed. Drone rejected command.";
+                            send_cb_(r.dump());
+                        }
+                    }
                 }
             }
 
@@ -409,7 +442,12 @@ void AccelCalibration::sendPreflightCalibCommand()
 
 void AccelCalibration::startRetryWatcher()
 {
-    stopRetryWatcher();
+    std::lock_guard<std::mutex> lk(retryMtx_);
+    if (retryThread_.joinable())
+    {
+        retryActive_ = false;
+        retryThread_.join();
+    }
     retryActive_       = true;
     calibStartRetries_ = 0;
 
@@ -456,6 +494,7 @@ void AccelCalibration::startRetryWatcher()
 
 void AccelCalibration::stopRetryWatcher()
 {
+    std::lock_guard<std::mutex> lk(retryMtx_);
     retryActive_ = false;
     if (retryThread_.joinable())
         retryThread_.join();
@@ -505,7 +544,7 @@ void AccelCalibration::launchStepTimeoutThread()
             // ── Sleep until deadline, or until disarmed / destroyed ──────────
             {
                 std::unique_lock<std::mutex> lk(stepTimeoutMtx_);
-                auto deadline = stepDeadline_.load();
+                auto deadline = stepDeadline_;
                 stepTimeoutCv_.wait_until(lk, deadline, [this]{
                     return !stepTimeoutArmed_.load() || !stepTimeoutActive_.load();
                 });
@@ -555,9 +594,6 @@ void AccelCalibration::launchStepTimeoutThread()
 // Arms the watchdog for the current step. Returns immediately (non-blocking).
 void AccelCalibration::startStepTimeout()
 {
-    if (!stepTimeoutThread_.joinable())
-        launchStepTimeoutThread();
-
     {
         std::lock_guard<std::mutex> lk(stepTimeoutMtx_);
         stepDeadline_     = std::chrono::steady_clock::now()

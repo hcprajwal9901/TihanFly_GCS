@@ -294,7 +294,7 @@ bool Vehicle::is_alive() const
 {
     std::lock_guard<std::mutex> lock(heartbeat_mtx_);
     return (std::chrono::steady_clock::now() - last_heartbeat_)
-           < std::chrono::seconds(8);
+           < std::chrono::seconds(5);
 }
 
 // ---------------------------------------------------------------------------

@@ -160,6 +160,7 @@ PlanFlightMode.prototype.sendMarkersToDrone = function() {
         if (wp.type === 'rtl'     || wp.command === 20) return 'return';  // MAV_CMD_NAV_RETURN_TO_LAUNCH
         if (wp.type === 'landing' || wp.command === 21) return 'land';    // MAV_CMD_NAV_LAND
         if (wp.type === 'hover'   || wp.command === 17) return 'hover';   // MAV_CMD_NAV_LOITER_UNLIM
+        if (wp.type === 'takeoff' || wp.command === 22) return 'takeoff'; // MAV_CMD_NAV_TAKEOFF
         return 'move';  // default → NAV_WAYPOINT (16)
     }
 
@@ -261,17 +262,36 @@ PlanFlightMode.prototype.sendMissionToDrone = function() {
         window.PolygonManager.surveyGrid.length > 0) {
 
         const altitude = window.PolygonManager.surveySettings?.altitude || 50;
-        rawWaypoints = window.PolygonManager.surveyGrid.map((pt, i) => ({
-            id:       i + 1,
-            lat:      pt.lat,
-            lng:      pt.lng,
-            altitude: altitude,
-            speed:    window.PolygonManager.surveySettings?.speed || 10,
-            type:     'waypoint'   // all survey grid points are plain NAV_WAYPOINT
-        }));
-        console.log(`📐 Polygon survey fallback: ${rawWaypoints.length} grid waypoints`);
+        const speed = window.PolygonManager.surveySettings?.speed || 10;
+        
+        // Resolve home/drone position for takeoff point
+        const droneLoc = window.WaypointManager.getDroneActualLocation ? window.WaypointManager.getDroneActualLocation() : (homePosition || window.PolygonManager.surveyGrid[0]);
+
+        // Prepend takeoff point as the very first waypoint
+        rawWaypoints = [{
+            id:       1,
+            lat:      droneLoc.lat,
+            lng:      droneLoc.lng,
+            altitude: 15,
+            speed:    speed,
+            type:     'takeoff'
+        }];
+
+        // Map and append the rest of the survey grid points (shifting their IDs)
+        window.PolygonManager.surveyGrid.forEach((pt, i) => {
+            rawWaypoints.push({
+                id:       i + 2,
+                lat:      pt.lat,
+                lng:      pt.lng,
+                altitude: altitude,
+                speed:    speed,
+                type:     'waypoint'
+            });
+        });
+
+        console.log(`📐 Polygon survey fallback: ${rawWaypoints.length} grid waypoints (with prepended takeoff WP)`);
         if (window.MsgConsole) {
-            window.MsgConsole.info(`Using polygon survey grid (${rawWaypoints.length} waypoints)`);
+            window.MsgConsole.info(`Using polygon survey grid (${rawWaypoints.length - 1} waypoints + takeoff)`);
         }
     }
 
@@ -287,6 +307,7 @@ PlanFlightMode.prototype.sendMissionToDrone = function() {
     const LOITER  = 17;  // MAV_CMD_NAV_LOITER_UNLIM  (hover)
     const RTL_CMD = 20;  // MAV_CMD_NAV_RETURN_TO_LAUNCH
     const LAND    = 21;  // MAV_CMD_NAV_LAND
+    const TAKEOFF_CMD = 22; // MAV_CMD_NAV_TAKEOFF
 
     const missionItems = [];
     let seq = 0;
@@ -319,6 +340,7 @@ PlanFlightMode.prototype.sendMissionToDrone = function() {
             if (wp.type === 'rtl'     || wp.command === RTL_CMD) return 'return';
             if (wp.type === 'landing' || wp.command === LAND)    return 'land';
             if (wp.type === 'hover'   || wp.command === LOITER)  return 'hover';
+            if (wp.type === 'takeoff' || wp.command === TAKEOFF_CMD) return 'takeoff';
             return 'move';  // default: NAV_WAYPOINT
         })();
 
@@ -348,6 +370,13 @@ PlanFlightMode.prototype.sendMissionToDrone = function() {
             missionItems.push({
                 seq: seq++, latitude: lat, longitude: lng, altitude: alt,
                 command: LOITER, frame: FRAME, param1: 0, autocontinue: true
+            });
+
+        } else if (action === 'takeoff') {
+            // ── Takeoff ──────────────────────────────────────────────────────
+            missionItems.push({
+                seq: seq++, latitude: lat, longitude: lng, altitude: alt,
+                command: TAKEOFF_CMD, frame: FRAME, param1: 0, autocontinue: true
             });
 
         } else {
