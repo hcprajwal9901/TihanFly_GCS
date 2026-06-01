@@ -14,6 +14,7 @@ using json = nlohmann::json;
 CompassCalibration::CompassCalibration()
 {
     std::cout << "[CompassCalibration] Constructed\n";
+    launchOverallTimeoutThread();
 }
 
 CompassCalibration::~CompassCalibration()
@@ -297,23 +298,14 @@ void CompassCalibration::startCompassCalibration(bool large_vehicle)
     }
 
     // Always stop the previous retry watcher before starting a new one.
-    // If startRetryWatcher() is called while retryThread_ is still joinable
-    // (e.g. after a cancel that only set retryActive_=false but didn't join),
-    // the assignment of a new std::thread would destroy the old joinable one
-    // and call std::terminate().
     stopRetryWatcher();
 
-    // Stop the previous overall-timeout thread before launching a new one.
-    // Without this, re-assigning overallTimeoutThread_ while it is still
-    // joinable calls std::terminate().
+    // Reset overall timeout armed state under its mutex
     {
         std::lock_guard<std::mutex> lk(overallTimeoutMtx_);
-        overallTimeoutActive_ = false;
         overallTimeoutArmed_  = false;
     }
     overallTimeoutCv_.notify_all();
-    if (overallTimeoutThread_.joinable())
-        overallTimeoutThread_.join();
 
     large_vehicle_ = large_vehicle;
 
@@ -347,7 +339,6 @@ void CompassCalibration::startCompassCalibration(bool large_vehicle)
 
     sendStatusJSON("Waiting for drone response...");
 
-    launchOverallTimeoutThread();
     startRetryWatcher();
 
     // Initial confirmation counter is 1, not 0
@@ -810,6 +801,12 @@ void CompassCalibration::sendAcceptMagCalCommand()
 
 void CompassCalibration::startRetryWatcher()
 {
+    std::lock_guard<std::mutex> lk(retryMtx_);
+    if (retryThread_.joinable())
+    {
+        retryActive_ = false;
+        retryThread_.join();
+    }
     retryActive_ = true;
 
     retryThread_ = std::thread([this]()
@@ -859,6 +856,7 @@ void CompassCalibration::startRetryWatcher()
 
 void CompassCalibration::stopRetryWatcher()
 {
+    std::lock_guard<std::mutex> lk(retryMtx_);
     retryActive_ = false;
 
     if (retryThread_.joinable())
@@ -871,18 +869,6 @@ void CompassCalibration::stopRetryWatcher()
 
 void CompassCalibration::launchOverallTimeoutThread()
 {
-    // Never assign over a joinable thread — that calls std::terminate().
-    // The caller (startCompassCalibration) is responsible for stopping the old
-    // thread before calling us. This guard is a safety net.
-    if (overallTimeoutThread_.joinable())
-    {
-        std::cout << "[Compass] WARNING: launchOverallTimeoutThread called while "
-                     "previous thread still joinable — joining first\n";
-        overallTimeoutActive_ = false;
-        overallTimeoutCv_.notify_all();
-        overallTimeoutThread_.join();
-    }
-
     overallTimeoutActive_ = true;
     overallTimeoutArmed_  = false;
 
@@ -951,9 +937,6 @@ void CompassCalibration::launchOverallTimeoutThread()
 
 void CompassCalibration::startOverallTimeout()
 {
-    if (!overallTimeoutThread_.joinable())
-        launchOverallTimeoutThread();
-
     // [FIX-B]: Only arm if not already armed. compare_exchange guarantees at
     // most one successful arm even if called concurrently.
     bool wasArmed = false;

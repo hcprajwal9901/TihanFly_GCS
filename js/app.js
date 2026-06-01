@@ -265,6 +265,9 @@ function initializeDroneWebSocket() {
                                     distance: 0, satellites: 0
                                 });
                             }
+                            if (tmap && typeof tmap.clearDroneMarkers === 'function') {
+                                tmap.clearDroneMarkers();
+                            }
                             if (tmap && homeMarker) {
                                 droneMapSnapped = false;
                                 tmap._droneSetViewInProgress = true;
@@ -312,6 +315,9 @@ function initializeDroneWebSocket() {
             }
             if (window.MsgConsole) {
                 window.MsgConsole.warning('🔌 Backend disconnected — reconnecting...');
+            }
+            if (tmap && typeof tmap.clearDroneMarkers === 'function') {
+                tmap.clearDroneMarkers();
             }
             // ── Snap map back to static home location ─────────────────────
             if (tmap && homeMarker) {

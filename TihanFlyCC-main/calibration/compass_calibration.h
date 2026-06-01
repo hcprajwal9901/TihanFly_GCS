@@ -239,6 +239,7 @@ private:
 
     std::thread       retryThread_;
     std::atomic<bool> retryActive_{false};
+    std::mutex        retryMtx_;
 
     // [BUG 2]: tracks whether the retry watcher has already been stopped
     // by an implicit ACK (MAG_CAL_PROGRESS or STATUSTEXT) so we don't call

@@ -295,6 +295,11 @@ class CommandEditor {
         if (waypointsPanel) waypointsPanel.style.display = 'block';
         if (detailsPanel) detailsPanel.style.display = 'none';
         
+        const typeField = document.getElementById('waypointTypeField');
+        if (typeField) {
+            typeField.disabled = false;
+        }
+        
         this.selectedWaypointId = null;
     }
     
@@ -318,7 +323,13 @@ class CommandEditor {
         document.getElementById('waypointLatField').value = waypoint.lat;
         document.getElementById('waypointLngField').value = waypoint.lng;
         document.getElementById('waypointAltField').value = waypoint.altitude || 50;
-        document.getElementById('waypointTypeField').value = waypoint.type || 'waypoint';
+        
+        const typeField = document.getElementById('waypointTypeField');
+        if (typeField) {
+            typeField.value = waypoint.type || 'waypoint';
+            const isFirstTakeoff = waypointIndex === 0 && waypoint.type === 'takeoff';
+            typeField.disabled = isFirstTakeoff;
+        }
     }
     
     saveWaypointChanges() {
@@ -342,7 +353,13 @@ class CommandEditor {
         waypoint.lat = newLat;
         waypoint.lng = newLng;
         waypoint.altitude = newAlt;
-        waypoint.type = newType;
+        
+        const isFirstTakeoff = this.waypointManager.waypoints[0]?.id === this.selectedWaypointId && waypoint.type === 'takeoff';
+        if (isFirstTakeoff) {
+            waypoint.type = 'takeoff';
+        } else {
+            waypoint.type = newType;
+        }
         
         if (waypoint.marker) {
             waypoint.marker.setLatLng([newLat, newLng]);

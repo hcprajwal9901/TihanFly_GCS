@@ -640,4 +640,47 @@ disableWeatherClicks() {
         if (enabled) this._gpsFixCount = 0;
         console.log(`🚁 Drone auto-pan: ${enabled ? 'ON' : 'OFF'}`);
     }
+
+    /**
+     * Prune vehicle markers that are no longer active/connected.
+     * @param {number[]} activeSysids - Array of active vehicle system IDs
+     */
+    pruneStaleVehicleMarkers(activeSysids) {
+        if (!this.droneMarkers) return;
+        Object.keys(this.droneMarkers).forEach(sysidStr => {
+            const sysid = parseInt(sysidStr, 10);
+            if (!activeSysids.includes(sysid)) {
+                console.log(`[TMap] Pruning stale drone marker for sysid=${sysid}`);
+                const marker = this.droneMarkers[sysid];
+                if (marker) {
+                    this.map.removeLayer(marker);
+                }
+                delete this.droneMarkers[sysid];
+            }
+        });
+    }
+
+    /**
+     * Remove all drone markers from the map.
+     */
+    clearDroneMarkers() {
+        if (!this.droneMarkers) return;
+        Object.keys(this.droneMarkers).forEach(sysid => {
+            const marker = this.droneMarkers[sysid];
+            if (marker) {
+                this.map.removeLayer(marker);
+            }
+        });
+        this.droneMarkers = {};
+        console.log('[TMap] Cleared all drone markers');
+    }
+
+    /**
+     * Getter for backward compatibility and simple access to the selected active drone marker.
+     * @returns {object|null} The marker for the selected/active drone.
+     */
+    get droneMarker() {
+        const activeSysId = window.selectedSysId || window._primarySysId || 1;
+        return (this.droneMarkers && this.droneMarkers[activeSysId]) ? this.droneMarkers[activeSysId] : null;
+    }
 }

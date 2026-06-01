@@ -462,8 +462,8 @@ void CommandManager::send_mission_item(uint16_t seq)
         (seq == 0) ? 1 : 0,                       // current=1 for home/first item
         wp.autocontinue ? 1 : 0,
         wp.hold_time, 0.f, 0.f, 0.f,             // param1-4
-        static_cast<int32_t>(wp.lat * 1e7),       // x = lat × 1e7  (int32)
-        static_cast<int32_t>(wp.lng * 1e7),       // y = lng × 1e7  (int32)
+        static_cast<int32_t>(wp.lat * 1e7f),      // x = lat × 1e7  (int32)
+        static_cast<int32_t>(wp.lng * 1e7f),      // y = lng × 1e7  (int32)
         wp.altitude,                               // z = altitude (float, metres)
         MAV_MISSION_TYPE_MISSION);
 

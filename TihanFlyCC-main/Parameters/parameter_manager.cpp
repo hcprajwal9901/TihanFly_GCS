@@ -150,8 +150,6 @@ void ParameterManager::handle_param_value(const mavlink_message_t& msg)
     //      • On completion, send ONE param_all with the full snapshot.
     //    This cuts WS traffic from 2092 messages to ~22, eliminating the lag.
 
-    static constexpr int PROGRESS_BATCH_SIZE = 10;
-
     if (!loading_.load())
     {
         // Not a bulk load — individual request_one reply: send immediately.
