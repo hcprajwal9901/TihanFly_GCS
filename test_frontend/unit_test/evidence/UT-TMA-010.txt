@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-TMA-010
+Requirement ID      : REQ-SYS-002
+Source File         : tmap.js
+Target Function     : tmap_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should update or create vehicle marker and lock auto-pan
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+tmap = new TMap('map-container', [17.385, 78.486], 16, true)
+tmap.updateDronePosition(17.385, 78.486, 90)
+tmap.updateDronePosition(17.386, 78.487, 180)
+
+Expected Behavior:
+Verify tmap.droneMarkers[1] satisfies toBeDefined().
+Verify mapMock.setView satisfies toHaveBeenCalledWith([17.385, 78.486], 17, expect.any(Object)).
+Verify markerMock.setLatLng satisfies toHaveBeenCalledWith([17.386, 78.487]).
+Verify mapMock.removeLayer satisfies toHaveBeenCalledWith(markerMock).
+Verify tmap.droneMarkers[1] satisfies toBeUndefined().
+
+Actual Observations:
+tmap.droneMarkers[1]: defined
+mapMock.setView: called with [17.385, 78.486], 17, expect.any(Object)
+markerMock.setLatLng: called with [17.386, 78.487]
+mapMock.removeLayer: called with markerMock
+tmap.droneMarkers[1]: toBeUndefined()
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(tmap.droneMarkers[1]).toBeDefined();
+expect(mapMock.setView).toHaveBeenCalledWith([17.385, 78.486], 17, expect.any(Object));
+expect(markerMock.setLatLng).toHaveBeenCalledWith([17.386, 78.487]);
+expect(mapMock.removeLayer).toHaveBeenCalledWith(markerMock);
+expect(tmap.droneMarkers[1]).toBeUndefined();
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] tmap.droneMarkers[1]: defined
+[PASS] mapMock.setView: called with [17.385, 78.486], 17, expect.any(Object)
+[PASS] markerMock.setLatLng: called with [17.386, 78.487]
+[PASS] mapMock.removeLayer: called with markerMock
+[PASS] tmap.droneMarkers[1]: toBeUndefined()
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

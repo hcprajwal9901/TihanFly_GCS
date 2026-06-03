@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-DM-004
+Requirement ID      : REQ-SYS-002
+Source File         : dropdown-menu.js
+Target Function     : initializeDropdownMenuStrip() [Line 262]
+Test Category       : Positive / Functional
+Test Case Title     : planFlightBtn should trigger PlanFlight.enter and hide dropdown
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+logo.click()
+planBtn.click()
+
+Expected Behavior:
+Container hidden.
+Flight Controls displayed.
+Verify planFlightMock.enter satisfies toHaveBeenCalled().
+
+Actual Observations:
+container.style.display = 'none'
+flightControls.style.display = 'flex'
+planFlightMock.enter: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(hide).toBeDefined();
+// JSDOM verification:
+expect(container.style.display).toBe('none');
+expect(flightControls.style.display).toBe('flex');
+expect(planFlightMock.enter).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] container.style.display = 'none'
+[PASS] flightControls.style.display = 'flex'
+[PASS] planFlightMock.enter: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

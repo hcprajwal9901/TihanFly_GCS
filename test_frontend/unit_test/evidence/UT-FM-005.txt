@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FM-005
+Requirement ID      : REQ-SYS-002
+Source File         : flight-mode.js
+Target Function     : modeById() [Line 115]
+Test Category       : Positive / Functional
+Test Case Title     : should re-enable save button on 5-second timeout if no response echo arrives
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.FlightModes._save()
+saveBtn = container.querySelector('#fmSaveBtn')
+jest.advanceTimersByTime(5100)
+
+Expected Behavior:
+Save Button Disabled is equal to true.
+Save Button Disabled is equal to false.
+Save Button displays text containing 'Save Modes'.
+
+Actual Observations:
+saveBtn.disabled = true
+saveBtn.disabled = false
+saveBtn.innerHTML contains 'Save Modes'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(saveBtn.disabled).toBe(true);
+expect(saveBtn.disabled).toBe(false);
+expect(saveBtn.innerHTML).toContain('Save Modes');
+
+Console Logs:
+[INFO] Jest executed test in 76ms
+[PASS] saveBtn.disabled = true
+[PASS] saveBtn.disabled = false
+[PASS] saveBtn.innerHTML contains 'Save Modes'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,67 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CA-008
+Requirement ID      : REQ-HW-001
+Source File         : calib-accel.js
+Target Function     : buildCubeGrid() [Line 58]
+Test Category       : Positive / Functional
+Test Case Title     : should clear all highlighted classes and progress fills on clicking Reset
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CalibAccel.init()
+})
+face = document.querySelector('.calib-cube-face[data-face="level"]')
+document.getElementById('accelResetBtn').click()
+
+Expected Behavior:
+Face Class List Contains('Active') is equal to true.
+Face Class List Contains('Active') is equal to false.
+Accel Pct exists.
+Accel Status exists.
+Accel Attitude Box exists.
+
+Actual Observations:
+face.classList.contains('active') = true
+face.classList.contains('active') = false
+document.getElementById('accelPct').textContent = '0 / 6'
+document.getElementById('accelStatus').textContent = 'NOT STARTED'
+document.getElementById('accelAttitudeBox').style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(face.classList.contains('active')).toBe(true);
+expect(face.classList.contains('active')).toBe(false);
+expect(document.getElementById('accelPct').textContent).toBe('0 / 6');
+expect(document.getElementById('accelStatus').textContent).toBe('NOT STARTED');
+expect(document.getElementById('accelAttitudeBox').style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 91ms
+[PASS] face.classList.contains('active') = true
+[PASS] face.classList.contains('active') = false
+[PASS] document.getElementById('accelPct').textContent = '0 / 6'
+[PASS] document.getElementById('accelStatus').textContent = 'NOT STARTED'
+[PASS] document.getElementById('accelAttitudeBox').style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

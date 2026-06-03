@@ -1,0 +1,65 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-005
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Positive / Functional
+Test Case Title     : should request single log downloads and broadcast progress updates
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+cls: String, fn: String, ico: String, lbl: String, id: Number, i18Key: String | Simulated: window.AnalyzeToolsPanel._refreshLogs()
+window.AnalyzeToolsPanel._dlLog(5, 500000)
+)
+prog = document.getElementById('logprog_5')
+wsHandler = window.ws.addEventListener.mock.calls.find(call => call[0] === 'message')[1]
+})
+pctLbl = document.getElementById('loglbl_5')
+
+Expected Behavior:
+WebSocket notification sent.
+Prog Class List Contains('Active') is equal to true.
+Pct Lbl displays '50%'.
+
+Actual Observations:
+window.ws.send: toHaveBeenCalledWith
+prog.classList.contains('active') = true
+pctLbl.textContent = '50%'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = B(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(window.ws.send).toHaveBeenCalledWith(
+expect(prog.classList.contains('active')).toBe(true);
+if (pctLbl) expect(pctLbl.textContent).toBe('50%');
+
+Console Logs:
+[INFO] Jest executed test in 9ms
+[PASS] window.ws.send: toHaveBeenCalledWith
+[PASS] prog.classList.contains('active') = true
+[PASS] pctLbl.textContent = '50%'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

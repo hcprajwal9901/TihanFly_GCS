@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFW-003
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-weather.js
+Target Function     : weatherClickHandler() [Line 80]
+Test Category       : Positive / Functional
+Test Case Title     : should register click handler with tmap if registerWeatherClickHandler is present
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.tmap = {
+modeInstance.enableWeatherMapClick()
+registeredCallback = window.tmap.registerWeatherClickHandler.mock.calls[0][0]
+spyFetch = jest.spyOn(modeInstance, 'fetchWeatherForPlanMode').mockImplementation(() => {})
+registeredCallback(12.34, 80.56)
+spyFetch.mockRestore()
+
+Expected Behavior:
+Verify window.tmap.registerWeatherClickHandler satisfies toHaveBeenCalledTimes(1).
+Verify window.tmap.enableWeatherClicks satisfies toHaveBeenCalledTimes(1).
+Verify spyFetch satisfies toHaveBeenCalledWith(12.34, 80.56).
+
+Actual Observations:
+window.tmap.registerWeatherClickHandler: 1 call(s)
+window.tmap.enableWeatherClicks: 1 call(s)
+spyFetch: called with 12.34, 80.56
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.tmap.registerWeatherClickHandler).toHaveBeenCalledTimes(1);
+expect(window.tmap.enableWeatherClicks).toHaveBeenCalledTimes(1);
+expect(spyFetch).toHaveBeenCalledWith(12.34, 80.56);
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] window.tmap.registerWeatherClickHandler: 1 call(s)
+[PASS] window.tmap.enableWeatherClicks: 1 call(s)
+[PASS] spyFetch: called with 12.34, 80.56
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

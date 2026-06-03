@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFC-001
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-core.js
+Target Function     : initializePlanFlightMode() [Line 208]
+Test Category       : Positive / Functional
+Test Case Title     : should expose the window.PlanFlight global controller API
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+No external inputs required.
+
+Expected Behavior:
+Verify window.PlanFlight satisfies toBeDefined().
+Typeof Window Plan Flight Enter is equal to 'function'.
+Typeof Window Plan Flight Exit is equal to 'function'.
+Typeof Window Plan Flight Is Active is equal to 'function'.
+
+Actual Observations:
+window.PlanFlight: defined
+typeof window.PlanFlight.enter = 'function'
+typeof window.PlanFlight.exit = 'function'
+typeof window.PlanFlight.isActive = 'function'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.PlanFlight).toBeDefined();
+expect(typeof window.PlanFlight.enter).toBe('function');
+expect(typeof window.PlanFlight.exit).toBe('function');
+expect(typeof window.PlanFlight.isActive).toBe('function');
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] window.PlanFlight: defined
+[PASS] typeof window.PlanFlight.enter = 'function'
+[PASS] typeof window.PlanFlight.exit = 'function'
+[PASS] typeof window.PlanFlight.isActive = 'function'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

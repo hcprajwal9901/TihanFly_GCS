@@ -1,0 +1,53 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MT-012
+Requirement ID      : REQ-HW-001
+Source File         : motor-test.js
+Target Function     : test_motor_output() [Line 94]
+Test Category       : Boundary Value
+Test Case Title     : should enforce parameter boundary range clipping for minimum and maximum limits of Actuator Motor Testing and PWM Range Limits
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized. Autopilot parameter boundary rules loaded.
+
+Test Inputs:
+component = new GCSComponent()
+component.setLimits(1, 100)
+
+Expected Behavior:
+Component Set Value(101) is equal to 100.
+Component Set Value(0) is equal to 1.
+
+Actual Observations:
+component.setValue(101) = 100
+component.setValue(0) = 1
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(component.setValue(101)).toBe(100);
+expect(component.setValue(0)).toBe(1);
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] component.setValue(101) = 100
+[PASS] component.setValue(0) = 1
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

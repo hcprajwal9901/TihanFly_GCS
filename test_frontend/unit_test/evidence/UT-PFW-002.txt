@@ -1,0 +1,77 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFW-002
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-weather.js
+Target Function     : restoreWeatherPosition() [Line 36]
+Test Category       : Positive / Functional
+Test Case Title     : should restore styles to top-right and clear click listeners on restoreWeatherPosition
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockDashboard = originalCreateElement.call(document, 'div')
+modeInstance.weatherDashboard = mockDashboard
+window.tmap = {
+mockListener = jest.fn()
+modeInstance._weatherClickListener = mockListener
+modeInstance.restoreWeatherPosition()
+
+Expected Behavior:
+Mock Dashboard Style Top is equal to '80px'.
+Mock Dashboard Style Bottom is equal to 'auto'.
+Mock Dashboard Style Right is equal to '20px'.
+Mock Dashboard Style Left is equal to 'auto'.
+Verify window.tmap.map.off satisfies toHaveBeenCalledWith('click', mockListener).
+Verify window.tmap.disableWeatherClicks satisfies toHaveBeenCalledTimes(1).
+Mode Instance Weather Click Listener is null.
+
+Actual Observations:
+mockDashboard.style.top = '80px'
+mockDashboard.style.bottom = 'auto'
+mockDashboard.style.right = '20px'
+mockDashboard.style.left = 'auto'
+window.tmap.map.off: called with 'click', mockListener
+window.tmap.disableWeatherClicks: 1 call(s)
+modeInstance._weatherClickListener: null
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockDashboard.style.top).toBe('80px');
+expect(mockDashboard.style.bottom).toBe('auto');
+expect(mockDashboard.style.right).toBe('20px');
+expect(mockDashboard.style.left).toBe('auto');
+expect(window.tmap.map.off).toHaveBeenCalledWith('click', mockListener);
+expect(window.tmap.disableWeatherClicks).toHaveBeenCalledTimes(1);
+expect(modeInstance._weatherClickListener).toBeNull();
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] mockDashboard.style.top = '80px'
+[PASS] mockDashboard.style.bottom = 'auto'
+[PASS] mockDashboard.style.right = '20px'
+[PASS] mockDashboard.style.left = 'auto'
+[PASS] window.tmap.map.off: called with 'click', mockListener
+[PASS] window.tmap.disableWeatherClicks: 1 call(s)
+[PASS] modeInstance._weatherClickListener: null
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

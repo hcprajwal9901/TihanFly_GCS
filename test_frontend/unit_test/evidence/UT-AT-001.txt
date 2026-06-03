@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-001
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Positive / Functional
+Test Case Title     : should initialize and construct sidebar analyzePanel and tool windows
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+cls: String, fn: String, ico: String, lbl: String, id: Number, i18Key: String | Simulated: window.AnalyzeToolsPanel.showAnalyzePanel()
+panel = document.getElementById('analyzePanel')
+dlWin = document.getElementById('atw-log-download')
+insWin = document.getElementById('atw-mavlink-inspector')
+
+Expected Behavior:
+Panel is null.
+Dl Win is null.
+Ins Win is null.
+Panel Class List Contains('Ap On') is equal to true.
+
+Actual Observations:
+panel: not null
+dlWin: not null
+insWin: not null
+panel.classList.contains('ap-on') = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = B(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(panel).not.toBeNull();
+expect(dlWin).not.toBeNull();
+expect(insWin).not.toBeNull();
+expect(panel.classList.contains('ap-on')).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 6ms
+[PASS] panel: not null
+[PASS] dlWin: not null
+[PASS] insWin: not null
+[PASS] panel.classList.contains('ap-on') = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

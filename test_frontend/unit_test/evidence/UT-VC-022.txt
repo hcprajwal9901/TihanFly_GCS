@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-022
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Positive / Functional
+Test Case Title     : should update program progress and record logs on 10% milestones
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+triggerWsMessage({ type: 'firmware_status', stage: 'program', progress: 0 })
+triggerWsMessage({ type: 'firmware_status', stage: 'program', progress: 75 })
+triggerWsMessage({ type: 'firmware_status', stage: 'program', progress: 80 })
+
+Expected Behavior:
+Write Bar Style Width is equal to '0%'.
+Log Box displays text containing 'Programming firmware… 0%'.
+Write Bar Style Width is equal to '75%'.
+Log Box displays text containing 'Programming firmware… 75%'.
+Write Bar Style Width is equal to '80%'.
+Log Box displays text containing 'Programming firmware… 80%'.
+
+Actual Observations:
+writeBar.style.width = '0%'
+logBox.textContent contains 'Programming firmware… 0%'
+writeBar.style.width = '75%'
+logBox.textContent contains 'Programming firmware… 75%'
+writeBar.style.width = '80%'
+logBox.textContent contains 'Programming firmware… 80%'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(writeBar.style.width).toBe('0%');
+expect(logBox.textContent).toContain('Programming firmware… 0%');
+expect(writeBar.style.width).toBe('75%');
+expect(logBox.textContent).not.toContain('Programming firmware… 75%');
+expect(writeBar.style.width).toBe('80%');
+expect(logBox.textContent).toContain('Programming firmware… 80%');
+
+Console Logs:
+[INFO] Jest executed test in 109ms
+[PASS] writeBar.style.width = '0%'
+[PASS] logBox.textContent contains 'Programming firmware… 0%'
+[PASS] writeBar.style.width = '75%'
+[PASS] logBox.textContent contains 'Programming firmware… 75%'
+[PASS] writeBar.style.width = '80%'
+[PASS] logBox.textContent contains 'Programming firmware… 80%'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

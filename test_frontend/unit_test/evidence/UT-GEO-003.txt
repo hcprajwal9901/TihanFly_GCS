@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-GEO-003
+Requirement ID      : REQ-SAF-002
+Source File         : geofence.js
+Target Function     : safeSendWrap() [Line 64]
+Test Category       : Positive / Functional
+Test Case Title     : should toggle rows status to pending when values are edited by the user
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+altMaxRow = document.getElementById('gf-row-altmax')
+altMaxInp = document.getElementById('gf-altmax-inp')
+altMaxInp.value = '150'
+altMaxInp.dispatchEvent(new Event('input'))
+
+Expected Behavior:
+Alt Max Row Class List Contains('Gf Row Pending') is equal to false.
+Alt Max Row Class List Contains('Gf Row Pending') is equal to true.
+
+Actual Observations:
+altMaxRow.classList.contains('gf-row-pending') = false
+altMaxRow.classList.contains('gf-row-pending') = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(altMaxRow.classList.contains('gf-row-pending')).toBe(false);
+expect(altMaxRow.classList.contains('gf-row-pending')).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 37ms
+[PASS] altMaxRow.classList.contains('gf-row-pending') = false
+[PASS] altMaxRow.classList.contains('gf-row-pending') = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

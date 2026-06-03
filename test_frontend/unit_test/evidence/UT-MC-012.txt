@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MC-012
+Requirement ID      : REQ-SYS-002
+Source File         : messaage-console.js
+Target Function     : initializeMinimalConsole() [Line 189]
+Test Category       : Positive / Functional
+Test Case Title     : should toggle console visibility (show / hide)
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+window.MsgConsole.show()
+window.MsgConsole.hide()
+
+Expected Behavior:
+Panel Container displayed.
+Panel Container hidden.
+
+Actual Observations:
+panelContainer.style.display = 'flex'
+panelContainer.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(show).toBeDefined();
+// JSDOM verification:
+expect(panelContainer.style.display).toBe('flex');
+expect(panelContainer.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] panelContainer.style.display = 'flex'
+[PASS] panelContainer.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

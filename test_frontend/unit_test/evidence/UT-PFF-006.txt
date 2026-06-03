@@ -1,0 +1,48 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFF-006
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-file.js
+Target Function     : handleFileActions() [Line 6]
+Test Category       : Negative / Robustness
+Test Case Title     : should error if WaypointManager is not available
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.newMission()
+
+Expected Behavior:
+Verify window.alert satisfies toHaveBeenCalledWith(expect.stringContaining('WaypointManager not initialized')).
+
+Actual Observations:
+window.alert: called with expect.stringContaining('WaypointManager not initialized')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.alert).toHaveBeenCalledWith(expect.stringContaining('WaypointManager not initialized'));
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] window.alert: called with expect.stringContaining('WaypointManager not initialized')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

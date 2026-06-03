@@ -1,0 +1,101 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MV-004
+Requirement ID      : REQ-SYS-002
+Source File         : multi-vehicle.js
+Target Function     : updateVehicleSelector() [Line 87]
+Test Category       : Positive / Functional
+Test Case Title     : should build fleet cards, battery colors, and badges in updateVehicleSelector
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+vehicles: String, dynLinks: String | Simulated: vehicles = [
+window.updateVehicleSelector(vehicles)
+wrap = document.getElementById('vehicleSelectorWrap')
+cards = wrap.querySelectorAll('.mv-drone-tab')
+card1 = wrap.querySelector('.mv-drone-tab[data-sysid="1"]')
+card2 = wrap.querySelector('.mv-drone-tab[data-sysid="2"]')
+card2.click()
+
+Expected Behavior:
+Drone Count Text exists.
+Cards Length is equal to 3.
+Card1 Query Selector(' Mv Label') displays 'D-1'.
+Card1 Query Selector(' Mv Arm Badge') displays 'DSRM'.
+Card1 Query Selector(' Mv Dot') Class List Contains('Mv Warn') is equal to false.
+Card1 Query Selector(' Mv Dot') Class List Contains('Mv Err') is equal to false.
+Card2 Query Selector(' Mv Label') displays 'D-2'.
+Card2 Query Selector(' Mv Arm Badge') displays 'ARMED'.
+Card2 Query Selector(' Mv Dot') Class List Contains('Mv Err') is equal to true.
+Window Selected Sys Id is equal to 2.
+
+Actual Observations:
+document.getElementById('droneCountText').textContent = '2 DRONES'
+cards.length = 3
+card1.querySelector('.mv-label').textContent = 'D-1'
+card1.querySelector('.mv-arm-badge').textContent = 'DSRM'
+card1.querySelector('.mv-dot').classList.contains('mv-warn') = false
+card1.querySelector('.mv-dot').classList.contains('mv-err') = false
+card2.querySelector('.mv-label').textContent = 'D-2'
+card2.querySelector('.mv-arm-badge').textContent = 'ARMED'
+card2.querySelector('.mv-dot').classList.contains('mv-err') = true
+window.selectedSysId = 2
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(addEventListener).toHaveBeenCalled();
+expect(appendChild).toHaveBeenCalled();
+expect(document.createElement).toHaveBeenCalledWith('a');
+expect(includes).toHaveBeenCalled();
+expect(isArray).toHaveBeenCalled();
+expect(querySelectorAll).toHaveBeenCalled();
+expect(rgba).toHaveBeenCalled();
+expect(setSelectedSysId).toHaveBeenCalled();
+expect(tabs).toHaveBeenCalled();
+expect(updateAllDroneSelectors).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('droneCountText').textContent).toBe('2 DRONES');
+expect(cards.length).toBe(3);
+expect(card1.querySelector('.mv-label').textContent).toBe('D-1');
+expect(card1.querySelector('.mv-arm-badge').textContent).toBe('DSRM');
+expect(card1.querySelector('.mv-dot').classList.contains('mv-warn')).toBe(false);
+expect(card1.querySelector('.mv-dot').classList.contains('mv-err')).toBe(false);
+expect(card2.querySelector('.mv-label').textContent).toBe('D-2');
+expect(card2.querySelector('.mv-arm-badge').textContent).toBe('ARMED');
+expect(card2.querySelector('.mv-dot').classList.contains('mv-err')).toBe(true);
+expect(window.selectedSysId).toBe(2);
+
+Console Logs:
+[INFO] Jest executed test in 78ms
+[PASS] document.getElementById('droneCountText').textContent = '2 DRONES'
+[PASS] cards.length = 3
+[PASS] card1.querySelector('.mv-label').textContent = 'D-1'
+[PASS] card1.querySelector('.mv-arm-badge').textContent = 'DSRM'
+[PASS] card1.querySelector('.mv-dot').classList.contains('mv-warn') = false
+[PASS] card1.querySelector('.mv-dot').classList.contains('mv-err') = false
+[PASS] card2.querySelector('.mv-label').textContent = 'D-2'
+[PASS] card2.querySelector('.mv-arm-badge').textContent = 'ARMED'
+[PASS] card2.querySelector('.mv-dot').classList.contains('mv-err') = true
+[PASS] window.selectedSysId = 2
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

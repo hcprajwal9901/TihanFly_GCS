@@ -1,0 +1,74 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CA-006
+Requirement ID      : REQ-HW-001
+Source File         : calib-accel.js
+Target Function     : buildCubeGrid() [Line 58]
+Test Category       : Positive / Functional
+Test Case Title     : should open success complete modals on done results
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CalibAccel.init()
+})
+})
+modal = document.getElementById('accelModal')
+statPos = document.getElementById('accelModalPositions')
+document.getElementById('accelOkBtn').click()
+document.getElementById('accelModalOkBtn').click()
+
+Expected Behavior:
+Accel Status exists.
+Accel Next Button exists.
+Accel Ok Button exists.
+Modal Class List Contains('Visible') is equal to true.
+Stat Pos displays '6 / 6'.
+Modal Class List Contains('Visible') is equal to false.
+
+Actual Observations:
+document.getElementById('accelStatus').textContent = 'COMPLETE'
+document.getElementById('accelNextBtn').style.display = 'none'
+document.getElementById('accelOkBtn').style.display = 'inline-flex'
+modal.classList.contains('visible') = true
+statPos.textContent = '6 / 6'
+modal.classList.contains('visible') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('accelStatus').textContent).toBe('COMPLETE');
+expect(document.getElementById('accelNextBtn').style.display).toBe('none');
+expect(document.getElementById('accelOkBtn').style.display).toBe('inline-flex');
+expect(modal.classList.contains('visible')).toBe(true);
+expect(statPos.textContent).toBe('6 / 6'); // based on currentStep set + 1
+expect(modal.classList.contains('visible')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 132ms
+[PASS] document.getElementById('accelStatus').textContent = 'COMPLETE'
+[PASS] document.getElementById('accelNextBtn').style.display = 'none'
+[PASS] document.getElementById('accelOkBtn').style.display = 'inline-flex'
+[PASS] modal.classList.contains('visible') = true
+[PASS] statPos.textContent = '6 / 6'
+[PASS] modal.classList.contains('visible') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

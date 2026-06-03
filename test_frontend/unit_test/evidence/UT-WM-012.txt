@@ -1,0 +1,67 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WM-012
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-manager.js
+Target Function     : initializeWaypointManager() [Line 696]
+Test Category       : Positive / Functional
+Test Case Title     : should handle dragging marker and updating route and command editors
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+manager.addWaypoint(17.605, 78.130, 50)
+waypoint = manager.waypoints[1]
+dragCallback = dragCallbackMap.get(waypoint.marker)
+dragCallback(17.610, 78.140)
+
+Expected Behavior:
+Verify dragCallback satisfies toBeDefined().
+Waypoint Lat is equal to 17.610.
+Waypoint Lng is equal to 78.140.
+Verify mockTMap.clearRoute satisfies toHaveBeenCalled().
+Verify window.CommandEditor.refreshWaypoints satisfies toHaveBeenCalled().
+
+Actual Observations:
+dragCallback: defined
+waypoint.lat = 17.610
+waypoint.lng = 78.140
+mockTMap.clearRoute: called
+window.CommandEditor.refreshWaypoints: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(dragCallback).toBeDefined();
+expect(waypoint.lat).toBe(17.610);
+expect(waypoint.lng).toBe(78.140);
+expect(mockTMap.clearRoute).toHaveBeenCalled();
+expect(window.CommandEditor.refreshWaypoints).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] dragCallback: defined
+[PASS] waypoint.lat = 17.610
+[PASS] waypoint.lng = 78.140
+[PASS] mockTMap.clearRoute: called
+[PASS] window.CommandEditor.refreshWaypoints: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

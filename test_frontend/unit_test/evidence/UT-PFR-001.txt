@@ -1,0 +1,62 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFR-001
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-return.js
+Target Function     : handleReturnActions() [Line 8]
+Test Category       : Positive / Functional
+Test Case Title     : should route matching return actions to their respective handlers
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+spyRtl = jest.spyOn(modeInstance, 'returnToLaunch').mockImplementation(() => {})
+spyLand = jest.spyOn(modeInstance, 'landHere').mockImplementation(() => {})
+modeInstance.handleReturnActions('return-to-launch')
+modeInstance.handleReturnActions('land-here')
+modeInstance.handleReturnActions('unknown-return-action')
+spyRtl.mockRestore()
+spyLand.mockRestore()
+
+Expected Behavior:
+Verify spyRtl satisfies toHaveBeenCalledTimes(1).
+Verify spyLand satisfies toHaveBeenCalledTimes(1).
+Verify console.warn satisfies toHaveBeenCalledWith(expect.stringContaining('Unknown return action')).
+
+Actual Observations:
+spyRtl: 1 call(s)
+spyLand: 1 call(s)
+console.warn: called with expect.stringContaining('Unknown return action')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(spyRtl).toHaveBeenCalledTimes(1);
+expect(spyLand).toHaveBeenCalledTimes(1);
+expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('Unknown return action'));
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] spyRtl: 1 call(s)
+[PASS] spyLand: 1 call(s)
+[PASS] console.warn: called with expect.stringContaining('Unknown return action')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

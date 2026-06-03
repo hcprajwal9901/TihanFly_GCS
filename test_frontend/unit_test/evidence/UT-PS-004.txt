@@ -1,0 +1,78 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PS-004
+Requirement ID      : REQ-TUNE-001
+Source File         : param-switch.js
+Target Function     : connectWebSocket() [Line 232]
+Test Category       : Positive / Functional
+Test Case Title     : should show correct percentage progress during parameter loading streams
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+progressBar = document.getElementById('swProgressBar')
+fill = document.getElementById('swProgressFill')
+label = document.getElementById('swProgressLabel')
+progressBar.style.display = 'none'
+})
+})
+})
+
+Expected Behavior:
+Progress Bar hidden.
+Progress Bar displayed.
+Sw Footer Info exists.
+Fill Style Width is equal to '50%'.
+Label displays text containing 'Loading… 4/8 (50%)'.
+Progress Bar hidden.
+Sw Footer Info exists.
+
+Actual Observations:
+progressBar.style.display = 'none'
+progressBar.style.display = 'block'
+document.getElementById('swFooterInfo').textContent = 'Reading configurations…'
+fill.style.width = '50%'
+label.textContent contains 'Loading… 4/8 (50%)'
+progressBar.style.display = 'none'
+document.getElementById('swFooterInfo').textContent = 'Sync OK'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(progressBar.style.display).toBe('none');
+expect(progressBar.style.display).toBe('block');
+expect(document.getElementById('swFooterInfo').textContent).toBe('Reading configurations…');
+expect(fill.style.width).toBe('50%');
+expect(label.textContent).toContain('Loading… 4/8 (50%)');
+expect(progressBar.style.display).toBe('none');
+expect(document.getElementById('swFooterInfo').textContent).toBe('Sync OK');
+
+Console Logs:
+[INFO] Jest executed test in 1014ms
+[PASS] progressBar.style.display = 'none'
+[PASS] progressBar.style.display = 'block'
+[PASS] document.getElementById('swFooterInfo').textContent = 'Reading configurations…'
+[PASS] fill.style.width = '50%'
+[PASS] label.textContent contains 'Loading… 4/8 (50%)'
+[PASS] progressBar.style.display = 'none'
+[PASS] document.getElementById('swFooterInfo').textContent = 'Sync OK'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

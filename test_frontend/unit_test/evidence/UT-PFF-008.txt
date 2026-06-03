@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFF-008
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-file.js
+Target Function     : handleFileActions() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should auto-dismiss new mission notification after a 5-second timeout
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.WaypointManager = {
+modeInstance.newMission()
+autoDismissCallback()
+
+Expected Behavior:
+Document Body Query Selector(' New Mission Notification') is true.
+Auto Dismiss Callback is true.
+Document Body Query Selector(' New Mission Notification') is null.
+
+Actual Observations:
+document.body.querySelector('.new-mission-notification'): truthy
+autoDismissCallback: truthy
+document.body.querySelector('.new-mission-notification'): null
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.body.querySelector('.new-mission-notification')).toBeTruthy();
+expect(autoDismissCallback).toBeTruthy();
+expect(document.body.querySelector('.new-mission-notification')).toBeNull();
+
+Console Logs:
+[INFO] Jest executed test in 9ms
+[PASS] document.body.querySelector('.new-mission-notification'): truthy
+[PASS] autoDismissCallback: truthy
+[PASS] document.body.querySelector('.new-mission-notification'): null
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

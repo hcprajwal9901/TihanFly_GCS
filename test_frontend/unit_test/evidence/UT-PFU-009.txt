@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFU-009
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-ui.js
+Target Function     : showPlanMenuStrip() [Line 10]
+Test Category       : Positive / Functional
+Test Case Title     : should delegate to window.CommandEditor component show/hide if defined
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CommandEditor = {
+modeInstance.createCommandEditor()
+modeInstance.removeCommandEditor()
+
+Expected Behavior:
+Verify window.CommandEditor.show satisfies toHaveBeenCalledTimes(1).
+Verify window.CommandEditor.hide satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+window.CommandEditor.show: 1 call(s)
+window.CommandEditor.hide: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.CommandEditor.show).toHaveBeenCalledTimes(1);
+expect(window.CommandEditor.hide).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] window.CommandEditor.show: 1 call(s)
+[PASS] window.CommandEditor.hide: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,84 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-005
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Positive / Functional
+Test Case Title     : should populate list when serial_ports message arrives and allow port selection
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockPorts = [
+triggerWsMessage({ type: 'serial_ports', ports: mockPorts })
+rows = document.querySelectorAll('.vc-port-row')
+rows[0].dispatchEvent(new Event('click'))
+logBox = document.getElementById('vcFlashLog')
+
+Expected Behavior:
+Rows Length is equal to 2.
+Rows[0] Children[0] displays 'COM3'.
+Rows[0] Children[1] displays 'v4'.
+Rows[0] Children[2] displays 'STMicroelectronics'.
+Rows[0] Children[3] displays 'Pixhawk'.
+Rows[0] Children[4] displays 'FMU v4 Serial'.
+Rows[0] Class List Contains('Vc Selected') is equal to true.
+Rows[1] Class List Contains('Vc Selected') is equal to false.
+Log Box displays text containing 'Port selected: COM3'.
+
+Actual Observations:
+rows.length = 2
+rows[0].children[0].textContent = 'COM3'
+rows[0].children[1].textContent = 'v4'
+rows[0].children[2].textContent = 'STMicroelectronics'
+rows[0].children[3].textContent = 'Pixhawk'
+rows[0].children[4].textContent = 'FMU v4 Serial'
+rows[0].classList.contains('vc-selected') = true
+rows[1].classList.contains('vc-selected') = false
+logBox.textContent contains 'Port selected: COM3'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(rows.length).toBe(2);
+expect(rows[0].children[0].textContent).toBe('COM3');
+expect(rows[0].children[1].textContent).toBe('v4');
+expect(rows[0].children[2].textContent).toBe('STMicroelectronics');
+expect(rows[0].children[3].textContent).toBe('Pixhawk');
+expect(rows[0].children[4].textContent).toBe('FMU v4 Serial');
+expect(rows[0].classList.contains('vc-selected')).toBe(true);
+expect(rows[1].classList.contains('vc-selected')).toBe(false);
+expect(logBox.textContent).toContain('Port selected: COM3');
+
+Console Logs:
+[INFO] Jest executed test in 102ms
+[PASS] rows.length = 2
+[PASS] rows[0].children[0].textContent = 'COM3'
+[PASS] rows[0].children[1].textContent = 'v4'
+[PASS] rows[0].children[2].textContent = 'STMicroelectronics'
+[PASS] rows[0].children[3].textContent = 'Pixhawk'
+[PASS] rows[0].children[4].textContent = 'FMU v4 Serial'
+[PASS] rows[0].classList.contains('vc-selected') = true
+[PASS] rows[1].classList.contains('vc-selected') = false
+[PASS] logBox.textContent contains 'Port selected: COM3'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

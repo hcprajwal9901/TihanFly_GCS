@@ -1,0 +1,75 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LOG-009
+Requirement ID      : REQ-LOG-001
+Source File         : login.js
+Target Function     : updateConnectionStatus() [Line 91]
+Test Category       : Positive / Functional
+Test Case Title     : should submit registration and support real-time approval full-screen overlays
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+type: String, callback: Function | Simulated: document.getElementById('signupFirst').value = 'Ravi'
+document.getElementById('signupLast').value = 'Kumar'
+document.getElementById('signupEmail').value = 'ravi@tihan.in'
+document.getElementById('signupPassword').value = 'password123'
+document.getElementById('signupConfirm').value = 'password123'
+document.getElementById('termsCheck').checked = true
+sendSpy = jest.spyOn(socket, 'send')
+handleSignup()
+})
+socket.handlers['signup_pending'][0]({ message: 'Awaiting admin approval' })
+socket.handlers['account_approved'][0]({ message: 'User Ravi approved by admin' })
+proceeds = document.body.innerHTML
+sendSpy.mockRestore()
+
+Expected Behavior:
+Verify sendSpy satisfies toHaveBeenCalledWith().
+Auth Alert exists.
+Proceeds contains 'Account Approved!'.
+Proceeds contains 'User Ravi approved by admin'.
+
+Actual Observations:
+sendSpy: toHaveBeenCalledWith
+document.getElementById('authAlert').textContent contains 'Awaiting admin approval'
+proceeds contains 'Account Approved!'
+proceeds contains 'User Ravi approved by admin'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = on(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(sendSpy).toHaveBeenCalledWith({
+expect(document.getElementById('authAlert').textContent).toContain('Awaiting admin approval');
+expect(proceeds).toContain('Account Approved!');
+expect(proceeds).toContain('User Ravi approved by admin');
+
+Console Logs:
+[INFO] Jest executed test in 26ms
+[PASS] sendSpy: toHaveBeenCalledWith
+[PASS] document.getElementById('authAlert').textContent contains 'Awaiting admin approval'
+[PASS] proceeds contains 'Account Approved!'
+[PASS] proceeds contains 'User Ravi approved by admin'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

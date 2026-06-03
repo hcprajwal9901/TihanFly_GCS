@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-TMA-003
+Requirement ID      : REQ-SYS-002
+Source File         : tmap.js
+Target Function     : tmap_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : addRotatingHomeMarker should create icon, marker and handle centering on click
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+lat: Number, lng: Number, label = 'Home': String, options = {}: String | Simulated: tmap = new TMap('map-container', [17.385, 78.486], 16, true)
+home = tmap.addRotatingHomeMarker(17.385, 78.486, 'Ground Base')
+markerEvents['click']()
+
+Expected Behavior:
+Verify global.L.divIcon satisfies toHaveBeenCalled().
+Verify global.L.marker satisfies toHaveBeenCalledWith([17.385, 78.486], expect.any(Object)).
+Tmap Get Marker Count() is equal to 1.
+Click action triggered.
+Verify mapMock.setView satisfies toHaveBeenCalledWith([17.385, 78.486], 18).
+
+Actual Observations:
+global.L.divIcon: called
+global.L.marker: called with [17.385, 78.486], expect.any(Object)
+tmap.getMarkerCount() = 1
+markerEvents['click']: defined
+mapMock.setView: called with [17.385, 78.486], 18
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(addRotatingHomeMarker).toBeDefined();
+// JSDOM verification:
+expect(global.L.divIcon).toHaveBeenCalled();
+expect(global.L.marker).toHaveBeenCalledWith([17.385, 78.486], expect.any(Object));
+expect(tmap.getMarkerCount()).toBe(1);
+expect(markerEvents['click']).toBeDefined();
+expect(mapMock.setView).toHaveBeenCalledWith([17.385, 78.486], 18);
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] global.L.divIcon: called
+[PASS] global.L.marker: called with [17.385, 78.486], expect.any(Object)
+[PASS] tmap.getMarkerCount() = 1
+[PASS] markerEvents['click']: defined
+[PASS] mapMock.setView: called with [17.385, 78.486], 18
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

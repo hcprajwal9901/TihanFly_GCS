@@ -1,0 +1,82 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFF-007
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-file.js
+Target Function     : handleFileActions() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should clear caches, show notification modal, and trigger startAddingWaypoint on confirmation click
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.WaypointManager = {
+modeInstance.newMission()
+notification = document.body.querySelector('.new-mission-notification')
+confirmBtn = notification.querySelector('button')
+onclickAttr = confirmBtn.getAttribute('onclick')
+evalFn = new Function('window', onclickAttr)
+evalFn.call(confirmBtn, window)
+
+Expected Behavior:
+Verify window.WaypointManager.clearAllWaypoints satisfies toHaveBeenCalledTimes(1).
+Verify window.WaypointManager.clearHomePosition satisfies toHaveBeenCalledTimes(1).
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('✅ New mission ready').
+Notification is true.
+Notification displays text containing 'New Mission Ready'.
+Document Body Query Selector(' New Mission Notification') is null.
+Verify window.WaypointManager.startAddingWaypoint satisfies toHaveBeenCalledTimes(1).
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith('✈️ Click on map to add waypoints').
+
+Actual Observations:
+window.WaypointManager.clearAllWaypoints: 1 call(s)
+window.WaypointManager.clearHomePosition: 1 call(s)
+window.MsgConsole.success: called with '✅ New mission ready'
+notification: truthy
+notification.textContent contains 'New Mission Ready'
+document.body.querySelector('.new-mission-notification'): null
+window.WaypointManager.startAddingWaypoint: 1 call(s)
+window.MsgConsole.info: called with '✈️ Click on map to add waypoints'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.WaypointManager.clearAllWaypoints).toHaveBeenCalledTimes(1);
+expect(window.WaypointManager.clearHomePosition).toHaveBeenCalledTimes(1);
+expect(window.MsgConsole.success).toHaveBeenCalledWith('✅ New mission ready');
+expect(notification).toBeTruthy();
+expect(notification.textContent).toContain('New Mission Ready');
+expect(document.body.querySelector('.new-mission-notification')).toBeNull();
+expect(window.WaypointManager.startAddingWaypoint).toHaveBeenCalledTimes(1);
+expect(window.MsgConsole.info).toHaveBeenCalledWith('✈️ Click on map to add waypoints');
+
+Console Logs:
+[INFO] Jest executed test in 183ms
+[PASS] window.WaypointManager.clearAllWaypoints: 1 call(s)
+[PASS] window.WaypointManager.clearHomePosition: 1 call(s)
+[PASS] window.MsgConsole.success: called with '✅ New mission ready'
+[PASS] notification: truthy
+[PASS] notification.textContent contains 'New Mission Ready'
+[PASS] document.body.querySelector('.new-mission-notification'): null
+[PASS] window.WaypointManager.startAddingWaypoint: 1 call(s)
+[PASS] window.MsgConsole.info: called with '✈️ Click on map to add waypoints'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

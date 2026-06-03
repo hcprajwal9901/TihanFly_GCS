@@ -1,0 +1,49 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WIH-013
+Requirement ID      : REQ-SYS-002
+Source File         : weather-integration-helper.js
+Target Function     : fetch_weather_telemetry() [Line 101]
+Test Category       : Wrong Value
+Test Case Title     : should reject incorrect string format payloads and log mismatch warning for Weather API Dashboard and Wind-speed Warning Overlays
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized. Type safety check wrappers active.
+
+Test Inputs:
+weather = new WeatherDashboard()
+result = weather.parseWeatherData('GARBAGE_STRING')
+
+Expected Behavior:
+Result is null.
+
+Actual Observations:
+result: null
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(result).toBeNull();
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] result: null
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

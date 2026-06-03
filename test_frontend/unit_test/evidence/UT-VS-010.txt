@@ -1,0 +1,75 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VS-010
+Requirement ID      : REQ-SYS-002
+Source File         : video-stream.js
+Target Function     : VideoStreamController() [Line 16]
+Test Category       : Positive / Functional
+Test Case Title     : should capture video snapshots and trigger download element
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+originalAlert = window.alert
+window.alert = jest.fn()
+inactiveRes = VideoStreamController.takeSnapshot()
+imgEl = document.getElementById('mjpegFrame')
+window.dispatchEvent(new CustomEvent('video_status', {
+}))
+imgEl.onload()
+clickSpy = jest.fn()
+originalCreate = document.createElement
+document.createElement = jest.fn().mockImplementation((tag) => {
+el = originalCreate.call(document, tag)
+el.click = clickSpy
+})
+activeRes = VideoStreamController.takeSnapshot()
+document.createElement = originalCreate
+window.alert = originalAlert
+
+Expected Behavior:
+Verify window.alert satisfies toHaveBeenCalledWith('No video active.').
+Inactive Res is null.
+Click action triggered.
+Active Res is equal to 'data:image/png;base64,mocksnapshot'.
+
+Actual Observations:
+window.alert: called with 'No video active.'
+inactiveRes: null
+clickSpy: called
+activeRes = 'data:image/png;base64,mocksnapshot'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.alert).toHaveBeenCalledWith('No video active.');
+expect(inactiveRes).toBeNull();
+expect(clickSpy).toHaveBeenCalled();
+expect(activeRes).toBe('data:image/png;base64,mocksnapshot');
+
+Console Logs:
+[INFO] Jest executed test in 9ms
+[PASS] window.alert: called with 'No video active.'
+[PASS] inactiveRes: null
+[PASS] clickSpy: called
+[PASS] activeRes = 'data:image/png;base64,mocksnapshot'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

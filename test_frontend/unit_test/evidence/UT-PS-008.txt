@@ -1,0 +1,76 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PS-008
+Requirement ID      : REQ-TUNE-001
+Source File         : param-switch.js
+Target Function     : connectWebSocket() [Line 232]
+Test Category       : Positive / Functional
+Test Case Title     : should prompt user and reset UI selections to defaults upon confirmation without writing to flight controller
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+select5 = document.querySelector('select[data-name="RC5_OPTION"]')
+select5.value = '4'; // RTL
+select5.dispatchEvent(new Event('change', { bubbles: true }))
+})
+window.ws.send.mockClear()
+window.confirm.mockClear()
+resetBtn = document.getElementById('swResetBtn')
+resetBtn.click()
+newSelect5 = document.querySelector('select[data-name="RC5_OPTION"]')
+
+Expected Behavior:
+Verify window.confirm satisfies toHaveBeenCalledWith(expect.stringContaining('defaults')).
+New Select5 displays '0'.
+Sw Channel[Data Name="Rc5 Option"] exists.
+Sw Stat Dirty exists.
+WebSocket notification sent.
+Sw Footer Info exists.
+
+Actual Observations:
+window.confirm: called with expect.stringContaining('defaults')
+newSelect5.value = '0'
+document.querySelector('.sw-channel[data-name="RC5_OPTION"]').classList.contains('dirty') = false
+document.getElementById('swStatDirty').textContent = '0'
+window.ws.send: not called
+document.getElementById('swFooterInfo').textContent contains 'defaults (not yet written to FC)'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.confirm).toHaveBeenCalledWith(expect.stringContaining('defaults'));
+expect(newSelect5.value).toBe('0');
+expect(document.querySelector('.sw-channel[data-name="RC5_OPTION"]').classList.contains('dirty')).toBe(false);
+expect(document.getElementById('swStatDirty').textContent).toBe('0');
+expect(window.ws.send).not.toHaveBeenCalled();
+expect(document.getElementById('swFooterInfo').textContent).toContain('defaults (not yet written to FC)');
+
+Console Logs:
+[INFO] Jest executed test in 951ms
+[PASS] window.confirm: called with expect.stringContaining('defaults')
+[PASS] newSelect5.value = '0'
+[PASS] document.querySelector('.sw-channel[data-name="RC5_OPTION"]').classList.contains('dirty') = false
+[PASS] document.getElementById('swStatDirty').textContent = '0'
+[PASS] window.ws.send: not called
+[PASS] document.getElementById('swFooterInfo').textContent contains 'defaults (not yet written to FC)'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

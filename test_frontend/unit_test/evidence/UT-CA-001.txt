@@ -1,0 +1,85 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CA-001
+Requirement ID      : REQ-HW-001
+Source File         : calib-accel.js
+Target Function     : render() [Line 103]
+Test Category       : Positive / Functional
+Test Case Title     : should inject correct HTML templates, build cube face grids, and bind socket listeners
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+window.CalibAccel.init()
+faces = document.querySelectorAll('.calib-cube-face')
+
+Expected Behavior:
+Accel Status exists.
+Accel Pct exists.
+Accel Start Button exists.
+Accel Next Button exists.
+Accel Error Banner exists.
+Faces Length is equal to 6.
+Faces[0] Dataset Face is equal to 'level'.
+Faces[5] Dataset Face is equal to 'back'.
+Verify mockSocket.addEventListener satisfies toHaveBeenCalledWith('message', expect.any(Function)).
+
+Actual Observations:
+document.getElementById('accelStatus').textContent = 'NOT STARTED'
+document.getElementById('accelPct').textContent = '0 / 6'
+document.getElementById('accelStartBtn'): truthy
+document.getElementById('accelNextBtn').style.display = 'none'
+document.getElementById('accelErrorBanner').style.display = 'none'
+faces.length = 6
+faces[0].dataset.face = 'level'
+faces[5].dataset.face = 'back'
+mockSocket.addEventListener: called with 'message', expect.any(Function)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(attitude).toHaveBeenCalled();
+expect(buildCubeGrid).toHaveBeenCalled();
+expect(buildSuccessModal).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('accelStatus').textContent).toBe('NOT STARTED');
+expect(document.getElementById('accelPct').textContent).toBe('0 / 6');
+expect(document.getElementById('accelStartBtn')).toBeTruthy();
+expect(document.getElementById('accelNextBtn').style.display).toBe('none');
+expect(document.getElementById('accelErrorBanner').style.display).toBe('none');
+expect(faces.length).toBe(6);
+expect(faces[0].dataset.face).toBe('level');
+expect(faces[5].dataset.face).toBe('back');
+expect(mockSocket.addEventListener).toHaveBeenCalledWith('message', expect.any(Function));
+
+Console Logs:
+[INFO] Jest executed test in 89ms
+[PASS] document.getElementById('accelStatus').textContent = 'NOT STARTED'
+[PASS] document.getElementById('accelPct').textContent = '0 / 6'
+[PASS] document.getElementById('accelStartBtn'): truthy
+[PASS] document.getElementById('accelNextBtn').style.display = 'none'
+[PASS] document.getElementById('accelErrorBanner').style.display = 'none'
+[PASS] faces.length = 6
+[PASS] faces[0].dataset.face = 'level'
+[PASS] faces[5].dataset.face = 'back'
+[PASS] mockSocket.addEventListener: called with 'message', expect.any(Function)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

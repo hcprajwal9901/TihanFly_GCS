@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FH-002
+Requirement ID      : REQ-HUD-001
+Source File         : flight-hud.js
+Target Function     : init() [Line 27]
+Test Category       : Positive / Functional
+Test Case Title     : should render successfully and toggle visibility states on checkbox change
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+toggleHudCheckbox.checked = true
+toggleHudCheckbox.dispatchEvent(new Event('change'))
+toggleHudCheckbox.checked = false
+toggleHudCheckbox.dispatchEvent(new Event('change'))
+
+Expected Behavior:
+Hud Container Class List Contains('Hud Visible') is equal to false.
+Hud Container Class List Contains('Hud Visible') is equal to true.
+Canvas Element Width is equal to 400.
+Hud Container Class List Contains('Hud Visible') is equal to false.
+
+Actual Observations:
+hudContainer.classList.contains('hud-visible') = false
+hudContainer.classList.contains('hud-visible') = true
+canvasElement.width = 400
+hudContainer.classList.contains('hud-visible') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(hudContainer.classList.contains('hud-visible')).toBe(false);
+expect(hudContainer.classList.contains('hud-visible')).toBe(true);
+expect(canvasElement.width).toBe(400); // verify resize updated dimension
+expect(hudContainer.classList.contains('hud-visible')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 15ms
+[PASS] hudContainer.classList.contains('hud-visible') = false
+[PASS] hudContainer.classList.contains('hud-visible') = true
+[PASS] canvasElement.width = 400
+[PASS] hudContainer.classList.contains('hud-visible') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

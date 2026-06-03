@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-011
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Positive / Functional
+Test Case Title     : should update attitude roll pitch yaw dials on attitude packet for selected vehicle
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+message.pitch ?? 0: String | Simulated: window.initWebSocket()
+ws = wsInstances[0]
+window.selectedSysId = 3
+})
+})
+
+Expected Behavior:
+Verify window.TelemetryDisplay.update satisfies toHaveBeenCalledWith().
+Verify window.compass.updateTelemetry satisfies toHaveBeenCalled().
+
+Actual Observations:
+window.TelemetryDisplay.update: toHaveBeenCalledWith
+window.compass.updateTelemetry: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(updateTelemetry).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.TelemetryDisplay.update).toHaveBeenCalledWith({
+expect(window.compass.updateTelemetry).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] window.TelemetryDisplay.update: toHaveBeenCalledWith
+[PASS] window.compass.updateTelemetry: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

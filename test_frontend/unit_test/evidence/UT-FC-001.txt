@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FC-001
+Requirement ID      : REQ-CON-001
+Source File         : flight-controls.js
+Target Function     : flight-controls_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should successfully instantiate classes and expose them on window
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+No external inputs required.
+
+Expected Behavior:
+Verify window.FlightControls satisfies toBeDefined().
+Verify window.ArmControl satisfies toBeDefined().
+Verify window.FlightModeSelector satisfies toBeDefined().
+
+Actual Observations:
+window.FlightControls: defined
+window.ArmControl: defined
+window.FlightModeSelector: defined
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(addEventListener).toHaveBeenCalled();
+expect(close).toHaveBeenCalled();
+expect(contains).toHaveBeenCalled();
+expect(open).toHaveBeenCalled();
+expect(querySelectorAll).toHaveBeenCalled();
+expect(select).toHaveBeenCalled();
+expect(stopPropagation).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.FlightControls).toBeDefined();
+expect(window.ArmControl).toBeDefined();
+expect(window.FlightModeSelector).toBeDefined();
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] window.FlightControls: defined
+[PASS] window.ArmControl: defined
+[PASS] window.FlightModeSelector: defined
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

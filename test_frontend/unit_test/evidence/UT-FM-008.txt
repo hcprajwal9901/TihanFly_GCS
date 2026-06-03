@@ -1,0 +1,50 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FM-008
+Requirement ID      : REQ-SYS-002
+Source File         : flight-mode.js
+Target Function     : modeById() [Line 115]
+Test Category       : Positive / Functional
+Test Case Title     : should handle flight_mode_param parameter echoes and update options selection index
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+paramMsg = {
+window.ws.onmessage({ data: JSON.stringify(paramMsg) })
+selectEl = container.querySelector('#fmRow1 select')
+
+Expected Behavior:
+Select El displays '6'.
+
+Actual Observations:
+selectEl.value = '6'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(selectEl.value).toBe('6');
+
+Console Logs:
+[INFO] Jest executed test in 49ms
+[PASS] selectEl.value = '6'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

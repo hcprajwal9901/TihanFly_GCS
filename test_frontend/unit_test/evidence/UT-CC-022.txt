@@ -1,0 +1,98 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CC-022
+Requirement ID      : REQ-SYS-002
+Source File         : camera-controls.js
+Target Function     : CameraControls() [Line 16]
+Test Category       : Positive / Functional
+Test Case Title     : should start and stop video recordings loops with fake timer ticks
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CameraControls.init()
+jest.useFakeTimers()
+window.electronSaveFile.save.mockResolvedValueOnce({ ok: true, filePath: 'C:\\Users\\MockUser\\Downloads\\rec_123.webm' })
+window.CameraControls.toggleRecord()
+recBtn = document.getElementById('camRecordBtn')
+)
+jest.advanceTimersByTime(5000)
+window.CameraControls.toggleRecord()
+)
+jest.advanceTimersByTime(20)
+jest.useRealTimers()
+
+Expected Behavior:
+Window Cameraera Controls Is Recordording() is equal to false.
+Window Cameraera Controls Is Recordording() is equal to true.
+Record Button Class List Contains('Recordording') is equal to true.
+Record Timer Badge exists.
+WebSocket notification sent.
+Record Timer Badge exists.
+Window Cameraera Controls Is Recordording() is equal to false.
+WebSocket notification sent.
+Record Button Class List Contains('Recordording') is equal to false.
+Record Timer Badge exists.
+Electron save dialog triggered.
+
+Actual Observations:
+window.CameraControls.isRecording() = false
+window.CameraControls.isRecording() = true
+recBtn.classList.contains('recording') = true
+document.getElementById('recTimerBadge').classList.contains('active') = true
+window.ws.send: toHaveBeenCalledWith
+document.getElementById('recTimerBadge').textContent = '00:05'
+window.CameraControls.isRecording() = false
+window.ws.send: toHaveBeenCalledWith
+recBtn.classList.contains('recording') = false
+document.getElementById('recTimerBadge').textContent = '00:00'
+window.electronSaveFile.save: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.CameraControls.isRecording()).toBe(false);
+expect(window.CameraControls.isRecording()).toBe(true);
+expect(recBtn.classList.contains('recording')).toBe(true);
+expect(document.getElementById('recTimerBadge').classList.contains('active')).toBe(true);
+expect(window.ws.send).toHaveBeenCalledWith(
+expect(document.getElementById('recTimerBadge').textContent).toBe('00:05');
+expect(window.CameraControls.isRecording()).toBe(false);
+expect(window.ws.send).toHaveBeenCalledWith(
+expect(recBtn.classList.contains('recording')).toBe(false);
+expect(document.getElementById('recTimerBadge').textContent).toBe('00:00');
+expect(window.electronSaveFile.save).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 33ms
+[PASS] window.CameraControls.isRecording() = false
+[PASS] window.CameraControls.isRecording() = true
+[PASS] recBtn.classList.contains('recording') = true
+[PASS] document.getElementById('recTimerBadge').classList.contains('active') = true
+[PASS] window.ws.send: toHaveBeenCalledWith
+[PASS] document.getElementById('recTimerBadge').textContent = '00:05'
+[PASS] window.CameraControls.isRecording() = false
+[PASS] window.ws.send: toHaveBeenCalledWith
+[PASS] recBtn.classList.contains('recording') = false
+[PASS] document.getElementById('recTimerBadge').textContent = '00:00'
+[PASS] window.electronSaveFile.save: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

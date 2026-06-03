@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PT-001
+Requirement ID      : REQ-TUNE-001
+Source File         : pid-tuning.js
+Target Function     : send() [Line 84]
+Test Category       : Positive / Functional
+Test Case Title     : should inject correct headers, action buttons, and render all 45+ parameters
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+inputs = document.querySelectorAll('[data-param]')
+
+Expected Behavior:
+Pid Status Message exists.
+Pid Write Button exists.
+Pid Refresh Button exists.
+Verify inputs.length satisfies toBeGreaterThanOrEqual(45).
+
+Actual Observations:
+document.getElementById('pid-status-msg'): truthy
+document.getElementById('pid-write-btn'): truthy
+document.getElementById('pid-refresh-btn'): truthy
+inputs.length: toBeGreaterThanOrEqual(45)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('pid-status-msg')).toBeTruthy();
+expect(document.getElementById('pid-write-btn')).toBeTruthy();
+expect(document.getElementById('pid-refresh-btn')).toBeTruthy();
+expect(inputs.length).toBeGreaterThanOrEqual(45);
+
+Console Logs:
+[INFO] Jest executed test in 231ms
+[PASS] document.getElementById('pid-status-msg'): truthy
+[PASS] document.getElementById('pid-write-btn'): truthy
+[PASS] document.getElementById('pid-refresh-btn'): truthy
+[PASS] inputs.length: toBeGreaterThanOrEqual(45)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

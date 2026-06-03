@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFP-017
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-polygon.js
+Target Function     : handlePolygonActions() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should dismiss the modal if cancel button is clicked
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+instance.showSurveySettingsModal()
+modal = document.getElementById('surveySettingsModal')
+cancelBtn = document.getElementById('ss-cancel')
+cancelBtn.click()
+
+Expected Behavior:
+Modal is true.
+Document Body Contains(Modal) is equal to false.
+
+Actual Observations:
+modal: truthy
+document.body.contains(modal) = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modal).toBeTruthy();
+expect(document.body.contains(modal)).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 161ms
+[PASS] modal: truthy
+[PASS] document.body.contains(modal) = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

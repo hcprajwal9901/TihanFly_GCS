@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-GEO-006
+Requirement ID      : REQ-SAF-002
+Source File         : geofence.js
+Target Function     : safeSendWrap() [Line 64]
+Test Category       : Boundary Value
+Test Case Title     : should present the breach banner and flash bad status when limit is exceeded
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.TelemetryStore.altitude = 105; // breaches alt limit (100)
+window.TelemetryStore.distFromHome = 50
+jest.advanceTimersByTime(500)
+banner = document.getElementById('gf-breach-banner')
+altValEl = document.getElementById('gf-chip-alt').querySelector('.gf-telem-chip-value')
+
+Expected Behavior:
+Banner Class List Contains('Visible') is equal to true.
+Gf Breach Sub exists.
+Alt Val El Class List Contains('Gf Bad') is equal to true.
+
+Actual Observations:
+banner.classList.contains('visible') = true
+document.getElementById('gf-breach-sub').textContent contains 'Alt 105.0 m / 100 m limit'
+altValEl.classList.contains('gf-bad') = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(banner.classList.contains('visible')).toBe(true);
+expect(document.getElementById('gf-breach-sub').textContent).toContain('Alt 105.0 m / 100 m limit');
+expect(altValEl.classList.contains('gf-bad')).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 138ms
+[PASS] banner.classList.contains('visible') = true
+[PASS] document.getElementById('gf-breach-sub').textContent contains 'Alt 105.0 m / 100 m limit'
+[PASS] altValEl.classList.contains('gf-bad') = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

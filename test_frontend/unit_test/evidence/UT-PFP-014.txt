@@ -1,0 +1,50 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFP-014
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-polygon.js
+Target Function     : showSurveySettings() [Line 83]
+Test Category       : Positive / Functional
+Test Case Title     : should delegate to showSurveySettingsModal on success
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modalSpy = jest.spyOn(instance, 'showSurveySettingsModal').mockImplementation(() => {})
+instance.showSurveySettings()
+modalSpy.mockRestore()
+
+Expected Behavior:
+Verify modalSpy satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+modalSpy: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modalSpy).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] modalSpy: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

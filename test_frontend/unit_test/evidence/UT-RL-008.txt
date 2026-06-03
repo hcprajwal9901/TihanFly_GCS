@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-008
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : should handle corrupt bytes gracefully and skip offsets using stall guard
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+buffer = new ArrayBuffer(2)
+bytes = new Uint8Array(buffer)
+bytes[0] = 0xA3
+bytes[1] = 0x95; // partial head, len-i < 3
+file = {
+window.ReviewLog.handleFile(file)
+jest.advanceTimersByTime(500)
+pill = document.getElementById('rlStatusPill')
+
+Expected Behavior:
+Pill displays '● READY'.
+
+Actual Observations:
+pill.textContent = '● READY'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(pill.textContent).toBe('● READY');
+
+Console Logs:
+[INFO] Jest executed test in 32ms
+[PASS] pill.textContent = '● READY'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,112 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LD-006
+Requirement ID      : REQ-LOG-001
+Source File         : log-download.js
+Target Function     : _injectCSS() [Line 105]
+Test Category       : Positive / Functional
+Test Case Title     : should process downloads, update progress indicators, and reconstruct binary files on done
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+chk = document.querySelector('.ld-chk')
+chk.checked = true
+window.ws.send.mockClear()
+dlBtn = document.getElementById('ldBtnDownload')
+dlBtn.click()
+req = JSON.parse(window.ws.send.mock.calls[0][0])
+progressWrap = document.getElementById('ld-prog-10')
+progMsg = { type: 'log_download_progress', log_id: 10, received: 51200, total: 102400 }
+wsMsgCallback({ data: JSON.stringify(progMsg) })
+fill = document.getElementById('ld-fill-10')
+lbl = document.getElementById('ld-lbl-10')
+clickSpy = jest.fn()
+mockAnchor = {
+origCreateElement = document.createElement
+return origCreateElement.call(document, tag)
+})
+jest.spyOn(document.body, 'appendChild').mockImplementation(() => {})
+jest.spyOn(document.body, 'removeChild').mockImplementation(() => {})
+doneMsg = { type: 'log_download_done', log_id: 10, data: 'VGZseQ==' }
+wsMsgCallback({ data: JSON.stringify(doneMsg) })
+document.createElement.mockRestore()
+
+Expected Behavior:
+WebSocket notification sent.
+Req Type is equal to 'download_log'.
+Log message recorded.
+Progress Wrap Class List Contains('Active') is equal to true.
+Fill Style Width is equal to '50%'.
+Lbl displays '50%'.
+Verify global.URL.createObjectURL satisfies toHaveBeenCalled().
+Mock Anchor Download is equal to 'log_10.bin'.
+Click action triggered.
+Verify global.URL.revokeObjectURL satisfies toHaveBeenCalledWith('blob:mock-url').
+Lbl displays 'Saved'.
+Lbl Style Color is equal to 'rgb(92, 191, 92)'.
+
+Actual Observations:
+window.ws.send: called
+req.type = 'download_log'
+req.log_id = 10
+progressWrap.classList.contains('active') = true
+fill.style.width = '50%'
+lbl.textContent = '50%'
+global.URL.createObjectURL: called
+mockAnchor.download = 'log_10.bin'
+clickSpy: called
+global.URL.revokeObjectURL: called with 'blob:mock-url'
+lbl.textContent = 'Saved'
+lbl.style.color = 'rgb(92, 191, 92)'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.ws.send).toHaveBeenCalled();
+expect(req.type).toBe('download_log');
+expect(req.log_id).toBe(10);
+expect(progressWrap.classList.contains('active')).toBe(true);
+expect(fill.style.width).toBe('50%');
+expect(lbl.textContent).toBe('50%');
+expect(global.URL.createObjectURL).toHaveBeenCalled();
+expect(mockAnchor.download).toBe('log_10.bin');
+expect(clickSpy).toHaveBeenCalled();
+expect(global.URL.revokeObjectURL).toHaveBeenCalledWith('blob:mock-url');
+expect(lbl.textContent).toBe('Saved');
+expect(lbl.style.color).toBe('rgb(92, 191, 92)'); // green
+
+Console Logs:
+[INFO] Jest executed test in 24ms
+[PASS] window.ws.send: called
+[PASS] req.type = 'download_log'
+[PASS] req.log_id = 10
+[PASS] progressWrap.classList.contains('active') = true
+[PASS] fill.style.width = '50%'
+[PASS] lbl.textContent = '50%'
+[PASS] global.URL.createObjectURL: called
+[PASS] mockAnchor.download = 'log_10.bin'
+[PASS] clickSpy: called
+[PASS] global.URL.revokeObjectURL: called with 'blob:mock-url'
+[PASS] lbl.textContent = 'Saved'
+[PASS] lbl.style.color = 'rgb(92, 191, 92)'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

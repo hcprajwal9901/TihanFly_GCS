@@ -1,0 +1,84 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFT-003
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-takeoff.js
+Target Function     : handleTakeoffActions() [Line 11]
+Test Category       : Positive / Functional
+Test Case Title     : should launch multi-step takeoff sequence at confirmed altitude when WebSocket is connected
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.ws = { readyState: 1 }; // OPEN (WebSocket.OPEN)
+window.prompt.mockImplementation(() => '15'); // Confirm altitude at 15m
+modeInstance.takeoffHere()
+capturedTimeouts[0].cb()
+capturedTimeouts[1].cb()
+
+Expected Behavior:
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith(expect.stringContaining('Setting mode → GUIDED')).
+Verify window.sendCommand satisfies toHaveBeenCalledWith('SET_MODE', { mode: 'GUIDED' }).
+Capturetured Timeouts Length is equal to 2.
+Capturetured Timeouts[0] Delay is equal to 1200.
+Capturetured Timeouts[1] Delay is equal to 3500.
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith(expect.stringContaining('Arming drone')).
+Verify window.sendCommand satisfies toHaveBeenCalledWith('ARM').
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith(expect.stringContaining('Taking off to 15 m')).
+Verify window.sendCommand satisfies toHaveBeenCalledWith('TAKEOFF', { altitude: 15 }).
+
+Actual Observations:
+window.MsgConsole.info: called with expect.stringContaining('Setting mode → GUIDED')
+window.sendCommand: called with 'SET_MODE', { mode: 'GUIDED' }
+capturedTimeouts.length = 2
+capturedTimeouts[0].delay = 1200
+capturedTimeouts[1].delay = 3500
+window.MsgConsole.info: called with expect.stringContaining('Arming drone')
+window.sendCommand: called with 'ARM'
+window.MsgConsole.info: called with expect.stringContaining('Taking off to 15 m')
+window.sendCommand: called with 'TAKEOFF', { altitude: 15 }
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.info).toHaveBeenCalledWith(expect.stringContaining('Setting mode → GUIDED'));
+expect(window.sendCommand).toHaveBeenCalledWith('SET_MODE', { mode: 'GUIDED' });
+expect(capturedTimeouts.length).toBe(2);
+expect(capturedTimeouts[0].delay).toBe(1200);
+expect(capturedTimeouts[1].delay).toBe(3500);
+expect(window.MsgConsole.info).toHaveBeenCalledWith(expect.stringContaining('Arming drone'));
+expect(window.sendCommand).toHaveBeenCalledWith('ARM');
+expect(window.MsgConsole.info).toHaveBeenCalledWith(expect.stringContaining('Taking off to 15 m'));
+expect(window.sendCommand).toHaveBeenCalledWith('TAKEOFF', { altitude: 15 });
+
+Console Logs:
+[INFO] Jest executed test in 10ms
+[PASS] window.MsgConsole.info: called with expect.stringContaining('Setting mode → GUIDED')
+[PASS] window.sendCommand: called with 'SET_MODE', { mode: 'GUIDED' }
+[PASS] capturedTimeouts.length = 2
+[PASS] capturedTimeouts[0].delay = 1200
+[PASS] capturedTimeouts[1].delay = 3500
+[PASS] window.MsgConsole.info: called with expect.stringContaining('Arming drone')
+[PASS] window.sendCommand: called with 'ARM'
+[PASS] window.MsgConsole.info: called with expect.stringContaining('Taking off to 15 m')
+[PASS] window.sendCommand: called with 'TAKEOFF', { altitude: 15 }
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CE-022
+Requirement ID      : REQ-HW-001
+Source File         : calib-esc.js
+Target Function     : _onStatusMessage() [Line 65]
+Test Category       : Negative / Robustness
+Test Case Title     : should transition status bar to failed states on sequence failures
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+statusBar = document.getElementById('escStatusBar')
+})
+)
+
+Expected Behavior:
+Status Bar Class List Contains('Failed') is equal to true.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith().
+
+Actual Observations:
+statusBar.classList.contains('failed') = true
+window.SwUtil.toast: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(statusBar.classList.contains('failed')).toBe(true);
+expect(window.SwUtil.toast).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 32ms
+[PASS] statusBar.classList.contains('failed') = true
+[PASS] window.SwUtil.toast: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

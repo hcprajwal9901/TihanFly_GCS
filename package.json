@@ -4,7 +4,10 @@
   "description": "TihanFly Ground Control Station",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test": "jest",
+    "test:modified": "python test_frontend/unit_test/run_modified_tests.py",
+    "test:all": "python test_frontend/unit_test/run_modified_tests.py --all"
   },
   "author": "Pavan",
   "license": "MIT",
@@ -13,7 +16,11 @@
   },
   "devDependencies": {
     "electron": "^29.0.0",
-    "electron-builder": "^24.0.0"
+    "electron-builder": "^24.0.0",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "jest-html-reporter": "^4.4.0",
+    "jest-monocart-coverage": "^1.1.1"
   },
   "build": {
     "appId": "com.tihan.fly",

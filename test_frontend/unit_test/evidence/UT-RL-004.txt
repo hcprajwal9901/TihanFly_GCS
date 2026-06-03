@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-004
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : ReviewLog.close should fall back to restoring panel displays if AnalyzeToolsPanel is missing
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+originalAnalyzeToolsPanel = window.AnalyzeToolsPanel
+delete window.AnalyzeToolsPanel
+window.ReviewLog.open()
+window.ReviewLog.close()
+win = document.getElementById('rlWindow')
+el = document.getElementById(id)
+})
+window.AnalyzeToolsPanel = originalAnalyzeToolsPanel
+
+Expected Behavior:
+Win Class List Contains('Rl On') is equal to false.
+El Style Get Property Value('Display') is equal to ''.
+
+Actual Observations:
+win.classList.contains('rl-on') = false
+el.style.getPropertyValue('display') = ''
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(function).toHaveBeenCalled();
+expect(goBack).toHaveBeenCalled();
+expect(removeProperty).toHaveBeenCalled();
+// JSDOM verification:
+expect(win.classList.contains('rl-on')).toBe(false);
+expect(el.style.getPropertyValue('display')).toBe('');
+
+Console Logs:
+[INFO] Jest executed test in 36ms
+[PASS] win.classList.contains('rl-on') = false
+[PASS] el.style.getPropertyValue('display') = ''
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

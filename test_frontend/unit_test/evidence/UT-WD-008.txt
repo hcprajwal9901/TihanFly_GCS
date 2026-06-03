@@ -1,0 +1,49 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-008
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should handle weather_warning from backend and log to MsgConsole
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+warningPayload = {
+backendMock.handleMessage(JSON.stringify(warningPayload))
+
+Expected Behavior:
+Verify msgConsoleMock.warning satisfies toHaveBeenCalledWith('Wind speed rising near safety thresholds').
+
+Actual Observations:
+msgConsoleMock.warning: called with 'Wind speed rising near safety thresholds'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(msgConsoleMock.warning).toHaveBeenCalledWith('Wind speed rising near safety thresholds');
+
+Console Logs:
+[INFO] Jest executed test in 6ms
+[PASS] msgConsoleMock.warning: called with 'Wind speed rising near safety thresholds'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

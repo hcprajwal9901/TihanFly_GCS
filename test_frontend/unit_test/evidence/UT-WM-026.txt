@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WM-026
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-manager.js
+Target Function     : initializeWaypointManager() [Line 696]
+Test Category       : Positive / Functional
+Test Case Title     : should serialize waypoints and home position on export
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+manager.waypoints = [
+manager.homePosition = { lat: 17.600, lng: 78.120, altitude: 10 }
+mission = manager.exportMission()
+
+Expected Behavior:
+Verify mission.waypoints satisfies toHaveLength(1).
+Mission Home Position is equal to { lat: 17.600, lng: 78.120, altitude: 10 }.
+
+Actual Observations:
+mission.waypoints: toHaveLength(1)
+mission.homePosition = { lat: 17.600, lng: 78.120, altitude: 10 }
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mission.waypoints).toHaveLength(1);
+expect(mission.homePosition).toEqual({ lat: 17.600, lng: 78.120, altitude: 10 });
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] mission.waypoints: toHaveLength(1)
+[PASS] mission.homePosition = { lat: 17.600, lng: 78.120, altitude: 10 }
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

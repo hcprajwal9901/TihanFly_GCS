@@ -1,0 +1,74 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-011
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Positive / Functional
+Test Case Title     : should complete unlock, persist state, and unlock install button on correct password
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+card = document.querySelector('.vc-drone-card[data-drone="ti-shadow"]')
+unlockBtn = card.querySelector('.vc-btn-unlock')
+installBtn = card.querySelector('.vc-btn-install')
+unlockBtn.click()
+backdrop = document.querySelector('.vc-pw-backdrop')
+input = backdrop.querySelector('#vcPwInput')
+confirmBtn = backdrop.querySelector('#vcPwConfirm')
+input.value = 'tishadow@123'
+confirmBtn.click()
+jest.advanceTimersByTime(150)
+logBox = document.getElementById('vcFlashLog')
+
+Expected Behavior:
+Vc Pw Backdrop does not exist.
+Unlock Button displays text containing 'UNLOCKED'.
+Unlock Button Disabled is equal to true.
+Install Button Class List Contains('Vc Unlocked') is equal to true.
+Log Box displays text containing 'Ti-Shadow unlocked — install enabled.'.
+
+Actual Observations:
+document.querySelector('.vc-pw-backdrop'): null
+unlockBtn.textContent contains 'UNLOCKED'
+unlockBtn.disabled = true
+installBtn.classList.contains('vc-unlocked') = true
+logBox.textContent contains 'Ti-Shadow unlocked — install enabled.'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.querySelector('.vc-pw-backdrop')).toBeNull();
+expect(unlockBtn.textContent).toContain('UNLOCKED');
+expect(unlockBtn.disabled).toBe(true);
+expect(installBtn.classList.contains('vc-unlocked')).toBe(true);
+expect(logBox.textContent).toContain('Ti-Shadow unlocked — install enabled.');
+
+Console Logs:
+[INFO] Jest executed test in 134ms
+[PASS] document.querySelector('.vc-pw-backdrop'): null
+[PASS] unlockBtn.textContent contains 'UNLOCKED'
+[PASS] unlockBtn.disabled = true
+[PASS] installBtn.classList.contains('vc-unlocked') = true
+[PASS] logBox.textContent contains 'Ti-Shadow unlocked — install enabled.'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

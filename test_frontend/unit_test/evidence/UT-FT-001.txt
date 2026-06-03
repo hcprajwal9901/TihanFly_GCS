@@ -1,0 +1,67 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FT-001
+Requirement ID      : REQ-SYS-002
+Source File         : frame-type.js
+Target Function     : init() [Line 485]
+Test Category       : Edge Case
+Test Case Title     : should inject correct headers, select elements, and initial empty read texts
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+classSel = document.getElementById('ft-class-select')
+typeSel = document.getElementById('ft-type-select')
+
+Expected Behavior:
+Ft Info Banner exists.
+Ft Current Class exists.
+Ft Current Type exists.
+Class Sel Options Length is equal to 13.
+Type Sel Options Length is equal to 12.
+
+Actual Observations:
+document.querySelector('.ft-info-banner'): truthy
+document.getElementById('ft-current-class').textContent = '— (not read)'
+document.getElementById('ft-current-type').textContent = '— (not read)'
+classSel.options.length = 13
+typeSel.options.length = 12
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.querySelector('.ft-info-banner')).toBeTruthy();
+expect(document.getElementById('ft-current-class').textContent).toBe('— (not read)');
+expect(document.getElementById('ft-current-type').textContent).toBe('— (not read)');
+expect(classSel.options.length).toBe(13); // 13 classes defined
+expect(typeSel.options.length).toBe(12);  // 12 types defined
+
+Console Logs:
+[INFO] Jest executed test in 80ms
+[PASS] document.querySelector('.ft-info-banner'): truthy
+[PASS] document.getElementById('ft-current-class').textContent = '— (not read)'
+[PASS] document.getElementById('ft-current-type').textContent = '— (not read)'
+[PASS] classSel.options.length = 13
+[PASS] typeSel.options.length = 12
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

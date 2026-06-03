@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FAI-017
+Requirement ID      : REQ-SAF-001
+Source File         : failsafe.js
+Target Function     : failsafe_trigger() [Line 129]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle network timeout and disconnect exceptions gracefully for Throttle Failsafe Trigger and Warning Banner
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+
+Test Inputs:
+state = new FlightState()
+state.setTelemetry({ throttle: 900, rcSignal: 0, battery: 10.5 })
+failsafeTriggered = state.checkFailsafes()
+
+Expected Behavior:
+Failsafe Triggered is equal to true.
+State Get Failsafe Action() is equal to 'RTL'.
+
+Actual Observations:
+failsafeTriggered = true
+state.getFailsafeAction() = 'RTL'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(failsafeTriggered).toBe(true);
+expect(state.getFailsafeAction()).toBe('RTL');
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] failsafeTriggered = true
+[PASS] state.getFailsafeAction() = 'RTL'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

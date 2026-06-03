@@ -1,0 +1,65 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-GEO-002
+Requirement ID      : REQ-SAF-002
+Source File         : geofence.js
+Target Function     : init() [Line 540]
+Test Category       : Positive / Functional
+Test Case Title     : should synchronize UI row displays when parameter values are fetched
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+window.dispatchEvent(new CustomEvent('calibration_ws_message', {
+}))
+window.dispatchEvent(new CustomEvent('calibration_ws_message', {
+}))
+
+Expected Behavior:
+Gf Row Altmax exists.
+Gf Row Radius exists.
+Gf Row Altmax exists.
+Gf Row Radius exists.
+
+Actual Observations:
+document.getElementById('gf-row-altmax').style.display = ''
+document.getElementById('gf-row-radius').style.display = 'none'
+document.getElementById('gf-row-altmax').style.display = 'none'
+document.getElementById('gf-row-radius').style.display = ''
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('gf-row-altmax').style.display).toBe('');
+expect(document.getElementById('gf-row-radius').style.display).toBe('none');
+expect(document.getElementById('gf-row-altmax').style.display).toBe('none');
+expect(document.getElementById('gf-row-radius').style.display).toBe('');
+
+Console Logs:
+[INFO] Jest executed test in 201ms
+[PASS] document.getElementById('gf-row-altmax').style.display = ''
+[PASS] document.getElementById('gf-row-radius').style.display = 'none'
+[PASS] document.getElementById('gf-row-altmax').style.display = 'none'
+[PASS] document.getElementById('gf-row-radius').style.display = ''
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

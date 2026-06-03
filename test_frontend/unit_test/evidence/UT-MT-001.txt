@@ -1,0 +1,71 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MT-001
+Requirement ID      : REQ-HW-001
+Source File         : motor-test.js
+Target Function     : init() [Line 290]
+Test Category       : Positive / Functional
+Test Case Title     : should inject layout nodes, render 8 motors, and enforce initial locked safety state
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+motorButtons = document.querySelectorAll('.mt-motor-btn')
+})
+
+Expected Behavior:
+Mt Lock exists.
+Mt Content exists.
+Motor Buttons Length is equal to 8.
+Button Disabled is equal to true.
+Mt Button All exists.
+Mt Status Message exists.
+
+Actual Observations:
+document.getElementById('mt-lock'): truthy
+document.getElementById('mt-content').classList.contains('mt-locked') = true
+motorButtons.length = 8
+btn.disabled = true
+document.getElementById('mt-btn-all').disabled = true
+document.getElementById('mt-status-msg').textContent contains 'Acknowledge safety warning to enable testing'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('mt-lock')).toBeTruthy();
+expect(document.getElementById('mt-content').classList.contains('mt-locked')).toBe(true);
+expect(motorButtons.length).toBe(8);
+expect(btn.disabled).toBe(true);
+expect(document.getElementById('mt-btn-all').disabled).toBe(true);
+expect(document.getElementById('mt-status-msg').textContent).toContain('Acknowledge safety warning to enable testing');
+
+Console Logs:
+[INFO] Jest executed test in 67ms
+[PASS] document.getElementById('mt-lock'): truthy
+[PASS] document.getElementById('mt-content').classList.contains('mt-locked') = true
+[PASS] motorButtons.length = 8
+[PASS] btn.disabled = true
+[PASS] document.getElementById('mt-btn-all').disabled = true
+[PASS] document.getElementById('mt-status-msg').textContent contains 'Acknowledge safety warning to enable testing'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

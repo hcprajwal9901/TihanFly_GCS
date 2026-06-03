@@ -1,0 +1,65 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-001
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Negative / Robustness
+Test Case Title     : should construct WebSocket and attach onopen/onmessage/onerror/onclose handlers
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.initWebSocket()
+ws = wsInstances[0]
+
+Expected Behavior:
+Verify wsInstances satisfies toHaveLength(1).
+Verify ws.onopen satisfies toBeDefined().
+Verify ws.onmessage satisfies toBeDefined().
+Verify ws.onerror satisfies toBeDefined().
+Verify ws.onclose satisfies toBeDefined().
+
+Actual Observations:
+wsInstances: toHaveLength(1)
+ws.onopen: defined
+ws.onmessage: defined
+ws.onerror: defined
+ws.onclose: defined
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wsInstances).toHaveLength(1);
+expect(ws.onopen).toBeDefined();
+expect(ws.onmessage).toBeDefined();
+expect(ws.onerror).toBeDefined();
+expect(ws.onclose).toBeDefined();
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] wsInstances: toHaveLength(1)
+[PASS] ws.onopen: defined
+[PASS] ws.onmessage: defined
+[PASS] ws.onerror: defined
+[PASS] ws.onclose: defined
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

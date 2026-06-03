@@ -1,0 +1,78 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-006
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should process weather updates sent from backend
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+weatherPayload = {
+backendMock.handleMessage(JSON.stringify(weatherPayload))
+safetyIndicator = document.getElementById('weatherSafetyIndicator')
+
+Expected Behavior:
+Location Name exists.
+Weather Temp exists.
+Weather Description exists.
+Feels Like exists.
+Humidity exists.
+Wind Speed exists.
+Verify safetyIndicator satisfies toBeDefined().
+Safety Indicator displays text containing 'Weather conditions safe for flight'.
+
+Actual Observations:
+document.getElementById('locationName').textContent = 'Hyderabad, IN'
+document.getElementById('weatherTemp').textContent = '35°C'
+document.getElementById('weatherDescription').textContent = 'clear sky'
+document.getElementById('feelsLike').textContent = '36°C'
+document.getElementById('humidity').textContent = '45%'
+document.getElementById('windSpeed').textContent = '4.2 m/s'
+safetyIndicator: defined
+safetyIndicator.innerHTML contains 'Weather conditions safe for flight'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('locationName').textContent).toBe('Hyderabad, IN');
+expect(document.getElementById('weatherTemp').textContent).toBe('35°C'); // rounded
+expect(document.getElementById('weatherDescription').textContent).toBe('clear sky');
+expect(document.getElementById('feelsLike').textContent).toBe('36°C');
+expect(document.getElementById('humidity').textContent).toBe('45%');
+expect(document.getElementById('windSpeed').textContent).toBe('4.2 m/s');
+expect(safetyIndicator).toBeDefined();
+expect(safetyIndicator.innerHTML).toContain('Weather conditions safe for flight');
+
+Console Logs:
+[INFO] Jest executed test in 35ms
+[PASS] document.getElementById('locationName').textContent = 'Hyderabad, IN'
+[PASS] document.getElementById('weatherTemp').textContent = '35°C'
+[PASS] document.getElementById('weatherDescription').textContent = 'clear sky'
+[PASS] document.getElementById('feelsLike').textContent = '36°C'
+[PASS] document.getElementById('humidity').textContent = '45%'
+[PASS] document.getElementById('windSpeed').textContent = '4.2 m/s'
+[PASS] safetyIndicator: defined
+[PASS] safetyIndicator.innerHTML contains 'Weather conditions safe for flight'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

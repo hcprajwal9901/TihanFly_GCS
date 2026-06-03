@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFP-023
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-polygon.js
+Target Function     : handlePolygonActions() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should clear polygon, remove map layers, and log success if user confirms
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+confirmSpy.mockReturnValue(true)
+instance.clearPolygon()
+
+Expected Behavior:
+Verify confirmSpy satisfies toHaveBeenCalledWith('Clear the current polygon and survey grid?').
+Verify window.PolygonManager.clearPolygon satisfies toHaveBeenCalledTimes(1).
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('✅ Polygon cleared').
+
+Actual Observations:
+confirmSpy: called with 'Clear the current polygon and survey grid?'
+window.PolygonManager.clearPolygon: 1 call(s)
+window.MsgConsole.success: called with '✅ Polygon cleared'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(confirmSpy).toHaveBeenCalledWith('Clear the current polygon and survey grid?');
+expect(window.PolygonManager.clearPolygon).toHaveBeenCalledTimes(1);
+expect(window.MsgConsole.success).toHaveBeenCalledWith('✅ Polygon cleared');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] confirmSpy: called with 'Clear the current polygon and survey grid?'
+[PASS] window.PolygonManager.clearPolygon: 1 call(s)
+[PASS] window.MsgConsole.success: called with '✅ Polygon cleared'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

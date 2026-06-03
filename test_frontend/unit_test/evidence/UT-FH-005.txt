@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FH-005
+Requirement ID      : REQ-HUD-001
+Source File         : flight-hud.js
+Target Function     : init() [Line 27]
+Test Category       : Positive / Functional
+Test Case Title     : should interpolate telemetry values gradually according to SMOOTH_FACTOR
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+toggleHudCheckbox.checked = true
+toggleHudCheckbox.dispatchEvent(new Event('change'))
+window.TelemetryStore.roll = 0.5; // ~28.6 degrees
+window.TelemetryStore.pitch = -0.2; // ~-11.4 degrees
+
+Expected Behavior:
+Verify mockCtx.rotate satisfies toHaveBeenCalledWith(0.5 * 0.45).
+Verify mockCtx.translate satisfies toHaveBeenCalledWith(0, -0.2 * 0.45 * 400).
+
+Actual Observations:
+mockCtx.rotate: called with 0.5 * 0.45
+mockCtx.translate: called with 0, -0.2 * 0.45 * 400
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockCtx.rotate).toHaveBeenCalledWith(0.5 * 0.45); // roll is 0.225
+expect(mockCtx.translate).toHaveBeenCalledWith(0, -0.2 * 0.45 * 400); // pitch translation offset
+
+Console Logs:
+[INFO] Jest executed test in 18ms
+[PASS] mockCtx.rotate: called with 0.5 * 0.45
+[PASS] mockCtx.translate: called with 0, -0.2 * 0.45 * 400
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

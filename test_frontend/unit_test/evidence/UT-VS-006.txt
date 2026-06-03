@@ -1,0 +1,93 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VS-006
+Requirement ID      : REQ-SYS-002
+Source File         : video-stream.js
+Target Function     : VideoStreamController() [Line 16]
+Test Category       : Negative / Robustness
+Test Case Title     : should show stream on "ready" ws status and handle progressive load errors up to 6 times
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+jest.useFakeTimers()
+imgEl = document.getElementById('mjpegFrame')
+placeholder = document.getElementById('noSignalPlaceholder')
+connectBtn = document.getElementById('rtspConnectBtn')
+disconnectBtn = document.getElementById('rtspDisconnectBtn')
+VideoStreamController.connect()
+window.dispatchEvent(new CustomEvent('video_status', {
+}))
+for (let retry = 1; retry <= 6; retry++) {
+imgEl.onerror()
+statusText = document.querySelector('#rtspOverlay span:last-child')
+jest.advanceTimersByTime(1000)
+imgEl.onerror()
+jest.useRealTimers()
+
+Expected Behavior:
+Img El displayed.
+Placeholder hidden.
+Img El displayed.
+Status Text displays '`STARTING… (${retry}/6)`'.
+Img El hidden.
+Placeholder displayed.
+Video Stream Controller Is Streaming() is equal to false.
+Connect Button displayed.
+Disconnect Button hidden.
+
+Actual Observations:
+imgEl.style.display = 'block'
+placeholder.style.display = 'none'
+imgEl.style.display = 'block'
+statusText.textContent = `STARTING… (${retry}/6)`
+imgEl.style.display = 'none'
+placeholder.style.display = 'flex'
+VideoStreamController.isStreaming() = false
+connectBtn.style.display = 'inline-block'
+disconnectBtn.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(imgEl.style.display).toBe('block');
+expect(placeholder.style.display).toBe('none');
+expect(imgEl.style.display).toBe('block'); // still trying
+expect(statusText.textContent).toBe(`STARTING… (${retry}/6)`);
+expect(imgEl.style.display).toBe('none');
+expect(placeholder.style.display).toBe('flex');
+expect(VideoStreamController.isStreaming()).toBe(false);
+expect(connectBtn.style.display).toBe('inline-block');
+expect(disconnectBtn.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 23ms
+[PASS] imgEl.style.display = 'block'
+[PASS] placeholder.style.display = 'none'
+[PASS] imgEl.style.display = 'block'
+[PASS] statusText.textContent = `STARTING… (${retry}/6)`
+[PASS] imgEl.style.display = 'none'
+[PASS] placeholder.style.display = 'flex'
+[PASS] VideoStreamController.isStreaming() = false
+[PASS] connectBtn.style.display = 'inline-block'
+[PASS] disconnectBtn.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

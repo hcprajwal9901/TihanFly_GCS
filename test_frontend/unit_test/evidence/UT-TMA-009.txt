@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-TMA-009
+Requirement ID      : REQ-SYS-002
+Source File         : tmap.js
+Target Function     : tmap_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger weather click callback only when not placing waypoints
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+tmap = new TMap('map-container', [17.385, 78.486], 16, true)
+weatherCallback = jest.fn()
+tmap.registerWeatherClickHandler(weatherCallback)
+tmap.enableWeatherClicks()
+window.WaypointManager.currentMode = true
+mapEvents['click']({ latlng: { lat: 17.385, lng: 78.486 } })
+window.WaypointManager.currentMode = false
+mapEvents['click']({ latlng: { lat: 17.385, lng: 78.486 } })
+
+Expected Behavior:
+Verify weatherCallback satisfies toHaveBeenCalled().
+Verify weatherCallback satisfies toHaveBeenCalledWith(17.385, 78.486).
+
+Actual Observations:
+weatherCallback: not called
+weatherCallback: called with 17.385, 78.486
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(weatherCallback).not.toHaveBeenCalled();
+expect(weatherCallback).toHaveBeenCalledWith(17.385, 78.486);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] weatherCallback: not called
+[PASS] weatherCallback: called with 17.385, 78.486
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

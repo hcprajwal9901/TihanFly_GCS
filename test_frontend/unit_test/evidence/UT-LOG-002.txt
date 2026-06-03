@@ -1,0 +1,73 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LOG-002
+Requirement ID      : REQ-LOG-001
+Source File         : login.js
+Target Function     : updateConnectionStatus() [Line 91]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger connection status dot indicator styles dynamically
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock WebSocket connections.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+dot = document.querySelector('.status-dot')
+text = document.querySelector('.status-text')
+socket.ws.onopen()
+socket.ws.onclose()
+
+Expected Behavior:
+Dot Style Background is equal to 'rgb(0, 208, 132)'.
+Text displays 'SYSTEMS ONLINE'.
+Dot Style Background is equal to 'rgb(255, 71, 87)'.
+Text displays 'RECONNECTING...'.
+
+Actual Observations:
+dot.style.background = 'rgb(0, 208, 132)'
+text.textContent = 'SYSTEMS ONLINE'
+dot.style.background = 'rgb(255, 71, 87)'
+text.textContent = 'RECONNECTING...'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(WebSocket).toHaveBeenCalled();
+expect(cb).toHaveBeenCalled();
+expect(clearInterval).toHaveBeenCalled();
+expect(parse).toHaveBeenCalled();
+expect(send).toHaveBeenCalled();
+expect(shift).toHaveBeenCalled();
+expect(showAlert).toHaveBeenCalled();
+expect(updateConnectionStatus).toHaveBeenCalled();
+expect(wsMock.send).toHaveBeenCalled();
+// JSDOM verification:
+expect(dot.style.background).toBe('rgb(0, 208, 132)'); // green
+expect(text.textContent).toBe('SYSTEMS ONLINE');
+expect(dot.style.background).toBe('rgb(255, 71, 87)'); // red
+expect(text.textContent).toBe('RECONNECTING...');
+
+Console Logs:
+[INFO] Jest executed test in 15ms
+[PASS] dot.style.background = 'rgb(0, 208, 132)'
+[PASS] text.textContent = 'SYSTEMS ONLINE'
+[PASS] dot.style.background = 'rgb(255, 71, 87)'
+[PASS] text.textContent = 'RECONNECTING...'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

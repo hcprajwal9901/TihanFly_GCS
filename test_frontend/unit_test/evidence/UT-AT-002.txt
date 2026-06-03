@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-002
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Positive / Functional
+Test Case Title     : should refresh logs and send list_logs command to websocket
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+cls: String, fn: String, ico: String, lbl: String, id: Number, i18Key: String | Simulated: window.AnalyzeToolsPanel._refreshLogs()
+)
+tableBody = document.getElementById('logTbody')
+
+Expected Behavior:
+WebSocket notification sent.
+Table Body displays text containing 'Requesting logs from drone…'.
+
+Actual Observations:
+window.ws.send: toHaveBeenCalledWith
+tableBody.textContent contains 'Requesting logs from drone…'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = B(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(window.ws.send).toHaveBeenCalledWith(
+expect(tableBody.textContent).toContain('Requesting logs from drone…');
+
+Console Logs:
+[INFO] Jest executed test in 13ms
+[PASS] window.ws.send: toHaveBeenCalledWith
+[PASS] tableBody.textContent contains 'Requesting logs from drone…'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

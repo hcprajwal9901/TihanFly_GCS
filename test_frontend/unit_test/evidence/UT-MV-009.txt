@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MV-009
+Requirement ID      : REQ-SYS-002
+Source File         : multi-vehicle.js
+Target Function     : setSelectedSysId() [Line 20]
+Test Category       : Positive / Functional
+Test Case Title     : should handle connect_vehicle_ack status messages
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.openConnectionManager()
+window._mvHandleMessage({
+})
+statusText = document.getElementById('mvConnStatus')
+
+Expected Behavior:
+Status Text displays '✓ UDP link created successfully'.
+Status Text Style Color is equal to 'rgb(74, 222, 128)'.
+
+Actual Observations:
+statusText.textContent = '✓ UDP link created successfully'
+statusText.style.color = 'rgb(74, 222, 128)'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(statusText.textContent).toBe('✓ UDP link created successfully');
+expect(statusText.style.color).toBe('rgb(74, 222, 128)'); // #4ade80 green
+
+Console Logs:
+[INFO] Jest executed test in 28ms
+[PASS] statusText.textContent = '✓ UDP link created successfully'
+[PASS] statusText.style.color = 'rgb(74, 222, 128)'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,69 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-011
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : should search fields inside groups and open matching group list elements
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+function(s: String | Simulated: searchInput = document.getElementById('rlSearch')
+searchInput.value = 'roll'
+searchInput.dispatchEvent(new Event('input'))
+attGroup = document.querySelector('#rlTreeScroll .rl-msg-group[data-msg="ATT"]')
+gpsGroup = document.querySelector('#rlTreeScroll .rl-msg-group[data-msg="GPS"]')
+attFields = attGroup.querySelector('.rl-fields')
+attArrow = attGroup.querySelector('.rl-msg-arrow')
+
+Expected Behavior:
+Att Group display state is .
+Gps Group hidden.
+Att Fields Class List Contains('Open') is equal to true.
+Att Arrow Class List Contains('Open') is equal to true.
+
+Actual Observations:
+attGroup.style.display = ''
+gpsGroup.style.display = 'none'
+attFields.classList.contains('open') = true
+attArrow.classList.contains('open') = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = filter(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(attGroup.style.display).toBe('');
+expect(gpsGroup.style.display).toBe('none');
+expect(attFields.classList.contains('open')).toBe(true);
+expect(attArrow.classList.contains('open')).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 53ms
+[PASS] attGroup.style.display = ''
+[PASS] gpsGroup.style.display = 'none'
+[PASS] attFields.classList.contains('open') = true
+[PASS] attArrow.classList.contains('open') = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

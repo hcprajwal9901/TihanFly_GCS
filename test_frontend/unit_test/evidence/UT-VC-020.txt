@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-020
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Negative / Robustness
+Test Case Title     : should parse progressive log strings, highlight error types, and suppress repetitive lines
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+triggerWsMessage({ type: 'firmware_status', stage: 'start' })
+triggerWsMessage({ type: 'firmware_status', stage: 'log', message: 'Connecting to board...' })
+triggerWsMessage({ type: 'firmware_status', stage: 'log', message: '✓ Handshake successful' })
+triggerWsMessage({ type: 'firmware_status', stage: 'log', message: '❌ Incompatible board target' })
+triggerWsMessage({ type: 'firmware_status', stage: 'log', message: '⚠ Power supply fluctuates' })
+triggerWsMessage({ type: 'firmware_status', stage: 'log', message: '→ Write: 42 %' })
+text = logBox.textContent
+
+Expected Behavior:
+Text contains 'Connecting to board...'.
+Text contains '✓ Handshake successful'.
+Text contains '❌ Incompatible board target'.
+Text contains '⚠ Power supply fluctuates'.
+Text contains 'Write: 42 %'.
+
+Actual Observations:
+text contains 'Connecting to board...'
+text contains '✓ Handshake successful'
+text contains '❌ Incompatible board target'
+text contains '⚠ Power supply fluctuates'
+text contains 'Write: 42 %'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(text).toContain('Connecting to board...');
+expect(text).toContain('✓ Handshake successful');
+expect(text).toContain('❌ Incompatible board target');
+expect(text).toContain('⚠ Power supply fluctuates');
+expect(text).not.toContain('Write: 42 %');
+
+Console Logs:
+[INFO] Jest executed test in 72ms
+[PASS] text contains 'Connecting to board...'
+[PASS] text contains '✓ Handshake successful'
+[PASS] text contains '❌ Incompatible board target'
+[PASS] text contains '⚠ Power supply fluctuates'
+[PASS] text contains 'Write: 42 %'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

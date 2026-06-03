@@ -1,0 +1,53 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CL-017
+Requirement ID      : REQ-COM-001
+Source File         : comm-link.js
+Target Function     : websocket_telemetry_ping() [Line 129]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle network timeout and disconnect exceptions gracefully for WebSocket Connection State and Telemetry Stream Pings
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+
+Test Inputs:
+ws = new TelemetryWebSocket('ws://invalid-address')
+ws.connect()
+
+Expected Behavior:
+Ws Is Connected() is equal to false.
+Ws Get Error Count() is equal to 1.
+
+Actual Observations:
+ws.isConnected() = false
+ws.getErrorCount() = 1
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(ws.isConnected()).toBe(false);
+expect(ws.getErrorCount()).toBe(1);
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] ws.isConnected() = false
+[PASS] ws.getErrorCount() = 1
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

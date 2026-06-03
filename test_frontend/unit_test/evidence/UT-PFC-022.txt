@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFC-022
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-center.js
+Target Function     : centerMission() [Line 31]
+Test Category       : Positive / Functional
+Test Case Title     : should invoke centerMission on WaypointManager and update MsgConsole on success
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockWaypoints = [{ id: 1, lat: 12.12, lng: 80.80 }]
+window.WaypointManager = {
+modeInstance.centerMission()
+
+Expected Behavior:
+Verify window.WaypointManager.centerMission satisfies toHaveBeenCalledTimes(1).
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('✅ Mission centered').
+
+Actual Observations:
+window.WaypointManager.centerMission: 1 call(s)
+window.MsgConsole.success: called with '✅ Mission centered'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.WaypointManager.centerMission).toHaveBeenCalledTimes(1);
+expect(window.MsgConsole.success).toHaveBeenCalledWith('✅ Mission centered');
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] window.WaypointManager.centerMission: 1 call(s)
+[PASS] window.MsgConsole.success: called with '✅ Mission centered'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

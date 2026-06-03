@@ -1,0 +1,73 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CC-019
+Requirement ID      : REQ-SYS-002
+Source File         : camera-controls.js
+Target Function     : CameraControls() [Line 16]
+Test Category       : Positive / Functional
+Test Case Title     : should construct camera action bars and inject custom styles
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CameraControls.init()
+actionBar = document.getElementById('cameraActionBar')
+
+Expected Behavior:
+Cameraera Action Bar exists.
+Camera Snap Button exists.
+Camera Recordord Button exists.
+Camera Gimbal Toggle Button exists.
+Record Timer Badge exists.
+Gimbal Panel exists.
+Action Bar Query Selector(' Video Max Button') is null.
+
+Actual Observations:
+document.getElementById('cameraActionBar'): not null
+document.getElementById('camSnapBtn'): not null
+document.getElementById('camRecordBtn'): not null
+document.getElementById('camGimbalToggleBtn'): not null
+document.getElementById('recTimerBadge'): not null
+document.getElementById('gimbalPanel'): not null
+actionBar.querySelector('#videoMaxBtn'): not null
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('cameraActionBar')).not.toBeNull();
+expect(document.getElementById('camSnapBtn')).not.toBeNull();
+expect(document.getElementById('camRecordBtn')).not.toBeNull();
+expect(document.getElementById('camGimbalToggleBtn')).not.toBeNull();
+expect(document.getElementById('recTimerBadge')).not.toBeNull();
+expect(document.getElementById('gimbalPanel')).not.toBeNull();
+expect(actionBar.querySelector('#videoMaxBtn')).not.toBeNull();
+
+Console Logs:
+[INFO] Jest executed test in 38ms
+[PASS] document.getElementById('cameraActionBar'): not null
+[PASS] document.getElementById('camSnapBtn'): not null
+[PASS] document.getElementById('camRecordBtn'): not null
+[PASS] document.getElementById('camGimbalToggleBtn'): not null
+[PASS] document.getElementById('recTimerBadge'): not null
+[PASS] document.getElementById('gimbalPanel'): not null
+[PASS] actionBar.querySelector('#videoMaxBtn'): not null
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

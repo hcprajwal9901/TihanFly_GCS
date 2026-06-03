@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-GEO-005
+Requirement ID      : REQ-SAF-002
+Source File         : geofence.js
+Target Function     : safeSendWrap() [Line 64]
+Test Category       : Positive / Functional
+Test Case Title     : should show warn status on chips when telemetry value enters margin buffer
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.TelemetryStore.altitude = 96
+window.TelemetryStore.distFromHome = 50
+jest.advanceTimersByTime(500)
+altValEl = document.getElementById('gf-chip-alt').querySelector('.gf-telem-chip-value')
+
+Expected Behavior:
+Alt Val El displays '96.0'.
+Alt Val El Class List Contains('Gf Warn') is equal to true.
+Alt Val El Class List Contains('Gf Bad') is equal to false.
+
+Actual Observations:
+altValEl.textContent = '96.0'
+altValEl.classList.contains('gf-warn') = true
+altValEl.classList.contains('gf-bad') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(altValEl.textContent).toBe('96.0');
+expect(altValEl.classList.contains('gf-warn')).toBe(true);
+expect(altValEl.classList.contains('gf-bad')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 213ms
+[PASS] altValEl.textContent = '96.0'
+[PASS] altValEl.classList.contains('gf-warn') = true
+[PASS] altValEl.classList.contains('gf-bad') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,50 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MV-005
+Requirement ID      : REQ-SYS-002
+Source File         : multi-vehicle.js
+Target Function     : setSelectedSysId() [Line 20]
+Test Category       : Negative / Robustness
+Test Case Title     : should snap active vehicle target to the first available if selected drone disconnects
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.selectedSysId = 3; // Selected drone 3
+vehicles = [{ sysid: 1 }, { sysid: 2 }]
+window.updateVehicleSelector(vehicles)
+
+Expected Behavior:
+Window Selected Sys Id is equal to 1.
+
+Actual Observations:
+window.selectedSysId = 1
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.selectedSysId).toBe(1);
+
+Console Logs:
+[INFO] Jest executed test in 11ms
+[PASS] window.selectedSysId = 1
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

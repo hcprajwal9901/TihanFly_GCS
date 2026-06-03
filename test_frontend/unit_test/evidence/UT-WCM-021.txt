@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-021
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger polygons offset dialog prompts
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockPolygonManager.polygons = [{ id: 1 }]
+window.prompt.mockReturnValueOnce('12')
+menuInstance.handleMenuAction('polygon-offset')
+
+Expected Behavior:
+Verify window.prompt satisfies toHaveBeenCalled().
+Verify mockPolygonManager.offsetPolygon satisfies toHaveBeenCalledWith(1, 12).
+
+Actual Observations:
+window.prompt: called
+mockPolygonManager.offsetPolygon: called with 1, 12
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.prompt).toHaveBeenCalled();
+expect(mockPolygonManager.offsetPolygon).toHaveBeenCalledWith(1, 12);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] window.prompt: called
+[PASS] mockPolygonManager.offsetPolygon: called with 1, 12
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

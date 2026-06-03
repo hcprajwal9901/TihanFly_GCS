@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PF-004
+Requirement ID      : REQ-TUNE-001
+Source File         : param-full.js
+Target Function     : parseOptionsFromRange() [Line 788]
+Test Category       : Positive / Functional
+Test Case Title     : should build table completely on param_all cache load
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+await initPanel()
+allEvt = new CustomEvent('param_all', {
+})
+window.dispatchEvent(allEvt)
+tbody = document.getElementById('fpBody')
+rows = tbody.querySelectorAll('tr[data-param]')
+acroRow = tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"]')
+
+Expected Behavior:
+Rows Length is equal to 2.
+Acro Row Query Selector(' Fp Param Name') displays 'ACRO_BAL_PITCH'.
+Acro Row Query Selector(' Param Val Input') displays '1.5'.
+Acro Row Query Selector(' Fp U') displays 'deg/s'.
+Acro Row Query Selector(' Fp Range Badge') displays '0 - 3'.
+
+Actual Observations:
+rows.length = 2
+acroRow.querySelector('.fp-param-name').textContent = 'ACRO_BAL_PITCH'
+acroRow.querySelector('.param-val-input').value = '1.5'
+acroRow.querySelector('.fp-u').textContent = 'deg/s'
+acroRow.querySelector('.fp-range-badge').textContent = '0 - 3'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(rows.length).toBe(2);
+expect(acroRow.querySelector('.fp-param-name').textContent).toBe('ACRO_BAL_PITCH');
+expect(acroRow.querySelector('.param-val-input').value).toBe('1.5');
+expect(acroRow.querySelector('.fp-u').textContent).toBe('deg/s');
+expect(acroRow.querySelector('.fp-range-badge').textContent).toBe('0 - 3');
+
+Console Logs:
+[INFO] Jest executed test in 167ms
+[PASS] rows.length = 2
+[PASS] acroRow.querySelector('.fp-param-name').textContent = 'ACRO_BAL_PITCH'
+[PASS] acroRow.querySelector('.param-val-input').value = '1.5'
+[PASS] acroRow.querySelector('.fp-u').textContent = 'deg/s'
+[PASS] acroRow.querySelector('.fp-range-badge').textContent = '0 - 3'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

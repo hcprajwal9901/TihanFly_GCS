@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-002
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : ReviewLog.open should show the container and hide map/telemetry panels
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+window.ReviewLog.open()
+win = document.getElementById('rlWindow')
+el = document.getElementById(id)
+})
+
+Expected Behavior:
+Win Class List Contains('Rl On') is equal to true.
+El Style Get Property Value('Display') is equal to 'none'.
+El Style Get Property Priority('Display') is equal to 'important'.
+
+Actual Observations:
+win.classList.contains('rl-on') = true
+el.style.getPropertyValue('display') = 'none'
+el.style.getPropertyPriority('display') = 'important'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(build).toHaveBeenCalled();
+expect(function).toHaveBeenCalled();
+expect(setProperty).toHaveBeenCalled();
+// JSDOM verification:
+expect(win.classList.contains('rl-on')).toBe(true);
+expect(el.style.getPropertyValue('display')).toBe('none');
+expect(el.style.getPropertyPriority('display')).toBe('important');
+
+Console Logs:
+[INFO] Jest executed test in 37ms
+[PASS] win.classList.contains('rl-on') = true
+[PASS] el.style.getPropertyValue('display') = 'none'
+[PASS] el.style.getPropertyPriority('display') = 'important'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

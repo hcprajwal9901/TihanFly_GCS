@@ -1,0 +1,74 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CE-008
+Requirement ID      : REQ-SYS-002
+Source File         : command-editor.js
+Target Function     : initializeCommandEditor() [Line 751]
+Test Category       : Positive / Functional
+Test Case Title     : should open edit panel with loaded parameters on clicking waypoint
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+list = document.getElementById('waypointList')
+firstWP = list.querySelector('.waypoint-item')
+firstWP.click()
+
+Expected Behavior:
+Waypoints Panel exists.
+Waypoint Details Panel exists.
+Editing Waypoint Title exists.
+Waypoint Id Field exists.
+Waypoint Lat Field exists.
+Waypoint Type Field exists.
+Waypoint Type Field exists.
+
+Actual Observations:
+document.getElementById('waypointsPanel').style.display = 'none'
+document.getElementById('waypointDetailsPanel').style.display = 'block'
+document.getElementById('editingWaypointTitle').textContent = 'Waypoint 1'
+document.getElementById('waypointIdField').value = '101'
+document.getElementById('waypointLatField').value = '17.601'
+document.getElementById('waypointTypeField').value = 'takeoff'
+document.getElementById('waypointTypeField').disabled = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('waypointsPanel').style.display).toBe('none');
+expect(document.getElementById('waypointDetailsPanel').style.display).toBe('block');
+expect(document.getElementById('editingWaypointTitle').textContent).toBe('Waypoint 1');
+expect(document.getElementById('waypointIdField').value).toBe('101');
+expect(document.getElementById('waypointLatField').value).toBe('17.601');
+expect(document.getElementById('waypointTypeField').value).toBe('takeoff');
+expect(document.getElementById('waypointTypeField').disabled).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 12ms
+[PASS] document.getElementById('waypointsPanel').style.display = 'none'
+[PASS] document.getElementById('waypointDetailsPanel').style.display = 'block'
+[PASS] document.getElementById('editingWaypointTitle').textContent = 'Waypoint 1'
+[PASS] document.getElementById('waypointIdField').value = '101'
+[PASS] document.getElementById('waypointLatField').value = '17.601'
+[PASS] document.getElementById('waypointTypeField').value = 'takeoff'
+[PASS] document.getElementById('waypointTypeField').disabled = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

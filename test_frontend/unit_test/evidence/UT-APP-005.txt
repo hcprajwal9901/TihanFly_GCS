@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-APP-005
+Requirement ID      : REQ-SYS-002
+Source File         : app.js
+Target Function     : initializeVideoMaximize() [Line 461]
+Test Category       : Boundary Value
+Test Case Title     : should execute maximize/minimize helper controls directly
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+global.initializeVideoMaximize()
+window.VideoMaximize.maximize()
+window.VideoMaximize.minimize()
+
+Expected Behavior:
+Window Video Maximize Is Maximized() is equal to true.
+Window Video Maximize Is Maximized() is equal to false.
+
+Actual Observations:
+window.VideoMaximize.isMaximized() = true
+window.VideoMaximize.isMaximized() = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(_iconMaximize).toHaveBeenCalled();
+expect(_iconMinimize).toHaveBeenCalled();
+expect(addEventListener).toHaveBeenCalled();
+expect(bezier).toHaveBeenCalled();
+expect(contains).toHaveBeenCalled();
+expect(eachLayer).toHaveBeenCalled();
+expect(invalidateSize).toHaveBeenCalled();
+expect(preventDefault).toHaveBeenCalled();
+expect(redraw).toHaveBeenCalled();
+expect(stopPropagation).toHaveBeenCalled();
+expect(toggleVideoMaximize).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.VideoMaximize.isMaximized()).toBe(true);
+expect(window.VideoMaximize.isMaximized()).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 13ms
+[PASS] window.VideoMaximize.isMaximized() = true
+[PASS] window.VideoMaximize.isMaximized() = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

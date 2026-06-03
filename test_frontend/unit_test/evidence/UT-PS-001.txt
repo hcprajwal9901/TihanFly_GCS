@@ -1,0 +1,71 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PS-001
+Requirement ID      : REQ-TUNE-001
+Source File         : param-switch.js
+Target Function     : connectWebSocket() [Line 232]
+Test Category       : Positive / Functional
+Test Case Title     : should inject correct structural grids and populate the 8 auxiliary switch rows
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+channels = document.querySelectorAll('.sw-channel')
+badges = Array.from(document.querySelectorAll('.sw-ch-badge')).map(el => el.textContent.trim())
+names = Array.from(document.querySelectorAll('.sw-ch-name')).map(el => el.textContent.trim())
+])
+
+Expected Behavior:
+Sw Grid exists.
+Sw Write Button exists.
+Sw Read Button exists.
+Channels Length is equal to 8.
+Badges is equal to ['RC 5', 'RC 6', 'RC 7', 'RC 8', 'RC 9', 'RC 10', 'RC 11', 'RC 12'].
+Names is equal to .
+
+Actual Observations:
+document.getElementById('swGrid'): truthy
+document.getElementById('swWriteBtn'): truthy
+document.getElementById('swReadBtn'): truthy
+channels.length = 8
+badges = ['RC 5', 'RC 6', 'RC 7', 'RC 8', 'RC 9', 'RC 10', 'RC 11', 'RC 12']
+names: toEqual
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('swGrid')).toBeTruthy();
+expect(document.getElementById('swWriteBtn')).toBeTruthy();
+expect(document.getElementById('swReadBtn')).toBeTruthy();
+expect(channels.length).toBe(8);
+expect(badges).toEqual(['RC 5', 'RC 6', 'RC 7', 'RC 8', 'RC 9', 'RC 10', 'RC 11', 'RC 12']);
+expect(names).toEqual([
+
+Console Logs:
+[INFO] Jest executed test in 1469ms
+[PASS] document.getElementById('swGrid'): truthy
+[PASS] document.getElementById('swWriteBtn'): truthy
+[PASS] document.getElementById('swReadBtn'): truthy
+[PASS] channels.length = 8
+[PASS] badges = ['RC 5', 'RC 6', 'RC 7', 'RC 8', 'RC 9', 'RC 10', 'RC 11', 'RC 12']
+[PASS] names: toEqual
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

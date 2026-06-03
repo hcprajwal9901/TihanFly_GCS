@@ -1,0 +1,134 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFMS-013
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-mission-send.js
+Target Function     : handleMissionSendActions() [Line 109]
+Test Category       : Positive / Functional
+Test Case Title     : should prepend seq=0 home position and build MAVLink command list correctly
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.sendMissionToDrone()
+sentPayload = JSON.parse(window.ws.send.mock.calls[0][0])
+items = sentPayload.waypoints
+
+Expected Behavior:
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith(expect.stringContaining('Uploading mission: home +')).
+Sent Payload Type is equal to 'mission'.
+Items Length is equal to 7.
+Items[0] Seq is equal to 0.
+Items[0] Latitude is equal to 12.0.
+Items[0] Longitude is equal to 80.0.
+Items[0] Command is equal to 16); // MAV_CMD_NAV_WAYPOINT (16.
+Items[1] Seq is equal to 1.
+Items[1] Latitude is equal to 12.34.
+Items[1] Command is equal to 22); // MAV_CMD_NAV_TAKEOFF (22.
+Items[2] Seq is equal to 2.
+Items[2] Latitude is equal to 12.35.
+Items[2] Command is equal to 16.
+Items[2] Param1 is equal to 2.
+Items[3] Seq is equal to 3.
+Items[3] Command is equal to 17); // MAV_CMD_NAV_LOITER_UNLIM (17.
+Items[4] Seq is equal to 4.
+Items[4] Command is equal to 16.
+Items[5] Seq is equal to 5.
+Items[5] Command is equal to 20); // MAV_CMD_NAV_RETURN_TO_LAUNCH (20.
+Items[6] Seq is equal to 6.
+Items[6] Command is equal to 21); // MAV_CMD_NAV_LAND (21.
+
+Actual Observations:
+window.MsgConsole.info: called with expect.stringContaining('Uploading mission: home +')
+sentPayload.type = 'mission'
+items.length = 7
+items[0].seq = 0
+items[0].latitude = 12.0
+items[0].longitude = 80.0
+items[0].command = 16); // MAV_CMD_NAV_WAYPOINT (16
+items[1].seq = 1
+items[1].latitude = 12.34
+items[1].command = 22); // MAV_CMD_NAV_TAKEOFF (22
+items[2].seq = 2
+items[2].latitude = 12.35
+items[2].command = 16
+items[2].param1 = 2
+items[3].seq = 3
+items[3].command = 17); // MAV_CMD_NAV_LOITER_UNLIM (17
+items[4].seq = 4
+items[4].command = 16
+items[5].seq = 5
+items[5].command = 20); // MAV_CMD_NAV_RETURN_TO_LAUNCH (20
+items[6].seq = 6
+items[6].command = 21); // MAV_CMD_NAV_LAND (21
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.info).toHaveBeenCalledWith(expect.stringContaining('Uploading mission: home +'));
+expect(sentPayload.type).toBe('mission');
+expect(items.length).toBe(7);
+expect(items[0].seq).toBe(0);
+expect(items[0].latitude).toBe(12.0);
+expect(items[0].longitude).toBe(80.0);
+expect(items[0].command).toBe(16); // MAV_CMD_NAV_WAYPOINT (16)
+expect(items[1].seq).toBe(1);
+expect(items[1].latitude).toBe(12.34);
+expect(items[1].command).toBe(22); // MAV_CMD_NAV_TAKEOFF (22)
+expect(items[2].seq).toBe(2);
+expect(items[2].latitude).toBe(12.35);
+expect(items[2].command).toBe(16);
+expect(items[2].param1).toBe(2); // hold_time = 2
+expect(items[3].seq).toBe(3);
+expect(items[3].command).toBe(17); // MAV_CMD_NAV_LOITER_UNLIM (17)
+expect(items[4].seq).toBe(4);
+expect(items[4].command).toBe(16);
+expect(items[5].seq).toBe(5);
+expect(items[5].command).toBe(20); // MAV_CMD_NAV_RETURN_TO_LAUNCH (20)
+expect(items[6].seq).toBe(6);
+expect(items[6].command).toBe(21); // MAV_CMD_NAV_LAND (21)
+
+Console Logs:
+[INFO] Jest executed test in 33ms
+[PASS] window.MsgConsole.info: called with expect.stringContaining('Uploading mission: home +')
+[PASS] sentPayload.type = 'mission'
+[PASS] items.length = 7
+[PASS] items[0].seq = 0
+[PASS] items[0].latitude = 12.0
+[PASS] items[0].longitude = 80.0
+[PASS] items[0].command = 16); // MAV_CMD_NAV_WAYPOINT (16
+[PASS] items[1].seq = 1
+[PASS] items[1].latitude = 12.34
+[PASS] items[1].command = 22); // MAV_CMD_NAV_TAKEOFF (22
+[PASS] items[2].seq = 2
+[PASS] items[2].latitude = 12.35
+[PASS] items[2].command = 16
+[PASS] items[2].param1 = 2
+[PASS] items[3].seq = 3
+[PASS] items[3].command = 17); // MAV_CMD_NAV_LOITER_UNLIM (17
+[PASS] items[4].seq = 4
+[PASS] items[4].command = 16
+[PASS] items[5].seq = 5
+[PASS] items[5].command = 20); // MAV_CMD_NAV_RETURN_TO_LAUNCH (20
+[PASS] items[6].seq = 6
+[PASS] items[6].command = 21); // MAV_CMD_NAV_LAND (21
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

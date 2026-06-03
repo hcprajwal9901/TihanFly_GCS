@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-007
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should update status badge to Unsafe and render warnings if weather is unsafe
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+weatherPayload = {
+backendMock.handleMessage(JSON.stringify(weatherPayload))
+statusBadge = document.querySelector('.status-badge')
+safetyIndicator = document.getElementById('weatherSafetyIndicator')
+
+Expected Behavior:
+Status Badge displays 'Weather Unsafe'.
+Status Badge Style Background is equal to 'rgb(239, 68, 68)'.
+Safety Indicator displays text containing 'High winds! Flight unsafe'.
+Safety Indicator displays text containing 'Wind speed exceeds limit (18.5 m/s)'.
+
+Actual Observations:
+statusBadge.textContent = 'Weather Unsafe'
+statusBadge.style.background = 'rgb(239, 68, 68)'
+safetyIndicator.innerHTML contains 'High winds! Flight unsafe'
+safetyIndicator.innerHTML contains 'Wind speed exceeds limit (18.5 m/s)'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(statusBadge.textContent).toBe('Weather Unsafe');
+expect(statusBadge.style.background).toBe('rgb(239, 68, 68)');
+expect(safetyIndicator.innerHTML).toContain('High winds! Flight unsafe');
+expect(safetyIndicator.innerHTML).toContain('Wind speed exceeds limit (18.5 m/s)');
+
+Console Logs:
+[INFO] Jest executed test in 23ms
+[PASS] statusBadge.textContent = 'Weather Unsafe'
+[PASS] statusBadge.style.background = 'rgb(239, 68, 68)'
+[PASS] safetyIndicator.innerHTML contains 'High winds! Flight unsafe'
+[PASS] safetyIndicator.innerHTML contains 'Wind speed exceeds limit (18.5 m/s)'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,56 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WM-003
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-manager.js
+Target Function     : initializeWaypointManager() [Line 696]
+Test Category       : Positive / Functional
+Test Case Title     : should switch into waypoint addition mode
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+manager.startAddingWaypoint()
+
+Expected Behavior:
+Manager Current Mode is equal to 'add'.
+Verify mockTMap.enableClick satisfies toHaveBeenCalled().
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith(expect.stringContaining('Click on map')).
+
+Actual Observations:
+manager.currentMode = 'add'
+mockTMap.enableClick: called
+window.MsgConsole.info: called with expect.stringContaining('Click on map')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(manager.currentMode).toBe('add');
+expect(mockTMap.enableClick).toHaveBeenCalled();
+expect(window.MsgConsole.info).toHaveBeenCalledWith(expect.stringContaining('Click on map'));
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] manager.currentMode = 'add'
+[PASS] mockTMap.enableClick: called
+[PASS] window.MsgConsole.info: called with expect.stringContaining('Click on map')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

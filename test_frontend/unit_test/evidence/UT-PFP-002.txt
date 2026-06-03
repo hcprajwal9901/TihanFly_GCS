@@ -1,0 +1,48 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFP-002
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-polygon.js
+Target Function     : handlePolygonActions() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should route draw-polygon action
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+instance.handlePolygonActions('draw-polygon')
+
+Expected Behavior:
+Verify instance.drawPolygon satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+instance.drawPolygon: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(instance.drawPolygon).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] instance.drawPolygon: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,85 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PT-005
+Requirement ID      : REQ-TUNE-001
+Source File         : pid-tuning.js
+Target Function     : send() [Line 84]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger staggered fetches for all params sequentially
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+refreshBtn = document.getElementById('pid-refresh-btn')
+window.safeSend.mockClear()
+refreshBtn.click()
+dot = document.getElementById('pid-status-dot')
+msg = document.getElementById('pid-status-msg')
+jest.advanceTimersByTime(1)
+})
+jest.advanceTimersByTime(80)
+})
+jest.advanceTimersByTime(68 * 80 + 200)
+
+Expected Behavior:
+Dot Class Name contains 'pid-dot-running'.
+Message displays text containing 'Reading 68 parameters'.
+Verify window.safeSend satisfies toHaveBeenCalledTimes(1).
+Verify window.safeSend satisfies toHaveBeenLastCalledWith().
+Verify window.safeSend satisfies toHaveBeenCalledTimes(2).
+Verify window.safeSend satisfies toHaveBeenLastCalledWith().
+Dot Class Name contains 'pid-dot-idle'.
+Message displays text containing 'Waiting for drone response…'.
+
+Actual Observations:
+dot.className contains 'pid-dot-running'
+msg.textContent contains 'Reading 68 parameters'
+window.safeSend: 1 call(s)
+window.safeSend: toHaveBeenLastCalledWith
+window.safeSend: 2 call(s)
+window.safeSend: toHaveBeenLastCalledWith
+dot.className contains 'pid-dot-idle'
+msg.textContent contains 'Waiting for drone response…'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(dot.className).toContain('pid-dot-running');
+expect(msg.textContent).toContain('Reading 68 parameters');
+expect(window.safeSend).toHaveBeenCalledTimes(1);
+expect(window.safeSend).toHaveBeenLastCalledWith({
+expect(window.safeSend).toHaveBeenCalledTimes(2);
+expect(window.safeSend).toHaveBeenLastCalledWith({
+expect(dot.className).toContain('pid-dot-idle');
+expect(msg.textContent).toContain('Waiting for drone response…');
+
+Console Logs:
+[INFO] Jest executed test in 118ms
+[PASS] dot.className contains 'pid-dot-running'
+[PASS] msg.textContent contains 'Reading 68 parameters'
+[PASS] window.safeSend: 1 call(s)
+[PASS] window.safeSend: toHaveBeenLastCalledWith
+[PASS] window.safeSend: 2 call(s)
+[PASS] window.safeSend: toHaveBeenLastCalledWith
+[PASS] dot.className contains 'pid-dot-idle'
+[PASS] msg.textContent contains 'Waiting for drone response…'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,56 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FC-012
+Requirement ID      : REQ-CON-001
+Source File         : flight-controls.js
+Target Function     : flight-controls_initialize() [Line 12]
+Test Category       : Boundary Value
+Test Case Title     : should handle force arming clicks and sync standard states
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+forceArmBtn = document.getElementById('forceArmBtn')
+forceArmBtn.click()
+
+Expected Behavior:
+Verify window.sendCommand satisfies toHaveBeenCalledWith('FORCE_ARM').
+Window Arm Control Get State() is equal to true.
+
+Actual Observations:
+window.sendCommand: called with 'FORCE_ARM'
+window.ArmControl.getState() = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(onArm).toHaveBeenCalled();
+expect(setArmedState).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.sendCommand).toHaveBeenCalledWith('FORCE_ARM');
+expect(window.ArmControl.getState()).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] window.sendCommand: called with 'FORCE_ARM'
+[PASS] window.ArmControl.getState() = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

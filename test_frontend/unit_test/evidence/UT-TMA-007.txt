@@ -1,0 +1,53 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-TMA-007
+Requirement ID      : REQ-SYS-002
+Source File         : tmap.js
+Target Function     : tmap_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : calculateDistance should compute distance between points
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock L Map layers.. Dependencies: Leaflet API initialized in setup.
+
+Test Inputs:
+coordinates: String | Simulated: tmap = new TMap('map-container', [17.385, 78.486], 16, true)
+routePoints = [
+dist = tmap.calculateDistance(routePoints)
+
+Expected Behavior:
+Verify dist satisfies toBeGreaterThan(0).
+
+Actual Observations:
+dist > 0
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(distanceTo).toHaveBeenCalled();
+expect(latLng).toHaveBeenCalled();
+// JSDOM verification:
+expect(dist).toBeGreaterThan(0);
+
+Console Logs:
+[INFO] Jest executed test in 8ms
+[PASS] dist > 0
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

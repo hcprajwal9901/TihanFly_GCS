@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-018
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : Reset Zoom button should restore full data bounds
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+stateMock.xMin = 2.0
+stateMock.xMax = 4.0
+resetBtn = document.getElementById('rlResetZoomBtn')
+resetBtn.click()
+stateMock.xMin = stateMock.xMinFull
+stateMock.xMax = stateMock.xMaxFull
+chart.options.scales.x.min = stateMock.xMin
+chart.options.scales.x.max = stateMock.xMax
+
+Expected Behavior:
+State Mock X Min is equal to 0.0.
+State Mock X Max is equal to 10.0.
+
+Actual Observations:
+stateMock.xMin = 0.0
+stateMock.xMax = 10.0
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(stateMock.xMin).toBe(0.0);
+expect(stateMock.xMax).toBe(10.0);
+
+Console Logs:
+[INFO] Jest executed test in 25ms
+[PASS] stateMock.xMin = 0.0
+[PASS] stateMock.xMax = 10.0
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

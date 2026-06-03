@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FAI-002
+Requirement ID      : REQ-SAF-001
+Source File         : failsafe.js
+Target Function     : requestParam() [Line 65]
+Test Category       : Positive / Functional
+Test Case Title     : should query all parameters from flight controller on launch
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.Failsafe.init()
+jest.advanceTimersByTime(200)
+)
+)
+)
+
+Expected Behavior:
+Verify window.safeSend satisfies toHaveBeenCalledTimes(3).
+Verify window.safeSend satisfies toHaveBeenNativelyCalledWith().
+Verify window.safeSend satisfies toHaveBeenNativelyCalledWith().
+Verify window.safeSend satisfies toHaveBeenNativelyCalledWith().
+
+Actual Observations:
+window.safeSend: 3 call(s)
+window.safeSend: toHaveBeenNativelyCalledWith
+window.safeSend: toHaveBeenNativelyCalledWith
+window.safeSend: toHaveBeenNativelyCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.safeSend).toHaveBeenCalledTimes(3);
+expect(window.safeSend).toHaveBeenNativelyCalledWith(
+expect(window.safeSend).toHaveBeenNativelyCalledWith(
+expect(window.safeSend).toHaveBeenNativelyCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 44ms
+[PASS] window.safeSend: 3 call(s)
+[PASS] window.safeSend: toHaveBeenNativelyCalledWith
+[PASS] window.safeSend: toHaveBeenNativelyCalledWith
+[PASS] window.safeSend: toHaveBeenNativelyCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

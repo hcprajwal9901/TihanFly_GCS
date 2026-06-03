@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-016
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : mouse click and drag should pan graph bounds horizontally
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+triggerDrag(100)
+
+Expected Behavior:
+Verify stateMock.xMin satisfies toBeCloseTo(0.6).
+Verify stateMock.xMax satisfies toBeCloseTo(4.6).
+Verify chart.options.scales.x.min satisfies toBeCloseTo(0.6).
+Verify chart.options.scales.x.max satisfies toBeCloseTo(4.6).
+Verify chart.update satisfies toHaveBeenCalledWith('none').
+
+Actual Observations:
+stateMock.xMin = 0.6
+stateMock.xMax = 4.6
+chart.options.scales.x.min = 0.6
+chart.options.scales.x.max = 4.6
+chart.update: called with 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(stateMock.xMin).toBeCloseTo(0.6);
+expect(stateMock.xMax).toBeCloseTo(4.6);
+expect(chart.options.scales.x.min).toBeCloseTo(0.6);
+expect(chart.options.scales.x.max).toBeCloseTo(4.6);
+expect(chart.update).toHaveBeenCalledWith('none');
+
+Console Logs:
+[INFO] Jest executed test in 44ms
+[PASS] stateMock.xMin = 0.6
+[PASS] stateMock.xMax = 4.6
+[PASS] chart.options.scales.x.min = 0.6
+[PASS] chart.options.scales.x.max = 4.6
+[PASS] chart.update: called with 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

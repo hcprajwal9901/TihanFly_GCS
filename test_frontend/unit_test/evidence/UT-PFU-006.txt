@@ -1,0 +1,73 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFU-006
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-ui.js
+Target Function     : showPlanMenuStrip() [Line 10]
+Test Category       : Positive / Functional
+Test Case Title     : should hide logos, inject exit button, and update header center stats
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.transformHeaderForPlanMode()
+insertedExitBtn = modeInstance.headerLeft.firstChild
+
+Expected Behavior:
+Mode Instance Tihan Logo hidden.
+Mode Instance Status Badge hidden.
+Inserted Exit Button is true.
+Inserted Exit Button Id is equal to 'exitPlanBtn'.
+Mode Instance Header Center Query Selector(' Plan Mission Stats') is true.
+Mode Instance Header Center Query Selector(' Plan Total Mission') is true.
+Mode Instance Header Center Dataset Original Content is equal to '<span>Original Content</span>'.
+
+Actual Observations:
+modeInstance.tihanLogo.style.display = 'none'
+modeInstance.statusBadge.style.display = 'none'
+insertedExitBtn: truthy
+insertedExitBtn.id = 'exitPlanBtn'
+modeInstance.headerCenter.querySelector('.plan-mission-stats'): truthy
+modeInstance.headerCenter.querySelector('.plan-total-mission'): truthy
+modeInstance.headerCenter.dataset.originalContent = '<span>Original Content</span>'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modeInstance.tihanLogo.style.display).toBe('none');
+expect(modeInstance.statusBadge.style.display).toBe('none');
+expect(insertedExitBtn).toBeTruthy();
+expect(insertedExitBtn.id).toBe('exitPlanBtn');
+expect(modeInstance.headerCenter.querySelector('.plan-mission-stats')).toBeTruthy();
+expect(modeInstance.headerCenter.querySelector('.plan-total-mission')).toBeTruthy();
+expect(modeInstance.headerCenter.dataset.originalContent).toBe('<span>Original Content</span>');
+
+Console Logs:
+[INFO] Jest executed test in 59ms
+[PASS] modeInstance.tihanLogo.style.display = 'none'
+[PASS] modeInstance.statusBadge.style.display = 'none'
+[PASS] insertedExitBtn: truthy
+[PASS] insertedExitBtn.id = 'exitPlanBtn'
+[PASS] modeInstance.headerCenter.querySelector('.plan-mission-stats'): truthy
+[PASS] modeInstance.headerCenter.querySelector('.plan-total-mission'): truthy
+[PASS] modeInstance.headerCenter.dataset.originalContent = '<span>Original Content</span>'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

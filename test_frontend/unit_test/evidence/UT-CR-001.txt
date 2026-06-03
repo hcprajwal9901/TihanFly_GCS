@@ -1,0 +1,88 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CR-001
+Requirement ID      : REQ-HW-001
+Source File         : calib-radio.js
+Target Function     : _onStatusMsg() [Line 32]
+Test Category       : Positive / Functional
+Test Case Title     : should inject correct HTML templates and setup layout structural nodes
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+for (let ch = 5; ch <= 14; ch++) {
+
+Expected Behavior:
+Radio Start Button exists.
+Radio Status Bar exists.
+Hbar Fill Roll exists.
+Stick Fill Pitch exists.
+Stick Fill Throttle exists.
+Hbar Fill Yaw exists.
+Hbar Min Roll exists.
+Hbar Max Roll exists.
+Hbar Val Roll exists.
+Document Get Element By Id(`Rbox ${Ch}`) is true.
+Document Get Element By Id(`Rbar ${Ch}`) is true.
+
+Actual Observations:
+document.getElementById('radioStartBtn'): truthy
+document.getElementById('radio-status-bar'): truthy
+document.getElementById('hbar-fill-roll'): truthy
+document.getElementById('stick-fill-pitch'): truthy
+document.getElementById('stick-fill-throttle'): truthy
+document.getElementById('hbar-fill-yaw'): truthy
+document.getElementById('hbar-min-roll'): truthy
+document.getElementById('hbar-max-roll'): truthy
+document.getElementById('hbar-val-roll').textContent = '1500'
+document.getElementById(`rbox-${ch}`): truthy
+document.getElementById(`rbar-${ch}`): truthy
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('radioStartBtn')).toBeTruthy();
+expect(document.getElementById('radio-status-bar')).toBeTruthy();
+expect(document.getElementById('hbar-fill-roll')).toBeTruthy();
+expect(document.getElementById('stick-fill-pitch')).toBeTruthy();
+expect(document.getElementById('stick-fill-throttle')).toBeTruthy();
+expect(document.getElementById('hbar-fill-yaw')).toBeTruthy();
+expect(document.getElementById('hbar-min-roll')).toBeTruthy();
+expect(document.getElementById('hbar-max-roll')).toBeTruthy();
+expect(document.getElementById('hbar-val-roll').textContent).toBe('1500');
+expect(document.getElementById(`rbox-${ch}`)).toBeTruthy();
+expect(document.getElementById(`rbar-${ch}`)).toBeTruthy();
+
+Console Logs:
+[INFO] Jest executed test in 92ms
+[PASS] document.getElementById('radioStartBtn'): truthy
+[PASS] document.getElementById('radio-status-bar'): truthy
+[PASS] document.getElementById('hbar-fill-roll'): truthy
+[PASS] document.getElementById('stick-fill-pitch'): truthy
+[PASS] document.getElementById('stick-fill-throttle'): truthy
+[PASS] document.getElementById('hbar-fill-yaw'): truthy
+[PASS] document.getElementById('hbar-min-roll'): truthy
+[PASS] document.getElementById('hbar-max-roll'): truthy
+[PASS] document.getElementById('hbar-val-roll').textContent = '1500'
+[PASS] document.getElementById(`rbox-${ch}`): truthy
+[PASS] document.getElementById(`rbar-${ch}`): truthy
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,5450 @@
+Excel summary of frontend functions:
+Total files: 54
+
+==================================================
+File: main.js (3 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - createWindow (line 12)
+    Description: Handles functionality for create window.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _filtersFor (line 49)
+    Description: Handles functionality for  filters for.
+    Inputs: mimeType
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\analyze-tools.js (31 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - injectCSS (line 260)
+    Description: Handles functionality for inject css.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _wsSend (line 288)
+    Description: Handles functionality for  ws send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - _attachWsListener (line 300)
+    Description: Handles functionality for  attach ws listener.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setInterval (line 316)
+    Description: Sets the interval.
+    Inputs: function (
+    Outputs: Executes side-effects (Void)
+
+  - _onLogEntry (line 321)
+    Description: Handles functionality for  on log entry.
+    Inputs: data
+    Outputs: Dynamic (Check implementation)
+
+  - _finaliseLogList (line 332)
+    Description: Handles functionality for  finalise log list.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _onLogProgress (line 389)
+    Description: Handles functionality for  on log progress.
+    Inputs: data
+    Outputs: Dynamic (Check implementation)
+
+  - _onLogDone (line 414)
+    Description: Handles functionality for  on log done.
+    Inputs: data
+    Outputs: Dynamic (Check implementation)
+
+  - setTimeout (line 425)
+    Description: Sets the timeout.
+    Inputs: function (
+    Outputs: Executes side-effects (Void)
+
+  - buildAnalyzePanel (line 461)
+    Description: Handles functionality for build analyze panel.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - buildWindows (line 535)
+    Description: Handles functionality for build windows.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - buildBody (line 569)
+    Description: Handles functionality for build body.
+    Inputs: id
+    Outputs: Dynamic (Check implementation)
+
+  - B (line 578)
+    Description: Handles functionality for b.
+    Inputs: cls, fn, ico, lbl, id, i18Key
+    Outputs: UI Component / Object
+
+  - F (line 583)
+    Description: Handles functionality for f.
+    Inputs: lbl, ctrl, i18Key
+    Outputs: UI Component / Object
+
+  - SVG (line 584)
+    Description: Handles functionality for svg.
+    Inputs: d
+    Outputs: UI Component / Object
+
+  - bodyLog (line 590)
+    Description: Handles functionality for body log.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - bodyGeo (line 625)
+    Description: Handles functionality for body geo.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - bodyCon (line 648)
+    Description: Handles functionality for body con.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - bodyInsp (line 665)
+    Description: Handles functionality for body insp.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - bodyVib (line 704)
+    Description: Handles functionality for body vib.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - icard (line 705)
+    Description: Handles functionality for icard.
+    Inputs: title, pfx
+    Outputs: Dynamic (Check implementation)
+
+  - _applyInspData (line 763)
+    Description: Handles functionality for  apply insp data.
+    Inputs: packet
+    Outputs: Dynamic (Check implementation)
+
+  - _renderInspPane (line 832)
+    Description: Handles functionality for  render insp pane.
+    Inputs: name, m, tick
+    Outputs: Dynamic (Check implementation)
+
+  - setInterval (line 875)
+    Description: Sets the interval.
+    Inputs: function (
+    Outputs: Executes side-effects (Void)
+
+  - setTimeout (line 951)
+    Description: Sets the timeout.
+    Inputs: function (
+    Outputs: Executes side-effects (Void)
+
+  - setTimeout (line 1128)
+    Description: Sets the timeout.
+    Inputs: function (
+    Outputs: Executes side-effects (Void)
+
+  - setTimeout (line 1173)
+    Description: Sets the timeout.
+    Inputs: function (
+    Outputs: Executes side-effects (Void)
+
+  - _updateVib (line 1286)
+    Description: Handles functionality for  update vib.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _fakeResp (line 1343)
+    Description: Handles functionality for  fake resp.
+    Inputs: cmd
+    Outputs: Dynamic (Check implementation)
+
+  - _mavFields (line 1354)
+    Description: Handles functionality for  mav fields.
+    Inputs: msg
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\app.js (29 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - initializeApplication (line 26)
+    Description: Handles functionality for initialize application.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializeMap (line 55)
+    Description: Handles functionality for initialize map.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - haversineDistance (line 92)
+    Description: Handles functionality for haversine distance.
+    Inputs: lat1, lon1, lat2, lon2
+    Outputs: Dynamic (Check implementation)
+
+  - initializeDroneWebSocket (line 104)
+    Description: Handles functionality for initialize drone web socket.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - connect (line 111)
+    Description: Handles functionality for connect.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializeCompass (line 403)
+    Description: Handles functionality for initialize compass.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializeVideo (line 432)
+    Description: Handles functionality for initialize video.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializeVideoMaximize (line 461)
+    Description: Handles functionality for initialize video maximize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - toggleVideoMaximize (line 484)
+    Description: Handles functionality for toggle video maximize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _iconMaximize (line 579)
+    Description: Handles functionality for  icon maximize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _iconMinimize (line 586)
+    Description: Handles functionality for  icon minimize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - integrateComponents (line 613)
+    Description: Handles functionality for integrate components.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - finishIntegration (line 648)
+    Description: Handles functionality for finish integration.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - integrateWeatherDashboard (line 675)
+    Description: Handles functionality for integrate weather dashboard.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - integrateFlightControls (line 721)
+    Description: Handles functionality for integrate flight controls.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - integrateWaypointManager (line 757)
+    Description: Handles functionality for integrate waypoint manager.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setHeaderStatus (line 779)
+    Description: Sets the header status.
+    Inputs: text, state = 'ready'
+    Outputs: Executes side-effects (Void)
+
+  - addCustomLocation (line 786)
+    Description: Handles functionality for add custom location.
+    Inputs: lat, lng, name, options = {}
+    Outputs: Dynamic (Check implementation)
+
+  - addCustomHomeMarker (line 810)
+    Description: Handles functionality for add custom home marker.
+    Inputs: lat, lng, name = 'Home', options = {}
+    Outputs: Dynamic (Check implementation)
+
+  - goHome (line 838)
+    Description: Handles functionality for go home.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - centerOnLocation (line 850)
+    Description: Handles functionality for center on location.
+    Inputs: lat, lng, zoom = 15
+    Outputs: Dynamic (Check implementation)
+
+  - testWeather (line 857)
+    Description: Handles functionality for test weather.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - debugComponents (line 866)
+    Description: Handles functionality for debug components.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - makeDraggable (line 966)
+    Description: Handles functionality for make draggable.
+    Inputs: element
+    Outputs: Dynamic (Check implementation)
+
+  - dragMouseDown (line 975)
+    Description: Handles functionality for drag mouse down.
+    Inputs: e
+    Outputs: Dynamic (Check implementation)
+
+  - elementDrag (line 1000)
+    Description: Handles functionality for element drag.
+    Inputs: e
+    Outputs: Dynamic (Check implementation)
+
+  - closeDragElement (line 1012)
+    Description: Handles functionality for close drag element.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializeUIAppearance (line 1020)
+    Description: Handles functionality for initialize uiappearance.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\calib-accel.js (29 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - buildCubeGrid (line 58)
+    Description: Handles functionality for build cube grid.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - buildSuccessModal (line 71)
+    Description: Handles functionality for build success modal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - render (line 103)
+    Description: Handles functionality for render.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 194)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setStatus (line 201)
+    Description: Sets the status.
+    Inputs: id, text, cls
+    Outputs: Executes side-effects (Void)
+
+  - toast (line 205)
+    Description: Handles functionality for toast.
+    Inputs: msg, type
+    Outputs: Dynamic (Check implementation)
+
+  - getLiveSocket (line 225)
+    Description: Retrieves the live socket.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - sendWS (line 229)
+    Description: Handles functionality for send ws.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - buildDroneSelector (line 269)
+    Description: Handles functionality for build drone selector.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getFaceEl (line 300)
+    Description: Retrieves the face el.
+    Inputs: key
+    Outputs: Dynamic (Check implementation)
+
+  - refreshProgress (line 304)
+    Description: Handles functionality for refresh progress.
+    Inputs: done
+    Outputs: Dynamic (Check implementation)
+
+  - updateHint (line 312)
+    Description: Handles functionality for update hint.
+    Inputs: text
+    Outputs: Dynamic (Check implementation)
+
+  - showError (line 317)
+    Description: Handles functionality for show error.
+    Inputs: text
+    Outputs: Dynamic (Check implementation)
+
+  - hideError (line 324)
+    Description: Handles functionality for hide error.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - cancelSafetyTimer (line 331)
+    Description: Checks if it cancel safety timer.
+    Inputs: None
+    Outputs: Boolean
+
+  - setNextBtnNormal (line 335)
+    Description: Sets the next btn normal.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - setNextBtnWaiting (line 342)
+    Description: Sets the next btn waiting.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - highlightStep (line 351)
+    Description: Handles functionality for highlight step.
+    Inputs: idx
+    Outputs: Dynamic (Check implementation)
+
+  - markStepDone (line 361)
+    Description: Handles functionality for mark step done.
+    Inputs: idx
+    Outputs: Dynamic (Check implementation)
+
+  - updateAttitudeDisplay (line 369)
+    Description: Handles functionality for update attitude display.
+    Inputs: roll, pitch
+    Outputs: Dynamic (Check implementation)
+
+  - hideAttitudeBox (line 379)
+    Description: Handles functionality for hide attitude box.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showModal (line 385)
+    Description: Handles functionality for show modal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hideModal (line 391)
+    Description: Handles functionality for hide modal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - dequeueNextPosition (line 398)
+    Description: Handles functionality for dequeue next position.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - resetAll (line 426)
+    Description: Handles functionality for reset all.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleCalibMessage (line 449)
+    Description: Event handler for handle calib message.
+    Inputs: data
+    Outputs: Executes side-effects (Void)
+
+  - onCalibEvent (line 576)
+    Description: Event handler for on calib event.
+    Inputs: e
+    Outputs: Executes side-effects (Void)
+
+  - attachToSocket (line 580)
+    Description: Handles functionality for attach to socket.
+    Inputs: sock
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\calib-compass.js (24 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - isDuplicate (line 64)
+    Description: Checks if it is duplicate.
+    Inputs: msg
+    Outputs: Boolean
+
+  - installWsBridge (line 105)
+    Description: Handles functionality for install ws bridge.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - attachBridge (line 112)
+    Description: Handles functionality for attach bridge.
+    Inputs: ws
+    Outputs: Dynamic (Check implementation)
+
+  - get (line 167)
+    Description: Retrieves the .
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - set (line 168)
+    Description: Sets the .
+    Inputs: newWs
+    Outputs: Executes side-effects (Void)
+
+  - setInterval (line 191)
+    Description: Sets the interval.
+    Inputs: function (
+    Outputs: Executes side-effects (Void)
+
+  - buildTableRows (line 212)
+    Description: Handles functionality for build table rows.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - render (line 234)
+    Description: Handles functionality for render.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - syncCanvasSize (line 428)
+    Description: Handles functionality for sync canvas size.
+    Inputs: canvas
+    Outputs: Dynamic (Check implementation)
+
+  - drawBase (line 439)
+    Description: Handles functionality for draw base.
+    Inputs: ctx, W, H
+    Outputs: Dynamic (Check implementation)
+
+  - initCanvas (line 467)
+    Description: Handles functionality for init canvas.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - addDot (line 476)
+    Description: Handles functionality for add dot.
+    Inputs: cv, progress
+    Outputs: Dynamic (Check implementation)
+
+  - showToast (line 503)
+    Description: Handles functionality for show toast.
+    Inputs: message, type = 'info'
+    Outputs: Dynamic (Check implementation)
+
+  - setStatusText (line 540)
+    Description: Sets the status text.
+    Inputs: text, mode = 'idle'
+    Outputs: Executes side-effects (Void)
+
+  - showRotationOverlay (line 562)
+    Description: Handles functionality for show rotation overlay.
+    Inputs: show
+    Outputs: Dynamic (Check implementation)
+
+  - setActiveCompass (line 567)
+    Description: Sets the active compass.
+    Inputs: compassId
+    Outputs: Executes side-effects (Void)
+
+  - resetBars (line 576)
+    Description: Handles functionality for reset bars.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - reIndexTable (line 590)
+    Description: Handles functionality for re index table.
+    Inputs: tbody
+    Outputs: Dynamic (Check implementation)
+
+  - updateBar (line 599)
+    Description: Handles functionality for update bar.
+    Inputs: compassId, pct
+    Outputs: Dynamic (Check implementation)
+
+  - showRebootPopup (line 614)
+    Description: Handles functionality for show reboot popup.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hideRebootPopup (line 619)
+    Description: Handles functionality for hide reboot popup.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 783)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wsSend (line 820)
+    Description: Handles functionality for ws send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\calib-esc.js (14 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - _onStatusMessage (line 65)
+    Description: Handles functionality for  on status message.
+    Inputs: data
+    Outputs: Dynamic (Check implementation)
+
+  - _getActiveSysid (line 73)
+    Description: Handles functionality for  get active sysid.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - render (line 88)
+    Description: Handles functionality for render.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setStatus (line 220)
+    Description: Sets the status.
+    Inputs: msg, busy
+    Outputs: Executes side-effects (Void)
+
+  - updateStepper (line 232)
+    Description: Handles functionality for update stepper.
+    Inputs: stage
+    Outputs: Dynamic (Check implementation)
+
+  - setButtonState (line 268)
+    Description: Sets the button state.
+    Inputs: calibrating
+    Outputs: Executes side-effects (Void)
+
+  - handleBackendStatus (line 290)
+    Description: Event handler for handle backend status.
+    Inputs: data
+    Outputs: Executes side-effects (Void)
+
+  - getWs (line 321)
+    Description: Retrieves the ws.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hookWs (line 330)
+    Description: Handles functionality for hook ws.
+    Inputs: ws
+    Outputs: Dynamic (Check implementation)
+
+  - tryHookWs (line 353)
+    Description: Handles functionality for try hook ws.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wsSend (line 373)
+    Description: Handles functionality for ws send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 389)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - autoInit (line 422)
+    Description: Handles functionality for auto init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\calib-level.js (13 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - buildSuccessModal (line 11)
+    Description: Handles functionality for build success modal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - render (line 28)
+    Description: Handles functionality for render.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 82)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setStatus (line 88)
+    Description: Sets the status.
+    Inputs: id, text, cls
+    Outputs: Executes side-effects (Void)
+
+  - toast (line 92)
+    Description: Handles functionality for toast.
+    Inputs: msg, type
+    Outputs: Dynamic (Check implementation)
+
+  - getLiveSocket (line 97)
+    Description: Retrieves the live socket.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - sendWS (line 101)
+    Description: Handles functionality for send ws.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - showError (line 122)
+    Description: Handles functionality for show error.
+    Inputs: msg
+    Outputs: Dynamic (Check implementation)
+
+  - hideError (line 128)
+    Description: Handles functionality for hide error.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - populateDroneSelector (line 132)
+    Description: Handles functionality for populate drone selector.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - resetUI (line 194)
+    Description: Handles functionality for reset ui.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleMessage (line 202)
+    Description: Event handler for handle message.
+    Inputs: e
+    Outputs: Executes side-effects (Void)
+
+==================================================
+File: js\calib-radio.js (24 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - _onStatusMsg (line 32)
+    Description: Handles functionality for  on status msg.
+    Inputs: data
+    Outputs: Dynamic (Check implementation)
+
+  - _getActiveSysid (line 40)
+    Description: Handles functionality for  get active sysid.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - pwmToPct (line 51)
+    Description: Handles functionality for pwm to pct.
+    Inputs: raw
+    Outputs: Dynamic (Check implementation)
+
+  - hbar (line 57)
+    Description: Handles functionality for hbar.
+    Inputs: id, label, pct
+    Outputs: Dynamic (Check implementation)
+
+  - vStick (line 74)
+    Description: Handles functionality for v stick.
+    Inputs: id, label, pct
+    Outputs: Dynamic (Check implementation)
+
+  - radioBox (line 93)
+    Description: Handles functionality for radio box.
+    Inputs: ch, value, pct
+    Outputs: Dynamic (Check implementation)
+
+  - render (line 104)
+    Description: Handles functionality for render.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _mm (line 162)
+    Description: Handles functionality for  mm.
+    Inputs: key, pct
+    Outputs: Dynamic (Check implementation)
+
+  - resetMinMax (line 171)
+    Description: Handles functionality for reset min max.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setHbar (line 177)
+    Description: Sets the hbar.
+    Inputs: id, raw
+    Outputs: Executes side-effects (Void)
+
+  - setVstick (line 191)
+    Description: Sets the vstick.
+    Inputs: id, raw
+    Outputs: Executes side-effects (Void)
+
+  - setRbox (line 205)
+    Description: Sets the rbox.
+    Inputs: ch, raw
+    Outputs: Executes side-effects (Void)
+
+  - showCalibCompletePopup (line 229)
+    Description: Handles functionality for show calib complete popup.
+    Inputs: channels
+    Outputs: Dynamic (Check implementation)
+
+  - close (line 284)
+    Description: Handles functionality for close.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - collectLiveChannelData (line 299)
+    Description: Handles functionality for collect live channel data.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - read (line 301)
+    Description: Handles functionality for read.
+    Inputs: id
+    Outputs: Dynamic (Check implementation)
+
+  - showStatus (line 327)
+    Description: Handles functionality for show status.
+    Inputs: msg, success
+    Outputs: Dynamic (Check implementation)
+
+  - applyChannels (line 340)
+    Description: Handles functionality for apply channels.
+    Inputs: channels
+    Outputs: Dynamic (Check implementation)
+
+  - resolveSocket (line 380)
+    Description: Handles functionality for resolve socket.
+    Inputs: injected
+    Outputs: Dynamic (Check implementation)
+
+  - patchWebsocketJs (line 407)
+    Description: Handles functionality for patch websocket js.
+    Inputs: onMsg
+    Outputs: Dynamic (Check implementation)
+
+  - wsSend (line 438)
+    Description: Handles functionality for ws send.
+    Inputs: socket, obj
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 447)
+    Description: Handles functionality for init.
+    Inputs: injectedSocket
+    Outputs: Dynamic (Check implementation)
+
+  - onWsMessage (line 461)
+    Description: Event handler for on ws message.
+    Inputs: evt
+    Outputs: Executes side-effects (Void)
+
+==================================================
+File: js\camera-controls.js (36 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - CameraControls (line 16)
+    Description: Handles functionality for camera controls.
+    Inputs: (
+    Outputs: UI Component / Object
+
+  - build (line 39)
+    Description: Handles functionality for build.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _buildActionBar (line 59)
+    Description: Handles functionality for  build action bar.
+    Inputs: container
+    Outputs: Dynamic (Check implementation)
+
+  - _buildSnapFlash (line 120)
+    Description: Handles functionality for  build snap flash.
+    Inputs: container
+    Outputs: Dynamic (Check implementation)
+
+  - _buildPhotoToast (line 126)
+    Description: Handles functionality for  build photo toast.
+    Inputs: container
+    Outputs: Dynamic (Check implementation)
+
+  - _flashSnap (line 133)
+    Description: Handles functionality for  flash snap.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _buildRecTimer (line 144)
+    Description: Handles functionality for  build rec timer.
+    Inputs: container
+    Outputs: Dynamic (Check implementation)
+
+  - _startTimer (line 151)
+    Description: Handles functionality for  start timer.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _stopTimer (line 163)
+    Description: Handles functionality for  stop timer.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - capturePhoto (line 173)
+    Description: Handles functionality for capture photo.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - toggleRecord (line 215)
+    Description: Handles functionality for toggle record.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _startRecording (line 223)
+    Description: Handles functionality for  start recording.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - drawFrame (line 264)
+    Description: Handles functionality for draw frame.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _stopRecording (line 287)
+    Description: Handles functionality for  stop recording.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _saveRecording (line 309)
+    Description: Handles functionality for  save recording.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _getSupportedMime (line 325)
+    Description: Handles functionality for  get supported mime.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _buildGimbalPanel (line 341)
+    Description: Handles functionality for  build gimbal panel.
+    Inputs: container
+    Outputs: Dynamic (Check implementation)
+
+  - _wireGimbalUI (line 410)
+    Description: Handles functionality for  wire gimbal ui.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - dpadStart (line 443)
+    Description: Handles functionality for dpad start.
+    Inputs: direction
+    Outputs: Dynamic (Check implementation)
+
+  - dpadStop (line 448)
+    Description: Handles functionality for dpad stop.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - dpadTick (line 453)
+    Description: Handles functionality for dpad tick.
+    Inputs: dir
+    Outputs: Dynamic (Check implementation)
+
+  - _syncSlidersFromState (line 504)
+    Description: Handles functionality for  sync sliders from state.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _updateValBadge (line 516)
+    Description: Handles functionality for  update val badge.
+    Inputs: id, val
+    Outputs: Dynamic (Check implementation)
+
+  - _updateGimbalModeIndicator (line 521)
+    Description: Handles functionality for  update gimbal mode indicator.
+    Inputs: mode
+    Outputs: Dynamic (Check implementation)
+
+  - centerGimbal (line 529)
+    Description: Handles functionality for center gimbal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - toggleGimbalPanel (line 537)
+    Description: Handles functionality for toggle gimbal panel.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _sendGimbalCommand (line 546)
+    Description: Handles functionality for  send gimbal command.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _installWsListener (line 558)
+    Description: Handles functionality for  install ws listener.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _wsSend (line 607)
+    Description: Handles functionality for  ws send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - _timestamp (line 615)
+    Description: Handles functionality for  timestamp.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _saveViaElectron (line 627)
+    Description: Handles functionality for  save via electron.
+    Inputs: blob, defaultName, mimeType, onDone
+    Outputs: Dynamic (Check implementation)
+
+  - _showInfoToast (line 676)
+    Description: Handles functionality for  show info toast.
+    Inputs: text, bgColor, duration
+    Outputs: Dynamic (Check implementation)
+
+  - _showNoStreamToast (line 691)
+    Description: Handles functionality for  show no stream toast.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setGimbalAvailable (line 698)
+    Description: Sets the gimbal available.
+    Inputs: avail
+    Outputs: Executes side-effects (Void)
+
+  - _initCameraControls (line 726)
+    Description: Handles functionality for  init camera controls.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\comm-link.js (18 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - _ws_send (line 30)
+    Description: Handles functionality for  ws send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - processMessage (line 41)
+    Description: Handles functionality for process message.
+    Inputs: msg
+    Outputs: Dynamic (Check implementation)
+
+  - _build_html (line 69)
+    Description: Handles functionality for  build html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _syncStatusDot (line 210)
+    Description: Handles functionality for  sync status dot.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _setStatus (line 223)
+    Description: Handles functionality for  set status.
+    Inputs: dotClass, text
+    Outputs: Dynamic (Check implementation)
+
+  - _buildAllRows (line 231)
+    Description: Handles functionality for  build all rows.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _renderConnectionsList (line 268)
+    Description: Handles functionality for  render connections list.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _setMode (line 298)
+    Description: Handles functionality for  set mode.
+    Inputs: mode
+    Outputs: Dynamic (Check implementation)
+
+  - _setConnType (line 308)
+    Description: Handles functionality for  set conn type.
+    Inputs: type
+    Outputs: Dynamic (Check implementation)
+
+  - _refresh_ports (line 320)
+    Description: Handles functionality for  refresh ports.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _renderPortList (line 329)
+    Description: Handles functionality for  render port list.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _selectPort (line 346)
+    Description: Handles functionality for  select port.
+    Inputs: port
+    Outputs: Dynamic (Check implementation)
+
+  - _do_connect (line 352)
+    Description: Handles functionality for  do connect.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _do_disconnect (line 397)
+    Description: Handles functionality for  do disconnect.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _on_connect_ack (line 404)
+    Description: Handles functionality for  on connect ack.
+    Inputs: msg
+    Outputs: Dynamic (Check implementation)
+
+  - _on_disconnect_ack (line 426)
+    Description: Handles functionality for  on disconnect ack.
+    Inputs: msg
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 442)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\command-editor.js (37 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 7)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 22)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - show (line 48)
+    Description: Handles functionality for show.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hide (line 54)
+    Description: Handles functionality for hide.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - isVisible (line 60)
+    Description: Checks if it is visible.
+    Inputs: None
+    Outputs: Boolean
+
+  - attachTabListeners (line 69)
+    Description: Handles functionality for attach tab listeners.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - switchTab (line 86)
+    Description: Handles functionality for switch tab.
+    Inputs: tabName
+    Outputs: Dynamic (Check implementation)
+
+  - attachFormListeners (line 130)
+    Description: Handles functionality for attach form listeners.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleFormChange (line 154)
+    Description: Event handler for handle form change.
+    Inputs: control
+    Outputs: Executes side-effects (Void)
+
+  - handleCheckboxChange (line 160)
+    Description: Event handler for handle checkbox change.
+    Inputs: checkbox
+    Outputs: Executes side-effects (Void)
+
+  - attachWaypointListeners (line 170)
+    Description: Handles functionality for attach waypoint listeners.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setWaypointManager (line 208)
+    Description: Sets the waypoint manager.
+    Inputs: waypointManager
+    Outputs: Executes side-effects (Void)
+
+  - refreshWaypointList (line 214)
+    Description: Handles functionality for refresh waypoint list.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - createWaypointListItem (line 263)
+    Description: Handles functionality for create waypoint list item.
+    Inputs: waypoint, displayNumber
+    Outputs: Dynamic (Check implementation)
+
+  - showWaypointList (line 291)
+    Description: Handles functionality for show waypoint list.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - editWaypoint (line 306)
+    Description: Handles functionality for edit waypoint.
+    Inputs: waypointId
+    Outputs: Dynamic (Check implementation)
+
+  - saveWaypointChanges (line 335)
+    Description: Handles functionality for save waypoint changes.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - deleteSelectedWaypoint (line 383)
+    Description: Handles functionality for delete selected waypoint.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - attachFenceListeners (line 406)
+    Description: Handles functionality for attach fence listeners.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setPolygonManager (line 439)
+    Description: Sets the polygon manager.
+    Inputs: polygonManager
+    Outputs: Executes side-effects (Void)
+
+  - refreshFenceList (line 445)
+    Description: Handles functionality for refresh fence list.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - createFenceListItem (line 482)
+    Description: Handles functionality for create fence list item.
+    Inputs: fence, displayNumber
+    Outputs: Dynamic (Check implementation)
+
+  - showFenceList (line 508)
+    Description: Handles functionality for show fence list.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - editFence (line 518)
+    Description: Handles functionality for edit fence.
+    Inputs: fenceId
+    Outputs: Dynamic (Check implementation)
+
+  - saveFenceChanges (line 537)
+    Description: Handles functionality for save fence changes.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - deleteSelectedFence (line 544)
+    Description: Handles functionality for delete selected fence.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - attachRallyListeners (line 563)
+    Description: Handles functionality for attach rally listeners.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - refreshRallyList (line 596)
+    Description: Handles functionality for refresh rally list.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - createRallyListItem (line 630)
+    Description: Handles functionality for create rally list item.
+    Inputs: rally, displayNumber
+    Outputs: Dynamic (Check implementation)
+
+  - showRallyList (line 654)
+    Description: Handles functionality for show rally list.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - editRally (line 664)
+    Description: Handles functionality for edit rally.
+    Inputs: rallyId
+    Outputs: Dynamic (Check implementation)
+
+  - saveRallyChanges (line 683)
+    Description: Handles functionality for save rally changes.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - deleteSelectedRally (line 699)
+    Description: Handles functionality for delete selected rally.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - addRallyPoint (line 715)
+    Description: Handles functionality for add rally point.
+    Inputs: lat, lng, altitude = 50
+    Outputs: Dynamic (Check implementation)
+
+  - getAllData (line 735)
+    Description: Retrieves the all data.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializeCommandEditor (line 751)
+    Description: Handles functionality for initialize command editor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\compass.js (14 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 7)
+    Description: Handles functionality for constructor.
+    Inputs: containerId = 'map'
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 24)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - createCompassHTML (line 29)
+    Description: Handles functionality for create compass html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - injectStyles (line 104)
+    Description: Handles functionality for inject styles.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setHeading (line 304)
+    Description: Sets the heading.
+    Inputs: degrees
+    Outputs: Executes side-effects (Void)
+
+  - updateTelemetry (line 329)
+    Description: Handles functionality for update telemetry.
+    Inputs: data
+    Outputs: Dynamic (Check implementation)
+
+  - getHeading (line 375)
+    Description: Retrieves the heading.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getTelemetry (line 379)
+    Description: Retrieves the telemetry.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - startRotation (line 383)
+    Description: Handles functionality for start rotation.
+    Inputs: speed = 1
+    Outputs: Dynamic (Check implementation)
+
+  - stopRotation (line 389)
+    Description: Handles functionality for stop rotation.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - show (line 395)
+    Description: Handles functionality for show.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hide (line 402)
+    Description: Handles functionality for hide.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - destroy (line 409)
+    Description: Handles functionality for destroy.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\component-loader.js (3 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - loadComponent (line 24)
+    Description: Handles functionality for load component.
+    Inputs: component
+    Outputs: Promise (Async)
+
+  - loadAllComponents (line 43)
+    Description: Handles functionality for load all components.
+    Inputs: None
+    Outputs: Promise (Async)
+
+==================================================
+File: js\data-persistence.js (31 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 17)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - preActivatePlanModeIfNeeded (line 33)
+    Description: Handles functionality for pre activate plan mode if needed.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 96)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - saveAllData (line 118)
+    Description: Handles functionality for save all data.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getWaypointsData (line 149)
+    Description: Retrieves the waypoints data.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getHomePositionData (line 166)
+    Description: Retrieves the home position data.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getPolygonData (line 184)
+    Description: Retrieves the polygon data.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getUIState (line 203)
+    Description: Retrieves the uistate.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getCompassState (line 215)
+    Description: Retrieves the compass state.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getWeatherState (line 230)
+    Description: Retrieves the weather state.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getCommandEditorState (line 241)
+    Description: Retrieves the command editor state.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getMapCenter (line 252)
+    Description: Retrieves the map center.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getMapZoom (line 263)
+    Description: Retrieves the map zoom.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - restoreAllData (line 274)
+    Description: Handles functionality for restore all data.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - waitForEverything (line 390)
+    Description: Handles functionality for wait for everything.
+    Inputs: None
+    Outputs: Promise (Async)
+
+  - activatePlanModeInstantly (line 434)
+    Description: Handles functionality for activate plan mode instantly.
+    Inputs: uiState
+    Outputs: Dynamic (Check implementation)
+
+  - finalizePlanModeRestoration (line 451)
+    Description: Handles functionality for finalize plan mode restoration.
+    Inputs: uiState
+    Outputs: Dynamic (Check implementation)
+
+  - restoreMapPosition (line 495)
+    Description: Handles functionality for restore map position.
+    Inputs: center, zoom
+    Outputs: Dynamic (Check implementation)
+
+  - restoreWaypointsFixed (line 508)
+    Description: Handles functionality for restore waypoints fixed.
+    Inputs: waypoints
+    Outputs: Promise (Async)
+
+  - restoreHomePosition (line 567)
+    Description: Handles functionality for restore home position.
+    Inputs: home
+    Outputs: Dynamic (Check implementation)
+
+  - restorePolygon (line 578)
+    Description: Handles functionality for restore polygon.
+    Inputs: polygonData
+    Outputs: Dynamic (Check implementation)
+
+  - restoreCompassState (line 600)
+    Description: Handles functionality for restore compass state.
+    Inputs: compassState
+    Outputs: Dynamic (Check implementation)
+
+  - restoreWeatherState (line 625)
+    Description: Handles functionality for restore weather state.
+    Inputs: weatherState
+    Outputs: Dynamic (Check implementation)
+
+  - restoreCommandEditorState (line 649)
+    Description: Handles functionality for restore command editor state.
+    Inputs: editorState
+    Outputs: Dynamic (Check implementation)
+
+  - startAutoSave (line 671)
+    Description: Handles functionality for start auto save.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - stopAutoSave (line 681)
+    Description: Handles functionality for stop auto save.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - clearSavedData (line 693)
+    Description: Handles functionality for clear saved data.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hasSavedData (line 713)
+    Description: Checks if it has saved data.
+    Inputs: None
+    Outputs: Boolean
+
+  - getSavedDataInfo (line 717)
+    Description: Retrieves the saved data info.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializeDataPersistence (line 748)
+    Description: Handles functionality for initialize data persistence.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\dropdown-menu.js (19 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 7)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 22)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - attachLogoClickListener (line 55)
+    Description: Handles functionality for attach logo click listener.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - attachOutsideClickListener (line 70)
+    Description: Handles functionality for attach outside click listener.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - toggleWithFlightControls (line 84)
+    Description: Handles functionality for toggle with flight controls.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showAndHideFlightControls (line 92)
+    Description: Handles functionality for show and hide flight controls.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hideAndShowFlightControls (line 111)
+    Description: Handles functionality for hide and show flight controls.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - attachEventListeners (line 131)
+    Description: Handles functionality for attach event listeners.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleAction (line 168)
+    Description: Event handler for handle action.
+    Inputs: action
+    Outputs: Executes side-effects (Void)
+
+  - handleAnalyzeTools (line 190)
+    Description: Event handler for handle analyze tools.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - handleVehicleConfig (line 203)
+    Description: Event handler for handle vehicle config.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - handleAppSettings (line 214)
+    Description: Event handler for handle app settings.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - setActiveButton (line 218)
+    Description: Sets the active button.
+    Inputs: button
+    Outputs: Executes side-effects (Void)
+
+  - clearActiveStates (line 225)
+    Description: Handles functionality for clear active states.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - show (line 242)
+    Description: Handles functionality for show.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hide (line 246)
+    Description: Handles functionality for hide.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - toggle (line 250)
+    Description: Handles functionality for toggle.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializeDropdownMenuStrip (line 262)
+    Description: Handles functionality for initialize dropdown menu strip.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\failsafe.js (15 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - requestParam (line 65)
+    Description: Handles functionality for request param.
+    Inputs: name
+    Outputs: Dynamic (Check implementation)
+
+  - setParam (line 74)
+    Description: Sets the param.
+    Inputs: paramId, value
+    Outputs: Executes side-effects (Void)
+
+  - refreshParams (line 86)
+    Description: Handles functionality for refresh params.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleWsMessage (line 94)
+    Description: Event handler for handle ws message.
+    Inputs: evt
+    Outputs: Executes side-effects (Void)
+
+  - applyValueToUI (line 127)
+    Description: Handles functionality for apply value to ui.
+    Inputs: paramId, value
+    Outputs: Dynamic (Check implementation)
+
+  - checkAllLoaded (line 141)
+    Description: Handles functionality for check all loaded.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - checkAllSaved (line 148)
+    Description: Handles functionality for check all saved.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - markParamSaved (line 156)
+    Description: Handles functionality for mark param saved.
+    Inputs: paramId
+    Outputs: Dynamic (Check implementation)
+
+  - setBadge (line 171)
+    Description: Sets the badge.
+    Inputs: id, state, text
+    Outputs: Executes side-effects (Void)
+
+  - updateRowHint (line 179)
+    Description: Handles functionality for update row hint.
+    Inputs: sel
+    Outputs: Dynamic (Check implementation)
+
+  - buildOptions (line 189)
+    Description: Handles functionality for build options.
+    Inputs: actions
+    Outputs: Dynamic (Check implementation)
+
+  - buildPanelHTML (line 207)
+    Description: Handles functionality for build panel html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wirePanel (line 338)
+    Description: Handles functionality for wire panel.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 389)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\flight-controls.js (38 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 24)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 39)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - attachEventListeners (line 68)
+    Description: Handles functionality for attach event listeners.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - attachModalListeners (line 80)
+    Description: Handles functionality for attach modal listeners.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showTakeoffModal (line 112)
+    Description: Handles functionality for show takeoff modal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hideTakeoffModal (line 127)
+    Description: Handles functionality for hide takeoff modal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - confirmTakeoff (line 131)
+    Description: Handles functionality for confirm takeoff.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - executeLand (line 138)
+    Description: Handles functionality for execute land.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - executeRTL (line 144)
+    Description: Handles functionality for execute rtl.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setExecutingState (line 150)
+    Description: Sets the executing state.
+    Inputs: button, command
+    Outputs: Executes side-effects (Void)
+
+  - clearExecutingState (line 157)
+    Description: Handles functionality for clear executing state.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - disableAllButtons (line 166)
+    Description: Handles functionality for disable all buttons.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - enableAllButtons (line 172)
+    Description: Handles functionality for enable all buttons.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - onTakeoff (line 178)
+    Description: Event handler for on takeoff.
+    Inputs: cb
+    Outputs: Executes side-effects (Void)
+
+  - onLand (line 179)
+    Description: Event handler for on land.
+    Inputs: cb
+    Outputs: Executes side-effects (Void)
+
+  - onRTL (line 180)
+    Description: Event handler for on rtl.
+    Inputs: cb
+    Outputs: Executes side-effects (Void)
+
+  - show (line 182)
+    Description: Handles functionality for show.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hide (line 183)
+    Description: Handles functionality for hide.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - isCommandExecuting (line 184)
+    Description: Checks if it is command executing.
+    Inputs: None
+    Outputs: Boolean
+
+  - getCurrentCommand (line 185)
+    Description: Retrieves the current command.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getTakeoffSettings (line 186)
+    Description: Retrieves the takeoff settings.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - constructor (line 195)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 204)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - open (line 234)
+    Description: Handles functionality for open.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - close (line 247)
+    Description: Handles functionality for close.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - select (line 253)
+    Description: Handles functionality for select.
+    Inputs: mode, el
+    Outputs: Dynamic (Check implementation)
+
+  - setMode (line 270)
+    Description: Sets the mode.
+    Inputs: mode
+    Outputs: Executes side-effects (Void)
+
+  - getCurrentMode (line 282)
+    Description: Retrieves the current mode.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - constructor (line 290)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 299)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - toggle (line 310)
+    Description: Handles functionality for toggle.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setArmedState (line 312)
+    Description: Sets the armed state.
+    Inputs: isArmed
+    Outputs: Executes side-effects (Void)
+
+  - arm (line 328)
+    Description: Handles functionality for arm.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - disarm (line 333)
+    Description: Handles functionality for disarm.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - onArm (line 338)
+    Description: Event handler for on arm.
+    Inputs: cb
+    Outputs: Executes side-effects (Void)
+
+  - onDisarm (line 339)
+    Description: Event handler for on disarm.
+    Inputs: cb
+    Outputs: Executes side-effects (Void)
+
+  - getState (line 340)
+    Description: Retrieves the state.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\flight-hud.js (18 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - init (line 27)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - elementDrag (line 64)
+    Description: Handles functionality for element drag.
+    Inputs: e
+    Outputs: Dynamic (Check implementation)
+
+  - closeDragElement (line 74)
+    Description: Handles functionality for close drag element.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - resize (line 120)
+    Description: Handles functionality for resize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - startAnimation (line 136)
+    Description: Handles functionality for start animation.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - stopAnimation (line 142)
+    Description: Handles functionality for stop animation.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updateAndDraw (line 149)
+    Description: Handles functionality for update and draw.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updateSmoothedTelemetry (line 161)
+    Description: Handles functionality for update smoothed telemetry.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - drawHUD (line 195)
+    Description: Handles functionality for draw hud.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - drawArtificialHorizon (line 222)
+    Description: Handles functionality for draw artificial horizon.
+    Inputs: cx, cy
+    Outputs: Dynamic (Check implementation)
+
+  - drawPitchLadder (line 261)
+    Description: Handles functionality for draw pitch ladder.
+    Inputs: cx, cy
+    Outputs: Dynamic (Check implementation)
+
+  - drawCrosshair (line 328)
+    Description: Handles functionality for draw crosshair.
+    Inputs: cx, cy
+    Outputs: Dynamic (Check implementation)
+
+  - drawRollIndicator (line 354)
+    Description: Handles functionality for draw roll indicator.
+    Inputs: cx, cy
+    Outputs: Dynamic (Check implementation)
+
+  - drawHeadingTape (line 392)
+    Description: Handles functionality for draw heading tape.
+    Inputs: cx, y
+    Outputs: Dynamic (Check implementation)
+
+  - drawAltitudeTape (line 461)
+    Description: Handles functionality for draw altitude tape.
+    Inputs: x, cy
+    Outputs: Dynamic (Check implementation)
+
+  - drawSpeedTape (line 531)
+    Description: Handles functionality for draw speed tape.
+    Inputs: x, cy
+    Outputs: Dynamic (Check implementation)
+
+  - drawTelemetryText (line 600)
+    Description: Handles functionality for draw telemetry text.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\flight-mode.js (16 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - modeById (line 115)
+    Description: Handles functionality for mode by id.
+    Inputs: id
+    Outputs: Dynamic (Check implementation)
+
+  - friendlyLabel (line 119)
+    Description: Handles functionality for friendly label.
+    Inputs: backendName
+    Outputs: Dynamic (Check implementation)
+
+  - buildOptions (line 123)
+    Description: Handles functionality for build options.
+    Inputs: selectedId
+    Outputs: Dynamic (Check implementation)
+
+  - pwmToSlot (line 129)
+    Description: Handles functionality for pwm to slot.
+    Inputs: pwm
+    Outputs: Dynamic (Check implementation)
+
+  - buildHTML (line 144)
+    Description: Handles functionality for build html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - buildRow (line 200)
+    Description: Handles functionality for build row.
+    Inputs: i
+    Outputs: Dynamic (Check implementation)
+
+  - refreshRow (line 236)
+    Description: Handles functionality for refresh row.
+    Inputs: i
+    Outputs: Dynamic (Check implementation)
+
+  - refreshHeader (line 244)
+    Description: Handles functionality for refresh header.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _onMode (line 253)
+    Description: Handles functionality for  on mode.
+    Inputs: slotIdx, val
+    Outputs: Dynamic (Check implementation)
+
+  - _onSimple (line 259)
+    Description: Handles functionality for  on simple.
+    Inputs: slotIdx, checked
+    Outputs: Dynamic (Check implementation)
+
+  - _onSuperSimple (line 263)
+    Description: Handles functionality for  on super simple.
+    Inputs: slotIdx, checked
+    Outputs: Dynamic (Check implementation)
+
+  - _save (line 270)
+    Description: Handles functionality for  save.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - onMessage (line 315)
+    Description: Event handler for on message.
+    Inputs: data
+    Outputs: Executes side-effects (Void)
+
+  - init (line 394)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _installWsIntercept (line 412)
+    Description: Handles functionality for  install ws intercept.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\frame-type.js (10 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - send (line 64)
+    Description: Handles functionality for send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - readParamsFromDrone (line 78)
+    Description: Handles functionality for read params from drone.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setParam (line 96)
+    Description: Sets the param.
+    Inputs: paramId, value
+    Outputs: Executes side-effects (Void)
+
+  - setStatus (line 101)
+    Description: Sets the status.
+    Inputs: state, text
+    Outputs: Executes side-effects (Void)
+
+  - updateCurrentDisplay (line 110)
+    Description: Handles functionality for update current display.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleWsMessage (line 134)
+    Description: Event handler for handle ws message.
+    Inputs: evt
+    Outputs: Executes side-effects (Void)
+
+  - buildPanelHTML (line 234)
+    Description: Handles functionality for build panel html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wirePanel (line 399)
+    Description: Handles functionality for wire panel.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 485)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\geofence.js (20 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - safeSendWrap (line 64)
+    Description: Handles functionality for safe send wrap.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - requestParam (line 73)
+    Description: Handles functionality for request param.
+    Inputs: name
+    Outputs: Dynamic (Check implementation)
+
+  - setParam (line 78)
+    Description: Sets the param.
+    Inputs: paramId, value
+    Outputs: Executes side-effects (Void)
+
+  - refreshParams (line 87)
+    Description: Handles functionality for refresh params.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleWsMessage (line 93)
+    Description: Event handler for handle ws message.
+    Inputs: evt
+    Outputs: Executes side-effects (Void)
+
+  - applyToUI (line 126)
+    Description: Handles functionality for apply to ui.
+    Inputs: paramId, value
+    Outputs: Dynamic (Check implementation)
+
+  - checkAllLoaded (line 164)
+    Description: Handles functionality for check all loaded.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - checkAllSaved (line 169)
+    Description: Handles functionality for check all saved.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - flashRowSaved (line 186)
+    Description: Handles functionality for flash row saved.
+    Inputs: paramId
+    Outputs: Dynamic (Check implementation)
+
+  - setBadge (line 194)
+    Description: Sets the badge.
+    Inputs: id, state, text
+    Outputs: Executes side-effects (Void)
+
+  - markPending (line 201)
+    Description: Handles functionality for mark pending.
+    Inputs: row
+    Outputs: Dynamic (Check implementation)
+
+  - syncEnableState (line 207)
+    Description: Handles functionality for sync enable state.
+    Inputs: enabled
+    Outputs: Dynamic (Check implementation)
+
+  - syncTypeVisibility (line 216)
+    Description: Handles functionality for sync type visibility.
+    Inputs: type
+    Outputs: Dynamic (Check implementation)
+
+  - updateActionHint (line 226)
+    Description: Handles functionality for update action hint.
+    Inputs: val
+    Outputs: Dynamic (Check implementation)
+
+  - startTelemMonitor (line 234)
+    Description: Handles functionality for start telem monitor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updateChip (line 272)
+    Description: Handles functionality for update chip.
+    Inputs: id, current, max, margin, active, unit
+    Outputs: Dynamic (Check implementation)
+
+  - buildPanelHTML (line 288)
+    Description: Handles functionality for build panel html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wirePanel (line 455)
+    Description: Handles functionality for wire panel.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 540)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\i18n.js (9 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - t (line 250)
+    Description: Handles functionality for t.
+    Inputs: key
+    Outputs: Dynamic (Check implementation)
+
+  - applyTranslations (line 259)
+    Description: Handles functionality for apply translations.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - buildSelector (line 281)
+    Description: Handles functionality for build selector.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - renderOptions (line 409)
+    Description: Handles functionality for render options.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - openDropdown (line 439)
+    Description: Handles functionality for open dropdown.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - closeDropdown (line 446)
+    Description: Handles functionality for close dropdown.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - injectDataAttributes (line 470)
+    Description: Handles functionality for inject data attributes.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 689)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\initial-tune.js (11 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - calcGyroFilter (line 39)
+    Description: Handles functionality for calc gyro filter.
+    Inputs: propInch
+    Outputs: Dynamic (Check implementation)
+
+  - send (line 54)
+    Description: Handles functionality for send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - setStatus (line 59)
+    Description: Sets the status.
+    Inputs: state, text
+    Outputs: Executes side-effects (Void)
+
+  - calculateParams (line 68)
+    Description: Handles functionality for calculate params.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - renderPreview (line 119)
+    Description: Handles functionality for render preview.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - writeParams (line 140)
+    Description: Handles functionality for write params.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - onChemistryChange (line 163)
+    Description: Event handler for on chemistry change.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - buildPanelHTML (line 174)
+    Description: Handles functionality for build panel html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wirePanel (line 319)
+    Description: Handles functionality for wire panel.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 368)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\log-download.js (14 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - _injectCSS (line 105)
+    Description: Handles functionality for  inject css.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _build (line 112)
+    Description: Handles functionality for  build.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _wsSend (line 191)
+    Description: Handles functionality for  ws send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - _attachWsListener (line 199)
+    Description: Handles functionality for  attach ws listener.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setInterval (line 215)
+    Description: Sets the interval.
+    Inputs: function (
+    Outputs: Executes side-effects (Void)
+
+  - _onLogEntry (line 220)
+    Description: Handles functionality for  on log entry.
+    Inputs: data
+    Outputs: Dynamic (Check implementation)
+
+  - _finaliseLogList (line 229)
+    Description: Handles functionality for  finalise log list.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _onLogProgress (line 267)
+    Description: Handles functionality for  on log progress.
+    Inputs: data
+    Outputs: Dynamic (Check implementation)
+
+  - _refreshLogs (line 282)
+    Description: Handles functionality for  refresh logs.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _downloadSel (line 314)
+    Description: Handles functionality for  download sel.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _processDlQueue (line 328)
+    Description: Handles functionality for  process dl queue.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _deleteLogs (line 350)
+    Description: Handles functionality for  delete logs.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setTimeout (line 381)
+    Description: Sets the timeout.
+    Inputs: function (
+    Outputs: Executes side-effects (Void)
+
+==================================================
+File: js\login.js (34 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 18)
+    Description: Handles functionality for constructor.
+    Inputs: url
+    Outputs: Dynamic (Check implementation)
+
+  - connect (line 27)
+    Description: Handles functionality for connect.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - send (line 69)
+    Description: Handles functionality for send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - on (line 78)
+    Description: Event handler for on.
+    Inputs: type, callback
+    Outputs: Executes side-effects (Void)
+
+  - off (line 84)
+    Description: Handles functionality for off.
+    Inputs: type
+    Outputs: Dynamic (Check implementation)
+
+  - updateConnectionStatus (line 91)
+    Description: Handles functionality for update connection status.
+    Inputs: online
+    Outputs: Dynamic (Check implementation)
+
+  - switchTab (line 109)
+    Description: Handles functionality for switch tab.
+    Inputs: tab
+    Outputs: Dynamic (Check implementation)
+
+  - showAlert (line 141)
+    Description: Handles functionality for show alert.
+    Inputs: msg, type = 'error'
+    Outputs: Dynamic (Check implementation)
+
+  - clearAlert (line 147)
+    Description: Handles functionality for clear alert.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updateStrength (line 152)
+    Description: Handles functionality for update strength.
+    Inputs: val
+    Outputs: Dynamic (Check implementation)
+
+  - handleLogin (line 167)
+    Description: Event handler for handle login.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - handleSignup (line 198)
+    Description: Event handler for handle signup.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - showApprovalNotification (line 251)
+    Description: Handles functionality for show approval notification.
+    Inputs: result, message
+    Outputs: Dynamic (Check implementation)
+
+  - handleAdminLogin (line 290)
+    Description: Event handler for handle admin login.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - handleNewSignupNotification (line 320)
+    Description: Event handler for handle new signup notification.
+    Inputs: msg
+    Outputs: Executes side-effects (Void)
+
+  - approveUser (line 335)
+    Description: Handles functionality for approve user.
+    Inputs: userId, sessionId
+    Outputs: Dynamic (Check implementation)
+
+  - rejectUser (line 345)
+    Description: Handles functionality for reject user.
+    Inputs: userId, sessionId
+    Outputs: Dynamic (Check implementation)
+
+  - handleAdminLogout (line 357)
+    Description: Event handler for handle admin logout.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - requestUsers (line 367)
+    Description: Handles functionality for request users.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - renderDashboard (line 375)
+    Description: Handles functionality for render dashboard.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - renderUsers (line 377)
+    Description: Handles functionality for render users.
+    Inputs: users
+    Outputs: Dynamic (Check implementation)
+
+  - highlightUser (line 455)
+    Description: Handles functionality for highlight user.
+    Inputs: userId
+    Outputs: Dynamic (Check implementation)
+
+  - toggleUserStatus (line 464)
+    Description: Handles functionality for toggle user status.
+    Inputs: userId
+    Outputs: Dynamic (Check implementation)
+
+  - deleteUser (line 472)
+    Description: Handles functionality for delete user.
+    Inputs: userId
+    Outputs: Dynamic (Check implementation)
+
+  - showForgot (line 484)
+    Description: Handles functionality for show forgot.
+    Inputs: e
+    Outputs: Dynamic (Check implementation)
+
+  - handleGoogleLogin (line 494)
+    Description: Event handler for handle google login.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - closeGoogleModal (line 497)
+    Description: Handles functionality for close google modal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - applyClientId (line 498)
+    Description: Handles functionality for apply client id.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showToast (line 508)
+    Description: Handles functionality for show toast.
+    Inputs: title, body, type = 'info', onClick = null
+    Outputs: Dynamic (Check implementation)
+
+  - setBtn (line 565)
+    Description: Sets the btn.
+    Inputs: btn, label, disabled
+    Outputs: Executes side-effects (Void)
+
+  - escHtml (line 571)
+    Description: Handles functionality for esc html.
+    Inputs: str
+    Outputs: Dynamic (Check implementation)
+
+  - formatDate (line 574)
+    Description: Handles functionality for format date.
+    Inputs: iso
+    Outputs: Dynamic (Check implementation)
+
+  - formatTime (line 578)
+    Description: Handles functionality for format time.
+    Inputs: iso
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\messaage-console.js (25 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 10)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 19)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - addMessage (line 35)
+    Description: Handles functionality for add message.
+    Inputs: text, type = 'info'
+    Outputs: Dynamic (Check implementation)
+
+  - renderMessage (line 61)
+    Description: Handles functionality for render message.
+    Inputs: message
+    Outputs: Dynamic (Check implementation)
+
+  - getIcon (line 77)
+    Description: Retrieves the icon.
+    Inputs: type
+    Outputs: Dynamic (Check implementation)
+
+  - formatTime (line 87)
+    Description: Handles functionality for format time.
+    Inputs: date
+    Outputs: Dynamic (Check implementation)
+
+  - escapeHtml (line 94)
+    Description: Handles functionality for escape html.
+    Inputs: text
+    Outputs: Dynamic (Check implementation)
+
+  - scrollToBottom (line 100)
+    Description: Handles functionality for scroll to bottom.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - clearMessages (line 106)
+    Description: Handles functionality for clear messages.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - success (line 115)
+    Description: Handles functionality for success.
+    Inputs: text
+    Outputs: Dynamic (Check implementation)
+
+  - warning (line 119)
+    Description: Handles functionality for warning.
+    Inputs: text
+    Outputs: Dynamic (Check implementation)
+
+  - error (line 123)
+    Description: Handles functionality for error.
+    Inputs: text
+    Outputs: Dynamic (Check implementation)
+
+  - info (line 127)
+    Description: Handles functionality for info.
+    Inputs: text
+    Outputs: Dynamic (Check implementation)
+
+  - arm (line 132)
+    Description: Handles functionality for arm.
+    Inputs: text = 'Drone armed and ready'
+    Outputs: Dynamic (Check implementation)
+
+  - disarm (line 136)
+    Description: Handles functionality for disarm.
+    Inputs: text = 'Drone disarmed'
+    Outputs: Dynamic (Check implementation)
+
+  - takeoff (line 140)
+    Description: Handles functionality for takeoff.
+    Inputs: altitude
+    Outputs: Dynamic (Check implementation)
+
+  - land (line 144)
+    Description: Handles functionality for land.
+    Inputs: text = 'Landing sequence initiated'
+    Outputs: Dynamic (Check implementation)
+
+  - rtl (line 148)
+    Description: Handles functionality for rtl.
+    Inputs: text = 'Return to launch activated'
+    Outputs: Dynamic (Check implementation)
+
+  - getMessages (line 153)
+    Description: Retrieves the messages.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setAutoScroll (line 158)
+    Description: Sets the auto scroll.
+    Inputs: enabled
+    Outputs: Executes side-effects (Void)
+
+  - getMessageCount (line 163)
+    Description: Retrieves the message count.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - show (line 168)
+    Description: Handles functionality for show.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hide (line 175)
+    Description: Handles functionality for hide.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializeMinimalConsole (line 189)
+    Description: Handles functionality for initialize minimal console.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\mission-file-manager.js (27 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 7)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 31)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - createFileInput (line 36)
+    Description: Handles functionality for create file input.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - newMission (line 51)
+    Description: Handles functionality for new mission.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - openMission (line 84)
+    Description: Handles functionality for open mission.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleFileSelect (line 98)
+    Description: Event handler for handle file select.
+    Inputs: event
+    Outputs: Executes side-effects (Void)
+
+  - loadMissionByFormat (line 136)
+    Description: Handles functionality for load mission by format.
+    Inputs: content, filename, extension
+    Outputs: Dynamic (Check implementation)
+
+  - parseWaypointsJSON (line 175)
+    Description: Handles functionality for parse waypoints json.
+    Inputs: content
+    Outputs: Dynamic (Check implementation)
+
+  - parseMissionPlannerTXT (line 190)
+    Description: Handles functionality for parse mission planner txt.
+    Inputs: content
+    Outputs: Dynamic (Check implementation)
+
+  - parseQGCMission (line 254)
+    Description: Handles functionality for parse qgcmission.
+    Inputs: content
+    Outputs: Dynamic (Check implementation)
+
+  - loadMissionData (line 292)
+    Description: Handles functionality for load mission data.
+    Inputs: missionData, filename
+    Outputs: Dynamic (Check implementation)
+
+  - saveMission (line 353)
+    Description: Handles functionality for save mission.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - saveMissionAs (line 383)
+    Description: Handles functionality for save mission as.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showSaveDialog (line 388)
+    Description: Handles functionality for show save dialog.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - closeDialog (line 431)
+    Description: Handles functionality for close dialog.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - saveMissionToFile (line 462)
+    Description: Handles functionality for save mission to file.
+    Inputs: missionData, filename, format
+    Outputs: Dynamic (Check implementation)
+
+  - generateWaypointsJSON (line 513)
+    Description: Handles functionality for generate waypoints json.
+    Inputs: missionData
+    Outputs: Dynamic (Check implementation)
+
+  - generateMissionPlannerTXT (line 528)
+    Description: Handles functionality for generate mission planner txt.
+    Inputs: missionData
+    Outputs: Dynamic (Check implementation)
+
+  - generateQGCMission (line 563)
+    Description: Handles functionality for generate qgcmission.
+    Inputs: missionData
+    Outputs: Dynamic (Check implementation)
+
+  - downloadFile (line 633)
+    Description: Handles functionality for download file.
+    Inputs: content, filename
+    Outputs: Dynamic (Check implementation)
+
+  - addSaveDialogStyles (line 654)
+    Description: Handles functionality for add save dialog styles.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - markAsModified (line 817)
+    Description: Handles functionality for mark as modified.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updateMissionTitle (line 825)
+    Description: Handles functionality for update mission title.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getCurrentMissionName (line 835)
+    Description: Retrieves the current mission name.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getMissionStats (line 839)
+    Description: Retrieves the mission stats.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializeMissionFileManager (line 865)
+    Description: Handles functionality for initialize mission file manager.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\motor-test.js (16 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - send (line 39)
+    Description: Handles functionality for send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - getThrottle (line 43)
+    Description: Retrieves the throttle.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getDuration (line 47)
+    Description: Retrieves the duration.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - sendMotorTest (line 53)
+    Description: Handles functionality for send motor test.
+    Inputs: motorIndex
+    Outputs: Dynamic (Check implementation)
+
+  - sendStop (line 72)
+    Description: Handles functionality for send stop.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - scheduleAutoStop (line 88)
+    Description: Handles functionality for schedule auto stop.
+    Inputs: duration
+    Outputs: Dynamic (Check implementation)
+
+  - markRunning (line 97)
+    Description: Handles functionality for mark running.
+    Inputs: motorIndex
+    Outputs: Dynamic (Check implementation)
+
+  - clearRunning (line 106)
+    Description: Handles functionality for clear running.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setStatus (line 112)
+    Description: Sets the status.
+    Inputs: state, text
+    Outputs: Executes side-effects (Void)
+
+  - acknowledge (line 122)
+    Description: Handles functionality for acknowledge.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updateSliderFill (line 134)
+    Description: Handles functionality for update slider fill.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleWsMessage (line 145)
+    Description: Event handler for handle ws message.
+    Inputs: evt
+    Outputs: Executes side-effects (Void)
+
+  - buildPanelHTML (line 158)
+    Description: Handles functionality for build panel html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wirePanel (line 254)
+    Description: Handles functionality for wire panel.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 290)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\multi-vehicle.js (15 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - setSelectedSysId (line 20)
+    Description: Sets the selected sys id.
+    Inputs: id
+    Outputs: Executes side-effects (Void)
+
+  - buildDroneSelectorHtml (line 36)
+    Description: Handles functionality for build drone selector html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updateAllDroneSelectors (line 52)
+    Description: Handles functionality for update all drone selectors.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - sendToSelected (line 60)
+    Description: Handles functionality for send to selected.
+    Inputs: payload
+    Outputs: Dynamic (Check implementation)
+
+  - updateVehicleSelector (line 87)
+    Description: Handles functionality for update vehicle selector.
+    Inputs: vehicles, dynLinks
+    Outputs: Dynamic (Check implementation)
+
+  - buildConnectionManagerModal (line 229)
+    Description: Handles functionality for build connection manager modal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _refreshMvPorts (line 395)
+    Description: Handles functionality for  refresh mv ports.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - openConnectionManager (line 417)
+    Description: Handles functionality for open connection manager.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _renderLinkList (line 425)
+    Description: Handles functionality for  render link list.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleMvMessage (line 456)
+    Description: Event handler for handle mv message.
+    Inputs: msg
+    Outputs: Executes side-effects (Void)
+
+  - ensureAddButton (line 477)
+    Description: Handles functionality for ensure add button.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - patchStatusHandler (line 499)
+    Description: Handles functionality for patch status handler.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wireDropdown (line 507)
+    Description: Handles functionality for wire dropdown.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - injectStyles (line 519)
+    Description: Handles functionality for inject styles.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\param-full.js (25 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - parseOptionsFromRange (line 788)
+    Description: Handles functionality for parse options from range.
+    Inputs: r
+    Outputs: Dynamic (Check implementation)
+
+  - getMeta (line 804)
+    Description: Retrieves the meta.
+    Inputs: name
+    Outputs: Dynamic (Check implementation)
+
+  - loadExternalMeta (line 841)
+    Description: Handles functionality for load external meta.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - tryNext (line 858)
+    Description: Handles functionality for try next.
+    Inputs: urls
+    Outputs: Dynamic (Check implementation)
+
+  - wsSend (line 883)
+    Description: Handles functionality for ws send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - _updateDroneBadge (line 933)
+    Description: Handles functionality for  update drone badge.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleMessage (line 945)
+    Description: Event handler for handle message.
+    Inputs: data
+    Outputs: Executes side-effects (Void)
+
+  - setStatus (line 980)
+    Description: Sets the status.
+    Inputs: t
+    Outputs: Executes side-effects (Void)
+
+  - setProgress (line 981)
+    Description: Sets the progress.
+    Inputs: r,tot
+    Outputs: Executes side-effects (Void)
+
+  - showProgressBar (line 982)
+    Description: Handles functionality for show progress bar.
+    Inputs: s
+    Outputs: Dynamic (Check implementation)
+
+  - highlightRow (line 983)
+    Description: Handles functionality for highlight row.
+    Inputs: name,state
+    Outputs: Dynamic (Check implementation)
+
+  - makeValueCell (line 988)
+    Description: Handles functionality for make value cell.
+    Inputs: p, m
+    Outputs: Dynamic (Check implementation)
+
+  - makeRangeCell (line 1006)
+    Description: Handles functionality for make range cell.
+    Inputs: m
+    Outputs: Dynamic (Check implementation)
+
+  - makeDescCell (line 1025)
+    Description: Handles functionality for make desc cell.
+    Inputs: m
+    Outputs: Dynamic (Check implementation)
+
+  - makeRowHTML (line 1033)
+    Description: Handles functionality for make row html.
+    Inputs: p
+    Outputs: Dynamic (Check implementation)
+
+  - attachRowEvents (line 1043)
+    Description: Handles functionality for attach row events.
+    Inputs: row
+    Outputs: Dynamic (Check implementation)
+
+  - upsertRow (line 1083)
+    Description: Handles functionality for upsert row.
+    Inputs: name
+    Outputs: Dynamic (Check implementation)
+
+  - rebuildTable (line 1110)
+    Description: Handles functionality for rebuild table.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - filterTable (line 1141)
+    Description: Handles functionality for filter table.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - fmtV (line 1163)
+    Description: Handles functionality for fmt v.
+    Inputs: v
+    Outputs: Dynamic (Check implementation)
+
+  - escH (line 1164)
+    Description: Handles functionality for esc h.
+    Inputs: s
+    Outputs: Dynamic (Check implementation)
+
+  - injectCSS (line 1166)
+    Description: Handles functionality for inject css.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - render (line 1224)
+    Description: Handles functionality for render.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 1276)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\param-switch.js (18 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - connectWebSocket (line 232)
+    Description: Handles functionality for connect web socket.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wsSend (line 267)
+    Description: Handles functionality for ws send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - handleBackendMessage (line 277)
+    Description: Event handler for handle backend message.
+    Inputs: msg
+    Outputs: Executes side-effects (Void)
+
+  - updateChannelLive (line 346)
+    Description: Handles functionality for update channel live.
+    Inputs: name, fcValue, defaultValue
+    Outputs: Dynamic (Check implementation)
+
+  - readParamsFromFC (line 375)
+    Description: Handles functionality for read params from fc.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _updateSwitchBadge (line 426)
+    Description: Handles functionality for  update switch badge.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - writeParamsToFC (line 437)
+    Description: Handles functionality for write params to fc.
+    Inputs: dirtyChannels
+    Outputs: Dynamic (Check implementation)
+
+  - optionLabel (line 483)
+    Description: Handles functionality for option label.
+    Inputs: value
+    Outputs: Dynamic (Check implementation)
+
+  - renderSelect (line 487)
+    Description: Handles functionality for render select.
+    Inputs: ch
+    Outputs: Dynamic (Check implementation)
+
+  - rebuildGrid (line 500)
+    Description: Handles functionality for rebuild grid.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - renderShell (line 547)
+    Description: Handles functionality for render shell.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updateStats (line 606)
+    Description: Handles functionality for update stats.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updateWriteBtn (line 613)
+    Description: Handles functionality for update write btn.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setProgressVisible (line 630)
+    Description: Sets the progress visible.
+    Inputs: visible, percent = 0, received = 0, total = 0
+    Outputs: Executes side-effects (Void)
+
+  - setStatusBanner (line 642)
+    Description: Sets the status banner.
+    Inputs: msg, level = 'info'
+    Outputs: Executes side-effects (Void)
+
+  - onChannelChange (line 656)
+    Description: Event handler for on channel change.
+    Inputs: e
+    Outputs: Executes side-effects (Void)
+
+  - init (line 688)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\pid-tuning.js (12 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - send (line 84)
+    Description: Handles functionality for send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - setStatus (line 103)
+    Description: Sets the status.
+    Inputs: state, text
+    Outputs: Executes side-effects (Void)
+
+  - val (line 112)
+    Description: Handles functionality for val.
+    Inputs: id
+    Outputs: Dynamic (Check implementation)
+
+  - row (line 117)
+    Description: Handles functionality for row.
+    Inputs: label, id, step = 0.001
+    Outputs: Dynamic (Check implementation)
+
+  - rowSelect (line 132)
+    Description: Handles functionality for row select.
+    Inputs: label, id, options
+    Outputs: Dynamic (Check implementation)
+
+  - buildPanelHTML (line 147)
+    Description: Handles functionality for build panel html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wireLock (line 363)
+    Description: Handles functionality for wire lock.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - mirrorToPitch (line 372)
+    Description: Handles functionality for mirror to pitch.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wireActions (line 388)
+    Description: Handles functionality for wire actions.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wireWS (line 430)
+    Description: Handles functionality for wire ws.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 457)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\review-log.js (33 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - build (line 263)
+    Description: Handles functionality for build.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _injectCSS (line 335)
+    Description: Handles functionality for  inject css.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _wireCanvasZoom (line 345)
+    Description: Handles functionality for  wire canvas zoom.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _applyZoom (line 501)
+    Description: Handles functionality for  apply zoom.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _resetZoom (line 519)
+    Description: Handles functionality for  reset zoom.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _loadFile (line 529)
+    Description: Handles functionality for  load file.
+    Inputs: file
+    Outputs: Dynamic (Check implementation)
+
+  - setTimeout (line 547)
+    Description: Sets the timeout.
+    Inputs: function (
+    Outputs: Executes side-effects (Void)
+
+  - _localParse (line 553)
+    Description: Handles functionality for  local parse.
+    Inputs: file
+    Outputs: Dynamic (Check implementation)
+
+  - setTimeout (line 569)
+    Description: Sets the timeout.
+    Inputs: function (
+    Outputs: Executes side-effects (Void)
+
+  - _parseBinBuffer (line 588)
+    Description: Handles functionality for  parse bin buffer.
+    Inputs: buffer, onProgress, onDone
+    Outputs: Dynamic (Check implementation)
+
+  - readCStr (line 595)
+    Description: Handles functionality for read cstr.
+    Inputs: arr, offset, maxLen
+    Outputs: Dynamic (Check implementation)
+
+  - decodeRow (line 607)
+    Description: Handles functionality for decode row.
+    Inputs: payload, fmt, fields
+    Outputs: Dynamic (Check implementation)
+
+  - processChunk (line 644)
+    Description: Handles functionality for process chunk.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - processChunkSafe (line 701)
+    Description: Handles functionality for process chunk safe.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _onSchemaReceived (line 723)
+    Description: Handles functionality for  on schema received.
+    Inputs: rawSchema
+    Outputs: Dynamic (Check implementation)
+
+  - setTimeout (line 734)
+    Description: Sets the timeout.
+    Inputs: function(
+    Outputs: Executes side-effects (Void)
+
+  - _getMsgColor (line 763)
+    Description: Handles functionality for  get msg color.
+    Inputs: name
+    Outputs: Dynamic (Check implementation)
+
+  - _buildTree (line 768)
+    Description: Handles functionality for  build tree.
+    Inputs: schema, rowCounts
+    Outputs: Dynamic (Check implementation)
+
+  - _esc (line 797)
+    Description: Handles functionality for  esc.
+    Inputs: s
+    Outputs: Dynamic (Check implementation)
+
+  - _filterTree (line 799)
+    Description: Handles functionality for  filter tree.
+    Inputs: query
+    Outputs: Dynamic (Check implementation)
+
+  - _toggleField (line 815)
+    Description: Handles functionality for  toggle field.
+    Inputs: msgName, fieldName, rowEl
+    Outputs: Dynamic (Check implementation)
+
+  - _fetchAndPlot (line 834)
+    Description: Handles functionality for  fetch and plot.
+    Inputs: msgName, fieldName
+    Outputs: Dynamic (Check implementation)
+
+  - _renderChart (line 851)
+    Description: Handles functionality for  render chart.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _buildLegend (line 957)
+    Description: Handles functionality for  build legend.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _clearLegend (line 971)
+    Description: Handles functionality for  clear legend.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _clearAllSeries (line 972)
+    Description: Handles functionality for  clear all series.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _setPill (line 982)
+    Description: Handles functionality for  set pill.
+    Inputs: cls,txt
+    Outputs: Dynamic (Check implementation)
+
+  - _setProgress (line 983)
+    Description: Handles functionality for  set progress.
+    Inputs: pct,txt
+    Outputs: Dynamic (Check implementation)
+
+  - _showLoading (line 987)
+    Description: Handles functionality for  show loading.
+    Inputs: show
+    Outputs: Dynamic (Check implementation)
+
+  - _showError (line 988)
+    Description: Handles functionality for  show error.
+    Inputs: msg
+    Outputs: Dynamic (Check implementation)
+
+  - _resetStats (line 989)
+    Description: Handles functionality for  reset stats.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _wireFileInput (line 1012)
+    Description: Handles functionality for  wire file input.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\servo-output.js (19 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - pName (line 93)
+    Description: Handles functionality for p name.
+    Inputs: n, suffix
+    Outputs: Dynamic (Check implementation)
+
+  - parseParam (line 96)
+    Description: Handles functionality for parse param.
+    Inputs: paramId
+    Outputs: Dynamic (Check implementation)
+
+  - requestParam (line 105)
+    Description: Handles functionality for request param.
+    Inputs: name
+    Outputs: Dynamic (Check implementation)
+
+  - setParam (line 110)
+    Description: Sets the param.
+    Inputs: paramId, value
+    Outputs: Executes side-effects (Void)
+
+  - refreshParams (line 121)
+    Description: Handles functionality for refresh params.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleWsMessage (line 140)
+    Description: Event handler for handle ws message.
+    Inputs: evt
+    Outputs: Executes side-effects (Void)
+
+  - applyChannelToUI (line 185)
+    Description: Handles functionality for apply channel to ui.
+    Inputs: n
+    Outputs: Dynamic (Check implementation)
+
+  - updatePositionBars (line 213)
+    Description: Handles functionality for update position bars.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updatePositionBar (line 217)
+    Description: Handles functionality for update position bar.
+    Inputs: n
+    Outputs: Dynamic (Check implementation)
+
+  - checkAllLoaded (line 236)
+    Description: Handles functionality for check all loaded.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - checkAllSaved (line 243)
+    Description: Handles functionality for check all saved.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setBadge (line 251)
+    Description: Sets the badge.
+    Inputs: id, state, text
+    Outputs: Executes side-effects (Void)
+
+  - flashRowSaved (line 258)
+    Description: Handles functionality for flash row saved.
+    Inputs: paramId
+    Outputs: Dynamic (Check implementation)
+
+  - markRowPending (line 269)
+    Description: Handles functionality for mark row pending.
+    Inputs: n
+    Outputs: Dynamic (Check implementation)
+
+  - buildFunctionOptions (line 278)
+    Description: Handles functionality for build function options.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - buildPanelHTML (line 285)
+    Description: Handles functionality for build panel html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wirePanel (line 387)
+    Description: Handles functionality for wire panel.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - init (line 485)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\settings-window.js (8 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - buildShellHTML (line 53)
+    Description: Handles functionality for build shell html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setStatus (line 288)
+    Description: Sets the status.
+    Inputs: id, text, cls
+    Outputs: Executes side-effects (Void)
+
+  - toast (line 293)
+    Description: Handles functionality for toast.
+    Inputs: msg, err
+    Outputs: Dynamic (Check implementation)
+
+  - initPanel (line 304)
+    Description: Handles functionality for init panel.
+    Inputs: panelKey
+    Outputs: Dynamic (Check implementation)
+
+  - open (line 342)
+    Description: Handles functionality for open.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - close (line 358)
+    Description: Handles functionality for close.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - bindSidebar (line 366)
+    Description: Handles functionality for bind sidebar.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\tmap.js (43 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 8)
+    Description: Handles functionality for constructor.
+    Inputs: containerId, centerCoords, zoomLevel, useOffline = false
+    Outputs: Dynamic (Check implementation)
+
+  - loadTiles (line 39)
+    Description: Handles functionality for load tiles.
+    Inputs: useOffline
+    Outputs: Dynamic (Check implementation)
+
+  - addRotatingHomeMarker (line 77)
+    Description: Handles functionality for add rotating home marker.
+    Inputs: lat, lng, label = 'Home', options = {}
+    Outputs: Dynamic (Check implementation)
+
+  - addStaticLocation (line 163)
+    Description: Handles functionality for add static location.
+    Inputs: lat, lng, name, options = {}
+    Outputs: Dynamic (Check implementation)
+
+  - addMarker (line 232)
+    Description: Handles functionality for add marker.
+    Inputs: lat, lng, draggable = true, options = {}
+    Outputs: Dynamic (Check implementation)
+
+  - removeMarker (line 245)
+    Description: Handles functionality for remove marker.
+    Inputs: marker
+    Outputs: Dynamic (Check implementation)
+
+  - removeLastMarker (line 253)
+    Description: Handles functionality for remove last marker.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - removeMarkerAt (line 260)
+    Description: Handles functionality for remove marker at.
+    Inputs: index
+    Outputs: Dynamic (Check implementation)
+
+  - clearMarkers (line 267)
+    Description: Handles functionality for clear markers.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getMarkers (line 272)
+    Description: Retrieves the markers.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getMarkerCoordinates (line 276)
+    Description: Retrieves the marker coordinates.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getMarkerCount (line 283)
+    Description: Retrieves the marker count.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - drawRoute (line 291)
+    Description: Handles functionality for draw route.
+    Inputs: coordinates, options = {}
+    Outputs: Dynamic (Check implementation)
+
+  - clearRoute (line 308)
+    Description: Handles functionality for clear route.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - calculateDistance (line 316)
+    Description: Handles functionality for calculate distance.
+    Inputs: coordinates
+    Outputs: Dynamic (Check implementation)
+
+  - setCenter (line 333)
+    Description: Sets the center.
+    Inputs: lat, lng, zoom = null
+    Outputs: Executes side-effects (Void)
+
+  - getCenter (line 341)
+    Description: Retrieves the center.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setZoom (line 345)
+    Description: Sets the zoom.
+    Inputs: zoom
+    Outputs: Executes side-effects (Void)
+
+  - getZoom (line 349)
+    Description: Retrieves the zoom.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getBounds (line 353)
+    Description: Retrieves the bounds.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - fitBounds (line 357)
+    Description: Handles functionality for fit bounds.
+    Inputs: bounds
+    Outputs: Dynamic (Check implementation)
+
+  - onClick (line 365)
+    Description: Event handler for on click.
+    Inputs: callback
+    Outputs: Executes side-effects (Void)
+
+  - enableClick (line 381)
+    Description: Handles functionality for enable click.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - disableClick (line 385)
+    Description: Handles functionality for disable click.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - removeClickHandler (line 389)
+    Description: Handles functionality for remove click handler.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - onRightClick (line 398)
+    Description: Event handler for on right click.
+    Inputs: callback
+    Outputs: Executes side-effects (Void)
+
+  - onMarkerDrag (line 404)
+    Description: Event handler for on marker drag.
+    Inputs: marker, callback
+    Outputs: Executes side-effects (Void)
+
+  - onMarkerDragEnd (line 411)
+    Description: Event handler for on marker drag end.
+    Inputs: marker, callback
+    Outputs: Executes side-effects (Void)
+
+  - onMarkerClick (line 418)
+    Description: Event handler for on marker click.
+    Inputs: marker, callback
+    Outputs: Executes side-effects (Void)
+
+  - onMarkerRightClick (line 426)
+    Description: Event handler for on marker right click.
+    Inputs: marker, callback
+    Outputs: Executes side-effects (Void)
+
+  - onZoomChange (line 434)
+    Description: Event handler for on zoom change.
+    Inputs: callback
+    Outputs: Executes side-effects (Void)
+
+  - onMoveEnd (line 440)
+    Description: Event handler for on move end.
+    Inputs: callback
+    Outputs: Executes side-effects (Void)
+
+  - registerWeatherClickHandler (line 446)
+    Description: Handles functionality for register weather click handler.
+    Inputs: handler
+    Outputs: Dynamic (Check implementation)
+
+  - enableWeatherClicks (line 451)
+    Description: Handles functionality for enable weather clicks.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - disableWeatherClicks (line 472)
+    Description: Handles functionality for disable weather clicks.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - enableMarkerRemovalOnClick (line 483)
+    Description: Handles functionality for enable marker removal on click.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - addRemovableMarker (line 491)
+    Description: Handles functionality for add removable marker.
+    Inputs: lat, lng, draggable = true, options = {}
+    Outputs: Dynamic (Check implementation)
+
+  - updateDronePosition (line 510)
+    Description: Handles functionality for update drone position.
+    Inputs: lat, lng, heading = 0
+    Outputs: Dynamic (Check implementation)
+
+  - updateDronePositionForSysid (line 521)
+    Description: Handles functionality for update drone position for sysid.
+    Inputs: sysid, lat, lng, heading = 0
+    Outputs: Dynamic (Check implementation)
+
+  - setDroneAutoPan (line 637)
+    Description: Sets the drone auto pan.
+    Inputs: enabled
+    Outputs: Executes side-effects (Void)
+
+  - pruneStaleVehicleMarkers (line 648)
+    Description: Handles functionality for prune stale vehicle markers.
+    Inputs: activeSysids
+    Outputs: Dynamic (Check implementation)
+
+  - clearDroneMarkers (line 666)
+    Description: Handles functionality for clear drone markers.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\vehicle-config.js (25 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - injectModalStyles (line 38)
+    Description: Handles functionality for inject modal styles.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showPasswordModal (line 287)
+    Description: Handles functionality for show password modal.
+    Inputs: droneId, droneName, onSuccess
+    Outputs: Dynamic (Check implementation)
+
+  - closeModal (line 396)
+    Description: Handles functionality for close modal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - tryUnlock (line 402)
+    Description: Handles functionality for try unlock.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - buildHTML (line 427)
+    Description: Handles functionality for build html.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - restoreUnlockStates (line 708)
+    Description: Handles functionality for restore unlock states.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - bindEvents (line 743)
+    Description: Handles functionality for bind events.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - enableInstallBtn (line 912)
+    Description: Handles functionality for enable install btn.
+    Inputs: btn
+    Outputs: Dynamic (Check implementation)
+
+  - applyDefault (line 917)
+    Description: Handles functionality for apply default.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - vcUnlock (line 931)
+    Description: Handles functionality for vc unlock.
+    Inputs: id, name, unlockBtn
+    Outputs: Dynamic (Check implementation)
+
+  - updateInstallBtns (line 965)
+    Description: Handles functionality for update install btns.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - vcLog (line 983)
+    Description: Handles functionality for vc log.
+    Inputs: type, msg
+    Outputs: Dynamic (Check implementation)
+
+  - vcSetBar (line 1004)
+    Description: Handles functionality for vc set bar.
+    Inputs: barId, value
+    Outputs: Dynamic (Check implementation)
+
+  - vcAnimBar (line 1013)
+    Description: Handles functionality for vc anim bar.
+    Inputs: barId, from, to, dur, cb
+    Outputs: Dynamic (Check implementation)
+
+  - step (line 1017)
+    Description: Handles functionality for step.
+    Inputs: now
+    Outputs: Dynamic (Check implementation)
+
+  - replayFlashState (line 1031)
+    Description: Handles functionality for replay flash state.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - vcPopulatePorts (line 1070)
+    Description: Handles functionality for vc populate ports.
+    Inputs: ports
+    Outputs: Dynamic (Check implementation)
+
+  - vcHandleFirmwareMessage (line 1153)
+    Description: Handles functionality for vc handle firmware message.
+    Inputs: msg
+    Outputs: Dynamic (Check implementation)
+
+  - reenableInstallBtns (line 1156)
+    Description: Handles functionality for reenable install btns.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - open (line 1336)
+    Description: Handles functionality for open.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - close (line 1379)
+    Description: Handles functionality for close.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - attachVcWsRouter (line 1413)
+    Description: Handles functionality for attach vc ws router.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - dispatch (line 1419)
+    Description: Handles functionality for dispatch.
+    Inputs: raw
+    Outputs: Dynamic (Check implementation)
+
+  - attachToSocket (line 1458)
+    Description: Handles functionality for attach to socket.
+    Inputs: sock
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\video-stream.js (17 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - VideoStreamController (line 16)
+    Description: Handles functionality for video stream controller.
+    Inputs: (
+    Outputs: UI Component / Object
+
+  - buildUI (line 30)
+    Description: Handles functionality for build ui.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _installWsListener (line 181)
+    Description: Handles functionality for  install ws listener.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - connect (line 203)
+    Description: Handles functionality for connect.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - disconnect (line 221)
+    Description: Handles functionality for disconnect.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _showStream (line 229)
+    Description: Handles functionality for  show stream.
+    Inputs: url
+    Outputs: Dynamic (Check implementation)
+
+  - tryLoad (line 238)
+    Description: Handles functionality for try load.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _hideStream (line 272)
+    Description: Handles functionality for  hide stream.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _wsSend (line 285)
+    Description: Handles functionality for  ws send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - setStatus (line 293)
+    Description: Sets the status.
+    Inputs: label, live
+    Outputs: Executes side-effects (Void)
+
+  - init (line 311)
+    Description: Handles functionality for init.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - isStreaming (line 314)
+    Description: Checks if it is streaming.
+    Inputs: None
+    Outputs: Boolean
+
+  - setRtspUrl (line 315)
+    Description: Sets the rtsp url.
+    Inputs: u
+    Outputs: Executes side-effects (Void)
+
+  - getRtspUrl (line 316)
+    Description: Retrieves the rtsp url.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - takeSnapshot (line 317)
+    Description: Handles functionality for take snapshot.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _initVideoStream (line 346)
+    Description: Handles functionality for  init video stream.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\waypoint-context-menu.js (26 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 8)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 18)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - connectToWaypointManager (line 33)
+    Description: Handles functionality for connect to waypoint manager.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - createMenuElement (line 47)
+    Description: Handles functionality for create menu element.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - attachEventListeners (line 109)
+    Description: Handles functionality for attach event listeners.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showMenu (line 134)
+    Description: Handles functionality for show menu.
+    Inputs: x, y, waypoint
+    Outputs: Dynamic (Check implementation)
+
+  - hideMenu (line 160)
+    Description: Handles functionality for hide menu.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleMenuAction (line 166)
+    Description: Event handler for handle menu action.
+    Inputs: action
+    Outputs: Executes side-effects (Void)
+
+  - showPolygonSubmenu (line 253)
+    Description: Handles functionality for show polygon submenu.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - closeSubmenu (line 305)
+    Description: Handles functionality for close submenu.
+    Inputs: e
+    Outputs: Dynamic (Check implementation)
+
+  - handlePolygonAction (line 317)
+    Description: Event handler for handle polygon action.
+    Inputs: action
+    Outputs: Executes side-effects (Void)
+
+  - showPolygonFileInput (line 379)
+    Description: Handles functionality for show polygon file input.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showOffsetDialog (line 389)
+    Description: Handles functionality for show offset dialog.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showPolygonAreas (line 404)
+    Description: Handles functionality for show polygon areas.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - deleteWaypoint (line 430)
+    Description: Handles functionality for delete waypoint.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - clearMission (line 445)
+    Description: Handles functionality for clear mission.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - isFirstTakeoffWaypoint (line 460)
+    Description: Checks if it is first takeoff waypoint.
+    Inputs: waypoint
+    Outputs: Boolean
+
+  - returnToLaunch (line 466)
+    Description: Handles functionality for return to launch.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setHoverHere (line 508)
+    Description: Sets the hover here.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - resetToWaypoint (line 538)
+    Description: Handles functionality for reset to waypoint.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - landHere (line 568)
+    Description: Handles functionality for land here.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setHomeHere (line 601)
+    Description: Sets the home here.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - modifyAltitude (line 617)
+    Description: Handles functionality for modify altitude.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - attachToMarker (line 652)
+    Description: Handles functionality for attach to marker.
+    Inputs: marker, waypoint
+    Outputs: Dynamic (Check implementation)
+
+  - initializeWaypointContextMenu (line 681)
+    Description: Handles functionality for initialize waypoint context menu.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\waypoint-manager.js (37 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 8)
+    Description: Handles functionality for constructor.
+    Inputs: tmapInstance
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 42)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setupMapClickHandler (line 48)
+    Description: Sets the p map click handler.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - handleMapRightClick (line 60)
+    Description: Event handler for handle map right click.
+    Inputs: lat, lng, e
+    Outputs: Executes side-effects (Void)
+
+  - handleMapClick (line 69)
+    Description: Event handler for handle map click.
+    Inputs: lat, lng, e
+    Outputs: Executes side-effects (Void)
+
+  - startAddingWaypoint (line 95)
+    Description: Handles functionality for start adding waypoint.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getDroneActualLocation (line 105)
+    Description: Retrieves the drone actual location.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - _addWaypointDirect (line 120)
+    Description: Handles functionality for  add waypoint direct.
+    Inputs: lat, lng, altitude = 50, type = 'waypoint', speed = 10
+    Outputs: Dynamic (Check implementation)
+
+  - addWaypoint (line 186)
+    Description: Handles functionality for add waypoint.
+    Inputs: lat, lng, altitude = 50, typeOrSpeed = 'waypoint', typeFallback = 'waypoint'
+    Outputs: Dynamic (Check implementation)
+
+  - getWaypoints (line 210)
+    Description: Retrieves the waypoints.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getTotalDistance (line 214)
+    Description: Retrieves the total distance.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - startInsertingWaypoint (line 220)
+    Description: Handles functionality for start inserting waypoint.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - insertWaypoint (line 238)
+    Description: Handles functionality for insert waypoint.
+    Inputs: lat, lng
+    Outputs: Dynamic (Check implementation)
+
+  - findBestInsertPosition (line 284)
+    Description: Handles functionality for find best insert position.
+    Inputs: lat, lng
+    Outputs: Dynamic (Check implementation)
+
+  - pointToSegmentDistance (line 305)
+    Description: Handles functionality for point to segment distance.
+    Inputs: point, segStart, segEnd
+    Outputs: Dynamic (Check implementation)
+
+  - startDeletingWaypoint (line 343)
+    Description: Handles functionality for start deleting waypoint.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - removeWaypoint (line 360)
+    Description: Handles functionality for remove waypoint.
+    Inputs: waypointId
+    Outputs: Dynamic (Check implementation)
+
+  - clearAllWaypoints (line 392)
+    Description: Handles functionality for clear all waypoints.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - startTakeoffHere (line 413)
+    Description: Handles functionality for start takeoff here.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setHomePosition (line 423)
+    Description: Sets the home position.
+    Inputs: lat, lng
+    Outputs: Executes side-effects (Void)
+
+  - clearHomePosition (line 470)
+    Description: Handles functionality for clear home position.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getHomePosition (line 484)
+    Description: Retrieves the home position.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - startLandHere (line 488)
+    Description: Handles functionality for start land here.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - addLandingPoint (line 498)
+    Description: Handles functionality for add landing point.
+    Inputs: lat, lng
+    Outputs: Dynamic (Check implementation)
+
+  - createWaypointPopup (line 539)
+    Description: Handles functionality for create waypoint popup.
+    Inputs: waypoint
+    Outputs: Dynamic (Check implementation)
+
+  - updateRoute (line 553)
+    Description: Handles functionality for update route.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - toggleRouteLine (line 571)
+    Description: Handles functionality for toggle route line.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showRouteLines (line 580)
+    Description: Handles functionality for show route lines.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hideRouteLines (line 585)
+    Description: Handles functionality for hide route lines.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updateStats (line 590)
+    Description: Handles functionality for update stats.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - centerMission (line 607)
+    Description: Handles functionality for center mission.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - centerHome (line 629)
+    Description: Handles functionality for center home.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - exportMission (line 640)
+    Description: Handles functionality for export mission.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - importMission (line 660)
+    Description: Handles functionality for import mission.
+    Inputs: missionData
+    Outputs: Dynamic (Check implementation)
+
+  - cancelCurrentOperation (line 680)
+    Description: Checks if it cancel current operation.
+    Inputs: None
+    Outputs: Boolean
+
+  - initializeWaypointManager (line 696)
+    Description: Handles functionality for initialize waypoint manager.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\weather-dashboard.js (27 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 8)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 39)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - connectToBackend (line 61)
+    Description: Handles functionality for connect to backend.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - registerBackendHandlers (line 83)
+    Description: Handles functionality for register backend handlers.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleBackendWeather (line 116)
+    Description: Event handler for handle backend weather.
+    Inputs: data
+    Outputs: Executes side-effects (Void)
+
+  - showWeatherWarning (line 124)
+    Description: Handles functionality for show weather warning.
+    Inputs: message
+    Outputs: Dynamic (Check implementation)
+
+  - attachEventListeners (line 131)
+    Description: Handles functionality for attach event listeners.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showInitialState (line 147)
+    Description: Handles functionality for show initial state.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - validateCoordinates (line 158)
+    Description: Handles functionality for validate coordinates.
+    Inputs: lat, lng
+    Outputs: Dynamic (Check implementation)
+
+  - fetchWeather (line 171)
+    Description: Handles functionality for fetch weather.
+    Inputs: lat, lng
+    Outputs: Promise (Async)
+
+  - fetchWeatherDirect (line 220)
+    Description: Handles functionality for fetch weather direct.
+    Inputs: lat, lng
+    Outputs: Promise (Async)
+
+  - showLoading (line 248)
+    Description: Handles functionality for show loading.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showError (line 254)
+    Description: Handles functionality for show error.
+    Inputs: message
+    Outputs: Dynamic (Check implementation)
+
+  - displayWeatherFromBackend (line 267)
+    Description: Handles functionality for display weather from backend.
+    Inputs: data
+    Outputs: Dynamic (Check implementation)
+
+  - displayWeather (line 310)
+    Description: Handles functionality for display weather.
+    Inputs: data
+    Outputs: Dynamic (Check implementation)
+
+  - updateSafetyIndicators (line 362)
+    Description: Handles functionality for update safety indicators.
+    Inputs: safety
+    Outputs: Dynamic (Check implementation)
+
+  - onMapClick (line 405)
+    Description: Event handler for on map click.
+    Inputs: lat, lng
+    Outputs: Executes side-effects (Void)
+
+  - refresh (line 415)
+    Description: Handles functionality for refresh.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - show (line 424)
+    Description: Handles functionality for show.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - hide (line 433)
+    Description: Handles functionality for hide.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - toggle (line 442)
+    Description: Handles functionality for toggle.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - isShown (line 450)
+    Description: Checks if it is shown.
+    Inputs: None
+    Outputs: Boolean
+
+  - getCurrentLocation (line 454)
+    Description: Retrieves the current location.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getCurrentWeather (line 462)
+    Description: Retrieves the current weather.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - clear (line 466)
+    Description: Handles functionality for clear.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializeWeatherDashboard (line 477)
+    Description: Handles functionality for initialize weather dashboard.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: js\weather-integration-helper.js (5 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - integrateWeatherWithMap (line 7)
+    Description: Handles functionality for integrate weather with map.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - autoIntegrateWeather (line 49)
+    Description: Handles functionality for auto integrate weather.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - testWeatherDashboard (line 89)
+    Description: Handles functionality for test weather dashboard.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - debugWeatherIntegration (line 105)
+    Description: Handles functionality for debug weather integration.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: pages\Admin.html (23 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - connect (line 673)
+    Description: Handles functionality for connect.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - scheduleReconnect (line 702)
+    Description: Handles functionality for schedule reconnect.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - send (line 707)
+    Description: Handles functionality for send.
+    Inputs: obj
+    Outputs: Dynamic (Check implementation)
+
+  - on (line 713)
+    Description: Event handler for on.
+    Inputs: type, cb
+    Outputs: Executes side-effects (Void)
+
+  - off (line 717)
+    Description: Handles functionality for off.
+    Inputs: type
+    Outputs: Dynamic (Check implementation)
+
+  - updateConnUI (line 722)
+    Description: Handles functionality for update conn ui.
+    Inputs: online
+    Outputs: Dynamic (Check implementation)
+
+  - doLogin (line 742)
+    Description: Handles functionality for do login.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showGateError (line 776)
+    Description: Handles functionality for show gate error.
+    Inputs: msg
+    Outputs: Dynamic (Check implementation)
+
+  - doLogout (line 782)
+    Description: Handles functionality for do logout.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - requestUsers (line 795)
+    Description: Handles functionality for request users.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - renderStats (line 809)
+    Description: Handles functionality for render stats.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - filterTable (line 820)
+    Description: Handles functionality for filter table.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - renderTable (line 829)
+    Description: Handles functionality for render table.
+    Inputs: users
+    Outputs: Dynamic (Check implementation)
+
+  - approveUser (line 904)
+    Description: Handles functionality for approve user.
+    Inputs: userId, sessionId
+    Outputs: Dynamic (Check implementation)
+
+  - rejectUser (line 914)
+    Description: Handles functionality for reject user.
+    Inputs: userId, sessionId
+    Outputs: Dynamic (Check implementation)
+
+  - toggleUser (line 925)
+    Description: Handles functionality for toggle user.
+    Inputs: userId
+    Outputs: Dynamic (Check implementation)
+
+  - deleteUser (line 934)
+    Description: Handles functionality for delete user.
+    Inputs: userId
+    Outputs: Dynamic (Check implementation)
+
+  - handleNewSignup (line 944)
+    Description: Event handler for handle new signup.
+    Inputs: msg
+    Outputs: Executes side-effects (Void)
+
+  - showToast (line 956)
+    Description: Handles functionality for show toast.
+    Inputs: title, body, type='info'
+    Outputs: Dynamic (Check implementation)
+
+  - esc (line 976)
+    Description: Handles functionality for esc.
+    Inputs: s
+    Outputs: Dynamic (Check implementation)
+
+  - fmtDate (line 979)
+    Description: Handles functionality for fmt date.
+    Inputs: iso
+    Outputs: Dynamic (Check implementation)
+
+  - fmtTime (line 983)
+    Description: Handles functionality for fmt time.
+    Inputs: iso
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: pages\MainWindow.html (5 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - updateHeaderUI (line 68)
+    Description: Handles functionality for update header ui.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - formatModeStr (line 109)
+    Description: Handles functionality for format mode str.
+    Inputs: m
+    Outputs: Dynamic (Check implementation)
+
+  - routeMessages (line 126)
+    Description: Handles functionality for route messages.
+    Inputs: event
+    Outputs: Dynamic (Check implementation)
+
+  - PatchedWebSocket (line 230)
+    Description: Handles functionality for patched web socket.
+    Inputs: url, protocols
+    Outputs: UI Component / Object
+
+==================================================
+File: pages\remote-admin.html (43 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - avatarColor (line 524)
+    Description: Handles functionality for avatar color.
+    Inputs: n
+    Outputs: Dynamic (Check implementation)
+
+  - hashCreds (line 527)
+    Description: Checks if it hash creds.
+    Inputs: u,p
+    Outputs: Boolean
+
+  - connect (line 554)
+    Description: Handles functionality for connect.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - wsSend (line 590)
+    Description: Handles functionality for ws send.
+    Inputs: o
+    Outputs: Dynamic (Check implementation)
+
+  - on (line 597)
+    Description: Event handler for on.
+    Inputs: t,c
+    Outputs: Executes side-effects (Void)
+
+  - off (line 598)
+    Description: Handles functionality for off.
+    Inputs: t
+    Outputs: Dynamic (Check implementation)
+
+  - startHB (line 599)
+    Description: Handles functionality for start hb.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - stopHB (line 600)
+    Description: Handles functionality for stop hb.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showOfflineBtn (line 602)
+    Description: Handles functionality for show offline btn.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - doLogin (line 613)
+    Description: Handles functionality for do login.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - doOfflineLogin (line 647)
+    Description: Handles functionality for do offline login.
+    Inputs: u, p
+    Outputs: Dynamic (Check implementation)
+
+  - silentReauth (line 680)
+    Description: Handles functionality for silent reauth.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - goOffline (line 693)
+    Description: Handles functionality for go offline.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - goOnline (line 703)
+    Description: Handles functionality for go online.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - queueAction (line 715)
+    Description: Handles functionality for queue action.
+    Inputs: action
+    Outputs: Dynamic (Check implementation)
+
+  - updateQueueCount (line 722)
+    Description: Handles functionality for update queue count.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - trySyncQueue (line 731)
+    Description: Handles functionality for try sync queue.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - enterDash (line 752)
+    Description: Handles functionality for enter dash.
+    Inputs: offline
+    Outputs: Dynamic (Check implementation)
+
+  - loadFromCache (line 772)
+    Description: Handles functionality for load from cache.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - refreshUsers (line 792)
+    Description: Handles functionality for refresh users.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - updateStats (line 814)
+    Description: Handles functionality for update stats.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - animCount (line 822)
+    Description: Handles functionality for anim count.
+    Inputs: id,target
+    Outputs: Dynamic (Check implementation)
+
+  - setF (line 828)
+    Description: Sets the f.
+    Inputs: f
+    Outputs: Executes side-effects (Void)
+
+  - renderTable (line 836)
+    Description: Handles functionality for render table.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - sendOrQueue (line 886)
+    Description: Handles functionality for send or queue.
+    Inputs: action, onlineCallback
+    Outputs: Dynamic (Check implementation)
+
+  - doApprove (line 897)
+    Description: Handles functionality for do approve.
+    Inputs: uid,sid
+    Outputs: Dynamic (Check implementation)
+
+  - doReject (line 914)
+    Description: Handles functionality for do reject.
+    Inputs: uid,sid
+    Outputs: Dynamic (Check implementation)
+
+  - doToggle (line 930)
+    Description: Handles functionality for do toggle.
+    Inputs: uid
+    Outputs: Dynamic (Check implementation)
+
+  - doDel (line 944)
+    Description: Handles functionality for do del.
+    Inputs: uid,name
+    Outputs: Dynamic (Check implementation)
+
+  - doLogout (line 960)
+    Description: Handles functionality for do logout.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - toggleCfg (line 974)
+    Description: Handles functionality for toggle cfg.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - saveServer (line 975)
+    Description: Handles functionality for save server.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - confirm2 (line 986)
+    Description: Handles functionality for confirm2.
+    Inputs: iconType,title,body,label,btnClass,onOk
+    Outputs: Dynamic (Check implementation)
+
+  - reasonModal (line 1007)
+    Description: Handles functionality for reason modal.
+    Inputs: onOk
+    Outputs: Dynamic (Check implementation)
+
+  - resetBtn (line 1028)
+    Description: Handles functionality for reset btn.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - setConn (line 1033)
+    Description: Sets the conn.
+    Inputs: type,text
+    Outputs: Executes side-effects (Void)
+
+  - showAlert (line 1038)
+    Description: Handles functionality for show alert.
+    Inputs: m
+    Outputs: Dynamic (Check implementation)
+
+  - clearAlert (line 1039)
+    Description: Handles functionality for clear alert.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - toast (line 1041)
+    Description: Handles functionality for toast.
+    Inputs: title,body,type='i'
+    Outputs: Dynamic (Check implementation)
+
+  - x (line 1050)
+    Description: Handles functionality for x.
+    Inputs: s
+    Outputs: Dynamic (Check implementation)
+
+  - fd (line 1051)
+    Description: Handles functionality for fd.
+    Inputs: iso
+    Outputs: Dynamic (Check implementation)
+
+  - ft (line 1052)
+    Description: Handles functionality for ft.
+    Inputs: iso
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: plan-flight-modules\mission-file-manager.js (11 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 8)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 14)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - exportMission (line 28)
+    Description: Handles functionality for export mission.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - saveMissionToFile (line 79)
+    Description: Handles functionality for save mission to file.
+    Inputs: filename = null
+    Outputs: Dynamic (Check implementation)
+
+  - loadMission (line 154)
+    Description: Handles functionality for load mission.
+    Inputs: missionData
+    Outputs: Dynamic (Check implementation)
+
+  - openMissionFile (line 235)
+    Description: Handles functionality for open mission file.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - newMission (line 302)
+    Description: Handles functionality for new mission.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getCurrentMission (line 332)
+    Description: Retrieves the current mission.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - validateMission (line 343)
+    Description: Handles functionality for validate mission.
+    Inputs: missionData
+    Outputs: Dynamic (Check implementation)
+
+  - initializeMissionFileManager (line 409)
+    Description: Handles functionality for initialize mission file manager.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: plan-flight-modules\plan-flight-core.js (7 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 7)
+    Description: Handles functionality for constructor.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 30)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - enter (line 80)
+    Description: Handles functionality for enter.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - exit (line 151)
+    Description: Handles functionality for exit.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - getIsActive (line 197)
+    Description: Retrieves the is active.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializePlanFlightMode (line 208)
+    Description: Handles functionality for initialize plan flight mode.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: plan-flight-modules\plan-flight-mission-send.js (8 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - actionForWaypoint (line 156)
+    Description: Handles functionality for action for waypoint.
+    Inputs: wp, index, total
+    Outputs: Dynamic (Check implementation)
+
+  - action (line 339)
+    Description: Handles functionality for action.
+    Inputs: (
+    Outputs: Dynamic (Check implementation)
+
+  - handleMissionAck (line 443)
+    Description: Event handler for handle mission ack.
+    Inputs: message
+    Outputs: Executes side-effects (Void)
+
+  - handleFlightPlanAck (line 456)
+    Description: Event handler for handle flight plan ack.
+    Inputs: message
+    Outputs: Executes side-effects (Void)
+
+  - showSentPayloadOverlay (line 477)
+    Description: Handles functionality for show sent payload overlay.
+    Inputs: payload, mode
+    Outputs: Dynamic (Check implementation)
+
+  - close (line 538)
+    Description: Handles functionality for close.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - patchMenuRouter (line 559)
+    Description: Handles functionality for patch menu router.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: plan-flight-modules\plan-flight-polygon.js (2 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - recalc (line 217)
+    Description: Handles functionality for recalc.
+    Inputs: autoSpacing
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: plan-flight-modules\plan-flight-takeoff.js (6 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - setTimeout (line 61)
+    Description: Sets the timeout.
+    Inputs: function(
+    Outputs: Executes side-effects (Void)
+
+  - setTimeout (line 67)
+    Description: Sets the timeout.
+    Inputs: function(
+    Outputs: Executes side-effects (Void)
+
+  - onConfirm (line 95)
+    Description: Event handler for on confirm.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - onCancel (line 106)
+    Description: Event handler for on cancel.
+    Inputs: None
+    Outputs: Executes side-effects (Void)
+
+  - cleanup (line 111)
+    Description: Handles functionality for cleanup.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: plan-flight-modules\plan-flight-weather.js (2 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - weatherClickHandler (line 80)
+    Description: Handles functionality for weather click handler.
+    Inputs: lat, lng
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: plan-flight-modules\polygon-backend-integration.js (2 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - initializePolygonExtensions (line 24)
+    Description: Handles functionality for initialize polygon extensions.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: plan-flight-modules\polygon-manager.js (42 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - constructor (line 8)
+    Description: Handles functionality for constructor.
+    Inputs: map
+    Outputs: Dynamic (Check implementation)
+
+  - getLeafletMap (line 50)
+    Description: Retrieves the leaflet map.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initialize (line 54)
+    Description: Handles functionality for initialize.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - tryInitialize (line 57)
+    Description: Handles functionality for try initialize.
+    Inputs: attempt = 1
+    Outputs: Dynamic (Check implementation)
+
+  - ensureLayersInitialized (line 92)
+    Description: Handles functionality for ensure layers initialized.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - ensurePolygonExists (line 121)
+    Description: Handles functionality for ensure polygon exists.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - recreatePolygon (line 145)
+    Description: Handles functionality for recreate polygon.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - startDrawing (line 181)
+    Description: Handles functionality for start drawing.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleMapClick (line 216)
+    Description: Event handler for handle map click.
+    Inputs: e
+    Outputs: Executes side-effects (Void)
+
+  - _updatePreviewLines (line 273)
+    Description: Handles functionality for  update preview lines.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleKeyPress (line 306)
+    Description: Event handler for handle key press.
+    Inputs: e
+    Outputs: Executes side-effects (Void)
+
+  - finishDrawing (line 314)
+    Description: Handles functionality for finish drawing.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - cancelDrawing (line 351)
+    Description: Checks if it cancel drawing.
+    Inputs: None
+    Outputs: Boolean
+
+  - clearTempElements (line 368)
+    Description: Handles functionality for clear temp elements.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - createPolygon (line 383)
+    Description: Handles functionality for create polygon.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - calculatePolygonArea (line 435)
+    Description: Handles functionality for calculate polygon area.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - generateSurveyGrid (line 458)
+    Description: Handles functionality for generate survey grid.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - pointInPolygon (line 525)
+    Description: Handles functionality for point in polygon.
+    Inputs: latlng
+    Outputs: Dynamic (Check implementation)
+
+  - calculateGridParameters (line 540)
+    Description: Handles functionality for calculate grid parameters.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - generateGridLines (line 573)
+    Description: Handles functionality for generate grid lines.
+    Inputs: params
+    Outputs: Dynamic (Check implementation)
+
+  - generateRectangleLines (line 610)
+    Description: Handles functionality for generate rectangle lines.
+    Inputs: params
+    Outputs: Dynamic (Check implementation)
+
+  - generateCircleLines (line 643)
+    Description: Handles functionality for generate circle lines.
+    Inputs: params
+    Outputs: Dynamic (Check implementation)
+
+  - clipLinesToPolygon (line 672)
+    Description: Handles functionality for clip lines to polygon.
+    Inputs: lines
+    Outputs: Dynamic (Check implementation)
+
+  - getLinePolygonIntersections (line 697)
+    Description: Retrieves the line polygon intersections.
+    Inputs: line
+    Outputs: Dynamic (Check implementation)
+
+  - getLineIntersection (line 720)
+    Description: Retrieves the line intersection.
+    Inputs: x1, y1, x2, y2, x3, y3, x4, y4
+    Outputs: Dynamic (Check implementation)
+
+  - createWaypointsFromGrid (line 742)
+    Description: Handles functionality for create waypoints from grid.
+    Inputs: gridLines, pattern = 'horizontal'
+    Outputs: Dynamic (Check implementation)
+
+  - drawGrid (line 821)
+    Description: Handles functionality for draw grid.
+    Inputs: gridLines
+    Outputs: Dynamic (Check implementation)
+
+  - _addVertexMarker (line 862)
+    Description: Handles functionality for  add vertex marker.
+    Inputs: point, index
+    Outputs: Dynamic (Check implementation)
+
+  - _rebuildVertexMarkers (line 910)
+    Description: Handles functionality for  rebuild vertex markers.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - showSurveyPatternModal (line 926)
+    Description: Handles functionality for show survey pattern modal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - closeSurveyPatternModal (line 1017)
+    Description: Handles functionality for close survey pattern modal.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - startEditing (line 1028)
+    Description: Handles functionality for start editing.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - stopEditing (line 1049)
+    Description: Handles functionality for stop editing.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - openSurveySettings (line 1058)
+    Description: Handles functionality for open survey settings.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - applySurveySettings (line 1121)
+    Description: Handles functionality for apply survey settings.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - closeSurveySettings (line 1145)
+    Description: Handles functionality for close survey settings.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - clearPolygon (line 1156)
+    Description: Handles functionality for clear polygon.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - clearGrid (line 1191)
+    Description: Handles functionality for clear grid.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - centerPolygon (line 1205)
+    Description: Handles functionality for center polygon.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - exportPolygon (line 1212)
+    Description: Handles functionality for export polygon.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - initializePolygonManager (line 1230)
+    Description: Handles functionality for initialize polygon manager.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+==================================================
+File: plan-flight-modules\websocket.js (18 functions)
+==================================================
+  - Module/Function (Name (line Line Number))
+    Description: Description
+    Inputs: Actual Input
+    Outputs: Expected Output
+
+  - updateVehicleSelector (line 55)
+    Description: Handles functionality for update vehicle selector.
+    Inputs: vehicles
+    Outputs: Dynamic (Check implementation)
+
+  - deliverFirmwareMessage (line 128)
+    Description: Handles functionality for deliver firmware message.
+    Inputs: msg
+    Outputs: Dynamic (Check implementation)
+
+  - flushFirmwareQueue (line 133)
+    Description: Handles functionality for flush firmware queue.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - snapMapToHome (line 184)
+    Description: Handles functionality for snap map to home.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - safeSend (line 198)
+    Description: Handles functionality for safe send.
+    Inputs: payload
+    Outputs: Dynamic (Check implementation)
+
+  - startHeartbeat (line 237)
+    Description: Handles functionality for start heartbeat.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - stopHeartbeat (line 246)
+    Description: Handles functionality for stop heartbeat.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - detachHandlers (line 258)
+    Description: Handles functionality for detach handlers.
+    Inputs: sock
+    Outputs: Dynamic (Check implementation)
+
+  - initWebSocket (line 270)
+    Description: Handles functionality for init web socket.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - scheduleReconnect (line 382)
+    Description: Handles functionality for schedule reconnect.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - handleBackendMessage (line 413)
+    Description: Event handler for handle backend message.
+    Inputs: message
+    Outputs: Executes side-effects (Void)
+
+  - handleTelemetryUpdate (line 815)
+    Description: Event handler for handle telemetry update.
+    Inputs: data
+    Outputs: Executes side-effects (Void)
+
+  - requestTelemetry (line 846)
+    Description: Handles functionality for request telemetry.
+    Inputs: None
+    Outputs: Dynamic (Check implementation)
+
+  - sendCommand (line 876)
+    Description: Handles functionality for send command.
+    Inputs: command, params = {}
+    Outputs: Dynamic (Check implementation)
+
+  - sendMission (line 906)
+    Description: Handles functionality for send mission.
+    Inputs: waypointItems
+    Outputs: Dynamic (Check implementation)
+
+  - updateConnectionStatus (line 935)
+    Description: Handles functionality for update connection status.
+    Inputs: state, link
+    Outputs: Dynamic (Check implementation)
+
+  - updatePortStatus (line 952)
+    Description: Handles functionality for update port status.
+    Inputs: ports
+    Outputs: Dynamic (Check implementation)
+

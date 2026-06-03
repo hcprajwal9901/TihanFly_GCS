@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FH-008
+Requirement ID      : REQ-HUD-001
+Source File         : flight-hud.js
+Target Function     : init() [Line 27]
+Test Category       : Positive / Functional
+Test Case Title     : should draw sky/ground horizontal layouts and alt/speed tapes
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+toggleHudCheckbox.checked = true
+toggleHudCheckbox.dispatchEvent(new Event('change'))
+jest.advanceTimersByTime(16)
+
+Expected Behavior:
+Verify mockCtx.clearRect satisfies toHaveBeenCalled().
+Mock Ctx Fill Styles contains 'rgba(41, 128, 185, 0.4)'.
+Verify mockCtx.fillRect satisfies toHaveBeenCalled().
+Mock Ctx Fill Styles contains 'rgba(139, 69, 19, 0.4)'.
+Mock Ctx Stroke Styles contains 'rgba(255, 255, 255, 0.8)'.
+Verify mockCtx.fillText satisfies toHaveBeenCalledWith('N', expect.any(Number), expect.any(Number)).
+
+Actual Observations:
+mockCtx.clearRect: called
+mockCtx.fillStyles contains 'rgba(41, 128, 185, 0.4)'
+mockCtx.fillRect: called
+mockCtx.fillStyles contains 'rgba(139, 69, 19, 0.4)'
+mockCtx.strokeStyles contains 'rgba(255, 255, 255, 0.8)'
+mockCtx.fillText: called with 'N', expect.any(Number), expect.any(Number)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockCtx.clearRect).toHaveBeenCalled();
+expect(mockCtx.fillStyles).toContain('rgba(41, 128, 185, 0.4)');
+expect(mockCtx.fillRect).toHaveBeenCalled();
+expect(mockCtx.fillStyles).toContain('rgba(139, 69, 19, 0.4)');
+expect(mockCtx.strokeStyles).toContain('rgba(255, 255, 255, 0.8)');
+expect(mockCtx.fillText).toHaveBeenCalledWith('N', expect.any(Number), expect.any(Number));
+
+Console Logs:
+[INFO] Jest executed test in 56ms
+[PASS] mockCtx.clearRect: called
+[PASS] mockCtx.fillStyles contains 'rgba(41, 128, 185, 0.4)'
+[PASS] mockCtx.fillRect: called
+[PASS] mockCtx.fillStyles contains 'rgba(139, 69, 19, 0.4)'
+[PASS] mockCtx.strokeStyles contains 'rgba(255, 255, 255, 0.8)'
+[PASS] mockCtx.fillText: called with 'N', expect.any(Number), expect.any(Number)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

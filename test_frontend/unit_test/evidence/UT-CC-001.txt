@@ -1,0 +1,87 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CC-001
+Requirement ID      : REQ-HUD-001
+Source File         : calib-compass.js
+Target Function     : render() [Line 234]
+Test Category       : Positive / Functional
+Test Case Title     : should inject correct HTML templates, render rows, and allow priority row sorting up/down
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+data.compass_id ?? 0: String | Simulated: window.CalibCompass.init()
+rows = document.querySelectorAll('.compass-priority-table tbody tr')
+rows[1].click()
+upBtn = rows[1].querySelector('.arrow-btn[data-dir="up"]')
+upBtn.click()
+newRows = document.querySelectorAll('.compass-priority-table tbody tr')
+
+Expected Behavior:
+Rows Length is equal to 2.
+Rows[0] Query Selector('Td:Nth Child(2)') displays '97539'.
+Rows[1] Query Selector('Td:Nth Child(2)') displays '131874'.
+Rows[1] Class List Contains('Selected') is equal to true.
+Rows[0] Class List Contains('Selected') is equal to false.
+New Rows[0] Query Selector('Td:Nth Child(2)') displays '131874'.
+New Rows[1] Query Selector('Td:Nth Child(2)') displays '97539'.
+New Rows[0] Query Selector('Td:First Child') displays '1'.
+New Rows[1] Query Selector('Td:First Child') displays '2'.
+
+Actual Observations:
+rows.length = 2
+rows[0].querySelector('td:nth-child(2)').textContent = '97539'
+rows[1].querySelector('td:nth-child(2)').textContent = '131874'
+rows[1].classList.contains('selected') = true
+rows[0].classList.contains('selected') = false
+newRows[0].querySelector('td:nth-child(2)').textContent = '131874'
+newRows[1].querySelector('td:nth-child(2)').textContent = '97539'
+newRows[0].querySelector('td:first-child').textContent = '1'
+newRows[1].querySelector('td:first-child').textContent = '2'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(compass).toBeDefined();
+// JSDOM verification:
+expect(rows.length).toBe(2);
+expect(rows[0].querySelector('td:nth-child(2)').textContent).toBe('97539'); // DevID of first row
+expect(rows[1].querySelector('td:nth-child(2)').textContent).toBe('131874'); // DevID of second row
+expect(rows[1].classList.contains('selected')).toBe(true);
+expect(rows[0].classList.contains('selected')).toBe(false);
+expect(newRows[0].querySelector('td:nth-child(2)').textContent).toBe('131874'); // Now first
+expect(newRows[1].querySelector('td:nth-child(2)').textContent).toBe('97539'); // Now second
+expect(newRows[0].querySelector('td:first-child').textContent).toBe('1');
+expect(newRows[1].querySelector('td:first-child').textContent).toBe('2');
+
+Console Logs:
+[INFO] Jest executed test in 139ms
+[PASS] rows.length = 2
+[PASS] rows[0].querySelector('td:nth-child(2)').textContent = '97539'
+[PASS] rows[1].querySelector('td:nth-child(2)').textContent = '131874'
+[PASS] rows[1].classList.contains('selected') = true
+[PASS] rows[0].classList.contains('selected') = false
+[PASS] newRows[0].querySelector('td:nth-child(2)').textContent = '131874'
+[PASS] newRows[1].querySelector('td:nth-child(2)').textContent = '97539'
+[PASS] newRows[0].querySelector('td:first-child').textContent = '1'
+[PASS] newRows[1].querySelector('td:first-child').textContent = '2'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

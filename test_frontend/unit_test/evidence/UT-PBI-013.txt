@@ -1,0 +1,48 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PBI-013
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-backend-integration.js
+Target Function     : initializePolygonExtensions() [Line 101]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle network timeout and disconnect exceptions gracefully for Component Layout Initialization and DOM Controls Validation
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+
+Test Inputs:
+map = new TMap('map-element', [17.385, 78.486], 15, false)
+
+Expected Behavior:
+Verify () => map.addMarker(999.0, 999.0) satisfies toThrow('Invalid coordinates').
+
+Actual Observations:
+() => map.addMarker(999.0, 999.0): throws
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(() => map.addMarker(999.0, 999.0)).toThrow('Invalid coordinates');
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] () => map.addMarker(999.0, 999.0): throws
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

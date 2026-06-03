@@ -1,0 +1,86 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CE-021
+Requirement ID      : REQ-HW-001
+Source File         : calib-esc.js
+Target Function     : _onStatusMessage() [Line 65]
+Test Category       : Positive / Functional
+Test Case Title     : should transition dot active classes and trigger toasts on stages
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+statusText = document.getElementById('escStatusMsg')
+stepPreflight = document.getElementById('step-preflight')
+stepSafetyBtn = document.getElementById('step-safety_btn')
+})
+})
+)
+})
+
+Expected Behavior:
+Status Text displays text containing 'Writing Calibration Flag'.
+Step Preflight Class List Contains('Active') is equal to true.
+Step Safety Button Class List Contains('Active') is equal to false.
+Status Text displays text containing 'Power Cycle Required'.
+Step Preflight Class List Contains('Done') is equal to true.
+Step Safety Button Class List Contains('Active') is equal to true.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith().
+Esc Step Track exists.
+Esc Calibrate Button exists.
+
+Actual Observations:
+statusText.textContent contains 'Writing Calibration Flag'
+stepPreflight.classList.contains('active') = true
+stepSafetyBtn.classList.contains('active') = false
+statusText.textContent contains 'Power Cycle Required'
+stepPreflight.classList.contains('done') = true
+stepSafetyBtn.classList.contains('active') = true
+window.SwUtil.toast: toHaveBeenCalledWith
+document.getElementById('escStepTrack').style.display = 'flex'
+document.getElementById('escCalibrateBtn').disabled = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(statusText.textContent).toContain('Writing Calibration Flag');
+expect(stepPreflight.classList.contains('active')).toBe(true);
+expect(stepSafetyBtn.classList.contains('active')).toBe(false);
+expect(statusText.textContent).toContain('Power Cycle Required');
+expect(stepPreflight.classList.contains('done')).toBe(true);
+expect(stepSafetyBtn.classList.contains('active')).toBe(true);
+expect(window.SwUtil.toast).toHaveBeenCalledWith(
+expect(document.getElementById('escStepTrack').style.display).toBe('flex'); // track remains visible on done
+expect(document.getElementById('escCalibrateBtn').disabled).toBe(false); // restored start state
+
+Console Logs:
+[INFO] Jest executed test in 49ms
+[PASS] statusText.textContent contains 'Writing Calibration Flag'
+[PASS] stepPreflight.classList.contains('active') = true
+[PASS] stepSafetyBtn.classList.contains('active') = false
+[PASS] statusText.textContent contains 'Power Cycle Required'
+[PASS] stepPreflight.classList.contains('done') = true
+[PASS] stepSafetyBtn.classList.contains('active') = true
+[PASS] window.SwUtil.toast: toHaveBeenCalledWith
+[PASS] document.getElementById('escStepTrack').style.display = 'flex'
+[PASS] document.getElementById('escCalibrateBtn').disabled = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

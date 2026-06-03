@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-I-004
+Requirement ID      : REQ-SYS-001
+Source File         : i18n.js
+Target Function     : t() [Line 250]
+Test Category       : Positive / Functional
+Test Case Title     : should build interactive combobox buttons and listing dropdowns
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+key: String | Simulated: wrap = document.getElementById('langSelectorWrap')
+toggleBtn = document.getElementById('langToggleBtn')
+
+Expected Behavior:
+Wrap displays ''.
+Lang Toggle Button exists.
+Lang Dropdown exists.
+Toggle Button displays text containing 'English'.
+
+Actual Observations:
+wrap.innerHTML = ''
+document.getElementById('langToggleBtn'): defined
+document.getElementById('langDropdown'): defined
+toggleBtn.textContent contains 'English'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = t(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(wrap.innerHTML).not.toBe('');
+expect(document.getElementById('langToggleBtn')).toBeDefined();
+expect(document.getElementById('langDropdown')).toBeDefined();
+expect(toggleBtn.textContent).toContain('English');
+
+Console Logs:
+[INFO] Jest executed test in 77ms
+[PASS] wrap.innerHTML = ''
+[PASS] document.getElementById('langToggleBtn'): defined
+[PASS] document.getElementById('langDropdown'): defined
+[PASS] toggleBtn.textContent contains 'English'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

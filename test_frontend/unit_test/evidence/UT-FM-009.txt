@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FM-009
+Requirement ID      : REQ-SYS-002
+Source File         : flight-mode.js
+Target Function     : _save() [Line 270]
+Test Category       : Positive / Functional
+Test Case Title     : should re-enable save button on flight_mode_saved message and show toast
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock WebSocket connections.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+window.FlightModes._save()
+saveBtn = container.querySelector('#fmSaveBtn')
+savedMsg = {
+window.ws.onmessage({ data: JSON.stringify(savedMsg) })
+
+Expected Behavior:
+Save Button Disabled is equal to true.
+Save Button Disabled is equal to false.
+Save Button displays text containing 'Save Modes'.
+Verify swUtilMock.toast satisfies toHaveBeenCalledWith(' Autopilot modes saved successfully', false).
+
+Actual Observations:
+saveBtn.disabled = true
+saveBtn.disabled = false
+saveBtn.innerHTML contains 'Save Modes'
+swUtilMock.toast: called with ' Autopilot modes saved successfully', false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(SwUtil.toast).toHaveBeenCalled();
+expect(send).toHaveBeenCalled();
+expect(sendToSelected).toHaveBeenCalled();
+expect(stringify).toHaveBeenCalled();
+expect(warn).toHaveBeenCalled();
+expect(wsMock.send).toHaveBeenCalled();
+// JSDOM verification:
+expect(saveBtn.disabled).toBe(true);
+expect(saveBtn.disabled).toBe(false);
+expect(saveBtn.innerHTML).toContain('Save Modes');
+expect(swUtilMock.toast).toHaveBeenCalledWith(' Autopilot modes saved successfully', false);
+
+Console Logs:
+[INFO] Jest executed test in 33ms
+[PASS] saveBtn.disabled = true
+[PASS] saveBtn.disabled = false
+[PASS] saveBtn.innerHTML contains 'Save Modes'
+[PASS] swUtilMock.toast: called with ' Autopilot modes saved successfully', false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

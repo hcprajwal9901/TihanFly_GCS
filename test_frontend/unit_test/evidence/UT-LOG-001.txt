@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LOG-001
+Requirement ID      : REQ-LOG-001
+Source File         : login.js
+Target Function     : updateConnectionStatus() [Line 91]
+Test Category       : Negative / Robustness
+Test Case Title     : should queue outbound payloads when offline and flush on open
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+type: String, callback: Function | Simulated: socket.connected = false
+socket.ws.readyState = 0; // CONNECTING
+socket.queue = []
+socket.send({ type: 'test_action', payload: '123' })
+sendSpy = jest.spyOn(socket.ws, 'send').mockImplementation(() => {})
+socket.connected = true
+socket.ws.onopen()
+sendSpy.mockRestore()
+
+Expected Behavior:
+Socket Queue Length is equal to 1.
+Socket Queue[0] contains 'test_action'.
+Verify sendSpy satisfies toHaveBeenCalledWith(expect.stringContaining('test_action')).
+Socket Queue Length is equal to 0.
+
+Actual Observations:
+socket.queue.length = 1
+socket.queue[0] contains 'test_action'
+sendSpy: called with expect.stringContaining('test_action')
+socket.queue.length = 0
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = on(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(socket.queue.length).toBe(1);
+expect(socket.queue[0]).toContain('test_action');
+expect(sendSpy).toHaveBeenCalledWith(expect.stringContaining('test_action'));
+expect(socket.queue.length).toBe(0);
+
+Console Logs:
+[INFO] Jest executed test in 28ms
+[PASS] socket.queue.length = 1
+[PASS] socket.queue[0] contains 'test_action'
+[PASS] sendSpy: called with expect.stringContaining('test_action')
+[PASS] socket.queue.length = 0
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

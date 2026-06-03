@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MFM-004
+Requirement ID      : REQ-SYS-002
+Source File         : mission-file-manager.js
+Target Function     : closeDialog() [Line 431]
+Test Category       : Edge Case
+Test Case Title     : should display console warning and alert if waypoint list is empty
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+missionData: String, filename: String, format: String | Simulated: mockWaypointManager.getWaypoints.mockReturnValue([])
+success = missionManager.saveMissionToFile()
+
+Expected Behavior:
+Success is equal to false.
+Verify window.alert satisfies toHaveBeenCalledWith(expect.stringContaining('No waypoints to save')).
+
+Actual Observations:
+success = false
+window.alert: called with expect.stringContaining('No waypoints to save')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(downloadFile).toHaveBeenCalled();
+expect(generateMissionPlannerTXT).toHaveBeenCalled();
+expect(generateQGCMission).toHaveBeenCalled();
+expect(generateWaypointsJSON).toHaveBeenCalled();
+expect(lastIndexOf).toHaveBeenCalled();
+expect(substring).toHaveBeenCalled();
+expect(updateMissionTitle).toHaveBeenCalled();
+// JSDOM verification:
+expect(success).toBe(false);
+expect(window.alert).toHaveBeenCalledWith(expect.stringContaining('No waypoints to save'));
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] success = false
+[PASS] window.alert: called with expect.stringContaining('No waypoints to save')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-019
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Positive / Functional
+Test Case Title     : should wipe previous state buffers and logs when starting a fresh flash session
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+triggerWsMessage({ type: 'firmware_status', stage: 'erase', progress: 50 })
+})
+
+Expected Behavior:
+Erase Bar Style Width is equal to '50%'.
+Erase Bar Style Width is equal to '0%'.
+Write Bar Style Width is equal to '0%'.
+Log Box displays '→ 🚀 Beginning firmware installer stream'.
+
+Actual Observations:
+eraseBar.style.width = '50%'
+eraseBar.style.width = '0%'
+writeBar.style.width = '0%'
+logBox.textContent.trim() = '→ 🚀 Beginning firmware installer stream'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(eraseBar.style.width).toBe('50%');
+expect(eraseBar.style.width).toBe('0%');
+expect(writeBar.style.width).toBe('0%');
+expect(logBox.textContent.trim()).toBe('→ 🚀 Beginning firmware installer stream');
+
+Console Logs:
+[INFO] Jest executed test in 61ms
+[PASS] eraseBar.style.width = '50%'
+[PASS] eraseBar.style.width = '0%'
+[PASS] writeBar.style.width = '0%'
+[PASS] logBox.textContent.trim() = '→ 🚀 Beginning firmware installer stream'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

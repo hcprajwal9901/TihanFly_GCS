@@ -1,0 +1,74 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFW-008
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-weather.js
+Target Function     : moveWeatherToBottomLeft() [Line 11]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle API errors and show localized error messages inside status cards
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+loading = originalCreateElement.call(document, 'div')
+loading.id = 'weatherLoading'
+error = originalCreateElement.call(document, 'div')
+error.id = 'weatherError'
+errorMsg = originalCreateElement.call(document, 'span')
+errorMsg.id = 'weatherErrorMessage'
+document.body.appendChild(loading)
+document.body.appendChild(error)
+document.body.appendChild(errorMsg)
+global.fetch.mockResolvedValue({
+})
+modeInstance.fetchWeatherForPlanMode(12, 80)
+await Promise.resolve()
+await Promise.resolve()
+await Promise.resolve()
+
+Expected Behavior:
+Loading hidden.
+Error displayed.
+Error Message displays text containing 'Invalid API key'.
+Error logged to console.
+
+Actual Observations:
+loading.style.display = 'none'
+error.style.display = 'flex'
+errorMsg.textContent contains 'Invalid API key'
+window.MsgConsole.error: called with '❌ Invalid weather API key'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(loading.style.display).toBe('none');
+expect(error.style.display).toBe('flex');
+expect(errorMsg.textContent).toContain('Invalid API key');
+expect(window.MsgConsole.error).toHaveBeenCalledWith('❌ Invalid weather API key');
+
+Console Logs:
+[INFO] Jest executed test in 7ms
+[PASS] loading.style.display = 'none'
+[PASS] error.style.display = 'flex'
+[PASS] errorMsg.textContent contains 'Invalid API key'
+[PASS] window.MsgConsole.error: called with '❌ Invalid weather API key'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

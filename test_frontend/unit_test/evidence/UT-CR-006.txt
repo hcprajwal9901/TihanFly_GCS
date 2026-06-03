@@ -1,0 +1,71 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CR-006
+Requirement ID      : REQ-HW-001
+Source File         : calib-radio.js
+Target Function     : _onStatusMsg() [Line 32]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger start state when calibrate button is clicked
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+btn = document.getElementById('radioStartBtn')
+status = document.getElementById('radio-status-bar')
+btn.click()
+)
+
+Expected Behavior:
+Button displays 'Complete'.
+Button Class List Contains('Running') is equal to true.
+Status displayed.
+Status displays text containing 'Move all sticks and switches to their full extents'.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('Move all sticks and switches to full extents').
+Verify mockSocket.send satisfies toHaveBeenCalledWith().
+
+Actual Observations:
+btn.textContent = 'Complete'
+btn.classList.contains('running') = true
+status.style.display = 'block'
+status.textContent contains 'Move all sticks and switches to their full extents'
+window.SwUtil.toast: called with 'Move all sticks and switches to full extents'
+mockSocket.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(btn.textContent).toBe('Complete');
+expect(btn.classList.contains('running')).toBe(true);
+expect(status.style.display).toBe('block');
+expect(status.textContent).toContain('Move all sticks and switches to their full extents');
+expect(window.SwUtil.toast).toHaveBeenCalledWith('Move all sticks and switches to full extents');
+expect(mockSocket.send).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 45ms
+[PASS] btn.textContent = 'Complete'
+[PASS] btn.classList.contains('running') = true
+[PASS] status.style.display = 'block'
+[PASS] status.textContent contains 'Move all sticks and switches to their full extents'
+[PASS] window.SwUtil.toast: called with 'Move all sticks and switches to full extents'
+[PASS] mockSocket.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

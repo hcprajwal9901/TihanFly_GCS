@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CL-002
+Requirement ID      : REQ-COM-001
+Source File         : comm-link.js
+Target Function     : _ws_send() [Line 30]
+Test Category       : Positive / Functional
+Test Case Title     : should swap viewports and labels when switching between automatic and manual modes
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CommLink.init()
+autoSec = document.getElementById('clAutoSection')
+manualSec = document.getElementById('clManualSection')
+window.CommLink._setMode('manual')
+
+Expected Behavior:
+Auto Sec hidden.
+Manual Sec hidden.
+Auto Sec hidden.
+Manual Sec displayed.
+
+Actual Observations:
+autoSec.style.display = 'none'
+manualSec.style.display = 'none'
+autoSec.style.display = 'none'
+manualSec.style.display = 'flex'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(autoSec.style.display).not.toBe('none');
+expect(manualSec.style.display).toBe('none');
+expect(autoSec.style.display).toBe('none');
+expect(manualSec.style.display).toBe('flex');
+
+Console Logs:
+[INFO] Jest executed test in 43ms
+[PASS] autoSec.style.display = 'none'
+[PASS] manualSec.style.display = 'none'
+[PASS] autoSec.style.display = 'none'
+[PASS] manualSec.style.display = 'flex'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

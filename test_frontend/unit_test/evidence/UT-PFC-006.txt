@@ -1,0 +1,51 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFC-006
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-core.js
+Target Function     : initializePlanFlightMode() [Line 208]
+Test Category       : Positive / Functional
+Test Case Title     : should forcefully cancel active polygon drawing if exits while drawing
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+window.PolygonManager.isDrawing = true
+window.PlanFlight.exit()
+
+Expected Behavior:
+Verify window.PolygonManager.cancelDrawing satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+window.PolygonManager.cancelDrawing: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(exit).toBeDefined();
+// JSDOM verification:
+expect(window.PolygonManager.cancelDrawing).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] window.PolygonManager.cancelDrawing: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WM-020
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-manager.js
+Target Function     : initializeWaypointManager() [Line 696]
+Test Category       : Positive / Functional
+Test Case Title     : should handle startLandHere setting land mode
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+manager.startLandHere()
+
+Expected Behavior:
+Manager Current Mode is equal to 'land'.
+Verify mockTMap.enableClick satisfies toHaveBeenCalled().
+
+Actual Observations:
+manager.currentMode = 'land'
+mockTMap.enableClick: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(enableClick).toHaveBeenCalled();
+// JSDOM verification:
+expect(manager.currentMode).toBe('land');
+expect(mockTMap.enableClick).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] manager.currentMode = 'land'
+[PASS] mockTMap.enableClick: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

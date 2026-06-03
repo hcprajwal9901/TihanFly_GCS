@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-001
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : buildHTML() [Line 427]
+Test Category       : Positive / Functional
+Test Case Title     : should open overlay, inject buildHTML elements, restore states, and scan ports
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+window.VehicleConfig.open()
+overlay = document.getElementById('vehicleConfigOverlay')
+logBox = document.getElementById('vcFlashLog')
+
+Expected Behavior:
+Vehicle Config Overlay exists.
+Overlay displayed.
+Overlay Query Selector(' Vc Layout') is true.
+Log Box displays text containing 'Vehicle Configuration ready.'.
+Verify window.safeSend satisfies toHaveBeenCalledWith({ type: 'list_serial_ports' }).
+
+Actual Observations:
+document.getElementById('vehicleConfigOverlay').style.display = 'none'
+overlay.style.display = 'flex'
+overlay.querySelector('.vc-layout'): truthy
+logBox.textContent contains 'Vehicle Configuration ready.'
+window.safeSend: called with { type: 'list_serial_ports' }
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(vcPopulatePorts).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('vehicleConfigOverlay').style.display).toBe('none');
+expect(overlay.style.display).toBe('flex');
+expect(overlay.querySelector('.vc-layout')).toBeTruthy();
+expect(logBox.textContent).toContain('Vehicle Configuration ready.');
+expect(window.safeSend).toHaveBeenCalledWith({ type: 'list_serial_ports' });
+
+Console Logs:
+[INFO] Jest executed test in 161ms
+[PASS] document.getElementById('vehicleConfigOverlay').style.display = 'none'
+[PASS] overlay.style.display = 'flex'
+[PASS] overlay.querySelector('.vc-layout'): truthy
+[PASS] logBox.textContent contains 'Vehicle Configuration ready.'
+[PASS] window.safeSend: called with { type: 'list_serial_ports' }
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

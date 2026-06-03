@@ -1,0 +1,79 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFW-007
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-weather.js
+Target Function     : moveWeatherToBottomLeft() [Line 11]
+Test Category       : Positive / Functional
+Test Case Title     : should invoke direct OpenWeatherMap API fetch, toggling loading DOM displays on success
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+loading = originalCreateElement.call(document, 'div')
+loading.id = 'weatherLoading'
+error = originalCreateElement.call(document, 'div')
+error.id = 'weatherError'
+content = originalCreateElement.call(document, 'div')
+content.id = 'weatherContent'
+document.body.appendChild(loading)
+document.body.appendChild(error)
+document.body.appendChild(content)
+mockPayload = {
+global.fetch.mockResolvedValue({
+})
+spyUpdate = jest.spyOn(modeInstance, 'updateWeatherDisplayInPlanMode').mockImplementation(() => {})
+modeInstance.fetchWeatherForPlanMode(17.601, 78.126)
+await new Promise(resolve => setTimeout(resolve, 10))
+spyUpdate.mockRestore()
+
+Expected Behavior:
+Loading displayed.
+Error hidden.
+Content hidden.
+Verify global.fetch satisfies toHaveBeenCalledWith(expect.stringContaining('lat=17.601&lon=78.126')).
+Verify spyUpdate satisfies toHaveBeenCalledWith(mockPayload, 17.601, 78.126).
+
+Actual Observations:
+loading.style.display = 'flex'
+error.style.display = 'none'
+content.style.display = 'none'
+global.fetch: called with expect.stringContaining('lat=17.601&lon=78.126')
+spyUpdate: called with mockPayload, 17.601, 78.126
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(loading.style.display).toBe('flex');
+expect(error.style.display).toBe('none');
+expect(content.style.display).toBe('none');
+expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('lat=17.601&lon=78.126'));
+expect(spyUpdate).toHaveBeenCalledWith(mockPayload, 17.601, 78.126);
+
+Console Logs:
+[INFO] Jest executed test in 36ms
+[PASS] loading.style.display = 'flex'
+[PASS] error.style.display = 'none'
+[PASS] content.style.display = 'none'
+[PASS] global.fetch: called with expect.stringContaining('lat=17.601&lon=78.126')
+[PASS] spyUpdate: called with mockPayload, 17.601, 78.126
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,89 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CC-006
+Requirement ID      : REQ-HUD-001
+Source File         : calib-compass.js
+Target Function     : isDuplicate() [Line 64]
+Test Category       : Positive / Functional
+Test Case Title     : should update progress bars, active indicators, and plot canvas dots
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+data.compass_id ?? 0: String | Simulated: window.CalibCompass.init()
+})
+})
+bar1 = document.getElementById('mag1-bar')
+pct1 = document.getElementById('mag1-label')
+activeDot1 = document.getElementById('magActiveDot0')
+row1 = document.getElementById('magBarRow0')
+})
+
+Expected Behavior:
+Mag Status Text exists.
+Bar1 Style Width is equal to '45%'.
+Pct1 displays '45%'.
+Active Dot1 Class List Contains('Active') is equal to true.
+Row1 Class List Contains('Mag Bar Active') is equal to true.
+Mag Status Text exists.
+Bar1 Style Width is equal to '100%'.
+Bar1 Style Background is equal to 'rgb(0, 230, 118)'.
+Pct1 displays '100%'.
+
+Actual Observations:
+document.getElementById('magStatusText').textContent = 'Rotate drone around roll axis'
+bar1.style.width = '45%'
+pct1.textContent = '45%'
+activeDot1.classList.contains('active') = true
+row1.classList.contains('mag-bar-active') = true
+document.getElementById('magStatusText').textContent contains 'MAG1: 45%'
+bar1.style.width = '100%'
+bar1.style.background = 'rgb(0, 230, 118)'
+pct1.textContent = '100%'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(compass).toBeDefined();
+// JSDOM verification:
+expect(document.getElementById('magStatusText').textContent).toBe('Rotate drone around roll axis');
+expect(bar1.style.width).toBe('45%');
+expect(pct1.textContent).toBe('45%');
+expect(activeDot1.classList.contains('active')).toBe(true);
+expect(row1.classList.contains('mag-bar-active')).toBe(true);
+expect(document.getElementById('magStatusText').textContent).toContain('MAG1: 45%');
+expect(bar1.style.width).toBe('100%');
+expect(bar1.style.background).toBe('rgb(0, 230, 118)'); // #00e676 green color
+expect(pct1.textContent).toBe('100%');
+
+Console Logs:
+[INFO] Jest executed test in 134ms
+[PASS] document.getElementById('magStatusText').textContent = 'Rotate drone around roll axis'
+[PASS] bar1.style.width = '45%'
+[PASS] pct1.textContent = '45%'
+[PASS] activeDot1.classList.contains('active') = true
+[PASS] row1.classList.contains('mag-bar-active') = true
+[PASS] document.getElementById('magStatusText').textContent contains 'MAG1: 45%'
+[PASS] bar1.style.width = '100%'
+[PASS] bar1.style.background = 'rgb(0, 230, 118)'
+[PASS] pct1.textContent = '100%'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

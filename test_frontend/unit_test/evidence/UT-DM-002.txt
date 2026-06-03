@@ -1,0 +1,87 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-DM-002
+Requirement ID      : REQ-SYS-002
+Source File         : dropdown-menu.js
+Target Function     : initializeDropdownMenuStrip() [Line 262]
+Test Category       : Positive / Functional
+Test Case Title     : should show dropdown and hide flight controls when logo is clicked, and toggle back on second click
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+logo.click()
+logo.click()
+
+Expected Behavior:
+Container displayed.
+Container Class List Contains('Hidden') is equal to false.
+Flight Controls hidden.
+Flight Controls Class List Contains('Hidden') is equal to true.
+Log message recorded.
+Container hidden.
+Container Class List Contains('Hidden') is equal to true.
+Flight Controls displayed.
+Flight Controls Class List Contains('Hidden') is equal to false.
+Log message recorded.
+
+Actual Observations:
+container.style.display = 'flex'
+container.classList.contains('hidden') = false
+flightControls.style.display = 'none'
+flightControls.classList.contains('hidden') = true
+logo.classList.contains('menu-active') = true
+container.style.display = 'none'
+container.classList.contains('hidden') = true
+flightControls.style.display = 'flex'
+flightControls.classList.contains('hidden') = false
+logo.classList.contains('menu-active') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(toggle).toBeDefined();
+// JSDOM verification:
+expect(container.style.display).toBe('flex');
+expect(container.classList.contains('hidden')).toBe(false);
+expect(flightControls.style.display).toBe('none');
+expect(flightControls.classList.contains('hidden')).toBe(true);
+expect(logo.classList.contains('menu-active')).toBe(true);
+expect(container.style.display).toBe('none');
+expect(container.classList.contains('hidden')).toBe(true);
+expect(flightControls.style.display).toBe('flex');
+expect(flightControls.classList.contains('hidden')).toBe(false);
+expect(logo.classList.contains('menu-active')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] container.style.display = 'flex'
+[PASS] container.classList.contains('hidden') = false
+[PASS] flightControls.style.display = 'none'
+[PASS] flightControls.classList.contains('hidden') = true
+[PASS] logo.classList.contains('menu-active') = true
+[PASS] container.style.display = 'none'
+[PASS] container.classList.contains('hidden') = true
+[PASS] flightControls.style.display = 'flex'
+[PASS] flightControls.classList.contains('hidden') = false
+[PASS] logo.classList.contains('menu-active') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

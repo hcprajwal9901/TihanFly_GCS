@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CE-003
+Requirement ID      : REQ-SYS-002
+Source File         : command-editor.js
+Target Function     : initializeCommandEditor() [Line 751]
+Test Category       : Positive / Functional
+Test Case Title     : should toggle active classes and display properties when switching tabs
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+editorInstance.show()
+editorInstance.switchTab('waypoints')
+waypointsTab = document.querySelector('[data-tab="waypoints"]')
+missionTab = document.querySelector('[data-tab="mission"]')
+
+Expected Behavior:
+Waypoints Tab Class List Contains('Active') is equal to true.
+Mission Tab Class List Contains('Active') is equal to false.
+Waypoints Panel exists.
+Mission Panel exists.
+
+Actual Observations:
+waypointsTab.classList.contains('active') = true
+missionTab.classList.contains('active') = false
+document.getElementById('waypointsPanel').style.display = 'block'
+document.getElementById('missionPanel').style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(waypointsTab.classList.contains('active')).toBe(true);
+expect(missionTab.classList.contains('active')).toBe(false);
+expect(document.getElementById('waypointsPanel').style.display).toBe('block');
+expect(document.getElementById('missionPanel').style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 29ms
+[PASS] waypointsTab.classList.contains('active') = true
+[PASS] missionTab.classList.contains('active') = false
+[PASS] document.getElementById('waypointsPanel').style.display = 'block'
+[PASS] document.getElementById('missionPanel').style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,52 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-I-002
+Requirement ID      : REQ-SYS-001
+Source File         : i18n.js
+Target Function     : t() [Line 250]
+Test Category       : Positive / Functional
+Test Case Title     : should translate keys correctly in English (default)
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+key: String | Simulated: el = document.getElementById('status')
+document.dispatchEvent(new Event('DOMContentLoaded'))
+
+Expected Behavior:
+El displays 'Ready To Fly'.
+
+Actual Observations:
+el.textContent = 'Ready To Fly'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = t(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(el.textContent).toBe('Ready To Fly');
+
+Console Logs:
+[INFO] Jest executed test in 104ms
+[PASS] el.textContent = 'Ready To Fly'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

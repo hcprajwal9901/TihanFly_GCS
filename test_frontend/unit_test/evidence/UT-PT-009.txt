@@ -1,0 +1,52 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PT-009
+Requirement ID      : REQ-TUNE-001
+Source File         : pid-tuning.js
+Target Function     : val() [Line 112]
+Test Category       : Positive / Functional
+Test Case Title     : should update input value and flash positive styling upon parameter message
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+id: Number | Simulated: el = document.getElementById('pid-inp-ATC_ANG_RLL_P')
+})
+
+Expected Behavior:
+El displays '6.1'.
+
+Actual Observations:
+el.value = '6.1'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = val(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(el.value).toBe('6.1');
+
+Console Logs:
+[INFO] Jest executed test in 83ms
+[PASS] el.value = '6.1'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

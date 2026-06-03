@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-GEO-007
+Requirement ID      : REQ-SAF-002
+Source File         : geofence.js
+Target Function     : safeSendWrap() [Line 64]
+Test Category       : Boundary Value
+Test Case Title     : should clear breach banners when telemetry values return to safe limits
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.TelemetryStore.altitude = 110
+jest.advanceTimersByTime(500)
+window.TelemetryStore.altitude = 45
+jest.advanceTimersByTime(500)
+
+Expected Behavior:
+Gf Breach Banner exists.
+Gf Breach Banner exists.
+
+Actual Observations:
+document.getElementById('gf-breach-banner').classList.contains('visible') = true
+document.getElementById('gf-breach-banner').classList.contains('visible') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('gf-breach-banner').classList.contains('visible')).toBe(true);
+expect(document.getElementById('gf-breach-banner').classList.contains('visible')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 46ms
+[PASS] document.getElementById('gf-breach-banner').classList.contains('visible') = true
+[PASS] document.getElementById('gf-breach-banner').classList.contains('visible') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

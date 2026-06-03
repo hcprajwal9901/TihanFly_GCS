@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PF-009
+Requirement ID      : REQ-TUNE-001
+Source File         : param-full.js
+Target Function     : parseOptionsFromRange() [Line 788]
+Test Category       : Positive / Functional
+Test Case Title     : should search/filter table correctly
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+await initPanel()
+window.dispatchEvent(new CustomEvent('param_all', {
+}))
+searchInput = document.getElementById('fpSearch')
+filterSelect = document.getElementById('fpFilterType')
+searchInput.value = 'RTL'
+searchInput.dispatchEvent(new Event('input'))
+tbody = document.getElementById('fpBody')
+searchInput.value = ''
+filterSelect.value = 'reboot'
+filterSelect.dispatchEvent(new Event('change'))
+
+Expected Behavior:
+Tbody Query Selector('Tr[Data Param="Acro Bal Pitch"]') hidden.
+Tbody Query Selector('Tr[Data Param="Rtl Alt M"]') display state is .
+Tbody Query Selector('Tr[Data Param="Acro Bal Pitch"]') hidden.
+Tbody Query Selector('Tr[Data Param="Rtl Alt M"]') display state is .
+
+Actual Observations:
+tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"]').style.display = 'none'
+tbody.querySelector('tr[data-param="RTL_ALT_M"]').style.display = ''
+tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"]').style.display = 'none'
+tbody.querySelector('tr[data-param="RTL_ALT_M"]').style.display = ''
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"]').style.display).toBe('none');
+expect(tbody.querySelector('tr[data-param="RTL_ALT_M"]').style.display).toBe('');
+expect(tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"]').style.display).toBe('none');
+expect(tbody.querySelector('tr[data-param="RTL_ALT_M"]').style.display).toBe('');
+
+Console Logs:
+[INFO] Jest executed test in 118ms
+[PASS] tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"]').style.display = 'none'
+[PASS] tbody.querySelector('tr[data-param="RTL_ALT_M"]').style.display = ''
+[PASS] tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"]').style.display = 'none'
+[PASS] tbody.querySelector('tr[data-param="RTL_ALT_M"]').style.display = ''
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

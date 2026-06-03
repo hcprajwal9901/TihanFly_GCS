@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-001
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should initialize and append menu div container to the document body
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+menuEl = document.getElementById('waypointContextMenu')
+
+Expected Behavior:
+Verify menuInstance satisfies toBeDefined().
+Verify menuEl satisfies toBeDefined().
+Menu El Class Name is equal to 'waypoint-context-menu'.
+Menu El hidden.
+
+Actual Observations:
+menuInstance: defined
+menuEl: defined
+menuEl.className = 'waypoint-context-menu'
+menuEl.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(attachEventListeners).toHaveBeenCalled();
+expect(connectToWaypointManager).toHaveBeenCalled();
+expect(createMenuElement).toHaveBeenCalled();
+// JSDOM verification:
+expect(menuInstance).toBeDefined();
+expect(menuEl).toBeDefined();
+expect(menuEl.className).toBe('waypoint-context-menu');
+expect(menuEl.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 18ms
+[PASS] menuInstance: defined
+[PASS] menuEl: defined
+[PASS] menuEl.className = 'waypoint-context-menu'
+[PASS] menuEl.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

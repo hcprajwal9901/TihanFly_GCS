@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WM-021
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-manager.js
+Target Function     : initializeWaypointManager() [Line 696]
+Test Category       : Positive / Functional
+Test Case Title     : should toggle routes visibility lines and sync displays
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+manager.addWaypoint(17.601, 78.126)
+manager.addWaypoint(17.605, 78.130)
+manager.showRouteLine = true
+manager.toggleRouteLine()
+manager.toggleRouteLine()
+
+Expected Behavior:
+Manager Show Route Line is equal to false.
+Verify mockTMap.clearRoute satisfies toHaveBeenCalled().
+Manager Show Route Line is equal to true.
+Verify mockTMap.drawRoute satisfies toHaveBeenCalled().
+
+Actual Observations:
+manager.showRouteLine = false
+mockTMap.clearRoute: called
+manager.showRouteLine = true
+mockTMap.drawRoute: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(manager.showRouteLine).toBe(false);
+expect(mockTMap.clearRoute).toHaveBeenCalled();
+expect(manager.showRouteLine).toBe(true);
+expect(mockTMap.drawRoute).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] manager.showRouteLine = false
+[PASS] mockTMap.clearRoute: called
+[PASS] manager.showRouteLine = true
+[PASS] mockTMap.drawRoute: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

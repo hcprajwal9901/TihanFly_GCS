@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LOG-010
+Requirement ID      : REQ-LOG-001
+Source File         : login.js
+Target Function     : updateConnectionStatus() [Line 91]
+Test Category       : Boundary Value
+Test Case Title     : should check admin logins and open dashboard table on success
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+type: String, callback: Function | Simulated: document.getElementById('adminUser').value = 'admin'
+document.getElementById('adminPass').value = 'admin123'
+sendSpy = jest.spyOn(socket, 'send')
+handleAdminLogin()
+})
+socket.handlers['admin_login_success'][0]()
+sendSpy.mockRestore()
+
+Expected Behavior:
+Verify sendSpy satisfies toHaveBeenCalledWith().
+Panel Dashboard exists.
+
+Actual Observations:
+sendSpy: toHaveBeenCalledWith
+document.getElementById('panelDashboard').classList.contains('active') = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = on(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(sendSpy).toHaveBeenCalledWith({
+expect(document.getElementById('panelDashboard').classList.contains('active')).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] sendSpy: toHaveBeenCalledWith
+[PASS] document.getElementById('panelDashboard').classList.contains('active') = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

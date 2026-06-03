@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFMR-007
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-menu-router.js
+Target Function     : handleMenuAction() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should route centering actions to handleCenterActions
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+centerActions = ['center-mission', 'center-vehicle', 'center-home']
+modeInstance.handleMenuAction(action)
+})
+
+Expected Behavior:
+Verify modeInstance.handleCenterActions satisfies toHaveBeenLastCalledWith(action).
+Verify modeInstance.handleCenterActions satisfies toHaveBeenCalledTimes(3).
+
+Actual Observations:
+modeInstance.handleCenterActions: toHaveBeenLastCalledWith(action)
+modeInstance.handleCenterActions: 3 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modeInstance.handleCenterActions).toHaveBeenLastCalledWith(action);
+expect(modeInstance.handleCenterActions).toHaveBeenCalledTimes(3);
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] modeInstance.handleCenterActions: toHaveBeenLastCalledWith(action)
+[PASS] modeInstance.handleCenterActions: 3 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

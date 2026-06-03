@@ -1,0 +1,62 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CL-003
+Requirement ID      : REQ-COM-001
+Source File         : comm-link.js
+Target Function     : _ws_send() [Line 30]
+Test Category       : Positive / Functional
+Test Case Title     : should select different manual communication protocols
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CommLink.init()
+window.CommLink._setMode('manual')
+window.CommLink._setConnType('tcp')
+
+Expected Behavior:
+Cl Udp Form exists.
+Cl Tcp Form exists.
+Cl Udp Form exists.
+Cl Tcp Form exists.
+
+Actual Observations:
+document.getElementById('clUdpForm').style.display = 'none'
+document.getElementById('clTcpForm').style.display = 'none'
+document.getElementById('clUdpForm').style.display = 'none'
+document.getElementById('clTcpForm').style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('clUdpForm').style.display).not.toBe('none');
+expect(document.getElementById('clTcpForm').style.display).toBe('none');
+expect(document.getElementById('clUdpForm').style.display).toBe('none');
+expect(document.getElementById('clTcpForm').style.display).not.toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 49ms
+[PASS] document.getElementById('clUdpForm').style.display = 'none'
+[PASS] document.getElementById('clTcpForm').style.display = 'none'
+[PASS] document.getElementById('clUdpForm').style.display = 'none'
+[PASS] document.getElementById('clTcpForm').style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

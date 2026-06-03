@@ -1,0 +1,76 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MC-013
+Requirement ID      : REQ-SYS-002
+Source File         : messaage-console.js
+Target Function     : initializeMinimalConsole() [Line 189]
+Test Category       : Positive / Functional
+Test Case Title     : should hook flightControls listeners and log messages on callbacks
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+text: String, type = 'info': String | Simulated: takeoffCallback({ altitude: 25 })
+message = container.querySelector('.minimal-console-message')
+landCallback()
+messages = container.querySelectorAll('.minimal-console-message')
+rtlCallback()
+messages = container.querySelectorAll('.minimal-console-message')
+
+Expected Behavior:
+Verify window.flightControls.onTakeoff satisfies toHaveBeenCalled().
+Verify window.flightControls.onLand satisfies toHaveBeenCalled().
+Verify window.flightControls.onRTL satisfies toHaveBeenCalled().
+Message Query Selector(' Minimal Message Text') displays '🚁 Takeoff initiated - Target altitude: 25m'.
+Messages[1] Query Selector(' Minimal Message Text') displays '🛬 Landing sequence initiated'.
+Messages[2] Query Selector(' Minimal Message Text') displays '🏠 Return to launch activated'.
+
+Actual Observations:
+window.flightControls.onTakeoff: called
+window.flightControls.onLand: called
+window.flightControls.onRTL: called
+message.querySelector('.minimal-message-text').textContent = '🚁 Takeoff initiated - Target altitude: 25m'
+messages[1].querySelector('.minimal-message-text').textContent = '🛬 Landing sequence initiated'
+messages[2].querySelector('.minimal-message-text').textContent = '🏠 Return to launch activated'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(addMessage).toHaveBeenCalled();
+expect(initializeMinimalConsole).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.flightControls.onTakeoff).toHaveBeenCalled();
+expect(window.flightControls.onLand).toHaveBeenCalled();
+expect(window.flightControls.onRTL).toHaveBeenCalled();
+expect(message.querySelector('.minimal-message-text').textContent).toBe('🚁 Takeoff initiated - Target altitude: 25m');
+expect(messages[1].querySelector('.minimal-message-text').textContent).toBe('🛬 Landing sequence initiated');
+expect(messages[2].querySelector('.minimal-message-text').textContent).toBe('🏠 Return to launch activated');
+
+Console Logs:
+[INFO] Jest executed test in 13ms
+[PASS] window.flightControls.onTakeoff: called
+[PASS] window.flightControls.onLand: called
+[PASS] window.flightControls.onRTL: called
+[PASS] message.querySelector('.minimal-message-text').textContent = '🚁 Takeoff initiated - Target altitude: 25m'
+[PASS] messages[1].querySelector('.minimal-message-text').textContent = '🛬 Landing sequence initiated'
+[PASS] messages[2].querySelector('.minimal-message-text').textContent = '🏠 Return to launch activated'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

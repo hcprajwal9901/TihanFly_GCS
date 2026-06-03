@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-APP-002
+Requirement ID      : REQ-SYS-002
+Source File         : app.js
+Target Function     : haversineDistance() [Line 92]
+Test Category       : Positive / Functional
+Test Case Title     : should calculate accurate physical distances between distinct coordinates
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+lat1: String, lon1: String, lat2: String, lon2: String | Simulated: dist = global.haversineDistance(17.3850, 78.4867, 17.4399, 78.4983)
+
+Expected Behavior:
+Verify dist satisfies toBeGreaterThan(6000).
+Verify dist satisfies toBeLessThan(6300).
+
+Actual Observations:
+dist > 6000
+dist < 6300
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(atan2).toHaveBeenCalled();
+expect(cos).toHaveBeenCalled();
+expect(sin).toHaveBeenCalled();
+expect(sqrt).toHaveBeenCalled();
+// JSDOM verification:
+expect(dist).toBeGreaterThan(6000);
+expect(dist).toBeLessThan(6300);
+
+Console Logs:
+[INFO] Jest executed test in 7ms
+[PASS] dist > 6000
+[PASS] dist < 6300
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

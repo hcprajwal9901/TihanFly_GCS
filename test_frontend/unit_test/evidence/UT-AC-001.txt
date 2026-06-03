@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AC-001
+Requirement ID      : REQ-CON-001
+Source File         : arm-control.js
+Target Function     : arm-control_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should successfully instantiate the ArmToggle class and bind to DOM elements
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+No external inputs required.
+
+Expected Behavior:
+Verify window.ArmControl satisfies toBeDefined().
+Window Arm Control Button is equal to document.getElementById('armBtn').
+Window Arm Control Label is equal to document.getElementById('armBtnLabel').
+Window Arm Control Icon is equal to document.getElementById('armBtnIcon').
+
+Actual Observations:
+window.ArmControl: defined
+window.ArmControl.btn = document.getElementById('armBtn')
+window.ArmControl.label = document.getElementById('armBtnLabel')
+window.ArmControl.icon = document.getElementById('armBtnIcon')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.ArmControl).toBeDefined();
+expect(window.ArmControl.btn).toBe(document.getElementById('armBtn'));
+expect(window.ArmControl.label).toBe(document.getElementById('armBtnLabel'));
+expect(window.ArmControl.icon).toBe(document.getElementById('armBtnIcon'));
+
+Console Logs:
+[INFO] Jest executed test in 17ms
+[PASS] window.ArmControl: defined
+[PASS] window.ArmControl.btn = document.getElementById('armBtn')
+[PASS] window.ArmControl.label = document.getElementById('armBtnLabel')
+[PASS] window.ArmControl.icon = document.getElementById('armBtnIcon')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,56 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LD-001
+Requirement ID      : REQ-LOG-001
+Source File         : log-download.js
+Target Function     : _injectCSS() [Line 105]
+Test Category       : Positive / Functional
+Test Case Title     : should auto-initialize window.LogDownloadPanel API
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+No external inputs required.
+
+Expected Behavior:
+Verify window.LogDownloadPanel satisfies toBeDefined().
+Typeof Window Log Download Panel Open is equal to 'function'.
+Typeof Window Log Download Panel Close is equal to 'function'.
+
+Actual Observations:
+window.LogDownloadPanel: defined
+typeof window.LogDownloadPanel.open = 'function'
+typeof window.LogDownloadPanel.close = 'function'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.LogDownloadPanel).toBeDefined();
+expect(typeof window.LogDownloadPanel.open).toBe('function');
+expect(typeof window.LogDownloadPanel.close).toBe('function');
+
+Console Logs:
+[INFO] Jest executed test in 7ms
+[PASS] window.LogDownloadPanel: defined
+[PASS] typeof window.LogDownloadPanel.open = 'function'
+[PASS] typeof window.LogDownloadPanel.close = 'function'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

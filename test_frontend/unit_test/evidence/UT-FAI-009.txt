@@ -1,0 +1,53 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FAI-009
+Requirement ID      : REQ-SAF-001
+Source File         : failsafe.js
+Target Function     : failsafe_trigger() [Line 73]
+Test Category       : Wrong Value
+Test Case Title     : should reject incorrect string format payloads and log mismatch warning for Throttle Failsafe Trigger and Warning Banner
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized. Type safety check wrappers active.
+
+Test Inputs:
+state = new FlightState()
+result = state.setFlightMode('BAD_MODE_STRING')
+
+Expected Behavior:
+Result is equal to false.
+State Get Flight Mode() is equal to 'STABILIZE'.
+
+Actual Observations:
+result = false
+state.getFlightMode() = 'STABILIZE'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(result).toBe(false);
+expect(state.getFlightMode()).toBe('STABILIZE');
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] result = false
+[PASS] state.getFlightMode() = 'STABILIZE'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

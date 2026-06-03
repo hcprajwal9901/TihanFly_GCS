@@ -1,0 +1,71 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WIH-002
+Requirement ID      : REQ-SYS-002
+Source File         : weather-integration-helper.js
+Target Function     : integrateWeatherWithMap() [Line 7]
+Test Category       : Positive / Functional
+Test Case Title     : should successfully bind click listeners and route clicks once both exist
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+window.tmap = new global.TMap()
+window.weatherDashboard = {
+global.loadScript('js/weather-integration-helper.js')
+success = window.WeatherIntegration.integrate()
+testLat = 17.4435
+testLng = 78.3772
+window.tmap.clickCallback(testLat, testLng)
+
+Expected Behavior:
+Success is equal to true.
+Click action triggered.
+Click action triggered.
+Verify window.weatherDashboard.onMapClick satisfies toHaveBeenCalledWith(testLat, testLng).
+
+Actual Observations:
+success = true
+window.tmap.clickEnabled = true
+window.tmap.clickCallback: defined
+window.weatherDashboard.onMapClick: called with testLat, testLng
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(Map).toHaveBeenCalled();
+expect(enableClick).toHaveBeenCalled();
+expect(onClick).toHaveBeenCalled();
+expect(onMapClick).toHaveBeenCalled();
+// JSDOM verification:
+expect(success).toBe(true);
+expect(window.tmap.clickEnabled).toBe(true);
+expect(window.tmap.clickCallback).toBeDefined();
+expect(window.weatherDashboard.onMapClick).toHaveBeenCalledWith(testLat, testLng);
+
+Console Logs:
+[INFO] Jest executed test in 7ms
+[PASS] success = true
+[PASS] window.tmap.clickEnabled = true
+[PASS] window.tmap.clickCallback: defined
+[PASS] window.weatherDashboard.onMapClick: called with testLat, testLng
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

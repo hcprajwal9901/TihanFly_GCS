@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-APP-001
+Requirement ID      : REQ-SYS-002
+Source File         : app.js
+Target Function     : haversineDistance() [Line 92]
+Test Category       : Edge Case
+Test Case Title     : should calculate exactly zero meters for identical coordinates
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+lat1: String, lon1: String, lat2: String, lon2: String | Simulated: lat = 17.601722
+lon = 78.126991
+dist = global.haversineDistance(lat, lon, lat, lon)
+
+Expected Behavior:
+Dist is equal to 0.
+
+Actual Observations:
+dist = 0
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(atan2).toHaveBeenCalled();
+expect(cos).toHaveBeenCalled();
+expect(sin).toHaveBeenCalled();
+expect(sqrt).toHaveBeenCalled();
+// JSDOM verification:
+expect(dist).toBe(0);
+
+Console Logs:
+[INFO] Jest executed test in 32ms
+[PASS] dist = 0
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

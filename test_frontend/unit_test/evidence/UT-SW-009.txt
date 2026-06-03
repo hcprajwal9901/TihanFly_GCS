@@ -1,0 +1,89 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-SW-009
+Requirement ID      : REQ-SYS-001
+Source File         : settings-window.js
+Target Function     : buildShellHTML() [Line 53]
+Test Category       : Negative / Robustness
+Test Case Title     : should trigger micro-animated success and error toasts
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+msg: String, err: String | Simulated: toastEl = document.getElementById('settingsToast')
+window.SwUtil.toast('Ginseng written', false)
+jest.advanceTimersByTime(3000)
+window.SwUtil.toast('IMU Saturated', true)
+
+Expected Behavior:
+Toast El Class List Contains('Show') is equal to false.
+Toast El displays text containing '✓'.
+Toast El displays text containing 'Ginseng written'.
+Toast El Class Name contains 'success'.
+Toast El Class List Contains('Show') is equal to true.
+Toast El Class List Contains('Show') is equal to false.
+Toast El displays text containing '✕'.
+Toast El displays text containing 'IMU Saturated'.
+Toast El Class Name contains 'error'.
+Toast El Class List Contains('Show') is equal to true.
+
+Actual Observations:
+toastEl.classList.contains('show') = false
+toastEl.textContent contains '✓'
+toastEl.textContent contains 'Ginseng written'
+toastEl.className contains 'success'
+toastEl.classList.contains('show') = true
+toastEl.classList.contains('show') = false
+toastEl.textContent contains '✕'
+toastEl.textContent contains 'IMU Saturated'
+toastEl.className contains 'error'
+toastEl.classList.contains('show') = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(toast).toBeDefined();
+// JSDOM verification:
+expect(toastEl.classList.contains('show')).toBe(false);
+expect(toastEl.textContent).toContain('✓');
+expect(toastEl.textContent).toContain('Ginseng written');
+expect(toastEl.className).toContain('success');
+expect(toastEl.classList.contains('show')).toBe(true);
+expect(toastEl.classList.contains('show')).toBe(false);
+expect(toastEl.textContent).toContain('✕');
+expect(toastEl.textContent).toContain('IMU Saturated');
+expect(toastEl.className).toContain('error');
+expect(toastEl.classList.contains('show')).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 43ms
+[PASS] toastEl.classList.contains('show') = false
+[PASS] toastEl.textContent contains '✓'
+[PASS] toastEl.textContent contains 'Ginseng written'
+[PASS] toastEl.className contains 'success'
+[PASS] toastEl.classList.contains('show') = true
+[PASS] toastEl.classList.contains('show') = false
+[PASS] toastEl.textContent contains '✕'
+[PASS] toastEl.textContent contains 'IMU Saturated'
+[PASS] toastEl.className contains 'error'
+[PASS] toastEl.classList.contains('show') = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

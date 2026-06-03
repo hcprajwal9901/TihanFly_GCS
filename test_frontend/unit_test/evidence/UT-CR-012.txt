@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CR-012
+Requirement ID      : REQ-HW-001
+Source File         : calib-radio.js
+Target Function     : _onStatusMsg() [Line 32]
+Test Category       : Positive / Functional
+Test Case Title     : should display status messages and fire toasts
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+status = document.getElementById('radio-status-bar')
+})
+})
+
+Expected Behavior:
+Status displayed.
+Status displays 'PreArm: RC calibrating'.
+Verify window.SwUtil.toast satisfies toHaveBeenCalled().
+Status displays 'Radio parameters verified!'.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('Radio parameters verified!').
+
+Actual Observations:
+status.style.display = 'block'
+status.textContent = 'PreArm: RC calibrating'
+window.SwUtil.toast: not called
+status.textContent = 'Radio parameters verified!'
+window.SwUtil.toast: called with 'Radio parameters verified!'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(status.style.display).toBe('block');
+expect(status.textContent).toBe('PreArm: RC calibrating');
+expect(window.SwUtil.toast).not.toHaveBeenCalled();
+expect(status.textContent).toBe('Radio parameters verified!');
+expect(window.SwUtil.toast).toHaveBeenCalledWith('Radio parameters verified!');
+
+Console Logs:
+[INFO] Jest executed test in 37ms
+[PASS] status.style.display = 'block'
+[PASS] status.textContent = 'PreArm: RC calibrating'
+[PASS] window.SwUtil.toast: not called
+[PASS] status.textContent = 'Radio parameters verified!'
+[PASS] window.SwUtil.toast: called with 'Radio parameters verified!'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

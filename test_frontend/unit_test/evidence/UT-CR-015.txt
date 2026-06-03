@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CR-015
+Requirement ID      : REQ-HW-001
+Source File         : calib-radio.js
+Target Function     : _onStatusMsg() [Line 32]
+Test Category       : Positive / Functional
+Test Case Title     : should dismiss popup if clicking overlay background
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+document.getElementById('radioStartBtn').click()
+document.getElementById('radioStartBtn').click()
+})
+overlay = document.getElementById('mp-calib-popup-overlay')
+clickEvent = new Event('click')
+Object.defineProperty(clickEvent, 'target', { value: overlay, enumerable: true })
+overlay.dispatchEvent(clickEvent)
+advanceManualTimers(200)
+
+Expected Behavior:
+Overlay is true.
+Document Body Query Selector(' Mp Calib Popup Overlay') is null.
+
+Actual Observations:
+overlay: truthy
+document.body.querySelector('#mp-calib-popup-overlay'): null
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(overlay).toBeTruthy();
+expect(document.body.querySelector('#mp-calib-popup-overlay')).toBeNull();
+
+Console Logs:
+[INFO] Jest executed test in 99ms
+[PASS] overlay: truthy
+[PASS] document.body.querySelector('#mp-calib-popup-overlay'): null
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

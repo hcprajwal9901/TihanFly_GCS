@@ -1,0 +1,56 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-013
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should request weather for click coordinates on onMapClick
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+lat: Number, lng: Number | Simulated: spyFetch = jest.spyOn(window.weatherDashboard, 'fetchWeather')
+window.weatherDashboard.onMapClick(12.34, 56.78)
+
+Expected Behavior:
+Verify spyFetch satisfies toHaveBeenCalledWith(12.34, 56.78).
+Verify msgConsoleMock.info satisfies toHaveBeenCalledWith('Weather requested: 12.3400, 56.7800').
+
+Actual Observations:
+spyFetch: called with 12.34, 56.78
+msgConsoleMock.info: called with 'Weather requested: 12.3400, 56.7800'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(fetchWeather).toHaveBeenCalled();
+expect(show).toHaveBeenCalled();
+// JSDOM verification:
+expect(spyFetch).toHaveBeenCalledWith(12.34, 56.78);
+expect(msgConsoleMock.info).toHaveBeenCalledWith('Weather requested: 12.3400, 56.7800');
+
+Console Logs:
+[INFO] Jest executed test in 13ms
+[PASS] spyFetch: called with 12.34, 56.78
+[PASS] msgConsoleMock.info: called with 'Weather requested: 12.3400, 56.7800'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

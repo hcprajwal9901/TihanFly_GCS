@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CC-020
+Requirement ID      : REQ-SYS-002
+Source File         : camera-controls.js
+Target Function     : CameraControls() [Line 16]
+Test Category       : Positive / Functional
+Test Case Title     : should capture photo frames and trigger Electron save dialogs
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CameraControls.init()
+jest.useFakeTimers()
+HTMLCanvasElement.prototype.toBlob = jest.fn().mockImplementation((cb) => {
+cb(new Blob(['photo-bytes'], { type: 'image/png' }))
+})
+window.CameraControls.capturePhoto()
+jest.advanceTimersByTime(20)
+)
+)
+await Promise.resolve()
+await Promise.resolve()
+toast = document.getElementById('photoSavedToast')
+jest.useRealTimers()
+
+Expected Behavior:
+WebSocket notification sent.
+Electron save dialog triggered.
+Toast displays '📷 photo_123.png'.
+
+Actual Observations:
+window.ws.send: toHaveBeenCalledWith
+window.electronSaveFile.save: toHaveBeenCalledWith
+toast.textContent = '📷 photo_123.png'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.ws.send).toHaveBeenCalledWith(
+expect(window.electronSaveFile.save).toHaveBeenCalledWith(
+expect(toast.textContent).toBe('📷 photo_123.png');
+
+Console Logs:
+[INFO] Jest executed test in 45ms
+[PASS] window.ws.send: toHaveBeenCalledWith
+[PASS] window.electronSaveFile.save: toHaveBeenCalledWith
+[PASS] toast.textContent = '📷 photo_123.png'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

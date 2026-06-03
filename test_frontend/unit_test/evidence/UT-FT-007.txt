@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FT-007
+Requirement ID      : REQ-SYS-002
+Source File         : frame-type.js
+Target Function     : send() [Line 64]
+Test Category       : Wrong Value
+Test Case Title     : should write FRAME_TYPE individually and update status
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+writeTypeBtn = document.getElementById('ft-write-type')
+typeSel = document.getElementById('ft-type-select')
+typeSel.value = '3'; // H layout
+typeSel.dispatchEvent(new Event('change'))
+window.safeSend.mockClear()
+writeTypeBtn.click()
+})
+})
+
+Expected Behavior:
+Verify window.safeSend satisfies toHaveBeenCalledWith().
+Ft Status Message exists.
+Ft Status Message exists.
+
+Actual Observations:
+window.safeSend: toHaveBeenCalledWith
+document.getElementById('ft-status-msg').textContent contains 'Writing FRAME_TYPE = 3'
+document.getElementById('ft-status-msg').textContent contains 'Reboot required'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.safeSend).toHaveBeenCalledWith({
+expect(document.getElementById('ft-status-msg').textContent).toContain('Writing FRAME_TYPE = 3');
+expect(document.getElementById('ft-status-msg').textContent).toContain('Reboot required');
+
+Console Logs:
+[INFO] Jest executed test in 50ms
+[PASS] window.safeSend: toHaveBeenCalledWith
+[PASS] document.getElementById('ft-status-msg').textContent contains 'Writing FRAME_TYPE = 3'
+[PASS] document.getElementById('ft-status-msg').textContent contains 'Reboot required'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,56 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-COM-003
+Requirement ID      : REQ-HUD-001
+Source File         : compass.js
+Target Function     : compass_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should set rotations angle and update heading golden labels
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+compass.setHeading(90)
+
+Expected Behavior:
+Compass Get Heading() is equal to 90.
+Heading Value exists.
+Compass Compass Element Style Transform is equal to 'translate(-50%, -50%) rotate(90deg)'.
+
+Actual Observations:
+compass.getHeading() = 90
+document.getElementById('headingValue').textContent = '90°'
+compass.compassElement.style.transform = 'translate(-50%, -50%) rotate(90deg)'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(compass.getHeading()).toBe(90);
+expect(document.getElementById('headingValue').textContent).toBe('90°');
+expect(compass.compassElement.style.transform).toBe('translate(-50%, -50%) rotate(90deg)');
+
+Console Logs:
+[INFO] Jest executed test in 22ms
+[PASS] compass.getHeading() = 90
+[PASS] document.getElementById('headingValue').textContent = '90°'
+[PASS] compass.compassElement.style.transform = 'translate(-50%, -50%) rotate(90deg)'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

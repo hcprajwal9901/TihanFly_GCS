@@ -1,0 +1,65 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PF-006
+Requirement ID      : REQ-TUNE-001
+Source File         : param-full.js
+Target Function     : parseOptionsFromRange() [Line 788]
+Test Category       : Positive / Functional
+Test Case Title     : should mark rows as dirty when values are edited
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+await initPanel()
+window.dispatchEvent(new CustomEvent('param_all', {
+}))
+tbody = document.getElementById('fpBody')
+row = tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"]')
+input = row.querySelector('.param-val-input')
+input.value = '2.8'
+input.dispatchEvent(new Event('input'))
+escEvent = new KeyboardEvent('keydown', { key: 'Escape' })
+input.dispatchEvent(escEvent)
+
+Expected Behavior:
+Row Class List Contains('Param Dirty') is equal to true.
+Input displays '1.5'.
+Row Class List Contains('Param Dirty') is equal to false.
+
+Actual Observations:
+row.classList.contains('param-dirty') = true
+input.value = '1.5'
+row.classList.contains('param-dirty') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(row.classList.contains('param-dirty')).toBe(true);
+expect(input.value).toBe('1.5');
+expect(row.classList.contains('param-dirty')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 51ms
+[PASS] row.classList.contains('param-dirty') = true
+[PASS] input.value = '1.5'
+[PASS] row.classList.contains('param-dirty') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,75 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-IT-001
+Requirement ID      : REQ-SYS-002
+Source File         : initial-tune.js
+Target Function     : init() [Line 368]
+Test Category       : Positive / Functional
+Test Case Title     : should inject correct form elements, calculate buttons, and initially hide preview section
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+previewSection = document.getElementById('it-preview-section')
+statusMsg = document.getElementById('it-status-msg')
+
+Expected Behavior:
+It Prereq Banner exists.
+It Prop Size exists.
+It Cell Count exists.
+It Chemistry exists.
+It Calc Button exists.
+Preview Section hidden.
+Status Message displays text containing 'Enter your airframe details above'.
+
+Actual Observations:
+document.querySelector('.it-prereq-banner'): truthy
+document.getElementById('it-prop-size'): truthy
+document.getElementById('it-cell-count'): truthy
+document.getElementById('it-chemistry'): truthy
+document.getElementById('it-calc-btn'): truthy
+previewSection.style.display = 'none'
+statusMsg.textContent contains 'Enter your airframe details above'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.querySelector('.it-prereq-banner')).toBeTruthy();
+expect(document.getElementById('it-prop-size')).toBeTruthy();
+expect(document.getElementById('it-cell-count')).toBeTruthy();
+expect(document.getElementById('it-chemistry')).toBeTruthy();
+expect(document.getElementById('it-calc-btn')).toBeTruthy();
+expect(previewSection.style.display).toBe('none');
+expect(statusMsg.textContent).toContain('Enter your airframe details above');
+
+Console Logs:
+[INFO] Jest executed test in 65ms
+[PASS] document.querySelector('.it-prereq-banner'): truthy
+[PASS] document.getElementById('it-prop-size'): truthy
+[PASS] document.getElementById('it-cell-count'): truthy
+[PASS] document.getElementById('it-chemistry'): truthy
+[PASS] document.getElementById('it-calc-btn'): truthy
+[PASS] previewSection.style.display = 'none'
+[PASS] statusMsg.textContent contains 'Enter your airframe details above'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

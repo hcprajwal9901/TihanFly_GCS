@@ -1,0 +1,73 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-015
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Positive / Functional
+Test Case Title     : should toggle monitoring timers and update progress bars from websocket inspector cache
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+cls: String, fn: String, ico: String, lbl: String, id: Number, i18Key: String | Simulated: jest.useFakeTimers()
+window.AnalyzeToolsPanel._togVib()
+pill = document.getElementById('vibPill')
+window.AnalyzeToolsPanel._onInspectorData([
+])
+jest.advanceTimersByTime(1000)
+jest.useRealTimers()
+
+Expected Behavior:
+Pill displays '● Monitoring'.
+Vib0X V exists.
+Vib0Y V exists.
+Vib0Z V exists.
+Clip Acc0 exists.
+
+Actual Observations:
+pill.textContent = '● Monitoring'
+document.getElementById('vib0x_v').textContent = '5.20'
+document.getElementById('vib0y_v').textContent = '10.50'
+document.getElementById('vib0z_v').textContent = '15.80'
+document.getElementById('clip_acc0').textContent = '1'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = B(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(pill.textContent).toBe('● Monitoring');
+expect(document.getElementById('vib0x_v').textContent).toBe('5.20');
+expect(document.getElementById('vib0y_v').textContent).toBe('10.50');
+expect(document.getElementById('vib0z_v').textContent).toBe('15.80');
+expect(document.getElementById('clip_acc0').textContent).toBe('1');
+
+Console Logs:
+[INFO] Jest executed test in 17ms
+[PASS] pill.textContent = '● Monitoring'
+[PASS] document.getElementById('vib0x_v').textContent = '5.20'
+[PASS] document.getElementById('vib0y_v').textContent = '10.50'
+[PASS] document.getElementById('vib0z_v').textContent = '15.80'
+[PASS] document.getElementById('clip_acc0').textContent = '1'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

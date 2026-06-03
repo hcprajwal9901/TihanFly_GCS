@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FC-007
+Requirement ID      : REQ-CON-001
+Source File         : flight-controls.js
+Target Function     : flight-controls_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger Land command on landBtn click
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+landBtn = document.getElementById('landBtn')
+landBtn.click()
+
+Expected Behavior:
+Verify window.sendCommand satisfies toHaveBeenCalledWith('LAND').
+Window Flight Controls Is Command Executing() is equal to true.
+Window Flight Controls Get Current Command() is equal to 'LAND'.
+
+Actual Observations:
+window.sendCommand: called with 'LAND'
+window.FlightControls.isCommandExecuting() = true
+window.FlightControls.getCurrentCommand() = 'LAND'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.sendCommand).toHaveBeenCalledWith('LAND');
+expect(window.FlightControls.isCommandExecuting()).toBe(true);
+expect(window.FlightControls.getCurrentCommand()).toBe('LAND');
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] window.sendCommand: called with 'LAND'
+[PASS] window.FlightControls.isCommandExecuting() = true
+[PASS] window.FlightControls.getCurrentCommand() = 'LAND'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

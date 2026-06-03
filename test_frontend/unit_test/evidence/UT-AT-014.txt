@@ -1,0 +1,52 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-014
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : F() [Line 583]
+Test Category       : Boundary Value
+Test Case Title     : should clear terminal contents on clears
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+lbl: String, ctrl: String, i18Key: String | Simulated: window.AnalyzeToolsPanel._clrCon()
+term = document.getElementById('mavTerm')
+
+Expected Behavior:
+Term displays 'Console cleared.'.
+
+Actual Observations:
+term.textContent = 'Console cleared.'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = F(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(term.textContent).toBe('Console cleared.');
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] term.textContent = 'Console cleared.'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

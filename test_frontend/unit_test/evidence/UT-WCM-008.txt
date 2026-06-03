@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-008
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should execute clear-mission after asking confirm dialogues
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.confirm.mockReturnValueOnce(false)
+menuInstance.handleMenuAction('clear-mission')
+window.confirm.mockReturnValueOnce(true)
+menuInstance.handleMenuAction('clear-mission')
+
+Expected Behavior:
+Verify mockWaypointManager.clearAllWaypoints satisfies toHaveBeenCalled().
+Verify mockWaypointManager.clearAllWaypoints satisfies toHaveBeenCalled().
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('Mission cleared').
+
+Actual Observations:
+mockWaypointManager.clearAllWaypoints: not called
+mockWaypointManager.clearAllWaypoints: called
+window.MsgConsole.success: called with 'Mission cleared'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockWaypointManager.clearAllWaypoints).not.toHaveBeenCalled();
+expect(mockWaypointManager.clearAllWaypoints).toHaveBeenCalled();
+expect(window.MsgConsole.success).toHaveBeenCalledWith('Mission cleared');
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] mockWaypointManager.clearAllWaypoints: not called
+[PASS] mockWaypointManager.clearAllWaypoints: called
+[PASS] window.MsgConsole.success: called with 'Mission cleared'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

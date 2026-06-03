@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AC-003
+Requirement ID      : REQ-CON-001
+Source File         : arm-control.js
+Target Function     : arm-control_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should add the armed CSS class and change text labels when armed
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+armToggle = window.ArmControl
+armToggle.setArmedState(true)
+
+Expected Behavior:
+Arm Toggle Get State() is equal to true.
+Arm Toggle Button Class List Contains('Armed') is equal to true.
+Arm Toggle Label displays 'DISARM'.
+Arm Toggle Icon Alt is equal to 'Disarm'.
+
+Actual Observations:
+armToggle.getState() = true
+armToggle.btn.classList.contains('armed') = true
+armToggle.label.textContent = 'DISARM'
+armToggle.icon.alt = 'Disarm'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(armToggle.getState()).toBe(true);
+expect(armToggle.btn.classList.contains('armed')).toBe(true);
+expect(armToggle.label.textContent).toBe('DISARM');
+expect(armToggle.icon.alt).toBe('Disarm');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] armToggle.getState() = true
+[PASS] armToggle.btn.classList.contains('armed') = true
+[PASS] armToggle.label.textContent = 'DISARM'
+[PASS] armToggle.icon.alt = 'Disarm'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

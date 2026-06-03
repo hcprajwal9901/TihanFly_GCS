@@ -1,0 +1,76 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VS-011
+Requirement ID      : REQ-SYS-002
+Source File         : video-stream.js
+Target Function     : VideoStreamController() [Line 16]
+Test Category       : Positive / Functional
+Test Case Title     : should fall back to backward-compatible global VideoStream shim methods
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+connectSpy = jest.spyOn(VideoStreamController, 'connect').mockImplementation(() => {})
+window.VideoStream.connect()
+disconnectSpy = jest.spyOn(VideoStreamController, 'disconnect').mockImplementation(() => {})
+window.VideoStream.disconnect()
+isStreamingSpy = jest.spyOn(VideoStreamController, 'isStreaming').mockReturnValue(true)
+setRtspSpy = jest.spyOn(VideoStreamController, 'setRtspUrl').mockImplementation(() => {})
+window.VideoStream.setRtspUrl('rtsp://test')
+getRtspSpy = jest.spyOn(VideoStreamController, 'getRtspUrl').mockReturnValue('rtsp://test')
+connectSpy.mockRestore()
+disconnectSpy.mockRestore()
+isStreamingSpy.mockRestore()
+setRtspSpy.mockRestore()
+getRtspSpy.mockRestore()
+
+Expected Behavior:
+Verify connectSpy satisfies toHaveBeenCalled().
+Verify disconnectSpy satisfies toHaveBeenCalled().
+Window Video Stream Is Streaming() is equal to true.
+Verify setRtspSpy satisfies toHaveBeenCalledWith('rtsp://test').
+Window Video Stream Get Rtsp Url() is equal to 'rtsp://test'.
+
+Actual Observations:
+connectSpy: called
+disconnectSpy: called
+window.VideoStream.isStreaming() = true
+setRtspSpy: called with 'rtsp://test'
+window.VideoStream.getRtspUrl() = 'rtsp://test'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(connectSpy).toHaveBeenCalled();
+expect(disconnectSpy).toHaveBeenCalled();
+expect(window.VideoStream.isStreaming()).toBe(true);
+expect(setRtspSpy).toHaveBeenCalledWith('rtsp://test');
+expect(window.VideoStream.getRtspUrl()).toBe('rtsp://test');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] connectSpy: called
+[PASS] disconnectSpy: called
+[PASS] window.VideoStream.isStreaming() = true
+[PASS] setRtspSpy: called with 'rtsp://test'
+[PASS] window.VideoStream.getRtspUrl() = 'rtsp://test'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

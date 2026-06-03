@@ -1,0 +1,72 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-017
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Positive / Functional
+Test Case Title     : should validate JSON syntax in uploads and show warning message for missing image field
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+createdInput = null
+originalCreate = document.createElement
+document.createElement = function(tagName) {
+el = originalCreate.call(document, tagName)
+createdInput = el
+installBtn.click()
+invalidJsonFile = {
+})
+createdInput.dispatchEvent(new Event('change'))
+logBox = document.getElementById('vcFlashLog')
+installBtn.click()
+missingImageFile = {
+})
+createdInput.dispatchEvent(new Event('change'))
+logBox = document.getElementById('vcFlashLog')
+document.createElement = originalCreate
+})
+
+Expected Behavior:
+Log Box displays text containing 'APJ file is not valid JSON'.
+Install Button Disabled is equal to false.
+Log Box displays text containing 'APJ file has no image field'.
+
+Actual Observations:
+logBox.textContent contains 'APJ file is not valid JSON'
+installBtn.disabled = false
+logBox.textContent contains 'APJ file has no "image" field'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(logBox.textContent).toContain('APJ file is not valid JSON');
+expect(installBtn.disabled).toBe(false);
+expect(logBox.textContent).toContain('APJ file has no "image" field');
+
+Console Logs:
+[INFO] Jest executed test in 73ms
+[PASS] logBox.textContent contains 'APJ file is not valid JSON'
+[PASS] installBtn.disabled = false
+[PASS] logBox.textContent contains 'APJ file has no "image" field'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

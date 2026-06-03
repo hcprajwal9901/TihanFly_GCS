@@ -1,0 +1,73 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-013
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Positive / Functional
+Test Case Title     : should disable install buttons until BOTH drone is unlocked and port is selected
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.VehicleConfig.open()
+card = document.querySelector('.vc-drone-card[data-drone="spider"]')
+installBtn = card.querySelector('.vc-btn-install')
+})
+document.querySelector('.vc-port-row').click()
+card.querySelector('.vc-btn-unlock').click()
+backdrop = document.querySelector('.vc-pw-backdrop')
+backdrop.querySelector('#vcPwInput').value = 'spider@123'
+backdrop.querySelector('#vcPwConfirm').click()
+jest.advanceTimersByTime(150)
+
+Expected Behavior:
+Install Button Disabled is equal to true.
+Install Button Disabled is equal to true.
+Install Button Disabled is equal to false.
+Install Button Style Opacity is equal to ''.
+Install Button Style Cursor is equal to 'pointer'.
+
+Actual Observations:
+installBtn.disabled = true
+installBtn.disabled = true
+installBtn.disabled = false
+installBtn.style.opacity = ''
+installBtn.style.cursor = 'pointer'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(installBtn.disabled).toBe(true);
+expect(installBtn.disabled).toBe(true);
+expect(installBtn.disabled).toBe(false);
+expect(installBtn.style.opacity).toBe('');
+expect(installBtn.style.cursor).toBe('pointer');
+
+Console Logs:
+[INFO] Jest executed test in 67ms
+[PASS] installBtn.disabled = true
+[PASS] installBtn.disabled = true
+[PASS] installBtn.disabled = false
+[PASS] installBtn.style.opacity = ''
+[PASS] installBtn.style.cursor = 'pointer'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

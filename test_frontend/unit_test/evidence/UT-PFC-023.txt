@@ -1,0 +1,52 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFC-023
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-center.js
+Target Function     : handleCenterActions() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should warning alert if vehicle position or tmap is missing
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.centerVehicle()
+
+Expected Behavior:
+Verify window.MsgConsole.warning satisfies toHaveBeenCalledWith('Vehicle position not available').
+Verify global.alert satisfies toHaveBeenCalledWith(expect.stringContaining('Vehicle position not available')).
+
+Actual Observations:
+window.MsgConsole.warning: called with 'Vehicle position not available'
+global.alert: called with expect.stringContaining('Vehicle position not available')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.warning).toHaveBeenCalledWith('Vehicle position not available');
+expect(global.alert).toHaveBeenCalledWith(expect.stringContaining('Vehicle position not available'));
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] window.MsgConsole.warning: called with 'Vehicle position not available'
+[PASS] global.alert: called with expect.stringContaining('Vehicle position not available')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

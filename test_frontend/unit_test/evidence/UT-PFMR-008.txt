@@ -1,0 +1,48 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFMR-008
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-menu-router.js
+Target Function     : handleMenuAction() [Line 6]
+Test Category       : Wrong Value
+Test Case Title     : should handle unimplemented/unknown menu action strings
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.handleMenuAction('calibrate-sensor-action')
+
+Expected Behavior:
+Verify window.MsgConsole.warning satisfies toHaveBeenCalledWith('Action not yet implemented: calibrate sensor action').
+
+Actual Observations:
+window.MsgConsole.warning: called with 'Action not yet implemented: calibrate sensor action'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.warning).toHaveBeenCalledWith('Action not yet implemented: calibrate sensor action');
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] window.MsgConsole.warning: called with 'Action not yet implemented: calibrate sensor action'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

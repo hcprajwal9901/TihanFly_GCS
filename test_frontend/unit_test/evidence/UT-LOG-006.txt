@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LOG-006
+Requirement ID      : REQ-LOG-001
+Source File         : login.js
+Target Function     : updateConnectionStatus() [Line 91]
+Test Category       : Negative / Robustness
+Test Case Title     : should reject login forms if email does not have a @ character
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+type: String, callback: Function | Simulated: document.getElementById('loginEmail').value = 'bademail'
+document.getElementById('loginPassword').value = 'mypassword'
+handleLogin()
+alertNode = document.getElementById('authAlert')
+
+Expected Behavior:
+Alert Node displayed.
+Alert Node displays text containing 'Enter a valid email address.'.
+
+Actual Observations:
+alertNode.style.display = 'block'
+alertNode.textContent contains 'Enter a valid email address.'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = on(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(alertNode.style.display).toBe('block');
+expect(alertNode.textContent).toContain('Enter a valid email address.');
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] alertNode.style.display = 'block'
+[PASS] alertNode.textContent contains 'Enter a valid email address.'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

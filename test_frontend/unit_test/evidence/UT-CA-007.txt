@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CA-007
+Requirement ID      : REQ-HW-001
+Source File         : calib-accel.js
+Target Function     : buildCubeGrid() [Line 58]
+Test Category       : Negative / Robustness
+Test Case Title     : should trigger error status on failed results
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CalibAccel.init()
+})
+
+Expected Behavior:
+Accel Status exists.
+Accel Error Banner exists.
+Accel Error Text exists.
+
+Actual Observations:
+document.getElementById('accelStatus').textContent = 'FAILED'
+document.getElementById('accelErrorBanner').style.display = 'flex'
+document.getElementById('accelErrorText').textContent contains 'Calibration bad alignment'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('accelStatus').textContent).toBe('FAILED');
+expect(document.getElementById('accelErrorBanner').style.display).toBe('flex');
+expect(document.getElementById('accelErrorText').textContent).toContain('Calibration bad alignment');
+
+Console Logs:
+[INFO] Jest executed test in 84ms
+[PASS] document.getElementById('accelStatus').textContent = 'FAILED'
+[PASS] document.getElementById('accelErrorBanner').style.display = 'flex'
+[PASS] document.getElementById('accelErrorText').textContent contains 'Calibration bad alignment'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

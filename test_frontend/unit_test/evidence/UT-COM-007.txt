@@ -1,0 +1,62 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-COM-007
+Requirement ID      : REQ-HUD-001
+Source File         : compass.js
+Target Function     : compass_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should automatically convert meters to kilometers if distance is >= 1000m
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+distVal = document.getElementById('distValue')
+compass.updateTelemetry({ distance: 450.6 })
+compass.updateTelemetry({ distance: 2548 })
+
+Expected Behavior:
+Dist Val displays '451'.
+Dist Val Next Element Sibling displays 'm'.
+Dist Val displays '2.55'.
+Dist Val Next Element Sibling displays 'km'.
+
+Actual Observations:
+distVal.textContent = '451'
+distVal.nextElementSibling.textContent = 'm'
+distVal.textContent = '2.55'
+distVal.nextElementSibling.textContent = 'km'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(distVal.textContent).toBe('451');
+expect(distVal.nextElementSibling.textContent).toBe('m');
+expect(distVal.textContent).toBe('2.55');
+expect(distVal.nextElementSibling.textContent).toBe('km');
+
+Console Logs:
+[INFO] Jest executed test in 15ms
+[PASS] distVal.textContent = '451'
+[PASS] distVal.nextElementSibling.textContent = 'm'
+[PASS] distVal.textContent = '2.55'
+[PASS] distVal.nextElementSibling.textContent = 'km'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

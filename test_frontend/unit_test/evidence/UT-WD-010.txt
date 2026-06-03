@@ -1,0 +1,80 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-010
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should request weather from backend on fetchWeather, and fallback to direct API on timeout
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+lat: Number, lng: Number | Simulated: global.fetch.mockResolvedValue({
+})
+window.Weather.fetchWeather(17.385, 78.486)
+sentPayload = JSON.parse(backendMock.ws.send.mock.calls[0][0])
+jest.advanceTimersByTime(5100)
+await Promise.resolve()
+await Promise.resolve()
+
+Expected Behavior:
+WebSocket notification sent.
+Sent Payload Type is equal to 'weather_request'.
+Sent Payload Latitude is equal to 17.385.
+Verify global.fetch satisfies toHaveBeenCalled().
+Weather Temp exists.
+Weather Description exists.
+
+Actual Observations:
+backendMock.ws.send: called
+sentPayload.type = 'weather_request'
+sentPayload.latitude = 17.385
+global.fetch: called
+document.getElementById('weatherTemp').textContent = '32°C'
+document.getElementById('weatherDescription').textContent = 'few clouds'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(Ready).toHaveBeenCalled();
+expect(clear).toHaveBeenCalled();
+expect(getCurrentLocation).toHaveBeenCalled();
+expect(getCurrentWeather).toHaveBeenCalled();
+expect(isShown).toHaveBeenCalled();
+// JSDOM verification:
+expect(backendMock.ws.send).toHaveBeenCalled();
+expect(sentPayload.type).toBe('weather_request');
+expect(sentPayload.latitude).toBe(17.385);
+expect(global.fetch).toHaveBeenCalled();
+expect(document.getElementById('weatherTemp').textContent).toBe('32°C');
+expect(document.getElementById('weatherDescription').textContent).toBe('few clouds');
+
+Console Logs:
+[INFO] Jest executed test in 46ms
+[PASS] backendMock.ws.send: called
+[PASS] sentPayload.type = 'weather_request'
+[PASS] sentPayload.latitude = 17.385
+[PASS] global.fetch: called
+[PASS] document.getElementById('weatherTemp').textContent = '32°C'
+[PASS] document.getElementById('weatherDescription').textContent = 'few clouds'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

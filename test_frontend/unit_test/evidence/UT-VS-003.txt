@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VS-003
+Requirement ID      : REQ-SYS-002
+Source File         : video-stream.js
+Target Function     : connect() [Line 203]
+Test Category       : Positive / Functional
+Test Case Title     : should perform connection flows and write URL to localStorage
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock L Map layers, Mock WebSocket connections, Mock localStorage cache items.. Dependencies: Leaflet API, localStorage initialized in setup.
+
+Test Inputs:
+input = document.getElementById('rtspUrlInput')
+connectBtn = document.getElementById('rtspConnectBtn')
+input.value = 'rtsp://192.168.1.100:554/stream1'
+connectBtn.click()
+)
+
+Expected Behavior:
+Local Storage Get Item('Gcs Rtsp Url') is equal to 'rtsp://192.168.1.100:554/stream1'.
+Connect Button Disabled is equal to true.
+WebSocket notification sent.
+
+Actual Observations:
+localStorage.getItem('gcs_rtsp_url') = 'rtsp://192.168.1.100:554/stream1'
+connectBtn.disabled = true
+window.ws.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(alert).toHaveBeenCalled();
+expect(localStorage.setItem).toHaveBeenCalledWith('gcs_rtsp_url', expect.any(String));
+expect(setStatus).toHaveBeenCalled();
+expect(trim).toHaveBeenCalled();
+expect(wsMock.send).toHaveBeenCalled();
+// JSDOM verification:
+expect(localStorage.getItem('gcs_rtsp_url')).toBe('rtsp://192.168.1.100:554/stream1');
+expect(connectBtn.disabled).toBe(true);
+expect(window.ws.send).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 16ms
+[PASS] localStorage.getItem('gcs_rtsp_url') = 'rtsp://192.168.1.100:554/stream1'
+[PASS] connectBtn.disabled = true
+[PASS] window.ws.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

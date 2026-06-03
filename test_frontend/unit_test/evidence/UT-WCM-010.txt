@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-010
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should block actions if first takeoff waypoint is targeted
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+takeoffWp = { id: 1, type: 'takeoff' }
+mockWaypointManager.waypoints = [takeoffWp]
+menuInstance.currentWaypoint = takeoffWp
+menuInstance.handleMenuAction('rtl')
+menuInstance.handleMenuAction('set-hover')
+menuInstance.handleMenuAction('set-waypoint')
+
+Expected Behavior:
+Verify window.MsgConsole.warning satisfies toHaveBeenCalledWith('Takeoff point mode cannot be changed').
+Verify window.MsgConsole.warning satisfies toHaveBeenCalledWith('Takeoff point mode cannot be changed').
+Verify window.MsgConsole.warning satisfies toHaveBeenCalledWith('Takeoff point mode cannot be changed').
+
+Actual Observations:
+window.MsgConsole.warning: called with 'Takeoff point mode cannot be changed'
+window.MsgConsole.warning: called with 'Takeoff point mode cannot be changed'
+window.MsgConsole.warning: called with 'Takeoff point mode cannot be changed'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.warning).toHaveBeenCalledWith('Takeoff point mode cannot be changed');
+expect(window.MsgConsole.warning).toHaveBeenCalledWith('Takeoff point mode cannot be changed');
+expect(window.MsgConsole.warning).toHaveBeenCalledWith('Takeoff point mode cannot be changed');
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] window.MsgConsole.warning: called with 'Takeoff point mode cannot be changed'
+[PASS] window.MsgConsole.warning: called with 'Takeoff point mode cannot be changed'
+[PASS] window.MsgConsole.warning: called with 'Takeoff point mode cannot be changed'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

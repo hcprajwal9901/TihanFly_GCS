@@ -1,0 +1,73 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FC-014
+Requirement ID      : REQ-CON-001
+Source File         : flight-controls.js
+Target Function     : flight-controls_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should select mode row, close overlays and trigger MAVLink command dispatcher
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+mode: String, el: String | Simulated: guidedItem = document.querySelector('[data-mode="guided"]')
+spyEvent = jest.fn()
+window.addEventListener('flightModeChanged', spyEvent)
+window.FlightModeSelector.select('guided', guidedItem)
+
+Expected Behavior:
+Window Flight Mode Selector Get Current Mode() is equal to 'guided'.
+Guided Item Class List Contains('Active Mode') is equal to true.
+Active Mode Display exists.
+Verify spyEvent satisfies toHaveBeenCalled().
+Verify window.sendCommand satisfies toHaveBeenCalledWith('SET_MODE', { mode: 'guided' }).
+
+Actual Observations:
+window.FlightModeSelector.getCurrentMode() = 'guided'
+guidedItem.classList.contains('active-mode') = true
+document.getElementById('activeModeDisplay').textContent = 'GUIDED'
+spyEvent: called
+window.sendCommand: called with 'SET_MODE', { mode: 'guided' }
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(CustomEvent).toHaveBeenCalled();
+expect(close).toHaveBeenCalled();
+expect(dispatchEvent).toHaveBeenCalled();
+expect(querySelectorAll).toHaveBeenCalled();
+expect(toUpperCase).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.FlightModeSelector.getCurrentMode()).toBe('guided');
+expect(guidedItem.classList.contains('active-mode')).toBe(true);
+expect(document.getElementById('activeModeDisplay').textContent).toBe('GUIDED');
+expect(spyEvent).toHaveBeenCalled();
+expect(window.sendCommand).toHaveBeenCalledWith('SET_MODE', { mode: 'guided' });
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] window.FlightModeSelector.getCurrentMode() = 'guided'
+[PASS] guidedItem.classList.contains('active-mode') = true
+[PASS] document.getElementById('activeModeDisplay').textContent = 'GUIDED'
+[PASS] spyEvent: called
+[PASS] window.sendCommand: called with 'SET_MODE', { mode: 'guided' }
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

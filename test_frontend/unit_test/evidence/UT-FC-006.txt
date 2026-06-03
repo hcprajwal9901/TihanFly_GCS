@@ -1,0 +1,75 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FC-006
+Requirement ID      : REQ-CON-001
+Source File         : flight-controls.js
+Target Function     : flight-controls_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should execute three-stage takeoff commands sequence (Guided mode -> Arm -> Takeoff)
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+confirmBtn = document.getElementById('modalConfirmBtn')
+window.FlightControls.takeoffSettings = { altitude: 12, speed: 2.5 }
+confirmBtn.click()
+jest.advanceTimersByTime(1200)
+jest.advanceTimersByTime(2300)
+
+Expected Behavior:
+Verify window.sendCommand satisfies toHaveBeenNthCalledWith(1, 'SET_MODE', { mode: 'GUIDED' }).
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith(expect.stringContaining('Setting mode → GUIDED')).
+Verify window.sendCommand satisfies toHaveBeenNthCalledWith(2, 'ARM').
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith(expect.stringContaining('Arming drone')).
+Verify window.sendCommand satisfies toHaveBeenNthCalledWith(3, 'TAKEOFF', { altitude: 12, speed: 2.5 }).
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith(expect.stringContaining('Taking off to 12 m')).
+
+Actual Observations:
+window.sendCommand: toHaveBeenNthCalledWith(1, 'SET_MODE', { mode: 'GUIDED' })
+window.MsgConsole.info: called with expect.stringContaining('Setting mode → GUIDED')
+window.sendCommand: toHaveBeenNthCalledWith(2, 'ARM')
+window.MsgConsole.info: called with expect.stringContaining('Arming drone')
+window.sendCommand: toHaveBeenNthCalledWith(3, 'TAKEOFF', { altitude: 12, speed: 2.5 })
+window.MsgConsole.info: called with expect.stringContaining('Taking off to 12 m')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(onArm).toHaveBeenCalled();
+expect(setArmedState).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.sendCommand).toHaveBeenNthCalledWith(1, 'SET_MODE', { mode: 'GUIDED' });
+expect(window.MsgConsole.info).toHaveBeenCalledWith(expect.stringContaining('Setting mode → GUIDED'));
+expect(window.sendCommand).toHaveBeenNthCalledWith(2, 'ARM');
+expect(window.MsgConsole.info).toHaveBeenCalledWith(expect.stringContaining('Arming drone'));
+expect(window.sendCommand).toHaveBeenNthCalledWith(3, 'TAKEOFF', { altitude: 12, speed: 2.5 });
+expect(window.MsgConsole.info).toHaveBeenCalledWith(expect.stringContaining('Taking off to 12 m'));
+
+Console Logs:
+[INFO] Jest executed test in 8ms
+[PASS] window.sendCommand: toHaveBeenNthCalledWith(1, 'SET_MODE', { mode: 'GUIDED' })
+[PASS] window.MsgConsole.info: called with expect.stringContaining('Setting mode → GUIDED')
+[PASS] window.sendCommand: toHaveBeenNthCalledWith(2, 'ARM')
+[PASS] window.MsgConsole.info: called with expect.stringContaining('Arming drone')
+[PASS] window.sendCommand: toHaveBeenNthCalledWith(3, 'TAKEOFF', { altitude: 12, speed: 2.5 })
+[PASS] window.MsgConsole.info: called with expect.stringContaining('Taking off to 12 m')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

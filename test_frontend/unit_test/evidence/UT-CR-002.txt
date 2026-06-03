@@ -1,0 +1,49 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CR-002
+Requirement ID      : REQ-HW-001
+Source File         : calib-radio.js
+Target Function     : _onStatusMsg() [Line 32]
+Test Category       : Positive / Functional
+Test Case Title     : should fallback to 1 as default sysid
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+document.getElementById('radioStartBtn').click()
+)
+
+Expected Behavior:
+Verify mockSocket.send satisfies toHaveBeenCalledWith().
+
+Actual Observations:
+mockSocket.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockSocket.send).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 122ms
+[PASS] mockSocket.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

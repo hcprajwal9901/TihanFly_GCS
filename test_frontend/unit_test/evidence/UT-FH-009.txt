@@ -1,0 +1,62 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FH-009
+Requirement ID      : REQ-HUD-001
+Source File         : flight-hud.js
+Target Function     : init() [Line 27]
+Test Category       : Positive / Functional
+Test Case Title     : should print voltage percents and current flight mode text in the corner
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+toggleHudCheckbox.checked = true
+toggleHudCheckbox.dispatchEvent(new Event('change'))
+window.TelemetryStore.mode = 'ALT_HOLD'
+window.TelemetryStore.batteryVoltage = 11.8
+window.TelemetryStore.batteryPercent = 72
+window.TelemetryStore.satellites = 15
+jest.advanceTimersByTime(16)
+
+Expected Behavior:
+Verify mockCtx.fillText satisfies toHaveBeenCalledWith('ALT_HOLD', expect.any(Number), expect.any(Number)).
+Verify mockCtx.fillText satisfies toHaveBeenCalledWith('BATT: 11.8V / 72%', expect.any(Number), expect.any(Number)).
+Verify mockCtx.fillText satisfies toHaveBeenCalledWith('GPS: 15 Sats', expect.any(Number), expect.any(Number)).
+
+Actual Observations:
+mockCtx.fillText: called with 'ALT_HOLD', expect.any(Number), expect.any(Number)
+mockCtx.fillText: called with 'BATT: 11.8V / 72%', expect.any(Number), expect.any(Number)
+mockCtx.fillText: called with 'GPS: 15 Sats', expect.any(Number), expect.any(Number)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockCtx.fillText).toHaveBeenCalledWith('ALT_HOLD', expect.any(Number), expect.any(Number));
+expect(mockCtx.fillText).toHaveBeenCalledWith('BATT: 11.8V / 72%', expect.any(Number), expect.any(Number));
+expect(mockCtx.fillText).toHaveBeenCalledWith('GPS: 15 Sats', expect.any(Number), expect.any(Number));
+
+Console Logs:
+[INFO] Jest executed test in 119ms
+[PASS] mockCtx.fillText: called with 'ALT_HOLD', expect.any(Number), expect.any(Number)
+[PASS] mockCtx.fillText: called with 'BATT: 11.8V / 72%', expect.any(Number), expect.any(Number)
+[PASS] mockCtx.fillText: called with 'GPS: 15 Sats', expect.any(Number), expect.any(Number)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

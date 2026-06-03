@@ -153,3 +153,9 @@ coverage/
 *.orig
 *.rej
 .sass-cache/
+
+# Excel Temporary Owner Files
+~$*.xlsx
+~$*.xls
+~$*
+

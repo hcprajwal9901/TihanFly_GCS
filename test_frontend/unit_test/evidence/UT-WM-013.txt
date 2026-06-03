@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WM-013
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-manager.js
+Target Function     : initializeWaypointManager() [Line 696]
+Test Category       : Positive / Functional
+Test Case Title     : should remove waypoint on marker click if current mode is delete
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+manager.addWaypoint(17.605, 78.130, 50)
+waypoint = manager.waypoints[1]
+markerClickCallback = markerClickCallbackMap.get(waypoint.marker)
+spyRemove = jest.spyOn(manager, 'removeWaypoint')
+manager.currentMode = null
+markerClickCallback()
+manager.currentMode = 'delete'
+markerClickCallback()
+
+Expected Behavior:
+Verify markerClickCallback satisfies toBeDefined().
+Verify spyRemove satisfies toHaveBeenCalled().
+Verify spyRemove satisfies toHaveBeenCalledWith(waypoint.id).
+
+Actual Observations:
+markerClickCallback: defined
+spyRemove: not called
+spyRemove: called with waypoint.id
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(markerClickCallback).toBeDefined();
+expect(spyRemove).not.toHaveBeenCalled();
+expect(spyRemove).toHaveBeenCalledWith(waypoint.id);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] markerClickCallback: defined
+[PASS] spyRemove: not called
+[PASS] spyRemove: called with waypoint.id
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

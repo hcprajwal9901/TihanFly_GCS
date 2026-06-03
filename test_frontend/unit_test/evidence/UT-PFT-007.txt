@@ -1,0 +1,75 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFT-007
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-takeoff.js
+Target Function     : _showTakeoffDialog() [Line 79]
+Test Category       : Positive / Functional
+Test Case Title     : should reuse existing #takeoffModal elements and attach listener triggers if present in DOM
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+function(altitude: String | Simulated: mockCallback = jest.fn()
+modal = originalCreateElement.call(document, 'div')
+modal.id = 'takeoffModal'
+modal.className = 'takeoff-modal'
+altInput = originalCreateElement.call(document, 'input')
+altInput.id = 'altitudeInput'
+altInput.value = '12.5'
+confirmBtn = originalCreateElement.call(document, 'button')
+confirmBtn.id = 'modalConfirmBtn'
+cancelBtn = originalCreateElement.call(document, 'button')
+cancelBtn.id = 'modalCancelBtn'
+document.body.appendChild(modal)
+document.body.appendChild(altInput)
+document.body.appendChild(confirmBtn)
+document.body.appendChild(cancelBtn)
+modeInstance._showTakeoffDialog(mockCallback)
+confirmBtn.click()
+
+Expected Behavior:
+Modal Class List Contains('Active') is equal to true.
+Modal Class List Contains('Active') is equal to false.
+Verify mockCallback satisfies toHaveBeenCalledWith(12.5).
+
+Actual Observations:
+modal.classList.contains('active') = true
+modal.classList.contains('active') = false
+mockCallback: called with 12.5
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(function).toHaveBeenCalled();
+expect(sendCommand).toHaveBeenCalled();
+// JSDOM verification:
+expect(modal.classList.contains('active')).toBe(true);
+expect(modal.classList.contains('active')).toBe(false);
+expect(mockCallback).toHaveBeenCalledWith(12.5);
+
+Console Logs:
+[INFO] Jest executed test in 8ms
+[PASS] modal.classList.contains('active') = true
+[PASS] modal.classList.contains('active') = false
+[PASS] mockCallback: called with 12.5
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

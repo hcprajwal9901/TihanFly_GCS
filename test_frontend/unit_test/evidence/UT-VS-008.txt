@@ -1,0 +1,92 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VS-008
+Requirement ID      : REQ-SYS-002
+Source File         : video-stream.js
+Target Function     : disconnect() [Line 221]
+Test Category       : Negative / Robustness
+Test Case Title     : should stop and hide stream on disconnect clicks or "stopped" ws events
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock WebSocket connections.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+imgEl = document.getElementById('mjpegFrame')
+connectBtn = document.getElementById('rtspConnectBtn')
+disconnectBtn = document.getElementById('rtspDisconnectBtn')
+window.dispatchEvent(new CustomEvent('video_status', {
+}))
+imgEl.onload()
+VideoStreamController.disconnect()
+)
+window.dispatchEvent(new CustomEvent('video_status', {
+}))
+
+Expected Behavior:
+Video Stream Controller Is Streaming() is equal to true.
+WebSocket notification sent.
+Img El hidden.
+Img El Get Attribute('Src') is equal to ''.
+Video Stream Controller Is Streaming() is equal to false.
+Connect Button displayed.
+Disconnect Button hidden.
+Img El hidden.
+Video Stream Controller Is Streaming() is equal to false.
+
+Actual Observations:
+VideoStreamController.isStreaming() = true
+window.ws.send: toHaveBeenCalledWith
+imgEl.style.display = 'none'
+imgEl.getAttribute('src') = ''
+VideoStreamController.isStreaming() = false
+connectBtn.style.display = 'inline-block'
+disconnectBtn.style.display = 'none'
+imgEl.style.display = 'none'
+VideoStreamController.isStreaming() = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(_hideStream).toHaveBeenCalled();
+expect(wsMock.send).toHaveBeenCalled();
+// JSDOM verification:
+expect(VideoStreamController.isStreaming()).toBe(true);
+expect(window.ws.send).toHaveBeenCalledWith(
+expect(imgEl.style.display).toBe('none');
+expect(imgEl.getAttribute('src')).toBe('');
+expect(VideoStreamController.isStreaming()).toBe(false);
+expect(connectBtn.style.display).toBe('inline-block');
+expect(disconnectBtn.style.display).toBe('none');
+expect(imgEl.style.display).toBe('none');
+expect(VideoStreamController.isStreaming()).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 6ms
+[PASS] VideoStreamController.isStreaming() = true
+[PASS] window.ws.send: toHaveBeenCalledWith
+[PASS] imgEl.style.display = 'none'
+[PASS] imgEl.getAttribute('src') = ''
+[PASS] VideoStreamController.isStreaming() = false
+[PASS] connectBtn.style.display = 'inline-block'
+[PASS] disconnectBtn.style.display = 'none'
+[PASS] imgEl.style.display = 'none'
+[PASS] VideoStreamController.isStreaming() = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

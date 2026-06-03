@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LD-002
+Requirement ID      : REQ-LOG-001
+Source File         : log-download.js
+Target Function     : _injectCSS() [Line 105]
+Test Category       : Positive / Functional
+Test Case Title     : should show "Backend not connected" if ws is not open on refresh
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+window.ws.readyState = 0; // CLOSED / CONNECTING
+refreshBtn = document.getElementById('ldBtnRefresh')
+refreshBtn.click()
+tbody = document.getElementById('ldTbody')
+pill = document.getElementById('ldConnPill')
+
+Expected Behavior:
+Tbody displays text containing 'Backend not connected'.
+Pill displays text containing 'No Connection'.
+
+Actual Observations:
+tbody.innerHTML contains 'Backend not connected'
+pill.textContent contains 'No Connection'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(_build).toHaveBeenCalled();
+expect(_refreshLogs).toHaveBeenCalled();
+// JSDOM verification:
+expect(tbody.innerHTML).toContain('Backend not connected');
+expect(pill.textContent).toContain('No Connection');
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] tbody.innerHTML contains 'Backend not connected'
+[PASS] pill.textContent contains 'No Connection'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

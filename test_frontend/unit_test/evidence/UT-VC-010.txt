@@ -1,0 +1,74 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-010
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Negative / Robustness
+Test Case Title     : should trigger shaking animation and display error message on wrong password
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+card = document.querySelector('.vc-drone-card[data-drone="ti-shadow"]')
+card.querySelector('.vc-btn-unlock').click()
+backdrop = document.querySelector('.vc-pw-backdrop')
+input = backdrop.querySelector('#vcPwInput')
+confirmBtn = backdrop.querySelector('#vcPwConfirm')
+errMsg = backdrop.querySelector('#vcPwErrMsg')
+input.value = 'wrongpassword'
+confirmBtn.click()
+jest.advanceTimersByTime(400)
+input.value = 'a'
+input.dispatchEvent(new Event('input'))
+
+Expected Behavior:
+Input Class List Contains('Vc Pw Error') is equal to true.
+Err Message Class List Contains('Visible') is equal to true.
+Input displays ''.
+Input Class List Contains('Vc Pw Error') is equal to false.
+Err Message Class List Contains('Visible') is equal to false.
+
+Actual Observations:
+input.classList.contains('vc-pw-error') = true
+errMsg.classList.contains('visible') = true
+input.value = ''
+input.classList.contains('vc-pw-error') = false
+errMsg.classList.contains('visible') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(input.classList.contains('vc-pw-error')).toBe(true);
+expect(errMsg.classList.contains('visible')).toBe(true);
+expect(input.value).toBe('');
+expect(input.classList.contains('vc-pw-error')).toBe(false);
+expect(errMsg.classList.contains('visible')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 91ms
+[PASS] input.classList.contains('vc-pw-error') = true
+[PASS] errMsg.classList.contains('visible') = true
+[PASS] input.value = ''
+[PASS] input.classList.contains('vc-pw-error') = false
+[PASS] errMsg.classList.contains('visible') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

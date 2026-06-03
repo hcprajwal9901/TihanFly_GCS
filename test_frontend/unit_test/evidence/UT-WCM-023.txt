@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-023
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should map contextual clicks on leaflet markers
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockMarker = {
+dummyWp = { id: 3 }
+menuInstance.attachToMarker(mockMarker, dummyWp)
+contextMenuHandler = mockMarker.on.mock.calls[0][1]
+spyShowMenu = jest.spyOn(menuInstance, 'showMenu')
+dummyEvt = {
+contextMenuHandler(dummyEvt)
+
+Expected Behavior:
+Verify mockMarker.on satisfies toHaveBeenCalledWith('contextmenu', expect.any(Function)).
+Verify spyShowMenu satisfies toHaveBeenCalledWith(250, 320, dummyWp).
+
+Actual Observations:
+mockMarker.on: called with 'contextmenu', expect.any(Function)
+spyShowMenu: called with 250, 320, dummyWp
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockMarker.on).toHaveBeenCalledWith('contextmenu', expect.any(Function));
+expect(spyShowMenu).toHaveBeenCalledWith(250, 320, dummyWp);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] mockMarker.on: called with 'contextmenu', expect.any(Function)
+[PASS] spyShowMenu: called with 250, 320, dummyWp
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFU-005
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-ui.js
+Target Function     : showElements() [Line 73]
+Test Category       : Positive / Functional
+Test Case Title     : should restore message console, flight controls, and reset DropdownStrip sync on showElements
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.showElements()
+
+Expected Behavior:
+Mode Instance Message Console displayed.
+Mode Instance Flight Controls Strip displayed.
+Mode Instance Flight Controls Strip Class List Contains('Hidden') is equal to false.
+Mode Instance Strip Container hidden.
+Verify window.DropdownStrip.hide satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+modeInstance.messageConsole.style.display = 'flex'
+modeInstance.flightControlsStrip.style.display = 'flex'
+modeInstance.flightControlsStrip.classList.contains('hidden') = false
+modeInstance.stripContainer.style.display = 'none'
+window.DropdownStrip.hide: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modeInstance.messageConsole.style.display).toBe('flex');
+expect(modeInstance.flightControlsStrip.style.display).toBe('flex');
+expect(modeInstance.flightControlsStrip.classList.contains('hidden')).toBe(false);
+expect(modeInstance.stripContainer.style.display).toBe('none');
+expect(window.DropdownStrip.hide).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] modeInstance.messageConsole.style.display = 'flex'
+[PASS] modeInstance.flightControlsStrip.style.display = 'flex'
+[PASS] modeInstance.flightControlsStrip.classList.contains('hidden') = false
+[PASS] modeInstance.stripContainer.style.display = 'none'
+[PASS] window.DropdownStrip.hide: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

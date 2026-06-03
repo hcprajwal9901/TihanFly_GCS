@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFMR-006
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-menu-router.js
+Target Function     : handleMenuAction() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should route return actions to handleReturnActions
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+returnActions = ['return-to-launch', 'land-here']
+modeInstance.handleMenuAction(action)
+})
+
+Expected Behavior:
+Verify modeInstance.handleReturnActions satisfies toHaveBeenLastCalledWith(action).
+Verify modeInstance.handleReturnActions satisfies toHaveBeenCalledTimes(2).
+
+Actual Observations:
+modeInstance.handleReturnActions: toHaveBeenLastCalledWith(action)
+modeInstance.handleReturnActions: 2 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modeInstance.handleReturnActions).toHaveBeenLastCalledWith(action);
+expect(modeInstance.handleReturnActions).toHaveBeenCalledTimes(2);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] modeInstance.handleReturnActions: toHaveBeenLastCalledWith(action)
+[PASS] modeInstance.handleReturnActions: 2 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

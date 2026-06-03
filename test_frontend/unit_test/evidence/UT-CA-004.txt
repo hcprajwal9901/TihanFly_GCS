@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CA-004
+Requirement ID      : REQ-HW-001
+Source File         : calib-accel.js
+Target Function     : buildCubeGrid() [Line 58]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger recovery mode if drone remains silent for 8 seconds after clicking Next
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CalibAccel.init()
+document.getElementById('accelStartBtn').click()
+})
+nextBtn = document.getElementById('accelNextBtn')
+nextBtn.click()
+jest.advanceTimersByTime(7900)
+jest.advanceTimersByTime(200)
+
+Expected Behavior:
+Next Button Disabled is equal to true.
+Next Button Disabled is equal to true.
+Next Button Disabled is equal to false.
+Accel Step Hint exists.
+
+Actual Observations:
+nextBtn.disabled = true
+nextBtn.disabled = true
+nextBtn.disabled = false
+document.getElementById('accelStepHint').textContent contains 'No response from drone'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(nextBtn.disabled).toBe(true);
+expect(nextBtn.disabled).toBe(true);
+expect(nextBtn.disabled).toBe(false); // recovery re-enabled
+expect(document.getElementById('accelStepHint').textContent).toContain('No response from drone');
+
+Console Logs:
+[INFO] Jest executed test in 115ms
+[PASS] nextBtn.disabled = true
+[PASS] nextBtn.disabled = true
+[PASS] nextBtn.disabled = false
+[PASS] document.getElementById('accelStepHint').textContent contains 'No response from drone'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

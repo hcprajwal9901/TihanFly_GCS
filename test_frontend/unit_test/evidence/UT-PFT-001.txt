@@ -1,0 +1,69 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFT-001
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-takeoff.js
+Target Function     : handleTakeoffActions() [Line 11]
+Test Category       : Positive / Functional
+Test Case Title     : should route matching takeoff actions to their respective handlers
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+spyTakeoff = jest.spyOn(modeInstance, 'takeoffHere').mockImplementation(() => {})
+spySetHome = jest.spyOn(modeInstance, 'setHomePosition').mockImplementation(() => {})
+spyClearHome = jest.spyOn(modeInstance, 'clearHome').mockImplementation(() => {})
+modeInstance.handleTakeoffActions('takeoff-here')
+modeInstance.handleTakeoffActions('set-home-position')
+modeInstance.handleTakeoffActions('clear-home')
+modeInstance.handleTakeoffActions('invalid-action')
+spyTakeoff.mockRestore()
+spySetHome.mockRestore()
+spyClearHome.mockRestore()
+
+Expected Behavior:
+Verify spyTakeoff satisfies toHaveBeenCalledTimes(1).
+Verify spySetHome satisfies toHaveBeenCalledTimes(1).
+Verify spyClearHome satisfies toHaveBeenCalledTimes(1).
+Verify console.warn satisfies toHaveBeenCalledWith(expect.stringContaining('Unknown takeoff action')).
+
+Actual Observations:
+spyTakeoff: 1 call(s)
+spySetHome: 1 call(s)
+spyClearHome: 1 call(s)
+console.warn: called with expect.stringContaining('Unknown takeoff action')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(spyTakeoff).toHaveBeenCalledTimes(1);
+expect(spySetHome).toHaveBeenCalledTimes(1);
+expect(spyClearHome).toHaveBeenCalledTimes(1);
+expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('Unknown takeoff action'));
+
+Console Logs:
+[INFO] Jest executed test in 7ms
+[PASS] spyTakeoff: 1 call(s)
+[PASS] spySetHome: 1 call(s)
+[PASS] spyClearHome: 1 call(s)
+[PASS] console.warn: called with expect.stringContaining('Unknown takeoff action')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

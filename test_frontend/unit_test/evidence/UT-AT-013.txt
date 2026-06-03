@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-013
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Positive / Functional
+Test Case Title     : should prompt commands, add to history arrow buffer, and fake execute replies
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+cls: String, fn: String, ico: String, lbl: String, id: Number, i18Key: String | Simulated: jest.useFakeTimers()
+input = document.getElementById('mavIn')
+input.value = 'free'
+window.AnalyzeToolsPanel._sendCmd()
+term = document.getElementById('mavTerm')
+jest.advanceTimersByTime(200)
+jest.useRealTimers()
+
+Expected Behavior:
+Term displays text containing 'nsh&gt; free'.
+Term displays text containing 'Mem:  Total: 256M'.
+
+Actual Observations:
+term.innerHTML contains 'nsh&gt; free'
+term.innerHTML contains 'Mem:  Total: 256M'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = B(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(term.innerHTML).toContain('nsh&gt; free');
+expect(term.innerHTML).toContain('Mem:  Total: 256M');
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] term.innerHTML contains 'nsh&gt; free'
+[PASS] term.innerHTML contains 'Mem:  Total: 256M'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

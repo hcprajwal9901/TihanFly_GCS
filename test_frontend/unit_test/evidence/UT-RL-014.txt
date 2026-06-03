@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-014
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : Clear Plots button should untoggle all fields and clear graphs
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+fieldRow = document.querySelector('.rl-field-row[data-field="Lat"]')
+fieldRow.click()
+clearBtn = document.getElementById('rlClearBtn')
+clearBtn.click()
+
+Expected Behavior:
+Field Row Class List Contains('Active') is equal to true.
+Field Row Class List Contains('Active') is equal to false.
+Rl Stat Series exists.
+Rl No Data exists.
+
+Actual Observations:
+fieldRow.classList.contains('active') = true
+fieldRow.classList.contains('active') = false
+document.getElementById('rlStatSeries').textContent = '0'
+document.getElementById('rlNoData').classList.contains('hidden') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(fieldRow.classList.contains('active')).toBe(true);
+expect(fieldRow.classList.contains('active')).toBe(false);
+expect(document.getElementById('rlStatSeries').textContent).toBe('0');
+expect(document.getElementById('rlNoData').classList.contains('hidden')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 85ms
+[PASS] fieldRow.classList.contains('active') = true
+[PASS] fieldRow.classList.contains('active') = false
+[PASS] document.getElementById('rlStatSeries').textContent = '0'
+[PASS] document.getElementById('rlNoData').classList.contains('hidden') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

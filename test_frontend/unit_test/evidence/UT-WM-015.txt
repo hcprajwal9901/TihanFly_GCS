@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WM-015
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-manager.js
+Target Function     : initializeWaypointManager() [Line 696]
+Test Category       : Positive / Functional
+Test Case Title     : should delete takeoff point safely if it is the only waypoint in the mission
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+manager.addWaypoint(17.605, 78.130, 50)
+regularWp = manager.waypoints[1]
+manager.removeWaypoint(regularWp.id)
+takeoffWp = manager.waypoints[0]
+manager.removeWaypoint(takeoffWp.id)
+
+Expected Behavior:
+Verify manager.waypoints satisfies toHaveLength(2).
+Verify manager.waypoints satisfies toHaveLength(1).
+Verify manager.waypoints satisfies toHaveLength(0).
+
+Actual Observations:
+manager.waypoints: toHaveLength(2)
+manager.waypoints: toHaveLength(1)
+manager.waypoints: toHaveLength(0)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(manager.waypoints).toHaveLength(2);
+expect(manager.waypoints).toHaveLength(1);
+expect(manager.waypoints).toHaveLength(0); // Safely deleted!
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] manager.waypoints: toHaveLength(2)
+[PASS] manager.waypoints: toHaveLength(1)
+[PASS] manager.waypoints: toHaveLength(0)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

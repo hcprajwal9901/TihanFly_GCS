@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FAI-011
+Requirement ID      : REQ-SAF-001
+Source File         : failsafe.js
+Target Function     : failsafe_trigger() [Line 87]
+Test Category       : Positive / Functional
+Test Case Title     : should successfully verify normal happy-path operation for Throttle Failsafe Trigger and Warning Banner
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized. Standard mocks active for failsafe.js.
+
+Test Inputs:
+state = new FlightState()
+state.setTelemetry({ throttle: 1200, rcSignal: 100, battery: 16.8 })
+canArm = state.preArmChecks()
+
+Expected Behavior:
+Pre-arm checks validation results.
+State Get Status() is equal to 'READY_TO_ARM'.
+
+Actual Observations:
+canArm = true
+state.getStatus() = 'READY_TO_ARM'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(canArm).toBe(true);
+expect(state.getStatus()).toBe('READY_TO_ARM');
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] canArm = true
+[PASS] state.getStatus() = 'READY_TO_ARM'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

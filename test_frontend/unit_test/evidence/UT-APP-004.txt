@@ -1,0 +1,100 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-APP-004
+Requirement ID      : REQ-SYS-002
+Source File         : app.js
+Target Function     : initializeVideoMaximize() [Line 461]
+Test Category       : Boundary Value
+Test Case Title     : should successfully wire buttons and toggle maximize states
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+global.initializeVideoMaximize()
+videoContainer = document.getElementById('videoContainer')
+mapContainer = document.getElementById('map')
+window.VideoMaximize.toggle()
+window.VideoMaximize.toggle()
+
+Expected Behavior:
+Verify window.VideoMaximize satisfies toBeDefined().
+Window Video Maximize Is Maximized() is equal to false.
+Video Container Class List Contains('Maximized') is equal to false.
+Map Container Class List Contains('Minimized') is equal to false.
+Window Video Maximize Is Maximized() is equal to true.
+Video Container Class List Contains('Maximized') is equal to true.
+Map Container Class List Contains('Minimized') is equal to true.
+Window Video Maximize Is Maximized() is equal to false.
+Video Container Class List Contains('Maximized') is equal to false.
+Map Container Class List Contains('Minimized') is equal to false.
+
+Actual Observations:
+window.VideoMaximize: defined
+window.VideoMaximize.isMaximized() = false
+videoContainer.classList.contains('maximized') = false
+mapContainer.classList.contains('minimized') = false
+window.VideoMaximize.isMaximized() = true
+videoContainer.classList.contains('maximized') = true
+mapContainer.classList.contains('minimized') = true
+window.VideoMaximize.isMaximized() = false
+videoContainer.classList.contains('maximized') = false
+mapContainer.classList.contains('minimized') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(_iconMaximize).toHaveBeenCalled();
+expect(_iconMinimize).toHaveBeenCalled();
+expect(addEventListener).toHaveBeenCalled();
+expect(bezier).toHaveBeenCalled();
+expect(contains).toHaveBeenCalled();
+expect(eachLayer).toHaveBeenCalled();
+expect(invalidateSize).toHaveBeenCalled();
+expect(preventDefault).toHaveBeenCalled();
+expect(redraw).toHaveBeenCalled();
+expect(stopPropagation).toHaveBeenCalled();
+expect(toggleVideoMaximize).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.VideoMaximize).toBeDefined();
+expect(window.VideoMaximize.isMaximized()).toBe(false);
+expect(videoContainer.classList.contains('maximized')).toBe(false);
+expect(mapContainer.classList.contains('minimized')).toBe(false);
+expect(window.VideoMaximize.isMaximized()).toBe(true);
+expect(videoContainer.classList.contains('maximized')).toBe(true);
+expect(mapContainer.classList.contains('minimized')).toBe(true);
+expect(window.VideoMaximize.isMaximized()).toBe(false);
+expect(videoContainer.classList.contains('maximized')).toBe(false);
+expect(mapContainer.classList.contains('minimized')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 19ms
+[PASS] window.VideoMaximize: defined
+[PASS] window.VideoMaximize.isMaximized() = false
+[PASS] videoContainer.classList.contains('maximized') = false
+[PASS] mapContainer.classList.contains('minimized') = false
+[PASS] window.VideoMaximize.isMaximized() = true
+[PASS] videoContainer.classList.contains('maximized') = true
+[PASS] mapContainer.classList.contains('minimized') = true
+[PASS] window.VideoMaximize.isMaximized() = false
+[PASS] videoContainer.classList.contains('maximized') = false
+[PASS] mapContainer.classList.contains('minimized') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

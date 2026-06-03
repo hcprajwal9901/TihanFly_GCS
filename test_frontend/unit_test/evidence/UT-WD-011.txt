@@ -1,0 +1,72 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-011
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should query OpenWeatherMap directly and display weather
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+global.fetch.mockResolvedValue({
+})
+window.Weather.fetchWeather(13.0827, 80.2707)
+await Promise.resolve()
+await Promise.resolve()
+
+Expected Behavior:
+Weather Loading exists.
+Weather Loading exists.
+Weather Content exists.
+Location Name exists.
+Weather Temp exists.
+Humidity exists.
+
+Actual Observations:
+document.getElementById('weatherLoading').style.display = 'flex'
+document.getElementById('weatherLoading').style.display = 'none'
+document.getElementById('weatherContent').style.display = 'flex'
+document.getElementById('locationName').textContent = 'Chennai, IN'
+document.getElementById('weatherTemp').textContent = '29°C'
+document.getElementById('humidity').textContent = '80%'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('weatherLoading').style.display).toBe('flex');
+expect(document.getElementById('weatherLoading').style.display).toBe('none');
+expect(document.getElementById('weatherContent').style.display).toBe('flex');
+expect(document.getElementById('locationName').textContent).toBe('Chennai, IN');
+expect(document.getElementById('weatherTemp').textContent).toBe('29°C');
+expect(document.getElementById('humidity').textContent).toBe('80%');
+
+Console Logs:
+[INFO] Jest executed test in 21ms
+[PASS] document.getElementById('weatherLoading').style.display = 'flex'
+[PASS] document.getElementById('weatherLoading').style.display = 'none'
+[PASS] document.getElementById('weatherContent').style.display = 'flex'
+[PASS] document.getElementById('locationName').textContent = 'Chennai, IN'
+[PASS] document.getElementById('weatherTemp').textContent = '29°C'
+[PASS] document.getElementById('humidity').textContent = '80%'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

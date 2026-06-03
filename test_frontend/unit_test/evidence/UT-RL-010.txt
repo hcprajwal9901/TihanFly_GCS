@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-010
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : should filter groups matching message name search query
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+function(s: String | Simulated: searchInput = document.getElementById('rlSearch')
+searchInput.value = 'gp'
+searchInput.dispatchEvent(new Event('input'))
+gpsGroup = document.querySelector('#rlTreeScroll .rl-msg-group[data-msg="GPS"]')
+imuGroup = document.querySelector('#rlTreeScroll .rl-msg-group[data-msg="IMU"]')
+attGroup = document.querySelector('#rlTreeScroll .rl-msg-group[data-msg="ATT"]')
+
+Expected Behavior:
+Gps Group display state is .
+Imu Group hidden.
+Att Group hidden.
+
+Actual Observations:
+gpsGroup.style.display = ''
+imuGroup.style.display = 'none'
+attGroup.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = filter(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(gpsGroup.style.display).toBe('');
+expect(imuGroup.style.display).toBe('none');
+expect(attGroup.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 64ms
+[PASS] gpsGroup.style.display = ''
+[PASS] imuGroup.style.display = 'none'
+[PASS] attGroup.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

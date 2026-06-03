@@ -1,0 +1,81 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MFM-005
+Requirement ID      : REQ-SYS-002
+Source File         : mission-file-manager.js
+Target Function     : closeDialog() [Line 431]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger browser download link clicks and revoke object blobs
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+missionData: String, filename: String, format: String | Simulated: success = missionManager.saveMissionToFile('tihan_flight')
+)
+
+Expected Behavior:
+Success is equal to true.
+Verify window.URL.createObjectURL satisfies toHaveBeenCalled().
+Verify document.createElement satisfies toHaveBeenCalledWith('a').
+Mock Anchor Download is equal to 'tihan_flight.waypoints'.
+Click action triggered.
+Verify window.URL.revokeObjectURL satisfies toHaveBeenCalledWith('blob:http://localhost/mock-blob-uuid').
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith().
+
+Actual Observations:
+success = true
+window.URL.createObjectURL: called
+document.createElement: called with 'a'
+mockAnchor.download = 'tihan_flight.waypoints'
+mockAnchor.click: called
+window.URL.revokeObjectURL: called with 'blob:http://localhost/mock-blob-uuid'
+window.MsgConsole.success: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(downloadFile).toHaveBeenCalled();
+expect(generateMissionPlannerTXT).toHaveBeenCalled();
+expect(generateQGCMission).toHaveBeenCalled();
+expect(generateWaypointsJSON).toHaveBeenCalled();
+expect(lastIndexOf).toHaveBeenCalled();
+expect(substring).toHaveBeenCalled();
+expect(updateMissionTitle).toHaveBeenCalled();
+// JSDOM verification:
+expect(success).toBe(true);
+expect(window.URL.createObjectURL).toHaveBeenCalled();
+expect(document.createElement).toHaveBeenCalledWith('a');
+expect(mockAnchor.download).toBe('tihan_flight.waypoints');
+expect(mockAnchor.click).toHaveBeenCalled();
+expect(window.URL.revokeObjectURL).toHaveBeenCalledWith('blob:http://localhost/mock-blob-uuid');
+expect(window.MsgConsole.success).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] success = true
+[PASS] window.URL.createObjectURL: called
+[PASS] document.createElement: called with 'a'
+[PASS] mockAnchor.download = 'tihan_flight.waypoints'
+[PASS] mockAnchor.click: called
+[PASS] window.URL.revokeObjectURL: called with 'blob:http://localhost/mock-blob-uuid'
+[PASS] window.MsgConsole.success: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,85 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MFM-008
+Requirement ID      : REQ-SYS-002
+Source File         : mission-file-manager.js
+Target Function     : closeDialog() [Line 431]
+Test Category       : Positive / Functional
+Test Case Title     : should clear old missions, load home location, sort waypoints by index and re-add them
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+missionData: String | Simulated: success = missionManager.loadMission(validMissionData)
+
+Expected Behavior:
+Success is equal to true.
+Verify mockWaypointManager.clearAllWaypoints satisfies toHaveBeenCalled().
+Verify mockWaypointManager.clearHomePosition satisfies toHaveBeenCalled().
+Verify mockWaypointManager.setHomePosition satisfies toHaveBeenCalledWith(17.600, 78.125).
+Verify mockWaypointManager.addWaypoint satisfies toHaveBeenNthCalledWith(1, 17.601, 78.126, 50).
+Verify mockWaypointManager.addWaypoint satisfies toHaveBeenNthCalledWith(2, 17.605, 78.130, 60).
+Verify mockWaypointManager.centerMission satisfies toHaveBeenCalled().
+Verify window.MsgConsole.success satisfies toHaveBeenCalled().
+
+Actual Observations:
+success = true
+mockWaypointManager.clearAllWaypoints: called
+mockWaypointManager.clearHomePosition: called
+mockWaypointManager.setHomePosition: called with 17.600, 78.125
+mockWaypointManager.addWaypoint: toHaveBeenNthCalledWith(1, 17.601, 78.126, 50)
+mockWaypointManager.addWaypoint: toHaveBeenNthCalledWith(2, 17.605, 78.130, 60)
+mockWaypointManager.centerMission: called
+window.MsgConsole.success: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(addWaypoint).toHaveBeenCalled();
+expect(alert).toHaveBeenCalled();
+expect(centerMission).toHaveBeenCalled();
+expect(clearAllWaypoints).toHaveBeenCalled();
+expect(clearHomePosition).toHaveBeenCalled();
+expect(setHomePosition).toHaveBeenCalled();
+expect(sort).toHaveBeenCalled();
+expect(validateMission).toHaveBeenCalled();
+// JSDOM verification:
+expect(success).toBe(true);
+expect(mockWaypointManager.clearAllWaypoints).toHaveBeenCalled();
+expect(mockWaypointManager.clearHomePosition).toHaveBeenCalled();
+expect(mockWaypointManager.setHomePosition).toHaveBeenCalledWith(17.600, 78.125);
+expect(mockWaypointManager.addWaypoint).toHaveBeenNthCalledWith(1, 17.601, 78.126, 50);
+expect(mockWaypointManager.addWaypoint).toHaveBeenNthCalledWith(2, 17.605, 78.130, 60);
+expect(mockWaypointManager.centerMission).toHaveBeenCalled();
+expect(window.MsgConsole.success).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] success = true
+[PASS] mockWaypointManager.clearAllWaypoints: called
+[PASS] mockWaypointManager.clearHomePosition: called
+[PASS] mockWaypointManager.setHomePosition: called with 17.600, 78.125
+[PASS] mockWaypointManager.addWaypoint: toHaveBeenNthCalledWith(1, 17.601, 78.126, 50)
+[PASS] mockWaypointManager.addWaypoint: toHaveBeenNthCalledWith(2, 17.605, 78.130, 60)
+[PASS] mockWaypointManager.centerMission: called
+[PASS] window.MsgConsole.success: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WIH-001
+Requirement ID      : REQ-SYS-002
+Source File         : weather-integration-helper.js
+Target Function     : integrateWeatherWithMap() [Line 7]
+Test Category       : Negative / Robustness
+Test Case Title     : should return false and log errors if map or weather dashboard is missing
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+global.loadScript('js/weather-integration-helper.js')
+success = window.WeatherIntegration.integrate()
+expect.stringContaining('Map (window.tmap) not found!')
+)
+
+Expected Behavior:
+Verify window.WeatherIntegration satisfies toBeDefined().
+Success is equal to false.
+Error logged to console.
+
+Actual Observations:
+window.WeatherIntegration: defined
+success = false
+console.error: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(Map).toHaveBeenCalled();
+expect(enableClick).toHaveBeenCalled();
+expect(onClick).toHaveBeenCalled();
+expect(onMapClick).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.WeatherIntegration).toBeDefined();
+expect(success).toBe(false);
+expect(console.error).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] window.WeatherIntegration: defined
+[PASS] success = false
+[PASS] console.error: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

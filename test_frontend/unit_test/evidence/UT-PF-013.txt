@@ -1,0 +1,56 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PF-013
+Requirement ID      : REQ-TUNE-001
+Source File         : param-full.js
+Target Function     : parseOptionsFromRange() [Line 788]
+Test Category       : Positive / Functional
+Test Case Title     : should re-request parameters when current active vehicle is changed
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+await initPanel()
+)
+window.selectedSysId = 2
+window.dispatchEvent(new CustomEvent('vehicle_selected'))
+)
+
+Expected Behavior:
+WebSocket notification sent.
+WebSocket notification sent.
+
+Actual Observations:
+window.ws.send: toHaveBeenCalledWith
+window.ws.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.ws.send).toHaveBeenCalledWith(
+expect(window.ws.send).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 49ms
+[PASS] window.ws.send: toHaveBeenCalledWith
+[PASS] window.ws.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

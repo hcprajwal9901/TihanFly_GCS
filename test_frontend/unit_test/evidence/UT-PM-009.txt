@@ -1,0 +1,80 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PM-009
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-manager.js
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger file prompt and recreate polygon layout on successful loading
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+dummyFileContent = JSON.stringify({
+})
+})
+global.FileReader = FileReaderMock
+fileOnChangeCallback = null
+originalCreate = document.createElement.bind(document)
+document.createElement = jest.fn().mockImplementation((tagName) => {
+el = originalCreate(tagName)
+})
+}, 0)
+})
+set: (cb) => { fileOnChangeCallback = cb; }
+})
+})
+pmInstance.importPolygonData()
+jest.advanceTimersByTime(100)
+document.createElement = originalCreate
+
+Expected Behavior:
+Pm Instance Polygon Id is equal to 'imported_poly'.
+Pm Instance Survey Settings Altitude is equal to 15.
+Pm Instance Survey Settings Overlap is equal to 80.
+Pm Instance Polygon Points[0] Lat is equal to 17.605.
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('✅ Polygon imported').
+
+Actual Observations:
+pmInstance.polygonId = 'imported_poly'
+pmInstance.surveySettings.altitude = 15
+pmInstance.surveySettings.overlap = 80
+pmInstance.polygonPoints[0].lat = 17.605
+window.MsgConsole.success: called with '✅ Polygon imported'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(pmInstance.polygonId).toBe('imported_poly');
+expect(pmInstance.surveySettings.altitude).toBe(15);
+expect(pmInstance.surveySettings.overlap).toBe(80);
+expect(pmInstance.polygonPoints[0].lat).toBe(17.605);
+expect(window.MsgConsole.success).toHaveBeenCalledWith('✅ Polygon imported');
+
+Console Logs:
+[INFO] Jest executed test in 32ms
+[PASS] pmInstance.polygonId = 'imported_poly'
+[PASS] pmInstance.surveySettings.altitude = 15
+[PASS] pmInstance.surveySettings.overlap = 80
+[PASS] pmInstance.polygonPoints[0].lat = 17.605
+[PASS] window.MsgConsole.success: called with '✅ Polygon imported'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

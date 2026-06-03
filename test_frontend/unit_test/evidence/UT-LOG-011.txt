@@ -1,0 +1,76 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LOG-011
+Requirement ID      : REQ-LOG-001
+Source File         : login.js
+Target Function     : updateConnectionStatus() [Line 91]
+Test Category       : Positive / Functional
+Test Case Title     : should fetch user list and render stats, user rows and control buttons
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+type: String, callback: Function | Simulated: ])
+tbody = document.getElementById('tableBody')
+
+Expected Behavior:
+Dstat Total exists.
+Dstat Active exists.
+Dstat Inactive exists.
+Tbody displays text containing 'Anil Prasad'.
+Tbody displays text containing 'sita@google.com'.
+Tbody displays text containing '✓ Approve'.
+Tbody displays text containing 'Disable'.
+
+Actual Observations:
+document.getElementById('dstatTotal').textContent = '2'
+document.getElementById('dstatActive').textContent = '1'
+document.getElementById('dstatInactive').textContent = '0'
+tbody.innerHTML contains 'Anil Prasad'
+tbody.innerHTML contains 'sita@google.com'
+tbody.innerHTML contains '✓ Approve'
+tbody.innerHTML contains 'Disable'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = on(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(document.getElementById('dstatTotal').textContent).toBe('2');
+expect(document.getElementById('dstatActive').textContent).toBe('1');
+expect(document.getElementById('dstatInactive').textContent).toBe('0');
+expect(tbody.innerHTML).toContain('Anil Prasad');
+expect(tbody.innerHTML).toContain('sita@google.com');
+expect(tbody.innerHTML).toContain('✓ Approve'); // pending user gets Approve button
+expect(tbody.innerHTML).toContain('Disable');   // active user gets Disable button
+
+Console Logs:
+[INFO] Jest executed test in 21ms
+[PASS] document.getElementById('dstatTotal').textContent = '2'
+[PASS] document.getElementById('dstatActive').textContent = '1'
+[PASS] document.getElementById('dstatInactive').textContent = '0'
+[PASS] tbody.innerHTML contains 'Anil Prasad'
+[PASS] tbody.innerHTML contains 'sita@google.com'
+[PASS] tbody.innerHTML contains '✓ Approve'
+[PASS] tbody.innerHTML contains 'Disable'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

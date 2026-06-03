@@ -1,0 +1,52 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFC-002
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-core.js
+Target Function     : initializePlanFlightMode() [Line 208]
+Test Category       : Positive / Functional
+Test Case Title     : should start with plan mode inactive
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+No external inputs required.
+
+Expected Behavior:
+Window Plan Flight Is Active() is equal to false.
+Document Body Class List Contains('Plan Mode Active') is equal to false.
+
+Actual Observations:
+window.PlanFlight.isActive() = false
+document.body.classList.contains('plan-mode-active') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.PlanFlight.isActive()).toBe(false);
+expect(document.body.classList.contains('plan-mode-active')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] window.PlanFlight.isActive() = false
+[PASS] document.body.classList.contains('plan-mode-active') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

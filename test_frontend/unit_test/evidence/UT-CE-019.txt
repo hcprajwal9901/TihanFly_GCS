@@ -1,0 +1,72 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CE-019
+Requirement ID      : REQ-HW-001
+Source File         : calib-esc.js
+Target Function     : _onStatusMessage() [Line 65]
+Test Category       : Positive / Functional
+Test Case Title     : should inject correct HTML templates and setup WebSocket onmessage hook automatically
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+select = document.getElementById('escType')
+
+Expected Behavior:
+Mp Esc Title Text exists.
+Esc Status Message exists.
+Esc Step Track exists.
+Select Options Length is equal to 7.
+Select Options[0] Text is equal to 'Normal'.
+Select Options[6] Text is equal to 'DShot600'.
+Typeof Mock Socket Onmessage is equal to 'function'.
+
+Actual Observations:
+document.querySelector('.mp-esc-title-text').textContent = 'ESC Calibration'
+document.getElementById('escStatusMsg').textContent = 'Ready'
+document.getElementById('escStepTrack').style.display = 'none'
+select.options.length = 7
+select.options[0].text = 'Normal'
+select.options[6].text = 'DShot600'
+typeof mockSocket.onmessage = 'function'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.querySelector('.mp-esc-title-text').textContent).toBe('ESC Calibration');
+expect(document.getElementById('escStatusMsg').textContent).toBe('Ready');
+expect(document.getElementById('escStepTrack').style.display).toBe('none');
+expect(select.options.length).toBe(7);
+expect(select.options[0].text).toBe('Normal');
+expect(select.options[6].text).toBe('DShot600');
+expect(typeof mockSocket.onmessage).toBe('function');
+
+Console Logs:
+[INFO] Jest executed test in 48ms
+[PASS] document.querySelector('.mp-esc-title-text').textContent = 'ESC Calibration'
+[PASS] document.getElementById('escStatusMsg').textContent = 'Ready'
+[PASS] document.getElementById('escStepTrack').style.display = 'none'
+[PASS] select.options.length = 7
+[PASS] select.options[0].text = 'Normal'
+[PASS] select.options[6].text = 'DShot600'
+[PASS] typeof mockSocket.onmessage = 'function'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

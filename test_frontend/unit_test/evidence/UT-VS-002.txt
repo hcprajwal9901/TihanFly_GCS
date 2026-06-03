@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VS-002
+Requirement ID      : REQ-SYS-002
+Source File         : video-stream.js
+Target Function     : VideoStreamController() [Line 16]
+Test Category       : Positive / Functional
+Test Case Title     : should fade overlay opacity in/out on hover actions
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+container = document.getElementById('videoStream')
+overlay = document.getElementById('rtspOverlay')
+container.dispatchEvent(new Event('mouseenter'))
+container.dispatchEvent(new Event('mouseleave'))
+
+Expected Behavior:
+Overlay Style Opacity is equal to '1'.
+Overlay Style Opacity is equal to '0.25'.
+
+Actual Observations:
+overlay.style.opacity = '1'
+overlay.style.opacity = '0.25'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(overlay.style.opacity).toBe('1');
+expect(overlay.style.opacity).toBe('0.25');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] overlay.style.opacity = '1'
+[PASS] overlay.style.opacity = '0.25'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

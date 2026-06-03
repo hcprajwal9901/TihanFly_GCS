@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFC-028
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-center.js
+Target Function     : centerHome() [Line 104]
+Test Category       : Positive / Functional
+Test Case Title     : should invoke centerHome on WaypointManager on success
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockHome = { lat: 12.98, lng: 80.12 }
+window.WaypointManager = {
+modeInstance.centerHome()
+
+Expected Behavior:
+Verify window.WaypointManager.centerHome satisfies toHaveBeenCalledTimes(1).
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('✅ Map centered on home').
+
+Actual Observations:
+window.WaypointManager.centerHome: 1 call(s)
+window.MsgConsole.success: called with '✅ Map centered on home'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.WaypointManager.centerHome).toHaveBeenCalledTimes(1);
+expect(window.MsgConsole.success).toHaveBeenCalledWith('✅ Map centered on home');
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] window.WaypointManager.centerHome: 1 call(s)
+[PASS] window.MsgConsole.success: called with '✅ Map centered on home'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

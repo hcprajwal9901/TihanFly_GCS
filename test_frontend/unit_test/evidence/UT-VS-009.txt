@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VS-009
+Requirement ID      : REQ-SYS-002
+Source File         : video-stream.js
+Target Function     : VideoStreamController() [Line 16]
+Test Category       : Negative / Robustness
+Test Case Title     : should display error message on backend "error" ws status
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+connectBtn = document.getElementById('rtspConnectBtn')
+window.dispatchEvent(new CustomEvent('video_status', {
+}))
+statusText = document.querySelector('#rtspOverlay span:last-child')
+
+Expected Behavior:
+Connect Button Disabled is equal to false.
+Error logged to console.
+Status Text displays 'ERROR'.
+
+Actual Observations:
+connectBtn.disabled = false
+window.MsgConsole.error: called with 'Video: RTSP Connection Timeout'
+statusText.textContent = 'ERROR'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(connectBtn.disabled).toBe(false);
+expect(window.MsgConsole.error).toHaveBeenCalledWith('Video: RTSP Connection Timeout');
+expect(statusText.textContent).toBe('ERROR');
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] connectBtn.disabled = false
+[PASS] window.MsgConsole.error: called with 'Video: RTSP Connection Timeout'
+[PASS] statusText.textContent = 'ERROR'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

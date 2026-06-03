@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-003
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should position the menu at (x, y) and set display to block
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+dummyWp = { id: 1, lat: 17.6, lng: 78.1 }
+window.innerWidth = 1000
+window.innerHeight = 800
+menuInstance.showMenu(100, 150, dummyWp)
+
+Expected Behavior:
+Menu Instance Current Waypoint is equal to dummyWp.
+Menu Instance Menu displayed.
+Menu Instance Menu Style Left is equal to '100px'.
+Menu Instance Menu Style Top is equal to '150px'.
+
+Actual Observations:
+menuInstance.currentWaypoint = dummyWp
+menuInstance.menu.style.display = 'block'
+menuInstance.menu.style.left = '100px'
+menuInstance.menu.style.top = '150px'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(menuInstance.currentWaypoint).toBe(dummyWp);
+expect(menuInstance.menu.style.display).toBe('block');
+expect(menuInstance.menu.style.left).toBe('100px');
+expect(menuInstance.menu.style.top).toBe('150px');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] menuInstance.currentWaypoint = dummyWp
+[PASS] menuInstance.menu.style.display = 'block'
+[PASS] menuInstance.menu.style.left = '100px'
+[PASS] menuInstance.menu.style.top = '150px'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

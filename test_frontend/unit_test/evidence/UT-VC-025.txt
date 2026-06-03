@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-025
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Positive / Functional
+Test Case Title     : should fallback to legacy message structures for backward-compatibility
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+})
+})
+})
+
+Expected Behavior:
+Log Box displays text containing 'Erasing previous program...'.
+Erase Bar Style Width is equal to '65%'.
+Erase Bar Style Width is equal to '100%'.
+Write Bar Style Width is equal to '100%'.
+Log Box displays text containing 'System up-to-date!'.
+
+Actual Observations:
+logBox.textContent contains 'Erasing previous program...'
+eraseBar.style.width = '65%'
+eraseBar.style.width = '100%'
+writeBar.style.width = '100%'
+logBox.textContent contains 'System up-to-date!'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(logBox.textContent).toContain('Erasing previous program...');
+expect(eraseBar.style.width).toBe('65%');
+expect(eraseBar.style.width).toBe('100%');
+expect(writeBar.style.width).toBe('100%');
+expect(logBox.textContent).toContain('System up-to-date!');
+
+Console Logs:
+[INFO] Jest executed test in 66ms
+[PASS] logBox.textContent contains 'Erasing previous program...'
+[PASS] eraseBar.style.width = '65%'
+[PASS] eraseBar.style.width = '100%'
+[PASS] writeBar.style.width = '100%'
+[PASS] logBox.textContent contains 'System up-to-date!'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

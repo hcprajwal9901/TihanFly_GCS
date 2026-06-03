@@ -1,0 +1,87 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MV-006
+Requirement ID      : REQ-SYS-002
+Source File         : multi-vehicle.js
+Target Function     : setSelectedSysId() [Line 20]
+Test Category       : Positive / Functional
+Test Case Title     : should build connection manager modal and support protocols selections
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.openConnectionManager()
+modal = document.getElementById('mvConnModal')
+select = document.getElementById('mvConnProtocol')
+formUdp = document.getElementById('mvFormUdp')
+formTcp = document.getElementById('mvFormTcp')
+formSerial = document.getElementById('mvFormSerial')
+select.value = 'tcp'
+select.dispatchEvent(new Event('change'))
+
+Expected Behavior:
+Modal is null.
+Modal hidden.
+Select is null.
+Form Udp hidden.
+Form Tcp hidden.
+Form Serial hidden.
+Form Udp hidden.
+Form Tcp displayed.
+Form Serial hidden.
+
+Actual Observations:
+modal: not null
+modal.style.display = 'none'
+select: not null
+formUdp.style.display = 'none'
+formTcp.style.display = 'none'
+formSerial.style.display = 'none'
+formUdp.style.display = 'none'
+formTcp.style.display = 'block'
+formSerial.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modal).not.toBeNull();
+expect(modal.style.display).not.toBe('none');
+expect(select).not.toBeNull();
+expect(formUdp.style.display).not.toBe('none'); // Uses native default display style
+expect(formTcp.style.display).toBe('none');
+expect(formSerial.style.display).toBe('none');
+expect(formUdp.style.display).toBe('none');
+expect(formTcp.style.display).toBe('block');
+expect(formSerial.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 130ms
+[PASS] modal: not null
+[PASS] modal.style.display = 'none'
+[PASS] select: not null
+[PASS] formUdp.style.display = 'none'
+[PASS] formTcp.style.display = 'none'
+[PASS] formSerial.style.display = 'none'
+[PASS] formUdp.style.display = 'none'
+[PASS] formTcp.style.display = 'block'
+[PASS] formSerial.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,96 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PBI-009
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-backend-integration.js
+Target Function     : initializePolygonExtensions() [Line 24]
+Test Category       : Positive / Functional
+Test Case Title     : should import polygon data correctly
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.confirm.mockReturnValue(true)
+pmMock.currentPolygon = {}; // Existing polygon triggers confirm clear
+clickSpy = jest.fn()
+mockInput = {
+origCreateElement = document.createElement
+return origCreateElement.call(document, tag)
+})
+pmMock.importPolygonData()
+mockFile = new Blob(['{}'], { type: 'application/json' })
+FileReader.prototype.mockResult = JSON.stringify({
+})
+})
+document.createElement.mockRestore()
+
+Expected Behavior:
+Mock Input Type is equal to 'file'.
+Mock Input Accept is equal to '.json'.
+Click action triggered.
+Verify window.confirm satisfies toHaveBeenCalledWith('Clear existing polygon?').
+Pm Mock Polygon Points is equal to [{ lat: 1.5, lng: 2.5 }].
+Pm Mock Polygon Id is equal to 'new_polygon'.
+Pm Mock Survey Settings is equal to { altitude: 80 }.
+Verify pmMock.createPolygon satisfies toHaveBeenCalled().
+Pm Mock Survey Grid is equal to [{ lat: 3.5, lng: 4.5 }].
+Verify msgConsoleMock.success satisfies toHaveBeenCalledWith('✅ Polygon imported').
+
+Actual Observations:
+mockInput.type = 'file'
+mockInput.accept = '.json'
+clickSpy: called
+window.confirm: called with 'Clear existing polygon?'
+pmMock.polygonPoints = [{ lat: 1.5, lng: 2.5 }]
+pmMock.polygonId = 'new_polygon'
+pmMock.surveySettings = { altitude: 80 }
+pmMock.createPolygon: called
+pmMock.surveyGrid = [{ lat: 3.5, lng: 4.5 }]
+msgConsoleMock.success: called with '✅ Polygon imported'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockInput.type).toBe('file');
+expect(mockInput.accept).toBe('.json');
+expect(clickSpy).toHaveBeenCalled();
+expect(window.confirm).toHaveBeenCalledWith('Clear existing polygon?');
+expect(pmMock.polygonPoints).toEqual([{ lat: 1.5, lng: 2.5 }]);
+expect(pmMock.polygonId).toBe('new_polygon');
+expect(pmMock.surveySettings).toEqual({ altitude: 80 });
+expect(pmMock.createPolygon).toHaveBeenCalled();
+expect(pmMock.surveyGrid).toEqual([{ lat: 3.5, lng: 4.5 }]);
+expect(msgConsoleMock.success).toHaveBeenCalledWith('✅ Polygon imported');
+
+Console Logs:
+[INFO] Jest executed test in 6ms
+[PASS] mockInput.type = 'file'
+[PASS] mockInput.accept = '.json'
+[PASS] clickSpy: called
+[PASS] window.confirm: called with 'Clear existing polygon?'
+[PASS] pmMock.polygonPoints = [{ lat: 1.5, lng: 2.5 }]
+[PASS] pmMock.polygonId = 'new_polygon'
+[PASS] pmMock.surveySettings = { altitude: 80 }
+[PASS] pmMock.createPolygon: called
+[PASS] pmMock.surveyGrid = [{ lat: 3.5, lng: 4.5 }]
+[PASS] msgConsoleMock.success: called with '✅ Polygon imported'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

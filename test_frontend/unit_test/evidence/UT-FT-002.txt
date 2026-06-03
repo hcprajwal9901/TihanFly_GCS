@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FT-002
+Requirement ID      : REQ-SYS-002
+Source File         : frame-type.js
+Target Function     : send() [Line 64]
+Test Category       : Positive / Functional
+Test Case Title     : should update class description when select element changes
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+classSel = document.getElementById('ft-class-select')
+classDesc = document.getElementById('ft-class-desc')
+classSel.value = '1'
+classSel.dispatchEvent(new Event('change'))
+classSel.value = '2'
+classSel.dispatchEvent(new Event('change'))
+
+Expected Behavior:
+Class Desc displays text containing 'Quadcopter'.
+Class Desc displays text containing 'Hexacopter'.
+
+Actual Observations:
+classDesc.textContent contains 'Quadcopter'
+classDesc.textContent contains 'Hexacopter'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(classDesc.textContent).toContain('Quadcopter');
+expect(classDesc.textContent).toContain('Hexacopter');
+
+Console Logs:
+[INFO] Jest executed test in 46ms
+[PASS] classDesc.textContent contains 'Quadcopter'
+[PASS] classDesc.textContent contains 'Hexacopter'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

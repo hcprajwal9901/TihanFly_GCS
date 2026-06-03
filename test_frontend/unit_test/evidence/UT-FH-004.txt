@@ -1,0 +1,85 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FH-004
+Requirement ID      : REQ-HUD-001
+Source File         : flight-hud.js
+Target Function     : init() [Line 27]
+Test Category       : Positive / Functional
+Test Case Title     : should apply absolute offsets and reposition HUD Container on dragging
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+toggleHudCheckbox.checked = true
+toggleHudCheckbox.dispatchEvent(new Event('change'))
+hudContainer.getBoundingClientRect = jest.fn().mockReturnValue({
+})
+mouseDownEvent = new MouseEvent('mousedown', {
+})
+titleBar.dispatchEvent(mouseDownEvent)
+Object.defineProperty(hudContainer, 'offsetTop', { value: 100 })
+Object.defineProperty(hudContainer, 'offsetLeft', { value: 200 })
+mouseMoveEvent = new MouseEvent('mousemove', {
+})
+document.dispatchEvent(mouseMoveEvent)
+mouseUpEvent = new MouseEvent('mouseup')
+document.dispatchEvent(mouseUpEvent)
+
+Expected Behavior:
+Hud Container Style Top is equal to '100px'.
+Hud Container Style Left is equal to '200px'.
+Hud Container Style Bottom is equal to 'auto'.
+Hud Container Style Right is equal to 'auto'.
+Hud Container Style Top is equal to '130px'); // 100 - (120 - 150.
+Hud Container Style Left is equal to '250px'); // 200 - (250 - 300.
+Hud Container Style Transition is equal to ''.
+
+Actual Observations:
+hudContainer.style.top = '100px'
+hudContainer.style.left = '200px'
+hudContainer.style.bottom = 'auto'
+hudContainer.style.right = 'auto'
+hudContainer.style.top = '130px'); // 100 - (120 - 150
+hudContainer.style.left = '250px'); // 200 - (250 - 300
+hudContainer.style.transition = ''
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(hudContainer.style.top).toBe('100px');
+expect(hudContainer.style.left).toBe('200px');
+expect(hudContainer.style.bottom).toBe('auto');
+expect(hudContainer.style.right).toBe('auto');
+expect(hudContainer.style.top).toBe('130px'); // 100 - (120 - 150)
+expect(hudContainer.style.left).toBe('250px'); // 200 - (250 - 300)
+expect(hudContainer.style.transition).toBe('');
+
+Console Logs:
+[INFO] Jest executed test in 25ms
+[PASS] hudContainer.style.top = '100px'
+[PASS] hudContainer.style.left = '200px'
+[PASS] hudContainer.style.bottom = 'auto'
+[PASS] hudContainer.style.right = 'auto'
+[PASS] hudContainer.style.top = '130px'); // 100 - (120 - 150
+[PASS] hudContainer.style.left = '250px'); // 200 - (250 - 300
+[PASS] hudContainer.style.transition = ''
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,69 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MFM-011
+Requirement ID      : REQ-SYS-002
+Source File         : mission-file-manager.js
+Target Function     : closeDialog() [Line 431]
+Test Category       : Positive / Functional
+Test Case Title     : should completely reset waypoints and clear GCS current mission states
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+success = missionManager.newMission()
+
+Expected Behavior:
+Success is equal to true.
+Verify mockWaypointManager.clearAllWaypoints satisfies toHaveBeenCalled().
+Verify mockWaypointManager.clearHomePosition satisfies toHaveBeenCalled().
+Mission Manager Get Current Mission() is null.
+Verify window.MsgConsole.success satisfies toHaveBeenCalled().
+
+Actual Observations:
+success = true
+mockWaypointManager.clearAllWaypoints: called
+mockWaypointManager.clearHomePosition: called
+missionManager.getCurrentMission(): null
+window.MsgConsole.success: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(clearAllWaypoints).toHaveBeenCalled();
+expect(clearHomePosition).toHaveBeenCalled();
+expect(confirm).toHaveBeenCalled();
+expect(updateMissionTitle).toHaveBeenCalled();
+// JSDOM verification:
+expect(success).toBe(true);
+expect(mockWaypointManager.clearAllWaypoints).toHaveBeenCalled();
+expect(mockWaypointManager.clearHomePosition).toHaveBeenCalled();
+expect(missionManager.getCurrentMission()).toBeNull();
+expect(window.MsgConsole.success).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] success = true
+[PASS] mockWaypointManager.clearAllWaypoints: called
+[PASS] mockWaypointManager.clearHomePosition: called
+[PASS] missionManager.getCurrentMission(): null
+[PASS] window.MsgConsole.success: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

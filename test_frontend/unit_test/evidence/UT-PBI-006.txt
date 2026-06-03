@@ -1,0 +1,94 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PBI-006
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-backend-integration.js
+Target Function     : initializePolygonExtensions() [Line 24]
+Test Category       : Positive / Functional
+Test Case Title     : should clean up associated markers by coords, source tag, or id list
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+marker1 = { id: 'm1' }
+marker2 = { id: 'm2' }
+marker3 = { id: 'm3' }
+wp1 = { id: 101, lat: 10.0, lng: 20.0, source: 'user', marker: marker1 }
+wp2 = { id: 102, lat: 11.0, lng: 21.0, source: 'polygon', marker: marker2 }
+wp3 = { id: 103, lat: 12.0, lng: 22.0, source: 'user', marker: marker3 }; // matches createdWaypointIds
+wmMock.waypoints = [wp1, wp2, wp3]
+wmMock.tmap.markers = [marker1, marker2, marker3]
+pmMock.surveyGrid = [{ lat: 10.0, lng: 20.0 }]; // wp1 matches by coord (rounded)
+pmMock.createdWaypointIds = [103]; // wp3 matches by ID list
+pmMock.clearPolygon()
+
+Expected Behavior:
+Verify wmMock.tmap.markerLayer.removeLayer satisfies toHaveBeenCalledWith(marker1).
+Verify wmMock.tmap.markerLayer.removeLayer satisfies toHaveBeenCalledWith(marker2).
+Verify wmMock.tmap.markerLayer.removeLayer satisfies toHaveBeenCalledWith(marker3).
+Wm Mock Tmap Markers is equal to [].
+Wm Mock Waypoints is equal to [].
+Verify wmMock.updateRoute satisfies toHaveBeenCalled().
+Verify wmMock.updateStats satisfies toHaveBeenCalled().
+Verify commandEditorMock.refreshWaypoints satisfies toHaveBeenCalled().
+Pm Mock Created Waypoint Ids is equal to [].
+Verify msgConsoleMock.info satisfies toHaveBeenCalledWith('Polygon and survey waypoints cleared').
+
+Actual Observations:
+wmMock.tmap.markerLayer.removeLayer: called with marker1
+wmMock.tmap.markerLayer.removeLayer: called with marker2
+wmMock.tmap.markerLayer.removeLayer: called with marker3
+wmMock.tmap.markers = []
+wmMock.waypoints = []
+wmMock.updateRoute: called
+wmMock.updateStats: called
+commandEditorMock.refreshWaypoints: called
+pmMock.createdWaypointIds = []
+msgConsoleMock.info: called with 'Polygon and survey waypoints cleared'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wmMock.tmap.markerLayer.removeLayer).toHaveBeenCalledWith(marker1);
+expect(wmMock.tmap.markerLayer.removeLayer).toHaveBeenCalledWith(marker2);
+expect(wmMock.tmap.markerLayer.removeLayer).toHaveBeenCalledWith(marker3);
+expect(wmMock.tmap.markers).toEqual([]);
+expect(wmMock.waypoints).toEqual([]);
+expect(wmMock.updateRoute).toHaveBeenCalled();
+expect(wmMock.updateStats).toHaveBeenCalled();
+expect(commandEditorMock.refreshWaypoints).toHaveBeenCalled();
+expect(pmMock.createdWaypointIds).toEqual([]);
+expect(msgConsoleMock.info).toHaveBeenCalledWith('Polygon and survey waypoints cleared');
+
+Console Logs:
+[INFO] Jest executed test in 6ms
+[PASS] wmMock.tmap.markerLayer.removeLayer: called with marker1
+[PASS] wmMock.tmap.markerLayer.removeLayer: called with marker2
+[PASS] wmMock.tmap.markerLayer.removeLayer: called with marker3
+[PASS] wmMock.tmap.markers = []
+[PASS] wmMock.waypoints = []
+[PASS] wmMock.updateRoute: called
+[PASS] wmMock.updateStats: called
+[PASS] commandEditorMock.refreshWaypoints: called
+[PASS] pmMock.createdWaypointIds = []
+[PASS] msgConsoleMock.info: called with 'Polygon and survey waypoints cleared'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

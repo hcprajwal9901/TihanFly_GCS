@@ -1,0 +1,48 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFP-004
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-polygon.js
+Target Function     : handlePolygonActions() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should route survey-settings action
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+instance.handlePolygonActions('survey-settings')
+
+Expected Behavior:
+Verify instance.showSurveySettings satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+instance.showSurveySettings: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(instance.showSurveySettings).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] instance.showSurveySettings: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

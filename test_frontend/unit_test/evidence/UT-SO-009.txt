@@ -1,0 +1,115 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-SO-009
+Requirement ID      : REQ-HW-001
+Source File         : servo-output.js
+Target Function     : pName() [Line 93]
+Test Category       : Positive / Functional
+Test Case Title     : should clear pending flag and write parameters sequentially when write button is clicked
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+fnSel8 = document.getElementById('so-fn-8')
+minInp8 = document.getElementById('so-min-8')
+saveBtn = document.getElementById('so-save-btn')
+saveBadge = document.getElementById('so-save-badge')
+fnSel8.value = '6'; // Mount Pitch
+fnSel8.dispatchEvent(new Event('change'))
+minInp8.value = '1060'
+minInp8.dispatchEvent(new Event('change'))
+window.safeSend.mockClear()
+saveBtn.click()
+triggerWsMessage({ type: 'param_set_sent', param_id: 'SERVO8_FUNCTION', value: 6 })
+triggerWsMessage({ type: 'param_set_sent', param_id: 'SERVO8_REVERSED', value: 0 })
+triggerWsMessage({ type: 'param_set_sent', param_id: 'SERVO8_MIN', value: 1060 })
+triggerWsMessage({ type: 'param_set_sent', param_id: 'SERVO8_TRIM', value: 1500 })
+triggerWsMessage({ type: 'param_set_sent', param_id: 'SERVO8_MAX', value: 1900 })
+jest.advanceTimersByTime(1800)
+
+Expected Behavior:
+Verify window.safeSend satisfies toHaveBeenCalledTimes(5).
+Verify window.safeSend satisfies toHaveBeenCalledWith({ type: 'param_set', param_id: 'SERVO8_FUNCTION', value: 6 }).
+Verify window.safeSend satisfies toHaveBeenCalledWith({ type: 'param_set', param_id: 'SERVO8_REVERSED', value: 0 }).
+Verify window.safeSend satisfies toHaveBeenCalledWith({ type: 'param_set', param_id: 'SERVO8_MIN', value: 1060 }).
+Verify window.safeSend satisfies toHaveBeenCalledWith({ type: 'param_set', param_id: 'SERVO8_TRIM', value: 1500 }).
+Verify window.safeSend satisfies toHaveBeenCalledWith({ type: 'param_set', param_id: 'SERVO8_MAX', value: 1900 }).
+Save Badge displays text containing 'Writing to FC…'.
+Save Badge Class Name contains 'fs-badge-loading'.
+So Row 8 exists.
+Save Badge displays '✓ Written to FC'.
+Save Badge Class Name contains 'fs-badge-ok'.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('Servo output settings written to flight controller', false).
+So Row 8 exists.
+So Row 8 exists.
+
+Actual Observations:
+window.safeSend: 5 call(s)
+window.safeSend: called with { type: 'param_set', param_id: 'SERVO8_FUNCTION', value: 6 }
+window.safeSend: called with { type: 'param_set', param_id: 'SERVO8_REVERSED', value: 0 }
+window.safeSend: called with { type: 'param_set', param_id: 'SERVO8_MIN', value: 1060 }
+window.safeSend: called with { type: 'param_set', param_id: 'SERVO8_TRIM', value: 1500 }
+window.safeSend: called with { type: 'param_set', param_id: 'SERVO8_MAX', value: 1900 }
+saveBadge.textContent contains 'Writing to FC…'
+saveBadge.className contains 'fs-badge-loading'
+document.getElementById('so-row-8').classList.contains('so-row-pending') = false
+saveBadge.textContent = '✓ Written to FC'
+saveBadge.className contains 'fs-badge-ok'
+window.SwUtil.toast: called with 'Servo output settings written to flight controller', false
+document.getElementById('so-row-8').classList.contains('so-row-saved') = true
+document.getElementById('so-row-8').classList.contains('so-row-saved') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.safeSend).toHaveBeenCalledTimes(5); // all 5 params are sent for the pending row
+expect(window.safeSend).toHaveBeenCalledWith({ type: 'param_set', param_id: 'SERVO8_FUNCTION', value: 6 });
+expect(window.safeSend).toHaveBeenCalledWith({ type: 'param_set', param_id: 'SERVO8_REVERSED', value: 0 });
+expect(window.safeSend).toHaveBeenCalledWith({ type: 'param_set', param_id: 'SERVO8_MIN', value: 1060 });
+expect(window.safeSend).toHaveBeenCalledWith({ type: 'param_set', param_id: 'SERVO8_TRIM', value: 1500 });
+expect(window.safeSend).toHaveBeenCalledWith({ type: 'param_set', param_id: 'SERVO8_MAX', value: 1900 });
+expect(saveBadge.textContent).toContain('Writing to FC…');
+expect(saveBadge.className).toContain('fs-badge-loading');
+expect(document.getElementById('so-row-8').classList.contains('so-row-pending')).toBe(false);
+expect(saveBadge.textContent).toBe('✓ Written to FC');
+expect(saveBadge.className).toContain('fs-badge-ok');
+expect(window.SwUtil.toast).toHaveBeenCalledWith('Servo output settings written to flight controller', false);
+expect(document.getElementById('so-row-8').classList.contains('so-row-saved')).toBe(true);
+expect(document.getElementById('so-row-8').classList.contains('so-row-saved')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 232ms
+[PASS] window.safeSend: 5 call(s)
+[PASS] window.safeSend: called with { type: 'param_set', param_id: 'SERVO8_FUNCTION', value: 6 }
+[PASS] window.safeSend: called with { type: 'param_set', param_id: 'SERVO8_REVERSED', value: 0 }
+[PASS] window.safeSend: called with { type: 'param_set', param_id: 'SERVO8_MIN', value: 1060 }
+[PASS] window.safeSend: called with { type: 'param_set', param_id: 'SERVO8_TRIM', value: 1500 }
+[PASS] window.safeSend: called with { type: 'param_set', param_id: 'SERVO8_MAX', value: 1900 }
+[PASS] saveBadge.textContent contains 'Writing to FC…'
+[PASS] saveBadge.className contains 'fs-badge-loading'
+[PASS] document.getElementById('so-row-8').classList.contains('so-row-pending') = false
+[PASS] saveBadge.textContent = '✓ Written to FC'
+[PASS] saveBadge.className contains 'fs-badge-ok'
+[PASS] window.SwUtil.toast: called with 'Servo output settings written to flight controller', false
+[PASS] document.getElementById('so-row-8').classList.contains('so-row-saved') = true
+[PASS] document.getElementById('so-row-8').classList.contains('so-row-saved') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

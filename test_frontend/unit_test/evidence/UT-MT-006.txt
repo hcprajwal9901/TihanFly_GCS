@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MT-006
+Requirement ID      : REQ-HW-001
+Source File         : motor-test.js
+Target Function     : acknowledge() [Line 122]
+Test Category       : Positive / Functional
+Test Case Title     : should immediately stop all motors and cancel timers on click Stop
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+motorBtn = document.getElementById('mt-motor-5')
+motorBtn.click()
+stopBtn = document.getElementById('mt-btn-stop')
+stopBtn.click()
+})
+
+Expected Behavior:
+Motor Button Class List Contains('Mt Running') is equal to true.
+Verify window.safeSend satisfies toHaveBeenLastCalledWith().
+Motor Button Class List Contains('Mt Running') is equal to false.
+Mt Status Message exists.
+
+Actual Observations:
+motorBtn.classList.contains('mt-running') = true
+window.safeSend: toHaveBeenLastCalledWith
+motorBtn.classList.contains('mt-running') = false
+document.getElementById('mt-status-msg').textContent = 'Stopped.'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(setStatus).toHaveBeenCalled();
+// JSDOM verification:
+expect(motorBtn.classList.contains('mt-running')).toBe(true);
+expect(window.safeSend).toHaveBeenLastCalledWith({
+expect(motorBtn.classList.contains('mt-running')).toBe(false);
+expect(document.getElementById('mt-status-msg').textContent).toBe('Stopped.');
+
+Console Logs:
+[INFO] Jest executed test in 75ms
+[PASS] motorBtn.classList.contains('mt-running') = true
+[PASS] window.safeSend: toHaveBeenLastCalledWith
+[PASS] motorBtn.classList.contains('mt-running') = false
+[PASS] document.getElementById('mt-status-msg').textContent = 'Stopped.'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

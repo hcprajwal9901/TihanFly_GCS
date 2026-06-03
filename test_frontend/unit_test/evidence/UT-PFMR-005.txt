@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFMR-005
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-menu-router.js
+Target Function     : handleMenuAction() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should route polygon actions to handlePolygonActions
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+polygonActions = ['draw-polygon', 'survey-pattern', 'survey-settings', 'clear-polygon']
+modeInstance.handleMenuAction(action)
+})
+
+Expected Behavior:
+Verify modeInstance.handlePolygonActions satisfies toHaveBeenLastCalledWith(action).
+Verify modeInstance.handlePolygonActions satisfies toHaveBeenCalledTimes(4).
+
+Actual Observations:
+modeInstance.handlePolygonActions: toHaveBeenLastCalledWith(action)
+modeInstance.handlePolygonActions: 4 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modeInstance.handlePolygonActions).toHaveBeenLastCalledWith(action);
+expect(modeInstance.handlePolygonActions).toHaveBeenCalledTimes(4);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] modeInstance.handlePolygonActions: toHaveBeenLastCalledWith(action)
+[PASS] modeInstance.handlePolygonActions: 4 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

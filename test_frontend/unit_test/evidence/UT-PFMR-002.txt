@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFMR-002
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-menu-router.js
+Target Function     : handleMenuAction() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should route takeoff actions to handleTakeoffActions
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+takeoffActions = ['takeoff-here', 'set-home-position', 'clear-home']
+modeInstance.handleMenuAction(action)
+})
+
+Expected Behavior:
+Verify modeInstance.handleTakeoffActions satisfies toHaveBeenLastCalledWith(action).
+Verify modeInstance.handleTakeoffActions satisfies toHaveBeenCalledTimes(3).
+
+Actual Observations:
+modeInstance.handleTakeoffActions: toHaveBeenLastCalledWith(action)
+modeInstance.handleTakeoffActions: 3 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modeInstance.handleTakeoffActions).toHaveBeenLastCalledWith(action);
+expect(modeInstance.handleTakeoffActions).toHaveBeenCalledTimes(3);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] modeInstance.handleTakeoffActions: toHaveBeenLastCalledWith(action)
+[PASS] modeInstance.handleTakeoffActions: 3 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

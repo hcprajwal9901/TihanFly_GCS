@@ -1,0 +1,65 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WM-011
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-manager.js
+Target Function     : initializeWaypointManager() [Line 696]
+Test Category       : Positive / Functional
+Test Case Title     : should create marker, bind popup, register drags/clicks and contextual menu listeners
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+manager.addWaypoint(17.605, 78.130, 50, 'landing')
+waypoint = manager.waypoints[1]; // Index 1 because takeoff was prepended
+
+Expected Behavior:
+Verify waypoint.marker satisfies toBeDefined().
+Verify waypoint.marker.bindPopup satisfies toHaveBeenCalled().
+Verify mockTMap.onMarkerDragEnd satisfies toHaveBeenCalledWith(waypoint.marker, expect.any(Function)).
+Verify mockTMap.onMarkerClick satisfies toHaveBeenCalledWith(waypoint.marker, expect.any(Function)).
+Verify window.WaypointContextMenu.attachToMarker satisfies toHaveBeenCalledWith(waypoint.marker, waypoint).
+
+Actual Observations:
+waypoint.marker: defined
+waypoint.marker.bindPopup: called
+mockTMap.onMarkerDragEnd: called with waypoint.marker, expect.any(Function)
+mockTMap.onMarkerClick: called with waypoint.marker, expect.any(Function)
+window.WaypointContextMenu.attachToMarker: called with waypoint.marker, waypoint
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(waypoint.marker).toBeDefined();
+expect(waypoint.marker.bindPopup).toHaveBeenCalled();
+expect(mockTMap.onMarkerDragEnd).toHaveBeenCalledWith(waypoint.marker, expect.any(Function));
+expect(mockTMap.onMarkerClick).toHaveBeenCalledWith(waypoint.marker, expect.any(Function));
+expect(window.WaypointContextMenu.attachToMarker).toHaveBeenCalledWith(waypoint.marker, waypoint);
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] waypoint.marker: defined
+[PASS] waypoint.marker.bindPopup: called
+[PASS] mockTMap.onMarkerDragEnd: called with waypoint.marker, expect.any(Function)
+[PASS] mockTMap.onMarkerClick: called with waypoint.marker, expect.any(Function)
+[PASS] window.WaypointContextMenu.attachToMarker: called with waypoint.marker, waypoint
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,85 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-016
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : dispatch() [Line 1419]
+Test Category       : Positive / Functional
+Test Case Title     : should load the file content, validate json schemas, and dispatch backend install parameters
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+raw: String | Simulated: createdInput = null
+originalCreate = document.createElement
+document.createElement = function(tagName) {
+el = originalCreate.call(document, tagName)
+createdInput = el
+installBtn.click()
+validMockFile = {
+})
+createdInput.dispatchEvent(new Event('change'))
+logBox = document.getElementById('vcFlashLog')
+})
+document.createElement = originalCreate
+
+Expected Behavior:
+Log Box displays text containing 'Selected: tfly-subsystem.apj'.
+Log Box displays text containing 'Port: COM7  |  Drone: kala'.
+Log Box displays text containing 'Firmware file read OK — starting installation…'.
+Verify window.safeSend satisfies toHaveBeenLastCalledWith().
+Install Button Disabled is equal to true.
+Install Button Style Opacity is equal to '0.5'.
+
+Actual Observations:
+logBox.textContent contains 'Selected: tfly-subsystem.apj'
+logBox.textContent contains 'Port: COM7  |  Drone: kala'
+logBox.textContent contains 'Firmware file read OK — starting installation…'
+window.safeSend: toHaveBeenLastCalledWith
+installBtn.disabled = true
+installBtn.style.opacity = '0.5'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(has).toHaveBeenCalled();
+expect(parse).toHaveBeenCalled();
+expect(safeSend).toHaveBeenCalled();
+expect(vcHandleFirmwareMessage).toHaveBeenCalled();
+expect(vcPopulatePorts).toHaveBeenCalled();
+// JSDOM verification:
+expect(logBox.textContent).toContain('Selected: tfly-subsystem.apj');
+expect(logBox.textContent).toContain('Port: COM7  |  Drone: kala');
+expect(logBox.textContent).toContain('Firmware file read OK — starting installation…');
+expect(window.safeSend).toHaveBeenLastCalledWith({
+expect(installBtn.disabled).toBe(true);
+expect(installBtn.style.opacity).toBe('0.5');
+
+Console Logs:
+[INFO] Jest executed test in 58ms
+[PASS] logBox.textContent contains 'Selected: tfly-subsystem.apj'
+[PASS] logBox.textContent contains 'Port: COM7  |  Drone: kala'
+[PASS] logBox.textContent contains 'Firmware file read OK — starting installation…'
+[PASS] window.safeSend: toHaveBeenLastCalledWith
+[PASS] installBtn.disabled = true
+[PASS] installBtn.style.opacity = '0.5'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

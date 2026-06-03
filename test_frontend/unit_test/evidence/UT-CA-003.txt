@@ -1,0 +1,150 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CA-003
+Requirement ID      : REQ-HW-001
+Source File         : calib-accel.js
+Target Function     : buildCubeGrid() [Line 58]
+Test Category       : Negative / Robustness
+Test Case Title     : should start calibration, request steps, confirmation, and handle timeouts & error flows
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CalibAccel.init()
+})
+startBtn = document.getElementById('accelStartBtn')
+nextBtn = document.getElementById('accelNextBtn')
+statusVal = document.getElementById('accelStatus')
+hint = document.getElementById('accelStepHint')
+startBtn.click()
+})
+faceLevel = document.querySelector('.calib-cube-face[data-face="level"]')
+nextBtn.click()
+)
+mockSocket.send.mockClear()
+nextBtn.click()
+})
+faceLeft = document.querySelector('.calib-cube-face[data-face="left"]')
+})
+errBanner = document.getElementById('accelErrorBanner')
+errText = document.getElementById('accelErrorText')
+})
+
+Expected Behavior:
+Start Button hidden.
+Next Button display state is inline-flex.
+Next Button Disabled is equal to true.
+Status Val displays 'WAITING…'.
+Hint displays 'Waiting for drone to request first position…'.
+Status Val displays 'POSITION 1 / 6'.
+Hint displays text containing 'Hold drone in the Level orientation'.
+Next Button Disabled is equal to false.
+Face Level Class List Contains('Active') is equal to true.
+Next Button Disabled is equal to true.
+Status Val displays 'CONFIRMING…'.
+Verify mockSocket.send satisfies toHaveBeenCalledWith().
+Verify mockSocket.send satisfies toHaveBeenCalled().
+Face Level Class List Contains('Active') is equal to false.
+Face Level Class List Contains('Done') is equal to true.
+Face Left Class List Contains('Active') is equal to true.
+Status Val displays 'POSITION 2 / 6'.
+Accel Pct exists.
+Err Banner displayed.
+Err Text displays '⚠️ Move detected! Keep still!'.
+Next Button Disabled is equal to false.
+Err Text displays '⏱ No reply from flight controller'.
+
+Actual Observations:
+startBtn.style.display = 'none'
+nextBtn.style.display = 'inline-flex'
+nextBtn.disabled = true
+statusVal.textContent = 'WAITING…'
+hint.textContent = 'Waiting for drone to request first position…'
+statusVal.textContent = 'POSITION 1 / 6'
+hint.textContent contains 'Hold drone in the "Level" orientation'
+nextBtn.disabled = false
+faceLevel.classList.contains('active') = true
+nextBtn.disabled = true
+statusVal.textContent = 'CONFIRMING…'
+mockSocket.send: toHaveBeenCalledWith
+mockSocket.send: not called
+faceLevel.classList.contains('active') = false
+faceLevel.classList.contains('done') = true
+faceLeft.classList.contains('active') = true
+statusVal.textContent = 'POSITION 2 / 6'
+document.getElementById('accelPct').textContent = '1 / 6'
+errBanner.style.display = 'flex'
+errText.textContent = '⚠️ Move detected! Keep still!'
+nextBtn.disabled = false
+errText.textContent = '⏱ No reply from flight controller'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(startBtn.style.display).toBe('none');
+expect(nextBtn.style.display).toBe('inline-flex');
+expect(nextBtn.disabled).toBe(true); // waiting for drone
+expect(statusVal.textContent).toBe('WAITING…');
+expect(hint.textContent).toBe('Waiting for drone to request first position…');
+expect(statusVal.textContent).toBe('POSITION 1 / 6');
+expect(hint.textContent).toContain('Hold drone in the "Level" orientation');
+expect(nextBtn.disabled).toBe(false); // user must act now
+expect(faceLevel.classList.contains('active')).toBe(true);
+expect(nextBtn.disabled).toBe(true); // locked until drone acknowledges
+expect(statusVal.textContent).toBe('CONFIRMING…');
+expect(mockSocket.send).toHaveBeenCalledWith(
+expect(mockSocket.send).not.toHaveBeenCalled();
+expect(faceLevel.classList.contains('active')).toBe(false);
+expect(faceLevel.classList.contains('done')).toBe(true);
+expect(faceLeft.classList.contains('active')).toBe(true);
+expect(statusVal.textContent).toBe('POSITION 2 / 6');
+expect(document.getElementById('accelPct').textContent).toBe('1 / 6');
+expect(errBanner.style.display).toBe('flex');
+expect(errText.textContent).toBe('⚠️ Move detected! Keep still!');
+expect(nextBtn.disabled).toBe(false); // allowed to retry
+expect(errText.textContent).toBe('⏱ No reply from flight controller');
+
+Console Logs:
+[INFO] Jest executed test in 92ms
+[PASS] startBtn.style.display = 'none'
+[PASS] nextBtn.style.display = 'inline-flex'
+[PASS] nextBtn.disabled = true
+[PASS] statusVal.textContent = 'WAITING…'
+[PASS] hint.textContent = 'Waiting for drone to request first position…'
+[PASS] statusVal.textContent = 'POSITION 1 / 6'
+[PASS] hint.textContent contains 'Hold drone in the "Level" orientation'
+[PASS] nextBtn.disabled = false
+[PASS] faceLevel.classList.contains('active') = true
+[PASS] nextBtn.disabled = true
+[PASS] statusVal.textContent = 'CONFIRMING…'
+[PASS] mockSocket.send: toHaveBeenCalledWith
+[PASS] mockSocket.send: not called
+[PASS] faceLevel.classList.contains('active') = false
+[PASS] faceLevel.classList.contains('done') = true
+[PASS] faceLeft.classList.contains('active') = true
+[PASS] statusVal.textContent = 'POSITION 2 / 6'
+[PASS] document.getElementById('accelPct').textContent = '1 / 6'
+[PASS] errBanner.style.display = 'flex'
+[PASS] errText.textContent = '⚠️ Move detected! Keep still!'
+[PASS] nextBtn.disabled = false
+[PASS] errText.textContent = '⏱ No reply from flight controller'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

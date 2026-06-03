@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFMS-015
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-mission-send.js
+Target Function     : handleMissionSendActions() [Line 109]
+Test Category       : Positive / Functional
+Test Case Title     : should create #sentPayloadOverlay and inject formatted JSON markup
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+payload = { mock_data: true }
+window.showSentPayloadOverlay(payload, 'markers')
+overlay = document.body.querySelector('#sentPayloadOverlay')
+pre = overlay.querySelector('pre')
+
+Expected Behavior:
+Overlay is true.
+Overlay displays text containing 'Markers Sent to Drone'.
+Pre displays text containing 'mock_data: true'.
+
+Actual Observations:
+overlay: truthy
+overlay.textContent contains 'Markers Sent to Drone'
+pre.textContent contains '"mock_data": true'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(overlay).toBeTruthy();
+expect(overlay.textContent).toContain('Markers Sent to Drone');
+expect(pre.textContent).toContain('"mock_data": true');
+
+Console Logs:
+[INFO] Jest executed test in 37ms
+[PASS] overlay: truthy
+[PASS] overlay.textContent contains 'Markers Sent to Drone'
+[PASS] pre.textContent contains '"mock_data": true'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

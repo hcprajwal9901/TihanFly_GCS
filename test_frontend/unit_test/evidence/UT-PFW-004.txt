@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFW-004
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-weather.js
+Target Function     : moveWeatherToBottomLeft() [Line 11]
+Test Category       : Positive / Functional
+Test Case Title     : should fall back to direct map click registration if tmap triggers are missing
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockMap = {
+window.tmap = {
+window.WaypointManager = {
+modeInstance.enableWeatherMapClick()
+spyFetch = jest.spyOn(modeInstance, 'fetchWeatherForPlanMode').mockImplementation(() => {})
+clickEvent = {
+modeInstance._weatherClickListener(clickEvent)
+spyFetch.mockRestore()
+
+Expected Behavior:
+Verify mockMap.on satisfies toHaveBeenCalledWith('click', expect.any(Function)).
+Mode Instance Weather Click Listener is true.
+Verify spyFetch satisfies toHaveBeenCalledWith(12.345, 80.678).
+
+Actual Observations:
+mockMap.on: called with 'click', expect.any(Function)
+modeInstance._weatherClickListener: truthy
+spyFetch: called with 12.345, 80.678
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockMap.on).toHaveBeenCalledWith('click', expect.any(Function));
+expect(modeInstance._weatherClickListener).toBeTruthy();
+expect(spyFetch).toHaveBeenCalledWith(12.345, 80.678);
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] mockMap.on: called with 'click', expect.any(Function)
+[PASS] modeInstance._weatherClickListener: truthy
+[PASS] spyFetch: called with 12.345, 80.678
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

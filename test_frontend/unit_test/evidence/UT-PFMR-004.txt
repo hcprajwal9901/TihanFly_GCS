@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFMR-004
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-menu-router.js
+Target Function     : handleMenuAction() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should route mission send actions to handleMissionSendActions
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+missionActions = ['send-markers', 'send-mission', 'write-to-drone', 'start-mission']
+modeInstance.handleMenuAction(action)
+})
+
+Expected Behavior:
+Verify modeInstance.handleMissionSendActions satisfies toHaveBeenLastCalledWith(action).
+Verify modeInstance.handleMissionSendActions satisfies toHaveBeenCalledTimes(4).
+
+Actual Observations:
+modeInstance.handleMissionSendActions: toHaveBeenLastCalledWith(action)
+modeInstance.handleMissionSendActions: 4 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modeInstance.handleMissionSendActions).toHaveBeenLastCalledWith(action);
+expect(modeInstance.handleMissionSendActions).toHaveBeenCalledTimes(4);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] modeInstance.handleMissionSendActions: toHaveBeenLastCalledWith(action)
+[PASS] modeInstance.handleMissionSendActions: 4 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

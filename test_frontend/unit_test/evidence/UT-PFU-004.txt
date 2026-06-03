@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFU-004
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-ui.js
+Target Function     : hideElements() [Line 47]
+Test Category       : Positive / Functional
+Test Case Title     : should hide all container elements and invoke DropdownStrip sync on hideElements
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.hideElements()
+
+Expected Behavior:
+Mode Instance Strip Container hidden.
+Mode Instance Strip Container Class List Contains('Hidden') is equal to true.
+Mode Instance Flight Controls Strip hidden.
+Mode Instance Flight Controls Strip Class List Contains('Hidden') is equal to true.
+Mode Instance Message Console hidden.
+Verify window.DropdownStrip.hide satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+modeInstance.stripContainer.style.display = 'none'
+modeInstance.stripContainer.classList.contains('hidden') = true
+modeInstance.flightControlsStrip.style.display = 'none'
+modeInstance.flightControlsStrip.classList.contains('hidden') = true
+modeInstance.messageConsole.style.display = 'none'
+window.DropdownStrip.hide: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modeInstance.stripContainer.style.display).toBe('none');
+expect(modeInstance.stripContainer.classList.contains('hidden')).toBe(true);
+expect(modeInstance.flightControlsStrip.style.display).toBe('none');
+expect(modeInstance.flightControlsStrip.classList.contains('hidden')).toBe(true);
+expect(modeInstance.messageConsole.style.display).toBe('none');
+expect(window.DropdownStrip.hide).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] modeInstance.stripContainer.style.display = 'none'
+[PASS] modeInstance.stripContainer.classList.contains('hidden') = true
+[PASS] modeInstance.flightControlsStrip.style.display = 'none'
+[PASS] modeInstance.flightControlsStrip.classList.contains('hidden') = true
+[PASS] modeInstance.messageConsole.style.display = 'none'
+[PASS] window.DropdownStrip.hide: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,78 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MT-004
+Requirement ID      : REQ-HW-001
+Source File         : motor-test.js
+Target Function     : acknowledge() [Line 122]
+Test Category       : Positive / Functional
+Test Case Title     : should dispatch correct WebSocket command when individual motor is clicked and handle auto-stop highlights
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+motorBtn = document.getElementById('mt-motor-3')
+statusMsg = document.getElementById('mt-status-msg')
+motorBtn.click()
+})
+jest.advanceTimersByTime(2390)
+
+Expected Behavior:
+Verify window.safeSend satisfies toHaveBeenCalledWith().
+Status Message displays text containing '▶ Motor 3 testing at 15% for 2s'.
+Motor Button Class List Contains('Mt Running') is equal to true.
+Mt Motor 1 exists.
+Motor Button Class List Contains('Mt Running') is equal to true.
+Motor Button Class List Contains('Mt Running') is equal to false.
+Status Message displays text containing '✓ Test complete'.
+
+Actual Observations:
+window.safeSend: toHaveBeenCalledWith
+statusMsg.textContent contains '▶ Motor 3 testing at 15% for 2s'
+motorBtn.classList.contains('mt-running') = true
+document.getElementById('mt-motor-1').classList.contains('mt-running') = false
+motorBtn.classList.contains('mt-running') = true
+motorBtn.classList.contains('mt-running') = false
+statusMsg.textContent contains '✓ Test complete'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(setStatus).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.safeSend).toHaveBeenCalledWith({
+expect(statusMsg.textContent).toContain('▶ Motor 3 testing at 15% for 2s');
+expect(motorBtn.classList.contains('mt-running')).toBe(true);
+expect(document.getElementById('mt-motor-1').classList.contains('mt-running')).toBe(false);
+expect(motorBtn.classList.contains('mt-running')).toBe(true);
+expect(motorBtn.classList.contains('mt-running')).toBe(false);
+expect(statusMsg.textContent).toContain('✓ Test complete');
+
+Console Logs:
+[INFO] Jest executed test in 52ms
+[PASS] window.safeSend: toHaveBeenCalledWith
+[PASS] statusMsg.textContent contains '▶ Motor 3 testing at 15% for 2s'
+[PASS] motorBtn.classList.contains('mt-running') = true
+[PASS] document.getElementById('mt-motor-1').classList.contains('mt-running') = false
+[PASS] motorBtn.classList.contains('mt-running') = true
+[PASS] motorBtn.classList.contains('mt-running') = false
+[PASS] statusMsg.textContent contains '✓ Test complete'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

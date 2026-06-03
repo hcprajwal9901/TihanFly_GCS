@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFU-011
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-ui.js
+Target Function     : showPlanMenuStrip() [Line 10]
+Test Category       : Positive / Functional
+Test Case Title     : should intercept anchor click events, call preventDefault, and route action dataset to handleMenuAction
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+menuStrip = originalCreateElement.call(document, 'div')
+menuStrip.className = 'plan-menu-strip'
+content = originalCreateElement.call(document, 'div')
+content.className = 'plan-menu-content'
+link1 = originalCreateElement.call(document, 'a')
+link1.dataset.action = 'action-one'
+link2 = originalCreateElement.call(document, 'a')
+link2.dataset.action = 'action-two'
+content.appendChild(link1)
+content.appendChild(link2)
+menuStrip.appendChild(content)
+modeInstance.planMenuStrip = menuStrip
+modeInstance.attachMenuEventListeners()
+clickEvent = new window.MouseEvent('click', {
+})
+jest.spyOn(clickEvent, 'preventDefault')
+link1.dispatchEvent(clickEvent)
+
+Expected Behavior:
+Click action triggered.
+Verify modeInstance.handleMenuAction satisfies toHaveBeenCalledWith('action-one').
+
+Actual Observations:
+clickEvent.preventDefault: 1 call(s)
+modeInstance.handleMenuAction: called with 'action-one'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(clickEvent.preventDefault).toHaveBeenCalledTimes(1);
+expect(modeInstance.handleMenuAction).toHaveBeenCalledWith('action-one');
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] clickEvent.preventDefault: 1 call(s)
+[PASS] modeInstance.handleMenuAction: called with 'action-one'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

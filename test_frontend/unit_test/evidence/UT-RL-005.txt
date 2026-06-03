@@ -1,0 +1,96 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-005
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : should successfully parse a valid binary DataFlash file buffer and populate tree view
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+file = {
+window.ReviewLog.handleFile(file)
+jest.advanceTimersByTime(100)
+pill = document.getElementById('rlStatusPill')
+jest.advanceTimersByTime(500)
+barFile = document.getElementById('rlBarFile')
+msgCount = document.getElementById('rlMsgCount')
+msgRows = document.querySelectorAll('.rl-msg-row')
+fieldRows = document.querySelectorAll('.rl-field-row')
+
+Expected Behavior:
+Pill displays text containing 'PARSING'.
+Pill displays text containing 'READY'.
+Bar File displays 'test_log.bin'.
+Message Count displays '1 types'.
+Message Rows Length is equal to 1.
+Message Rows[0] Query Selector(' Rl Message Name') displays 'GPS'.
+Message Rows[0] Query Selector(' Rl Message Cnt') displays '1'.
+Field Rows Length is equal to 3.
+Field Rows[0] Dataset Field is equal to 'TimeUS'.
+Field Rows[1] Dataset Field is equal to 'Lat'.
+Field Rows[2] Dataset Field is equal to 'Lng'.
+
+Actual Observations:
+pill.textContent contains 'PARSING'
+pill.textContent contains 'READY'
+barFile.textContent = 'test_log.bin'
+msgCount.textContent = '1 types'
+msgRows.length = 1
+msgRows[0].querySelector('.rl-msg-name').textContent = 'GPS'
+msgRows[0].querySelector('.rl-msg-cnt').textContent = '1'
+fieldRows.length = 3
+fieldRows[0].dataset.field = 'TimeUS'
+fieldRows[1].dataset.field = 'Lat'
+fieldRows[2].dataset.field = 'Lng'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(pill.textContent).toContain('PARSING');
+expect(pill.textContent).toContain('READY');
+expect(barFile.textContent).toBe('test_log.bin');
+expect(msgCount.textContent).toBe('1 types');
+expect(msgRows.length).toBe(1);
+expect(msgRows[0].querySelector('.rl-msg-name').textContent).toBe('GPS');
+expect(msgRows[0].querySelector('.rl-msg-cnt').textContent).toBe('1');
+expect(fieldRows.length).toBe(3); // TimeUS, Lat, Lng
+expect(fieldRows[0].dataset.field).toBe('TimeUS');
+expect(fieldRows[1].dataset.field).toBe('Lat');
+expect(fieldRows[2].dataset.field).toBe('Lng');
+
+Console Logs:
+[INFO] Jest executed test in 201ms
+[PASS] pill.textContent contains 'PARSING'
+[PASS] pill.textContent contains 'READY'
+[PASS] barFile.textContent = 'test_log.bin'
+[PASS] msgCount.textContent = '1 types'
+[PASS] msgRows.length = 1
+[PASS] msgRows[0].querySelector('.rl-msg-name').textContent = 'GPS'
+[PASS] msgRows[0].querySelector('.rl-msg-cnt').textContent = '1'
+[PASS] fieldRows.length = 3
+[PASS] fieldRows[0].dataset.field = 'TimeUS'
+[PASS] fieldRows[1].dataset.field = 'Lat'
+[PASS] fieldRows[2].dataset.field = 'Lng'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

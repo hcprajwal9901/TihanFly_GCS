@@ -1,0 +1,88 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CA-002
+Requirement ID      : REQ-HW-001
+Source File         : calib-accel.js
+Target Function     : buildCubeGrid() [Line 58]
+Test Category       : Positive / Functional
+Test Case Title     : should build target dropdown options and show target selection wraps only when multiple drones exist
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CalibAccel.init()
+selectorWrap = document.getElementById('accelDroneSelector')
+})
+})
+select = document.getElementById('accelDroneSelect')
+select.value = '5'
+select.dispatchEvent(new Event('change'))
+document.getElementById('accelStartBtn').click()
+)
+
+Expected Behavior:
+Selector Wrap hidden.
+Selector Wrap hidden.
+Selector Wrap displayed.
+Select Options Length is equal to 2.
+Select Options[0] displays '2'.
+Select Options[0] Dataset Link is equal to '1'.
+Select Options[1] displays '5'.
+Select Options[1] Dataset Link is equal to '2'.
+Verify mockSocket.send satisfies toHaveBeenCalledWith().
+
+Actual Observations:
+selectorWrap.style.display = 'none'
+selectorWrap.style.display = 'none'
+selectorWrap.style.display = 'flex'
+select.options.length = 2
+select.options[0].value = '2'
+select.options[0].dataset.link = '1'
+select.options[1].value = '5'
+select.options[1].dataset.link = '2'
+mockSocket.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(selectorWrap.style.display).toBe('none');
+expect(selectorWrap.style.display).toBe('none');
+expect(selectorWrap.style.display).toBe('flex');
+expect(select.options.length).toBe(2);
+expect(select.options[0].value).toBe('2');
+expect(select.options[0].dataset.link).toBe('1');
+expect(select.options[1].value).toBe('5');
+expect(select.options[1].dataset.link).toBe('2');
+expect(mockSocket.send).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 70ms
+[PASS] selectorWrap.style.display = 'none'
+[PASS] selectorWrap.style.display = 'none'
+[PASS] selectorWrap.style.display = 'flex'
+[PASS] select.options.length = 2
+[PASS] select.options[0].value = '2'
+[PASS] select.options[0].dataset.link = '1'
+[PASS] select.options[1].value = '5'
+[PASS] select.options[1].dataset.link = '2'
+[PASS] mockSocket.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

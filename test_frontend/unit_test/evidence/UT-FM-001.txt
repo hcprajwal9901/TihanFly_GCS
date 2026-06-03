@@ -1,0 +1,78 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FM-001
+Requirement ID      : REQ-SYS-002
+Source File         : flight-mode.js
+Target Function     : init() [Line 394]
+Test Category       : Positive / Functional
+Test Case Title     : should auto-initialize FlightModes, mount panel HTML, and install WS intercept
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+window.FlightModes.init()
+rows = container.querySelectorAll('.fm-row')
+select = rows[0].querySelector('select')
+
+Expected Behavior:
+Container Query Selector(' Settings Panel Title') displays text containing 'Flight Modes'.
+Container Query Selector(' Fm Current Mode Text') displays '—'.
+Container Query Selector(' Fm Current Pwm') displays '—'.
+Rows Length is equal to 6.
+Select Options Length is equal to 25.
+Select Options[0] Text is equal to 'Stabilize'.
+Typeof Window Ws Onmessage is equal to 'function'.
+
+Actual Observations:
+container.querySelector('.settings-panel-title').textContent contains 'Flight Modes'
+container.querySelector('#fmCurrentModeText').textContent = '—'
+container.querySelector('#fmCurrentPWM').textContent = '—'
+rows.length = 6
+select.options.length = 25
+select.options[0].text = 'Stabilize'
+typeof window.ws.onmessage = 'function'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(_installWsIntercept).toHaveBeenCalled();
+expect(buildHTML).toHaveBeenCalled();
+expect(onMessage).toHaveBeenCalled();
+// JSDOM verification:
+expect(container.querySelector('.settings-panel-title').textContent).toContain('Flight Modes');
+expect(container.querySelector('#fmCurrentModeText').textContent).toBe('—');
+expect(container.querySelector('#fmCurrentPWM').textContent).toBe('—');
+expect(rows.length).toBe(6);
+expect(select.options.length).toBe(25); // MODES length
+expect(select.options[0].text).toBe('Stabilize');
+expect(typeof window.ws.onmessage).toBe('function');
+
+Console Logs:
+[INFO] Jest executed test in 157ms
+[PASS] container.querySelector('.settings-panel-title').textContent contains 'Flight Modes'
+[PASS] container.querySelector('#fmCurrentModeText').textContent = '—'
+[PASS] container.querySelector('#fmCurrentPWM').textContent = '—'
+[PASS] rows.length = 6
+[PASS] select.options.length = 25
+[PASS] select.options[0].text = 'Stabilize'
+[PASS] typeof window.ws.onmessage = 'function'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

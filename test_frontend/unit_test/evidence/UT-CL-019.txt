@@ -1,0 +1,83 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CL-019
+Requirement ID      : REQ-HW-001
+Source File         : calib-level.js
+Target Function     : buildSuccessModal() [Line 11]
+Test Category       : Positive / Functional
+Test Case Title     : should inject correct HTML templates and populate drone selector when multiple drones exist
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+selectorWrap = document.getElementById('levelDroneSelector')
+select = document.getElementById('levelDroneSelect')
+window.g_vehicles = [
+})
+select.value = '3'
+select.dispatchEvent(new Event('change'))
+document.getElementById('levelStartBtn').click()
+)
+
+Expected Behavior:
+Level Status exists.
+Level Start Button exists.
+Selector Wrap hidden.
+Selector Wrap displayed.
+Select Options Length is equal to 2.
+Select Options[0] displays '1'.
+Select Options[1] displays '3'.
+Verify mockSocket.send satisfies toHaveBeenCalledWith().
+
+Actual Observations:
+document.getElementById('levelStatus').textContent = 'NOT STARTED'
+document.getElementById('levelStartBtn'): truthy
+selectorWrap.style.display = 'none'
+selectorWrap.style.display = 'flex'
+select.options.length = 2
+select.options[0].value = '1'
+select.options[1].value = '3'
+mockSocket.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('levelStatus').textContent).toBe('NOT STARTED');
+expect(document.getElementById('levelStartBtn')).toBeTruthy();
+expect(selectorWrap.style.display).toBe('none'); // initially none
+expect(selectorWrap.style.display).toBe('flex');
+expect(select.options.length).toBe(2);
+expect(select.options[0].value).toBe('1');
+expect(select.options[1].value).toBe('3');
+expect(mockSocket.send).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 64ms
+[PASS] document.getElementById('levelStatus').textContent = 'NOT STARTED'
+[PASS] document.getElementById('levelStartBtn'): truthy
+[PASS] selectorWrap.style.display = 'none'
+[PASS] selectorWrap.style.display = 'flex'
+[PASS] select.options.length = 2
+[PASS] select.options[0].value = '1'
+[PASS] select.options[1].value = '3'
+[PASS] mockSocket.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

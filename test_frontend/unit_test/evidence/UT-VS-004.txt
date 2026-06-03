@@ -1,0 +1,50 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VS-004
+Requirement ID      : REQ-SYS-002
+Source File         : video-stream.js
+Target Function     : VideoStreamController() [Line 16]
+Test Category       : Positive / Functional
+Test Case Title     : should restore stored RTSP URL from localStorage on initialization
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+VideoStreamController.setRtspUrl('rtsp://saved-host/live')
+
+Expected Behavior:
+Video Stream Controller Get Rtsp Url() is equal to 'rtsp://saved-host/live'.
+
+Actual Observations:
+VideoStreamController.getRtspUrl() = 'rtsp://saved-host/live'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(buildUI).toHaveBeenCalled();
+// JSDOM verification:
+expect(VideoStreamController.getRtspUrl()).toBe('rtsp://saved-host/live');
+
+Console Logs:
+[INFO] Jest executed test in 20ms
+[PASS] VideoStreamController.getRtspUrl() = 'rtsp://saved-host/live'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

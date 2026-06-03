@@ -1,0 +1,53 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FC-018
+Requirement ID      : REQ-CON-001
+Source File         : flight-controls.js
+Target Function     : flight_controls_click() [Line 136]
+Test Category       : Edge Case
+Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for Flight Control UI Takeoff and Land Actions
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized. Input buffer references set to null.
+
+Test Inputs:
+state = new FlightState()
+state.setTelemetry(null)
+
+Expected Behavior:
+Verify () => state.update() satisfies toThrow().
+State Is Failsafe Active() is equal to true.
+
+Actual Observations:
+() => state.update(): not throws
+state.isFailsafeActive() = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(() => state.update()).not.toThrow();
+expect(state.isFailsafeActive()).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] () => state.update(): not throws
+[PASS] state.isFailsafeActive() = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

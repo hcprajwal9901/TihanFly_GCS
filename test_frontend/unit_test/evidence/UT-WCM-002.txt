@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-002
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should generate all menu action items
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+menuEl = document.getElementById('waypointContextMenu')
+deleteWpItem = menuEl.querySelector('[data-action="delete-wp"]')
+clearMissionItem = menuEl.querySelector('[data-action="clear-mission"]')
+rtlItem = menuEl.querySelector('[data-action="rtl"]')
+loiterItem = menuEl.querySelector('[data-action="loiter"]')
+
+Expected Behavior:
+Verify deleteWpItem satisfies toBeDefined().
+Verify clearMissionItem satisfies toBeDefined().
+Verify rtlItem satisfies toBeDefined().
+Verify loiterItem satisfies toBeDefined().
+
+Actual Observations:
+deleteWpItem: defined
+clearMissionItem: defined
+rtlItem: defined
+loiterItem: defined
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(deleteWpItem).toBeDefined();
+expect(clearMissionItem).toBeDefined();
+expect(rtlItem).toBeDefined();
+expect(loiterItem).toBeDefined();
+
+Console Logs:
+[INFO] Jest executed test in 23ms
+[PASS] deleteWpItem: defined
+[PASS] clearMissionItem: defined
+[PASS] rtlItem: defined
+[PASS] loiterItem: defined
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

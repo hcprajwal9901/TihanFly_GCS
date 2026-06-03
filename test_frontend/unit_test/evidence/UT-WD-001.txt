@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-001
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should auto-initialize WeatherDashboard and register window.Weather API
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+No external inputs required.
+
+Expected Behavior:
+Verify window.Weather satisfies toBeDefined().
+Typeof Window Weather Show is equal to 'function'.
+Typeof Window Weather Fetch Weather is equal to 'function'.
+
+Actual Observations:
+window.Weather: defined
+typeof window.Weather.show = 'function'
+typeof window.Weather.fetchWeather = 'function'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(attachEventListeners).toHaveBeenCalled();
+expect(connectToBackend).toHaveBeenCalled();
+expect(showInitialState).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.Weather).toBeDefined();
+expect(typeof window.Weather.show).toBe('function');
+expect(typeof window.Weather.fetchWeather).toBe('function');
+
+Console Logs:
+[INFO] Jest executed test in 15ms
+[PASS] window.Weather: defined
+[PASS] typeof window.Weather.show = 'function'
+[PASS] typeof window.Weather.fetchWeather = 'function'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

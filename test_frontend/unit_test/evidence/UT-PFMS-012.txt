@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFMS-012
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-mission-send.js
+Target Function     : handleMissionSendActions() [Line 109]
+Test Category       : Positive / Functional
+Test Case Title     : should broadcast markers to all active sysids if selectedSysId is 0
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.selectedSysId = 0; // Broadcast mode
+modeInstance.sendMarkersToDrone()
+activeTimer = capturedTimeouts.find(t => t.delay === 400)
+
+Expected Behavior:
+Window Mission Queue Length is equal to 1.
+Window Mission In Flight Sysid is equal to 1.
+
+Actual Observations:
+window.missionQueue.length = 1
+window._missionInFlightSysid = 1
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.missionQueue.length).toBe(1); // second in queue
+expect(window._missionInFlightSysid).toBe(1); // first in-flight
+
+Console Logs:
+[INFO] Jest executed test in 11ms
+[PASS] window.missionQueue.length = 1
+[PASS] window._missionInFlightSysid = 1
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

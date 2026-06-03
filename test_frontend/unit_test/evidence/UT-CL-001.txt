@@ -1,0 +1,67 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CL-001
+Requirement ID      : REQ-COM-001
+Source File         : comm-link.js
+Target Function     : init() [Line 442]
+Test Category       : Positive / Functional
+Test Case Title     : should render link state widgets and select boxes on init
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+window.CommLink.init()
+
+Expected Behavior:
+Verify window.CommLink satisfies toBeDefined().
+Cl Panel exists.
+Cl Status Dot exists.
+Cl Mode Auto exists.
+Cl Mode Manual exists.
+
+Actual Observations:
+window.CommLink: defined
+document.getElementById('clPanel'): defined
+document.getElementById('clStatusDot'): defined
+document.getElementById('clModeAuto'): defined
+document.getElementById('clModeManual'): defined
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(_build_html).toHaveBeenCalled();
+expect(warn).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.CommLink).toBeDefined();
+expect(document.getElementById('clPanel')).toBeDefined();
+expect(document.getElementById('clStatusDot')).toBeDefined();
+expect(document.getElementById('clModeAuto')).toBeDefined();
+expect(document.getElementById('clModeManual')).toBeDefined();
+
+Console Logs:
+[INFO] Jest executed test in 74ms
+[PASS] window.CommLink: defined
+[PASS] document.getElementById('clPanel'): defined
+[PASS] document.getElementById('clStatusDot'): defined
+[PASS] document.getElementById('clModeAuto'): defined
+[PASS] document.getElementById('clModeManual'): defined
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

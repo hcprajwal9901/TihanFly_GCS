@@ -1,0 +1,125 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFMS-011
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-mission-send.js
+Target Function     : action() [Line 339]
+Test Category       : Positive / Functional
+Test Case Title     : should generate rich JSON payload with actions mapping and queues message correctly
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.sendMarkersToDrone()
+sentPayload = JSON.parse(window.ws.send.mock.calls[0][0])
+flightPlan = sentPayload.data
+wps = flightPlan.flight_plan.waypoints
+t1 = new Date(wps[0].estimated_time)
+t2 = new Date(wps[1].estimated_time)
+
+Expected Behavior:
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith(expect.stringContaining('Sending 5 markers to drone')).
+WebSocket notification sent.
+Sent Payload Type is equal to 'flight_plan'.
+Sent Payload Sysid is equal to 1.
+Flight Plan Drone Id is equal to 'Drone_001'.
+Flight Plan Status is equal to 'active'.
+Wps Length is equal to 5.
+Wps[0] Latitude is equal to 12.3456789.
+Wps[0] Longitude is equal to 80.1234567.
+Wps[0] Action is equal to 'takeoff'.
+Wps[1] Action is equal to 'move'.
+Wps[2] Action is equal to 'hover'.
+Wps[3] Action is equal to 'return'.
+Wps[4] Action is equal to 'land'.
+Wps[0] Altitude is equal to 25.
+Wps[0] Speed is equal to 5.
+Wps[4] Altitude is equal to 45.
+Wps[4] Speed is equal to 15.
+T2 Get Time() T1 Get Time() is equal to 5 * 60 * 1000.
+
+Actual Observations:
+window.MsgConsole.info: called with expect.stringContaining('Sending 5 markers to drone')
+window.ws.send: 1 call(s)
+sentPayload.type = 'flight_plan'
+sentPayload.sysid = 1
+flightPlan.drone_id = 'Drone_001'
+flightPlan.status = 'active'
+wps.length = 5
+wps[0].latitude = 12.3456789
+wps[0].longitude = 80.1234567
+wps[0].action = 'takeoff'
+wps[1].action = 'move'
+wps[2].action = 'hover'
+wps[3].action = 'return'
+wps[4].action = 'land'
+wps[0].altitude = 25
+wps[0].speed = 5
+wps[4].altitude = 45
+wps[4].speed = 15
+t2.getTime() - t1.getTime() = 5 * 60 * 1000
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.info).toHaveBeenCalledWith(expect.stringContaining('Sending 5 markers to drone'));
+expect(window.ws.send).toHaveBeenCalledTimes(1);
+expect(sentPayload.type).toBe('flight_plan');
+expect(sentPayload.sysid).toBe(1); // window.selectedSysId
+expect(flightPlan.drone_id).toBe('Drone_001');
+expect(flightPlan.status).toBe('active');
+expect(wps.length).toBe(5);
+expect(wps[0].latitude).toBe(12.3456789);
+expect(wps[0].longitude).toBe(80.1234567);
+expect(wps[0].action).toBe('takeoff');
+expect(wps[1].action).toBe('move'); // waypoint maps to move
+expect(wps[2].action).toBe('hover');
+expect(wps[3].action).toBe('return'); // rtl maps to return
+expect(wps[4].action).toBe('land'); // landing maps to land
+expect(wps[0].altitude).toBe(25);
+expect(wps[0].speed).toBe(5);
+expect(wps[4].altitude).toBe(45);
+expect(wps[4].speed).toBe(15);
+expect(t2.getTime() - t1.getTime()).toBe(5 * 60 * 1000);
+
+Console Logs:
+[INFO] Jest executed test in 83ms
+[PASS] window.MsgConsole.info: called with expect.stringContaining('Sending 5 markers to drone')
+[PASS] window.ws.send: 1 call(s)
+[PASS] sentPayload.type = 'flight_plan'
+[PASS] sentPayload.sysid = 1
+[PASS] flightPlan.drone_id = 'Drone_001'
+[PASS] flightPlan.status = 'active'
+[PASS] wps.length = 5
+[PASS] wps[0].latitude = 12.3456789
+[PASS] wps[0].longitude = 80.1234567
+[PASS] wps[0].action = 'takeoff'
+[PASS] wps[1].action = 'move'
+[PASS] wps[2].action = 'hover'
+[PASS] wps[3].action = 'return'
+[PASS] wps[4].action = 'land'
+[PASS] wps[0].altitude = 25
+[PASS] wps[0].speed = 5
+[PASS] wps[4].altitude = 45
+[PASS] wps[4].speed = 15
+[PASS] t2.getTime() - t1.getTime() = 5 * 60 * 1000
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

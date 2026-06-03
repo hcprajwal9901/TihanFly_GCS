@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-003
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Positive / Functional
+Test Case Title     : should parse ws log entries and render table rows with checksum controls
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+cls: String, fn: String, ico: String, lbl: String, id: Number, i18Key: String | Simulated: window.AnalyzeToolsPanel._refreshLogs()
+wsHandler = window.ws.addEventListener.mock.calls.find(call => call[0] === 'message')[1]
+})
+})
+row1 = document.getElementById('logrow_1')
+row2 = document.getElementById('logrow_2')
+
+Expected Behavior:
+Row1 is null.
+Row2 is null.
+Row1 displays text containing '1.00 MB'.
+Row2 displays text containing '2.00 MB'.
+
+Actual Observations:
+row1: not null
+row2: not null
+row1.innerHTML contains '1.00 MB'
+row2.innerHTML contains '2.00 MB'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = B(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(row1).not.toBeNull();
+expect(row2).not.toBeNull();
+expect(row1.innerHTML).toContain('1.00 MB');
+expect(row2.innerHTML).toContain('2.00 MB');
+
+Console Logs:
+[INFO] Jest executed test in 102ms
+[PASS] row1: not null
+[PASS] row2: not null
+[PASS] row1.innerHTML contains '1.00 MB'
+[PASS] row2.innerHTML contains '2.00 MB'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

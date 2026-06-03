@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFU-008
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-ui.js
+Target Function     : restoreHeader() [Line 225]
+Test Category       : Positive / Functional
+Test Case Title     : should clean up exit button, restore logos, and restore center content on restoreHeader
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.transformHeaderForPlanMode()
+document.body.appendChild(modeInstance.headerLeft)
+modeInstance.restoreHeader()
+
+Expected Behavior:
+Document Body Query Selector(' Exit Plan Button') is true.
+Document Body Query Selector(' Exit Plan Button') is null.
+Mode Instance Tihan Logo displayed.
+Mode Instance Status Badge displayed.
+Mode Instance Header Center displays '<span>Original Content</span>'.
+
+Actual Observations:
+document.body.querySelector('#exitPlanBtn'): truthy
+document.body.querySelector('#exitPlanBtn'): null
+modeInstance.tihanLogo.style.display = 'block'
+modeInstance.statusBadge.style.display = 'flex'
+modeInstance.headerCenter.innerHTML = '<span>Original Content</span>'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.body.querySelector('#exitPlanBtn')).toBeTruthy();
+expect(document.body.querySelector('#exitPlanBtn')).toBeNull();
+expect(modeInstance.tihanLogo.style.display).toBe('block');
+expect(modeInstance.statusBadge.style.display).toBe('flex');
+expect(modeInstance.headerCenter.innerHTML).toBe('<span>Original Content</span>');
+
+Console Logs:
+[INFO] Jest executed test in 11ms
+[PASS] document.body.querySelector('#exitPlanBtn'): truthy
+[PASS] document.body.querySelector('#exitPlanBtn'): null
+[PASS] modeInstance.tihanLogo.style.display = 'block'
+[PASS] modeInstance.statusBadge.style.display = 'flex'
+[PASS] modeInstance.headerCenter.innerHTML = '<span>Original Content</span>'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

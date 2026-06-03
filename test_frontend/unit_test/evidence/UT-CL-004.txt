@@ -1,0 +1,50 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CL-004
+Requirement ID      : REQ-COM-001
+Source File         : comm-link.js
+Target Function     : _ws_send() [Line 30]
+Test Category       : Positive / Functional
+Test Case Title     : should dispatch list_serial_ports WS message on refresh ports
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CommLink.init()
+jest.clearAllMocks()
+window.CommLink._refresh_ports()
+
+Expected Behavior:
+Verify window.safeSend satisfies toHaveBeenCalledWith({ type: 'list_serial_ports' }).
+
+Actual Observations:
+window.safeSend: called with { type: 'list_serial_ports' }
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.safeSend).toHaveBeenCalledWith({ type: 'list_serial_ports' });
+
+Console Logs:
+[INFO] Jest executed test in 30ms
+[PASS] window.safeSend: called with { type: 'list_serial_ports' }
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

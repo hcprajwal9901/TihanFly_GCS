@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-006
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Edge Case
+Test Case Title     : should display warning in log when empty port scan occurs
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+triggerWsMessage({ type: 'serial_ports', ports: [] })
+tableRows = document.querySelectorAll('.vc-port-table tbody tr')
+logBox = document.getElementById('vcFlashLog')
+
+Expected Behavior:
+Table Rows Length is equal to 1.
+Table Rows[0] displays text containing 'No serial ports found'.
+Log Box displays text containing 'No serial ports found.'.
+
+Actual Observations:
+tableRows.length = 1
+tableRows[0].textContent contains 'No serial ports found'
+logBox.textContent contains 'No serial ports found.'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(tableRows.length).toBe(1);
+expect(tableRows[0].textContent).toContain('No serial ports found');
+expect(logBox.textContent).toContain('No serial ports found.');
+
+Console Logs:
+[INFO] Jest executed test in 72ms
+[PASS] tableRows.length = 1
+[PASS] tableRows[0].textContent contains 'No serial ports found'
+[PASS] logBox.textContent contains 'No serial ports found.'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

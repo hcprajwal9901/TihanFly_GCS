@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-GEO-001
+Requirement ID      : REQ-SAF-002
+Source File         : geofence.js
+Target Function     : init() [Line 540]
+Test Category       : Positive / Functional
+Test Case Title     : should inject geofence UI HTML and wire initial refresh requests
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+panel = document.getElementById('gf-params-wrap')
+
+Expected Behavior:
+Verify panel satisfies toBeDefined().
+Gf Enable Chk exists.
+Gf Save Button exists.
+Verify window.safeSend satisfies toHaveBeenCalledWith({ type: 'param_request_one', name: 'FENCE_ENABLE' }).
+Verify window.safeSend satisfies toHaveBeenCalledWith({ type: 'param_request_one', name: 'FENCE_ALT_MAX' }).
+
+Actual Observations:
+panel: defined
+document.getElementById('gf-enable-chk'): defined
+document.getElementById('gf-save-btn'): defined
+window.safeSend: called with { type: 'param_request_one', name: 'FENCE_ENABLE' }
+window.safeSend: called with { type: 'param_request_one', name: 'FENCE_ALT_MAX' }
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(panel).toBeDefined();
+expect(document.getElementById('gf-enable-chk')).toBeDefined();
+expect(document.getElementById('gf-save-btn')).toBeDefined();
+expect(window.safeSend).toHaveBeenCalledWith({ type: 'param_request_one', name: 'FENCE_ENABLE' });
+expect(window.safeSend).toHaveBeenCalledWith({ type: 'param_request_one', name: 'FENCE_ALT_MAX' });
+
+Console Logs:
+[INFO] Jest executed test in 125ms
+[PASS] panel: defined
+[PASS] document.getElementById('gf-enable-chk'): defined
+[PASS] document.getElementById('gf-save-btn'): defined
+[PASS] window.safeSend: called with { type: 'param_request_one', name: 'FENCE_ENABLE' }
+[PASS] window.safeSend: called with { type: 'param_request_one', name: 'FENCE_ALT_MAX' }
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

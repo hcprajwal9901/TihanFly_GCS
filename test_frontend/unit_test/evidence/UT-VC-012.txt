@@ -1,0 +1,81 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-012
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Positive / Functional
+Test Case Title     : should dismiss modal when cancel button, Escape key, or backdrop itself is clicked
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+card = document.querySelector('.vc-drone-card[data-drone="ti-shadow"]')
+card.querySelector('.vc-btn-unlock').click()
+backdrop = document.querySelector('.vc-pw-backdrop')
+input = backdrop.querySelector('#vcPwInput')
+input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+jest.advanceTimersByTime(150)
+card.querySelector('.vc-btn-unlock').click()
+backdrop = document.querySelector('.vc-pw-backdrop')
+backdrop.querySelector('#vcPwCancel').click()
+jest.advanceTimersByTime(150)
+card.querySelector('.vc-btn-unlock').click()
+backdrop = document.querySelector('.vc-pw-backdrop')
+backdrop.dispatchEvent(new Event('click'))
+jest.advanceTimersByTime(150)
+
+Expected Behavior:
+Backdrop is true.
+Vc Pw Backdrop does not exist.
+Backdrop is true.
+Vc Pw Backdrop does not exist.
+Backdrop is true.
+Vc Pw Backdrop does not exist.
+
+Actual Observations:
+backdrop: truthy
+document.querySelector('.vc-pw-backdrop'): null
+backdrop: truthy
+document.querySelector('.vc-pw-backdrop'): null
+backdrop: truthy
+document.querySelector('.vc-pw-backdrop'): null
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(backdrop).toBeTruthy();
+expect(document.querySelector('.vc-pw-backdrop')).toBeNull();
+expect(backdrop).toBeTruthy();
+expect(document.querySelector('.vc-pw-backdrop')).toBeNull();
+expect(backdrop).toBeTruthy();
+expect(document.querySelector('.vc-pw-backdrop')).toBeNull();
+
+Console Logs:
+[INFO] Jest executed test in 77ms
+[PASS] backdrop: truthy
+[PASS] document.querySelector('.vc-pw-backdrop'): null
+[PASS] backdrop: truthy
+[PASS] document.querySelector('.vc-pw-backdrop'): null
+[PASS] backdrop: truthy
+[PASS] document.querySelector('.vc-pw-backdrop'): null
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

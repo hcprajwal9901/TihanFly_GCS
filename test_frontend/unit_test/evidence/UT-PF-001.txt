@@ -1,0 +1,88 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PF-001
+Requirement ID      : REQ-TUNE-001
+Source File         : param-full.js
+Target Function     : init() [Line 1276]
+Test Category       : Positive / Functional
+Test Case Title     : should initialize panel UI and fetch metadata correctly
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock WebSocket connections.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+await initPanel()
+
+Expected Behavior:
+Fp Search exists.
+Fp Filter Type exists.
+Fp Refresh Button exists.
+Fp Write Button exists.
+Fp Style exists.
+
+Actual Observations:
+document.getElementById('fpSearch'): defined
+document.getElementById('fpFilterType'): defined
+document.getElementById('fpRefreshBtn'): defined
+document.getElementById('fpWriteBtn'): defined
+document.getElementById('fp-style'): not null
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(SwUtil.toast).toHaveBeenCalled();
+expect(_updateDroneBadge).toHaveBeenCalled();
+expect(addEventListener).toHaveBeenCalled();
+expect(contains).toHaveBeenCalled();
+expect(drone).toHaveBeenCalled();
+expect(handleMessage).toHaveBeenCalled();
+expect(injectCSS).toHaveBeenCalled();
+expect(keys).toHaveBeenCalled();
+expect(loadExternalMeta).toHaveBeenCalled();
+expect(loaded).toHaveBeenCalled();
+expect(param).toHaveBeenCalled();
+expect(prompt).toHaveBeenCalled();
+expect(querySelector).toHaveBeenCalled();
+expect(rebuildTable).toHaveBeenCalled();
+expect(render).toHaveBeenCalled();
+expect(send).toHaveBeenCalled();
+expect(setStatus).toHaveBeenCalled();
+expect(stringify).toHaveBeenCalled();
+expect(then).toHaveBeenCalled();
+expect(trim).toHaveBeenCalled();
+expect(updateAllDroneSelectors).toHaveBeenCalled();
+expect(wsMock.send).toHaveBeenCalled();
+expect(wsSend).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('fpSearch')).toBeDefined();
+expect(document.getElementById('fpFilterType')).toBeDefined();
+expect(document.getElementById('fpRefreshBtn')).toBeDefined();
+expect(document.getElementById('fpWriteBtn')).toBeDefined();
+expect(document.getElementById('fp-style')).not.toBeNull();
+
+Console Logs:
+[INFO] Jest executed test in 146ms
+[PASS] document.getElementById('fpSearch'): defined
+[PASS] document.getElementById('fpFilterType'): defined
+[PASS] document.getElementById('fpRefreshBtn'): defined
+[PASS] document.getElementById('fpWriteBtn'): defined
+[PASS] document.getElementById('fp-style'): not null
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

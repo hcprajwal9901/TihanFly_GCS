@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFU-007
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-ui.js
+Target Function     : showPlanMenuStrip() [Line 10]
+Test Category       : Positive / Functional
+Test Case Title     : should execute exit() route callback when exit button click is triggered
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.transformHeaderForPlanMode()
+exitBtn = modeInstance.headerLeft.querySelector('#exitPlanBtn')
+exitBtn.click()
+
+Expected Behavior:
+Exit Button is true.
+Verify modeInstance.exit satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+exitBtn: truthy
+modeInstance.exit: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(exitBtn).toBeTruthy();
+expect(modeInstance.exit).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 10ms
+[PASS] exitBtn: truthy
+[PASS] modeInstance.exit: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

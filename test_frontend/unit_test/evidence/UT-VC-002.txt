@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-002
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : close() [Line 1379]
+Test Category       : Positive / Functional
+Test Case Title     : should smoothly hide overlay with fade-out delay when closed
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+window.VehicleConfig.open()
+overlay = document.getElementById('vehicleConfigOverlay')
+window.VehicleConfig.close()
+jest.advanceTimersByTime(200)
+
+Expected Behavior:
+Overlay Style Opacity is equal to '0'.
+Overlay hidden.
+
+Actual Observations:
+overlay.style.opacity = '0'
+overlay.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(close).toBeDefined();
+// JSDOM verification:
+expect(overlay.style.opacity).toBe('0');
+expect(overlay.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 90ms
+[PASS] overlay.style.opacity = '0'
+[PASS] overlay.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FC-004
+Requirement ID      : REQ-CON-001
+Source File         : flight-controls.js
+Target Function     : flight-controls_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should sync changes on speed and altitude inputs parameters
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+altInput = document.getElementById('altitudeInput')
+speedInput = document.getElementById('speedInput')
+altInput.value = '15'
+altInput.dispatchEvent(new Event('input'))
+speedInput.value = '3.5'
+speedInput.dispatchEvent(new Event('input'))
+})
+
+Expected Behavior:
+Window Flight Controls Get Takeoff Settings() is equal to .
+
+Actual Observations:
+window.FlightControls.getTakeoffSettings(): toEqual
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.FlightControls.getTakeoffSettings()).toEqual({
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] window.FlightControls.getTakeoffSettings(): toEqual
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

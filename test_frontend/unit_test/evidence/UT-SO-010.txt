@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-SO-010
+Requirement ID      : REQ-HW-001
+Source File         : servo-output.js
+Target Function     : pName() [Line 93]
+Test Category       : Negative / Robustness
+Test Case Title     : should toast and alert error when save requested while disconnected
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+fnSel8 = document.getElementById('so-fn-8')
+fnSel8.value = '6'
+fnSel8.dispatchEvent(new Event('change'))
+origSafeSend = window.safeSend
+delete window.safeSend
+saveBtn = document.getElementById('so-save-btn')
+saveBadge = document.getElementById('so-save-badge')
+saveBtn.click()
+window.safeSend = origSafeSend
+
+Expected Behavior:
+Save Badge displays '✕ Not connected'.
+Save Badge Class Name contains 'fs-badge-error'.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('Not connected — cannot write parameters', true).
+
+Actual Observations:
+saveBadge.textContent = '✕ Not connected'
+saveBadge.className contains 'fs-badge-error'
+window.SwUtil.toast: called with 'Not connected — cannot write parameters', true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(saveBadge.textContent).toBe('✕ Not connected');
+expect(saveBadge.className).toContain('fs-badge-error');
+expect(window.SwUtil.toast).toHaveBeenCalledWith('Not connected — cannot write parameters', true);
+
+Console Logs:
+[INFO] Jest executed test in 177ms
+[PASS] saveBadge.textContent = '✕ Not connected'
+[PASS] saveBadge.className contains 'fs-badge-error'
+[PASS] window.SwUtil.toast: called with 'Not connected — cannot write parameters', true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

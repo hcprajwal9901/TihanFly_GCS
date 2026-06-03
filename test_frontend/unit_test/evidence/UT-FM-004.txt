@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FM-004
+Requirement ID      : REQ-SYS-002
+Source File         : flight-mode.js
+Target Function     : modeById() [Line 115]
+Test Category       : Positive / Functional
+Test Case Title     : should disable save button and broadcast save_flight_modes over WS
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+saveBtn = container.querySelector('#fmSaveBtn')
+window.FlightModes._save()
+payload = JSON.parse(window.ws.send.mock.calls[0][0])
+
+Expected Behavior:
+Save Button Disabled is equal to false.
+Save Button Disabled is equal to true.
+Save Button displays text containing 'Saving…'.
+WebSocket notification sent.
+Payload Type is equal to 'save_flight_modes'.
+Payload Modes Length is equal to 6.
+
+Actual Observations:
+saveBtn.disabled = false
+saveBtn.disabled = true
+saveBtn.innerHTML contains 'Saving…'
+window.ws.send: called
+payload.type = 'save_flight_modes'
+payload.modes.length = 6
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(saveBtn.disabled).toBe(false);
+expect(saveBtn.disabled).toBe(true);
+expect(saveBtn.innerHTML).toContain('Saving…');
+expect(window.ws.send).toHaveBeenCalled();
+expect(payload.type).toBe('save_flight_modes');
+expect(payload.modes.length).toBe(6);
+
+Console Logs:
+[INFO] Jest executed test in 58ms
+[PASS] saveBtn.disabled = false
+[PASS] saveBtn.disabled = true
+[PASS] saveBtn.innerHTML contains 'Saving…'
+[PASS] window.ws.send: called
+[PASS] payload.type = 'save_flight_modes'
+[PASS] payload.modes.length = 6
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

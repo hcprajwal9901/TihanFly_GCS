@@ -1,0 +1,118 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-IT-004
+Requirement ID      : REQ-SYS-002
+Source File         : initial-tune.js
+Target Function     : init() [Line 368]
+Test Category       : Positive / Functional
+Test Case Title     : should compile suggestive values table including battery voltage, ESC bounds, and AP4 low/critical options
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+cellInp = document.getElementById('it-cell-count')
+tMotorCk = document.getElementById('it-tmotor-esc')
+ap4Ck = document.getElementById('it-ap4-settings')
+calcBtn = document.getElementById('it-calc-btn')
+cellInp.value = '6'; // 6S Battery
+tMotorCk.checked = true
+ap4Ck.checked = true
+calcBtn.click()
+previewRows = document.querySelectorAll('#it-preview-tbody tr')
+
+Expected Behavior:
+It Preview Section exists.
+Preview Rows Length is equal to 13.
+Preview Rows[0] Query Selector(' It Param Id') displays 'MOT_BAT_VOLT_MAX'.
+Preview Rows[0] Query Selector(' It Param Val') displays '25.2'.
+Preview Rows[1] Query Selector(' It Param Id') displays 'MOT_BAT_VOLT_MIN'.
+Preview Rows[1] Query Selector(' It Param Val') displays '21'.
+Preview Rows[2] Query Selector(' It Param Id') displays 'BATT_ARM_VOLT'.
+Preview Rows[2] Query Selector(' It Param Val') displays '22.2'.
+Preview Rows[6] Query Selector(' It Param Id') displays 'MOT_PWM_MIN'.
+Preview Rows[6] Query Selector(' It Param Val') displays '1000'.
+Preview Rows[7] Query Selector(' It Param Id') displays 'MOT_PWM_MAX'.
+Preview Rows[7] Query Selector(' It Param Val') displays '2000'.
+Preview Rows[8] Query Selector(' It Param Id') displays 'BATT_LOW_VOLT'.
+Preview Rows[8] Query Selector(' It Param Val') displays '24'.
+Preview Rows[9] Query Selector(' It Param Id') displays 'BATT_CRT_VOLT'.
+Preview Rows[9] Query Selector(' It Param Val') displays '21.6'.
+
+Actual Observations:
+document.getElementById('it-preview-section').style.display = 'block'
+previewRows.length = 13
+previewRows[0].querySelector('.it-param-id').textContent = 'MOT_BAT_VOLT_MAX'
+previewRows[0].querySelector('.it-param-val').textContent = '25.2'
+previewRows[1].querySelector('.it-param-id').textContent = 'MOT_BAT_VOLT_MIN'
+previewRows[1].querySelector('.it-param-val').textContent = '21'
+previewRows[2].querySelector('.it-param-id').textContent = 'BATT_ARM_VOLT'
+previewRows[2].querySelector('.it-param-val').textContent = '22.2'
+previewRows[6].querySelector('.it-param-id').textContent = 'MOT_PWM_MIN'
+previewRows[6].querySelector('.it-param-val').textContent = '1000'
+previewRows[7].querySelector('.it-param-id').textContent = 'MOT_PWM_MAX'
+previewRows[7].querySelector('.it-param-val').textContent = '2000'
+previewRows[8].querySelector('.it-param-id').textContent = 'BATT_LOW_VOLT'
+previewRows[8].querySelector('.it-param-val').textContent = '24'
+previewRows[9].querySelector('.it-param-id').textContent = 'BATT_CRT_VOLT'
+previewRows[9].querySelector('.it-param-val').textContent = '21.6'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('it-preview-section').style.display).toBe('block');
+expect(previewRows.length).toBe(13);
+expect(previewRows[0].querySelector('.it-param-id').textContent).toBe('MOT_BAT_VOLT_MAX');
+expect(previewRows[0].querySelector('.it-param-val').textContent).toBe('25.2');
+expect(previewRows[1].querySelector('.it-param-id').textContent).toBe('MOT_BAT_VOLT_MIN');
+expect(previewRows[1].querySelector('.it-param-val').textContent).toBe('21');
+expect(previewRows[2].querySelector('.it-param-id').textContent).toBe('BATT_ARM_VOLT');
+expect(previewRows[2].querySelector('.it-param-val').textContent).toBe('22.2');
+expect(previewRows[6].querySelector('.it-param-id').textContent).toBe('MOT_PWM_MIN');
+expect(previewRows[6].querySelector('.it-param-val').textContent).toBe('1000');
+expect(previewRows[7].querySelector('.it-param-id').textContent).toBe('MOT_PWM_MAX');
+expect(previewRows[7].querySelector('.it-param-val').textContent).toBe('2000');
+expect(previewRows[8].querySelector('.it-param-id').textContent).toBe('BATT_LOW_VOLT');
+expect(previewRows[8].querySelector('.it-param-val').textContent).toBe('24');
+expect(previewRows[9].querySelector('.it-param-id').textContent).toBe('BATT_CRT_VOLT');
+expect(previewRows[9].querySelector('.it-param-val').textContent).toBe('21.6');
+
+Console Logs:
+[INFO] Jest executed test in 30ms
+[PASS] document.getElementById('it-preview-section').style.display = 'block'
+[PASS] previewRows.length = 13
+[PASS] previewRows[0].querySelector('.it-param-id').textContent = 'MOT_BAT_VOLT_MAX'
+[PASS] previewRows[0].querySelector('.it-param-val').textContent = '25.2'
+[PASS] previewRows[1].querySelector('.it-param-id').textContent = 'MOT_BAT_VOLT_MIN'
+[PASS] previewRows[1].querySelector('.it-param-val').textContent = '21'
+[PASS] previewRows[2].querySelector('.it-param-id').textContent = 'BATT_ARM_VOLT'
+[PASS] previewRows[2].querySelector('.it-param-val').textContent = '22.2'
+[PASS] previewRows[6].querySelector('.it-param-id').textContent = 'MOT_PWM_MIN'
+[PASS] previewRows[6].querySelector('.it-param-val').textContent = '1000'
+[PASS] previewRows[7].querySelector('.it-param-id').textContent = 'MOT_PWM_MAX'
+[PASS] previewRows[7].querySelector('.it-param-val').textContent = '2000'
+[PASS] previewRows[8].querySelector('.it-param-id').textContent = 'BATT_LOW_VOLT'
+[PASS] previewRows[8].querySelector('.it-param-val').textContent = '24'
+[PASS] previewRows[9].querySelector('.it-param-id').textContent = 'BATT_CRT_VOLT'
+[PASS] previewRows[9].querySelector('.it-param-val').textContent = '21.6'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FM-007
+Requirement ID      : REQ-SYS-002
+Source File         : flight-mode.js
+Target Function     : modeById() [Line 115]
+Test Category       : Positive / Functional
+Test Case Title     : should handle flight_mode_pwm updates and highlight slot
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+pwmMsg = {
+window.ws.onmessage({ data: JSON.stringify(pwmMsg) })
+rows = container.querySelectorAll('.fm-row')
+
+Expected Behavior:
+Container Query Selector(' Fm Current Pwm') displays '5: 1680'.
+Rows[4] Class Name contains 'fm-row--active'.
+
+Actual Observations:
+container.querySelector('#fmCurrentPWM').textContent = '5: 1680'
+rows[4].className contains 'fm-row--active'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(container.querySelector('#fmCurrentPWM').textContent).toBe('5: 1680');
+expect(rows[4].className).toContain('fm-row--active');
+
+Console Logs:
+[INFO] Jest executed test in 62ms
+[PASS] container.querySelector('#fmCurrentPWM').textContent = '5: 1680'
+[PASS] rows[4].className contains 'fm-row--active'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

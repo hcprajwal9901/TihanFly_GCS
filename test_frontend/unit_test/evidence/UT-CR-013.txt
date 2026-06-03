@@ -1,0 +1,89 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CR-013
+Requirement ID      : REQ-HW-001
+Source File         : calib-radio.js
+Target Function     : _onStatusMsg() [Line 32]
+Test Category       : Positive / Functional
+Test Case Title     : should handle successful complete message, update indicators and show popup
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+document.getElementById('radioStartBtn').click(); // Starts it
+document.getElementById('radioStartBtn').click(); // Completes it (starts fallback timer)
+})
+advanceManualTimers(2000)
+overlay = document.getElementById('mp-calib-popup-overlay')
+document.getElementById('mp-popup-ok-btn').click()
+
+Expected Behavior:
+Overlay is true.
+Radio Status Bar exists.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('Radio calibration complete').
+Hbar Val Roll exists.
+Stick Val Pitch exists.
+Overlay displays text containing 'CH1'.
+Overlay displays text containing '1100 | 1900'.
+Overlay displays text containing '1050 | 1950'.
+Overlay displays text containing '(not moved)'.
+Document Body Query Selector(' Mp Calib Popup Overlay') is null.
+
+Actual Observations:
+overlay: truthy
+document.getElementById('radio-status-bar').textContent contains 'Radio calibration successful!'
+window.SwUtil.toast: called with 'Radio calibration complete'
+document.getElementById('hbar-val-roll').textContent = '1500'
+document.getElementById('stick-val-pitch').textContent = '1480'
+overlay.textContent contains 'CH1'
+overlay.textContent contains '1100 | 1900'
+overlay.textContent contains '1050 | 1950'
+overlay.textContent contains '(not moved)'
+document.body.querySelector('#mp-calib-popup-overlay'): null
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(overlay).toBeTruthy();
+expect(document.getElementById('radio-status-bar').textContent).toContain('Radio calibration successful!');
+expect(window.SwUtil.toast).toHaveBeenCalledWith('Radio calibration complete');
+expect(document.getElementById('hbar-val-roll').textContent).toBe('1500');
+expect(document.getElementById('stick-val-pitch').textContent).toBe('1480');
+expect(overlay.textContent).toContain('CH1');
+expect(overlay.textContent).toContain('1100 | 1900');
+expect(overlay.textContent).toContain('1050 | 1950');
+expect(overlay.textContent).toContain('(not moved)'); // channel 5 wasn't moved
+expect(document.body.querySelector('#mp-calib-popup-overlay')).toBeNull();
+
+Console Logs:
+[INFO] Jest executed test in 142ms
+[PASS] overlay: truthy
+[PASS] document.getElementById('radio-status-bar').textContent contains 'Radio calibration successful!'
+[PASS] window.SwUtil.toast: called with 'Radio calibration complete'
+[PASS] document.getElementById('hbar-val-roll').textContent = '1500'
+[PASS] document.getElementById('stick-val-pitch').textContent = '1480'
+[PASS] overlay.textContent contains 'CH1'
+[PASS] overlay.textContent contains '1100 | 1900'
+[PASS] overlay.textContent contains '1050 | 1950'
+[PASS] overlay.textContent contains '(not moved)'
+[PASS] document.body.querySelector('#mp-calib-popup-overlay'): null
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

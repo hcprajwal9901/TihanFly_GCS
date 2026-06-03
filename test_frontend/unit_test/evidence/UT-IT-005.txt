@@ -1,0 +1,99 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-IT-005
+Requirement ID      : REQ-SYS-002
+Source File         : initial-tune.js
+Target Function     : send() [Line 54]
+Test Category       : Positive / Functional
+Test Case Title     : should disable write button and dispatch param_set messages staggered by 120ms
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+obj: String | Simulated: calcBtn = document.getElementById('it-calc-btn')
+writeBtn = document.getElementById('it-write-btn')
+calcBtn.click()
+window.safeSend.mockClear()
+writeBtn.click()
+jest.advanceTimersByTime(1)
+})
+jest.advanceTimersByTime(120)
+})
+jest.advanceTimersByTime(1200)
+
+Expected Behavior:
+Write Button Disabled is equal to true.
+It Status Dot exists.
+It Status Message exists.
+Verify window.safeSend satisfies toHaveBeenCalledTimes(1).
+Verify window.safeSend satisfies toHaveBeenCalledWith().
+Verify window.safeSend satisfies toHaveBeenCalledTimes(2).
+Verify window.safeSend satisfies toHaveBeenLastCalledWith().
+Write Button Disabled is equal to false.
+It Status Dot exists.
+It Status Message exists.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith(expect.stringContaining('parameters written')).
+
+Actual Observations:
+writeBtn.disabled = true
+document.getElementById('it-status-dot').className contains 'it-dot-running'
+document.getElementById('it-status-msg').textContent contains 'Writing 6 parameters'
+window.safeSend: 1 call(s)
+window.safeSend: toHaveBeenCalledWith
+window.safeSend: 2 call(s)
+window.safeSend: toHaveBeenLastCalledWith
+writeBtn.disabled = false
+document.getElementById('it-status-dot').className contains 'it-dot-ok'
+document.getElementById('it-status-msg').textContent contains 'successfully'
+window.SwUtil.toast: called with expect.stringContaining('parameters written')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(safeSend).toHaveBeenCalled();
+// JSDOM verification:
+expect(writeBtn.disabled).toBe(true);
+expect(document.getElementById('it-status-dot').className).toContain('it-dot-running');
+expect(document.getElementById('it-status-msg').textContent).toContain('Writing 6 parameters');
+expect(window.safeSend).toHaveBeenCalledTimes(1);
+expect(window.safeSend).toHaveBeenCalledWith({
+expect(window.safeSend).toHaveBeenCalledTimes(2);
+expect(window.safeSend).toHaveBeenLastCalledWith({
+expect(writeBtn.disabled).toBe(false);
+expect(document.getElementById('it-status-dot').className).toContain('it-dot-ok');
+expect(document.getElementById('it-status-msg').textContent).toContain('successfully');
+expect(window.SwUtil.toast).toHaveBeenCalledWith(expect.stringContaining('parameters written'));
+
+Console Logs:
+[INFO] Jest executed test in 38ms
+[PASS] writeBtn.disabled = true
+[PASS] document.getElementById('it-status-dot').className contains 'it-dot-running'
+[PASS] document.getElementById('it-status-msg').textContent contains 'Writing 6 parameters'
+[PASS] window.safeSend: 1 call(s)
+[PASS] window.safeSend: toHaveBeenCalledWith
+[PASS] window.safeSend: 2 call(s)
+[PASS] window.safeSend: toHaveBeenLastCalledWith
+[PASS] writeBtn.disabled = false
+[PASS] document.getElementById('it-status-dot').className contains 'it-dot-ok'
+[PASS] document.getElementById('it-status-msg').textContent contains 'successfully'
+[PASS] window.SwUtil.toast: called with expect.stringContaining('parameters written')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

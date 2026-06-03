@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFC-003
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-core.js
+Target Function     : initializePlanFlightMode() [Line 208]
+Test Category       : Positive / Functional
+Test Case Title     : should add the styling class to body and invoke UI transform steps
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+window.PlanFlight.enter()
+
+Expected Behavior:
+Window Plan Flight Is Active() is equal to true.
+Document Body Class List Contains('Plan Mode Active') is equal to true.
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('Plan Flight Mode activated').
+
+Actual Observations:
+window.PlanFlight.isActive() = true
+document.body.classList.contains('plan-mode-active') = true
+window.MsgConsole.success: called with 'Plan Flight Mode activated'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(enter).toBeDefined();
+// JSDOM verification:
+expect(window.PlanFlight.isActive()).toBe(true);
+expect(document.body.classList.contains('plan-mode-active')).toBe(true);
+expect(window.MsgConsole.success).toHaveBeenCalledWith('Plan Flight Mode activated');
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] window.PlanFlight.isActive() = true
+[PASS] document.body.classList.contains('plan-mode-active') = true
+[PASS] window.MsgConsole.success: called with 'Plan Flight Mode activated'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

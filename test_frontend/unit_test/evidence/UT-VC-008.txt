@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-008
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Positive / Functional
+Test Case Title     : should display security backdrop and modal card upon unlock request
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+card = document.querySelector('.vc-drone-card[data-drone="ti-shadow"]')
+unlockBtn = card.querySelector('.vc-btn-unlock')
+unlockBtn.click()
+backdrop = document.querySelector('.vc-pw-backdrop')
+
+Expected Behavior:
+Backdrop is true.
+Backdrop Query Selector(' Vc Pw Title') displays 'Unlock Required'.
+Backdrop Query Selector(' Vc Pw Drone Badge') displays text containing 'Ti-Shadow'.
+
+Actual Observations:
+backdrop: truthy
+backdrop.querySelector('.vc-pw-title').textContent = 'Unlock Required'
+backdrop.querySelector('.vc-pw-drone-badge').textContent contains 'Ti-Shadow'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(backdrop).toBeTruthy();
+expect(backdrop.querySelector('.vc-pw-title').textContent).toBe('Unlock Required');
+expect(backdrop.querySelector('.vc-pw-drone-badge').textContent).toContain('Ti-Shadow');
+
+Console Logs:
+[INFO] Jest executed test in 153ms
+[PASS] backdrop: truthy
+[PASS] backdrop.querySelector('.vc-pw-title').textContent = 'Unlock Required'
+[PASS] backdrop.querySelector('.vc-pw-drone-badge').textContent contains 'Ti-Shadow'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

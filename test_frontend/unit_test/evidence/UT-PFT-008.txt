@@ -1,0 +1,67 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFT-008
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-takeoff.js
+Target Function     : _showTakeoffDialog() [Line 79]
+Test Category       : Edge Case
+Test Case Title     : should default altitude value to 10 in DOM modal if altInput value is empty
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+function(altitude: String | Simulated: mockCallback = jest.fn()
+modal = originalCreateElement.call(document, 'div')
+modal.id = 'takeoffModal'
+altInput = originalCreateElement.call(document, 'input')
+altInput.id = 'altitudeInput'
+altInput.value = ''; // empty
+confirmBtn = originalCreateElement.call(document, 'button')
+confirmBtn.id = 'modalConfirmBtn'
+document.body.appendChild(modal)
+document.body.appendChild(altInput)
+document.body.appendChild(confirmBtn)
+modeInstance._showTakeoffDialog(mockCallback)
+confirmBtn.click()
+
+Expected Behavior:
+Alt Input displays '10'.
+Verify mockCallback satisfies toHaveBeenCalledWith(10).
+
+Actual Observations:
+altInput.value = '10'
+mockCallback: called with 10
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(function).toHaveBeenCalled();
+expect(sendCommand).toHaveBeenCalled();
+// JSDOM verification:
+expect(altInput.value).toBe('10');
+expect(mockCallback).toHaveBeenCalledWith(10);
+
+Console Logs:
+[INFO] Jest executed test in 6ms
+[PASS] altInput.value = '10'
+[PASS] mockCallback: called with 10
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

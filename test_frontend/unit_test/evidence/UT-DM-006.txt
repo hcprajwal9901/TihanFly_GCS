@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-DM-006
+Requirement ID      : REQ-SYS-002
+Source File         : dropdown-menu.js
+Target Function     : initializeDropdownMenuStrip() [Line 262]
+Test Category       : Positive / Functional
+Test Case Title     : vehicleConfigBtn should trigger VehicleConfig.open with 150ms timeout
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+logo.click()
+vehicleBtn.click()
+jest.advanceTimersByTime(200)
+
+Expected Behavior:
+Verify vehicleConfigMock.open satisfies toHaveBeenCalled().
+Verify vehicleConfigMock.open satisfies toHaveBeenCalled().
+Container hidden.
+
+Actual Observations:
+vehicleConfigMock.open: not called
+vehicleConfigMock.open: called
+container.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(vehicleConfigMock.open).not.toHaveBeenCalled();
+expect(vehicleConfigMock.open).toHaveBeenCalled();
+expect(container.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] vehicleConfigMock.open: not called
+[PASS] vehicleConfigMock.open: called
+[PASS] container.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

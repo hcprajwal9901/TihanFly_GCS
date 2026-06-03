@@ -1,0 +1,52 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFT-013
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-takeoff.js
+Target Function     : handleTakeoffActions() [Line 11]
+Test Category       : Negative / Robustness
+Test Case Title     : should error and alert if WaypointManager is missing
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.setHomePosition()
+
+Expected Behavior:
+Error logged to console.
+Error logged to console.
+
+Actual Observations:
+console.error: called with expect.stringContaining('WaypointManager not available')
+window.MsgConsole.error: called with 'WaypointManager not initialized'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(console.error).toHaveBeenCalledWith(expect.stringContaining('WaypointManager not available'));
+expect(window.MsgConsole.error).toHaveBeenCalledWith('WaypointManager not initialized');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] console.error: called with expect.stringContaining('WaypointManager not available')
+[PASS] window.MsgConsole.error: called with 'WaypointManager not initialized'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

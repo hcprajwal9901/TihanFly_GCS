@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PS-005
+Requirement ID      : REQ-TUNE-001
+Source File         : param-switch.js
+Target Function     : connectWebSocket() [Line 232]
+Test Category       : Positive / Functional
+Test Case Title     : should style active cards as dirty and enable writing when select options change
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+select5 = document.querySelector('select[data-name="RC5_OPTION"]')
+card5 = document.querySelector('.sw-channel[data-name="RC5_OPTION"]')
+dirtyBadge = document.getElementById('swStatDirty')
+select5.value = '4'
+select5.dispatchEvent(new Event('change', { bubbles: true }))
+
+Expected Behavior:
+Card5 Class List Contains('Dirty') is equal to false.
+Dirty Badge displays '0'.
+Card5 Class List Contains('Dirty') is equal to true.
+Select5 Class List Contains('Dirty') is equal to true.
+Dirty Badge displays '1'.
+
+Actual Observations:
+card5.classList.contains('dirty') = false
+dirtyBadge.textContent = '0'
+card5.classList.contains('dirty') = true
+select5.classList.contains('dirty') = true
+dirtyBadge.textContent = '1'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(card5.classList.contains('dirty')).toBe(false);
+expect(dirtyBadge.textContent).toBe('0');
+expect(card5.classList.contains('dirty')).toBe(true);
+expect(select5.classList.contains('dirty')).toBe(true);
+expect(dirtyBadge.textContent).toBe('1');
+
+Console Logs:
+[INFO] Jest executed test in 860ms
+[PASS] card5.classList.contains('dirty') = false
+[PASS] dirtyBadge.textContent = '0'
+[PASS] card5.classList.contains('dirty') = true
+[PASS] select5.classList.contains('dirty') = true
+[PASS] dirtyBadge.textContent = '1'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

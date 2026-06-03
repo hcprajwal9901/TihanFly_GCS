@@ -1,0 +1,65 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-026
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : close() [Line 1379]
+Test Category       : Positive / Functional
+Test Case Title     : should preserve and replay complete session log buffers when closed and reopened mid-flash
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+triggerWsMessage({ type: 'firmware_status', stage: 'start' })
+triggerWsMessage({ type: 'firmware_status', stage: 'log', message: 'Reading boot sector' })
+triggerWsMessage({ type: 'firmware_status', stage: 'erase', progress: 40 })
+window.VehicleConfig.close()
+jest.advanceTimersByTime(200)
+window.VehicleConfig.open()
+newLogBox = document.getElementById('vcFlashLog')
+newEraseBar = document.getElementById('vcEraseBar')
+
+Expected Behavior:
+New Erase Bar Style Width is equal to '40%'.
+New Log Box displays text containing 'Reading boot sector'.
+New Log Box displays text containing 'Erasing flash… 40%'.
+
+Actual Observations:
+newEraseBar.style.width = '40%'
+newLogBox.textContent contains 'Reading boot sector'
+newLogBox.textContent contains 'Erasing flash… 40%'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(close).toBeDefined();
+// JSDOM verification:
+expect(newEraseBar.style.width).toBe('40%');
+expect(newLogBox.textContent).toContain('Reading boot sector');
+expect(newLogBox.textContent).toContain('Erasing flash… 40%');
+
+Console Logs:
+[INFO] Jest executed test in 70ms
+[PASS] newEraseBar.style.width = '40%'
+[PASS] newLogBox.textContent contains 'Reading boot sector'
+[PASS] newLogBox.textContent contains 'Erasing flash… 40%'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

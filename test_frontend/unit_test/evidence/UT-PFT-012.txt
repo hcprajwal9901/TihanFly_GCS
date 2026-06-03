@@ -1,0 +1,53 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFT-012
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-takeoff.js
+Target Function     : handleTakeoffActions() [Line 11]
+Test Category       : Positive / Functional
+Test Case Title     : should request map click via WaypointManager when initialized
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.WaypointManager = {
+modeInstance.setHomePosition()
+
+Expected Behavior:
+Verify window.WaypointManager.startTakeoffHere satisfies toHaveBeenCalledTimes(1).
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith('🏠 Click on map to set home position').
+
+Actual Observations:
+window.WaypointManager.startTakeoffHere: 1 call(s)
+window.MsgConsole.info: called with '🏠 Click on map to set home position'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.WaypointManager.startTakeoffHere).toHaveBeenCalledTimes(1);
+expect(window.MsgConsole.info).toHaveBeenCalledWith('🏠 Click on map to set home position');
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] window.WaypointManager.startTakeoffHere: 1 call(s)
+[PASS] window.MsgConsole.info: called with '🏠 Click on map to set home position'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-TMA-001
+Requirement ID      : REQ-SYS-002
+Source File         : tmap.js
+Target Function     : tmap_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should create leaflet map and load tiles (online)
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+tmap = new TMap('map-container', [17.385, 78.486], 16, false)
+
+Expected Behavior:
+Verify global.L.map satisfies toHaveBeenCalledWith('map-container', expect.any(Object)).
+Verify mapMock.setView satisfies toHaveBeenCalledWith([17.385, 78.486], 16).
+Verify global.L.layerGroup satisfies toHaveBeenCalledTimes(2).
+Verify global.L.TileLayer.extend satisfies toHaveBeenCalled().
+
+Actual Observations:
+global.L.map: called with 'map-container', expect.any(Object)
+mapMock.setView: called with [17.385, 78.486], 16
+global.L.layerGroup: 2 call(s)
+global.L.TileLayer.extend: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(global.L.map).toHaveBeenCalledWith('map-container', expect.any(Object));
+expect(mapMock.setView).toHaveBeenCalledWith([17.385, 78.486], 16);
+expect(global.L.layerGroup).toHaveBeenCalledTimes(2); // marker and route layers
+expect(global.L.TileLayer.extend).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 10ms
+[PASS] global.L.map: called with 'map-container', expect.any(Object)
+[PASS] mapMock.setView: called with [17.385, 78.486], 16
+[PASS] global.L.layerGroup: 2 call(s)
+[PASS] global.L.TileLayer.extend: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

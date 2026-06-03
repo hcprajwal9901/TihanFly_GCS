@@ -1,0 +1,52 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFC-020
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-center.js
+Target Function     : handleCenterActions() [Line 6]
+Test Category       : Negative / Robustness
+Test Case Title     : should error if WaypointManager is not available
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.centerMission()
+
+Expected Behavior:
+Error logged to console.
+Error logged to console.
+
+Actual Observations:
+console.error: called with '❌ WaypointManager not available'
+window.MsgConsole.error: called with 'WaypointManager not initialized'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(console.error).toHaveBeenCalledWith('❌ WaypointManager not available');
+expect(window.MsgConsole.error).toHaveBeenCalledWith('WaypointManager not initialized');
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] console.error: called with '❌ WaypointManager not available'
+[PASS] window.MsgConsole.error: called with 'WaypointManager not initialized'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

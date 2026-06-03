@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FC-005
+Requirement ID      : REQ-CON-001
+Source File         : flight-controls.js
+Target Function     : flight-controls_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should close dialog if cancel button or container overlay is clicked
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+modal = document.getElementById('takeoffModal')
+modal.classList.add('active')
+cancelBtn = document.getElementById('modalCancelBtn')
+cancelBtn.click()
+modal.classList.add('active')
+
+Expected Behavior:
+Modal Class List Contains('Active') is equal to false.
+Modal Class List Contains('Active') is equal to false.
+
+Actual Observations:
+modal.classList.contains('active') = false
+modal.classList.contains('active') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(close).toBeDefined();
+// JSDOM verification:
+expect(modal.classList.contains('active')).toBe(false);
+expect(modal.classList.contains('active')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] modal.classList.contains('active') = false
+[PASS] modal.classList.contains('active') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

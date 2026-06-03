@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MT-005
+Requirement ID      : REQ-HW-001
+Source File         : motor-test.js
+Target Function     : acknowledge() [Line 122]
+Test Category       : Positive / Functional
+Test Case Title     : should support testing all motors simultaneously
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+btnAll = document.getElementById('swWriteBtn') || document.getElementById('mt-btn-all')
+btnAll.click()
+})
+document.querySelectorAll('.mt-motor-btn').forEach(btn => {
+})
+
+Expected Behavior:
+Verify window.safeSend satisfies toHaveBeenCalledWith().
+Button Class List Contains('Mt Running') is equal to true.
+
+Actual Observations:
+window.safeSend: toHaveBeenCalledWith
+btn.classList.contains('mt-running') = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(setStatus).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.safeSend).toHaveBeenCalledWith({
+expect(btn.classList.contains('mt-running')).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 17ms
+[PASS] window.safeSend: toHaveBeenCalledWith
+[PASS] btn.classList.contains('mt-running') = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

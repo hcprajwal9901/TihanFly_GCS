@@ -1,0 +1,49 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-COM-008
+Requirement ID      : REQ-HUD-001
+Source File         : compass.js
+Target Function     : compass_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should set an interval for active rotation
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+spySet = jest.spyOn(compass, 'setHeading')
+compass.stopRotation()
+
+Expected Behavior:
+Verify spySet satisfies toHaveBeenCalledTimes(2).
+
+Actual Observations:
+spySet: 2 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(spySet).toHaveBeenCalledTimes(2);
+
+Console Logs:
+[INFO] Jest executed test in 12ms
+[PASS] spySet: 2 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

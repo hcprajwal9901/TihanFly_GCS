@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FT-003
+Requirement ID      : REQ-SYS-002
+Source File         : frame-type.js
+Target Function     : send() [Line 64]
+Test Category       : Wrong Value
+Test Case Title     : should update type description when select element changes
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+typeSel = document.getElementById('ft-type-select')
+typeDesc = document.getElementById('ft-type-desc')
+typeSel.value = '1'
+typeSel.dispatchEvent(new Event('change'))
+typeSel.value = '4'
+typeSel.dispatchEvent(new Event('change'))
+
+Expected Behavior:
+Type Desc displays text containing 'X layout'.
+Type Desc displays text containing 'V-Tail'.
+
+Actual Observations:
+typeDesc.textContent contains 'X layout'
+typeDesc.textContent contains 'V-Tail'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(typeDesc.textContent).toContain('X layout');
+expect(typeDesc.textContent).toContain('V-Tail');
+
+Console Logs:
+[INFO] Jest executed test in 25ms
+[PASS] typeDesc.textContent contains 'X layout'
+[PASS] typeDesc.textContent contains 'V-Tail'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

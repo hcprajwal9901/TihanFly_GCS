@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CC-025
+Requirement ID      : REQ-SYS-002
+Source File         : camera-controls.js
+Target Function     : CameraControls() [Line 16]
+Test Category       : Positive / Functional
+Test Case Title     : should control gimbal adjustments sequentially on D-Pad arrows press-and-holds
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.CameraControls.init()
+window.CameraControls.centerGimbal()
+jest.useFakeTimers()
+dpadUp = document.getElementById('dpadUp')
+dpadUp.dispatchEvent(new Event('mousedown'))
+jest.advanceTimersByTime(120)
+document.dispatchEvent(new Event('mouseup'))
+jest.useRealTimers()
+
+Expected Behavior:
+Gimbal Pitch Val exists.
+Gimbal Pitch Val exists.
+Gimbal Pitch Val exists.
+
+Actual Observations:
+document.getElementById('gimbalPitchVal').textContent = '5°'
+document.getElementById('gimbalPitchVal').textContent = '10°'
+document.getElementById('gimbalPitchVal').textContent = '10°'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('gimbalPitchVal').textContent).toBe('5°');
+expect(document.getElementById('gimbalPitchVal').textContent).toBe('10°');
+expect(document.getElementById('gimbalPitchVal').textContent).toBe('10°');
+
+Console Logs:
+[INFO] Jest executed test in 19ms
+[PASS] document.getElementById('gimbalPitchVal').textContent = '5°'
+[PASS] document.getElementById('gimbalPitchVal').textContent = '10°'
+[PASS] document.getElementById('gimbalPitchVal').textContent = '10°'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

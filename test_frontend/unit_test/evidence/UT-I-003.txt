@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-I-003
+Requirement ID      : REQ-SYS-001
+Source File         : i18n.js
+Target Function     : t() [Line 250]
+Test Category       : Positive / Functional
+Test Case Title     : should dynamically update DOM translation properties on translation execution
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+key: String | Simulated: el = document.getElementById('status')
+input = document.getElementById('inputTest')
+global.localStorage.setItem('tihan_lang', 'kn'); // Kannada
+global.loadScript('js/i18n.js')
+
+Expected Behavior:
+El displays 'ಹಾರಲು ಸಿದ್ಧ'.
+Input Placeholder is equal to 'ಹೊಸ ಮಿಷನ್'.
+
+Actual Observations:
+el.textContent = 'ಹಾರಲು ಸಿದ್ಧ'
+input.placeholder = 'ಹೊಸ ಮಿಷನ್'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = t(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(el.textContent).toBe('ಹಾರಲು ಸಿದ್ಧ');
+expect(input.placeholder).toBe('ಹೊಸ ಮಿಷನ್');
+
+Console Logs:
+[INFO] Jest executed test in 165ms
+[PASS] el.textContent = 'ಹಾರಲು ಸಿದ್ಧ'
+[PASS] input.placeholder = 'ಹೊಸ ಮಿಷನ್'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

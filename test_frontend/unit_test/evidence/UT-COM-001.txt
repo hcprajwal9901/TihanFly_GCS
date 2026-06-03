@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-COM-001
+Requirement ID      : REQ-HUD-001
+Source File         : compass.js
+Target Function     : compass_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should successfully append the compass-telemetry-container DOM to the map element
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+overlay = document.querySelector('.compass-telemetry-container')
+
+Expected Behavior:
+Verify overlay satisfies toBeDefined().
+Verify overlay.querySelector('.gcs-compass-panel') satisfies toBeDefined().
+Verify overlay.querySelector('.left-group') satisfies toBeDefined().
+Verify overlay.querySelector('.right-group') satisfies toBeDefined().
+Verify overlay.querySelector('#compassArrow') satisfies toBeDefined().
+
+Actual Observations:
+overlay: defined
+overlay.querySelector('.gcs-compass-panel'): defined
+overlay.querySelector('.left-group'): defined
+overlay.querySelector('.right-group'): defined
+overlay.querySelector('#compassArrow'): defined
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(overlay).toBeDefined();
+expect(overlay.querySelector('.gcs-compass-panel')).toBeDefined();
+expect(overlay.querySelector('.left-group')).toBeDefined();
+expect(overlay.querySelector('.right-group')).toBeDefined();
+expect(overlay.querySelector('#compassArrow')).toBeDefined();
+
+Console Logs:
+[INFO] Jest executed test in 108ms
+[PASS] overlay: defined
+[PASS] overlay.querySelector('.gcs-compass-panel'): defined
+[PASS] overlay.querySelector('.left-group'): defined
+[PASS] overlay.querySelector('.right-group'): defined
+[PASS] overlay.querySelector('#compassArrow'): defined
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

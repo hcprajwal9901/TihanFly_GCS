@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-SO-011
+Requirement ID      : REQ-HW-001
+Source File         : servo-output.js
+Target Function     : pName() [Line 93]
+Test Category       : Positive / Functional
+Test Case Title     : should transmit save_eeprom command and toast when eeprom save is triggered
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+eepromBtn = document.getElementById('so-eeprom-btn')
+saveBadge = document.getElementById('so-save-badge')
+eepromBtn.click()
+})
+
+Expected Behavior:
+Verify window.safeSend satisfies toHaveBeenCalledWith().
+Save Badge displays '✓ EEPROM save requested'.
+Save Badge Class Name contains 'fs-badge-ok'.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('EEPROM save command sent to flight controller', false).
+
+Actual Observations:
+window.safeSend: toHaveBeenCalledWith
+saveBadge.textContent = '✓ EEPROM save requested'
+saveBadge.className contains 'fs-badge-ok'
+window.SwUtil.toast: called with 'EEPROM save command sent to flight controller', false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.safeSend).toHaveBeenCalledWith({
+expect(saveBadge.textContent).toBe('✓ EEPROM save requested');
+expect(saveBadge.className).toContain('fs-badge-ok');
+expect(window.SwUtil.toast).toHaveBeenCalledWith('EEPROM save command sent to flight controller', false);
+
+Console Logs:
+[INFO] Jest executed test in 186ms
+[PASS] window.safeSend: toHaveBeenCalledWith
+[PASS] saveBadge.textContent = '✓ EEPROM save requested'
+[PASS] saveBadge.className contains 'fs-badge-ok'
+[PASS] window.SwUtil.toast: called with 'EEPROM save command sent to flight controller', false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

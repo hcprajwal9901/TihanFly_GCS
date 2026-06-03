@@ -1,0 +1,82 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-SW-001
+Requirement ID      : REQ-SYS-001
+Source File         : settings-window.js
+Target Function     : open() [Line 342]
+Test Category       : Positive / Functional
+Test Case Title     : should inject correct HTML shell when open() is called
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+window.SettingsWindow.open()
+overlay = document.getElementById('settingsOverlay')
+navButtons = Array.from(document.querySelectorAll('.settings-nav-btn'))
+
+Expected Behavior:
+Settings Overlay does not exist.
+Overlay is true.
+Overlay displayed.
+Settings Header Title exists.
+Settings Header Subtitle exists.
+Verify navButtons.length satisfies toBeGreaterThan(5).
+Verify window.CalibAccel.init satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+document.getElementById('settingsOverlay'): null
+overlay: truthy
+overlay.style.display = 'flex'
+document.querySelector('.settings-header-title').textContent = 'Vehicle Configuration'
+document.querySelector('.settings-header-subtitle').textContent = 'TiHANFly Ground Control Station'
+navButtons.length > 5
+window.CalibAccel.init: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(appendChild).toHaveBeenCalled();
+expect(bindSidebar).toHaveBeenCalled();
+expect(buildShellHTML).toHaveBeenCalled();
+expect(document.createElement).toHaveBeenCalledWith('a');
+expect(initPanel).toHaveBeenCalled();
+expect(panel).toHaveBeenCalled();
+expect(updateAllDroneSelectors).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('settingsOverlay')).toBeNull();
+expect(overlay).toBeTruthy();
+expect(overlay.style.display).toBe('flex');
+expect(document.querySelector('.settings-header-title').textContent).toBe('Vehicle Configuration');
+expect(document.querySelector('.settings-header-subtitle').textContent).toBe('TiHANFly Ground Control Station');
+expect(navButtons.length).toBeGreaterThan(5);
+expect(window.CalibAccel.init).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 54ms
+[PASS] document.getElementById('settingsOverlay'): null
+[PASS] overlay: truthy
+[PASS] overlay.style.display = 'flex'
+[PASS] document.querySelector('.settings-header-title').textContent = 'Vehicle Configuration'
+[PASS] document.querySelector('.settings-header-subtitle').textContent = 'TiHANFly Ground Control Station'
+[PASS] navButtons.length > 5
+[PASS] window.CalibAccel.init: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

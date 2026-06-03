@@ -1,0 +1,97 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CE-009
+Requirement ID      : REQ-SYS-002
+Source File         : command-editor.js
+Target Function     : initializeCommandEditor() [Line 751]
+Test Category       : Positive / Functional
+Test Case Title     : should update waypoint variables, invoke routes recalculations and markers moves on save
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+editorInstance.switchTab('waypoints')
+editorInstance.refreshWaypoints()
+secondWP = document.getElementById('waypointList').querySelectorAll('.waypoint-item')[1]
+secondWP.click()
+document.getElementById('waypointLatField').value = '17.608'
+document.getElementById('waypointLngField').value = '78.129'
+document.getElementById('waypointAltField').value = '35'
+document.getElementById('waypointTypeField').value = 'land'
+document.getElementById('saveWaypointBtn').click()
+targetWP = mockWaypointManager.waypoints[1]
+
+Expected Behavior:
+Waypoint Type Field exists.
+Target Wp Lat is equal to 17.608.
+Target Wp Lng is equal to 78.129.
+Target Wp Altitude is equal to 35.
+Target Wp Type is equal to 'land'.
+Verify targetWP.marker.setLatLng satisfies toHaveBeenCalledWith([17.608, 78.129]).
+Verify mockWaypointManager.updateRoute satisfies toHaveBeenCalledTimes(1).
+Verify mockWaypointManager.updateStats satisfies toHaveBeenCalledTimes(1).
+Waypoints Panel exists.
+Waypoint Details Panel exists.
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('Waypoint 102 updated').
+
+Actual Observations:
+document.getElementById('waypointTypeField').disabled = false
+targetWP.lat = 17.608
+targetWP.lng = 78.129
+targetWP.altitude = 35
+targetWP.type = 'land'
+targetWP.marker.setLatLng: called with [17.608, 78.129]
+mockWaypointManager.updateRoute: 1 call(s)
+mockWaypointManager.updateStats: 1 call(s)
+document.getElementById('waypointsPanel').style.display = 'block'
+document.getElementById('waypointDetailsPanel').style.display = 'none'
+window.MsgConsole.success: called with 'Waypoint 102 updated'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('waypointTypeField').disabled).toBe(false);
+expect(targetWP.lat).toBe(17.608);
+expect(targetWP.lng).toBe(78.129);
+expect(targetWP.altitude).toBe(35);
+expect(targetWP.type).toBe('land');
+expect(targetWP.marker.setLatLng).toHaveBeenCalledWith([17.608, 78.129]);
+expect(mockWaypointManager.updateRoute).toHaveBeenCalledTimes(1);
+expect(mockWaypointManager.updateStats).toHaveBeenCalledTimes(1);
+expect(document.getElementById('waypointsPanel').style.display).toBe('block');
+expect(document.getElementById('waypointDetailsPanel').style.display).toBe('none');
+expect(window.MsgConsole.success).toHaveBeenCalledWith('Waypoint 102 updated');
+
+Console Logs:
+[INFO] Jest executed test in 42ms
+[PASS] document.getElementById('waypointTypeField').disabled = false
+[PASS] targetWP.lat = 17.608
+[PASS] targetWP.lng = 78.129
+[PASS] targetWP.altitude = 35
+[PASS] targetWP.type = 'land'
+[PASS] targetWP.marker.setLatLng: called with [17.608, 78.129]
+[PASS] mockWaypointManager.updateRoute: 1 call(s)
+[PASS] mockWaypointManager.updateStats: 1 call(s)
+[PASS] document.getElementById('waypointsPanel').style.display = 'block'
+[PASS] document.getElementById('waypointDetailsPanel').style.display = 'none'
+[PASS] window.MsgConsole.success: called with 'Waypoint 102 updated'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,71 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MT-002
+Requirement ID      : REQ-HW-001
+Source File         : motor-test.js
+Target Function     : acknowledge() [Line 122]
+Test Category       : Positive / Functional
+Test Case Title     : should unlock controls and enable buttons upon safety warning acknowledgement
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+ackBtn = document.getElementById('mt-ack-btn')
+lockOverlay = document.getElementById('mt-lock')
+content = document.getElementById('mt-content')
+ackBtn.click()
+document.querySelectorAll('.mt-motor-btn').forEach(btn => {
+})
+
+Expected Behavior:
+Lock Overlay hidden.
+Content Class List Contains('Mt Locked') is equal to false.
+Button Disabled is equal to false.
+Mt Button All exists.
+Mt Status Message exists.
+
+Actual Observations:
+lockOverlay.style.display = 'none'
+content.classList.contains('mt-locked') = false
+btn.disabled = false
+document.getElementById('mt-btn-all').disabled = false
+document.getElementById('mt-status-msg').textContent contains 'Ready — select a motor or test all'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(setStatus).toHaveBeenCalled();
+// JSDOM verification:
+expect(lockOverlay.style.display).toBe('none');
+expect(content.classList.contains('mt-locked')).toBe(false);
+expect(btn.disabled).toBe(false);
+expect(document.getElementById('mt-btn-all').disabled).toBe(false);
+expect(document.getElementById('mt-status-msg').textContent).toContain('Ready — select a motor or test all');
+
+Console Logs:
+[INFO] Jest executed test in 22ms
+[PASS] lockOverlay.style.display = 'none'
+[PASS] content.classList.contains('mt-locked') = false
+[PASS] btn.disabled = false
+[PASS] document.getElementById('mt-btn-all').disabled = false
+[PASS] document.getElementById('mt-status-msg').textContent contains 'Ready — select a motor or test all'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

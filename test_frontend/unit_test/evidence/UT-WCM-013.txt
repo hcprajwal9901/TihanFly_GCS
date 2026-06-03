@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-013
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should reset special waypoint mode back to standard fly-through
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockMarker = { setPopupContent: jest.fn() }
+regularWp = { id: 2, type: 'rtl', marker: mockMarker, lat: 17.6, lng: 78.1 }
+mockWaypointManager.waypoints = [{}, regularWp]
+menuInstance.currentWaypoint = regularWp
+menuInstance.handleMenuAction('set-waypoint')
+
+Expected Behavior:
+Regular Wp Type is equal to 'waypoint'.
+Regular Wp Command is equal to 16.
+Verify mockMarker.setPopupContent satisfies toHaveBeenCalled().
+
+Actual Observations:
+regularWp.type = 'waypoint'
+regularWp.command = 16
+mockMarker.setPopupContent: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(regularWp.type).toBe('waypoint');
+expect(regularWp.command).toBe(16);
+expect(mockMarker.setPopupContent).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] regularWp.type = 'waypoint'
+[PASS] regularWp.command = 16
+[PASS] mockMarker.setPopupContent: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-TMA-011
+Requirement ID      : REQ-SYS-002
+Source File         : tmap.js
+Target Function     : tmap_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : clearDroneMarkers should remove all vehicles
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock L Map layers.. Dependencies: Leaflet API initialized in setup.
+
+Test Inputs:
+tmap = new TMap('map-container', [17.385, 78.486], 16, true)
+tmap.updateDronePositionForSysid(1, 17.385, 78.486)
+tmap.updateDronePositionForSysid(2, 17.386, 78.487)
+tmap.clearDroneMarkers()
+
+Expected Behavior:
+Tmap Drone Markers is equal to {}.
+
+Actual Observations:
+tmap.droneMarkers = {}
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(keys).toHaveBeenCalled();
+expect(removeLayer).toHaveBeenCalled();
+// JSDOM verification:
+expect(tmap.droneMarkers).toEqual({});
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] tmap.droneMarkers = {}
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

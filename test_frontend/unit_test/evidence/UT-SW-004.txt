@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-SW-004
+Requirement ID      : REQ-SYS-001
+Source File         : settings-window.js
+Target Function     : buildShellHTML() [Line 53]
+Test Category       : Negative / Robustness
+Test Case Title     : should display error block if panel module fails to initialize
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.panel_calib_level.init.mockImplementationOnce(() => {
+throw new Error('Compass magnetic interference')
+})
+levelBtn = document.querySelector('.settings-nav-btn[data-panel="calib-level"]')
+levelBtn.click()
+levelPanel = document.getElementById('panel-calib-level')
+
+Expected Behavior:
+Level Panel displays text containing 'Failed to load panel: calib-level'.
+Level Panel displays text containing 'Compass magnetic interference'.
+
+Actual Observations:
+levelPanel.textContent contains 'Failed to load panel: calib-level'
+levelPanel.textContent contains 'Compass magnetic interference'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(levelPanel.textContent).toContain('Failed to load panel: calib-level');
+expect(levelPanel.textContent).toContain('Compass magnetic interference');
+
+Console Logs:
+[INFO] Jest executed test in 32ms
+[PASS] levelPanel.textContent contains 'Failed to load panel: calib-level'
+[PASS] levelPanel.textContent contains 'Compass magnetic interference'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

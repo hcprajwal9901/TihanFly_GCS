@@ -1,0 +1,76 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CR-009
+Requirement ID      : REQ-HW-001
+Source File         : calib-radio.js
+Target Function     : _onStatusMsg() [Line 32]
+Test Category       : Positive / Functional
+Test Case Title     : should update auxiliary radio box grid on channels 5-14
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+})
+
+Expected Behavior:
+Rval 5 exists.
+Rbar 5 exists.
+Rbar Min 5 exists.
+Rbar Max 5 exists.
+Rval 14 exists.
+Rbar 14 exists.
+Rbar Min 14 exists.
+Rbar Max 14 exists.
+
+Actual Observations:
+document.getElementById('rval-5').textContent = '1000'
+document.getElementById('rbar-5').style.width = '0%'
+document.getElementById('rbar-min-5').style.left = '0%'
+document.getElementById('rbar-max-5').style.left = '0%'
+document.getElementById('rval-14').textContent = '2000'
+document.getElementById('rbar-14').style.width = '100%'
+document.getElementById('rbar-min-14').style.left = '100%'
+document.getElementById('rbar-max-14').style.left = '100%'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('rval-5').textContent).toBe('1000');
+expect(document.getElementById('rbar-5').style.width).toBe('0%');
+expect(document.getElementById('rbar-min-5').style.left).toBe('0%');
+expect(document.getElementById('rbar-max-5').style.left).toBe('0%');
+expect(document.getElementById('rval-14').textContent).toBe('2000');
+expect(document.getElementById('rbar-14').style.width).toBe('100%');
+expect(document.getElementById('rbar-min-14').style.left).toBe('100%');
+expect(document.getElementById('rbar-max-14').style.left).toBe('100%');
+
+Console Logs:
+[INFO] Jest executed test in 40ms
+[PASS] document.getElementById('rval-5').textContent = '1000'
+[PASS] document.getElementById('rbar-5').style.width = '0%'
+[PASS] document.getElementById('rbar-min-5').style.left = '0%'
+[PASS] document.getElementById('rbar-max-5').style.left = '0%'
+[PASS] document.getElementById('rval-14').textContent = '2000'
+[PASS] document.getElementById('rbar-14').style.width = '100%'
+[PASS] document.getElementById('rbar-min-14').style.left = '100%'
+[PASS] document.getElementById('rbar-max-14').style.left = '100%'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

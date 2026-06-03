@@ -1,0 +1,56 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LOG-014
+Requirement ID      : REQ-LOG-001
+Source File         : login.js
+Target Function     : updateConnectionStatus() [Line 91]
+Test Category       : Boundary Value
+Test Case Title     : should display admin contact email on forgot password links
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+type: String, callback: Function | Simulated: event = { preventDefault: jest.fn() }
+showForgot(event)
+
+Expected Behavior:
+Verify event.preventDefault satisfies toHaveBeenCalled().
+Auth Alert exists.
+
+Actual Observations:
+event.preventDefault: called
+document.getElementById('authAlert').textContent contains 'Contact admin at tihan@iith.ac.in'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = on(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(event.preventDefault).toHaveBeenCalled();
+expect(document.getElementById('authAlert').textContent).toContain('Contact admin at tihan@iith.ac.in');
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] event.preventDefault: called
+[PASS] document.getElementById('authAlert').textContent contains 'Contact admin at tihan@iith.ac.in'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

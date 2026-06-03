@@ -1,0 +1,69 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FC-010
+Requirement ID      : REQ-CON-001
+Source File         : flight-controls.js
+Target Function     : flight-controls_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should automatically re-enable controls when matching WebSocket responses arrive
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+takeoffBtn = document.getElementById('takeoffBtn')
+landBtn = document.getElementById('landBtn')
+rtlBtn = document.getElementById('rtlBtn')
+window.FlightControls.setExecutingState(takeoffBtn, 'TAKEOFF')
+window.dispatchEvent(new CustomEvent('calibration_ws_message', {
+}))
+
+Expected Behavior:
+Window Flight Controls Is Command Executing() is equal to false.
+Takeoff Button Class List Contains('Executing') is equal to false.
+Takeoff Button Disabled is equal to false.
+Land Button Disabled is equal to false.
+Rtl Button Disabled is equal to false.
+
+Actual Observations:
+window.FlightControls.isCommandExecuting() = false
+takeoffBtn.classList.contains('executing') = false
+takeoffBtn.disabled = false
+landBtn.disabled = false
+rtlBtn.disabled = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.FlightControls.isCommandExecuting()).toBe(false);
+expect(takeoffBtn.classList.contains('executing')).toBe(false);
+expect(takeoffBtn.disabled).toBe(false);
+expect(landBtn.disabled).toBe(false);
+expect(rtlBtn.disabled).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] window.FlightControls.isCommandExecuting() = false
+[PASS] takeoffBtn.classList.contains('executing') = false
+[PASS] takeoffBtn.disabled = false
+[PASS] landBtn.disabled = false
+[PASS] rtlBtn.disabled = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

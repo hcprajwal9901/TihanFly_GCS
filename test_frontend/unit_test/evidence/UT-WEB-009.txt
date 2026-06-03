@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-009
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger reconnection schedules and backoff delay increments
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.initWebSocket()
+ws = wsInstances[0]
+ws.onclose()
+jest.advanceTimersByTime(4500)
+
+Expected Behavior:
+Verify wsInstances satisfies toHaveLength(1).
+Verify wsInstances satisfies toHaveLength(2).
+
+Actual Observations:
+wsInstances: toHaveLength(1)
+wsInstances: toHaveLength(2)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wsInstances).toHaveLength(1); // Reconnection timer not ticked yet
+expect(wsInstances).toHaveLength(2); // Connection attempt 2 constructed
+
+Console Logs:
+[INFO] Jest executed test in 7ms
+[PASS] wsInstances: toHaveLength(1)
+[PASS] wsInstances: toHaveLength(2)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

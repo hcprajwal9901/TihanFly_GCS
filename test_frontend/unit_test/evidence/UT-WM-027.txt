@@ -1,0 +1,69 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WM-027
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-manager.js
+Target Function     : initializeWaypointManager() [Line 696]
+Test Category       : Positive / Functional
+Test Case Title     : should unpack imported mission payload and map route coordinates
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+spyClearWaypoints = jest.spyOn(manager, 'clearAllWaypoints')
+spyClearHome = jest.spyOn(manager, 'clearHomePosition')
+spySetHome = jest.spyOn(manager, 'setHomePosition')
+spyAdd = jest.spyOn(manager, 'addWaypoint')
+missionData = {
+manager.importMission(missionData)
+
+Expected Behavior:
+Verify spyClearWaypoints satisfies toHaveBeenCalled().
+Verify spyClearHome satisfies toHaveBeenCalled().
+Verify spySetHome satisfies toHaveBeenCalledWith(17.600, 78.120).
+Verify spyAdd satisfies toHaveBeenNthCalledWith(1, 17.601, 78.126, 30, 'takeoff').
+Verify spyAdd satisfies toHaveBeenNthCalledWith(2, 17.605, 78.130, 45, 'waypoint').
+
+Actual Observations:
+spyClearWaypoints: called
+spyClearHome: called
+spySetHome: called with 17.600, 78.120
+spyAdd: toHaveBeenNthCalledWith(1, 17.601, 78.126, 30, 'takeoff')
+spyAdd: toHaveBeenNthCalledWith(2, 17.605, 78.130, 45, 'waypoint')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(spyClearWaypoints).toHaveBeenCalled();
+expect(spyClearHome).toHaveBeenCalled();
+expect(spySetHome).toHaveBeenCalledWith(17.600, 78.120);
+expect(spyAdd).toHaveBeenNthCalledWith(1, 17.601, 78.126, 30, 'takeoff');
+expect(spyAdd).toHaveBeenNthCalledWith(2, 17.605, 78.130, 45, 'waypoint');
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] spyClearWaypoints: called
+[PASS] spyClearHome: called
+[PASS] spySetHome: called with 17.600, 78.120
+[PASS] spyAdd: toHaveBeenNthCalledWith(1, 17.601, 78.126, 30, 'takeoff')
+[PASS] spyAdd: toHaveBeenNthCalledWith(2, 17.605, 78.130, 45, 'waypoint')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

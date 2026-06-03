@@ -1,0 +1,88 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-IT-002
+Requirement ID      : REQ-SYS-002
+Source File         : initial-tune.js
+Target Function     : init() [Line 368]
+Test Category       : Positive / Functional
+Test Case Title     : should auto-populate charged/discharged voltage inputs correctly when switching battery chemistry options
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+chemSelect = document.getElementById('it-chemistry')
+chargedInp = document.getElementById('it-cell-charged')
+dischargedInp = document.getElementById('it-cell-discharged')
+chemSelect.value = 'LiHV'
+chemSelect.dispatchEvent(new Event('change'))
+chemSelect.value = 'LiFe'
+chemSelect.dispatchEvent(new Event('change'))
+chemSelect.value = 'NiMH'
+chemSelect.dispatchEvent(new Event('change'))
+chemSelect.value = 'LiPo'
+chemSelect.dispatchEvent(new Event('change'))
+
+Expected Behavior:
+Charged Inp displays '4.35'.
+Discharged Inp displays '3.5'.
+Charged Inp displays '3.6'.
+Discharged Inp displays '3'.
+Charged Inp displays '1.45'.
+Discharged Inp displays '1.1'.
+Charged Inp displays '4.2'.
+Discharged Inp displays '3.5'.
+
+Actual Observations:
+chargedInp.value = '4.35'
+dischargedInp.value = '3.5'
+chargedInp.value = '3.6'
+dischargedInp.value = '3'
+chargedInp.value = '1.45'
+dischargedInp.value = '1.1'
+chargedInp.value = '4.2'
+dischargedInp.value = '3.5'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(chargedInp.value).toBe('4.35');
+expect(dischargedInp.value).toBe('3.5');
+expect(chargedInp.value).toBe('3.6');
+expect(dischargedInp.value).toBe('3');
+expect(chargedInp.value).toBe('1.45');
+expect(dischargedInp.value).toBe('1.1');
+expect(chargedInp.value).toBe('4.2');
+expect(dischargedInp.value).toBe('3.5');
+
+Console Logs:
+[INFO] Jest executed test in 47ms
+[PASS] chargedInp.value = '4.35'
+[PASS] dischargedInp.value = '3.5'
+[PASS] chargedInp.value = '3.6'
+[PASS] dischargedInp.value = '3'
+[PASS] chargedInp.value = '1.45'
+[PASS] dischargedInp.value = '1.1'
+[PASS] chargedInp.value = '4.2'
+[PASS] dischargedInp.value = '3.5'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

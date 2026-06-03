@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-IT-006
+Requirement ID      : REQ-SYS-002
+Source File         : initial-tune.js
+Target Function     : init() [Line 368]
+Test Category       : Negative / Robustness
+Test Case Title     : should style the status badge as error if param_error ws message received
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+})
+
+Expected Behavior:
+It Status Dot exists.
+It Status Message exists.
+
+Actual Observations:
+document.getElementById('it-status-dot').className contains 'it-dot-error'
+document.getElementById('it-status-msg').textContent = '✕ Parameter write rejected'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('it-status-dot').className).toContain('it-dot-error');
+expect(document.getElementById('it-status-msg').textContent).toBe('✕ Parameter write rejected');
+
+Console Logs:
+[INFO] Jest executed test in 28ms
+[PASS] document.getElementById('it-status-dot').className contains 'it-dot-error'
+[PASS] document.getElementById('it-status-msg').textContent = '✕ Parameter write rejected'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

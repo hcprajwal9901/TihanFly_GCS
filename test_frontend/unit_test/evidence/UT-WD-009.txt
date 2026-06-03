@@ -1,0 +1,62 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-009
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle weather_error from backend and show error state
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+errorPayload = {
+backendMock.handleMessage(JSON.stringify(errorPayload))
+
+Expected Behavior:
+Weather Error exists.
+Weather Error Message exists.
+
+Actual Observations:
+document.getElementById('weatherError').style.display = 'flex'
+document.getElementById('weatherErrorMessage').textContent = 'Failed to retrieve weather data from provider'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(Ready).toHaveBeenCalled();
+expect(clear).toHaveBeenCalled();
+expect(fetchWeather).toHaveBeenCalled();
+expect(getCurrentLocation).toHaveBeenCalled();
+expect(getCurrentWeather).toHaveBeenCalled();
+expect(hide).toHaveBeenCalled();
+expect(isShown).toHaveBeenCalled();
+expect(refresh).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('weatherError').style.display).toBe('flex');
+expect(document.getElementById('weatherErrorMessage').textContent).toBe('Failed to retrieve weather data from provider');
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] document.getElementById('weatherError').style.display = 'flex'
+[PASS] document.getElementById('weatherErrorMessage').textContent = 'Failed to retrieve weather data from provider'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

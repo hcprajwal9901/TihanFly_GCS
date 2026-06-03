@@ -1,0 +1,74 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-IT-003
+Requirement ID      : REQ-SYS-002
+Source File         : initial-tune.js
+Target Function     : init() [Line 368]
+Test Category       : Positive / Functional
+Test Case Title     : should resolve correct gyro and rate filters for various propeller sizes
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+propInp = document.getElementById('it-prop-size')
+calcBtn = document.getElementById('it-calc-btn')
+propInp.value = '5'
+calcBtn.click()
+previewRows = document.querySelectorAll('#it-preview-tbody tr')
+propInp.value = '10'
+previewRows = document.querySelectorAll('#it-preview-tbody tr')
+propInp.value = '15'
+propInp.dispatchEvent(new Event('change'))
+previewRows = document.querySelectorAll('#it-preview-tbody tr')
+propInp.value = '20'
+propInp.dispatchEvent(new Event('change'))
+previewRows = document.querySelectorAll('#it-preview-tbody tr')
+
+Expected Behavior:
+Preview Rows[3] Query Selector(' It Param Val') displays '100'.
+Preview Rows[3] Query Selector(' It Param Val') displays '40'.
+Preview Rows[3] Query Selector(' It Param Val') displays '25'.
+Preview Rows[3] Query Selector(' It Param Val') displays '20'.
+
+Actual Observations:
+previewRows[3].querySelector('.it-param-val').textContent = '100'
+previewRows[3].querySelector('.it-param-val').textContent = '40'
+previewRows[3].querySelector('.it-param-val').textContent = '25'
+previewRows[3].querySelector('.it-param-val').textContent = '20'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(previewRows[3].querySelector('.it-param-val').textContent).toBe('100');
+expect(previewRows[3].querySelector('.it-param-val').textContent).toBe('40');
+expect(previewRows[3].querySelector('.it-param-val').textContent).toBe('25');
+expect(previewRows[3].querySelector('.it-param-val').textContent).toBe('20');
+
+Console Logs:
+[INFO] Jest executed test in 63ms
+[PASS] previewRows[3].querySelector('.it-param-val').textContent = '100'
+[PASS] previewRows[3].querySelector('.it-param-val').textContent = '40'
+[PASS] previewRows[3].querySelector('.it-param-val').textContent = '25'
+[PASS] previewRows[3].querySelector('.it-param-val').textContent = '20'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

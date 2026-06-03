@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-007
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Negative / Robustness
+Test Case Title     : should show error when parsing returns no messages
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+file = {
+window.ReviewLog.handleFile(file)
+jest.advanceTimersByTime(500)
+pill = document.getElementById('rlStatusPill')
+errorDiv = document.getElementById('rlError')
+
+Expected Behavior:
+Pill displays text containing 'READY'.
+Error Div Class List Contains('Show') is equal to true.
+Error Div displays text containing 'No recognisable messages found in this log file.'.
+
+Actual Observations:
+pill.textContent contains 'READY'
+errorDiv.classList.contains('show') = true
+errorDiv.textContent contains 'No recognisable messages found in this log file.'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(pill.textContent).toContain('READY');
+expect(errorDiv.classList.contains('show')).toBe(true);
+expect(errorDiv.textContent).toContain('No recognisable messages found in this log file.');
+
+Console Logs:
+[INFO] Jest executed test in 45ms
+[PASS] pill.textContent contains 'READY'
+[PASS] errorDiv.classList.contains('show') = true
+[PASS] errorDiv.textContent contains 'No recognisable messages found in this log file.'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

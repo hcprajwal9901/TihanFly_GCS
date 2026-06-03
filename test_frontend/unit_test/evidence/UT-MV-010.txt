@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MV-010
+Requirement ID      : REQ-SYS-002
+Source File         : multi-vehicle.js
+Target Function     : setSelectedSysId() [Line 20]
+Test Category       : Negative / Robustness
+Test Case Title     : should render active dynamic link lists inside modal and support disconnections
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+vehicles = [{ sysid: 1 }]
+dynLinks = [
+window.updateVehicleSelector(vehicles, dynLinks)
+window.openConnectionManager()
+linkList = document.getElementById('mvLinkList')
+discBtn = linkList.querySelector('button')
+discBtn.click()
+)
+
+Expected Behavior:
+Link List displays text containing ':11040 → 127.0.0.1:14550'.
+WebSocket notification sent.
+
+Actual Observations:
+linkList.innerHTML contains ':11040 → 127.0.0.1:14550'
+window.ws.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(linkList.innerHTML).toContain(':11040 → 127.0.0.1:14550');
+expect(window.ws.send).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 36ms
+[PASS] linkList.innerHTML contains ':11040 → 127.0.0.1:14550'
+[PASS] window.ws.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

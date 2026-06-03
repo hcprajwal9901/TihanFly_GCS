@@ -1,0 +1,93 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CE-013
+Requirement ID      : REQ-SYS-002
+Source File         : command-editor.js
+Target Function     : initializeCommandEditor() [Line 751]
+Test Category       : Positive / Functional
+Test Case Title     : should support adding, editing, and deleting rally points locally
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+editorInstance.switchTab('rally')
+editorInstance.addRallyPoint(17.6015, 78.1255, 45)
+items = document.getElementById('rallyList').querySelectorAll('.rally-item')
+items[0].click()
+document.getElementById('rallyLatField').value = '17.6019'
+document.getElementById('rallyLngField').value = '78.1259'
+document.getElementById('rallyAltField').value = '60'
+document.getElementById('saveRallyBtn').click()
+document.getElementById('rallyList').querySelector('.rally-item').click()
+document.getElementById('deleteRallyBtn').click()
+
+Expected Behavior:
+Rally Count Display exists.
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('Rally point 1 added').
+Items Length is equal to 1.
+Items[0] Query Selector(' Rally Item Number') displays '📍 Rally 1'.
+Rally Id Field exists.
+Rally Lat Field exists.
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('Rally point updated').
+Verify window.confirm satisfies toHaveBeenCalledWith('Delete this rally point?').
+Rally Count Display exists.
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('Rally point deleted').
+
+Actual Observations:
+document.getElementById('rallyCountDisplay').textContent = '1 Rally Point'
+window.MsgConsole.success: called with 'Rally point 1 added'
+items.length = 1
+items[0].querySelector('.rally-item-number').textContent = '📍 Rally 1'
+document.getElementById('rallyIdField').value = '1'
+document.getElementById('rallyLatField').value = '17.6015'
+window.MsgConsole.success: called with 'Rally point updated'
+window.confirm: called with 'Delete this rally point?'
+document.getElementById('rallyCountDisplay').textContent = '0 Rally Points'
+window.MsgConsole.success: called with 'Rally point deleted'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('rallyCountDisplay').textContent).toBe('1 Rally Point');
+expect(window.MsgConsole.success).toHaveBeenCalledWith('Rally point 1 added');
+expect(items.length).toBe(1);
+expect(items[0].querySelector('.rally-item-number').textContent).toBe('📍 Rally 1');
+expect(document.getElementById('rallyIdField').value).toBe('1');
+expect(document.getElementById('rallyLatField').value).toBe('17.6015');
+expect(window.MsgConsole.success).toHaveBeenCalledWith('Rally point updated');
+expect(window.confirm).toHaveBeenCalledWith('Delete this rally point?');
+expect(document.getElementById('rallyCountDisplay').textContent).toBe('0 Rally Points');
+expect(window.MsgConsole.success).toHaveBeenCalledWith('Rally point deleted');
+
+Console Logs:
+[INFO] Jest executed test in 20ms
+[PASS] document.getElementById('rallyCountDisplay').textContent = '1 Rally Point'
+[PASS] window.MsgConsole.success: called with 'Rally point 1 added'
+[PASS] items.length = 1
+[PASS] items[0].querySelector('.rally-item-number').textContent = '📍 Rally 1'
+[PASS] document.getElementById('rallyIdField').value = '1'
+[PASS] document.getElementById('rallyLatField').value = '17.6015'
+[PASS] window.MsgConsole.success: called with 'Rally point updated'
+[PASS] window.confirm: called with 'Delete this rally point?'
+[PASS] document.getElementById('rallyCountDisplay').textContent = '0 Rally Points'
+[PASS] window.MsgConsole.success: called with 'Rally point deleted'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

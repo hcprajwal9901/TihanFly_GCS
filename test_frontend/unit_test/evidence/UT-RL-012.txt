@@ -1,0 +1,116 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-012
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : clicking field row should toggle active classes, trigger fetch, plot series & compute stats
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+fieldRow = document.querySelector('.rl-field-row[data-field="Lat"]')
+msgRow = document.querySelector('.rl-msg-row')
+fieldRow.click()
+legendChips = document.querySelectorAll('.rl-legend-chip')
+fieldRow.click()
+
+Expected Behavior:
+Field Row is null.
+Message Row is null.
+Field Row Class List Contains('Active') is equal to true.
+Message Row Class List Contains('Rl Has Active') is equal to true.
+Field Row Style Get Property Value(' Field Color') is equal to '#29b6f6'.
+Rl Stat Min exists.
+Rl Stat Max exists.
+Rl Stat Avg exists.
+Rl Stat Rows exists.
+Rl Stat Series exists.
+Legend Chips Length is equal to 1.
+Legend Chips[0] displays text containing 'GPS.Lat'.
+Field Row Class List Contains('Active') is equal to false.
+Message Row Class List Contains('Rl Has Active') is equal to false.
+Rl Stat Min exists.
+Rl Stat Max exists.
+Rl Stat Series exists.
+
+Actual Observations:
+fieldRow: not null
+msgRow: not null
+fieldRow.classList.contains('active') = true
+msgRow.classList.contains('rl-has-active') = true
+fieldRow.style.getPropertyValue('--field-color') = '#29b6f6'
+document.getElementById('rlStatMin').textContent = '12.3456'
+document.getElementById('rlStatMax').textContent = '12.3456'
+document.getElementById('rlStatAvg').textContent = '12.3456'
+document.getElementById('rlStatRows').textContent = '1'
+document.getElementById('rlStatSeries').textContent = '1'
+legendChips.length = 1
+legendChips[0].textContent contains 'GPS.Lat'
+fieldRow.classList.contains('active') = false
+msgRow.classList.contains('rl-has-active') = false
+document.getElementById('rlStatMin').textContent = '—'
+document.getElementById('rlStatMax').textContent = '—'
+document.getElementById('rlStatSeries').textContent = '0'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(fieldRow).not.toBeNull();
+expect(msgRow).not.toBeNull();
+expect(fieldRow.classList.contains('active')).toBe(true);
+expect(msgRow.classList.contains('rl-has-active')).toBe(true);
+expect(fieldRow.style.getPropertyValue('--field-color')).toBe('#29b6f6'); // first color index series
+expect(document.getElementById('rlStatMin').textContent).toBe('12.3456');
+expect(document.getElementById('rlStatMax').textContent).toBe('12.3456');
+expect(document.getElementById('rlStatAvg').textContent).toBe('12.3456');
+expect(document.getElementById('rlStatRows').textContent).toBe('1');
+expect(document.getElementById('rlStatSeries').textContent).toBe('1');
+expect(legendChips.length).toBe(1);
+expect(legendChips[0].textContent).toContain('GPS.Lat');
+expect(fieldRow.classList.contains('active')).toBe(false);
+expect(msgRow.classList.contains('rl-has-active')).toBe(false);
+expect(document.getElementById('rlStatMin').textContent).toBe('—');
+expect(document.getElementById('rlStatMax').textContent).toBe('—');
+expect(document.getElementById('rlStatSeries').textContent).toBe('0');
+
+Console Logs:
+[INFO] Jest executed test in 100ms
+[PASS] fieldRow: not null
+[PASS] msgRow: not null
+[PASS] fieldRow.classList.contains('active') = true
+[PASS] msgRow.classList.contains('rl-has-active') = true
+[PASS] fieldRow.style.getPropertyValue('--field-color') = '#29b6f6'
+[PASS] document.getElementById('rlStatMin').textContent = '12.3456'
+[PASS] document.getElementById('rlStatMax').textContent = '12.3456'
+[PASS] document.getElementById('rlStatAvg').textContent = '12.3456'
+[PASS] document.getElementById('rlStatRows').textContent = '1'
+[PASS] document.getElementById('rlStatSeries').textContent = '1'
+[PASS] legendChips.length = 1
+[PASS] legendChips[0].textContent contains 'GPS.Lat'
+[PASS] fieldRow.classList.contains('active') = false
+[PASS] msgRow.classList.contains('rl-has-active') = false
+[PASS] document.getElementById('rlStatMin').textContent = '—'
+[PASS] document.getElementById('rlStatMax').textContent = '—'
+[PASS] document.getElementById('rlStatSeries').textContent = '0'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,75 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-014
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : close() [Line 1379]
+Test Category       : Positive / Functional
+Test Case Title     : should persist unlock states across multiple open and close lifecycle sessions
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+window.VehicleConfig.open()
+card = document.querySelector('.vc-drone-card[data-drone="kala"]')
+installBtn = card.querySelector('.vc-btn-install')
+card.querySelector('.vc-btn-unlock').click()
+backdrop = document.querySelector('.vc-pw-backdrop')
+backdrop.querySelector('#vcPwInput').value = 'kala@123'
+backdrop.querySelector('#vcPwConfirm').click()
+jest.advanceTimersByTime(150)
+window.VehicleConfig.close()
+jest.advanceTimersByTime(200)
+window.VehicleConfig.open()
+newCard = document.querySelector('.vc-drone-card[data-drone="kala"]')
+newInstallBtn = newCard.querySelector('.vc-btn-install')
+newUnlockBtn = newCard.querySelector('.vc-btn-unlock')
+
+Expected Behavior:
+Install Button Class List Contains('Vc Unlocked') is equal to true.
+New Install Button Class List Contains('Vc Unlocked') is equal to true.
+New Unlock Button displays text containing 'UNLOCKED'.
+New Unlock Button Disabled is equal to true.
+
+Actual Observations:
+installBtn.classList.contains('vc-unlocked') = true
+newInstallBtn.classList.contains('vc-unlocked') = true
+newUnlockBtn.textContent contains 'UNLOCKED'
+newUnlockBtn.disabled = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(close).toBeDefined();
+// JSDOM verification:
+expect(installBtn.classList.contains('vc-unlocked')).toBe(true);
+expect(newInstallBtn.classList.contains('vc-unlocked')).toBe(true);
+expect(newUnlockBtn.textContent).toContain('UNLOCKED');
+expect(newUnlockBtn.disabled).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 168ms
+[PASS] installBtn.classList.contains('vc-unlocked') = true
+[PASS] newInstallBtn.classList.contains('vc-unlocked') = true
+[PASS] newUnlockBtn.textContent contains 'UNLOCKED'
+[PASS] newUnlockBtn.disabled = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

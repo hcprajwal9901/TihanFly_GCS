@@ -1,0 +1,80 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFW-010
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-weather.js
+Target Function     : getWindDirection() [Line 290]
+Test Category       : Positive / Functional
+Test Case Title     : should calculate correct cardinal wind headings in getWindDirection
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+No external inputs required.
+
+Expected Behavior:
+Mode Instance Get Wind Di Recordtion(0) is equal to 'N'.
+Mode Instance Get Wind Di Recordtion(45) is equal to 'NE'.
+Mode Instance Get Wind Di Recordtion(90) is equal to 'E'.
+Mode Instance Get Wind Di Recordtion(135) is equal to 'SE'.
+Mode Instance Get Wind Di Recordtion(180) is equal to 'S'.
+Mode Instance Get Wind Di Recordtion(225) is equal to 'SW'.
+Mode Instance Get Wind Di Recordtion(270) is equal to 'W'.
+Mode Instance Get Wind Di Recordtion(315) is equal to 'NW'.
+Mode Instance Get Wind Di Recordtion(360) is equal to 'N'.
+
+Actual Observations:
+modeInstance.getWindDirection(0) = 'N'
+modeInstance.getWindDirection(45) = 'NE'
+modeInstance.getWindDirection(90) = 'E'
+modeInstance.getWindDirection(135) = 'SE'
+modeInstance.getWindDirection(180) = 'S'
+modeInstance.getWindDirection(225) = 'SW'
+modeInstance.getWindDirection(270) = 'W'
+modeInstance.getWindDirection(315) = 'NW'
+modeInstance.getWindDirection(360) = 'N'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modeInstance.getWindDirection(0)).toBe('N');
+expect(modeInstance.getWindDirection(45)).toBe('NE');
+expect(modeInstance.getWindDirection(90)).toBe('E');
+expect(modeInstance.getWindDirection(135)).toBe('SE');
+expect(modeInstance.getWindDirection(180)).toBe('S');
+expect(modeInstance.getWindDirection(225)).toBe('SW');
+expect(modeInstance.getWindDirection(270)).toBe('W');
+expect(modeInstance.getWindDirection(315)).toBe('NW');
+expect(modeInstance.getWindDirection(360)).toBe('N');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] modeInstance.getWindDirection(0) = 'N'
+[PASS] modeInstance.getWindDirection(45) = 'NE'
+[PASS] modeInstance.getWindDirection(90) = 'E'
+[PASS] modeInstance.getWindDirection(135) = 'SE'
+[PASS] modeInstance.getWindDirection(180) = 'S'
+[PASS] modeInstance.getWindDirection(225) = 'SW'
+[PASS] modeInstance.getWindDirection(270) = 'W'
+[PASS] modeInstance.getWindDirection(315) = 'NW'
+[PASS] modeInstance.getWindDirection(360) = 'N'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

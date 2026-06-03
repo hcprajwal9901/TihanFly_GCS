@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFW-020
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-waypoint.js
+Target Function     : handleWaypointActions() [Line 10]
+Test Category       : Positive / Functional
+Test Case Title     : should cancel active PolygonManager drawing before executing waypoint actions
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.WaypointManager = {
+window.PolygonManager = {
+modeInstance.handleWaypointActions('add-waypoint')
+
+Expected Behavior:
+Log message recorded.
+Verify window.PolygonManager.cancelDrawing satisfies toHaveBeenCalledTimes(1).
+Verify window.WaypointManager.startAddingWaypoint satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+console.log: called with expect.stringContaining('Cancelling active polygon draw')
+window.PolygonManager.cancelDrawing: 1 call(s)
+window.WaypointManager.startAddingWaypoint: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Cancelling active polygon draw'));
+expect(window.PolygonManager.cancelDrawing).toHaveBeenCalledTimes(1);
+expect(window.WaypointManager.startAddingWaypoint).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] console.log: called with expect.stringContaining('Cancelling active polygon draw')
+[PASS] window.PolygonManager.cancelDrawing: 1 call(s)
+[PASS] window.WaypointManager.startAddingWaypoint: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

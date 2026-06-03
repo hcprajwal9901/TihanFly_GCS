@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-015
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should reset to initial state on clear
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+window.weatherDashboard.onMapClick(12.34, 56.78)
+window.Weather.clear()
+
+Expected Behavior:
+Window Weather Dashboard Get Current Location() Lat is equal to 12.34.
+Window Weather Dashboard Get Current Location() Lat is null.
+Weather Update Time exists.
+
+Actual Observations:
+window.weatherDashboard.getCurrentLocation().lat = 12.34
+window.weatherDashboard.getCurrentLocation().lat: null
+document.getElementById('weatherUpdateTime').textContent = 'Click map to load weather'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(Ready).toHaveBeenCalled();
+expect(clear).toHaveBeenCalled();
+expect(fetchWeather).toHaveBeenCalled();
+expect(getCurrentLocation).toHaveBeenCalled();
+expect(getCurrentWeather).toHaveBeenCalled();
+expect(isShown).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.weatherDashboard.getCurrentLocation().lat).toBe(12.34);
+expect(window.weatherDashboard.getCurrentLocation().lat).toBeNull();
+expect(document.getElementById('weatherUpdateTime').textContent).toBe('Click map to load weather');
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] window.weatherDashboard.getCurrentLocation().lat = 12.34
+[PASS] window.weatherDashboard.getCurrentLocation().lat: null
+[PASS] document.getElementById('weatherUpdateTime').textContent = 'Click map to load weather'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

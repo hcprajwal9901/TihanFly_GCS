@@ -1,0 +1,49 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WM-008
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-manager.js
+Target Function     : initializeWaypointManager() [Line 696]
+Test Category       : Positive / Functional
+Test Case Title     : should resolve from home position if drone marker is missing
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockTMap.droneMarker = null
+manager.homePosition = { lat: 17.8, lng: 78.8 }
+
+Expected Behavior:
+Manager Get Drone Actual Location() is equal to { lat: 17.8, lng: 78.8 }.
+
+Actual Observations:
+manager.getDroneActualLocation() = { lat: 17.8, lng: 78.8 }
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(manager.getDroneActualLocation()).toEqual({ lat: 17.8, lng: 78.8 });
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] manager.getDroneActualLocation() = { lat: 17.8, lng: 78.8 }
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

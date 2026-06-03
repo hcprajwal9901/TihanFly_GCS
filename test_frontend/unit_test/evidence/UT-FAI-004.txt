@@ -1,0 +1,73 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FAI-004
+Requirement ID      : REQ-SAF-001
+Source File         : failsafe.js
+Target Function     : requestParam() [Line 65]
+Test Category       : Positive / Functional
+Test Case Title     : should update UI selects and badge states when receiving WS messages via CustomEvents
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.Failsafe.init()
+lowSel = document.getElementById('fs-batt-low-sel')
+paramEvent = new CustomEvent('calibration_ws_message', {
+})
+window.dispatchEvent(paramEvent)
+)
+window.dispatchEvent(new CustomEvent('calibration_ws_message', {
+}))
+window.dispatchEvent(new CustomEvent('calibration_ws_message', {
+}))
+
+Expected Behavior:
+Low Sel displays '0'.
+Low Sel displays '2'.
+Verify document.getElementById('fs-batt-low-hint' satisfies textContent().
+Fs Conn Badge exists.
+Fs Conn Badge exists.
+
+Actual Observations:
+lowSel.value = '0'
+lowSel.value = '2'
+document.getElementById('fs-batt-low-hint': textContent
+document.getElementById('fs-conn-badge').textContent = '✓ Synced with FC'
+document.getElementById('fs-conn-badge').className contains 'fs-badge-ok'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(lowSel.value).toBe('0'); // default None
+expect(lowSel.value).toBe('2');
+expect(document.getElementById('fs-batt-low-hint').textContent).toBe(
+expect(document.getElementById('fs-conn-badge').textContent).toBe('✓ Synced with FC');
+expect(document.getElementById('fs-conn-badge').className).toContain('fs-badge-ok');
+
+Console Logs:
+[INFO] Jest executed test in 37ms
+[PASS] lowSel.value = '0'
+[PASS] lowSel.value = '2'
+[PASS] document.getElementById('fs-batt-low-hint': textContent
+[PASS] document.getElementById('fs-conn-badge').textContent = '✓ Synced with FC'
+[PASS] document.getElementById('fs-conn-badge').className contains 'fs-badge-ok'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

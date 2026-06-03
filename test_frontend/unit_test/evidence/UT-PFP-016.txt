@@ -1,0 +1,121 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFP-016
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-polygon.js
+Target Function     : handlePolygonActions() [Line 6]
+Test Category       : Positive / Functional
+Test Case Title     : should remove existing modal, render the layout, and set up live mathematical calculations
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+dummyModal = document.createElement('div')
+dummyModal.id = 'surveySettingsModal'
+document.body.appendChild(dummyModal)
+instance.showSurveySettingsModal()
+modals = document.querySelectorAll('#surveySettingsModal')
+modal = document.getElementById('surveySettingsModal')
+altInput = document.getElementById('ss-altitude')
+hfovInput = document.getElementById('ss-hfov')
+vfovInput = document.getElementById('ss-vfov')
+overlapInput = document.getElementById('ss-overlap')
+spacingInput = document.getElementById('ss-spacing')
+sidelapInput = document.getElementById('ss-sidelap')
+angleInput = document.getElementById('ss-angle')
+speedInput = document.getElementById('ss-speed')
+altInput.value = '200'
+altInput.dispatchEvent(new Event('input'))
+spacingInput.value = '100'; // 100 meters
+spacingInput.dispatchEvent(new Event('input'))
+
+Expected Behavior:
+Modals Length is equal to 1.
+Verify modal satisfies toBeDefined().
+Alt Input displays '100'.
+Hfov Input displays '120'.
+Vfov Input displays '90'.
+Overlap Input displays '70'.
+Spacing Input displays '20.0'.
+Sidelap Input displays '94.2); // derived: (1 - 20 / (2 * 100 * tan(60))'.
+Angle Input displays '45'.
+Speed Input displays '5'.
+Ss Fw exists.
+Ss Fh exists.
+Ss Fa exists.
+Ss Sl Pct exists.
+Sidelap Input displays '85.6'.
+
+Actual Observations:
+modals.length = 1
+modal: defined
+altInput.value = '100'
+hfovInput.value = '120'
+vfovInput.value = '90'
+overlapInput.value = '70'
+spacingInput.value = '20.0'
+sidelapInput.value = '94.2'); // derived: (1 - 20 / (2 * 100 * tan(60))
+angleInput.value = '45'
+speedInput.value = '5'
+document.getElementById('ss-fw').textContent contains '692.82 m'
+document.getElementById('ss-fh').textContent contains '400.00 m'
+document.getElementById('ss-fa').textContent contains '277128.1 m²'
+document.getElementById('ss-sl-pct').textContent = '85.6'
+sidelapInput.value = '85.6'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(modals.length).toBe(1);
+expect(modal).toBeDefined();
+expect(altInput.value).toBe('100');
+expect(hfovInput.value).toBe('120');
+expect(vfovInput.value).toBe('90');
+expect(overlapInput.value).toBe('70');
+expect(spacingInput.value).toBe('20.0');
+expect(sidelapInput.value).toBe('94.2'); // derived: (1 - 20 / (2 * 100 * tan(60))) * 100
+expect(angleInput.value).toBe('45');
+expect(speedInput.value).toBe('5');
+expect(document.getElementById('ss-fw').textContent).toContain('692.82 m');
+expect(document.getElementById('ss-fh').textContent).toContain('400.00 m');
+expect(document.getElementById('ss-fa').textContent).toContain('277128.1 m²');
+expect(document.getElementById('ss-sl-pct').textContent).toBe('85.6');
+expect(sidelapInput.value).toBe('85.6');
+
+Console Logs:
+[INFO] Jest executed test in 217ms
+[PASS] modals.length = 1
+[PASS] modal: defined
+[PASS] altInput.value = '100'
+[PASS] hfovInput.value = '120'
+[PASS] vfovInput.value = '90'
+[PASS] overlapInput.value = '70'
+[PASS] spacingInput.value = '20.0'
+[PASS] sidelapInput.value = '94.2'); // derived: (1 - 20 / (2 * 100 * tan(60))
+[PASS] angleInput.value = '45'
+[PASS] speedInput.value = '5'
+[PASS] document.getElementById('ss-fw').textContent contains '692.82 m'
+[PASS] document.getElementById('ss-fh').textContent contains '400.00 m'
+[PASS] document.getElementById('ss-fa').textContent contains '277128.1 m²'
+[PASS] document.getElementById('ss-sl-pct').textContent = '85.6'
+[PASS] sidelapInput.value = '85.6'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

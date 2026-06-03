@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MFM-002
+Requirement ID      : REQ-SYS-002
+Source File         : mission-file-manager.js
+Target Function     : closeDialog() [Line 431]
+Test Category       : Negative / Robustness
+Test Case Title     : should throw an error if WaypointManager is missing
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+window.WaypointManager = null
+
+Expected Behavior:
+Verify () => missionManager.exportMission() satisfies toThrow('WaypointManager not initialized').
+
+Actual Observations:
+() => missionManager.exportMission(): throws
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(Date).toHaveBeenCalled();
+expect(expects).toHaveBeenCalled();
+expect(getHomePosition).toHaveBeenCalled();
+expect(getTotalDistance).toHaveBeenCalled();
+expect(getWaypoints).toHaveBeenCalled();
+expect(toISOString).toHaveBeenCalled();
+// JSDOM verification:
+expect(() => missionManager.exportMission()).toThrow('WaypointManager not initialized');
+
+Console Logs:
+[INFO] Jest executed test in 6ms
+[PASS] () => missionManager.exportMission(): throws
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

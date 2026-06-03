@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-014
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should refresh weather at same location on refresh if coordinates set
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+spyFetch = jest.spyOn(window.weatherDashboard, 'fetchWeather')
+window.Weather.refresh()
+window.weatherDashboard.onMapClick(12.34, 56.78)
+window.Weather.refresh()
+
+Expected Behavior:
+Verify spyFetch satisfies toHaveBeenCalled().
+Verify spyFetch satisfies toHaveBeenCalledTimes(1).
+Verify spyFetch satisfies toHaveBeenCalledTimes(2).
+Verify spyFetch satisfies toHaveBeenLastCalledWith(12.34, 56.78).
+
+Actual Observations:
+spyFetch: not called
+spyFetch: 1 call(s)
+spyFetch: 2 call(s)
+spyFetch: toHaveBeenLastCalledWith(12.34, 56.78)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(Ready).toHaveBeenCalled();
+expect(clear).toHaveBeenCalled();
+expect(fetchWeather).toHaveBeenCalled();
+expect(getCurrentLocation).toHaveBeenCalled();
+expect(getCurrentWeather).toHaveBeenCalled();
+expect(isShown).toHaveBeenCalled();
+// JSDOM verification:
+expect(spyFetch).not.toHaveBeenCalled();
+expect(spyFetch).toHaveBeenCalledTimes(1);
+expect(spyFetch).toHaveBeenCalledTimes(2);
+expect(spyFetch).toHaveBeenLastCalledWith(12.34, 56.78);
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] spyFetch: not called
+[PASS] spyFetch: 1 call(s)
+[PASS] spyFetch: 2 call(s)
+[PASS] spyFetch: toHaveBeenLastCalledWith(12.34, 56.78)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

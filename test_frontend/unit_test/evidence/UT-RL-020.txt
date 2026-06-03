@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-020
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Wrong Value
+Test Case Title     : changing selected file input should parse log and clear value string
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+fileInput = document.getElementById('reviewLogFileInput')
+originalHandleFile = window.ReviewLog.handleFile
+window.ReviewLog.handleFile = jest.fn()
+file = new File([''], 'flight_log.bin')
+})
+fileInput.dispatchEvent(new Event('change'))
+window.ReviewLog.handleFile = originalHandleFile
+
+Expected Behavior:
+Verify window.ReviewLog.handleFile satisfies toHaveBeenCalledWith(file).
+File Input displays ''.
+
+Actual Observations:
+window.ReviewLog.handleFile: called with file
+fileInput.value = ''
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.ReviewLog.handleFile).toHaveBeenCalledWith(file);
+expect(fileInput.value).toBe(''); // cleared value check
+
+Console Logs:
+[INFO] Jest executed test in 18ms
+[PASS] window.ReviewLog.handleFile: called with file
+[PASS] fileInput.value = ''
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

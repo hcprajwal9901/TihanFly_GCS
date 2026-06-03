@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-010
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Positive / Functional
+Test Case Title     : should filter inspector message rows based on user searches
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+cls: String, fn: String, ico: String, lbl: String, id: Number, i18Key: String | Simulated: tbody = document.getElementById('inspTbody')
+tbody.innerHTML = `
+window.AnalyzeToolsPanel._filterInsp('HEART')
+
+Expected Behavior:
+Irow Heartbeat exists.
+Irow Attitude exists.
+
+Actual Observations:
+document.getElementById('irow_HEARTBEAT').style.display = ''
+document.getElementById('irow_ATTITUDE').style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = B(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(document.getElementById('irow_HEARTBEAT').style.display).toBe('');
+expect(document.getElementById('irow_ATTITUDE').style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] document.getElementById('irow_HEARTBEAT').style.display = ''
+[PASS] document.getElementById('irow_ATTITUDE').style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

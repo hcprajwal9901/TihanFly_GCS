@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFW-023
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-waypoint.js
+Target Function     : handleWaypointActions() [Line 10]
+Test Category       : Wrong Value
+Test Case Title     : should log coordinates, JSON strings, and console table formatted outputs
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.WaypointManager = {
+modeInstance.logMarkersToConsole()
+tableArg = console.table.mock.calls[0][0]
+
+Expected Behavior:
+Verify console.table satisfies toHaveBeenCalledTimes(1).
+Table Arg Length is equal to 2.
+Table Arg[0] Id is equal to '1'.
+Table Arg[0] Lat is equal to 12.34.
+Table Arg[0] Altitude is equal to 25.
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith(expect.stringContaining('2 waypoints logged to console')).
+
+Actual Observations:
+console.table: 1 call(s)
+tableArg.length = 2
+tableArg[0].id = '1'
+tableArg[0].lat = 12.34
+tableArg[0].altitude = 25
+window.MsgConsole.success: called with expect.stringContaining('2 waypoints logged to console')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(console.table).toHaveBeenCalledTimes(1);
+expect(tableArg.length).toBe(2);
+expect(tableArg[0].id).toBe('1');
+expect(tableArg[0].lat).toBe(12.34);
+expect(tableArg[0].altitude).toBe(25);
+expect(window.MsgConsole.success).toHaveBeenCalledWith(expect.stringContaining('2 waypoints logged to console'));
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] console.table: 1 call(s)
+[PASS] tableArg.length = 2
+[PASS] tableArg[0].id = '1'
+[PASS] tableArg[0].lat = 12.34
+[PASS] tableArg[0].altitude = 25
+[PASS] window.MsgConsole.success: called with expect.stringContaining('2 waypoints logged to console')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

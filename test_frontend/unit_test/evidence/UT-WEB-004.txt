@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-004
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Positive / Functional
+Test Case Title     : should auto-inject current selectedSysId for outbound commands
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.initWebSocket()
+ws = wsInstances[0]
+ws.readyState = WebSocket.OPEN
+window.ws = ws
+window.selectedSysId = 2
+window.safeSend({ type: 'command', command: 176 })
+sentData = JSON.parse(ws.send.mock.calls[0][0])
+
+Expected Behavior:
+WebSocket notification sent.
+Sent Data Sysid is equal to 2.
+
+Actual Observations:
+ws.send: called
+sentData.sysid = 2
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(ws.send).toHaveBeenCalled();
+expect(sentData.sysid).toBe(2);
+
+Console Logs:
+[INFO] Jest executed test in 7ms
+[PASS] ws.send: called
+[PASS] sentData.sysid = 2
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

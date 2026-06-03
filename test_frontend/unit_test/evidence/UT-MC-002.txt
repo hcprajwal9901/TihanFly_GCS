@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MC-002
+Requirement ID      : REQ-SYS-002
+Source File         : messaage-console.js
+Target Function     : initializeMinimalConsole() [Line 189]
+Test Category       : Positive / Functional
+Test Case Title     : should add an info message to the console by default
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+text: String | Simulated: window.MsgConsole.log('Normal info log message')
+messageElements = container.querySelectorAll('.minimal-console-message')
+msgEl = messageElements[0]
+
+Expected Behavior:
+Message Elements Length is equal to 1.
+Message El Class Name contains 'info'.
+Message El Query Selector(' Minimal Message Icon') displays 'ℹ'.
+Message El Query Selector(' Minimal Message Text') displays 'Normal info log message'.
+Verify msgEl.querySelector('.minimal-message-time') satisfies toBeDefined().
+
+Actual Observations:
+messageElements.length = 1
+msgEl.className contains 'info'
+msgEl.querySelector('.minimal-message-icon').textContent = 'ℹ'
+msgEl.querySelector('.minimal-message-text').textContent = 'Normal info log message'
+msgEl.querySelector('.minimal-message-time'): defined
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(initializeMinimalConsole).toHaveBeenCalled();
+// JSDOM verification:
+expect(messageElements.length).toBe(1);
+expect(msgEl.className).toContain('info');
+expect(msgEl.querySelector('.minimal-message-icon').textContent).toBe('ℹ');
+expect(msgEl.querySelector('.minimal-message-text').textContent).toBe('Normal info log message');
+expect(msgEl.querySelector('.minimal-message-time')).toBeDefined();
+
+Console Logs:
+[INFO] Jest executed test in 19ms
+[PASS] messageElements.length = 1
+[PASS] msgEl.className contains 'info'
+[PASS] msgEl.querySelector('.minimal-message-icon').textContent = 'ℹ'
+[PASS] msgEl.querySelector('.minimal-message-text').textContent = 'Normal info log message'
+[PASS] msgEl.querySelector('.minimal-message-time'): defined
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

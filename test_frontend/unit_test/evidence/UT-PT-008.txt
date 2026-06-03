@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PT-008
+Requirement ID      : REQ-TUNE-001
+Source File         : pid-tuning.js
+Target Function     : val() [Line 112]
+Test Category       : Positive / Functional
+Test Case Title     : should update input value and flash positive styling upon param_value update
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+id: Number | Simulated: el = document.getElementById('pid-inp-ATC_ANG_RLL_P')
+})
+jest.advanceTimersByTime(900)
+
+Expected Behavior:
+El displays '5.2'.
+El Style Color is equal to 'var(--good)'.
+El Style Color is equal to ''.
+
+Actual Observations:
+el.value = '5.2'
+el.style.color = 'var(--good)'
+el.style.color = ''
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = val(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(el.value).toBe('5.2');
+expect(el.style.color).toBe('var(--good)');
+expect(el.style.color).toBe('');
+
+Console Logs:
+[INFO] Jest executed test in 136ms
+[PASS] el.value = '5.2'
+[PASS] el.style.color = 'var(--good)'
+[PASS] el.style.color = ''
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

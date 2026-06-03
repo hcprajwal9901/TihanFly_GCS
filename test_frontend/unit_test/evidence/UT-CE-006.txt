@@ -1,0 +1,52 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CE-006
+Requirement ID      : REQ-SYS-002
+Source File         : command-editor.js
+Target Function     : initializeCommandEditor() [Line 751]
+Test Category       : Positive / Functional
+Test Case Title     : should output changes to consoles when checkboxes toggle states
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+spyConsole = jest.spyOn(console, 'log')
+checkbox = document.getElementById('testCheckbox')
+checkbox.checked = true
+checkbox.dispatchEvent(new Event('change'))
+spyConsole.mockRestore()
+
+Expected Behavior:
+Verify spyConsole satisfies toHaveBeenCalledWith(expect.stringContaining('Checkbox changed: Enable Fence = true')).
+
+Actual Observations:
+spyConsole: called with expect.stringContaining('Checkbox changed: Enable Fence = true')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(spyConsole).toHaveBeenCalledWith(expect.stringContaining('Checkbox changed: Enable Fence = true'));
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] spyConsole: called with expect.stringContaining('Checkbox changed: Enable Fence = true')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

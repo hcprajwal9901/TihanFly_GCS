@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-SW-002
+Requirement ID      : REQ-SYS-001
+Source File         : settings-window.js
+Target Function     : open() [Line 342]
+Test Category       : Positive / Functional
+Test Case Title     : should prevent double overlay creation on multiple open() calls
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+window.SettingsWindow.open()
+firstOverlay = document.getElementById('settingsOverlay')
+window.SettingsWindow.open()
+secondOverlay = document.getElementById('settingsOverlay')
+
+Expected Behavior:
+First Overlay is equal to secondOverlay.
+
+Actual Observations:
+firstOverlay = secondOverlay
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(appendChild).toHaveBeenCalled();
+expect(bindSidebar).toHaveBeenCalled();
+expect(buildShellHTML).toHaveBeenCalled();
+expect(document.createElement).toHaveBeenCalledWith('a');
+expect(initPanel).toHaveBeenCalled();
+expect(panel).toHaveBeenCalled();
+expect(updateAllDroneSelectors).toHaveBeenCalled();
+// JSDOM verification:
+expect(firstOverlay).toBe(secondOverlay);
+
+Console Logs:
+[INFO] Jest executed test in 107ms
+[PASS] firstOverlay = secondOverlay
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

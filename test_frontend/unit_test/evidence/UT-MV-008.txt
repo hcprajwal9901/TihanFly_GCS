@@ -1,0 +1,72 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MV-008
+Requirement ID      : REQ-SYS-002
+Source File         : multi-vehicle.js
+Target Function     : setSelectedSysId() [Line 20]
+Test Category       : Positive / Functional
+Test Case Title     : should support serial port selection and refresh triggerings
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.openConnectionManager()
+select = document.getElementById('mvConnProtocol')
+select.value = 'serial'
+select.dispatchEvent(new Event('change'))
+)
+window._vcLastKnownPorts = [
+jest.useFakeTimers()
+document.getElementById('mvRefreshPorts').click()
+jest.advanceTimersByTime(250)
+portSelect = document.getElementById('mvSerialPort')
+document.getElementById('mvConnectBtn').click()
+)
+jest.useRealTimers()
+
+Expected Behavior:
+WebSocket notification sent.
+Port Select Options Length is equal to 1.
+Port Select displays 'COM3'.
+WebSocket notification sent.
+
+Actual Observations:
+window.ws.send: toHaveBeenCalledWith
+portSelect.options.length = 1
+portSelect.value = 'COM3'
+window.ws.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.ws.send).toHaveBeenCalledWith(
+expect(portSelect.options.length).toBe(1);
+expect(portSelect.value).toBe('COM3');
+expect(window.ws.send).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 26ms
+[PASS] window.ws.send: toHaveBeenCalledWith
+[PASS] portSelect.options.length = 1
+[PASS] portSelect.value = 'COM3'
+[PASS] window.ws.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

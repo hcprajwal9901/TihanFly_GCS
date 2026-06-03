@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-SW-007
+Requirement ID      : REQ-SYS-001
+Source File         : settings-window.js
+Target Function     : close() [Line 358]
+Test Category       : Positive / Functional
+Test Case Title     : should close overlay on Escape keydown
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+overlay = document.getElementById('settingsOverlay')
+escapeEvent = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })
+document.dispatchEvent(escapeEvent)
+jest.advanceTimersByTime(200)
+
+Expected Behavior:
+Overlay displayed.
+Overlay Class List Contains('Closing') is equal to true.
+Overlay hidden.
+
+Actual Observations:
+overlay.style.display = 'flex'
+overlay.classList.contains('closing') = true
+overlay.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(close).toBeDefined();
+// JSDOM verification:
+expect(overlay.style.display).toBe('flex');
+expect(overlay.classList.contains('closing')).toBe(true);
+expect(overlay.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 56ms
+[PASS] overlay.style.display = 'flex'
+[PASS] overlay.classList.contains('closing') = true
+[PASS] overlay.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

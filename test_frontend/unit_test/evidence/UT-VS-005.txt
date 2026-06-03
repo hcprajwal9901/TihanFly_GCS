@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VS-005
+Requirement ID      : REQ-SYS-002
+Source File         : video-stream.js
+Target Function     : connect() [Line 203]
+Test Category       : Edge Case
+Test Case Title     : should alert if CONNECT clicked with empty RTSP input
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock L Map layers, Mock WebSocket connections, Mock localStorage cache items.. Dependencies: Leaflet API, localStorage initialized in setup.
+
+Test Inputs:
+originalAlert = window.alert
+window.alert = jest.fn()
+input = document.getElementById('rtspUrlInput')
+input.value = ''
+connectBtn = document.getElementById('rtspConnectBtn')
+connectBtn.click()
+window.alert = originalAlert
+
+Expected Behavior:
+Verify window.alert satisfies toHaveBeenCalledWith('Please enter an RTSP URL.').
+
+Actual Observations:
+window.alert: called with 'Please enter an RTSP URL.'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(alert).toHaveBeenCalled();
+expect(localStorage.setItem).toHaveBeenCalledWith('gcs_rtsp_url', expect.any(String));
+expect(setStatus).toHaveBeenCalled();
+expect(trim).toHaveBeenCalled();
+expect(wsMock.send).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.alert).toHaveBeenCalledWith('Please enter an RTSP URL.');
+
+Console Logs:
+[INFO] Jest executed test in 11ms
+[PASS] window.alert: called with 'Please enter an RTSP URL.'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

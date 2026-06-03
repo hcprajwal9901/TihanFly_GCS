@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFU-001
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-ui.js
+Target Function     : showPlanMenuStrip() [Line 10]
+Test Category       : Positive / Functional
+Test Case Title     : should set style display to flex and verify position metrics on show
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockStrip = originalCreateElement.call(document, 'div')
+mockStrip.style.display = 'none'
+mockStrip.getBoundingClientRect = jest.fn(() => ({
+}))
+modeInstance.planMenuStrip = mockStrip
+jest.spyOn(console, 'log').mockImplementation(() => {})
+modeInstance.showPlanMenuStrip()
+
+Expected Behavior:
+Mock Strip displayed.
+Verify mockStrip.getBoundingClientRect satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+mockStrip.style.display = 'flex'
+mockStrip.getBoundingClientRect: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockStrip.style.display).toBe('flex');
+expect(mockStrip.getBoundingClientRect).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 12ms
+[PASS] mockStrip.style.display = 'flex'
+[PASS] mockStrip.getBoundingClientRect: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

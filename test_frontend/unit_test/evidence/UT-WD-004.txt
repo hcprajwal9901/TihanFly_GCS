@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-004
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should validate coordinates and normalize longitude wrapping
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+wd = window.weatherDashboard
+
+Expected Behavior:
+Wd Validate Coordinates(12 34, 56 78) is equal to { lat: 12.34, lng: 56.78 }.
+Wd Validate Coordinates( 95, 120) is null.
+Wd Validate Coordinates(91, 120) is null.
+Wd Validate Coordinates(10, 190) is equal to { lat: 10, lng: -170 }.
+Wd Validate Coordinates(10, 200) is equal to { lat: 10, lng: 160 }.
+
+Actual Observations:
+wd.validateCoordinates(12.34, 56.78) = { lat: 12.34, lng: 56.78 }
+wd.validateCoordinates(-95, 120): null
+wd.validateCoordinates(91, 120): null
+wd.validateCoordinates(10, 190) = { lat: 10, lng: -170 }
+wd.validateCoordinates(10, -200) = { lat: 10, lng: 160 }
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wd.validateCoordinates(12.34, 56.78)).toEqual({ lat: 12.34, lng: 56.78 });
+expect(wd.validateCoordinates(-95, 120)).toBeNull();
+expect(wd.validateCoordinates(91, 120)).toBeNull();
+expect(wd.validateCoordinates(10, 190)).toEqual({ lat: 10, lng: -170 });
+expect(wd.validateCoordinates(10, -200)).toEqual({ lat: 10, lng: 160 });
+
+Console Logs:
+[INFO] Jest executed test in 8ms
+[PASS] wd.validateCoordinates(12.34, 56.78) = { lat: 12.34, lng: 56.78 }
+[PASS] wd.validateCoordinates(-95, 120): null
+[PASS] wd.validateCoordinates(91, 120): null
+[PASS] wd.validateCoordinates(10, 190) = { lat: 10, lng: -170 }
+[PASS] wd.validateCoordinates(10, -200) = { lat: 10, lng: 160 }
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AC-005
+Requirement ID      : REQ-CON-001
+Source File         : arm-control.js
+Target Function     : arm-control_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should not perform redundant state operations if set to the current state
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+armToggle = window.ArmControl
+spySet = jest.spyOn(armToggle, 'setArmedState')
+spySet.mockClear()
+spySet.mockRestore()
+
+Expected Behavior:
+Verify spySet satisfies toHaveBeenCalledWith(true).
+Arm Toggle Get State() is equal to true.
+
+Actual Observations:
+spySet: called with true
+armToggle.getState() = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(spySet).toHaveBeenCalledWith(true);
+expect(armToggle.getState()).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] spySet: called with true
+[PASS] armToggle.getState() = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

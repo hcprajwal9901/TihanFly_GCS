@@ -1,0 +1,62 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MV-007
+Requirement ID      : REQ-SYS-002
+Source File         : multi-vehicle.js
+Target Function     : setSelectedSysId() [Line 20]
+Test Category       : Positive / Functional
+Test Case Title     : should dispatch manual UDP connections requests correctly
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.openConnectionManager()
+connectBtn = document.getElementById('mvConnectBtn')
+localPortInput = document.getElementById('mvLocalPort')
+remoteIpInput = document.getElementById('mvRemoteIp')
+remotePortInput = document.getElementById('mvRemotePort')
+connectBtn.click()
+localPortInput.value = '11040'
+remoteIpInput.value = '192.168.1.100'
+remotePortInput.value = '14550'
+connectBtn.click()
+)
+
+Expected Behavior:
+Mv Conn Status exists.
+WebSocket notification sent.
+
+Actual Observations:
+document.getElementById('mvConnStatus').textContent = 'Enter the GCS Listen Port (e.g. 11040).'
+window.ws.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('mvConnStatus').textContent).toBe('Enter the GCS Listen Port (e.g. 11040).');
+expect(window.ws.send).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 53ms
+[PASS] document.getElementById('mvConnStatus').textContent = 'Enter the GCS Listen Port (e.g. 11040).'
+[PASS] window.ws.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,78 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PBI-008
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-backend-integration.js
+Target Function     : initializePolygonExtensions() [Line 24]
+Test Category       : Positive / Functional
+Test Case Title     : should export polygon data as a JSON file and trigger browser download
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+pmMock.currentPolygon = {}
+pmMock.polygonPoints = [{ lat: 1, lng: 2 }]
+pmMock.surveySettings = { altitude: 60 }
+pmMock.surveyGrid = [{ lat: 3, lng: 4 }]
+origCreateElement = document.createElement
+clickSpy = jest.fn()
+mockAnchor = {
+return origCreateElement.call(document, tag)
+})
+jest.spyOn(document.body, 'appendChild').mockImplementation(() => {})
+jest.spyOn(document.body, 'removeChild').mockImplementation(() => {})
+pmMock.exportPolygonData()
+document.createElement.mockRestore()
+document.body.appendChild.mockRestore()
+document.body.removeChild.mockRestore()
+
+Expected Behavior:
+Verify global.URL.createObjectURL satisfies toHaveBeenCalled().
+Mock Anchor Download contains 'polygon_survey_'.
+Click action triggered.
+Verify global.URL.revokeObjectURL satisfies toHaveBeenCalledWith('blob:mock-url').
+Verify msgConsoleMock.success satisfies toHaveBeenCalledWith('✅ Polygon exported').
+
+Actual Observations:
+global.URL.createObjectURL: called
+mockAnchor.download contains 'polygon_survey_'
+clickSpy: called
+global.URL.revokeObjectURL: called with 'blob:mock-url'
+msgConsoleMock.success: called with '✅ Polygon exported'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(global.URL.createObjectURL).toHaveBeenCalled();
+expect(mockAnchor.download).toContain('polygon_survey_');
+expect(clickSpy).toHaveBeenCalled();
+expect(global.URL.revokeObjectURL).toHaveBeenCalledWith('blob:mock-url');
+expect(msgConsoleMock.success).toHaveBeenCalledWith('✅ Polygon exported');
+
+Console Logs:
+[INFO] Jest executed test in 6ms
+[PASS] global.URL.createObjectURL: called
+[PASS] mockAnchor.download contains 'polygon_survey_'
+[PASS] clickSpy: called
+[PASS] global.URL.revokeObjectURL: called with 'blob:mock-url'
+[PASS] msgConsoleMock.success: called with '✅ Polygon exported'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

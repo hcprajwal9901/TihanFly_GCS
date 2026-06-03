@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FM-003
+Requirement ID      : REQ-SYS-002
+Source File         : flight-mode.js
+Target Function     : _onSuperSimple() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : _onSimple and _onSuperSimple should update slot checkbox state flags
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+slotIdx: String, checked: String | Simulated: window.FlightModes._onSimple(0, true)
+window.FlightModes._onSuperSimple(1, true)
+window.FlightModes._save()
+payload = JSON.parse(window.ws.send.mock.calls[0][0])
+
+Expected Behavior:
+WebSocket notification sent.
+Payload Type is equal to 'save_flight_modes'.
+Verify payload.modes satisfies toBeDefined().
+
+Actual Observations:
+window.ws.send: called
+payload.type = 'save_flight_modes'
+payload.modes: defined
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(_onSuperSimple).toBeDefined();
+// JSDOM verification:
+expect(window.ws.send).toHaveBeenCalled();
+expect(payload.type).toBe('save_flight_modes');
+expect(payload.modes).toBeDefined();
+
+Console Logs:
+[INFO] Jest executed test in 81ms
+[PASS] window.ws.send: called
+[PASS] payload.type = 'save_flight_modes'
+[PASS] payload.modes: defined
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

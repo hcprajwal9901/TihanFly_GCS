@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FC-013
+Requirement ID      : REQ-CON-001
+Source File         : flight-controls.js
+Target Function     : flight-controls_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should toggle panel open and close class states
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+btn = document.getElementById('flightModeBtn')
+panel = document.getElementById('flightModePanel')
+btn.getBoundingClientRect = jest.fn().mockReturnValue({
+})
+btn.click()
+btn.click()
+
+Expected Behavior:
+Panel Class List Contains('Open') is equal to true.
+Panel Style Left is equal to '158px'.
+Panel Class List Contains('Open') is equal to false.
+
+Actual Observations:
+panel.classList.contains('open') = true
+panel.style.left = '158px'
+panel.classList.contains('open') = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(arm).toHaveBeenCalled();
+expect(disarm).toHaveBeenCalled();
+// JSDOM verification:
+expect(panel.classList.contains('open')).toBe(true);
+expect(panel.style.left).toBe('158px'); // 150 right + 8 pad
+expect(panel.classList.contains('open')).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] panel.classList.contains('open') = true
+[PASS] panel.style.left = '158px'
+[PASS] panel.classList.contains('open') = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

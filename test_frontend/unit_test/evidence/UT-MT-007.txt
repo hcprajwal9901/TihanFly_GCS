@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MT-007
+Requirement ID      : REQ-HW-001
+Source File         : motor-test.js
+Target Function     : acknowledge() [Line 122]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle motor_test_ack errors and flash toasts
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+motorBtn = document.getElementById('mt-motor-1')
+motorBtn.click()
+})
+
+Expected Behavior:
+Motor Button Class List Contains('Mt Running') is equal to false.
+Mt Status Message exists.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('Motor test: Autopilot armed — motors locked!', true).
+
+Actual Observations:
+motorBtn.classList.contains('mt-running') = false
+document.getElementById('mt-status-msg').textContent contains '✕ Autopilot armed — motors locked!'
+window.SwUtil.toast: called with 'Motor test: Autopilot armed — motors locked!', true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(setStatus).toHaveBeenCalled();
+// JSDOM verification:
+expect(motorBtn.classList.contains('mt-running')).toBe(false);
+expect(document.getElementById('mt-status-msg').textContent).toContain('✕ Autopilot armed — motors locked!');
+expect(window.SwUtil.toast).toHaveBeenCalledWith('Motor test: Autopilot armed — motors locked!', true);
+
+Console Logs:
+[INFO] Jest executed test in 34ms
+[PASS] motorBtn.classList.contains('mt-running') = false
+[PASS] document.getElementById('mt-status-msg').textContent contains '✕ Autopilot armed — motors locked!'
+[PASS] window.SwUtil.toast: called with 'Motor test: Autopilot armed — motors locked!', true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

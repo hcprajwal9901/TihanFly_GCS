@@ -1,0 +1,78 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-MFM-003
+Requirement ID      : REQ-SYS-002
+Source File         : mission-file-manager.js
+Target Function     : closeDialog() [Line 431]
+Test Category       : Positive / Functional
+Test Case Title     : should map current waypoints, home coordinates, and stats to backend format
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+missionData = missionManager.exportMission()
+})
+})
+})
+
+Expected Behavior:
+Mission Data Version is equal to '1.0'.
+Mission Data Type is equal to 'mission'.
+Mission Data Home is equal to .
+Verify missionData.waypoints satisfies toHaveLength(2).
+Mission Data Waypoints[0] is equal to .
+Mission Data Stats is equal to .
+
+Actual Observations:
+missionData.version = '1.0'
+missionData.type = 'mission'
+missionData.home: toEqual
+missionData.waypoints: toHaveLength(2)
+missionData.waypoints[0]: toEqual
+missionData.stats: toEqual
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(Date).toHaveBeenCalled();
+expect(expects).toHaveBeenCalled();
+expect(getHomePosition).toHaveBeenCalled();
+expect(getTotalDistance).toHaveBeenCalled();
+expect(getWaypoints).toHaveBeenCalled();
+expect(toISOString).toHaveBeenCalled();
+// JSDOM verification:
+expect(missionData.version).toBe('1.0');
+expect(missionData.type).toBe('mission');
+expect(missionData.home).toEqual({
+expect(missionData.waypoints).toHaveLength(2);
+expect(missionData.waypoints[0]).toEqual({
+expect(missionData.stats).toEqual({
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] missionData.version = '1.0'
+[PASS] missionData.type = 'mission'
+[PASS] missionData.home: toEqual
+[PASS] missionData.waypoints: toHaveLength(2)
+[PASS] missionData.waypoints[0]: toEqual
+[PASS] missionData.stats: toEqual
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

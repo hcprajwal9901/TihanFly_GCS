@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PT-010
+Requirement ID      : REQ-TUNE-001
+Source File         : pid-tuning.js
+Target Function     : send() [Line 84]
+Test Category       : Negative / Robustness
+Test Case Title     : should display warning status message if param_error is received
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+})
+dot = document.getElementById('pid-status-dot')
+msg = document.getElementById('pid-status-msg')
+
+Expected Behavior:
+Dot Class Name contains 'pid-dot-error'.
+Message displays text containing '✕ Invalid MAVLink connection'.
+
+Actual Observations:
+dot.className contains 'pid-dot-error'
+msg.textContent contains '✕ Invalid MAVLink connection'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(dot.className).toContain('pid-dot-error');
+expect(msg.textContent).toContain('✕ Invalid MAVLink connection');
+
+Console Logs:
+[INFO] Jest executed test in 73ms
+[PASS] dot.className contains 'pid-dot-error'
+[PASS] msg.textContent contains '✕ Invalid MAVLink connection'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

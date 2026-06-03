@@ -1,0 +1,67 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFMS-006
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-mission-send.js
+Target Function     : handleMissionSendActions() [Line 109]
+Test Category       : Wrong Value
+Test Case Title     : should route mission send action types correctly in handleMissionSendActions
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+spyMarkers = jest.spyOn(modeInstance, 'sendMarkersToDrone').mockImplementation(() => {})
+spyMission = jest.spyOn(modeInstance, 'sendMissionToDrone').mockImplementation(() => {})
+modeInstance.handleMissionSendActions('send-markers')
+modeInstance.handleMissionSendActions('send-mission')
+modeInstance.handleMissionSendActions('write-to-drone')
+modeInstance.handleMissionSendActions('invalid-action')
+spyMarkers.mockRestore()
+spyMission.mockRestore()
+
+Expected Behavior:
+Verify spyMarkers satisfies toHaveBeenCalledTimes(1).
+Verify spyMission satisfies toHaveBeenCalledTimes(1).
+Verify spyMission satisfies toHaveBeenCalledTimes(2).
+Verify console.warn satisfies toHaveBeenCalledWith(expect.stringContaining('Unknown mission send action')).
+
+Actual Observations:
+spyMarkers: 1 call(s)
+spyMission: 1 call(s)
+spyMission: 2 call(s)
+console.warn: called with expect.stringContaining('Unknown mission send action')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(spyMarkers).toHaveBeenCalledTimes(1);
+expect(spyMission).toHaveBeenCalledTimes(1);
+expect(spyMission).toHaveBeenCalledTimes(2);
+expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('Unknown mission send action'));
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] spyMarkers: 1 call(s)
+[PASS] spyMission: 1 call(s)
+[PASS] spyMission: 2 call(s)
+[PASS] console.warn: called with expect.stringContaining('Unknown mission send action')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

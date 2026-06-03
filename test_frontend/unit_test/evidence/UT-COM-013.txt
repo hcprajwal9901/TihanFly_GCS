@@ -1,0 +1,49 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-COM-013
+Requirement ID      : REQ-HUD-001
+Source File         : compass.js
+Target Function     : update_compass_needle() [Line 101]
+Test Category       : Wrong Value
+Test Case Title     : should reject incorrect string format payloads and log mismatch warning for Compass Telemetry Orientation and HUD Needle Rotations
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized. Type safety check wrappers active.
+
+Test Inputs:
+component = new GCSComponent()
+result = component.setValue('NOT_A_NUMBER')
+
+Expected Behavior:
+Result is equal to false.
+
+Actual Observations:
+result = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(result).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] result = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

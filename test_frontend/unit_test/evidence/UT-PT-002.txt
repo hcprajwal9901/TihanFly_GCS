@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PT-002
+Requirement ID      : REQ-TUNE-001
+Source File         : pid-tuning.js
+Target Function     : init() [Line 457]
+Test Category       : Positive / Functional
+Test Case Title     : should initially show the idle state
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+msg = document.getElementById('pid-status-msg')
+dot = document.getElementById('pid-status-dot')
+
+Expected Behavior:
+Message displays text containing 'Click Refresh Screen to read'.
+Dot Class Name contains 'pid-dot-idle'.
+
+Actual Observations:
+msg.textContent contains 'Click "Refresh Screen" to read'
+dot.className contains 'pid-dot-idle'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(wireActions).toHaveBeenCalled();
+expect(wireLock).toHaveBeenCalled();
+expect(wireWS).toHaveBeenCalled();
+// JSDOM verification:
+expect(msg.textContent).toContain('Click "Refresh Screen" to read');
+expect(dot.className).toContain('pid-dot-idle');
+
+Console Logs:
+[INFO] Jest executed test in 103ms
+[PASS] msg.textContent contains 'Click "Refresh Screen" to read'
+[PASS] dot.className contains 'pid-dot-idle'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

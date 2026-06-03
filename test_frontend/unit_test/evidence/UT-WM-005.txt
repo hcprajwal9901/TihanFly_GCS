@@ -1,0 +1,89 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WM-005
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-manager.js
+Target Function     : initializeWaypointManager() [Line 696]
+Test Category       : Positive / Functional
+Test Case Title     : should route map click events based on current active mode
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+spyAdd = jest.spyOn(manager, 'addWaypoint')
+spyInsert = jest.spyOn(manager, 'insertWaypoint')
+spySetHome = jest.spyOn(manager, 'setHomePosition')
+spyLanding = jest.spyOn(manager, 'addLandingPoint')
+manager.currentMode = null
+clickCallback(17.6, 78.1, {})
+manager.currentMode = 'add'
+clickCallback(17.601, 78.126, {})
+manager.currentMode = 'insert'
+clickCallback(17.602, 78.127, {})
+manager.currentMode = 'takeoff'
+clickCallback(17.603, 78.128, {})
+manager.currentMode = 'land'
+clickCallback(17.604, 78.129, {})
+
+Expected Behavior:
+Verify spyAdd satisfies toHaveBeenCalled().
+Verify spyAdd satisfies toHaveBeenCalledWith(17.601, 78.126).
+Verify spyInsert satisfies toHaveBeenCalledWith(17.602, 78.127).
+Verify spySetHome satisfies toHaveBeenCalledWith(17.603, 78.128).
+Manager Current Mode is null.
+Verify mockTMap.disableClick satisfies toHaveBeenCalled().
+Verify spyLanding satisfies toHaveBeenCalledWith(17.604, 78.129).
+Manager Current Mode is null.
+
+Actual Observations:
+spyAdd: not called
+spyAdd: called with 17.601, 78.126
+spyInsert: called with 17.602, 78.127
+spySetHome: called with 17.603, 78.128
+manager.currentMode: null
+mockTMap.disableClick: called
+spyLanding: called with 17.604, 78.129
+manager.currentMode: null
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(spyAdd).not.toHaveBeenCalled();
+expect(spyAdd).toHaveBeenCalledWith(17.601, 78.126);
+expect(spyInsert).toHaveBeenCalledWith(17.602, 78.127);
+expect(spySetHome).toHaveBeenCalledWith(17.603, 78.128);
+expect(manager.currentMode).toBeNull();
+expect(mockTMap.disableClick).toHaveBeenCalled();
+expect(spyLanding).toHaveBeenCalledWith(17.604, 78.129);
+expect(manager.currentMode).toBeNull();
+
+Console Logs:
+[INFO] Jest executed test in 17ms
+[PASS] spyAdd: not called
+[PASS] spyAdd: called with 17.601, 78.126
+[PASS] spyInsert: called with 17.602, 78.127
+[PASS] spySetHome: called with 17.603, 78.128
+[PASS] manager.currentMode: null
+[PASS] mockTMap.disableClick: called
+[PASS] spyLanding: called with 17.604, 78.129
+[PASS] manager.currentMode: null
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

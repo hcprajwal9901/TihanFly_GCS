@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-006
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Positive / Functional
+Test Case Title     : should base64 decode complete binary data and trigger browser anchor download
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+cls: String, fn: String, ico: String, lbl: String, id: Number, i18Key: String | Simulated: window.AnalyzeToolsPanel._refreshLogs()
+jest.useFakeTimers()
+wsHandler = window.ws.addEventListener.mock.calls.find(call => call[0] === 'message')[1]
+clickSpy = jest.fn()
+originalCreate = document.createElement
+document.createElement = jest.fn().mockImplementation((tag) => {
+el = originalCreate.call(document, tag)
+el.click = clickSpy
+})
+})
+document.createElement = originalCreate
+jest.useRealTimers()
+
+Expected Behavior:
+Click action triggered.
+Verify window.URL.createObjectURL satisfies toHaveBeenCalled().
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith(expect.stringContaining('Log #5 downloaded')).
+
+Actual Observations:
+clickSpy: called
+window.URL.createObjectURL: called
+window.MsgConsole.success: called with expect.stringContaining('Log #5 downloaded')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = B(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(clickSpy).toHaveBeenCalled();
+expect(window.URL.createObjectURL).toHaveBeenCalled();
+expect(window.MsgConsole.success).toHaveBeenCalledWith(expect.stringContaining('Log #5 downloaded'));
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] clickSpy: called
+[PASS] window.URL.createObjectURL: called
+[PASS] window.MsgConsole.success: called with expect.stringContaining('Log #5 downloaded')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

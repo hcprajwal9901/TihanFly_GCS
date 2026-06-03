@@ -1,0 +1,49 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PBI-007
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-backend-integration.js
+Target Function     : initializePolygonExtensions() [Line 24]
+Test Category       : Positive / Functional
+Test Case Title     : should alert if there is no current polygon on export
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+pmMock.currentPolygon = null
+pmMock.exportPolygonData()
+
+Expected Behavior:
+Verify window.alert satisfies toHaveBeenCalledWith('❌ No polygon to export!').
+
+Actual Observations:
+window.alert: called with '❌ No polygon to export!'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.alert).toHaveBeenCalledWith('❌ No polygon to export!');
+
+Console Logs:
+[INFO] Jest executed test in 8ms
+[PASS] window.alert: called with '❌ No polygon to export!'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

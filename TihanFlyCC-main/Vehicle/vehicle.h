@@ -6,6 +6,7 @@
 #include <vector>
 #include <mutex>
 #include <chrono>
+#include <atomic>
 #include <stdexcept>
 #include <memory>
 #include <string>
@@ -100,6 +101,15 @@ public:
     bool is_alive() const;
 
     // ---------------------------------------------------------------
+    // Reboot detection
+    //
+    // Returns true ONCE after a heartbeat gap > 5 seconds is detected
+    // (i.e. the drone rebooted).  The flag is cleared after reading so
+    // callers get exactly one "reboot" event per gap.  Thread-safe.
+    // ---------------------------------------------------------------
+    bool check_and_clear_reboot();
+
+    // ---------------------------------------------------------------
     // Telemetry accessors  (cached from inbound MAVLink messages)
     // Thread-safe — protected by telem_mtx_.
     // ---------------------------------------------------------------
@@ -134,6 +144,8 @@ private:
     mutable std::mutex handlers_mtx_;
 
     std::chrono::steady_clock::time_point last_heartbeat_;
+    std::chrono::steady_clock::time_point created_at_;
+    std::atomic<bool> rebooted_{false};
     mutable std::mutex heartbeat_mtx_;
 
     // ── Cached telemetry (updated by update_telemetry) ───────────

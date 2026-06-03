@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PBI-005
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-backend-integration.js
+Target Function     : initializePolygonExtensions() [Line 24]
+Test Category       : Positive / Functional
+Test Case Title     : should read DOM input elements, update surveySettings, and trigger grid regeneration on timeout
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+createInput = (id, val) => {
+input = document.createElement('input')
+input.id = id
+input.value = val
+document.body.appendChild(input)
+createInput('surveyAlt', '100')
+createInput('surveyOverlap', '80')
+createInput('surveySidelap', '75')
+createInput('surveyAngle', '45')
+createInput('surveySpeed', '8')
+pmMock.applySurveySettings()
+})
+jest.advanceTimersByTime(350)
+
+Expected Behavior:
+Pm Mock Survey Settings is equal to .
+Verify pmMock.closeSurveySettings satisfies toHaveBeenCalled().
+Verify msgConsoleMock.success satisfies toHaveBeenCalledWith('✅ Settings updated').
+
+Actual Observations:
+pmMock.surveySettings: toEqual
+pmMock.closeSurveySettings: called
+msgConsoleMock.success: called with '✅ Settings updated'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(pmMock.surveySettings).toEqual({
+expect(pmMock.closeSurveySettings).toHaveBeenCalled();
+expect(msgConsoleMock.success).toHaveBeenCalledWith('✅ Settings updated');
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] pmMock.surveySettings: toEqual
+[PASS] pmMock.closeSurveySettings: called
+[PASS] msgConsoleMock.success: called with '✅ Settings updated'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

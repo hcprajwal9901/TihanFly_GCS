@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PF-005
+Requirement ID      : REQ-TUNE-001
+Source File         : param-full.js
+Target Function     : parseOptionsFromRange() [Line 788]
+Test Category       : Positive / Functional
+Test Case Title     : should upsert single row dynamically on param_value arrival
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+await initPanel()
+window.dispatchEvent(new CustomEvent('param_load_complete', {
+}))
+valEvt = new CustomEvent('param_value', {
+})
+window.dispatchEvent(valEvt)
+tbody = document.getElementById('fpBody')
+row = tbody.querySelector('tr[data-param="RTL_ALT_M"]')
+
+Expected Behavior:
+Row is null.
+Row Query Selector(' Param Val Input') displays '150'.
+Row Query Selector(' Fp Reboot Badge') is null.
+
+Actual Observations:
+row: not null
+row.querySelector('.param-val-input').value = '150'
+row.querySelector('.fp-reboot-badge'): not null
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(row).not.toBeNull();
+expect(row.querySelector('.param-val-input').value).toBe('150');
+expect(row.querySelector('.fp-reboot-badge')).not.toBeNull();
+
+Console Logs:
+[INFO] Jest executed test in 91ms
+[PASS] row: not null
+[PASS] row.querySelector('.param-val-input').value = '150'
+[PASS] row.querySelector('.fp-reboot-badge'): not null
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

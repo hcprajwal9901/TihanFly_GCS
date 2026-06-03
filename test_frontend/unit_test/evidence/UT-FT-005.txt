@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FT-005
+Requirement ID      : REQ-SYS-002
+Source File         : frame-type.js
+Target Function     : send() [Line 64]
+Test Category       : Positive / Functional
+Test Case Title     : should load parameters immediately and skip fallback if param_all cache hit received before 800ms
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+readBtn = document.getElementById('ft-read-btn')
+window.safeSend.mockClear()
+readBtn.click()
+jest.advanceTimersByTime(100)
+})
+jest.advanceTimersByTime(700)
+
+Expected Behavior:
+Ft Current Class exists.
+Ft Current Type exists.
+Verify window.safeSend satisfies toHaveBeenCalledTimes(1).
+
+Actual Observations:
+document.getElementById('ft-current-class').textContent contains 'Quad'
+document.getElementById('ft-current-type').textContent contains 'H'
+window.safeSend: 1 call(s)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('ft-current-class').textContent).toContain('Quad');
+expect(document.getElementById('ft-current-type').textContent).toContain('H');
+expect(window.safeSend).toHaveBeenCalledTimes(1);
+
+Console Logs:
+[INFO] Jest executed test in 23ms
+[PASS] document.getElementById('ft-current-class').textContent contains 'Quad'
+[PASS] document.getElementById('ft-current-type').textContent contains 'H'
+[PASS] window.safeSend: 1 call(s)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

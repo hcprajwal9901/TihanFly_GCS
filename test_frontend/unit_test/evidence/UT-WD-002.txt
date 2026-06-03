@@ -1,0 +1,83 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WD-002
+Requirement ID      : REQ-SYS-002
+Source File         : weather-dashboard.js
+Target Function     : initializeWeatherDashboard() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should show, hide, and toggle the dashboard correctly
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+dashboard = document.getElementById('weatherDashboard')
+window.Weather.show()
+window.Weather.hide()
+window.Weather.toggle()
+
+Expected Behavior:
+Dashboard Class List Contains('Hidden') is equal to false.
+Dashboard display state is .
+Window Weather Is Shown() is equal to true.
+Dashboard Class List Contains('Hidden') is equal to true.
+Dashboard hidden.
+Window Weather Is Shown() is equal to false.
+Window Weather Is Shown() is equal to true.
+
+Actual Observations:
+dashboard.classList.contains('hidden') = false
+dashboard.style.display = ''
+window.Weather.isShown() = true
+dashboard.classList.contains('hidden') = true
+dashboard.style.display = 'none'
+window.Weather.isShown() = false
+window.Weather.isShown() = true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(Ready).toHaveBeenCalled();
+expect(clear).toHaveBeenCalled();
+expect(fetchWeather).toHaveBeenCalled();
+expect(getCurrentLocation).toHaveBeenCalled();
+expect(getCurrentWeather).toHaveBeenCalled();
+expect(isShown).toHaveBeenCalled();
+expect(refresh).toHaveBeenCalled();
+// JSDOM verification:
+expect(dashboard.classList.contains('hidden')).toBe(false);
+expect(dashboard.style.display).toBe('');
+expect(window.Weather.isShown()).toBe(true);
+expect(dashboard.classList.contains('hidden')).toBe(true);
+expect(dashboard.style.display).toBe('none');
+expect(window.Weather.isShown()).toBe(false);
+expect(window.Weather.isShown()).toBe(true);
+
+Console Logs:
+[INFO] Jest executed test in 17ms
+[PASS] dashboard.classList.contains('hidden') = false
+[PASS] dashboard.style.display = ''
+[PASS] window.Weather.isShown() = true
+[PASS] dashboard.classList.contains('hidden') = true
+[PASS] dashboard.style.display = 'none'
+[PASS] window.Weather.isShown() = false
+[PASS] window.Weather.isShown() = true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,53 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-TMA-017
+Requirement ID      : REQ-SYS-002
+Source File         : tmap.js
+Target Function     : update_compass_needle() [Line 129]
+Test Category       : Positive / Functional
+Test Case Title     : should successfully verify normal happy-path operation for Compass Telemetry Orientation and HUD Needle Rotations
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized. Standard mocks active for tmap.js.
+
+Test Inputs:
+map = new TMap('map-element', [17.385, 78.486], 15, false)
+marker = map.addMarker(17.385, 78.486, true)
+
+Expected Behavior:
+Map Get Marker Count() is equal to 1.
+Verify marker.getLatLng().lat satisfies toBeCloseTo(17.385).
+
+Actual Observations:
+map.getMarkerCount() = 1
+marker.getLatLng().lat = 17.385
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(map.getMarkerCount()).toBe(1);
+expect(marker.getLatLng().lat).toBeCloseTo(17.385);
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] map.getMarkerCount() = 1
+[PASS] marker.getLatLng().lat = 17.385
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

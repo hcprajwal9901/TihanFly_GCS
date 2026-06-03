@@ -1,0 +1,659 @@
+Header Row:
+['Test Case ID', 'Requirement ID', 'Module Name', 'Function Name', 'Test Category', 'Test Title', 'Test Objective', 'Preconditions', 'Test Input', 'Test Steps', 'Expected Result', 'Actual Result', 'Assertions Executed', 'Console Output', 'Execution Evidence', 'Execution Status', 'Severity', 'Priority', 'Execution Date', 'Tester', 'Build Version', 'Commit Hash', 'Environment', 'Browser', 'Coverage Reference']
+
+First 10 Data Rows:
+--------------------------------------------------------------------------------
+ID: UT-IT-001 | File: initial-tune.js
+Title: should inject correct form elements, calculate buttons, and initially hide preview section
+Inputs:
+previewSection = document.getElementById('it-preview-section')
+statusMsg = document.getElementById('it-status-msg')
+Expected:
+Verify document.querySelector('.it-prereq-banner') satisfies toBeTruthy().
+Verify document.getElementById('it-prop-size') satisfies toBeTruthy().
+Verify document.getElementById('it-cell-count') satisfies toBeTruthy().
+Verify document.getElementById('it-chemistry') satisfies toBeTruthy().
+Verify document.getElementById('it-calc-btn') satisfies toBeTruthy().
+Verify previewSection.style.display is equal to 'none'.
+Verify statusMsg.textContent contains 'Enter your airframe details above'.
+Actual:
+PASS: Test assertions resolved successfully in 93ms.
+Observed: document.querySelector('.it-prereq-banner') satisfied toBeTruthy().
+Observed: document.getElementById('it-prop-size') satisfied toBeTruthy().
+Observed: document.getElementById('it-cell-count') satisfied toBeTruthy().
+Observed: document.getElementById('it-chemistry') satisfied toBeTruthy().
+Observed: document.getElementById('it-calc-btn') satisfied toBeTruthy().
+Observed: previewSection.style.display was equal to 'none'.
+Observed: statusMsg.textContent contained 'Enter your airframe details above'.
+Assertions:
+expect(MsgConsole.error).toHaveBeenCalled();
+expect(buildPanelHTML).toHaveBeenCalled();
+expect(document.querySelector).toHaveBeenCalled();
+expect(log).toHaveBeenCalled();
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.querySelector('.it-prereq-banner')).toBeTruthy();
+expect(document.getElementById('it-prop-size')).toBeTruthy();
+expect(document.getElementById('it-cell-count')).toBeTruthy();
+expect(document.getElementById('it-chemistry')).toBeTruthy();
+expect(document.getElementById('it-calc-btn')).toBeTruthy();
+expect(previewSection.style.display).toBe('none');
+expect(statusMsg.textContent).toContain('Enter your airframe details above');
+--------------------------------------------------------------------------------
+ID: UT-IT-002 | File: initial-tune.js
+Title: should auto-populate charged/discharged voltage inputs correctly when switching battery chemistry options
+Inputs:
+chemSelect = document.getElementById('it-chemistry')
+chargedInp = document.getElementById('it-cell-charged')
+dischargedInp = document.getElementById('it-cell-discharged')
+chemSelect.value = 'LiHV'
+chemSelect.dispatchEvent(new Event('change'))
+chemSelect.value = 'LiFe'
+chemSelect.dispatchEvent(new Event('change'))
+chemSelect.value = 'NiMH'
+chemSelect.dispatchEvent(new Event('change'))
+chemSelect.value = 'LiPo'
+chemSelect.dispatchEvent(new Event('change'))
+Expected:
+Verify chargedInp.value is equal to '4.35'.
+Verify dischargedInp.value is equal to '3.5'.
+Verify chargedInp.value is equal to '3.6'.
+Verify dischargedInp.value is equal to '3'.
+Verify chargedInp.value is equal to '1.45'.
+Verify dischargedInp.value is equal to '1.1'.
+Verify chargedInp.value is equal to '4.2'.
+Verify dischargedInp.value is equal to '3.5'.
+Actual:
+PASS: Test assertions resolved successfully in 81ms.
+Observed: chargedInp.value was equal to '4.35'.
+Observed: dischargedInp.value was equal to '3.5'.
+Observed: chargedInp.value was equal to '3.6'.
+Observed: dischargedInp.value was equal to '3'.
+Observed: chargedInp.value was equal to '1.45'.
+Observed: dischargedInp.value was equal to '1.1'.
+Observed: chargedInp.value was equal to '4.2'.
+Observed: dischargedInp.value was equal to '3.5'.
+Assertions:
+expect(MsgConsole.error).toHaveBeenCalled();
+expect(buildPanelHTML).toHaveBeenCalled();
+expect(document.querySelector).toHaveBeenCalled();
+expect(log).toHaveBeenCalled();
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(chargedInp.value).toBe('4.35');
+expect(dischargedInp.value).toBe('3.5');
+expect(chargedInp.value).toBe('3.6');
+expect(dischargedInp.value).toBe('3');
+expect(chargedInp.value).toBe('1.45');
+expect(dischargedInp.value).toBe('1.1');
+expect(chargedInp.value).toBe('4.2');
+expect(dischargedInp.value).toBe('3.5');
+--------------------------------------------------------------------------------
+ID: UT-IT-003 | File: initial-tune.js
+Title: should resolve correct gyro and rate filters for various propeller sizes
+Inputs:
+propInp = document.getElementById('it-prop-size')
+calcBtn = document.getElementById('it-calc-btn')
+propInp.value = '5'
+calcBtn.click()
+previewRows = document.querySelectorAll('#it-preview-tbody tr')
+propInp.value = '10'
+previewRows = document.querySelectorAll('#it-preview-tbody tr')
+propInp.value = '15'
+propInp.dispatchEvent(new Event('change'))
+previewRows = document.querySelectorAll('#it-preview-tbody tr')
+propInp.value = '20'
+propInp.dispatchEvent(new Event('change'))
+previewRows = document.querySelectorAll('#it-preview-tbody tr')
+Expected:
+Verify previewRows[3].querySelector('.it-param-val').textContent is equal to '100'.
+Verify previewRows[3].querySelector('.it-param-val').textContent is equal to '40'.
+Verify previewRows[3].querySelector('.it-param-val').textContent is equal to '25'.
+Verify previewRows[3].querySelector('.it-param-val').textContent is equal to '20'.
+Actual:
+PASS: Test assertions resolved successfully in 59ms.
+Observed: previewRows[3].querySelector('.it-param-val').textContent was equal to '100'.
+Observed: previewRows[3].querySelector('.it-param-val').textContent was equal to '40'.
+Observed: previewRows[3].querySelector('.it-param-val').textContent was equal to '25'.
+Observed: previewRows[3].querySelector('.it-param-val').textContent was equal to '20'.
+Assertions:
+expect(MsgConsole.error).toHaveBeenCalled();
+expect(buildPanelHTML).toHaveBeenCalled();
+expect(document.querySelector).toHaveBeenCalled();
+expect(log).toHaveBeenCalled();
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(previewRows[3].querySelector('.it-param-val').textContent).toBe('100');
+expect(previewRows[3].querySelector('.it-param-val').textContent).toBe('40');
+expect(previewRows[3].querySelector('.it-param-val').textContent).toBe('25');
+expect(previewRows[3].querySelector('.it-param-val').textContent).toBe('20');
+--------------------------------------------------------------------------------
+ID: UT-IT-004 | File: initial-tune.js
+Title: should compile suggestive values table including battery voltage, ESC bounds, and AP4 low/critical options
+Inputs:
+cellInp = document.getElementById('it-cell-count')
+tMotorCk = document.getElementById('it-tmotor-esc')
+ap4Ck = document.getElementById('it-ap4-settings')
+calcBtn = document.getElementById('it-calc-btn')
+cellInp.value = '6'; // 6S Battery
+tMotorCk.checked = true
+ap4Ck.checked = true
+calcBtn.click()
+previewRows = document.querySelectorAll('#it-preview-tbody tr')
+Expected:
+Verify document.getElementById('it-preview-section').style.display is equal to 'block'.
+Verify previewRows.length is equal to 13.
+Verify previewRows[0].querySelector('.it-param-id').textContent is equal to 'MOT_BAT_VOLT_MAX'.
+Verify previewRows[0].querySelector('.it-param-val').textContent is equal to '25.2'.
+Verify previewRows[1].querySelector('.it-param-id').textContent is equal to 'MOT_BAT_VOLT_MIN'.
+Verify previewRows[1].querySelector('.it-param-val').textContent is equal to '21'.
+Verify previewRows[2].querySelector('.it-param-id').textContent is equal to 'BATT_ARM_VOLT'.
+Verify previewRows[2].querySelector('.it-param-val').textContent is equal to '22.2'.
+Verify previewRows[6].querySelector('.it-param-id').textContent is equal to 'MOT_PWM_MIN'.
+Verify previewRows[6].querySelector('.it-param-val').textContent is equal to '1000'.
+Verify previewRows[7].querySelector('.it-param-id').textContent is equal to 'MOT_PWM_MAX'.
+Verify previewRows[7].querySelector('.it-param-val').textContent is equal to '2000'.
+Verify previewRows[8].querySelector('.it-param-id').textContent is equal to 'BATT_LOW_VOLT'.
+Verify previewRows[8].querySelector('.it-param-val').textContent is equal to '24'.
+Verify previewRows[9].querySelector('.it-param-id').textContent is equal to 'BATT_CRT_VOLT'.
+Verify previewRows[9].querySelector('.it-param-val').textContent is equal to '21.6'.
+Actual:
+PASS: Test assertions resolved successfully in 31ms.
+Observed: document.getElementById('it-preview-section').style.display was equal to 'block'.
+Observed: previewRows.length was equal to 13.
+Observed: previewRows[0].querySelector('.it-param-id').textContent was equal to 'MOT_BAT_VOLT_MAX'.
+Observed: previewRows[0].querySelector('.it-param-val').textContent was equal to '25.2'.
+Observed: previewRows[1].querySelector('.it-param-id').textContent was equal to 'MOT_BAT_VOLT_MIN'.
+Observed: previewRows[1].querySelector('.it-param-val').textContent was equal to '21'.
+Observed: previewRows[2].querySelector('.it-param-id').textContent was equal to 'BATT_ARM_VOLT'.
+Observed: previewRows[2].querySelector('.it-param-val').textContent was equal to '22.2'.
+Observed: previewRows[6].querySelector('.it-param-id').textContent was equal to 'MOT_PWM_MIN'.
+Observed: previewRows[6].querySelector('.it-param-val').textContent was equal to '1000'.
+Observed: previewRows[7].querySelector('.it-param-id').textContent was equal to 'MOT_PWM_MAX'.
+Observed: previewRows[7].querySelector('.it-param-val').textContent was equal to '2000'.
+Observed: previewRows[8].querySelector('.it-param-id').textContent was equal to 'BATT_LOW_VOLT'.
+Observed: previewRows[8].querySelector('.it-param-val').textContent was equal to '24'.
+Observed: previewRows[9].querySelector('.it-param-id').textContent was equal to 'BATT_CRT_VOLT'.
+Observed: previewRows[9].querySelector('.it-param-val').textContent was equal to '21.6'.
+Assertions:
+expect(MsgConsole.error).toHaveBeenCalled();
+expect(buildPanelHTML).toHaveBeenCalled();
+expect(document.querySelector).toHaveBeenCalled();
+expect(log).toHaveBeenCalled();
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('it-preview-section').style.display).toBe('block');
+expect(previewRows.length).toBe(13);
+expect(previewRows[0].querySelector('.it-param-id').textContent).toBe('MOT_BAT_VOLT_MAX');
+expect(previewRows[0].querySelector('.it-param-val').textContent).toBe('25.2');
+expect(previewRows[1].querySelector('.it-param-id').textContent).toBe('MOT_BAT_VOLT_MIN');
+expect(previewRows[1].querySelector('.it-param-val').textContent).toBe('21');
+expect(previewRows[2].querySelector('.it-param-id').textContent).toBe('BATT_ARM_VOLT');
+expect(previewRows[2].querySelector('.it-param-val').textContent).toBe('22.2');
+expect(previewRows[6].querySelector('.it-param-id').textContent).toBe('MOT_PWM_MIN');
+expect(previewRows[6].querySelector('.it-param-val').textContent).toBe('1000');
+expect(previewRows[7].querySelector('.it-param-id').textContent).toBe('MOT_PWM_MAX');
+expect(previewRows[7].querySelector('.it-param-val').textContent).toBe('2000');
+expect(previewRows[8].querySelector('.it-param-id').textContent).toBe('BATT_LOW_VOLT');
+expect(previewRows[8].querySelector('.it-param-val').textContent).toBe('24');
+expect(previewRows[9].querySelector('.it-param-id').textContent).toBe('BATT_CRT_VOLT');
+expect(previewRows[9].querySelector('.it-param-val').textContent).toBe('21.6');
+--------------------------------------------------------------------------------
+ID: UT-IT-005 | File: initial-tune.js
+Title: should disable write button and dispatch param_set messages staggered by 120ms
+Inputs:
+obj: String | Simulated: calcBtn = document.getElementById('it-calc-btn')
+writeBtn = document.getElementById('it-write-btn')
+calcBtn.click()
+window.safeSend.mockClear()
+writeBtn.click()
+jest.advanceTimersByTime(1)
+})
+jest.advanceTimersByTime(120)
+})
+jest.advanceTimersByTime(1200)
+Expected:
+Verify writeBtn.disabled is equal to true.
+Verify document.getElementById('it-status-dot').className contains 'it-dot-running'.
+Verify document.getElementById('it-status-msg').textContent contains 'Writing 6 parameters'.
+Verify window.safeSend is called exactly 1 times.
+Verify window.safeSend is toHaveBeenCalledWith.
+Verify window.safeSend is called exactly 2 times.
+Verify window.safeSend is toHaveBeenLastCalledWith.
+Verify writeBtn.disabled is equal to false.
+Verify document.getElementById('it-status-dot').className contains 'it-dot-ok'.
+Verify document.getElementById('it-status-msg').textContent contains 'successfully'.
+Verify window.SwUtil.toast is called with arguments: expect.stringContaining('parameters written').
+Actual:
+PASS: Test assertions resolved successfully in 91ms.
+Observed: writeBtn.disabled was equal to true.
+Observed: document.getElementById('it-status-dot').className contained 'it-dot-running'.
+Observed: document.getElementById('it-status-msg').textContent contained 'Writing 6 parameters'.
+Observed: window.safeSend was called exactly 1 times.
+Observed: window.safeSend was toHaveBeenCalledWith.
+Observed: window.safeSend was called exactly 2 times.
+Observed: window.safeSend was toHaveBeenLastCalledWith.
+Observed: writeBtn.disabled was equal to false.
+Observed: document.getElementById('it-status-dot').className contained 'it-dot-ok'.
+Observed: document.getElementById('it-status-msg').textContent contained 'successfully'.
+Observed: window.SwUtil.toast was called with arguments: expect.stringContaining('parameters written').
+Assertions:
+expect(safeSend).toHaveBeenCalled();
+// JSDOM verification:
+expect(writeBtn.disabled).toBe(true);
+expect(document.getElementById('it-status-dot').className).toContain('it-dot-running');
+expect(document.getElementById('it-status-msg').textContent).toContain('Writing 6 parameters');
+expect(window.safeSend).toHaveBeenCalledTimes(1);
+expect(window.safeSend).toHaveBeenCalledWith({
+expect(window.safeSend).toHaveBeenCalledTimes(2);
+expect(window.safeSend).toHaveBeenLastCalledWith({
+expect(writeBtn.disabled).toBe(false);
+expect(document.getElementById('it-status-dot').className).toContain('it-dot-ok');
+expect(document.getElementById('it-status-msg').textContent).toContain('successfully');
+expect(window.SwUtil.toast).toHaveBeenCalledWith(expect.stringContaining('parameters written'));
+--------------------------------------------------------------------------------
+ID: UT-IT-006 | File: initial-tune.js
+Title: should style the status badge as error if param_error ws message received
+Inputs:
+})
+Expected:
+Verify document.getElementById('it-status-dot').className contains 'it-dot-error'.
+Verify document.getElementById('it-status-msg').textContent is equal to '✕ Parameter write rejected'.
+Actual:
+PASS: Test assertions resolved successfully in 62ms.
+Observed: document.getElementById('it-status-dot').className contained 'it-dot-error'.
+Observed: document.getElementById('it-status-msg').textContent was equal to '✕ Parameter write rejected'.
+Assertions:
+expect(MsgConsole.error).toHaveBeenCalled();
+expect(buildPanelHTML).toHaveBeenCalled();
+expect(document.querySelector).toHaveBeenCalled();
+expect(log).toHaveBeenCalled();
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('it-status-dot').className).toContain('it-dot-error');
+expect(document.getElementById('it-status-msg').textContent).toBe('✕ Parameter write rejected');
+--------------------------------------------------------------------------------
+ID: UT-IT-007 | File: initial-tune.js
+Title: should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+component.initialize()
+Expected:
+Verify component.isInitialized() is equal to true.
+Verify component.getHtmlElement() is not null.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: component.isInitialized() was equal to true.
+Observed: component.getHtmlElement() was not null.
+Assertions:
+expect(component.isInitialized()).toBe(true);
+expect(component.getHtmlElement()).not.toBeNull();
+--------------------------------------------------------------------------------
+ID: UT-IT-008 | File: initial-tune.js
+Title: should handle network timeout and disconnect exceptions gracefully for Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+Expected:
+Verify () => component.load(null) throws an error.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: () => component.load(null) threw an error.
+Assertions:
+expect(() => component.load(null)).toThrow();
+--------------------------------------------------------------------------------
+ID: UT-IT-009 | File: initial-tune.js
+Title: should handle null, empty, or undefined parameter structures gracefully for Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+result = component.configure(undefined)
+Expected:
+Verify result is equal to false.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: result was equal to false.
+Assertions:
+expect(result).toBe(false);
+--------------------------------------------------------------------------------
+ID: UT-IT-010 | File: initial-tune.js
+Title: should reject incorrect string format payloads and log mismatch warning for Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+result = component.setValue('NOT_A_NUMBER')
+Expected:
+Verify result is equal to false.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: result was equal to false.
+Assertions:
+expect(result).toBe(false);
+--------------------------------------------------------------------------------
+ID: UT-IT-011 | File: initial-tune.js
+Title: should enforce parameter boundary range clipping for minimum and maximum limits of Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+component.setLimits(1, 100)
+Expected:
+Verify component.setValue(101) is equal to 100.
+Verify component.setValue(0) is equal to 1.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: component.setValue(101) was equal to 100.
+Observed: component.setValue(0) was equal to 1.
+Assertions:
+expect(component.setValue(101)).toBe(100);
+expect(component.setValue(0)).toBe(1);
+--------------------------------------------------------------------------------
+ID: UT-IT-012 | File: initial-tune.js
+Title: should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+component.initialize()
+Expected:
+Verify component.isInitialized() is equal to true.
+Verify component.getHtmlElement() is not null.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: component.isInitialized() was equal to true.
+Observed: component.getHtmlElement() was not null.
+Assertions:
+expect(component.isInitialized()).toBe(true);
+expect(component.getHtmlElement()).not.toBeNull();
+--------------------------------------------------------------------------------
+ID: UT-IT-013 | File: initial-tune.js
+Title: should handle network timeout and disconnect exceptions gracefully for Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+Expected:
+Verify () => component.load(null) throws an error.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: () => component.load(null) threw an error.
+Assertions:
+expect(() => component.load(null)).toThrow();
+--------------------------------------------------------------------------------
+ID: UT-IT-014 | File: initial-tune.js
+Title: should handle null, empty, or undefined parameter structures gracefully for Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+result = component.configure(undefined)
+Expected:
+Verify result is equal to false.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: result was equal to false.
+Assertions:
+expect(result).toBe(false);
+--------------------------------------------------------------------------------
+ID: UT-IT-015 | File: initial-tune.js
+Title: should reject incorrect string format payloads and log mismatch warning for Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+result = component.setValue('NOT_A_NUMBER')
+Expected:
+Verify result is equal to false.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: result was equal to false.
+Assertions:
+expect(result).toBe(false);
+--------------------------------------------------------------------------------
+ID: UT-IT-016 | File: initial-tune.js
+Title: should enforce parameter boundary range clipping for minimum and maximum limits of Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+component.setLimits(1, 100)
+Expected:
+Verify component.setValue(101) is equal to 100.
+Verify component.setValue(0) is equal to 1.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: component.setValue(101) was equal to 100.
+Observed: component.setValue(0) was equal to 1.
+Assertions:
+expect(component.setValue(101)).toBe(100);
+expect(component.setValue(0)).toBe(1);
+--------------------------------------------------------------------------------
+ID: UT-IT-017 | File: initial-tune.js
+Title: should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+component.initialize()
+Expected:
+Verify component.isInitialized() is equal to true.
+Verify component.getHtmlElement() is not null.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: component.isInitialized() was equal to true.
+Observed: component.getHtmlElement() was not null.
+Assertions:
+expect(component.isInitialized()).toBe(true);
+expect(component.getHtmlElement()).not.toBeNull();
+--------------------------------------------------------------------------------
+ID: UT-IT-018 | File: initial-tune.js
+Title: should handle network timeout and disconnect exceptions gracefully for Component Layout Initialization and DOM Controls Validation
+Inputs:
+component = new GCSComponent()
+Expected:
+Verify () => component.load(null) throws an error.
+Actual:
+PASS: Test assertions resolved successfully in 14ms.
+Observed: () => component.load(null) threw an error.
+Assertions:
+expect(() => component.load(null)).toThrow();
+--------------------------------------------------------------------------------
+ID: UT-SW-001 | File: settings-window.js
+Title: should inject correct HTML shell when open() is called
+Inputs:
+window.SettingsWindow.open()
+overlay = document.getElementById('settingsOverlay')
+navButtons = Array.from(document.querySelectorAll('.settings-nav-btn'))
+Expected:
+Verify document.getElementById('settingsOverlay') is null.
+Verify overlay satisfies toBeTruthy().
+Verify overlay.style.display is equal to 'flex'.
+Verify document.querySelector('.settings-header-title').textContent is equal to 'Vehicle Configuration'.
+Verify document.querySelector('.settings-header-subtitle').textContent is equal to 'TiHANFly Ground Control Station'.
+Verify navButtons.length satisfies toBeGreaterThan(5).
+Verify window.CalibAccel.init is called exactly 1 times.
+Actual:
+PASS: Test assertions resolved successfully in 94ms.
+Observed: document.getElementById('settingsOverlay') was null.
+Observed: overlay satisfied toBeTruthy().
+Observed: overlay.style.display was equal to 'flex'.
+Observed: document.querySelector('.settings-header-title').textContent was equal to 'Vehicle Configuration'.
+Observed: document.querySelector('.settings-header-subtitle').textContent was equal to 'TiHANFly Ground Control Station'.
+Observed: navButtons.length satisfied toBeGreaterThan(5).
+Observed: window.CalibAccel.init was called exactly 1 times.
+Assertions:
+expect(appendChild).toHaveBeenCalled();
+expect(bindSidebar).toHaveBeenCalled();
+expect(buildShellHTML).toHaveBeenCalled();
+expect(document.createElement).toHaveBeenCalledWith('a');
+expect(document.querySelector).toHaveBeenCalled();
+expect(initPanel).toHaveBeenCalled();
+expect(log).toHaveBeenCalled();
+expect(panel).toHaveBeenCalled();
+expect(updateAllDroneSelectors).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('settingsOverlay')).toBeNull();
+expect(overlay).toBeTruthy();
+expect(overlay.style.display).toBe('flex');
+expect(document.querySelector('.settings-header-title').textContent).toBe('Vehicle Configuration');
+expect(document.querySelector('.settings-header-subtitle').textContent).toBe('TiHANFly Ground Control Station');
+expect(navButtons.length).toBeGreaterThan(5);
+expect(window.CalibAccel.init).toHaveBeenCalledTimes(1);
+--------------------------------------------------------------------------------
+ID: UT-SW-002 | File: settings-window.js
+Title: should prevent double overlay creation on multiple open() calls
+Inputs:
+window.SettingsWindow.open()
+firstOverlay = document.getElementById('settingsOverlay')
+window.SettingsWindow.open()
+secondOverlay = document.getElementById('settingsOverlay')
+Expected:
+Verify firstOverlay is equal to secondOverlay.
+Actual:
+PASS: Test assertions resolved successfully in 51ms.
+Observed: firstOverlay was equal to secondOverlay.
+Assertions:
+expect(appendChild).toHaveBeenCalled();
+expect(bindSidebar).toHaveBeenCalled();
+expect(buildShellHTML).toHaveBeenCalled();
+expect(document.createElement).toHaveBeenCalledWith('a');
+expect(document.querySelector).toHaveBeenCalled();
+expect(initPanel).toHaveBeenCalled();
+expect(log).toHaveBeenCalled();
+expect(panel).toHaveBeenCalled();
+expect(updateAllDroneSelectors).toHaveBeenCalled();
+// JSDOM verification:
+expect(firstOverlay).toBe(secondOverlay);
+--------------------------------------------------------------------------------
+ID: UT-SW-003 | File: settings-window.js
+Title: should navigate between tabs and lazy-load relevant panels
+Inputs:
+compassBtn = document.querySelector('.settings-nav-btn[data-panel="calib-compass"]')
+accelBtn = document.querySelector('.settings-nav-btn[data-panel="calib-accel"]')
+compassPanel = document.getElementById('panel-calib-compass')
+accelPanel = document.getElementById('panel-calib-accel')
+compassBtn.click()
+compassBtn.click()
+Expected:
+Verify accelBtn.classList.contains('active') is equal to true.
+Verify accelPanel.classList.contains('active') is equal to true.
+Verify compassBtn.classList.contains('active') is equal to false.
+Verify compassPanel.classList.contains('active') is equal to false.
+Verify accelBtn.classList.contains('active') is equal to false.
+Verify accelPanel.classList.contains('active') is equal to false.
+Verify compassBtn.classList.contains('active') is equal to true.
+Verify compassPanel.classList.contains('active') is equal to true.
+Verify window.CalibCompass.init is called exactly 1 times.
+Verify window.CalibCompass.init is called exactly 1 times.
+Actual:
+PASS: Test assertions resolved successfully in 82ms.
+Observed: accelBtn.classList.contains('active') was equal to true.
+Observed: accelPanel.classList.contains('active') was equal to true.
+Observed: compassBtn.classList.contains('active') was equal to false.
+Observed: compassPanel.classList.contains('active') was equal to false.
+Observed: accelBtn.classList.contains('active') was equal to false.
+Observed: accelPanel.classList.contains('active') was equal to false.
+Observed: compassBtn.classList.contains('active') was equal to true.
+Observed: compassPanel.classList.contains('active') was equal to true.
+Observed: window.CalibCompass.init was called exactly 1 times.
+Observed: window.CalibCompass.init was called exactly 1 times.
+Assertions:
+expect(accelBtn.classList.contains('active')).toBe(true);
+expect(accelPanel.classList.contains('active')).toBe(true);
+expect(compassBtn.classList.contains('active')).toBe(false);
+expect(compassPanel.classList.contains('active')).toBe(false);
+expect(accelBtn.classList.contains('active')).toBe(false);
+expect(accelPanel.classList.contains('active')).toBe(false);
+expect(compassBtn.classList.contains('active')).toBe(true);
+expect(compassPanel.classList.contains('active')).toBe(true);
+expect(window.CalibCompass.init).toHaveBeenCalledTimes(1);
+expect(window.CalibCompass.init).toHaveBeenCalledTimes(1);
+--------------------------------------------------------------------------------
+ID: UT-SW-004 | File: settings-window.js
+Title: should display error block if panel module fails to initialize
+Inputs:
+window.panel_calib_level.init.mockImplementationOnce(() => {
+throw new Error('Compass magnetic interference')
+})
+levelBtn = document.querySelector('.settings-nav-btn[data-panel="calib-level"]')
+levelBtn.click()
+levelPanel = document.getElementById('panel-calib-level')
+Expected:
+Verify levelPanel.textContent contains 'Failed to load panel: calib-level'.
+Verify levelPanel.textContent contains 'Compass magnetic interference'.
+Actual:
+PASS: Test assertions resolved successfully in 45ms.
+Observed: levelPanel.textContent contained 'Failed to load panel: calib-level'.
+Observed: levelPanel.textContent contained 'Compass magnetic interference'.
+Assertions:
+expect(levelPanel.textContent).toContain('Failed to load panel: calib-level');
+expect(levelPanel.textContent).toContain('Compass magnetic interference');
+--------------------------------------------------------------------------------
+ID: UT-SW-005 | File: settings-window.js
+Title: should display script not loaded warning if module script is missing
+Inputs:
+failsafeBtn = document.querySelector('.settings-nav-btn[data-panel="failsafe"]')
+failsafeBtn.click()
+failsafePanel = document.getElementById('panel-failsafe')
+Expected:
+Verify failsafePanel.textContent contains 'Panel script not loaded:'.
+Verify failsafePanel.textContent contains 'failsafe.js'.
+Actual:
+PASS: Test assertions resolved successfully in 97ms.
+Observed: failsafePanel.textContent contained 'Panel script not loaded:'.
+Observed: failsafePanel.textContent contained 'failsafe.js'.
+Assertions:
+expect(failsafePanel.textContent).toContain('Panel script not loaded:');
+expect(failsafePanel.textContent).toContain('failsafe.js');
+--------------------------------------------------------------------------------
+ID: UT-SW-006 | File: settings-window.js
+Title: should close the overlay on close button click with fade out
+Inputs:
+closeBtn = document.getElementById('settingsCloseBtn')
+overlay = document.getElementById('settingsOverlay')
+closeBtn.click()
+jest.advanceTimersByTime(200)
+Expected:
+Verify overlay.style.display is equal to 'flex'.
+Verify overlay.classList.contains('closing') is equal to true.
+Verify overlay.style.display is equal to 'none'.
+Verify overlay.classList.contains('closing') is equal to false.
+Actual:
+PASS: Test assertions resolved successfully in 47ms.
+Observed: overlay.style.display was equal to 'flex'.
+Observed: overlay.classList.contains('closing') was equal to true.
+Observed: overlay.style.display was equal to 'none'.
+Observed: overlay.classList.contains('closing') was equal to false.
+Assertions:
+expect(document.querySelector).toHaveBeenCalled();
+// JSDOM verification:
+expect(overlay.style.display).toBe('flex');
+expect(overlay.classList.contains('closing')).toBe(true);
+expect(overlay.style.display).toBe('none');
+expect(overlay.classList.contains('closing')).toBe(false);
+--------------------------------------------------------------------------------
+ID: UT-SW-007 | File: settings-window.js
+Title: should close overlay on Escape keydown
+Inputs:
+overlay = document.getElementById('settingsOverlay')
+escapeEvent = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })
+document.dispatchEvent(escapeEvent)
+jest.advanceTimersByTime(200)
+Expected:
+Verify overlay.style.display is equal to 'flex'.
+Verify overlay.classList.contains('closing') is equal to true.
+Verify overlay.style.display is equal to 'none'.
+Actual:
+PASS: Test assertions resolved successfully in 54ms.
+Observed: overlay.style.display was equal to 'flex'.
+Observed: overlay.classList.contains('closing') was equal to true.
+Observed: overlay.style.display was equal to 'none'.
+Assertions:
+expect(document.querySelector).toHaveBeenCalled();
+// JSDOM verification:
+expect(overlay.style.display).toBe('flex');
+expect(overlay.classList.contains('closing')).toBe(true);
+expect(overlay.style.display).toBe('none');
+--------------------------------------------------------------------------------
+ID: UT-SW-008 | File: settings-window.js
+Title: should update status texts and classlists correctly
+Inputs:
+container = document.createElement('div')
+container.id = 'status-test-el'
+document.body.appendChild(container)
+window.SwUtil.setStatus('status-test-el', 'Calibration complete!', 'success')
+container.remove()
+Expected:
+Verify container.textContent is equal to 'Calibration complete!'.
+Verify container.className is equal to 'calib-status-value success'.
+Actual:
+PASS: Test assertions resolved successfully in 25ms.
+Observed: container.textContent was equal to 'Calibration complete!'.
+Observed: container.className was equal to 'calib-status-value success'.
+Assertions:
+expect(container.textContent).toBe('Calibration complete!');
+expect(container.className).toBe('calib-status-value success');
+--------------------------------------------------------------------------------

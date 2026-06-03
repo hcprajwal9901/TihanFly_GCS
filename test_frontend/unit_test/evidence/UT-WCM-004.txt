@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-004
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should correct position coordinates on overflow edge boundaries
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+dummyWp = { id: 1, lat: 17.6, lng: 78.1 }
+window.innerWidth = 400
+window.innerHeight = 300
+menuInstance.menu.getBoundingClientRect = jest.fn().mockReturnValue({
+right: 450, // x (350) + width (150) = 500 > innerWidth (400)
+bottom: 350 // y (250) + height (200) = 450 > innerHeight (300)
+})
+menuInstance.showMenu(350, 250, dummyWp)
+
+Expected Behavior:
+Menu Instance Menu Style Left is equal to '200px'.
+Menu Instance Menu Style Top is equal to '50px'.
+
+Actual Observations:
+menuInstance.menu.style.left = '200px'
+menuInstance.menu.style.top = '50px'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(menuInstance.menu.style.left).toBe('200px');
+expect(menuInstance.menu.style.top).toBe('50px');
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] menuInstance.menu.style.left = '200px'
+[PASS] menuInstance.menu.style.top = '50px'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

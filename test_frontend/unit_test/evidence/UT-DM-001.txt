@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-DM-001
+Requirement ID      : REQ-SYS-002
+Source File         : dropdown-menu.js
+Target Function     : initializeDropdownMenuStrip() [Line 262]
+Test Category       : Positive / Functional
+Test Case Title     : should auto-initialize DropdownMenuStrip and expose window.DropdownStrip API
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+No external inputs required.
+
+Expected Behavior:
+Verify window.DropdownStrip satisfies toBeDefined().
+Typeof Window Dropdown Strip Show is equal to 'function'.
+Container hidden.
+Container Class List Contains('Hidden') is equal to true.
+Flight Controls displayed.
+
+Actual Observations:
+window.DropdownStrip: defined
+typeof window.DropdownStrip.show = 'function'
+container.style.display = 'none'
+container.classList.contains('hidden') = true
+flightControls.style.display = 'flex'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(attachEventListeners).toHaveBeenCalled();
+expect(attachLogoClickListener).toHaveBeenCalled();
+expect(attachOutsideClickListener).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.DropdownStrip).toBeDefined();
+expect(typeof window.DropdownStrip.show).toBe('function');
+expect(container.style.display).toBe('none');
+expect(container.classList.contains('hidden')).toBe(true);
+expect(flightControls.style.display).toBe('flex');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] window.DropdownStrip: defined
+[PASS] typeof window.DropdownStrip.show = 'function'
+[PASS] container.style.display = 'none'
+[PASS] container.classList.contains('hidden') = true
+[PASS] flightControls.style.display = 'flex'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

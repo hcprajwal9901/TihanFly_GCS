@@ -1,0 +1,67 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-SO-005
+Requirement ID      : REQ-HW-001
+Source File         : servo-output.js
+Target Function     : pName() [Line 93]
+Test Category       : Boundary Value
+Test Case Title     : should scale live output positions dynamically relative to channel min/max thresholds
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+triggerWsMessage({ type: 'param_value', param_id: 'SERVO5_MIN', value: 1000 })
+triggerWsMessage({ type: 'param_value', param_id: 'SERVO5_MAX', value: 2000 })
+triggerWsMessage({ type: 'param_value', param_id: 'SERVO5_TRIM', value: 1500 })
+})
+fillBar5 = document.getElementById('so-pos-fill-5')
+label5 = document.getElementById('so-pos-lbl-5')
+})
+})
+
+Expected Behavior:
+Fill Bar5 Style Width is equal to '25%'.
+Label5 displays '1250 µs'.
+Fill Bar5 Style Width is equal to '100%'.
+Fill Bar5 Style Width is equal to '0%'.
+
+Actual Observations:
+fillBar5.style.width = '25%'
+label5.textContent = '1250 µs'
+fillBar5.style.width = '100%'
+fillBar5.style.width = '0%'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(fillBar5.style.width).toBe('25%');
+expect(label5.textContent).toBe('1250 µs');
+expect(fillBar5.style.width).toBe('100%');
+expect(fillBar5.style.width).toBe('0%');
+
+Console Logs:
+[INFO] Jest executed test in 262ms
+[PASS] fillBar5.style.width = '25%'
+[PASS] label5.textContent = '1250 µs'
+[PASS] fillBar5.style.width = '100%'
+[PASS] fillBar5.style.width = '0%'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFR-004
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-return.js
+Target Function     : handleReturnActions() [Line 8]
+Test Category       : Positive / Functional
+Test Case Title     : should transmit RTL command via sendCommand and log success on OK confirmation
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.returnToLaunch()
+
+Expected Behavior:
+Verify global.confirm satisfies toHaveBeenCalledTimes(1).
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith('🔙 Sending Return to Launch command…').
+Verify window.sendCommand satisfies toHaveBeenCalledWith('RTL').
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('✅ RTL command sent').
+
+Actual Observations:
+global.confirm: 1 call(s)
+window.MsgConsole.info: called with '🔙 Sending Return to Launch command…'
+window.sendCommand: called with 'RTL'
+window.MsgConsole.success: called with '✅ RTL command sent'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(global.confirm).toHaveBeenCalledTimes(1);
+expect(window.MsgConsole.info).toHaveBeenCalledWith('🔙 Sending Return to Launch command…');
+expect(window.sendCommand).toHaveBeenCalledWith('RTL');
+expect(window.MsgConsole.success).toHaveBeenCalledWith('✅ RTL command sent');
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] global.confirm: 1 call(s)
+[PASS] window.MsgConsole.info: called with '🔙 Sending Return to Launch command…'
+[PASS] window.sendCommand: called with 'RTL'
+[PASS] window.MsgConsole.success: called with '✅ RTL command sent'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

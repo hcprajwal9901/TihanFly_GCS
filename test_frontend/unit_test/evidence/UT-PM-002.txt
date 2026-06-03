@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PM-002
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-manager.js
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Positive / Functional
+Test Case Title     : should start with default survey parameters
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+No external inputs required.
+
+Expected Behavior:
+Pm Instance Survey Settings Altitude is equal to 10.
+Pm Instance Survey Settings Overlap is equal to 70.
+Pm Instance Survey Settings Sidelap is equal to 60.
+Pm Instance Survey Settings Pattern is equal to 'horizontal'.
+
+Actual Observations:
+pmInstance.surveySettings.altitude = 10
+pmInstance.surveySettings.overlap = 70
+pmInstance.surveySettings.sidelap = 60
+pmInstance.surveySettings.pattern = 'horizontal'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(pmInstance.surveySettings.altitude).toBe(10);
+expect(pmInstance.surveySettings.overlap).toBe(70);
+expect(pmInstance.surveySettings.sidelap).toBe(60);
+expect(pmInstance.surveySettings.pattern).toBe('horizontal');
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] pmInstance.surveySettings.altitude = 10
+[PASS] pmInstance.surveySettings.overlap = 70
+[PASS] pmInstance.surveySettings.sidelap = 60
+[PASS] pmInstance.surveySettings.pattern = 'horizontal'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

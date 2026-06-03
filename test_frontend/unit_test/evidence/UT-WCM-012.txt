@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-012
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Wrong Value
+Test Case Title     : should map waypoint mode to Hover type and loiter command
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockMarker = { setPopupContent: jest.fn() }
+regularWp = { id: 2, type: 'waypoint', marker: mockMarker, lat: 17.6, lng: 78.1 }
+mockWaypointManager.waypoints = [{}, regularWp]
+menuInstance.currentWaypoint = regularWp
+menuInstance.handleMenuAction('set-hover')
+
+Expected Behavior:
+Regular Wp Type is equal to 'hover'.
+Regular Wp Command is equal to 17.
+Verify mockMarker.setPopupContent satisfies toHaveBeenCalled().
+
+Actual Observations:
+regularWp.type = 'hover'
+regularWp.command = 17
+mockMarker.setPopupContent: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(regularWp.type).toBe('hover');
+expect(regularWp.command).toBe(17);
+expect(mockMarker.setPopupContent).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] regularWp.type = 'hover'
+[PASS] regularWp.command = 17
+[PASS] mockMarker.setPopupContent: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

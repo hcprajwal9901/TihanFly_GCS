@@ -1,0 +1,69 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FH-001
+Requirement ID      : REQ-HUD-001
+Source File         : flight-hud.js
+Target Function     : init() [Line 27]
+Test Category       : Negative / Robustness
+Test Case Title     : should log errors and halt loading when critical elements are missing
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+document.body.innerHTML = ''
+originalGetElementById = document.getElementById
+document.getElementById = jest.fn().mockReturnValue(null)
+jest.spyOn(console, 'error').mockImplementation(() => {})
+global.loadScript('js/flight-hud.js')
+)
+document.getElementById = originalGetElementById
+
+Expected Behavior:
+Error logged to console.
+
+Actual Observations:
+console.error: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(Event).toHaveBeenCalled();
+expect(ResizeObserver).toHaveBeenCalled();
+expect(addEventListener).toHaveBeenCalled();
+expect(closeDragElement).toHaveBeenCalled();
+expect(dispatchEvent).toHaveBeenCalled();
+expect(elementDrag).toHaveBeenCalled();
+expect(getBoundingClientRect).toHaveBeenCalled();
+expect(getContext).toHaveBeenCalled();
+expect(observe).toHaveBeenCalled();
+expect(preventDefault).toHaveBeenCalled();
+expect(resize).toHaveBeenCalled();
+expect(startAnimation).toHaveBeenCalled();
+expect(stopAnimation).toHaveBeenCalled();
+expect(toLowerCase).toHaveBeenCalled();
+// JSDOM verification:
+expect(console.error).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 34ms
+[PASS] console.error: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LOG-007
+Requirement ID      : REQ-LOG-001
+Source File         : login.js
+Target Function     : updateConnectionStatus() [Line 91]
+Test Category       : Positive / Functional
+Test Case Title     : should handle login successes and redirect page to GCS MainWindow
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+type: String, callback: Function | Simulated: document.getElementById('loginEmail').value = 'pilot@tihan.in'
+document.getElementById('loginPassword').value = 'password123'
+originalSetTimeout = window.setTimeout
+window.setTimeout = jest.fn()
+sendSpy = jest.spyOn(socket, 'send')
+handleLogin()
+})
+responseHandler = socket.handlers['login_success'][0]
+responseHandler({ message: 'Login successful' })
+alertNode = document.getElementById('authAlert')
+window.setTimeout = originalSetTimeout
+sendSpy.mockRestore()
+
+Expected Behavior:
+Verify sendSpy satisfies toHaveBeenCalledWith().
+Alert Node displays text containing 'Login successful'.
+Verify window.setTimeout satisfies toHaveBeenCalledWith(expect.any(Function), 1000).
+
+Actual Observations:
+sendSpy: toHaveBeenCalledWith
+alertNode.textContent contains 'Login successful'
+window.setTimeout: called with expect.any(Function), 1000
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = on(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(sendSpy).toHaveBeenCalledWith({
+expect(alertNode.textContent).toContain('Login successful');
+expect(window.setTimeout).toHaveBeenCalledWith(expect.any(Function), 1000);
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] sendSpy: toHaveBeenCalledWith
+[PASS] alertNode.textContent contains 'Login successful'
+[PASS] window.setTimeout: called with expect.any(Function), 1000
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

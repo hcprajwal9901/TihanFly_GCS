@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PM-007
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-manager.js
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Positive / Functional
+Test Case Title     : should generate grid waypoints and add them to WaypointManager under Horizontal pattern
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+pmInstance.surveySettings.pattern = 'horizontal'
+pmInstance.surveySettings.altitude = 12
+pmInstance.generateSurveyGrid()
+lastCallArgs = window.WaypointManager.addWaypoint.mock.calls[0]
+
+Expected Behavior:
+Verify window.WaypointManager.addWaypoint satisfies toHaveBeenCalled().
+Last Call Args[2] is equal to 12.
+Last Call Args[4] is equal to 'polygon'.
+
+Actual Observations:
+window.WaypointManager.addWaypoint: called
+lastCallArgs[2] = 12
+lastCallArgs[4] = 'polygon'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.WaypointManager.addWaypoint).toHaveBeenCalled();
+expect(lastCallArgs[2]).toBe(12); // Altitude
+expect(lastCallArgs[4]).toBe('polygon'); // Source tag
+
+Console Logs:
+[INFO] Jest executed test in 5ms
+[PASS] window.WaypointManager.addWaypoint: called
+[PASS] lastCallArgs[2] = 12
+[PASS] lastCallArgs[4] = 'polygon'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,62 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-VC-009
+Requirement ID      : REQ-SYS-002
+Source File         : vehicle-config.js
+Target Function     : injectModalStyles() [Line 38]
+Test Category       : Positive / Functional
+Test Case Title     : should toggle password visibility on clicking the unmask eye toggle button
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+card = document.querySelector('.vc-drone-card[data-drone="ti-shadow"]')
+card.querySelector('.vc-btn-unlock').click()
+backdrop = document.querySelector('.vc-pw-backdrop')
+input = backdrop.querySelector('#vcPwInput')
+toggleBtn = backdrop.querySelector('#vcPwToggle')
+toggleBtn.click()
+toggleBtn.click()
+
+Expected Behavior:
+Input Type is equal to 'password'.
+Input Type is equal to 'text'.
+Input Type is equal to 'password'.
+
+Actual Observations:
+input.type = 'password'
+input.type = 'text'
+input.type = 'password'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(input.type).toBe('password');
+expect(input.type).toBe('text');
+expect(input.type).toBe('password');
+
+Console Logs:
+[INFO] Jest executed test in 72ms
+[PASS] input.type = 'password'
+[PASS] input.type = 'text'
+[PASS] input.type = 'password'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

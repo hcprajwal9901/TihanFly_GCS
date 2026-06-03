@@ -1,0 +1,76 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CR-011
+Requirement ID      : REQ-HW-001
+Source File         : calib-radio.js
+Target Function     : _onStatusMsg() [Line 32]
+Test Category       : Positive / Functional
+Test Case Title     : should send completion command and trigger 2-second fallback timer
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+btn = document.getElementById('radioStartBtn')
+})
+)
+advanceManualTimers(2000)
+overlay = document.getElementById('mp-calib-popup-overlay')
+
+Expected Behavior:
+Verify mockSocket.send satisfies toHaveBeenCalledWith().
+Button displays 'Calibrate Radio'.
+Button Class List Contains('Running') is equal to false.
+Overlay is true.
+Overlay displays text containing 'Here are the detected radio options'.
+Overlay displays text containing 'CH1'.
+Overlay displays text containing '1100'.
+
+Actual Observations:
+mockSocket.send: toHaveBeenCalledWith
+btn.textContent = 'Calibrate Radio'
+btn.classList.contains('running') = false
+overlay: truthy
+overlay.textContent contains 'Here are the detected radio options'
+overlay.textContent contains 'CH1'
+overlay.textContent contains '1100'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockSocket.send).toHaveBeenCalledWith(
+expect(btn.textContent).toBe('Calibrate Radio');
+expect(btn.classList.contains('running')).toBe(false);
+expect(overlay).toBeTruthy();
+expect(overlay.textContent).toContain('Here are the detected radio options');
+expect(overlay.textContent).toContain('CH1');
+expect(overlay.textContent).toContain('1100');
+
+Console Logs:
+[INFO] Jest executed test in 85ms
+[PASS] mockSocket.send: toHaveBeenCalledWith
+[PASS] btn.textContent = 'Calibrate Radio'
+[PASS] btn.classList.contains('running') = false
+[PASS] overlay: truthy
+[PASS] overlay.textContent contains 'Here are the detected radio options'
+[PASS] overlay.textContent contains 'CH1'
+[PASS] overlay.textContent contains '1100'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

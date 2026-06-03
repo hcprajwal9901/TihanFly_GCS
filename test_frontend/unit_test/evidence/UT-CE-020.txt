@@ -1,0 +1,87 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CE-020
+Requirement ID      : REQ-HW-001
+Source File         : calib-esc.js
+Target Function     : _onStatusMessage() [Line 65]
+Test Category       : Positive / Functional
+Test Case Title     : should start sequence, send websocket payload with correct sysid, and allow cancelling
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+})
+calibBtn = document.getElementById('escCalibrateBtn')
+cancelBtn = document.getElementById('escCancelBtn')
+calibBtn.click()
+)
+mockSocket.send.mockClear()
+cancelBtn.click()
+)
+
+Expected Behavior:
+Calib Button Disabled is equal to false.
+Cancel Button hidden.
+Calib Button Disabled is equal to true.
+Calib Button displays text containing 'Calibrating…'.
+Cancel Button display state is inline-flex.
+Esc Step Track exists.
+Esc Status Message exists.
+Verify mockSocket.send satisfies toHaveBeenCalledWith().
+Verify mockSocket.send satisfies toHaveBeenCalledWith().
+
+Actual Observations:
+calibBtn.disabled = false
+cancelBtn.style.display = 'none'
+calibBtn.disabled = true
+calibBtn.textContent contains 'Calibrating…'
+cancelBtn.style.display = 'inline-flex'
+document.getElementById('escStepTrack').style.display = 'flex'
+document.getElementById('escStatusMsg').textContent contains 'Starting ESC calibration'
+mockSocket.send: toHaveBeenCalledWith
+mockSocket.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(calibBtn.disabled).toBe(false);
+expect(cancelBtn.style.display).toBe('none');
+expect(calibBtn.disabled).toBe(true);
+expect(calibBtn.textContent).toContain('Calibrating…');
+expect(cancelBtn.style.display).toBe('inline-flex');
+expect(document.getElementById('escStepTrack').style.display).toBe('flex');
+expect(document.getElementById('escStatusMsg').textContent).toContain('Starting ESC calibration');
+expect(mockSocket.send).toHaveBeenCalledWith(
+expect(mockSocket.send).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 31ms
+[PASS] calibBtn.disabled = false
+[PASS] cancelBtn.style.display = 'none'
+[PASS] calibBtn.disabled = true
+[PASS] calibBtn.textContent contains 'Calibrating…'
+[PASS] cancelBtn.style.display = 'inline-flex'
+[PASS] document.getElementById('escStepTrack').style.display = 'flex'
+[PASS] document.getElementById('escStatusMsg').textContent contains 'Starting ESC calibration'
+[PASS] mockSocket.send: toHaveBeenCalledWith
+[PASS] mockSocket.send: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

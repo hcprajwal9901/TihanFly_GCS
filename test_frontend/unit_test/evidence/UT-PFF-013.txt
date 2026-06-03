@@ -1,0 +1,52 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PFF-013
+Requirement ID      : REQ-NAV-001
+Source File         : plan-flight-file.js
+Target Function     : handleFileActions() [Line 6]
+Test Category       : Edge Case
+Test Case Title     : should show warning alert if waypoints array is empty
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+modeInstance.saveMission()
+
+Expected Behavior:
+Verify window.MsgConsole.warning satisfies toHaveBeenCalledWith('No waypoints to save').
+Verify window.alert satisfies toHaveBeenCalledWith(expect.stringContaining('No waypoints to save')).
+
+Actual Observations:
+window.MsgConsole.warning: called with 'No waypoints to save'
+window.alert: called with expect.stringContaining('No waypoints to save')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.warning).toHaveBeenCalledWith('No waypoints to save');
+expect(window.alert).toHaveBeenCalledWith(expect.stringContaining('No waypoints to save'));
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] window.MsgConsole.warning: called with 'No waypoints to save'
+[PASS] window.alert: called with expect.stringContaining('No waypoints to save')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

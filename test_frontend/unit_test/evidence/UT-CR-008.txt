@@ -1,0 +1,78 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-CR-008
+Requirement ID      : REQ-HW-001
+Source File         : calib-radio.js
+Target Function     : vStick() [Line 74]
+Test Category       : Positive / Functional
+Test Case Title     : should update vertical sticks indicators (vstick) on pitch and throttle channels
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-03
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : df5ce65
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+id: Number, label: String, pct: String | Simulated: })
+
+Expected Behavior:
+Stick Val Pitch exists.
+Stick Fill Pitch exists.
+Stick Min Pitch exists.
+Stick Max Pitch exists.
+Stick Val Throttle exists.
+Stick Fill Throttle exists.
+Stick Min Throttle exists.
+Stick Max Throttle exists.
+
+Actual Observations:
+document.getElementById('stick-val-pitch').textContent = '1100'
+document.getElementById('stick-fill-pitch').style.height = '10%'
+document.getElementById('stick-min-pitch').style.bottom = '10%'
+document.getElementById('stick-max-pitch').style.bottom = '10%'
+document.getElementById('stick-val-throttle').textContent = '1900'
+document.getElementById('stick-fill-throttle').style.height = '90%'
+document.getElementById('stick-min-throttle').style.bottom = '90%'
+document.getElementById('stick-max-throttle').style.bottom = '90%'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(round).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('stick-val-pitch').textContent).toBe('1100');
+expect(document.getElementById('stick-fill-pitch').style.height).toBe('10%');
+expect(document.getElementById('stick-min-pitch').style.bottom).toBe('10%');
+expect(document.getElementById('stick-max-pitch').style.bottom).toBe('10%');
+expect(document.getElementById('stick-val-throttle').textContent).toBe('1900');
+expect(document.getElementById('stick-fill-throttle').style.height).toBe('90%');
+expect(document.getElementById('stick-min-throttle').style.bottom).toBe('90%');
+expect(document.getElementById('stick-max-throttle').style.bottom).toBe('90%');
+
+Console Logs:
+[INFO] Jest executed test in 49ms
+[PASS] document.getElementById('stick-val-pitch').textContent = '1100'
+[PASS] document.getElementById('stick-fill-pitch').style.height = '10%'
+[PASS] document.getElementById('stick-min-pitch').style.bottom = '10%'
+[PASS] document.getElementById('stick-max-pitch').style.bottom = '10%'
+[PASS] document.getElementById('stick-val-throttle').textContent = '1900'
+[PASS] document.getElementById('stick-fill-throttle').style.height = '90%'
+[PASS] document.getElementById('stick-min-throttle').style.bottom = '90%'
+[PASS] document.getElementById('stick-max-throttle').style.bottom = '90%'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================
