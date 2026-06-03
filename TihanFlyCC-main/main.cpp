@@ -4092,6 +4092,30 @@ int main()
                 param_manager.requestAllParameters(/*force=*/false);
                 flightMode.requestParams();
             }
+            // ── Drone-reboot detection ────────────────────────────────────────
+            // When the drone reboots over WiFi/UDP the connection type stays
+            // the same ("UDP"), so the block above is skipped.  But ArduPilot
+            // lost all its stream state during reboot — ATTITUDE, GPS,
+            // VFR_HUD, etc. stop flowing.  Detect the heartbeat gap and
+            // re-request everything so compass + HUD resume immediately.
+            else if (live_vehicle->check_and_clear_reboot())
+            {
+                std::cout << "[GCS] Drone reboot detected on sysid="
+                          << live_vehicle->sysid()
+                          << " — re-requesting telemetry streams\n";
+
+                wire_modules_to_active_vehicle();
+
+                flightMode.resetParamsRequested();
+                request_rc_channels_stream();
+                request_telemetry_streams();
+                request_gps_raw_int_via_command();
+                param_manager.requestAllParameters(/*force=*/true);
+                flightMode.requestParams();
+
+                // Also re-request streams via the per-vehicle path
+                request_streams_for_vehicle(live_vehicle);
+            }
 
             send_status();
         }

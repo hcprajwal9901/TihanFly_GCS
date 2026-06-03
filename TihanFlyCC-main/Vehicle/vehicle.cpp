@@ -19,6 +19,7 @@ Vehicle::Vehicle(int sysid, int compid, int link_id,
       ui_sysid_(ui_sysid),
       link_manager_(link_manager),
       last_heartbeat_(std::chrono::steady_clock::now()),
+      created_at_(std::chrono::steady_clock::now()),
       accel_calib_(std::make_unique<AccelCalibration>()),
       compass_calib_(std::make_unique<CompassCalibration>()),
       esc_calib_(std::make_unique<EscCalibration>()),
@@ -237,7 +238,20 @@ void Vehicle::update_telemetry(const mavlink_message_t& msg)
 void Vehicle::update_heartbeat()
 {
     std::lock_guard<std::mutex> lock(heartbeat_mtx_);
-    last_heartbeat_ = std::chrono::steady_clock::now();
+    auto now = std::chrono::steady_clock::now();
+
+    // Detect a heartbeat gap > 5 seconds — indicates the drone rebooted.
+    // We only flag this AFTER the grace period (first 15 s) so that the
+    // very first heartbeat after construction doesn't trigger a false reboot.
+    if ((now - created_at_) > std::chrono::seconds(15) &&
+        (now - last_heartbeat_) > std::chrono::seconds(5))
+    {
+        std::cout << "[Vehicle] sysid=" << sysid_
+                  << " heartbeat gap detected — flagging reboot\n";
+        rebooted_.store(true, std::memory_order_release);
+    }
+
+    last_heartbeat_ = now;
 }
 
 // ---------------------------------------------------------------------------
@@ -293,8 +307,27 @@ void Vehicle::register_handler(uint32_t msgid, MessageHandler handler)
 bool Vehicle::is_alive() const
 {
     std::lock_guard<std::mutex> lock(heartbeat_mtx_);
-    return (std::chrono::steady_clock::now() - last_heartbeat_)
-           < std::chrono::seconds(5);
+    auto now = std::chrono::steady_clock::now();
+
+    // ── Boot grace period ─────────────────────────────────────────────────
+    // After the vehicle is first discovered, give ArduPilot a generous
+    // 15-second window to finish booting and establish a steady heartbeat
+    // cadence.  Without this, a drone reboot over WiFi/UDP (CUAV WLink)
+    // causes repeated timeout-eviction because heartbeats are sporadic
+    // during the boot sequence.
+    if ((now - created_at_) < std::chrono::seconds(15))
+        return true;
+
+    // ── Normal liveness check ─────────────────────────────────────────────
+    // 10 seconds (up from 5) to tolerate WiFi packet loss and jitter.
+    // ArduPilot heartbeats at 1 Hz; 10 s allows ~10 missed packets before
+    // declaring the vehicle dead, which is appropriate for UDP over WiFi.
+    return (now - last_heartbeat_) < std::chrono::seconds(10);
+}
+
+bool Vehicle::check_and_clear_reboot()
+{
+    return rebooted_.exchange(false, std::memory_order_acq_rel);
 }
 
 // ---------------------------------------------------------------------------
