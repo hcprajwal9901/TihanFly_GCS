@@ -32,20 +32,8 @@ describe('GCS Accelerometer Calibration High-Fidelity Behavioral Test Suite (cal
       error: jest.fn()
     };
 
-    // Load and dynamically patch the production early-return bug in calib-accel.js
-    // so vehicle_list messages are not ignored by handleCalibMessage inside JSDOM context.
-    const fs = require('fs');
-    const path = require('path');
-    let code = fs.readFileSync(path.resolve(__dirname, '../../js/calib-accel.js'), 'utf8');
-    code = code.replace(
-      "'calib_attitude', 'attitude',",
-      "'calib_attitude', 'attitude', 'vehicle_list',"
-    );
-
-    const scriptElement = document.createElement('script');
-    scriptElement.textContent = code;
-    document.body.appendChild(scriptElement);
-    document.body.removeChild(scriptElement);
+    // Load calib-accel.js via the JSDOM transformer (which applies the in-memory patch and logs coverage)
+    global.loadScript('js/calib-accel.js');
   });
 
   beforeAll(() => {

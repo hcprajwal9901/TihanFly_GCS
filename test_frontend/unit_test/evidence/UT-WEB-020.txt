@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-020
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Positive / Functional
+Test Case Title     : should process Command response ACKs
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.initWebSocket()
+ws = wsInstances[0]
+})
+})
+
+Expected Behavior:
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('Takeoff Succeeded').
+Error logged to console.
+
+Actual Observations:
+window.MsgConsole.success: called with 'Takeoff Succeeded'
+window.MsgConsole.error: called with 'Takeoff Rejected'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.success).toHaveBeenCalledWith('Takeoff Succeeded');
+expect(window.MsgConsole.error).toHaveBeenCalledWith('Takeoff Rejected');
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] window.MsgConsole.success: called with 'Takeoff Succeeded'
+[PASS] window.MsgConsole.error: called with 'Takeoff Rejected'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

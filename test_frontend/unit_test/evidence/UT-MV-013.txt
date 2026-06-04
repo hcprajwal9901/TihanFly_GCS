@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-MV-013
 Requirement ID      : REQ-SYS-002
 Source File         : multi-vehicle.js
-Target Function     : setSelectedSysId() [Line 101]
-Test Category       : Edge Case
-Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : setSelectedSysId() [Line 20]
+Test Category       : Positive / Functional
+Test Case Title     : should cover modal close actions (close btn and backdrop)
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,43 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Input buffer references set to null.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.configure(undefined)
+window.openConnectionManager()
+modal = document.getElementById('mvConnModal')
+closeBtn = document.getElementById('mvConnClose')
+closeBtn.click()
+window.openConnectionManager()
+modal.dispatchEvent(new MouseEvent('click', { bubbles: true }))
 
 Expected Behavior:
-Result is equal to false.
+Modal displayed.
+Modal hidden.
+Modal displayed.
+Modal hidden.
 
 Actual Observations:
-result = false
+modal.style.display = 'flex'
+modal.style.display = 'none'
+modal.style.display = 'flex'
+modal.style.display = 'none'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(modal.style.display).toBe('flex');
+expect(modal.style.display).toBe('none');
+expect(modal.style.display).toBe('flex');
+expect(modal.style.display).toBe('none');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 21ms
+[PASS] modal.style.display = 'flex'
+[PASS] modal.style.display = 'none'
+[PASS] modal.style.display = 'flex'
+[PASS] modal.style.display = 'none'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

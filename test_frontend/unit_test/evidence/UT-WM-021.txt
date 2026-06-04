@@ -11,10 +11,10 @@ Test Case Title     : should toggle routes visibility lines and sync displays
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -53,7 +53,7 @@ expect(manager.showRouteLine).toBe(true);
 expect(mockTMap.drawRoute).toHaveBeenCalled();
 
 Console Logs:
-[INFO] Jest executed test in 3ms
+[INFO] Jest executed test in 1ms
 [PASS] manager.showRouteLine = false
 [PASS] mockTMap.clearRoute: called
 [PASS] manager.showRouteLine = true

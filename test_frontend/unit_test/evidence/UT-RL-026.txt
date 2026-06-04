@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-026
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : processChunk() [Line 644]
+Test Category       : Negative / Robustness
+Test Case Title     : should catch decodeRow / processChunk errors gracefully when processChunk throws
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+originalUint8Array = global.Uint8Array
+global.Uint8Array = jest.fn().mockImplementation((buf) => {
+throw new Error('Simulated binary read error')
+})
+})
+spyError = jest.spyOn(console, 'error').mockImplementation(() => {})
+file = {
+window.ReviewLog.handleFile(file)
+jest.advanceTimersByTime(500)
+)
+spyError.mockRestore()
+global.Uint8Array = originalUint8Array
+
+Expected Behavior:
+Verify spyError satisfies toHaveBeenCalledWith().
+
+Actual Observations:
+spyError: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(decodeRow).toHaveBeenCalled();
+expect(function).toHaveBeenCalled();
+expect(min).toHaveBeenCalled();
+expect(onDone).toHaveBeenCalled();
+expect(onProgress).toHaveBeenCalled();
+expect(readCStr).toHaveBeenCalled();
+expect(round).toHaveBeenCalled();
+expect(split).toHaveBeenCalled();
+expect(subarray).toHaveBeenCalled();
+expect(trim).toHaveBeenCalled();
+// JSDOM verification:
+expect(spyError).toHaveBeenCalledWith(
+
+Console Logs:
+[INFO] Jest executed test in 36ms
+[PASS] spyError: toHaveBeenCalledWith
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

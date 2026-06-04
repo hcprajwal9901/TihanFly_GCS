@@ -11,10 +11,10 @@ Test Case Title     : should dismiss the modal if backdrop is clicked
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -45,7 +45,7 @@ expect(modal).toBeTruthy();
 expect(document.body.contains(modal)).toBe(false);
 
 Console Logs:
-[INFO] Jest executed test in 107ms
+[INFO] Jest executed test in 55ms
 [PASS] modal: truthy
 [PASS] document.body.contains(modal) = false
 

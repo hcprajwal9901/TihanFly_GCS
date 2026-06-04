@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-WIH-009
 Requirement ID      : REQ-SYS-002
 Source File         : weather-integration-helper.js
-Target Function     : fetch_weather_telemetry() [Line 73]
-Test Category       : Boundary Value
-Test Case Title     : should enforce parameter boundary range clipping for minimum and maximum limits of Weather API Dashboard and Wind-speed Warning Overlays
+Target Function     : debugWeatherIntegration() [Line 105]
+Test Category       : Positive / Functional
+Test Case Title     : should log debug info even when all components are missing
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,37 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Autopilot parameter boundary rules loaded.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-weather = new WeatherDashboard()
-weather.updateTelemetry({ temp: 50.0, windSpeed: 15.0 })
+delete window.tmap
+delete window.weatherDashboard
+delete window.Weather
+global.loadScript('js/weather-integration-helper.js')
+window.WeatherIntegration.debug()
 
 Expected Behavior:
-Weather Is Safe To Fly() is equal to false.
+Log message recorded.
+Log message recorded.
 
 Actual Observations:
-weather.isSafeToFly() = false
+console.log: called with 'Map (window.tmap):', false
+console.log: called with 'Weather Dashboard:', false
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(weather.isSafeToFly()).toBe(false);
+expect(Map).toHaveBeenCalled();
+expect(getCurrentLocation).toHaveBeenCalled();
+// JSDOM verification:
+expect(console.log).toHaveBeenCalledWith('Map (window.tmap):', false);
+expect(console.log).toHaveBeenCalledWith('Weather Dashboard:', false);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] weather.isSafeToFly() = false
+[INFO] Jest executed test in 5ms
+[PASS] console.log: called with 'Map (window.tmap):', false
+[PASS] console.log: called with 'Weather Dashboard:', false
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

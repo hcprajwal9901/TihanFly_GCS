@@ -1,0 +1,58 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-031
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : sendCommand() [Line 876]
+Test Category       : Negative / Robustness
+Test Case Title     : should reject sendMission if waypoints param is empty
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+command: String, params = {}: String | Simulated: window.initWebSocket()
+ws = wsInstances[0]
+ws.readyState = WebSocket.OPEN
+window.ws = ws
+sent = window.sendMission([])
+
+Expected Behavior:
+Sent is equal to false.
+Error logged to console.
+
+Actual Observations:
+sent = false
+window.MsgConsole.error: called with 'No waypoints to send'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(sendCommand).toBeDefined();
+// JSDOM verification:
+expect(sent).toBe(false);
+expect(window.MsgConsole.error).toHaveBeenCalledWith('No waypoints to send');
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] sent = false
+[PASS] window.MsgConsole.error: called with 'No waypoints to send'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

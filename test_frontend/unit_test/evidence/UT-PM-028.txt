@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PM-028
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-manager.js
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Positive / Functional
+Test Case Title     : should track createdWaypointIds and remove them correctly on clearPolygon
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+pmInstance.createdWaypointIds = [101, 102]
+pmInstance.currentPolygon = window.L.polygon([
+window.L.latLng(17.600, 78.120),
+window.L.latLng(17.602, 78.120),
+window.L.latLng(17.601, 78.122)
+])
+Object.getPrototypeOf(pmInstance).clearPolygon.call(pmInstance)
+
+Expected Behavior:
+Verify window.WaypointManager.removeWaypointsByIds satisfies toHaveBeenCalledWith([101, 102]).
+Pm Instance Created Waypoint Ids Length is equal to 0.
+
+Actual Observations:
+window.WaypointManager.removeWaypointsByIds: called with [101, 102]
+pmInstance.createdWaypointIds.length = 0
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(IDs).toHaveBeenCalled();
+expect(clearGrid).toHaveBeenCalled();
+expect(clearLayers).toHaveBeenCalled();
+expect(clearTempElements).toHaveBeenCalled();
+expect(removeWaypointsByIds).toHaveBeenCalled();
+expect(removeWaypointsBySource).toHaveBeenCalled();
+expect(tag).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.WaypointManager.removeWaypointsByIds).toHaveBeenCalledWith([101, 102]);
+expect(pmInstance.createdWaypointIds.length).toBe(0);
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] window.WaypointManager.removeWaypointsByIds: called with [101, 102]
+[PASS] pmInstance.createdWaypointIds.length = 0
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PM-017
 Requirement ID      : REQ-NAV-001
 Source File         : polygon-manager.js
-Target Function     : initializePolygonManager() [Line 129]
-Test Category       : Edge Case
-Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger file prompt and recreate polygon layout on successful loading
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,58 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Input buffer references set to null.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-map = new TMap('map-element', [17.385, 78.486], 15, false)
-route = map.drawRoute([])
+dummyFileContent = JSON.stringify({
+})
+})
+global.FileReader = FileReaderMock
+fileOnChangeCallback = null
+originalCreate = document.createElement.bind(document)
+document.createElement = jest.fn().mockImplementation((tagName) => {
+el = originalCreate(tagName)
+})
+}, 0)
+})
+set: (cb) => { fileOnChangeCallback = cb; }
+})
+})
+pmInstance.importPolygonData()
+jest.advanceTimersByTime(100)
+document.createElement = originalCreate
 
 Expected Behavior:
-Route is null.
-Map Get Route Count() is equal to 0.
+Pm Instance Polygon Id is equal to 'imported_poly'.
+Pm Instance Survey Settings Altitude is equal to 15.
+Pm Instance Survey Settings Overlap is equal to 80.
+Pm Instance Polygon Points[0] Lat is equal to 17.605.
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('✅ Polygon imported').
 
 Actual Observations:
-route: null
-map.getRouteCount() = 0
+pmInstance.polygonId = 'imported_poly'
+pmInstance.surveySettings.altitude = 15
+pmInstance.surveySettings.overlap = 80
+pmInstance.polygonPoints[0].lat = 17.605
+window.MsgConsole.success: called with '✅ Polygon imported'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(route).toBeNull();
-expect(map.getRouteCount()).toBe(0);
+expect(pmInstance.polygonId).toBe('imported_poly');
+expect(pmInstance.surveySettings.altitude).toBe(15);
+expect(pmInstance.surveySettings.overlap).toBe(80);
+expect(pmInstance.polygonPoints[0].lat).toBe(17.605);
+expect(window.MsgConsole.success).toHaveBeenCalledWith('✅ Polygon imported');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] route: null
-[PASS] map.getRouteCount() = 0
+[INFO] Jest executed test in 6ms
+[PASS] pmInstance.polygonId = 'imported_poly'
+[PASS] pmInstance.surveySettings.altitude = 15
+[PASS] pmInstance.surveySettings.overlap = 80
+[PASS] pmInstance.polygonPoints[0].lat = 17.605
+[PASS] window.MsgConsole.success: called with '✅ Polygon imported'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

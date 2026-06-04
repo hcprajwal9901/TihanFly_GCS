@@ -1,0 +1,53 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-036
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Negative / Robustness
+Test Case Title     : should cover error logs when WaypointManager is not initialized
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+menuInstance.waypointManager = null
+menuInstance.handleMenuAction('delete-wp')
+
+Expected Behavior:
+Error logged to console.
+
+Actual Observations:
+window.MsgConsole.error: called with 'WaypointManager not initialized'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(attachEventListeners).toHaveBeenCalled();
+expect(connectToWaypointManager).toHaveBeenCalled();
+expect(createMenuElement).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.MsgConsole.error).toHaveBeenCalledWith('WaypointManager not initialized');
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] window.MsgConsole.error: called with 'WaypointManager not initialized'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

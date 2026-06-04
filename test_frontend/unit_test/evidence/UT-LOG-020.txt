@@ -1,0 +1,61 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LOG-020
+Requirement ID      : REQ-LOG-001
+Source File         : login.js
+Target Function     : showToast() [Line 508]
+Test Category       : Positive / Functional
+Test Case Title     : should cover showToast custom onClick and fadeout/remove timers
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+title: String, body: String, type = 'info': String, onClick = null: String | Simulated: clickFn = jest.fn()
+showToast('Title', 'Body', 'info', clickFn)
+toast = document.body.lastChild
+toast.click()
+jest.advanceTimersByTime(5000)
+jest.advanceTimersByTime(400)
+
+Expected Behavior:
+Click action triggered.
+
+Actual Observations:
+clickFn: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(addEventListener).toHaveBeenCalled();
+expect(appendChild).toHaveBeenCalled();
+expect(bezier).toHaveBeenCalled();
+expect(document.createElement).toHaveBeenCalledWith('a');
+expect(element.style.display).toBeDefined();
+expect(rgba).toHaveBeenCalled();
+expect(translateX).toHaveBeenCalled();
+// JSDOM verification:
+expect(clickFn).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] clickFn: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

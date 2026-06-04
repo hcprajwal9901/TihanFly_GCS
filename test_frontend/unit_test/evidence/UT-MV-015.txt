@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-MV-015
 Requirement ID      : REQ-SYS-002
 Source File         : multi-vehicle.js
-Target Function     : setSelectedSysId() [Line 115]
-Test Category       : Boundary Value
-Test Case Title     : should enforce parameter boundary range clipping for minimum and maximum limits of Component Layout Initialization and DOM Controls Validation
+Target Function     : ensureAddButton() [Line 477]
+Test Category       : Positive / Functional
+Test Case Title     : should cover ensureAddButton and its mouse hover/click callbacks
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,53 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Autopilot parameter boundary rules loaded.
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-component.setLimits(1, 100)
+window.ensureAddButton()
+btn = document.getElementById('mvAddDroneBtn')
+btn.dispatchEvent(new Event('mouseenter'))
+btn.dispatchEvent(new Event('mouseleave'))
+btn.dispatchEvent(new Event('click'))
+modal = document.getElementById('mvConnModal')
 
 Expected Behavior:
-Component Set Value(101) is equal to 100.
-Component Set Value(0) is equal to 1.
+Typeof Window Ensure Add Button is equal to 'function'.
+Button is null.
+Button Style Background contains '#1565c0'.
+Button Style Background contains '#1e4a7a'.
+Modal displayed.
 
 Actual Observations:
-component.setValue(101) = 100
-component.setValue(0) = 1
+typeof window.ensureAddButton = 'function'
+btn: not null
+btn.style.background contains '#1565c0'
+btn.style.background contains '#1e4a7a'
+modal.style.display = 'flex'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.setValue(101)).toBe(100);
-expect(component.setValue(0)).toBe(1);
+expect(appendChild).toHaveBeenCalled();
+expect(document.createElement).toHaveBeenCalledWith('a');
+expect(gradient).toHaveBeenCalled();
+expect(openConnectionManager).toHaveBeenCalled();
+expect(querySelector).toHaveBeenCalled();
+// JSDOM verification:
+expect(typeof window.ensureAddButton).toBe('function');
+expect(btn).not.toBeNull();
+expect(btn.style.background).toContain('#1565c0');
+expect(btn.style.background).toContain('#1e4a7a');
+expect(modal.style.display).toBe('flex');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.setValue(101) = 100
-[PASS] component.setValue(0) = 1
+[INFO] Jest executed test in 54ms
+[PASS] typeof window.ensureAddButton = 'function'
+[PASS] btn: not null
+[PASS] btn.style.background contains '#1565c0'
+[PASS] btn.style.background contains '#1e4a7a'
+[PASS] modal.style.display = 'flex'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

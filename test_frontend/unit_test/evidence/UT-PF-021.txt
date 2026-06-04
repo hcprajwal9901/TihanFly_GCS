@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PF-021
+Requirement ID      : REQ-TUNE-001
+Source File         : param-full.js
+Target Function     : upsertRow() [Line 1083]
+Test Category       : Positive / Functional
+Test Case Title     : should check upsertRow on existing elements updates select/inputs
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+name: String | Simulated: await initPanel()
+window.dispatchEvent(new CustomEvent('param_all', {
+}))
+window.dispatchEvent(new CustomEvent('param_value', {
+}))
+window.dispatchEvent(new CustomEvent('param_value', {
+}))
+tbody = document.getElementById('fpBody')
+
+Expected Behavior:
+Tbody Query Selector('Tr[Data Param="Arming Check"] Param Val Select') displays '1'.
+Tbody Query Selector('Tr[Data Param="Acro Bal Pitch"] Param Val Input') displays '2'.
+
+Actual Observations:
+tbody.querySelector('tr[data-param="ARMING_CHECK"] .param-val-select').value = '1'
+tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"] .param-val-input').value = '2'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(appendChild).toHaveBeenCalled();
+expect(attachRowEvents).toHaveBeenCalled();
+expect(document.createElement).toHaveBeenCalledWith('a');
+expect(escape).toHaveBeenCalled();
+expect(fmtV).toHaveBeenCalled();
+expect(from).toHaveBeenCalled();
+expect(insertBefore).toHaveBeenCalled();
+expect(makeRowHTML).toHaveBeenCalled();
+expect(querySelector).toHaveBeenCalled();
+expect(querySelectorAll).toHaveBeenCalled();
+// JSDOM verification:
+expect(tbody.querySelector('tr[data-param="ARMING_CHECK"] .param-val-select').value).toBe('1');
+expect(tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"] .param-val-input').value).toBe('2');
+
+Console Logs:
+[INFO] Jest executed test in 227ms
+[PASS] tbody.querySelector('tr[data-param="ARMING_CHECK"] .param-val-select').value = '1'
+[PASS] tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"] .param-val-input').value = '2'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

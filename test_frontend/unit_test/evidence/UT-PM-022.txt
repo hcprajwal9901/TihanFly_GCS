@@ -1,0 +1,69 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PM-022
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-manager.js
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Positive / Functional
+Test Case Title     : should cover ensureLayersInitialized returning false and true under various map states
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock L Map layers.. Dependencies: Leaflet API initialized in setup.
+
+Test Inputs:
+pmInstance.polygonLayer = null
+pmInstance.gridLayer = null
+pmInstance.map = {}
+resFalse = pmInstance.ensureLayersInitialized()
+pmInstance.map = originalMap
+resTrue = pmInstance.ensureLayersInitialized()
+
+Expected Behavior:
+Res False is equal to false.
+Res True is equal to true.
+Pm Instance Polygon Layer is null.
+Pm Instance Grid Layer is null.
+
+Actual Observations:
+resFalse = false
+resTrue = true
+pmInstance.polygonLayer: not null
+pmInstance.gridLayer: not null
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(addLayer).toHaveBeenCalled();
+expect(featureGroup).toHaveBeenCalled();
+expect(getLeafletMap).toHaveBeenCalled();
+// JSDOM verification:
+expect(resFalse).toBe(false);
+expect(resTrue).toBe(true);
+expect(pmInstance.polygonLayer).not.toBeNull();
+expect(pmInstance.gridLayer).not.toBeNull();
+
+Console Logs:
+[INFO] Jest executed test in 12ms
+[PASS] resFalse = false
+[PASS] resTrue = true
+[PASS] pmInstance.polygonLayer: not null
+[PASS] pmInstance.gridLayer: not null
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

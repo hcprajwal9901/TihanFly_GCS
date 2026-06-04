@@ -11,10 +11,10 @@ Test Case Title     : should handle failed complete message, update status and s
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -51,7 +51,7 @@ expect(document.getElementById('radio-status-bar').textContent).toContain('Radio
 expect(document.body.querySelector('#mp-calib-popup-overlay')).toBeNull();
 
 Console Logs:
-[INFO] Jest executed test in 93ms
+[INFO] Jest executed test in 42ms
 [PASS] overlay: truthy
 [PASS] document.getElementById('radio-status-bar').textContent contains 'Radio calibration failed'
 [PASS] document.body.querySelector('#mp-calib-popup-overlay'): null

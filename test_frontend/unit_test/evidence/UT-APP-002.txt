@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-APP-002
 Requirement ID      : REQ-SYS-002
 Source File         : app.js
-Target Function     : haversineDistance() [Line 92]
+Target Function     : initializeApplication() [Line 26]
 Test Category       : Positive / Functional
-Test Case Title     : should calculate accurate physical distances between distinct coordinates
+Test Case Title     : should retry waypoint manager integration if not initially ready
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,35 +22,31 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-lat1: String, lon1: String, lat2: String, lon2: String | Simulated: dist = global.haversineDistance(17.3850, 78.4867, 17.4399, 78.4983)
+savedManager = window.WaypointManager
+delete window.WaypointManager
+global.loadScript('js/app.js')
+jest.advanceTimersByTime(1100)
+window.WaypointManager = savedManager
+jest.advanceTimersByTime(200)
 
 Expected Behavior:
-Verify dist satisfies toBeGreaterThan(6000).
-Verify dist satisfies toBeLessThan(6300).
+Verify window.flightControls.onTakeoff satisfies toHaveBeenCalled().
 
 Actual Observations:
-dist > 6000
-dist < 6300
+window.flightControls.onTakeoff: called
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(atan2).toHaveBeenCalled();
-expect(cos).toHaveBeenCalled();
-expect(sin).toHaveBeenCalled();
-expect(sqrt).toHaveBeenCalled();
-// JSDOM verification:
-expect(dist).toBeGreaterThan(6000);
-expect(dist).toBeLessThan(6300);
+expect(window.flightControls.onTakeoff).toHaveBeenCalled();
 
 Console Logs:
-[INFO] Jest executed test in 7ms
-[PASS] dist > 6000
-[PASS] dist < 6300
+[INFO] Jest executed test in 56ms
+[PASS] window.flightControls.onTakeoff: called
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

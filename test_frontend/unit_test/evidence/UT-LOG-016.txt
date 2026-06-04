@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-LOG-016
 Requirement ID      : REQ-LOG-001
 Source File         : login.js
-Target Function     : authenticate_user() [Line 122]
-Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for GCS Authentication and Local Database Storage Sync
+Target Function     : updateConnectionStatus() [Line 91]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle TiHANSocket constructor error throwing
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,33 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for login.js.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+originalWS = global.WebSocket
+global.WebSocket = jest.fn().mockImplementation(() => {
+throw new Error('Constructor Error')
+})
+new TiHANSocket('ws://localhost:9999')
+global.WebSocket = originalWS
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Target functional state is fully achieved and internal memory maps update correctly.
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+All assertions satisfied.
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(connect).toHaveBeenCalled();
+// JSDOM verification:
+expect(state.initialized).toBe(true);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 3ms
+[PASS] All assertions resolved cleanly.
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

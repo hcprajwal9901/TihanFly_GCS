@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-MV-014
 Requirement ID      : REQ-SYS-002
 Source File         : multi-vehicle.js
-Target Function     : setSelectedSysId() [Line 108]
-Test Category       : Wrong Value
-Test Case Title     : should reject incorrect string format payloads and log mismatch warning for Component Layout Initialization and DOM Controls Validation
+Target Function     : handleMvMessage() [Line 456]
+Test Category       : Negative / Robustness
+Test Case Title     : should cover DOMContentLoaded, legacy select changes, and handleMvMessage ack failures
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,42 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Type safety check wrappers active.
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.setValue('NOT_A_NUMBER')
+msg: String | Simulated: document.dispatchEvent(new Event('DOMContentLoaded'))
+select = document.getElementById('vehicleSelector')
+select.innerHTML = '<option value="1">1</option><option value="2">2</option>'
+select.value = '2'
+select.dispatchEvent(new Event('change'))
+window.openConnectionManager()
+window._mvHandleMessage({
+})
+statusText = document.getElementById('mvConnStatus')
+window._mvHandleMessage({
+})
 
 Expected Behavior:
-Result is equal to false.
+Window Selected Sys Id is equal to 2.
+Status Text displays '✗ Could not resolve hostname'.
 
 Actual Observations:
-result = false
+window.selectedSysId = 2
+statusText.textContent = '✗ Could not resolve hostname'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(_renderLinkList).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.selectedSysId).toBe(2);
+expect(statusText.textContent).toBe('✗ Could not resolve hostname');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 17ms
+[PASS] window.selectedSysId = 2
+[PASS] statusText.textContent = '✗ Could not resolve hostname'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

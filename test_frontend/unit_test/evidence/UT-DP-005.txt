@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-DP-005
 Requirement ID      : REQ-SYS-002
 Source File         : data-persistence.js
-Target Function     : authenticate_user() [Line 45]
+Target Function     : initializeDataPersistence() [Line 748]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for GCS Authentication and Local Database Storage Sync
+Test Case Title     : should parse stored data and trigger step-by-step restoration callbacks
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,77 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for data-persistence.js.
+Mock Strategy: Live execution.. Dependencies: localStorage initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+window.weatherDashboard.isVisible = false
+testProfile = {
+global.localStorage.setItem('mission_flight_data_complete', JSON.stringify(testProfile))
+success = window.DataPersistence.restore()
+for (let i = 0; i < 30; i++) {
+jest.advanceTimersByTime(100)
+await Promise.resolve()
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Success is equal to true.
+Verify window.tmap.map.setView satisfies toHaveBeenCalledWith([17.443, 78.377], 18).
+Verify window.WaypointManager.setHomePosition satisfies toHaveBeenCalledWith(17.443, 78.377).
+Verify window.PolygonManager.clearPolygon satisfies toHaveBeenCalled().
+Verify window.compassEnhanced.show satisfies toHaveBeenCalled().
+Verify window.compassEnhanced.setHeading satisfies toHaveBeenCalledWith(120).
+Verify window.weatherDashboard.show satisfies toHaveBeenCalled().
+Verify window.weatherDashboard.fetchWeather satisfies toHaveBeenCalledWith(17.443, 78.377).
+Verify window.CommandEditor.switchTab satisfies toHaveBeenCalledWith('survey').
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+success = true
+window.tmap.map.setView: called with [17.443, 78.377], 18
+window.WaypointManager.setHomePosition: called with 17.443, 78.377
+window.PolygonManager.clearPolygon: called
+window.compassEnhanced.show: called
+window.compassEnhanced.setHeading: called with 120
+window.weatherDashboard.show: called
+window.weatherDashboard.fetchWeather: called with 17.443, 78.377
+window.CommandEditor.switchTab: called with 'survey'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(activatePlanModeInstantly).toHaveBeenCalled();
+expect(finalizePlanModeRestoration).toHaveBeenCalled();
+expect(parse).toHaveBeenCalled();
+expect(restoreCommandEditorState).toHaveBeenCalled();
+expect(restoreCompassState).toHaveBeenCalled();
+expect(restoreHomePosition).toHaveBeenCalled();
+expect(restoreMapPosition).toHaveBeenCalled();
+expect(restorePolygon).toHaveBeenCalled();
+expect(restoreWaypointsFixed).toHaveBeenCalled();
+expect(restoreWeatherState).toHaveBeenCalled();
+expect(then).toHaveBeenCalled();
+expect(waitForEverything).toHaveBeenCalled();
+// JSDOM verification:
+expect(success).toBe(true);
+expect(window.tmap.map.setView).toHaveBeenCalledWith([17.443, 78.377], 18);
+expect(window.WaypointManager.setHomePosition).toHaveBeenCalledWith(17.443, 78.377);
+expect(window.PolygonManager.clearPolygon).toHaveBeenCalled();
+expect(window.compassEnhanced.show).toHaveBeenCalled();
+expect(window.compassEnhanced.setHeading).toHaveBeenCalledWith(120);
+expect(window.weatherDashboard.show).toHaveBeenCalled();
+expect(window.weatherDashboard.fetchWeather).toHaveBeenCalledWith(17.443, 78.377);
+expect(window.CommandEditor.switchTab).toHaveBeenCalledWith('survey');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 22ms
+[PASS] success = true
+[PASS] window.tmap.map.setView: called with [17.443, 78.377], 18
+[PASS] window.WaypointManager.setHomePosition: called with 17.443, 78.377
+[PASS] window.PolygonManager.clearPolygon: called
+[PASS] window.compassEnhanced.show: called
+[PASS] window.compassEnhanced.setHeading: called with 120
+[PASS] window.weatherDashboard.show: called
+[PASS] window.weatherDashboard.fetchWeather: called with 17.443, 78.377
+[PASS] window.CommandEditor.switchTab: called with 'survey'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

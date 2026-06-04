@@ -5,16 +5,16 @@ Test Case ID        : UT-PFC-013
 Requirement ID      : REQ-NAV-001
 Source File         : plan-flight-core.js
 Target Function     : initializePlanFlightMode() [Line 101]
-Test Category       : Boundary Value
-Test Case Title     : should enforce parameter boundary range clipping for minimum and maximum limits of Component Layout Initialization and DOM Controls Validation
+Test Category       : Negative / Robustness
+Test Case Title     : should handle network timeout and disconnect exceptions gracefully for Component Layout Initialization and DOM Controls Validation
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,26 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Autopilot parameter boundary rules loaded.
+JSDOM context initialized. WebSocket state simulation set to OFFLINE.
 
 Test Inputs:
 component = new GCSComponent()
-component.setLimits(1, 100)
 
 Expected Behavior:
-Component Set Value(101) is equal to 100.
-Component Set Value(0) is equal to 1.
+Verify () => component.load(null) satisfies toThrow().
 
 Actual Observations:
-component.setValue(101) = 100
-component.setValue(0) = 1
+() => component.load(null): throws
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.setValue(101)).toBe(100);
-expect(component.setValue(0)).toBe(1);
+expect(() => component.load(null)).toThrow();
 
 Console Logs:
 [INFO] Jest executed test in 14ms
-[PASS] component.setValue(101) = 100
-[PASS] component.setValue(0) = 1
+[PASS] () => component.load(null): throws
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PM-015
 Requirement ID      : REQ-NAV-001
 Source File         : polygon-manager.js
-Target Function     : initializePolygonManager() [Line 115]
-Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Wrong Value
+Test Case Title     : should stringify coordinates and create downloadable JSON element
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,43 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for polygon-manager.js.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-map = new TMap('map-element', [17.385, 78.486], 15, false)
-marker = map.addMarker(17.385, 78.486, true)
+global.URL.createObjectURL = jest.fn().mockReturnValue('blob:http://localhost/test-uuid')
+global.URL.revokeObjectURL = jest.fn()
+pmInstance.polygonPoints = [
+window.L.latLng(17.600, 78.120),
+window.L.latLng(17.602, 78.120),
+window.L.latLng(17.601, 78.122)
+pmInstance.currentPolygon = window.L.polygon(pmInstance.polygonPoints)
+clickSpy = jest.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
+pmInstance.exportPolygonData()
+clickSpy.mockRestore()
 
 Expected Behavior:
-Map Get Marker Count() is equal to 1.
-Verify marker.getLatLng().lat satisfies toBeCloseTo(17.385).
+Verify global.URL.createObjectURL satisfies toHaveBeenCalled().
+Click action triggered.
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('✅ Polygon exported').
 
 Actual Observations:
-map.getMarkerCount() = 1
-marker.getLatLng().lat = 17.385
+global.URL.createObjectURL: called
+clickSpy: called
+window.MsgConsole.success: called with '✅ Polygon exported'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(map.getMarkerCount()).toBe(1);
-expect(marker.getLatLng().lat).toBeCloseTo(17.385);
+expect(global.URL.createObjectURL).toHaveBeenCalled();
+expect(clickSpy).toHaveBeenCalled();
+expect(window.MsgConsole.success).toHaveBeenCalledWith('✅ Polygon exported');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] map.getMarkerCount() = 1
-[PASS] marker.getLatLng().lat = 17.385
+[INFO] Jest executed test in 6ms
+[PASS] global.URL.createObjectURL: called
+[PASS] clickSpy: called
+[PASS] window.MsgConsole.success: called with '✅ Polygon exported'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

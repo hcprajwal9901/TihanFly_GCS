@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-APP-010
 Requirement ID      : REQ-SYS-002
 Source File         : app.js
-Target Function     : initializeApplication() [Line 80]
-Test Category       : Boundary Value
-Test Case Title     : should enforce parameter boundary range clipping for minimum and maximum limits of Component Layout Initialization and DOM Controls Validation
+Target Function     : initializeApplication() [Line 26]
+Test Category       : Wrong Value
+Test Case Title     : should update GPS lock on receiving gps message type
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,45 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Autopilot parameter boundary rules loaded.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-component.setLimits(1, 100)
+wsMockInstance.readyState = 1; // Open
+wsMockInstance.onopen()
+gpsMessage = {
+wsMockInstance.onmessage(gpsMessage)
 
 Expected Behavior:
-Component Set Value(101) is equal to 100.
-Component Set Value(0) is equal to 1.
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('🔌 Backend connected').
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith(expect.stringContaining('Map locked to drone GPS')).
+Global Compass Get Telemetry() Latitude is equal to 17.601722.
+Global Compass Get Telemetry() Satellites is equal to 9.
+Global Compass Get Heading() is equal to 90.
 
 Actual Observations:
-component.setValue(101) = 100
-component.setValue(0) = 1
+window.MsgConsole.success: called with '🔌 Backend connected'
+window.MsgConsole.success: called with expect.stringContaining('Map locked to drone GPS')
+global.compass.getTelemetry().latitude = 17.601722
+global.compass.getTelemetry().satellites = 9
+global.compass.getHeading() = 90
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.setValue(101)).toBe(100);
-expect(component.setValue(0)).toBe(1);
+expect(window.MsgConsole.success).toHaveBeenCalledWith('🔌 Backend connected');
+expect(window.MsgConsole.success).toHaveBeenCalledWith(expect.stringContaining('Map locked to drone GPS'));
+expect(global.compass.getTelemetry().latitude).toBe(17.601722);
+expect(global.compass.getTelemetry().satellites).toBe(9);
+expect(global.compass.getHeading()).toBe(90);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.setValue(101) = 100
-[PASS] component.setValue(0) = 1
+[INFO] Jest executed test in 29ms
+[PASS] window.MsgConsole.success: called with '🔌 Backend connected'
+[PASS] window.MsgConsole.success: called with expect.stringContaining('Map locked to drone GPS')
+[PASS] global.compass.getTelemetry().latitude = 17.601722
+[PASS] global.compass.getTelemetry().satellites = 9
+[PASS] global.compass.getHeading() = 90
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

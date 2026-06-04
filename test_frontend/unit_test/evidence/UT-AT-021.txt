@@ -1,0 +1,77 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-021
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger apBackBtn and restore window layouts
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+cls: String, fn: String, ico: String, lbl: String, id: Number, i18Key: String | Simulated: window.DropdownStrip = { showPlanStrip: jest.fn() }
+cmdPanel = document.createElement('div')
+cmdPanel.id = 'commandEditorPanel'
+document.body.appendChild(cmdPanel)
+window.AnalyzeToolsPanel.openTool('log-download')
+termWin = document.createElement('div')
+termWin.id = 'atw-mavlink-console'
+termWin.innerHTML = '<div id="mavTerm"></div><input id="mavIn" />'
+document.body.appendChild(termWin)
+window.AnalyzeToolsPanel._qcmd('free')
+termWin.remove()
+window.AnalyzeToolsPanel.showAnalyzePanel()
+backBtn = document.getElementById('apBackBtn')
+backBtn.click()
+cmdPanel.remove()
+
+Expected Behavior:
+Window Analyze Tools Panel Is Open() is equal to false.
+Window Analyze Tools Panel Is Open() is equal to true.
+Mav Term exists.
+Verify window.DropdownStrip.showPlanStrip satisfies toHaveBeenCalled().
+
+Actual Observations:
+window.AnalyzeToolsPanel.isOpen() = false
+window.AnalyzeToolsPanel.isOpen() = true
+document.getElementById('mavTerm').innerHTML contains 'free'
+window.DropdownStrip.showPlanStrip: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = B(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(window.AnalyzeToolsPanel.isOpen()).toBe(false);
+expect(window.AnalyzeToolsPanel.isOpen()).toBe(true);
+expect(document.getElementById('mavTerm').innerHTML).toContain('free');
+expect(window.DropdownStrip.showPlanStrip).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 10ms
+[PASS] window.AnalyzeToolsPanel.isOpen() = false
+[PASS] window.AnalyzeToolsPanel.isOpen() = true
+[PASS] document.getElementById('mavTerm').innerHTML contains 'free'
+[PASS] window.DropdownStrip.showPlanStrip: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PF-016
 Requirement ID      : REQ-TUNE-001
 Source File         : param-full.js
-Target Function     : parseOptionsFromRange() [Line 122]
-Test Category       : Edge Case
-Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : wsSend() [Line 883]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle wsSend failure modes and status toasts
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,50 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Input buffer references set to null.
+Mock Strategy: Mock external boundaries: Mock WebSocket connections.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.configure(undefined)
+obj: String | Simulated: window.SwUtil.toast = jest.fn()
+await initPanel()
+window.dispatchEvent(new CustomEvent('param_file_saved', {
+}))
+window.dispatchEvent(new CustomEvent('param_file_loaded', {
+}))
+window.dispatchEvent(new CustomEvent('param_error', {
+}))
+delete window.ws
+window.dispatchEvent(new CustomEvent('ws_connected')); // executes wsSend but does not throw
 
 Expected Behavior:
-Result is equal to false.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('Custom save ok').
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('Custom load ok').
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('⚠ Custom error occurred').
 
 Actual Observations:
-result = false
+window.SwUtil.toast: called with 'Custom save ok'
+window.SwUtil.toast: called with 'Custom load ok'
+window.SwUtil.toast: called with '⚠ Custom error occurred'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(_updateDroneBadge).toHaveBeenCalled();
+expect(primary).toHaveBeenCalled();
+expect(send).toHaveBeenCalled();
+expect(stringify).toHaveBeenCalled();
+expect(warn).toHaveBeenCalled();
+expect(wsMock.send).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.SwUtil.toast).toHaveBeenCalledWith('Custom save ok');
+expect(window.SwUtil.toast).toHaveBeenCalledWith('Custom load ok');
+expect(window.SwUtil.toast).toHaveBeenCalledWith('⚠ Custom error occurred');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 32ms
+[PASS] window.SwUtil.toast: called with 'Custom save ok'
+[PASS] window.SwUtil.toast: called with 'Custom load ok'
+[PASS] window.SwUtil.toast: called with '⚠ Custom error occurred'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PFC-010
 Requirement ID      : REQ-NAV-001
 Source File         : plan-flight-core.js
-Target Function     : initializePlanFlightMode() [Line 80]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : initializePlanFlightMode() [Line 208]
+Test Category       : Positive / Functional
+Test Case Title     : should handle missing CommandEditor in timeout callback
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,34 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
+consoleErrorSpy = jest.spyOn(console, 'error')
+originalCmdEditor = window.CommandEditor
+delete window.CommandEditor
+window.PlanFlight.enter()
+jest.advanceTimersByTime(500)
+window.CommandEditor = originalCmdEditor
+consoleErrorSpy.mockRestore()
 
 Expected Behavior:
-Verify () => component.load(null) satisfies toThrow().
+Verify consoleErrorSpy satisfies toHaveBeenCalledWith('❌ window.CommandEditor not found!').
 
 Actual Observations:
-() => component.load(null): throws
+consoleErrorSpy: called with '❌ window.CommandEditor not found!'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => component.load(null)).toThrow();
+expect(getComputedStyle).toHaveBeenCalled();
+// JSDOM verification:
+expect(consoleErrorSpy).toHaveBeenCalledWith('❌ window.CommandEditor not found!');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] () => component.load(null): throws
+[INFO] Jest executed test in 33ms
+[PASS] consoleErrorSpy: called with '❌ window.CommandEditor not found!'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

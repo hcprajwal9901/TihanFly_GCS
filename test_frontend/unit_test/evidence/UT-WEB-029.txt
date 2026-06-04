@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-029
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : sendCommand() [Line 876]
+Test Category       : Positive / Functional
+Test Case Title     : should drop command and return false if sendCommand called when closed
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+command: String, params = {}: String | Simulated: window.ws = null
+sent = window.sendCommand('TAKEOFF', { altitude: 10 })
+
+Expected Behavior:
+Sent is equal to false.
+Error logged to console.
+
+Actual Observations:
+sent = false
+window.MsgConsole.error: called with 'Not connected to backend'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(sendCommand).toBeDefined();
+// JSDOM verification:
+expect(sent).toBe(false);
+expect(window.MsgConsole.error).toHaveBeenCalledWith('Not connected to backend');
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] sent = false
+[PASS] window.MsgConsole.error: called with 'Not connected to backend'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

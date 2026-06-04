@@ -6,15 +6,15 @@ Requirement ID      : REQ-NAV-001
 Source File         : polygon-manager.js
 Target Function     : tryInitialize() [Line 57]
 Test Category       : Positive / Functional
-Test Case Title     : should cancel drawing and clear preview markers when pressing Escape key
+Test Case Title     : should configure map cursors and capture map clicks during drawing mode
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -26,34 +26,37 @@ JSDOM context initialized via setup.js.
 
 Test Inputs:
 pmInstance.startDrawing()
-clickEvent = { latlng: { lat: 17.601, lng: 78.125, distanceTo: () => 0 } }
+leafletMap = pmInstance.getLeafletMap()
+clickEvent = { latlng: window.L.latLng(17.601, 78.125) }
 mapEvents['click'](clickEvent)
-escEvent = new KeyboardEvent('keydown', { key: 'Escape' })
-document.dispatchEvent(escEvent)
 
 Expected Behavior:
+Leaflet Map Get Container() Style Cursor is equal to 'crosshair'.
+Pm Instance Is Drawing is equal to true.
 Pm Instance Polygon Points Length is equal to 1.
-Pm Instance Is Drawing is equal to false.
-Pm Instance Polygon Points Length is equal to 0.
+Verify pmInstance.polygonPoints[0] satisfies toMatchObject({ lat: 17.601, lng: 78.125 }).
 
 Actual Observations:
+leafletMap.getContainer().style.cursor = 'crosshair'
+pmInstance.isDrawing = true
 pmInstance.polygonPoints.length = 1
-pmInstance.isDrawing = false
-pmInstance.polygonPoints.length = 0
+pmInstance.polygonPoints[0]: toMatchObject({ lat: 17.601, lng: 78.125 })
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
+expect(leafletMap.getContainer().style.cursor).toBe('crosshair');
+expect(pmInstance.isDrawing).toBe(true);
 expect(pmInstance.polygonPoints.length).toBe(1);
-expect(pmInstance.isDrawing).toBe(false);
-expect(pmInstance.polygonPoints.length).toBe(0);
+expect(pmInstance.polygonPoints[0]).toMatchObject({ lat: 17.601, lng: 78.125 });
 
 Console Logs:
-[INFO] Jest executed test in 3ms
+[INFO] Jest executed test in 7ms
+[PASS] leafletMap.getContainer().style.cursor = 'crosshair'
+[PASS] pmInstance.isDrawing = true
 [PASS] pmInstance.polygonPoints.length = 1
-[PASS] pmInstance.isDrawing = false
-[PASS] pmInstance.polygonPoints.length = 0
+[PASS] pmInstance.polygonPoints[0]: toMatchObject({ lat: 17.601, lng: 78.125 })
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-DP-010
 Requirement ID      : REQ-SYS-002
 Source File         : data-persistence.js
-Target Function     : authenticate_user() [Line 80]
+Target Function     : initializeDataPersistence() [Line 748]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for GCS Authentication and Local Database Storage Sync
+Test Case Title     : should handle data clearance and return indicators
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,46 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for data-persistence.js.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+testProfile = { version: '5.0' }
+global.localStorage.setItem('mission_flight_data_complete', JSON.stringify(testProfile))
+info = window.DataPersistence.getInfo()
+cleared = window.DataPersistence.clear()
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Window Data Persistence Has Saved Data() is equal to true.
+Info Version is equal to '5.0'.
+Cleared is equal to true.
+Window Data Persistence Has Saved Data() is equal to false.
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+window.DataPersistence.hasSavedData() = true
+info.version = '5.0'
+cleared = true
+window.DataPersistence.hasSavedData() = false
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(Loaded).toHaveBeenCalled();
+expect(getSavedDataInfo).toHaveBeenCalled();
+expect(globally).toHaveBeenCalled();
+expect(initializeDataPersistence).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.DataPersistence.hasSavedData()).toBe(true);
+expect(info.version).toBe('5.0');
+expect(cleared).toBe(true);
+expect(window.DataPersistence.hasSavedData()).toBe(false);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 7ms
+[PASS] window.DataPersistence.hasSavedData() = true
+[PASS] info.version = '5.0'
+[PASS] cleared = true
+[PASS] window.DataPersistence.hasSavedData() = false
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

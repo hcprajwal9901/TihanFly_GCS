@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-I-009
 Requirement ID      : REQ-SYS-001
 Source File         : i18n.js
-Target Function     : update_system_settings() [Line 73]
-Test Category       : Boundary Value
-Test Case Title     : should enforce parameter boundary range clipping for minimum and maximum limits of System Configurations and Multi-language Translation Maps
+Target Function     : t() [Line 250]
+Test Category       : Positive / Functional
+Test Case Title     : should warn and skip dropdown build if langSelectorWrap is missing
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,35 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Autopilot parameter boundary rules loaded.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-component.setLimits(1, 100)
+key: String | Simulated: spyWarn = jest.spyOn(console, 'warn').mockImplementation(() => {})
+spyGetElementById = jest.spyOn(document, 'getElementById').mockReturnValue(null)
+document.body.innerHTML = `
+global.loadScript('js/i18n.js')
+)
+spyWarn.mockRestore()
+spyGetElementById.mockRestore()
 
 Expected Behavior:
-Component Set Value(101) is equal to 100.
-Component Set Value(0) is equal to 1.
+Verify spyWarn satisfies toHaveBeenCalledWith().
 
 Actual Observations:
-component.setValue(101) = 100
-component.setValue(0) = 1
+spyWarn: toHaveBeenCalledWith
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.setValue(101)).toBe(100);
-expect(component.setValue(0)).toBe(1);
+const res = t(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(spyWarn).toHaveBeenCalledWith(
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.setValue(101) = 100
-[PASS] component.setValue(0) = 1
+[INFO] Jest executed test in 139ms
+[PASS] spyWarn: toHaveBeenCalledWith
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

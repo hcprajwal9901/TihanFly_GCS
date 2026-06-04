@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-APP-024
+Requirement ID      : REQ-SYS-002
+Source File         : app.js
+Target Function     : initializeApplication() [Line 26]
+Test Category       : Positive / Functional
+Test Case Title     : should test map click handler and weather integration routing
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: waypointManager initialized in setup.
+
+Test Inputs:
+window.WaypointManager.currentMode = 'ADD_WAYPOINT'
+global.tmap.clickCallback(17.6, 78.1, {})
+window.WaypointManager.currentMode = null
+window.PlanFlight.isActive = () => true
+global.tmap.clickCallback(17.6, 78.1, {})
+window.PlanFlight.isActive = () => false
+global.tmap.clickCallback(17.6, 78.1, {})
+
+Expected Behavior:
+Click action triggered.
+Verify window.WaypointManager.handleMapClick satisfies toHaveBeenCalledWith(17.6, 78.1, {}).
+Verify window.weatherDashboard.onMapClick satisfies toHaveBeenCalledWith(17.6, 78.1).
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith('Weather: 17.6000, 78.1000 ').
+
+Actual Observations:
+global.tmap.clickCallback: defined
+window.WaypointManager.handleMapClick: called with 17.6, 78.1, {}
+window.weatherDashboard.onMapClick: called with 17.6, 78.1
+window.MsgConsole.info: called with 'Weather: 17.6000, 78.1000 '
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(startAddingWaypoint).toHaveBeenCalled();
+// JSDOM verification:
+expect(global.tmap.clickCallback).toBeDefined();
+expect(window.WaypointManager.handleMapClick).toHaveBeenCalledWith(17.6, 78.1, {});
+expect(window.weatherDashboard.onMapClick).toHaveBeenCalledWith(17.6, 78.1);
+expect(window.MsgConsole.info).toHaveBeenCalledWith('Weather: 17.6000, 78.1000 ');
+
+Console Logs:
+[INFO] Jest executed test in 20ms
+[PASS] global.tmap.clickCallback: defined
+[PASS] window.WaypointManager.handleMapClick: called with 17.6, 78.1, {}
+[PASS] window.weatherDashboard.onMapClick: called with 17.6, 78.1
+[PASS] window.MsgConsole.info: called with 'Weather: 17.6000, 78.1000 '
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

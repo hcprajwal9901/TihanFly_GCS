@@ -1,0 +1,63 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-021
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Positive / Functional
+Test Case Title     : should process Mission ACKs
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.initWebSocket()
+ws = wsInstances[0]
+window.handleMissionAck = jest.fn()
+window.handleMissionDownloadAck = jest.fn()
+window.handleMissionClearAck = jest.fn()
+ws.onmessage({ data: JSON.stringify({ type: 'mission_ack', seq: 1 }) })
+ws.onmessage({ data: JSON.stringify({ type: 'mission_download_ack', count: 5 }) })
+ws.onmessage({ data: JSON.stringify({ type: 'mission_clear_ack' }) })
+
+Expected Behavior:
+Verify window.handleMissionAck satisfies toHaveBeenCalled().
+Verify window.handleMissionDownloadAck satisfies toHaveBeenCalled().
+Verify window.handleMissionClearAck satisfies toHaveBeenCalled().
+
+Actual Observations:
+window.handleMissionAck: called
+window.handleMissionDownloadAck: called
+window.handleMissionClearAck: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.handleMissionAck).toHaveBeenCalled();
+expect(window.handleMissionDownloadAck).toHaveBeenCalled();
+expect(window.handleMissionClearAck).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 9ms
+[PASS] window.handleMissionAck: called
+[PASS] window.handleMissionDownloadAck: called
+[PASS] window.handleMissionClearAck: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

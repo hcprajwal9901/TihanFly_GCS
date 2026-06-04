@@ -1,0 +1,69 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PF-019
+Requirement ID      : REQ-TUNE-001
+Source File         : param-full.js
+Target Function     : parseOptionsFromRange() [Line 788]
+Test Category       : Negative / Robustness
+Test Case Title     : should test refresh button, prompt cancels, and write toast errors
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+await initPanel()
+window.dispatchEvent(new CustomEvent('param_all', {
+}))
+window.ws.send.mockClear()
+refreshBtn = document.getElementById('fpRefreshBtn')
+refreshBtn.click()
+)
+window.prompt = jest.fn().mockReturnValue(null)
+window.ws.send.mockClear()
+loadBtn = document.getElementById('fpLoadBtn')
+loadBtn.click()
+window.SwUtil.toast = jest.fn()
+writeBtn = document.getElementById('fpWriteBtn')
+writeBtn.click()
+
+Expected Behavior:
+WebSocket notification sent.
+WebSocket notification sent.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('No changed parameters').
+
+Actual Observations:
+window.ws.send: toHaveBeenCalledWith
+window.ws.send: not called
+window.SwUtil.toast: called with 'No changed parameters'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.ws.send).toHaveBeenCalledWith(
+expect(window.ws.send).not.toHaveBeenCalled();
+expect(window.SwUtil.toast).toHaveBeenCalledWith('No changed parameters');
+
+Console Logs:
+[INFO] Jest executed test in 89ms
+[PASS] window.ws.send: toHaveBeenCalledWith
+[PASS] window.ws.send: not called
+[PASS] window.SwUtil.toast: called with 'No changed parameters'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

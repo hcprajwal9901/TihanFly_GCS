@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PS-009
 Requirement ID      : REQ-TUNE-001
 Source File         : param-switch.js
-Target Function     : connectWebSocket() [Line 73]
+Target Function     : connectWebSocket() [Line 232]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Test Case Title     : should retry connecting WebSocket on close event after timeout
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,43 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for param-switch.js.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+spyWarn = jest.spyOn(console, 'warn').mockImplementation(() => {})
+mockPrivateWs.readyState = global.WebSocket.CLOSED
+mockPrivateWs.onclose()
+)
+jest.advanceTimersByTime(3000)
+spyWarn.mockRestore()
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Mock Private Ws is true.
+Verify spyWarn satisfies toHaveBeenCalledWith().
+Sw Footer Info exists.
+Global Web Socket Instances Length is equal to 2.
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+mockPrivateWs: truthy
+spyWarn: toHaveBeenCalledWith
+document.getElementById('swFooterInfo').textContent contains 'Backend disconnected'
+global.WebSocket.instances.length = 2
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(mockPrivateWs).toBeTruthy();
+expect(spyWarn).toHaveBeenCalledWith(
+expect(document.getElementById('swFooterInfo').textContent).toContain('Backend disconnected');
+expect(global.WebSocket.instances.length).toBe(2);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 595ms
+[PASS] mockPrivateWs: truthy
+[PASS] spyWarn: toHaveBeenCalledWith
+[PASS] document.getElementById('swFooterInfo').textContent contains 'Backend disconnected'
+[PASS] global.WebSocket.instances.length = 2
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

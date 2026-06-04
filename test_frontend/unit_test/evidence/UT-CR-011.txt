@@ -11,10 +11,10 @@ Test Case Title     : should send completion command and trigger 2-second fallba
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -62,7 +62,7 @@ expect(overlay.textContent).toContain('CH1');
 expect(overlay.textContent).toContain('1100');
 
 Console Logs:
-[INFO] Jest executed test in 85ms
+[INFO] Jest executed test in 29ms
 [PASS] mockSocket.send: toHaveBeenCalledWith
 [PASS] btn.textContent = 'Calibrate Radio'
 [PASS] btn.classList.contains('running') = false

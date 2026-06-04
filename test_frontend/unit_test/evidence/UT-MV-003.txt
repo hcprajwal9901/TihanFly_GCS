@@ -11,10 +11,10 @@ Test Case Title     : should route sendToSelected messages correctly
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -64,7 +64,7 @@ expect(window.ws.send).toHaveBeenNthCalledWith(2, JSON.stringify({ type: 'disarm
 expect(window.ws.send).toHaveBeenNthCalledWith(3, JSON.stringify({ type: 'disarm', sysid: 3 }));
 
 Console Logs:
-[INFO] Jest executed test in 13ms
+[INFO] Jest executed test in 7ms
 [PASS] window.ws.send: toHaveBeenCalledWith
 [PASS] window.ws.send: 3 call(s)
 [PASS] window.ws.send: toHaveBeenNthCalledWith(1, JSON.stringify({ type: 'disarm', sysid: 1 }))

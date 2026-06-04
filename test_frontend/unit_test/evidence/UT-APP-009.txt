@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-APP-009
 Requirement ID      : REQ-SYS-002
 Source File         : app.js
-Target Function     : initializeApplication() [Line 73]
-Test Category       : Wrong Value
-Test Case Title     : should reject incorrect string format payloads and log mismatch warning for Component Layout Initialization and DOM Controls Validation
+Target Function     : initializeVideoMaximize() [Line 461]
+Test Category       : Boundary Value
+Test Case Title     : should restore maximized video if minimized map container is clicked
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,47 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Type safety check wrappers active.
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.setValue('NOT_A_NUMBER')
+global.initializeVideoMaximize()
+window.VideoMaximize.maximize()
+mapContainer = document.getElementById('map')
+mapContainer.classList.add('minimized')
+clickEvent = new MouseEvent('click', { bubbles: true, cancelable: true })
+mapContainer.dispatchEvent(clickEvent)
 
 Expected Behavior:
-Result is equal to false.
+Window Video Maximize Is Maximized() is equal to true.
+Window Video Maximize Is Maximized() is equal to false.
 
 Actual Observations:
-result = false
+window.VideoMaximize.isMaximized() = true
+window.VideoMaximize.isMaximized() = false
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(_iconMaximize).toHaveBeenCalled();
+expect(_iconMinimize).toHaveBeenCalled();
+expect(addEventListener).toHaveBeenCalled();
+expect(bezier).toHaveBeenCalled();
+expect(contains).toHaveBeenCalled();
+expect(eachLayer).toHaveBeenCalled();
+expect(invalidateSize).toHaveBeenCalled();
+expect(preventDefault).toHaveBeenCalled();
+expect(redraw).toHaveBeenCalled();
+expect(stopPropagation).toHaveBeenCalled();
+expect(toggleVideoMaximize).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.VideoMaximize.isMaximized()).toBe(true);
+expect(window.VideoMaximize.isMaximized()).toBe(false);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 50ms
+[PASS] window.VideoMaximize.isMaximized() = true
+[PASS] window.VideoMaximize.isMaximized() = false
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

@@ -73,6 +73,7 @@ describe('Log Download Panel Behavioral Test Suite', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.clearAllTimers();
 
     // Neutralize setup.js aggressive DOM guards for clean native DOM querying
     document.querySelectorAll = (sel) => Array.from(document.body.querySelectorAll(sel));
@@ -278,6 +279,80 @@ describe('Log Download Panel Behavioral Test Suite', () => {
       // Verify table text updates
       const tbody = document.getElementById('ldTbody');
       expect(tbody.innerHTML).toContain('Logs erased from vehicle.');
+    });
+  });
+
+  describe('Edge Cases & Uncovered Callbacks (Phase 2)', () => {
+    it('should cover Back button click and ldSelAll bulk check toggle', () => {
+      window.LogDownloadPanel.open();
+      expect(document.getElementById('ldWindow').classList.contains('ld-on')).toBe(true);
+      const backBtn = document.getElementById('ldBackBtn');
+      if (backBtn) backBtn.click();
+      expect(document.getElementById('ldWindow').classList.contains('ld-on')).toBe(false);
+
+      // Create checkbox elements to be toggled
+      const tbody = document.getElementById('ldTbody');
+      tbody.innerHTML = `
+        <tr><td><input type="checkbox" class="ld-chk"></td></tr>
+        <tr><td><input type="checkbox" class="ld-chk"></td></tr>
+      `;
+      const selAll = document.getElementById('ldSelAll');
+      selAll.checked = true;
+      selAll.dispatchEvent(new Event('change'));
+
+      const chks = document.querySelectorAll('.ld-chk');
+      expect(chks[0].checked).toBe(true);
+      expect(chks[1].checked).toBe(true);
+    });
+
+    it('should cover setInterval WebSocket re-attachment and timeouts', () => {
+      // Clear any leftover timers and reload the script to get a clean setInterval
+      jest.clearAllTimers();
+      window.ws._ld_listener = false;
+      global.loadScript('js/log-download.js');
+
+      // 1. Re-attachment setInterval
+      jest.advanceTimersByTime(800);
+      expect(window.ws._ld_listener).toBe(true);
+
+      // 2. Scan timeout timeout inside _refreshLogs
+      window.ws.readyState = 1;
+      const refreshBtn = document.getElementById('ldBtnRefresh');
+      refreshBtn.click();
+      expect(document.getElementById('ldTbody').innerHTML).toContain('Requesting logs from drone…');
+      // Advance by 6000ms to trigger scan timeout
+      jest.advanceTimersByTime(6000);
+      expect(document.getElementById('ldTbody').innerHTML).toContain('No logs found on vehicle.');
+
+      // 3. Post-delete logs refresh timeout
+      global.confirm.mockReturnValue(true);
+      const eraseBtn = document.getElementById('ldBtnErase');
+      eraseBtn.click();
+      expect(document.getElementById('ldTbody').innerHTML).toContain('Logs erased from vehicle.');
+      // Advance by 1500ms to trigger refresh callback
+      jest.advanceTimersByTime(1500);
+      expect(document.getElementById('ldTbody').innerHTML).toContain('Requesting logs from drone…');
+
+      // 4. Post-download queue process timeout inside _onLogDone
+      const mockAnchor = { href: '', download: '', click: jest.fn() };
+      const origCreateElement = document.createElement;
+      jest.spyOn(document, 'createElement').mockImplementation((tag) => {
+        if (tag === 'a') return mockAnchor;
+        return origCreateElement.call(document, tag);
+      });
+      jest.spyOn(document.body, 'appendChild').mockImplementation(() => {});
+      jest.spyOn(document.body, 'removeChild').mockImplementation(() => {});
+
+      const doneMsg = { type: 'log_download_done', log_id: 10, data: 'VGZseQ==' };
+      const queueSpy = jest.spyOn(window.LogDownloadPanel, '_processDlQueue');
+      
+      window.LogDownloadPanel._onLogDone(doneMsg);
+      // Advance by 2000ms to trigger post-download queue callback
+      jest.advanceTimersByTime(2000);
+      expect(queueSpy).toHaveBeenCalled();
+
+      document.createElement.mockRestore();
+      queueSpy.mockRestore();
     });
   });
 });

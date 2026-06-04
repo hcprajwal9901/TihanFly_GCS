@@ -11,10 +11,10 @@ Test Case Title     : should apply and regenerate the survey grid on clicking Ap
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -81,7 +81,7 @@ expect(window.MsgConsole.success).toHaveBeenCalledWith('✅ Survey settings appl
 expect(document.body.contains(modal)).toBe(false);
 
 Console Logs:
-[INFO] Jest executed test in 66ms
+[INFO] Jest executed test in 95ms
 [PASS] modal: truthy
 [PASS] window.PolygonManager.surveySettings.altitude = 150
 [PASS] window.PolygonManager.surveySettings.hFov = 110

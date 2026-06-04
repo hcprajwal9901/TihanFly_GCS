@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-I-006
 Requirement ID      : REQ-SYS-001
 Source File         : i18n.js
-Target Function     : update_system_settings() [Line 52]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for System Configurations and Multi-language Translation Maps
+Target Function     : t() [Line 250]
+Test Category       : Positive / Functional
+Test Case Title     : should translate keys using t(key)
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,38 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+Mock Strategy: Mock external boundaries: Mock localStorage cache items.. Dependencies: localStorage initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
+code: String | Simulated: window.i18n.setLang('en')
+window.i18n.setLang('hi')
 
 Expected Behavior:
-Verify () => component.load(null) satisfies toThrow().
+Window I18N T('Status Ready') is equal to 'Ready To Fly'.
+Window I18N T('Nonexistent Key') is equal to 'nonexistent_key'.
+Window I18N T('Status Ready') is equal to 'उड़ान के लिए तैयार'.
 
 Actual Observations:
-() => component.load(null): throws
+window.i18n.t('status.ready') = 'Ready To Fly'
+window.i18n.t('nonexistent_key') = 'nonexistent_key'
+window.i18n.t('status.ready') = 'उड़ान के लिए तैयार'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => component.load(null)).toThrow();
+expect(applyTranslations).toHaveBeenCalled();
+expect(localStorage.setItem).toHaveBeenCalledWith('tihan_lang', expect.any(String));
+// JSDOM verification:
+expect(window.i18n.t('status.ready')).toBe('Ready To Fly');
+expect(window.i18n.t('nonexistent_key')).toBe('nonexistent_key');
+expect(window.i18n.t('status.ready')).toBe('उड़ान के लिए तैयार');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] () => component.load(null): throws
+[INFO] Jest executed test in 108ms
+[PASS] window.i18n.t('status.ready') = 'Ready To Fly'
+[PASS] window.i18n.t('nonexistent_key') = 'nonexistent_key'
+[PASS] window.i18n.t('status.ready') = 'उड़ान के लिए तैयार'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

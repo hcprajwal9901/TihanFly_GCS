@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-GEO-010
 Requirement ID      : REQ-SAF-002
 Source File         : geofence.js
-Target Function     : geofence_boundary_check() [Line 80]
-Test Category       : Edge Case
-Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for Geofence Boundary Violations and Autopilot RTL Trigger
+Target Function     : safeSendWrap() [Line 64]
+Test Category       : Negative / Robustness
+Test Case Title     : should fail validation on invalid input values
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,41 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Input buffer references set to null.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.configure(undefined)
+document.getElementById('gf-altmax-inp').value = '5'
+document.getElementById('gf-save-btn').click()
+document.getElementById('gf-altmax-inp').value = '100'
+document.getElementById('gf-radius-inp').value = '20'
+document.getElementById('gf-save-btn').click()
+document.getElementById('gf-radius-inp').value = '150'
+document.getElementById('gf-margin-inp').value = '0.5'
+document.getElementById('gf-save-btn').click()
 
 Expected Behavior:
-Result is equal to false.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('FENCE_ALT_MAX must be 10–1000 m', true).
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('FENCE_RADIUS must be 30–10000 m', true).
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('FENCE_MARGIN must be 1–10 m', true).
 
 Actual Observations:
-result = false
+window.SwUtil.toast: called with 'FENCE_ALT_MAX must be 10–1000 m', true
+window.SwUtil.toast: called with 'FENCE_RADIUS must be 30–10000 m', true
+window.SwUtil.toast: called with 'FENCE_MARGIN must be 1–10 m', true
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(window.SwUtil.toast).toHaveBeenCalledWith('FENCE_ALT_MAX must be 10–1000 m', true);
+expect(window.SwUtil.toast).toHaveBeenCalledWith('FENCE_RADIUS must be 30–10000 m', true);
+expect(window.SwUtil.toast).toHaveBeenCalledWith('FENCE_MARGIN must be 1–10 m', true);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 100ms
+[PASS] window.SwUtil.toast: called with 'FENCE_ALT_MAX must be 10–1000 m', true
+[PASS] window.SwUtil.toast: called with 'FENCE_RADIUS must be 30–10000 m', true
+[PASS] window.SwUtil.toast: called with 'FENCE_MARGIN must be 1–10 m', true
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

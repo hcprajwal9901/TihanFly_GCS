@@ -1,0 +1,53 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-APP-026
+Requirement ID      : REQ-SYS-002
+Source File         : app.js
+Target Function     : initializeApplication() [Line 26]
+Test Category       : Positive / Functional
+Test Case Title     : should warn when sending payload over websocket if websocket is closed
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+msg: String | Simulated: wsMockInstance.readyState = 3; // CLOSED
+wsMockInstance.onclose()
+window.DroneWS.send({ cmd: 'takeoff' })
+
+Expected Behavior:
+Verify console.warn satisfies toHaveBeenCalledWith('⚠️ WebSocket not connected').
+
+Actual Observations:
+console.warn: called with '⚠️ WebSocket not connected'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(stringify).toHaveBeenCalled();
+expect(warn).toHaveBeenCalled();
+// JSDOM verification:
+expect(console.warn).toHaveBeenCalledWith('⚠️ WebSocket not connected');
+
+Console Logs:
+[INFO] Jest executed test in 12ms
+[PASS] console.warn: called with '⚠️ WebSocket not connected'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

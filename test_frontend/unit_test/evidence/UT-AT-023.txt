@@ -1,0 +1,75 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-023
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : injectCSS() [Line 260]
+Test Category       : Boundary Value
+Test Case Title     : should handle NSH terminal history arrows navigation
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+Date.now(: String | Simulated: jest.useFakeTimers()
+global.loadScript('js/analyze-tools.js')
+termWin = document.createElement('div')
+termWin.id = 'atw-mavlink-console'
+termWin.innerHTML = `
+document.body.appendChild(termWin)
+window.AnalyzeToolsPanel.openTool('mavlink-console')
+jest.advanceTimersByTime(100)
+input = document.getElementById('mavIn')
+input.value = 'help'
+window.AnalyzeToolsPanel._sendCmd()
+input.value = 'status'
+window.AnalyzeToolsPanel._sendCmd()
+input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }))
+input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp' }))
+input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown' }))
+termWin.remove()
+jest.useRealTimers()
+
+Expected Behavior:
+Input displays 'status'.
+Input displays 'help'.
+Input displays 'status'.
+
+Actual Observations:
+input.value = 'status'
+input.value = 'help'
+input.value = 'status'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(random).toHaveBeenCalled();
+// JSDOM verification:
+expect(input.value).toBe('status');
+expect(input.value).toBe('help');
+expect(input.value).toBe('status');
+
+Console Logs:
+[INFO] Jest executed test in 35ms
+[PASS] input.value = 'status'
+[PASS] input.value = 'help'
+[PASS] input.value = 'status'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

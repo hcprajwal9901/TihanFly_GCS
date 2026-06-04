@@ -1,0 +1,75 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-022
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : injectCSS() [Line 260]
+Test Category       : Positive / Functional
+Test Case Title     : should simulate geotagging images loop
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+Date.now(: String | Simulated: jest.useFakeTimers()
+geoDiv = document.createElement('div')
+geoDiv.innerHTML = `
+document.body.appendChild(geoDiv)
+window.AnalyzeToolsPanel._browseImgs()
+window.AnalyzeToolsPanel._browseLog()
+window.AnalyzeToolsPanel._runGeo()
+jest.advanceTimersByTime(280 * 10)
+geoDiv.remove()
+jest.useRealTimers()
+
+Expected Behavior:
+Geo Img Dir exists.
+Geo Log File exists.
+Geo Total exists.
+Geo Tagged exists.
+Geo Skipped exists.
+
+Actual Observations:
+document.getElementById('geoImgDir').value = '/home/user/flight_images'
+document.getElementById('geoLogFile').value = '/home/user/logs/flight_001.tlog'
+document.getElementById('geoTotal').textContent = '48'
+document.getElementById('geoTagged').textContent = '46'
+document.getElementById('geoSkipped').textContent = '2'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(random).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('geoImgDir').value).toBe('/home/user/flight_images');
+expect(document.getElementById('geoLogFile').value).toBe('/home/user/logs/flight_001.tlog');
+expect(document.getElementById('geoTotal').textContent).toBe('48');
+expect(document.getElementById('geoTagged').textContent).toBe('46');
+expect(document.getElementById('geoSkipped').textContent).toBe('2');
+
+Console Logs:
+[INFO] Jest executed test in 22ms
+[PASS] document.getElementById('geoImgDir').value = '/home/user/flight_images'
+[PASS] document.getElementById('geoLogFile').value = '/home/user/logs/flight_001.tlog'
+[PASS] document.getElementById('geoTotal').textContent = '48'
+[PASS] document.getElementById('geoTagged').textContent = '46'
+[PASS] document.getElementById('geoSkipped').textContent = '2'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

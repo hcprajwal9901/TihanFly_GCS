@@ -2,19 +2,19 @@
 TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 ================================================================================
 Test Case ID        : UT-CL-025
-Requirement ID      : REQ-SYS-002
-Source File         : component-loader.js
-Target Function     : loadComponent() [Line 24]
-Test Category       : Positive / Functional
-Test Case Title     : should fetch components and inject HTML content when DOM is ready
+Requirement ID      : REQ-HW-001
+Source File         : calib-level.js
+Target Function     : buildSuccessModal() [Line 11]
+Test Category       : Wrong Value
+Test Case Title     : should scrape console texts for successful calibration strings and complete leveling
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -25,49 +25,43 @@ Pre-conditions:
 JSDOM context initialized via setup.js.
 
 Test Inputs:
-global.fetch.mockImplementation((url) => {
-componentName = url.split('/').pop().split('.')[0]
+window.g_vehicles = [{ sysid: 7, type: 'Copter' }]
+})
+document.getElementById('levelStartBtn').click()
 })
 })
-global.loadScript('js/component-loader.js')
-headerComponent = document.getElementById('header-component')
-hudComponent = document.getElementById('hud-display-component')
 
 Expected Behavior:
-Verify global.fetch satisfies toHaveBeenCalledTimes(9).
-Verify global.fetch satisfies toHaveBeenCalledWith('components/header.html').
-Verify global.fetch satisfies toHaveBeenCalledWith('components/hud-display.html').
-Header Component displays '<!-- Mock HTML for header -->'.
-Hud Component displays '<!-- Mock HTML for hud-display -->'.
-Event Dispatched is equal to true.
+Level Status exists.
+Level Status exists.
+Level Status exists.
+Level Modal exists.
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('🚁 Drone Levelled').
 
 Actual Observations:
-global.fetch: 9 call(s)
-global.fetch: called with 'components/header.html'
-global.fetch: called with 'components/hud-display.html'
-headerComponent.innerHTML = '<!-- Mock HTML for header -->'
-hudComponent.innerHTML = '<!-- Mock HTML for hud-display -->'
-eventDispatched = true
+document.getElementById('levelStatus').textContent = 'STARTED'
+document.getElementById('levelStatus').textContent = 'STARTED'
+document.getElementById('levelStatus').textContent = 'DONE'
+document.getElementById('levelModal').classList.contains('show') = true
+window.MsgConsole.success: called with '🚁 Drone Levelled'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(global.fetch).toHaveBeenCalledTimes(9);
-expect(global.fetch).toHaveBeenCalledWith('components/header.html');
-expect(global.fetch).toHaveBeenCalledWith('components/hud-display.html');
-expect(headerComponent.innerHTML).toBe('<!-- Mock HTML for header -->');
-expect(hudComponent.innerHTML).toBe('<!-- Mock HTML for hud-display -->');
-expect(eventDispatched).toBe(true);
+expect(document.getElementById('levelStatus').textContent).toBe('STARTED');
+expect(document.getElementById('levelStatus').textContent).toBe('STARTED');
+expect(document.getElementById('levelStatus').textContent).toBe('DONE');
+expect(document.getElementById('levelModal').classList.contains('show')).toBe(true);
+expect(window.MsgConsole.success).toHaveBeenCalledWith('🚁 Drone Levelled');
 
 Console Logs:
-[INFO] Jest executed test in 50ms
-[PASS] global.fetch: 9 call(s)
-[PASS] global.fetch: called with 'components/header.html'
-[PASS] global.fetch: called with 'components/hud-display.html'
-[PASS] headerComponent.innerHTML = '<!-- Mock HTML for header -->'
-[PASS] hudComponent.innerHTML = '<!-- Mock HTML for hud-display -->'
-[PASS] eventDispatched = true
+[INFO] Jest executed test in 15ms
+[PASS] document.getElementById('levelStatus').textContent = 'STARTED'
+[PASS] document.getElementById('levelStatus').textContent = 'STARTED'
+[PASS] document.getElementById('levelStatus').textContent = 'DONE'
+[PASS] document.getElementById('levelModal').classList.contains('show') = true
+[PASS] window.MsgConsole.success: called with '🚁 Drone Levelled'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

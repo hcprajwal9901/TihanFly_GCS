@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-WIH-008
 Requirement ID      : REQ-SYS-002
 Source File         : weather-integration-helper.js
-Target Function     : fetch_weather_telemetry() [Line 66]
-Test Category       : Wrong Value
-Test Case Title     : should reject incorrect string format payloads and log mismatch warning for Weather API Dashboard and Wind-speed Warning Overlays
+Target Function     : debugWeatherIntegration() [Line 105]
+Test Category       : Positive / Functional
+Test Case Title     : should log debug info showing map, dashboard, and API states
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,50 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Type safety check wrappers active.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-weather = new WeatherDashboard()
-result = weather.parseWeatherData('GARBAGE_STRING')
+window.tmap = {
+window.weatherDashboard = {
+window.Weather = {}
+global.loadScript('js/weather-integration-helper.js')
+window.WeatherIntegration.debug()
+delete window.Weather
 
 Expected Behavior:
-Result is null.
+Log message recorded.
+Log message recorded.
+Log message recorded.
+Log message recorded.
+Log message recorded.
 
 Actual Observations:
-result: null
+console.log: called with 'Map (window.tmap):', true
+console.log: called with 'Weather Dashboard:', true
+console.log: called with 'Weather API:', true
+console.log: called with 'Map click enabled:', true
+console.log: called with 'Weather visible:', true
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBeNull();
+expect(Map).toHaveBeenCalled();
+expect(getCurrentLocation).toHaveBeenCalled();
+// JSDOM verification:
+expect(console.log).toHaveBeenCalledWith('Map (window.tmap):', true);
+expect(console.log).toHaveBeenCalledWith('Weather Dashboard:', true);
+expect(console.log).toHaveBeenCalledWith('Weather API:', true);
+expect(console.log).toHaveBeenCalledWith('Map click enabled:', true);
+expect(console.log).toHaveBeenCalledWith('Weather visible:', true);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result: null
+[INFO] Jest executed test in 4ms
+[PASS] console.log: called with 'Map (window.tmap):', true
+[PASS] console.log: called with 'Weather Dashboard:', true
+[PASS] console.log: called with 'Weather API:', true
+[PASS] console.log: called with 'Map click enabled:', true
+[PASS] console.log: called with 'Weather visible:', true
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

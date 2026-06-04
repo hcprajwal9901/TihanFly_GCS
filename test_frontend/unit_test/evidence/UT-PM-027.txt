@@ -1,0 +1,56 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PM-027
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-manager.js
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Negative / Robustness
+Test Case Title     : should cover initialize failure logs and retries
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock L Map layers.. Dependencies: Leaflet API initialized in setup.
+
+Test Inputs:
+consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+badPm = new pmInstance.constructor({})
+jest.advanceTimersByTime(20000)
+consoleSpy.mockRestore()
+
+Expected Behavior:
+Verify consoleSpy satisfies toHaveBeenCalledWith(expect.stringContaining('Failed to initialize after 10 attempts')).
+
+Actual Observations:
+consoleSpy: called with expect.stringContaining('Failed to initialize after 10 attempts')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(addLayer).toHaveBeenCalled();
+expect(featureGroup).toHaveBeenCalled();
+expect(getLeafletMap).toHaveBeenCalled();
+expect(tryInitialize).toHaveBeenCalled();
+// JSDOM verification:
+expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Failed to initialize after 10 attempts'));
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] consoleSpy: called with expect.stringContaining('Failed to initialize after 10 attempts')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

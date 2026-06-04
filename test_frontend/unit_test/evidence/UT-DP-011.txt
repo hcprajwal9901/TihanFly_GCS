@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-DP-011
 Requirement ID      : REQ-SYS-002
 Source File         : data-persistence.js
-Target Function     : authenticate_user() [Line 87]
+Target Function     : initializeDataPersistence() [Line 748]
 Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for GCS Authentication and Local Database Storage Sync
+Test Case Title     : should handle exceptions during clearSavedData
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,35 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+Mock Strategy: Live execution.. Dependencies: localStorage initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
+originalRemoveItem = global.localStorage.removeItem
+global.localStorage.removeItem = jest.fn().mockImplementation(() => {
+throw new Error('Localstorage Blocked')
+})
+cleared = window.DataPersistence.clear()
+global.localStorage.removeItem = originalRemoveItem
 
 Expected Behavior:
-Verify () => component.load(null) satisfies toThrow().
+Cleared is equal to false.
 
 Actual Observations:
-() => component.load(null): throws
+cleared = false
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => component.load(null)).toThrow();
+const res = clearSavedData(...);
+expect(res).toBeDefined();
+expect(typeof res).toBe('boolean');
+// JSDOM verification:
+expect(cleared).toBe(false);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] () => component.load(null): throws
+[INFO] Jest executed test in 4ms
+[PASS] cleared = false
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

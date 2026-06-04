@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-APP-003
 Requirement ID      : REQ-SYS-002
 Source File         : app.js
-Target Function     : setHeaderStatus() [Line 779]
-Test Category       : Positive / Functional
-Test Case Title     : should correctly update status text and apply state class name
+Target Function     : initializeApplication() [Line 26]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle map initialization failure gracefully
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,55 +22,34 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+Mock Strategy: Live execution.. Dependencies: waypointManager initialized in setup.
 
 Test Inputs:
-text: String, state = 'ready': String | Simulated: badge = document.querySelector('.status-badge')
-global.setHeaderStatus('Connected', 'ready')
-global.setHeaderStatus('Disconnected', 'error')
-global.setHeaderStatus('Connecting...', 'connecting')
+originalTMap = global.TMap
+global.TMap = jest.fn().mockImplementation(() => {
+throw new Error('Map Initialization Failed')
+})
+global.loadScript('js/app.js')
+jest.advanceTimersByTime(1100)
+global.TMap = originalTMap
 
 Expected Behavior:
-Badge displays ''.
-Badge displays 'Connected'.
-Badge Class Name is equal to 'status-badge ready'.
-Badge displays 'Disconnected'.
-Badge Class Name is equal to 'status-badge error'.
-Badge displays 'Connecting...'.
-Badge Class Name is equal to 'status-badge connecting'.
+Error logged to console.
 
 Actual Observations:
-badge.textContent = ''
-badge.textContent = 'Connected'
-badge.className = 'status-badge ready'
-badge.textContent = 'Disconnected'
-badge.className = 'status-badge error'
-badge.textContent = 'Connecting...'
-badge.className = 'status-badge connecting'
+console.error: called with '❌ Error initializing map:', expect.any(Error)
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(querySelector).toHaveBeenCalled();
+expect(startAddingWaypoint).toHaveBeenCalled();
 // JSDOM verification:
-expect(badge.textContent).toBe('');
-expect(badge.textContent).toBe('Connected');
-expect(badge.className).toBe('status-badge ready');
-expect(badge.textContent).toBe('Disconnected');
-expect(badge.className).toBe('status-badge error');
-expect(badge.textContent).toBe('Connecting...');
-expect(badge.className).toBe('status-badge connecting');
+expect(console.error).toHaveBeenCalledWith('❌ Error initializing map:', expect.any(Error));
 
 Console Logs:
-[INFO] Jest executed test in 13ms
-[PASS] badge.textContent = ''
-[PASS] badge.textContent = 'Connected'
-[PASS] badge.className = 'status-badge ready'
-[PASS] badge.textContent = 'Disconnected'
-[PASS] badge.className = 'status-badge error'
-[PASS] badge.textContent = 'Connecting...'
-[PASS] badge.className = 'status-badge connecting'
+[INFO] Jest executed test in 30ms
+[PASS] console.error: called with '❌ Error initializing map:', expect.any(Error)
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

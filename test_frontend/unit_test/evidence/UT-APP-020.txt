@@ -1,0 +1,65 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-APP-020
+Requirement ID      : REQ-SYS-002
+Source File         : app.js
+Target Function     : initializeApplication() [Line 26]
+Test Category       : Positive / Functional
+Test Case Title     : should toggle camera and message viewer visibility on checkbox change
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+toggleCam = document.getElementById('toggleCamera1')
+toggleMsg = document.getElementById('toggleMessageViewer')
+video = document.getElementById('videoContainer')
+msgBox = document.querySelector('.minimal-console-container')
+toggleCam.checked = false
+toggleCam.dispatchEvent(new Event('change'))
+toggleCam.checked = true
+toggleCam.dispatchEvent(new Event('change'))
+toggleMsg.checked = false
+toggleMsg.dispatchEvent(new Event('change'))
+
+Expected Behavior:
+Video hidden.
+Video display state is .
+Message Box hidden.
+
+Actual Observations:
+video.style.display = 'none'
+video.style.display = ''
+msgBox.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(video.style.display).toBe('none');
+expect(video.style.display).toBe('');
+expect(msgBox.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 16ms
+[PASS] video.style.display = 'none'
+[PASS] video.style.display = ''
+[PASS] msgBox.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

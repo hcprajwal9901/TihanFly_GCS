@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PS-016
 Requirement ID      : REQ-TUNE-001
 Source File         : param-switch.js
-Target Function     : connectWebSocket() [Line 122]
-Test Category       : Edge Case
-Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : connectWebSocket() [Line 232]
+Test Category       : Negative / Robustness
+Test Case Title     : should log error when trying to write while both sockets are disconnected
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,35 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Input buffer references set to null.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.configure(undefined)
+originalSharedWs = window.ws
+delete window.ws
+mockPrivateWs.readyState = global.WebSocket.CLOSED
+mockPrivateWs.onclose()
+select6 = document.querySelector('select[data-name="RC6_OPTION"]')
+select6.value = '9'
+select6.dispatchEvent(new Event('change', { bubbles: true }))
+writeBtn = document.getElementById('swWriteBtn')
+writeBtn.click()
+window.ws = originalSharedWs
 
 Expected Behavior:
-Result is equal to false.
+Sw Footer Info exists.
 
 Actual Observations:
-result = false
+document.getElementById('swFooterInfo').textContent = 'WebSocket not connected. Cannot write parameters.'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(document.getElementById('swFooterInfo').textContent).toBe('WebSocket not connected. Cannot write parameters.');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 289ms
+[PASS] document.getElementById('swFooterInfo').textContent = 'WebSocket not connected. Cannot write parameters.'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

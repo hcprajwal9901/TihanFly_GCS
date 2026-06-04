@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PF-017
 Requirement ID      : REQ-TUNE-001
 Source File         : param-full.js
-Target Function     : parseOptionsFromRange() [Line 129]
-Test Category       : Wrong Value
-Test Case Title     : should reject incorrect string format payloads and log mismatch warning for Component Layout Initialization and DOM Controls Validation
+Target Function     : parseOptionsFromRange() [Line 788]
+Test Category       : Positive / Functional
+Test Case Title     : should handle complex range cell representation (bitmask, multi-options)
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,41 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Type safety check wrappers active.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.setValue('NOT_A_NUMBER')
+global.fetch = jest.fn().mockImplementation(() =>
+)
+await initPanel()
+window.dispatchEvent(new CustomEvent('param_all', {
+}))
+tbody = document.getElementById('fpBody')
+bitmaskRow = tbody.querySelector('tr[data-param="BITMASK_PARAM"]')
+optionsRow = tbody.querySelector('tr[data-param="MANY_OPTS_PARAM"]')
 
 Expected Behavior:
-Result is equal to false.
+Bitmask Row displays text containing 'fp-bit'.
+Bitmask Row displays text containing 'Bit 0 Label'.
+Options Row displays text containing '+1 more'.
 
 Actual Observations:
-result = false
+bitmaskRow.innerHTML contains 'fp-bit'
+bitmaskRow.innerHTML contains 'Bit 0 Label'
+optionsRow.innerHTML contains '+1 more'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(bitmaskRow.innerHTML).toContain('fp-bit');
+expect(bitmaskRow.innerHTML).toContain('Bit 0 Label');
+expect(optionsRow.innerHTML).toContain('+1 more');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 237ms
+[PASS] bitmaskRow.innerHTML contains 'fp-bit'
+[PASS] bitmaskRow.innerHTML contains 'Bit 0 Label'
+[PASS] optionsRow.innerHTML contains '+1 more'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

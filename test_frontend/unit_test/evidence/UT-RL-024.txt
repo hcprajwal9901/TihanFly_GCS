@@ -1,0 +1,67 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-024
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : should fetch and plot from backend if msgData is missing for a clicked field
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+fmtPkt = createFmtPacket(3, 19, 'UNKN', 'ff', 'f1,f2')
+buffer = new ArrayBuffer(89)
+new Uint8Array(buffer).set(fmtPkt, 0)
+window.ReviewLog.handleFile({
+})
+jest.advanceTimersByTime(500)
+unknRow = document.querySelector('.rl-field-row[data-msg="UNKN"][data-field="f1"]')
+unknRow.click()
+)
+for (let i = 0; i < 20; i++) {
+jest.advanceTimersByTime(100)
+await Promise.resolve()
+
+Expected Behavior:
+Unkn Row is null.
+Verify global.fetch satisfies toHaveBeenCalledWith().
+Rl Stat Rows exists.
+
+Actual Observations:
+unknRow: not null
+global.fetch: toHaveBeenCalledWith
+document.getElementById('rlStatRows').textContent = '3'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(unknRow).not.toBeNull();
+expect(global.fetch).toHaveBeenCalledWith(
+expect(document.getElementById('rlStatRows').textContent).toBe('3');
+
+Console Logs:
+[INFO] Jest executed test in 76ms
+[PASS] unknRow: not null
+[PASS] global.fetch: toHaveBeenCalledWith
+[PASS] document.getElementById('rlStatRows').textContent = '3'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

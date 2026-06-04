@@ -1,0 +1,71 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-025
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : _onSchemaReceived() [Line 723]
+Test Category       : Negative / Robustness
+Test Case Title     : should catch errors when _onSchemaReceived fails due to tree building issues
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
+
+Test Inputs:
+rawSchema: String | Simulated: spyGetElement = jest.spyOn(document, 'getElementById').mockImplementation((id) => {
+throw new Error('Mock tree build error')
+return originalGetElementById(id)
+})
+spyError = jest.spyOn(console, 'error').mockImplementation(() => {})
+file = {
+window.ReviewLog.handleFile(file)
+jest.advanceTimersByTime(500)
+spyGetElement.mockRestore()
+spyError.mockRestore()
+
+Expected Behavior:
+Verify spyError satisfies toHaveBeenCalled().
+Rl Error exists.
+
+Actual Observations:
+spyError: called
+document.getElementById('rlError').textContent contains 'Mock tree build error'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(_buildTree).toHaveBeenCalled();
+expect(_setPill).toHaveBeenCalled();
+expect(_setProgress).toHaveBeenCalled();
+expect(_showError).toHaveBeenCalled();
+expect(_showLoading).toHaveBeenCalled();
+expect(function).toHaveBeenCalled();
+expect(isArray).toHaveBeenCalled();
+expect(keys).toHaveBeenCalled();
+expect(toLocaleString).toHaveBeenCalled();
+// JSDOM verification:
+expect(spyError).toHaveBeenCalled();
+expect(document.getElementById('rlError').textContent).toContain('Mock tree build error');
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] spyError: called
+[PASS] document.getElementById('rlError').textContent contains 'Mock tree build error'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

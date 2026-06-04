@@ -14,17 +14,8 @@ describe('Telemetry Display Overlay High-Fidelity Behavioral Test Suite (compass
       delete window.CompassEnhanced;
     }
 
-    // Load actual telemetry display compass script and explicitly attach to window
-    const fs = require('fs');
-    const path = require('path');
-    const absolutePath = path.resolve(__dirname, '../../js/compass.js');
-    let code = fs.readFileSync(absolutePath, 'utf8');
-    code += '\nwindow.CompassEnhanced = CompassEnhanced;';
-
-    const scriptElement = document.createElement('script');
-    scriptElement.textContent = code;
-    document.body.appendChild(scriptElement);
-    document.body.removeChild(scriptElement);
+    // Load actual telemetry display compass script via global.loadScript
+    global.loadScript('js/compass.js');
   });
 
   afterAll(() => {

@@ -1,0 +1,67 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-034
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should check isFirstTakeoffWaypoint helper
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: waypointManager initialized in setup.
+
+Test Inputs:
+waypoint: String | Simulated: menuInstance.waypointManager = null
+menuInstance.waypointManager = mockWaypointManager
+firstWp = { type: 'takeoff' }
+mockWaypointManager.waypoints = [firstWp]
+regularWp = { type: 'waypoint' }
+mockWaypointManager.waypoints = [regularWp]
+
+Expected Behavior:
+Menu Instance Is First Takeoff Waypoint(Null) is equal to false.
+Menu Instance Is First Takeoff Waypoint({}) is equal to false.
+Menu Instance Is First Takeoff Waypoint(First Wp) is equal to true.
+Menu Instance Is First Takeoff Waypoint(Regular Wp) is equal to false.
+
+Actual Observations:
+menuInstance.isFirstTakeoffWaypoint(null) = false
+menuInstance.isFirstTakeoffWaypoint({}) = false
+menuInstance.isFirstTakeoffWaypoint(firstWp) = true
+menuInstance.isFirstTakeoffWaypoint(regularWp) = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(indexOf).toHaveBeenCalled();
+// JSDOM verification:
+expect(menuInstance.isFirstTakeoffWaypoint(null)).toBe(false);
+expect(menuInstance.isFirstTakeoffWaypoint({})).toBe(false);
+expect(menuInstance.isFirstTakeoffWaypoint(firstWp)).toBe(true);
+expect(menuInstance.isFirstTakeoffWaypoint(regularWp)).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] menuInstance.isFirstTakeoffWaypoint(null) = false
+[PASS] menuInstance.isFirstTakeoffWaypoint({}) = false
+[PASS] menuInstance.isFirstTakeoffWaypoint(firstWp) = true
+[PASS] menuInstance.isFirstTakeoffWaypoint(regularWp) = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

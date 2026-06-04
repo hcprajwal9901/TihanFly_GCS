@@ -1,0 +1,49 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-025
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should close menu when clicking outside of it
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+menuInstance.menu.style.display = 'block'
+document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+
+Expected Behavior:
+Menu Instance Menu hidden.
+
+Actual Observations:
+menuInstance.menu.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(menuInstance.menu.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] menuInstance.menu.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

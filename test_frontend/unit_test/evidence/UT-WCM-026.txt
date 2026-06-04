@@ -1,0 +1,57 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-026
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should handle menu item clicks in DOM
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+spyHandleAction = jest.spyOn(menuInstance, 'handleMenuAction')
+separator = menuInstance.menu.querySelector('.context-menu-separator')
+separator.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+item = menuInstance.menu.querySelector('[data-action="delete-wp"]')
+item.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+spyHandleAction.mockRestore()
+
+Expected Behavior:
+Verify spyHandleAction satisfies toHaveBeenCalled().
+Verify spyHandleAction satisfies toHaveBeenCalledWith('delete-wp').
+
+Actual Observations:
+spyHandleAction: not called
+spyHandleAction: called with 'delete-wp'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(spyHandleAction).not.toHaveBeenCalled();
+expect(spyHandleAction).toHaveBeenCalledWith('delete-wp');
+
+Console Logs:
+[INFO] Jest executed test in 41ms
+[PASS] spyHandleAction: not called
+[PASS] spyHandleAction: called with 'delete-wp'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

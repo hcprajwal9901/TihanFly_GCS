@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-020
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger sidebar click events for different tools
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+cls: String, fn: String, ico: String, lbl: String, id: Number, i18Key: String | Simulated: window.AnalyzeToolsPanel.showAnalyzePanel()
+reviewLogItem = Array.from(document.querySelectorAll('.ap-item'))
+.find(el => el.innerHTML.includes('Review a Log'))
+fileInput = document.createElement('input')
+fileInput.id = 'reviewLogFileInput'
+fileInput.type = 'file'
+document.body.appendChild(fileInput)
+clickSpy = jest.spyOn(fileInput, 'click').mockImplementation(() => {})
+reviewLogItem.click()
+fileInput.remove()
+window.LogDownloadPanel = { open: jest.fn() }
+logDlItem = Array.from(document.querySelectorAll('.ap-item'))
+.find(el => el.innerHTML.includes('Log Download'))
+logDlItem.click()
+
+Expected Behavior:
+Click action triggered.
+Verify window.LogDownloadPanel.open satisfies toHaveBeenCalled().
+
+Actual Observations:
+clickSpy: called
+window.LogDownloadPanel.open: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = B(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(clickSpy).toHaveBeenCalled();
+expect(window.LogDownloadPanel.open).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 8ms
+[PASS] clickSpy: called
+[PASS] window.LogDownloadPanel.open: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

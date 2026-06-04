@@ -11,10 +11,10 @@ Test Case Title     : should compile suggestive values table including battery v
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -95,7 +95,7 @@ expect(previewRows[9].querySelector('.it-param-id').textContent).toBe('BATT_CRT_
 expect(previewRows[9].querySelector('.it-param-val').textContent).toBe('21.6');
 
 Console Logs:
-[INFO] Jest executed test in 30ms
+[INFO] Jest executed test in 58ms
 [PASS] document.getElementById('it-preview-section').style.display = 'block'
 [PASS] previewRows.length = 13
 [PASS] previewRows[0].querySelector('.it-param-id').textContent = 'MOT_BAT_VOLT_MAX'

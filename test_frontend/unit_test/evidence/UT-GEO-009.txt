@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-GEO-009
 Requirement ID      : REQ-SAF-002
 Source File         : geofence.js
-Target Function     : geofence_boundary_check() [Line 73]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for Geofence Boundary Violations and Autopilot RTL Trigger
+Target Function     : safeSendWrap() [Line 64]
+Test Category       : Positive / Functional
+Test Case Title     : should warn when safeSend is missing
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,31 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
+originalSafeSend = window.safeSend
+delete window.safeSend
+consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+document.getElementById('gf-refresh-btn').click()
+consoleSpy.mockRestore()
+window.safeSend = originalSafeSend
 
 Expected Behavior:
-Verify () => component.load(null) satisfies toThrow().
+Verify consoleSpy satisfies toHaveBeenCalledWith('[Geofence] safeSend not available').
 
 Actual Observations:
-() => component.load(null): throws
+consoleSpy: called with '[Geofence] safeSend not available'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => component.load(null)).toThrow();
+expect(consoleSpy).toHaveBeenCalledWith('[Geofence] safeSend not available');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] () => component.load(null): throws
+[INFO] Jest executed test in 86ms
+[PASS] consoleSpy: called with '[Geofence] safeSend not available'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

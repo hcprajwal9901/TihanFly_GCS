@@ -5,16 +5,16 @@ Test Case ID        : UT-WEB-007
 Requirement ID      : REQ-COM-001
 Source File         : websocket.js
 Target Function     : updateVehicleSelector() [Line 55]
-Test Category       : Boundary Value
-Test Case Title     : should poll to flush queue automatically and give up after timeout limits
+Test Category       : Positive / Functional
+Test Case Title     : should queue firmware logs and flush them immediately once window handler is ready
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -26,27 +26,27 @@ JSDOM context initialized via setup.js.
 
 Test Inputs:
 window.vcHandleFirmwareMessage = undefined
-window.deliverFirmwareMessage({ type: 'firmware_progress', pct: 40 })
-jest.advanceTimersByTime(50)
+testMsg = { type: 'firmware_log', text: 'Erasing flash...' }
+window.deliverFirmwareMessage(testMsg)
 spyHandler = jest.fn()
 window.vcHandleFirmwareMessage = spyHandler
-jest.advanceTimersByTime(50)
+window.flushFirmwareQueue()
 
 Expected Behavior:
-Verify spyHandler satisfies toHaveBeenCalled().
+Verify spyHandler satisfies toHaveBeenCalledWith(testMsg).
 
 Actual Observations:
-spyHandler: called
+spyHandler: called with testMsg
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(spyHandler).toHaveBeenCalled();
+expect(spyHandler).toHaveBeenCalledWith(testMsg);
 
 Console Logs:
-[INFO] Jest executed test in 1ms
-[PASS] spyHandler: called
+[INFO] Jest executed test in 5ms
+[PASS] spyHandler: called with testMsg
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

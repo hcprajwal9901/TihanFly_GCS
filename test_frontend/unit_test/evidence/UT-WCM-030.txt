@@ -1,0 +1,48 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-030
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should trigger polygon-from-shp alert
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+menuInstance.handlePolygonAction('polygon-from-shp')
+
+Expected Behavior:
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith('SHP import feature coming soon').
+
+Actual Observations:
+window.MsgConsole.info: called with 'SHP import feature coming soon'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.info).toHaveBeenCalledWith('SHP import feature coming soon');
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] window.MsgConsole.info: called with 'SHP import feature coming soon'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

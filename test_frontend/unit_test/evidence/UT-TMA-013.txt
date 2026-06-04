@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-TMA-013
 Requirement ID      : REQ-SYS-002
 Source File         : tmap.js
-Target Function     : update_compass_needle() [Line 101]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for Compass Telemetry Orientation and HUD Needle Rotations
+Target Function     : tmap_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should cover addStaticLocation options and labelDirections
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,32 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-map = new TMap('map-element', [17.385, 78.486], 15, false)
+lat: Number, lng: Number, name: String, options = {}: String | Simulated: tmap = new TMap('map-container', [17.385, 78.486], 16, true)
+tmap.addStaticLocation(17.385, 78.486, 'Loc Left', { labelDirection: 'left' })
+tmap.addStaticLocation(17.385, 78.486, 'Loc Top', { labelDirection: 'top' })
+tmap.addStaticLocation(17.385, 78.486, 'Loc Bottom', { labelDirection: 'bottom' })
+tmap.addStaticLocation(17.385, 78.486, 'Loc No Label', { permanentLabel: false })
 
 Expected Behavior:
-Verify () => map.addMarker(999.0, 999.0) satisfies toThrow('Invalid coordinates').
+Tmap Get Marker Count() is equal to 4.
 
 Actual Observations:
-() => map.addMarker(999.0, 999.0): throws
+tmap.getMarkerCount() = 4
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => map.addMarker(999.0, 999.0)).toThrow('Invalid coordinates');
+expect(addStaticLocation).toBeDefined();
+// JSDOM verification:
+expect(tmap.getMarkerCount()).toBe(4);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] () => map.addMarker(999.0, 999.0): throws
+[INFO] Jest executed test in 2ms
+[PASS] tmap.getMarkerCount() = 4
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

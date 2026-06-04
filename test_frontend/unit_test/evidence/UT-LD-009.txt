@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-LD-009
 Requirement ID      : REQ-LOG-001
 Source File         : log-download.js
-Target Function     : _injectCSS() [Line 73]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : _injectCSS() [Line 105]
+Test Category       : Positive / Functional
+Test Case Title     : should cover setInterval WebSocket re-attachment and timeouts
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,71 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
+function (: String | Simulated: jest.clearAllTimers()
+window.ws._ld_listener = false
+global.loadScript('js/log-download.js')
+jest.advanceTimersByTime(800)
+window.ws.readyState = 1
+refreshBtn = document.getElementById('ldBtnRefresh')
+refreshBtn.click()
+jest.advanceTimersByTime(6000)
+global.confirm.mockReturnValue(true)
+eraseBtn = document.getElementById('ldBtnErase')
+eraseBtn.click()
+jest.advanceTimersByTime(1500)
+mockAnchor = { href: '', download: '', click: jest.fn() }
+origCreateElement = document.createElement
+return origCreateElement.call(document, tag)
+})
+jest.spyOn(document.body, 'appendChild').mockImplementation(() => {})
+jest.spyOn(document.body, 'removeChild').mockImplementation(() => {})
+doneMsg = { type: 'log_download_done', log_id: 10, data: 'VGZseQ==' }
+queueSpy = jest.spyOn(window.LogDownloadPanel, '_processDlQueue')
+window.LogDownloadPanel._onLogDone(doneMsg)
+jest.advanceTimersByTime(2000)
+document.createElement.mockRestore()
+queueSpy.mockRestore()
 
 Expected Behavior:
-Verify () => component.load(null) satisfies toThrow().
+Window Ws Ld Listener is equal to true.
+Ld Tbody exists.
+Ld Tbody exists.
+Ld Tbody exists.
+Ld Tbody exists.
+Verify queueSpy satisfies toHaveBeenCalled().
 
 Actual Observations:
-() => component.load(null): throws
+window.ws._ld_listener = true
+document.getElementById('ldTbody').innerHTML contains 'Requesting logs from drone…'
+document.getElementById('ldTbody').innerHTML contains 'No logs found on vehicle.'
+document.getElementById('ldTbody').innerHTML contains 'Logs erased from vehicle.'
+document.getElementById('ldTbody').innerHTML contains 'Requesting logs from drone…'
+queueSpy: called
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => component.load(null)).toThrow();
+expect(_attachWsListener).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.ws._ld_listener).toBe(true);
+expect(document.getElementById('ldTbody').innerHTML).toContain('Requesting logs from drone…');
+expect(document.getElementById('ldTbody').innerHTML).toContain('No logs found on vehicle.');
+expect(document.getElementById('ldTbody').innerHTML).toContain('Logs erased from vehicle.');
+expect(document.getElementById('ldTbody').innerHTML).toContain('Requesting logs from drone…');
+expect(queueSpy).toHaveBeenCalled();
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] () => component.load(null): throws
+[INFO] Jest executed test in 13ms
+[PASS] window.ws._ld_listener = true
+[PASS] document.getElementById('ldTbody').innerHTML contains 'Requesting logs from drone…'
+[PASS] document.getElementById('ldTbody').innerHTML contains 'No logs found on vehicle.'
+[PASS] document.getElementById('ldTbody').innerHTML contains 'Logs erased from vehicle.'
+[PASS] document.getElementById('ldTbody').innerHTML contains 'Requesting logs from drone…'
+[PASS] queueSpy: called
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

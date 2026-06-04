@@ -6,15 +6,15 @@ Requirement ID      : REQ-COM-001
 Source File         : websocket.js
 Target Function     : updateVehicleSelector() [Line 55]
 Test Category       : Positive / Functional
-Test Case Title     : should update attitude roll pitch yaw dials on attitude packet for selected vehicle
+Test Case Title     : should wire up dropdown change listener
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,36 +22,33 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-message.pitch ?? 0: String | Simulated: window.initWebSocket()
-ws = wsInstances[0]
-window.selectedSysId = 3
-})
-})
+sel = document.getElementById('vehicleSelector')
+opt = document.createElement('option')
+opt.value = '3'
+sel.appendChild(opt)
+sel.value = '3'
+domLoadedEvent = new Event('DOMContentLoaded')
+document.dispatchEvent(domLoadedEvent)
+sel.dispatchEvent(new Event('change'))
 
 Expected Behavior:
-Verify window.TelemetryDisplay.update satisfies toHaveBeenCalledWith().
-Verify window.compass.updateTelemetry satisfies toHaveBeenCalled().
+Window Selected Sys Id is equal to 3.
 
 Actual Observations:
-window.TelemetryDisplay.update: toHaveBeenCalledWith
-window.compass.updateTelemetry: called
+window.selectedSysId = 3
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(updateTelemetry).toHaveBeenCalled();
-// JSDOM verification:
-expect(window.TelemetryDisplay.update).toHaveBeenCalledWith({
-expect(window.compass.updateTelemetry).toHaveBeenCalled();
+expect(window.selectedSysId).toBe(3);
 
 Console Logs:
-[INFO] Jest executed test in 3ms
-[PASS] window.TelemetryDisplay.update: toHaveBeenCalledWith
-[PASS] window.compass.updateTelemetry: called
+[INFO] Jest executed test in 6ms
+[PASS] window.selectedSysId = 3
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

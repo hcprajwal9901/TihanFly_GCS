@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-TMA-017
 Requirement ID      : REQ-SYS-002
 Source File         : tmap.js
-Target Function     : update_compass_needle() [Line 129]
+Target Function     : tmap_initialize() [Line 12]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Compass Telemetry Orientation and HUD Needle Rotations
+Test Case Title     : should cover all map event registration methods
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,128 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for tmap.js.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-map = new TMap('map-element', [17.385, 78.486], 15, false)
-marker = map.addMarker(17.385, 78.486, true)
+tmap = new TMap('map-container', [17.385, 78.486], 16, true)
+cb1 = jest.fn()
+cb2 = jest.fn()
+tmap.onClick(cb1)
+tmap.onClick(cb2)
+tmap.enableClick()
+mapEvents['click']({ latlng: { lat: 17.1, lng: 78.1 } })
+tmap.disableClick()
+mapEvents['click']({ latlng: { lat: 17.1, lng: 78.1 } })
+tmap.removeClickHandler()
+rightClickCb = jest.fn()
+tmap.onRightClick(rightClickCb)
+mapEvents['contextmenu']({ latlng: { lat: 17.2, lng: 78.2 } })
+dragCb = jest.fn()
+mockMarker = {
+if (evt === 'drag') cb()
+tmap.onMarkerDrag(mockMarker, dragCb)
+dragEndCb = jest.fn()
+mockMarker2 = {
+if (evt === 'dragend') cb()
+tmap.onMarkerDragEnd(mockMarker2, dragEndCb)
+clickCb = jest.fn()
+stopProp = jest.fn()
+mockMarker3 = {
+if (evt === 'click') cb({ originalEvent: { stopPropagation: stopProp } })
+tmap.onMarkerClick(mockMarker3, clickCb)
+rightClickMarkerCb = jest.fn()
+stopProp2 = jest.fn()
+mockMarker4 = {
+if (evt === 'contextmenu') cb({ originalEvent: { stopPropagation: stopProp2 } })
+tmap.onMarkerRightClick(mockMarker4, rightClickMarkerCb)
+zoomChangeCb = jest.fn()
+tmap.onZoomChange(zoomChangeCb)
+mapEvents['zoom']()
+moveEndCb = jest.fn()
+tmap.onMoveEnd(moveEndCb)
+mapEvents['moveend']()
+tmap.enableWeatherClicks()
+tmap.disableWeatherClicks()
 
 Expected Behavior:
-Map Get Marker Count() is equal to 1.
-Verify marker.getLatLng().lat satisfies toBeCloseTo(17.385).
+Verify cb2 satisfies toHaveBeenCalledWith(17.1, 78.1, expect.any(Object)).
+Verify cb1 satisfies toHaveBeenCalled().
+Verify cb2 satisfies toHaveBeenCalledTimes(1).
+Click action triggered.
+Verify mapEvents['contextmenu'] satisfies toBeDefined().
+Verify rightClickCb satisfies toHaveBeenCalledWith(17.2, 78.2, expect.any(Object)).
+Verify dragCb satisfies toHaveBeenCalledWith(17.3, 78.3).
+Verify dragEndCb satisfies toHaveBeenCalledWith(17.4, 78.4).
+Verify stopProp satisfies toHaveBeenCalled().
+Click action triggered.
+Verify stopProp2 satisfies toHaveBeenCalled().
+Verify rightClickMarkerCb satisfies toHaveBeenCalledWith(17.6, 78.6, mockMarker4).
+Verify mapEvents['zoom'] satisfies toBeDefined().
+Verify zoomChangeCb satisfies toHaveBeenCalledWith(16).
+Verify mapEvents['moveend'] satisfies toBeDefined().
+Verify moveEndCb satisfies toHaveBeenCalledWith(17.385, 78.486).
+Tmap Weather Map Click Handler is null.
 
 Actual Observations:
-map.getMarkerCount() = 1
-marker.getLatLng().lat = 17.385
+cb2: called with 17.1, 78.1, expect.any(Object)
+cb1: not called
+cb2: 1 call(s)
+mapEvents['click']: toBeUndefined()
+mapEvents['contextmenu']: defined
+rightClickCb: called with 17.2, 78.2, expect.any(Object)
+dragCb: called with 17.3, 78.3
+dragEndCb: called with 17.4, 78.4
+stopProp: called
+clickCb: called with 17.5, 78.5, mockMarker3
+stopProp2: called
+rightClickMarkerCb: called with 17.6, 78.6, mockMarker4
+mapEvents['zoom']: defined
+zoomChangeCb: called with 16
+mapEvents['moveend']: defined
+moveEndCb: called with 17.385, 78.486
+tmap._weatherMapClickHandler: null
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(map.getMarkerCount()).toBe(1);
-expect(marker.getLatLng().lat).toBeCloseTo(17.385);
+expect(cb2).toHaveBeenCalledWith(17.1, 78.1, expect.any(Object));
+expect(cb1).not.toHaveBeenCalled();
+expect(cb2).toHaveBeenCalledTimes(1); // not called again
+expect(mapEvents['click']).toBeUndefined();
+expect(mapEvents['contextmenu']).toBeDefined();
+expect(rightClickCb).toHaveBeenCalledWith(17.2, 78.2, expect.any(Object));
+expect(dragCb).toHaveBeenCalledWith(17.3, 78.3);
+expect(dragEndCb).toHaveBeenCalledWith(17.4, 78.4);
+expect(stopProp).toHaveBeenCalled();
+expect(clickCb).toHaveBeenCalledWith(17.5, 78.5, mockMarker3);
+expect(stopProp2).toHaveBeenCalled();
+expect(rightClickMarkerCb).toHaveBeenCalledWith(17.6, 78.6, mockMarker4);
+expect(mapEvents['zoom']).toBeDefined();
+expect(zoomChangeCb).toHaveBeenCalledWith(16);
+expect(mapEvents['moveend']).toBeDefined();
+expect(moveEndCb).toHaveBeenCalledWith(17.385, 78.486);
+expect(tmap._weatherMapClickHandler).toBeNull();
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] map.getMarkerCount() = 1
-[PASS] marker.getLatLng().lat = 17.385
+[INFO] Jest executed test in 6ms
+[PASS] cb2: called with 17.1, 78.1, expect.any(Object)
+[PASS] cb1: not called
+[PASS] cb2: 1 call(s)
+[PASS] mapEvents['click']: toBeUndefined()
+[PASS] mapEvents['contextmenu']: defined
+[PASS] rightClickCb: called with 17.2, 78.2, expect.any(Object)
+[PASS] dragCb: called with 17.3, 78.3
+[PASS] dragEndCb: called with 17.4, 78.4
+[PASS] stopProp: called
+[PASS] clickCb: called with 17.5, 78.5, mockMarker3
+[PASS] stopProp2: called
+[PASS] rightClickMarkerCb: called with 17.6, 78.6, mockMarker4
+[PASS] mapEvents['zoom']: defined
+[PASS] zoomChangeCb: called with 16
+[PASS] mapEvents['moveend']: defined
+[PASS] moveEndCb: called with 17.385, 78.486
+[PASS] tmap._weatherMapClickHandler: null
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

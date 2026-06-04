@@ -1,0 +1,53 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-033
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Edge Case
+Test Case Title     : should cover takeoff and land actions when waypoint is null
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+menuInstance.currentWaypoint = null
+menuInstance.handleMenuAction('land')
+
+Expected Behavior:
+Mock Waypoint Manager Current Mode is equal to 'land'.
+Verify mockWaypointManager.tmap.enableClick satisfies toHaveBeenCalled().
+
+Actual Observations:
+mockWaypointManager.currentMode = 'land'
+mockWaypointManager.tmap.enableClick: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockWaypointManager.currentMode).toBe('land');
+expect(mockWaypointManager.tmap.enableClick).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] mockWaypointManager.currentMode = 'land'
+[PASS] mockWaypointManager.tmap.enableClick: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

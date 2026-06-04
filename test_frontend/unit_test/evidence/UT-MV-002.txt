@@ -11,10 +11,10 @@ Test Case Title     : should setSelectedSysId and dispatch vehicle_selected Cust
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -66,7 +66,7 @@ expect(tab1.classList.contains('mv-active')).toBe(false);
 expect(listener).toHaveBeenCalled();
 
 Console Logs:
-[INFO] Jest executed test in 21ms
+[INFO] Jest executed test in 19ms
 [PASS] window.selectedSysId = 2
 [PASS] tab2.classList.contains('mv-active') = true
 [PASS] tab1.classList.contains('mv-active') = false

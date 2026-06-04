@@ -1,0 +1,49 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-032
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Edge Case
+Test Case Title     : should cover polygon-area list empty check
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+mockPolygonManager.polygons = []
+menuInstance.handlePolygonAction('polygon-area')
+
+Expected Behavior:
+Verify window.MsgConsole.warning satisfies toHaveBeenCalledWith('No polygons available').
+
+Actual Observations:
+window.MsgConsole.warning: called with 'No polygons available'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.warning).toHaveBeenCalledWith('No polygons available');
+
+Console Logs:
+[INFO] Jest executed test in 12ms
+[PASS] window.MsgConsole.warning: called with 'No polygons available'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

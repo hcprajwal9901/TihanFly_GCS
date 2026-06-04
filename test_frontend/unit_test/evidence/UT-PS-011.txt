@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PS-011
 Requirement ID      : REQ-TUNE-001
 Source File         : param-switch.js
-Target Function     : connectWebSocket() [Line 87]
-Test Category       : Edge Case
-Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : connectWebSocket() [Line 232]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle backend param_error message
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,32 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Input buffer references set to null.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.configure(undefined)
+spyError = jest.spyOn(console, 'error').mockImplementation(() => {})
+})
+spyError.mockRestore()
 
 Expected Behavior:
-Result is equal to false.
+Verify spyError satisfies toHaveBeenCalledWith('[ParamSwitch] Backend error:', 'Invalid parameter requested').
+Sw Footer Info exists.
 
 Actual Observations:
-result = false
+spyError: called with '[ParamSwitch] Backend error:', 'Invalid parameter requested'
+document.getElementById('swFooterInfo').textContent = 'Error: Invalid parameter requested'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(spyError).toHaveBeenCalledWith('[ParamSwitch] Backend error:', 'Invalid parameter requested');
+expect(document.getElementById('swFooterInfo').textContent).toBe('Error: Invalid parameter requested');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 1126ms
+[PASS] spyError: called with '[ParamSwitch] Backend error:', 'Invalid parameter requested'
+[PASS] document.getElementById('swFooterInfo').textContent = 'Error: Invalid parameter requested'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

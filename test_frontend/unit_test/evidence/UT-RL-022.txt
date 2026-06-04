@@ -1,0 +1,74 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-022
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Wrong Value
+Test Case Title     : should successfully decode all format types: bBhHiIfdcCeELnNZqQ
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+fmtPkt = createFmtPacket(2, 145, 'TEST', 'bBhHiIfdcCeELnNZqQ', 'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18')
+payload = new Uint8Array(142)
+view = new DataView(payload.buffer)
+view.setInt16(26, 12345, true);   // c (2 bytes -> /100 = 123.45)
+view.setUint16(28, 54321, true);  // C (2 bytes -> /100 = 543.21)
+view.setInt32(30, 987654, true);  // e (4 bytes -> /100 = 9876.54)
+view.setUint32(34, 1234567, true); // E (4 bytes -> /100 = 12345.67)
+view.setInt32(38, 174430000, true); // L (4 bytes -> /1e7 = 17.443)
+for (let j = 0; j < 4; j++) payload[42 + j] = 'char'.charCodeAt(j)
+for (let j = 0; j < 16; j++) payload[46 + j] = 'sixteencharwords'.charCodeAt(j)
+for (let j = 0; j < 64; j++) payload[62 + j] = 'sixtyfourcharslongstringtodecodeinsidetestsuiteforreviewlogparser'.charCodeAt(j)
+view.setUint32(126, 1000, true)
+view.setInt32(130, 0, true)
+view.setUint32(134, 2000, true)
+view.setUint32(138, 0, true)
+dataPkt = createDataPacket(2, 145, payload)
+buffer = new ArrayBuffer(89 + 145)
+new Uint8Array(buffer).set(fmtPkt, 0)
+new Uint8Array(buffer).set(dataPkt, 89)
+file = {
+window.ReviewLog.handleFile(file)
+jest.advanceTimersByTime(500)
+msgRow = document.querySelector('.rl-msg-row')
+
+Expected Behavior:
+Rl Message Count exists.
+Message Row Query Selector(' Rl Message Name') displays 'TEST'.
+
+Actual Observations:
+document.getElementById('rlMsgCount').textContent = '1 types'
+msgRow.querySelector('.rl-msg-name').textContent = 'TEST'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('rlMsgCount').textContent).toBe('1 types');
+expect(msgRow.querySelector('.rl-msg-name').textContent).toBe('TEST');
+
+Console Logs:
+[INFO] Jest executed test in 67ms
+[PASS] document.getElementById('rlMsgCount').textContent = '1 types'
+[PASS] msgRow.querySelector('.rl-msg-name').textContent = 'TEST'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

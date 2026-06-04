@@ -5,16 +5,16 @@ Test Case ID        : UT-CL-026
 Requirement ID      : REQ-SYS-002
 Source File         : component-loader.js
 Target Function     : loadComponent() [Line 24]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle fetch failures gracefully and log console error
+Test Category       : Positive / Functional
+Test Case Title     : should fetch components and inject HTML content when DOM is ready
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -25,47 +25,48 @@ Pre-conditions:
 JSDOM context initialized via setup.js.
 
 Test Inputs:
-errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
 global.fetch.mockImplementation((url) => {
-})
+componentName = url.split('/').pop().split('.')[0]
 })
 })
 global.loadScript('js/component-loader.js')
-await Promise.resolve()
-await Promise.resolve()
-await Promise.resolve()
-await Promise.resolve()
 headerComponent = document.getElementById('header-component')
 hudComponent = document.getElementById('hud-display-component')
-)
-errorSpy.mockRestore()
 
 Expected Behavior:
-Header Component displays ''.
-Hud Component displays '<div>OK</div>'.
-Verify errorSpy satisfies toHaveBeenCalledWith().
+Verify global.fetch satisfies toHaveBeenCalledTimes(9).
+Verify global.fetch satisfies toHaveBeenCalledWith('components/header.html').
+Verify global.fetch satisfies toHaveBeenCalledWith('components/hud-display.html').
+Header Component displays '<!-- Mock HTML for header -->'.
+Hud Component displays '<!-- Mock HTML for hud-display -->'.
 Event Dispatched is equal to true.
 
 Actual Observations:
-headerComponent.innerHTML = ''
-hudComponent.innerHTML = '<div>OK</div>'
-errorSpy: toHaveBeenCalledWith
+global.fetch: 9 call(s)
+global.fetch: called with 'components/header.html'
+global.fetch: called with 'components/hud-display.html'
+headerComponent.innerHTML = '<!-- Mock HTML for header -->'
+hudComponent.innerHTML = '<!-- Mock HTML for hud-display -->'
 eventDispatched = true
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(headerComponent.innerHTML).toBe('');
-expect(hudComponent.innerHTML).toBe('<div>OK</div>');
-expect(errorSpy).toHaveBeenCalledWith(
+expect(global.fetch).toHaveBeenCalledTimes(9);
+expect(global.fetch).toHaveBeenCalledWith('components/header.html');
+expect(global.fetch).toHaveBeenCalledWith('components/hud-display.html');
+expect(headerComponent.innerHTML).toBe('<!-- Mock HTML for header -->');
+expect(hudComponent.innerHTML).toBe('<!-- Mock HTML for hud-display -->');
 expect(eventDispatched).toBe(true);
 
 Console Logs:
-[INFO] Jest executed test in 10ms
-[PASS] headerComponent.innerHTML = ''
-[PASS] hudComponent.innerHTML = '<div>OK</div>'
-[PASS] errorSpy: toHaveBeenCalledWith
+[INFO] Jest executed test in 16ms
+[PASS] global.fetch: 9 call(s)
+[PASS] global.fetch: called with 'components/header.html'
+[PASS] global.fetch: called with 'components/hud-display.html'
+[PASS] headerComponent.innerHTML = '<!-- Mock HTML for header -->'
+[PASS] hudComponent.innerHTML = '<!-- Mock HTML for hud-display -->'
 [PASS] eventDispatched = true
 
 --------------------------------------------------------------------------------

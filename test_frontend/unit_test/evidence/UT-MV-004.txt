@@ -11,10 +11,10 @@ Test Case Title     : should build fleet cards, battery colors, and badges in up
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -84,7 +84,7 @@ expect(card2.querySelector('.mv-dot').classList.contains('mv-err')).toBe(true);
 expect(window.selectedSysId).toBe(2);
 
 Console Logs:
-[INFO] Jest executed test in 78ms
+[INFO] Jest executed test in 150ms
 [PASS] document.getElementById('droneCountText').textContent = '2 DRONES'
 [PASS] cards.length = 3
 [PASS] card1.querySelector('.mv-label').textContent = 'D-1'

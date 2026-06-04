@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-APP-006
 Requirement ID      : REQ-SYS-002
 Source File         : app.js
-Target Function     : initializeApplication() [Line 52]
+Target Function     : setHeaderStatus() [Line 779]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Test Case Title     : should correctly update status text and apply state class name
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,42 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for app.js.
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+text: String, state = 'ready': String | Simulated: badge = document.querySelector('.status-badge')
+global.setHeaderStatus('Connected', 'ready')
+global.setHeaderStatus('Disconnected', 'error')
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Badge displays 'Connected'.
+Badge Class Name is equal to 'status-badge ready'.
+Badge displays 'Disconnected'.
+Badge Class Name is equal to 'status-badge error'.
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+badge.textContent = 'Connected'
+badge.className = 'status-badge ready'
+badge.textContent = 'Disconnected'
+badge.className = 'status-badge error'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(querySelector).toHaveBeenCalled();
+// JSDOM verification:
+expect(badge.textContent).toBe('Connected');
+expect(badge.className).toBe('status-badge ready');
+expect(badge.textContent).toBe('Disconnected');
+expect(badge.className).toBe('status-badge error');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 30ms
+[PASS] badge.textContent = 'Connected'
+[PASS] badge.className = 'status-badge ready'
+[PASS] badge.textContent = 'Disconnected'
+[PASS] badge.className = 'status-badge error'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

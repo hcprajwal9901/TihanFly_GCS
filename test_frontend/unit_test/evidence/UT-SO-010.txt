@@ -11,10 +11,10 @@ Test Case Title     : should toast and alert error when save requested while dis
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -54,7 +54,7 @@ expect(saveBadge.className).toContain('fs-badge-error');
 expect(window.SwUtil.toast).toHaveBeenCalledWith('Not connected — cannot write parameters', true);
 
 Console Logs:
-[INFO] Jest executed test in 177ms
+[INFO] Jest executed test in 316ms
 [PASS] saveBadge.textContent = '✕ Not connected'
 [PASS] saveBadge.className contains 'fs-badge-error'
 [PASS] window.SwUtil.toast: called with 'Not connected — cannot write parameters', true

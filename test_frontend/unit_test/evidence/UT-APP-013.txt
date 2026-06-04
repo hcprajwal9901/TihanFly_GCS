@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-APP-013
 Requirement ID      : REQ-SYS-002
 Source File         : app.js
-Target Function     : initializeApplication() [Line 101]
-Test Category       : Edge Case
-Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : connect() [Line 111]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle disconnect and reconnect routines on close event
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,51 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Input buffer references set to null.
+Mock Strategy: Live execution.. Dependencies: TelemetryStore initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.configure(undefined)
+wsMockInstance.readyState = 1; // Open
+wsMockInstance.onopen()
+wsMockInstance.onclose()
+jest.advanceTimersByTime(3000)
 
 Expected Behavior:
-Result is equal to false.
+Verify window.MsgConsole.warning satisfies toHaveBeenCalledWith(expect.stringContaining('Backend disconnected')).
+Global Web Socket Instances Length is equal to 2.
 
 Actual Observations:
-result = false
+window.MsgConsole.warning: called with expect.stringContaining('Backend disconnected')
+global.WebSocket.instances.length = 2
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(WebSocket).toHaveBeenCalled();
+expect(clearDroneMarkers).toHaveBeenCalled();
+expect(connected).toHaveBeenCalled();
+expect(haversineDistance).toHaveBeenCalled();
+expect(home).toHaveBeenCalled();
+expect(keys).toHaveBeenCalled();
+expect(parse).toHaveBeenCalled();
+expect(radians).toHaveBeenCalled();
+expect(setDroneAutoPan).toHaveBeenCalled();
+expect(setHeaderStatus).toHaveBeenCalled();
+expect(setHeading).toHaveBeenCalled();
+expect(setView).toHaveBeenCalled();
+expect(updateDronePosition).toHaveBeenCalled();
+expect(updateDronePositionForSysid).toHaveBeenCalled();
+expect(updateTelemetry).toHaveBeenCalled();
+expect(warn).toHaveBeenCalled();
+expect(warning).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.MsgConsole.warning).toHaveBeenCalledWith(expect.stringContaining('Backend disconnected'));
+expect(global.WebSocket.instances.length).toBe(2);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 30ms
+[PASS] window.MsgConsole.warning: called with expect.stringContaining('Backend disconnected')
+[PASS] global.WebSocket.instances.length = 2
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

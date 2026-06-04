@@ -1,0 +1,65 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-026
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Positive / Functional
+Test Case Title     : should process parameter set events and bulk parameter dumps
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.initWebSocket()
+ws = wsInstances[0]
+ws.onmessage({ data: JSON.stringify({ type: 'param_load_start', message: 'Loading' }) })
+ws.onmessage({ data: JSON.stringify({ type: 'param_load_complete', message: 'Loaded' }) })
+ws.onmessage({ data: JSON.stringify({ type: 'param_file_saved', message: 'Saved' }) })
+ws.onmessage({ data: JSON.stringify({ type: 'param_error', message: 'Bad param' }) })
+
+Expected Behavior:
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith('📋 Loading').
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('✅ Loaded').
+Verify window.MsgConsole.success satisfies toHaveBeenCalledWith('💾 Saved').
+Error logged to console.
+
+Actual Observations:
+window.MsgConsole.info: called with '📋 Loading'
+window.MsgConsole.success: called with '✅ Loaded'
+window.MsgConsole.success: called with '💾 Saved'
+window.MsgConsole.error: called with '⚠️ Param: Bad param'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.info).toHaveBeenCalledWith('📋 Loading');
+expect(window.MsgConsole.success).toHaveBeenCalledWith('✅ Loaded');
+expect(window.MsgConsole.success).toHaveBeenCalledWith('💾 Saved');
+expect(window.MsgConsole.error).toHaveBeenCalledWith('⚠️ Param: Bad param');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] window.MsgConsole.info: called with '📋 Loading'
+[PASS] window.MsgConsole.success: called with '✅ Loaded'
+[PASS] window.MsgConsole.success: called with '💾 Saved'
+[PASS] window.MsgConsole.error: called with '⚠️ Param: Bad param'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

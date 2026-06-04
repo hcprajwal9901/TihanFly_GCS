@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-CL-008
 Requirement ID      : REQ-COM-001
 Source File         : comm-link.js
-Target Function     : websocket_telemetry_ping() [Line 66]
-Test Category       : Edge Case
-Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for WebSocket Connection State and Telemetry Stream Pings
+Target Function     : _ws_send() [Line 30]
+Test Category       : Positive / Functional
+Test Case Title     : should use fallback window.ws.send if safeSend is not defined
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,30 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Input buffer references set to null.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-ws = new TelemetryWebSocket('ws://localhost:8080')
-ws.onMessage(null)
+window.CommLink.init()
+delete window.safeSend
+window.ws = {
+window.CommLink._refresh_ports()
+delete window.ws
 
 Expected Behavior:
-Ws Is Connected() is equal to true.
+WebSocket notification sent.
 
 Actual Observations:
-ws.isConnected() = true
+window.ws.send: called with JSON.stringify({ type: 'list_serial_ports' })
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(ws.isConnected()).toBe(true);
+expect(window.ws.send).toHaveBeenCalledWith(JSON.stringify({ type: 'list_serial_ports' }));
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] ws.isConnected() = true
+[INFO] Jest executed test in 50ms
+[PASS] window.ws.send: called with JSON.stringify({ type: 'list_serial_ports' })
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

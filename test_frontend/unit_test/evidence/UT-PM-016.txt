@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PM-016
 Requirement ID      : REQ-NAV-001
 Source File         : polygon-manager.js
-Target Function     : initializePolygonManager() [Line 122]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Positive / Functional
+Test Case Title     : should alert if trying to export when polygon is missing
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,28 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-map = new TMap('map-element', [17.385, 78.486], 15, false)
+pmInstance.currentPolygon = null
+pmInstance.polygonPoints = []
+pmInstance.exportPolygonData()
 
 Expected Behavior:
-Verify () => map.addMarker(999.0, 999.0) satisfies toThrow('Invalid coordinates').
+Verify window.alert satisfies toHaveBeenCalledWith('❌ No polygon to export!').
 
 Actual Observations:
-() => map.addMarker(999.0, 999.0): throws
+window.alert: called with '❌ No polygon to export!'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => map.addMarker(999.0, 999.0)).toThrow('Invalid coordinates');
+expect(window.alert).toHaveBeenCalledWith('❌ No polygon to export!');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] () => map.addMarker(999.0, 999.0): throws
+[INFO] Jest executed test in 0ms
+[PASS] window.alert: called with '❌ No polygon to export!'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

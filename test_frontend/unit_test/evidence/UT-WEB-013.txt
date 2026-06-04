@@ -5,16 +5,16 @@ Test Case ID        : UT-WEB-013
 Requirement ID      : REQ-COM-001
 Source File         : websocket.js
 Target Function     : updateVehicleSelector() [Line 55]
-Test Category       : Positive / Functional
-Test Case Title     : should dispatch custom events for calibration values pongs and serial ports
+Test Category       : Boundary Value
+Test Case Title     : should wait 30s and reset reconnect attempts after reaching limit
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -26,25 +26,26 @@ JSDOM context initialized via setup.js.
 
 Test Inputs:
 window.initWebSocket()
-ws = wsInstances[0]
-spyDispatch = jest.spyOn(window, 'dispatchEvent')
-})
+for (let i = 0; i < 11; i++) {
+currentWs = wsInstances[wsInstances.length - 1]
+currentWs.onclose()
+jest.advanceTimersByTime(35000)
 
 Expected Behavior:
-Verify spyDispatch satisfies toHaveBeenCalled().
+Verify wsInstances.length satisfies toBeGreaterThan(5).
 
 Actual Observations:
-spyDispatch: called
+wsInstances.length > 5
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(spyDispatch).toHaveBeenCalled();
+expect(wsInstances.length).toBeGreaterThan(5);
 
 Console Logs:
-[INFO] Jest executed test in 1ms
-[PASS] spyDispatch: called
+[INFO] Jest executed test in 5ms
+[PASS] wsInstances.length > 5
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

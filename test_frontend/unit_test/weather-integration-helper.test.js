@@ -100,4 +100,82 @@ describe('Weather Integration Helper Unit Tests (weather-integration-helper.js)'
       );
     });
   });
+
+  describe('MsgConsole integration branch', () => {
+    it('should show success message in MsgConsole if present on integration', () => {
+      window.tmap = new global.TMap();
+      window.weatherDashboard = {
+        onMapClick: jest.fn()
+      };
+      window.MsgConsole = {
+        success: jest.fn()
+      };
+
+      global.loadScript('js/weather-integration-helper.js');
+      window.WeatherIntegration.integrate();
+
+      expect(window.MsgConsole.success).toHaveBeenCalledWith(
+        expect.stringContaining('Weather Dashboard ready')
+      );
+      delete window.MsgConsole;
+    });
+  });
+
+  describe('testWeatherDashboard', () => {
+    it('should fetch weather for Hyderabad if weatherDashboard is present', () => {
+      window.weatherDashboard = {
+        fetchWeather: jest.fn()
+      };
+      global.loadScript('js/weather-integration-helper.js');
+      
+      window.WeatherIntegration.test();
+      expect(window.weatherDashboard.fetchWeather).toHaveBeenCalledWith(17.4435, 78.3772);
+    });
+
+    it('should log error if weatherDashboard is missing', () => {
+      delete window.weatherDashboard;
+      global.loadScript('js/weather-integration-helper.js');
+      
+      window.WeatherIntegration.test();
+      expect(console.error).toHaveBeenCalledWith('❌ Weather Dashboard not found!');
+    });
+  });
+
+  describe('debugWeatherIntegration', () => {
+    it('should log debug info showing map, dashboard, and API states', () => {
+      window.tmap = {
+        clickEnabled: true,
+        clickCallback: jest.fn()
+      };
+      window.weatherDashboard = {
+        isVisible: true,
+        isLoading: false,
+        getCurrentLocation: jest.fn().mockReturnValue({ lat: 17.6, lng: 78.1 })
+      };
+      window.Weather = {};
+
+      global.loadScript('js/weather-integration-helper.js');
+      window.WeatherIntegration.debug();
+
+      expect(console.log).toHaveBeenCalledWith('Map (window.tmap):', true);
+      expect(console.log).toHaveBeenCalledWith('Weather Dashboard:', true);
+      expect(console.log).toHaveBeenCalledWith('Weather API:', true);
+      expect(console.log).toHaveBeenCalledWith('Map click enabled:', true);
+      expect(console.log).toHaveBeenCalledWith('Weather visible:', true);
+      
+      delete window.Weather;
+    });
+
+    it('should log debug info even when all components are missing', () => {
+      delete window.tmap;
+      delete window.weatherDashboard;
+      delete window.Weather;
+
+      global.loadScript('js/weather-integration-helper.js');
+      window.WeatherIntegration.debug();
+
+      expect(console.log).toHaveBeenCalledWith('Map (window.tmap):', false);
+      expect(console.log).toHaveBeenCalledWith('Weather Dashboard:', false);
+    });
+  });
 });

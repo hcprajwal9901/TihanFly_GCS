@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-033
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Positive / Functional
+Test Case Title     : should update port status bound details
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.initWebSocket()
+ws = wsInstances[0]
+})
+
+Expected Behavior:
+Port Status Udp exists.
+Port Status Serial exists.
+
+Actual Observations:
+document.getElementById('portStatusUDP').textContent = '🟢 UDP :14550'
+document.getElementById('portStatusSerial').textContent = '🔴 Serial: not found'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(document.getElementById('portStatusUDP').textContent).toBe('🟢 UDP :14550');
+expect(document.getElementById('portStatusSerial').textContent).toBe('🔴 Serial: not found');
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] document.getElementById('portStatusUDP').textContent = '🟢 UDP :14550'
+[PASS] document.getElementById('portStatusSerial').textContent = '🔴 Serial: not found'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,55 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-029
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should handle polygon file imports
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+clickSpy = jest.fn()
+originalCreate = document.createElement
+document.createElement = jest.fn().mockImplementation((tag) => {
+el = originalCreate.call(document, tag)
+el.click = clickSpy
+})
+menuInstance.handlePolygonAction('polygon-load')
+document.createElement = originalCreate
+
+Expected Behavior:
+Click action triggered.
+
+Actual Observations:
+clickSpy: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(clickSpy).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 18ms
+[PASS] clickSpy: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-APP-025
+Requirement ID      : REQ-SYS-002
+Source File         : app.js
+Target Function     : initializeApplication() [Line 26]
+Test Category       : Positive / Functional
+Test Case Title     : should send payload over websocket helper if websocket is open
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+msg: String | Simulated: wsMockInstance.readyState = 1; // Open
+wsMockInstance.onopen()
+sendMock = jest.fn()
+wsMockInstance.send = sendMock
+window.DroneWS.send({ cmd: 'takeoff' })
+
+Expected Behavior:
+Verify sendMock satisfies toHaveBeenCalledWith(JSON.stringify({ cmd: 'takeoff' })).
+Window Drone Ws Status() is equal to 1.
+
+Actual Observations:
+sendMock: called with JSON.stringify({ cmd: 'takeoff' })
+window.DroneWS.status() = 1
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(stringify).toHaveBeenCalled();
+expect(warn).toHaveBeenCalled();
+// JSDOM verification:
+expect(sendMock).toHaveBeenCalledWith(JSON.stringify({ cmd: 'takeoff' }));
+expect(window.DroneWS.status()).toBe(1); // OPEN
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] sendMock: called with JSON.stringify({ cmd: 'takeoff' })
+[PASS] window.DroneWS.status() = 1
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

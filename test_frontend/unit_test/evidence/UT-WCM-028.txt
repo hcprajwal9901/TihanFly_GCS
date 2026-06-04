@@ -1,0 +1,70 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-028
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should position and display polygon submenu
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+jest.useFakeTimers()
+existingSub = document.querySelector('.polygon-submenu')
+if (existingSub) existingSub.remove()
+polygonItem = menuInstance.menu.querySelector('[data-action="polygon"]')
+polygonItem.getBoundingClientRect = jest.fn().mockReturnValue({
+})
+menuInstance.showPolygonSubmenu()
+submenu = document.querySelector('.polygon-submenu')
+jest.advanceTimersByTime(100)
+document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+jest.useRealTimers()
+
+Expected Behavior:
+Submenu is true.
+Submenu Style Left is equal to '155px'.
+Submenu Style Top is equal to '200px'.
+Submenu hidden.
+
+Actual Observations:
+submenu: truthy
+submenu.style.left = '155px'
+submenu.style.top = '200px'
+submenu.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(submenu).toBeTruthy();
+expect(submenu.style.left).toBe('155px');
+expect(submenu.style.top).toBe('200px');
+expect(submenu.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 14ms
+[PASS] submenu: truthy
+[PASS] submenu.style.left = '155px'
+[PASS] submenu.style.top = '200px'
+[PASS] submenu.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

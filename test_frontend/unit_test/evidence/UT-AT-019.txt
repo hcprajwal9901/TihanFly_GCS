@@ -1,0 +1,72 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-019
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle log download queue and base64 decode failures
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+cls: String, fn: String, ico: String, lbl: String, id: Number, i18Key: String | Simulated: window.ws = { readyState: 1, send: jest.fn(), addEventListener: jest.fn() }
+window.AnalyzeToolsPanel.openTool('log-download')
+window.AnalyzeToolsPanel._refreshLogs()
+wsHandler = window.ws.addEventListener.mock.calls.find(call => call[0] === 'message')[1]
+})
+})
+cb = document.querySelector('.lchk[data-lid="2"]')
+cb.checked = true
+window.ws.send.mockClear()
+window.AnalyzeToolsPanel._downloadSel()
+)
+spyConsoleError = jest.spyOn(console, 'error').mockImplementation(() => {})
+})
+spyConsoleError.mockRestore()
+
+Expected Behavior:
+Cb is true.
+WebSocket notification sent.
+Verify spyConsoleError satisfies toHaveBeenCalled().
+
+Actual Observations:
+cb: truthy
+window.ws.send: toHaveBeenCalledWith
+spyConsoleError: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = B(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(cb).toBeTruthy();
+expect(window.ws.send).toHaveBeenCalledWith(
+expect(spyConsoleError).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 28ms
+[PASS] cb: truthy
+[PASS] window.ws.send: toHaveBeenCalledWith
+[PASS] spyConsoleError: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,72 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-TMA-019
+Requirement ID      : REQ-SYS-002
+Source File         : tmap.js
+Target Function     : tmap_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should cover drone position updating edge cases and auto-pan loop
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+tmap = new TMap('map-container', [17.385, 78.486], 16, true)
+tmap.updateDronePosition(null, null)
+window.selectedSysId = 1
+tmap.updateDronePosition(17.385, 78.486, 90)
+document.body.innerHTML += `
+markerMock.isPopupOpen = jest.fn().mockReturnValue(true)
+tmap.updateDronePosition(17.387, 78.487, 180)
+tmap.setDroneAutoPan(true)
+for (let i = 0; i < 25; i++) {
+tmap.updateDronePosition(17.385, 78.486, 90)
+tmap.droneMarkers = null
+tmap.pruneStaleVehicleMarkers([1])
+tmap.clearDroneMarkers()
+
+Expected Behavior:
+Verify tmap.droneMarkers satisfies toBeUndefined().
+Tmap Drone Marker is null.
+Drone Popup Lat 1 exists.
+Tmap Drone Auto Pan is equal to false.
+
+Actual Observations:
+tmap.droneMarkers: toBeUndefined()
+tmap.droneMarker: not null
+document.getElementById('drone-popup-lat-1').textContent = 'Lat: 17.387000'
+tmap.droneAutoPan = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(tmap.droneMarkers).toBeUndefined();
+expect(tmap.droneMarker).not.toBeNull();
+expect(document.getElementById('drone-popup-lat-1').textContent).toBe('Lat: 17.387000');
+expect(tmap.droneAutoPan).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 10ms
+[PASS] tmap.droneMarkers: toBeUndefined()
+[PASS] tmap.droneMarker: not null
+[PASS] document.getElementById('drone-popup-lat-1').textContent = 'Lat: 17.387000'
+[PASS] tmap.droneAutoPan = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

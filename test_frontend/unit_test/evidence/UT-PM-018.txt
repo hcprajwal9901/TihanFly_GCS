@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PM-018
 Requirement ID      : REQ-NAV-001
 Source File         : polygon-manager.js
-Target Function     : initializePolygonManager() [Line 136]
-Test Category       : Wrong Value
-Test Case Title     : should reject incorrect string format payloads and log mismatch warning for Component Layout Initialization and DOM Controls Validation
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Positive / Functional
+Test Case Title     : should open and close survey settings dialog modal
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,57 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Type safety check wrappers active.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-map = new TMap('map-element', [17.385, 78.486], 15, false)
-marker = map.addMarker('invalid_lat', 'invalid_lng')
+pmInstance.openSurveySettings()
+modal = document.body.querySelector('#surveySettingsModal')
+document.getElementById('surveyAlt').value = '25'
+document.getElementById('surveyOverlap').value = '55'
+document.getElementById('surveySidelap').value = '45'
+document.getElementById('surveyAngle').value = '90'
+document.getElementById('surveySpeed').value = '8'
+pmInstance.applySurveySettings()
 
 Expected Behavior:
-Marker is null.
+Modal is true.
+Pm Instance Survey Settings Altitude is equal to 25.
+Pm Instance Survey Settings Overlap is equal to 55.
+Pm Instance Survey Settings Sidelap is equal to 45.
+Pm Instance Survey Settings Angle is equal to 90.
+Pm Instance Survey Settings Speed is equal to 8.
+Document Body Query Selector(' Survey Settings Modal') is null.
 
 Actual Observations:
-marker: null
+modal: truthy
+pmInstance.surveySettings.altitude = 25
+pmInstance.surveySettings.overlap = 55
+pmInstance.surveySettings.sidelap = 45
+pmInstance.surveySettings.angle = 90
+pmInstance.surveySettings.speed = 8
+document.body.querySelector('#surveySettingsModal'): null
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(marker).toBeNull();
+expect(modal).toBeTruthy();
+expect(pmInstance.surveySettings.altitude).toBe(25);
+expect(pmInstance.surveySettings.overlap).toBe(55);
+expect(pmInstance.surveySettings.sidelap).toBe(45);
+expect(pmInstance.surveySettings.angle).toBe(90);
+expect(pmInstance.surveySettings.speed).toBe(8);
+expect(document.body.querySelector('#surveySettingsModal')).toBeNull();
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] marker: null
+[INFO] Jest executed test in 120ms
+[PASS] modal: truthy
+[PASS] pmInstance.surveySettings.altitude = 25
+[PASS] pmInstance.surveySettings.overlap = 55
+[PASS] pmInstance.surveySettings.sidelap = 45
+[PASS] pmInstance.surveySettings.angle = 90
+[PASS] pmInstance.surveySettings.speed = 8
+[PASS] document.body.querySelector('#surveySettingsModal'): null
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

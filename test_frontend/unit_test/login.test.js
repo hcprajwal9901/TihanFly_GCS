@@ -443,4 +443,161 @@ describe('Web Authentication Panel Suite (js/login.js)', () => {
       expect(modal.style.display).toBe('none');
     });
   });
+
+  describe('Edge Cases & Uncovered Callbacks (Phase 2)', () => {
+    beforeAll(() => {
+      jest.useFakeTimers();
+    });
+
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    it('should handle TiHANSocket constructor error throwing', () => {
+      const originalWS = global.WebSocket;
+      global.WebSocket = jest.fn().mockImplementation(() => {
+        throw new Error('Constructor Error');
+      });
+      // Instantiate a new TiHANSocket (this triggers catch block)
+      new TiHANSocket('ws://localhost:9999');
+      // Restore WebSocket
+      global.WebSocket = originalWS;
+    });
+
+    it('should cover WebSocket onopen ping heartbeat and onmessage error/parsing error', () => {
+      // 1. onopen heartbeat
+      socket.ws.onopen();
+      jest.advanceTimersByTime(25000);
+
+      // 2. onmessage error type message
+      socket.ws.onmessage({ data: JSON.stringify({ type: 'error', message: 'Mock error payload' }) });
+      expect(document.getElementById('authAlert').textContent).toContain('Mock error payload');
+
+      // 3. onmessage parsing error catch block
+      socket.ws.onmessage({ data: 'invalid-json{' });
+
+      // 4. onerror and onclose
+      socket.ws.onerror(new Event('error'));
+      socket.ws.onclose();
+    });
+
+    it('should cover login, signup and admin callbacks and overlays', () => {
+      // Pre-populate inputs to pass basic validation guards
+      document.getElementById('loginEmail').value = 'test@tihan.in';
+      document.getElementById('loginPassword').value = 'password123';
+      
+      document.getElementById('signupFirst').value = 'Ravi';
+      document.getElementById('signupLast').value = 'Kumar';
+      document.getElementById('signupEmail').value = 'ravi@tihan.in';
+      document.getElementById('signupPassword').value = 'password123';
+      document.getElementById('signupConfirm').value = 'password123';
+      document.getElementById('termsCheck').checked = true;
+
+      document.getElementById('adminUser').value = 'admin';
+      document.getElementById('adminPass').value = 'admin123';
+
+      // 1. Login success redirect redirect timeout (1000ms)
+      handleLogin();
+      socket.handlers['login_success'][0]({ message: 'Logged in' });
+      try {
+        jest.advanceTimersByTime(1000);
+      } catch (e) {
+        // Catch and ignore JSDOM's native navigation not implemented error.
+        // This is expected and ensures the redirect callback is executed and covered.
+      }
+
+      // 2. Login error callback
+      handleLogin();
+      socket.handlers['login_error'][0]({ message: 'Bad password' });
+      expect(document.getElementById('authAlert').textContent).toContain('Bad password');
+
+      // 3. Signup pending and rejection
+      handleSignup();
+      socket.handlers['signup_pending'][0]({ message: 'Hold on' });
+      socket.handlers['account_rejected'][0]({ message: 'No access' });
+      const rejOverlay = document.body.lastChild;
+      expect(document.body.contains(rejOverlay)).toBe(true);
+      const closeBtn = rejOverlay.querySelector('button');
+      if (closeBtn) closeBtn.click();
+      expect(document.body.contains(rejOverlay)).toBe(false);
+
+      // 4. Signup pending and approval
+      handleSignup();
+      socket.handlers['signup_pending'][0]({ message: 'Hold on' });
+      socket.handlers['account_approved'][0]({ message: 'Welcome user' });
+      const appOverlay = document.body.lastChild;
+      expect(document.body.contains(appOverlay)).toBe(true);
+      const proceedBtn = appOverlay.querySelector('button');
+      if (proceedBtn) proceedBtn.click();
+      expect(document.body.contains(appOverlay)).toBe(false);
+
+      // 5. Signup error callback
+      handleSignup();
+      socket.handlers['signup_error'][0]({ message: 'Signup failed' });
+      expect(document.getElementById('authAlert').textContent).toContain('Signup failed');
+
+      // 6. Admin login error callback
+      handleAdminLogin();
+      socket.handlers['admin_login_error'][0]({ message: 'Access denied' });
+      expect(document.getElementById('authAlert').textContent).toContain('Access denied');
+    });
+
+    it('should cover new signup toast click, admin action responses, and logout', () => {
+      // 1. New signup toast click and highlight user timeouts
+      handleNewSignupNotification({ userId: 'u123', firstName: 'A', lastName: 'B', email: 'a@b.com' });
+      const toast = document.body.lastChild;
+      toast.click();
+      jest.advanceTimersByTime(300);
+      jest.advanceTimersByTime(3000);
+
+      // 2. Admin actions callbacks
+      toggleUserStatus('u123');
+      socket.handlers['toggle_done'][0]();
+
+      deleteUser('u123');
+      socket.handlers['delete_done'][0]();
+
+      // 3. Admin logout and Client ID helper
+      handleAdminLogout();
+      applyClientId();
+    });
+
+    it('should cover showToast custom onClick and fadeout/remove timers', () => {
+      const clickFn = jest.fn();
+      showToast('Title', 'Body', 'info', clickFn);
+      const toast = document.body.lastChild;
+      toast.click();
+      expect(clickFn).toHaveBeenCalled();
+
+      // Timer to fade out (5000ms)
+      jest.advanceTimersByTime(5000);
+      // Timer to remove (400ms)
+      jest.advanceTimersByTime(400);
+    });
+
+    it('should cover document keydown event listener and HUD coordinates ticker', () => {
+      // Login active
+      document.getElementById('panelLogin').classList.add('active');
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(document.getElementById('authAlert').textContent).toContain('All fields are required.');
+
+      // Signup active
+      document.getElementById('panelLogin').classList.remove('active');
+      document.getElementById('panelSignup').classList.add('active');
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(document.getElementById('authAlert').textContent).toContain('Please fill in all fields.');
+
+      // Admin active
+      document.getElementById('panelSignup').classList.remove('active');
+      document.getElementById('panelAdmin').classList.add('active');
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(document.getElementById('authAlert').textContent).toContain('Both fields are required.');
+
+      // Keydown other key (should return early)
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+
+      // HUD coordinates ticker interval callback (3000ms)
+      jest.advanceTimersByTime(3000);
+    });
+  });
 });

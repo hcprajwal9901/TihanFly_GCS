@@ -1,0 +1,54 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-027
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should prevent default context menu events on the menu container
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+preventSpy = jest.fn()
+dummyEvt = { preventDefault: preventSpy }
+menuInstance.menu.dispatchEvent(new MouseEvent('contextmenu'))
+menuEl = document.getElementById('waypointContextMenu')
+event = new Event('contextmenu', { cancelable: true })
+event.preventDefault = preventSpy
+menuEl.dispatchEvent(event)
+
+Expected Behavior:
+Verify preventSpy satisfies toHaveBeenCalled().
+
+Actual Observations:
+preventSpy: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(preventSpy).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] preventSpy: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

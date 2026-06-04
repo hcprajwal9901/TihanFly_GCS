@@ -1,0 +1,56 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-APP-019
+Requirement ID      : REQ-SYS-002
+Source File         : app.js
+Target Function     : initializeApplication() [Line 26]
+Test Category       : Positive / Functional
+Test Case Title     : should close dropdown if user clicks outside of appearance controls
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+btn = document.getElementById('uiAppearanceBtn')
+dropdown = document.getElementById('uiAppearanceDropdown')
+btn.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+document.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+jest.advanceTimersByTime(200)
+
+Expected Behavior:
+Dropdown displayed.
+Dropdown hidden.
+
+Actual Observations:
+dropdown.style.display = 'flex'
+dropdown.style.display = 'none'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(dropdown.style.display).toBe('flex');
+expect(dropdown.style.display).toBe('none');
+
+Console Logs:
+[INFO] Jest executed test in 36ms
+[PASS] dropdown.style.display = 'flex'
+[PASS] dropdown.style.display = 'none'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

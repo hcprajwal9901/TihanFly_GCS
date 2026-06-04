@@ -1,0 +1,62 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-031
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Negative / Robustness
+Test Case Title     : should cover polygon-offset prompt failures
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.prompt.mockReturnValueOnce(null)
+menuInstance.handlePolygonAction('polygon-offset')
+window.prompt.mockReturnValueOnce('abc')
+menuInstance.handlePolygonAction('polygon-offset')
+mockPolygonManager.polygons = []
+window.prompt.mockReturnValueOnce('10')
+menuInstance.handlePolygonAction('polygon-offset')
+
+Expected Behavior:
+Verify mockPolygonManager.offsetPolygon satisfies toHaveBeenCalled().
+Verify mockPolygonManager.offsetPolygon satisfies toHaveBeenCalled().
+Verify window.MsgConsole.warning satisfies toHaveBeenCalledWith('No polygon to offset').
+
+Actual Observations:
+mockPolygonManager.offsetPolygon: not called
+mockPolygonManager.offsetPolygon: not called
+window.MsgConsole.warning: called with 'No polygon to offset'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(mockPolygonManager.offsetPolygon).not.toHaveBeenCalled();
+expect(mockPolygonManager.offsetPolygon).not.toHaveBeenCalled();
+expect(window.MsgConsole.warning).toHaveBeenCalledWith('No polygon to offset');
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] mockPolygonManager.offsetPolygon: not called
+[PASS] mockPolygonManager.offsetPolygon: not called
+[PASS] window.MsgConsole.warning: called with 'No polygon to offset'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

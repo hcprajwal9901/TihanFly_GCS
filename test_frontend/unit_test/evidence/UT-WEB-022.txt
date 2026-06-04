@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-022
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Positive / Functional
+Test Case Title     : should process flight_mode and flight_mode_status updates
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.initWebSocket()
+ws = wsInstances[0]
+})
+})
+
+Expected Behavior:
+Verify window.FlightModeSelector.setMode satisfies toHaveBeenCalledWith('LOITER').
+Verify window.TelemetryDisplay.setFlightMode satisfies toHaveBeenCalledWith('LOITER').
+Verify window.FlightModeSelector.setMode satisfies toHaveBeenCalledWith('RTL').
+
+Actual Observations:
+window.FlightModeSelector.setMode: called with 'LOITER'
+window.TelemetryDisplay.setFlightMode: called with 'LOITER'
+window.FlightModeSelector.setMode: called with 'RTL'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.FlightModeSelector.setMode).toHaveBeenCalledWith('LOITER');
+expect(window.TelemetryDisplay.setFlightMode).toHaveBeenCalledWith('LOITER');
+expect(window.FlightModeSelector.setMode).toHaveBeenCalledWith('RTL');
+
+Console Logs:
+[INFO] Jest executed test in 4ms
+[PASS] window.FlightModeSelector.setMode: called with 'LOITER'
+[PASS] window.TelemetryDisplay.setFlightMode: called with 'LOITER'
+[PASS] window.FlightModeSelector.setMode: called with 'RTL'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

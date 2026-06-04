@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-APP-017
 Requirement ID      : REQ-SYS-002
 Source File         : app.js
-Target Function     : initializeApplication() [Line 129]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : initializeApplication() [Line 26]
+Test Category       : Positive / Functional
+Test Case Title     : should ignore dragging if initialized on interactive UI controls
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,32 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
+panel = document.getElementById('videoContainer')
+mockButton = document.createElement('button')
+panel.appendChild(mockButton)
+mousedownEvent = new MouseEvent('mousedown', {
+})
+Object.defineProperty(mousedownEvent, 'target', { value: mockButton, enumerable: true })
+panel.dispatchEvent(mousedownEvent)
 
 Expected Behavior:
-Verify () => component.load(null) satisfies toThrow().
+Panel Style Top is equal to ''.
 
 Actual Observations:
-() => component.load(null): throws
+panel.style.top = ''
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => component.load(null)).toThrow();
+expect(panel.style.top).toBe('');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] () => component.load(null): throws
+[INFO] Jest executed test in 20ms
+[PASS] panel.style.top = ''
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

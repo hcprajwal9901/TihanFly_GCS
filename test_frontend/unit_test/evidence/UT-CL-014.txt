@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-CL-014
 Requirement ID      : REQ-COM-001
 Source File         : comm-link.js
-Target Function     : websocket_telemetry_ping() [Line 108]
-Test Category       : Wrong Value
-Test Case Title     : should reject incorrect string format payloads and log mismatch warning for WebSocket Connection State and Telemetry Stream Pings
+Target Function     : _ws_send() [Line 30]
+Test Category       : Negative / Robustness
+Test Case Title     : should validate form and show error for TCP connections
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,37 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Type safety check wrappers active.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-ws = new TelemetryWebSocket('ws://localhost:8080')
-result = ws.sendData('BAD_BINARY_FORMAT')
+window.CommLink.init()
+window.CommLink._setConnType('tcp')
+document.getElementById('clTcpIp').value = ''
+window.CommLink._do_connect()
+document.getElementById('clTcpIp').value = '192.168.1.100'
+document.getElementById('clTcpPort').value = '8000'
+window.CommLink._do_connect()
+})
 
 Expected Behavior:
-Result is equal to false.
+Cl Status Text exists.
+Verify window.safeSend satisfies toHaveBeenCalledWith().
 
 Actual Observations:
-result = false
+document.getElementById('clStatusText').textContent = 'Enter a host/IP address.'
+window.safeSend: toHaveBeenCalledWith
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(document.getElementById('clStatusText').textContent).toBe('Enter a host/IP address.');
+expect(window.safeSend).toHaveBeenCalledWith({
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 38ms
+[PASS] document.getElementById('clStatusText').textContent = 'Enter a host/IP address.'
+[PASS] window.safeSend: toHaveBeenCalledWith
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

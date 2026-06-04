@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PM-014
 Requirement ID      : REQ-NAV-001
 Source File         : polygon-manager.js
-Target Function     : initializePolygonManager() [Line 108]
-Test Category       : Boundary Value
-Test Case Title     : should enforce parameter boundary range clipping for minimum and maximum limits of Component Layout Initialization and DOM Controls Validation
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Positive / Functional
+Test Case Title     : should perform ray-casting point-in-polygon math correctly
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,32 +22,31 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Autopilot parameter boundary rules loaded.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-map = new TMap('map-element', [17.385, 78.486], 15, false)
-map.setZoom(22)
-map.setZoom(1)
+pointInside = window.L.latLng(17.601, 78.121)
+pointOutside = window.L.latLng(17.650, 78.250)
 
 Expected Behavior:
-Map Get Zoom() is equal to 18.
-Map Get Zoom() is equal to 3.
+Pm Instance Point In Polygon(Point Inside) is equal to true.
+Pm Instance Point In Polygon(Point Outside) is equal to false.
 
 Actual Observations:
-map.getZoom() = 18
-map.getZoom() = 3
+pmInstance.pointInPolygon(pointInside) = true
+pmInstance.pointInPolygon(pointOutside) = false
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(map.getZoom()).toBe(18);
-expect(map.getZoom()).toBe(3);
+expect(pmInstance.pointInPolygon(pointInside)).toBe(true);
+expect(pmInstance.pointInPolygon(pointOutside)).toBe(false);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] map.getZoom() = 18
-[PASS] map.getZoom() = 3
+[INFO] Jest executed test in 1ms
+[PASS] pmInstance.pointInPolygon(pointInside) = true
+[PASS] pmInstance.pointInPolygon(pointOutside) = false
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

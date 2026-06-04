@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-APP-018
 Requirement ID      : REQ-SYS-002
 Source File         : app.js
-Target Function     : initializeApplication() [Line 136]
-Test Category       : Edge Case
-Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : initializeApplication() [Line 26]
+Test Category       : Positive / Functional
+Test Case Title     : should expand and collapse appearance dropdown on button clicks
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,34 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Input buffer references set to null.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.configure(undefined)
+btn = document.getElementById('uiAppearanceBtn')
+dropdown = document.getElementById('uiAppearanceDropdown')
+btn.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+btn.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+jest.advanceTimersByTime(200)
 
 Expected Behavior:
-Result is equal to false.
+Dropdown displayed.
+Dropdown hidden.
 
 Actual Observations:
-result = false
+dropdown.style.display = 'flex'
+dropdown.style.display = 'none'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(dropdown.style.display).toBe('flex');
+expect(dropdown.style.display).toBe('none');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 26ms
+[PASS] dropdown.style.display = 'flex'
+[PASS] dropdown.style.display = 'none'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

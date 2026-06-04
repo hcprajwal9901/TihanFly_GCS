@@ -6,15 +6,15 @@ Requirement ID      : REQ-COM-001
 Source File         : websocket.js
 Target Function     : updateVehicleSelector() [Line 55]
 Test Category       : Positive / Functional
-Test Case Title     : should broadcast set-commands copy to all active sysids if selectedSysId is 0
+Test Case Title     : should auto-inject current selectedSysId for outbound commands
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -29,35 +29,29 @@ window.initWebSocket()
 ws = wsInstances[0]
 ws.readyState = WebSocket.OPEN
 window.ws = ws
-window.selectedSysId = 0
-window.activeSysids = [2, 5]
-window.safeSend({ type: 'param_set', param_id: 'THR_MIN', value: 15 })
-data1 = JSON.parse(ws.send.mock.calls[0][0])
-data2 = JSON.parse(ws.send.mock.calls[1][0])
+window.selectedSysId = 2
+window.safeSend({ type: 'command', command: 176 })
+sentData = JSON.parse(ws.send.mock.calls[0][0])
 
 Expected Behavior:
 WebSocket notification sent.
-Data1 Sysid is equal to 2.
-Data2 Sysid is equal to 5.
+Sent Data Sysid is equal to 2.
 
 Actual Observations:
-ws.send: 2 call(s)
-data1.sysid = 2
-data2.sysid = 5
+ws.send: called
+sentData.sysid = 2
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(ws.send).toHaveBeenCalledTimes(2);
-expect(data1.sysid).toBe(2);
-expect(data2.sysid).toBe(5);
+expect(ws.send).toHaveBeenCalled();
+expect(sentData.sysid).toBe(2);
 
 Console Logs:
-[INFO] Jest executed test in 2ms
-[PASS] ws.send: 2 call(s)
-[PASS] data1.sysid = 2
-[PASS] data2.sysid = 5
+[INFO] Jest executed test in 3ms
+[PASS] ws.send: called
+[PASS] sentData.sysid = 2
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

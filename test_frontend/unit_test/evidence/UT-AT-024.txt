@@ -1,0 +1,78 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-024
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : B() [Line 578]
+Test Category       : Positive / Functional
+Test Case Title     : should test raw vibration table pills status mapping
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+function (log: String | Simulated: jest.useFakeTimers()
+vibWin = document.createElement('div')
+vibWin.id = 'atw-vibration'
+vibWin.innerHTML = `
+document.body.appendChild(vibWin)
+window.AnalyzeToolsPanel._togVib()
+window.AnalyzeToolsPanel._onInspectorData([{
+}])
+jest.advanceTimersByTime(800)
+window.AnalyzeToolsPanel._onInspectorData([{
+}])
+jest.advanceTimersByTime(800)
+window.AnalyzeToolsPanel._onInspectorData([{
+}])
+jest.advanceTimersByTime(800)
+window.AnalyzeToolsPanel._togVib()
+vibWin.remove()
+jest.useRealTimers()
+
+Expected Behavior:
+Rvs0 exists.
+Rvs0 exists.
+Rvs0 exists.
+
+Actual Observations:
+document.getElementById('rvs0').textContent = 'Good'
+document.getElementById('rvs0').textContent = 'Warning'
+document.getElementById('rvs0').textContent = 'High'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(Date).toHaveBeenCalled();
+expect(_dlLog).toHaveBeenCalled();
+expect(toLocaleDateString).toHaveBeenCalled();
+expect(toLocaleTimeString).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('rvs0').textContent).toBe('Good');
+expect(document.getElementById('rvs0').textContent).toBe('Warning');
+expect(document.getElementById('rvs0').textContent).toBe('High');
+
+Console Logs:
+[INFO] Jest executed test in 24ms
+[PASS] document.getElementById('rvs0').textContent = 'Good'
+[PASS] document.getElementById('rvs0').textContent = 'Warning'
+[PASS] document.getElementById('rvs0').textContent = 'High'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

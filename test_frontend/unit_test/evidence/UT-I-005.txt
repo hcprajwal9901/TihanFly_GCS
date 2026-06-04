@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-I-005
 Requirement ID      : REQ-SYS-001
 Source File         : i18n.js
-Target Function     : update_system_settings() [Line 45]
+Target Function     : t() [Line 250]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for System Configurations and Multi-language Translation Maps
+Test Case Title     : should set and get language correctly
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,42 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for i18n.js.
+Mock Strategy: Mock external boundaries: Mock localStorage cache items.. Dependencies: localStorage initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+code: String | Simulated: window.i18n.setLang('ta')
+window.i18n.setLang('invalid_code')
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Window I18N Get Lang() is equal to 'en'.
+Window I18N Get Lang() is equal to 'ta'.
+Global Local Storage Get Item('Tihan Lang') is equal to 'ta'.
+Window I18N Get Lang() is equal to 'ta'.
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+window.i18n.getLang() = 'en'
+window.i18n.getLang() = 'ta'
+global.localStorage.getItem('tihan_lang') = 'ta'
+window.i18n.getLang() = 'ta'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(applyTranslations).toHaveBeenCalled();
+expect(localStorage.setItem).toHaveBeenCalledWith('tihan_lang', expect.any(String));
+// JSDOM verification:
+expect(window.i18n.getLang()).toBe('en');
+expect(window.i18n.getLang()).toBe('ta');
+expect(global.localStorage.getItem('tihan_lang')).toBe('ta');
+expect(window.i18n.getLang()).toBe('ta');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 95ms
+[PASS] window.i18n.getLang() = 'en'
+[PASS] window.i18n.getLang() = 'ta'
+[PASS] global.localStorage.getItem('tihan_lang') = 'ta'
+[PASS] window.i18n.getLang() = 'ta'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

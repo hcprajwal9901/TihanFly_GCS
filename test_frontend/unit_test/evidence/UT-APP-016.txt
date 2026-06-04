@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-APP-016
 Requirement ID      : REQ-SYS-002
 Source File         : app.js
-Target Function     : initializeApplication() [Line 122]
+Target Function     : initializeApplication() [Line 26]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Test Case Title     : should handle mouse dragging movements on draggable panels
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,39 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for app.js.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+panel = document.getElementById('videoContainer')
+mousedownEvent = new MouseEvent('mousedown', {
+})
+panel.dispatchEvent(mousedownEvent)
+mousemoveEvent = new MouseEvent('mousemove', {
+})
+document.dispatchEvent(mousemoveEvent)
+mouseupEvent = new MouseEvent('mouseup', {
+})
+document.dispatchEvent(mouseupEvent)
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Verify panel.style.top satisfies toBeDefined().
+Verify panel.style.left satisfies toBeDefined().
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+panel.style.top: defined
+panel.style.left: defined
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(panel.style.top).toBeDefined();
+expect(panel.style.left).toBeDefined();
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 22ms
+[PASS] panel.style.top: defined
+[PASS] panel.style.left: defined
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PF-014
 Requirement ID      : REQ-TUNE-001
 Source File         : param-full.js
-Target Function     : parseOptionsFromRange() [Line 108]
-Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Target Function     : loadExternalMeta() [Line 841]
+Test Category       : Negative / Robustness
+Test Case Title     : should test loadExternalMeta failure and default fetch errors
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,36 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for param-full.js.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+global.fetch.mockImplementationOnce(() => Promise.reject(new Error('Fetch failed')))
+await initPanel()
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Fp Search exists.
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+document.getElementById('fpSearch'): defined
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(fetch).toHaveBeenCalled();
+expect(json).toHaveBeenCalled();
+expect(keys).toHaveBeenCalled();
+expect(replace).toHaveBeenCalled();
+expect(resolve).toHaveBeenCalled();
+expect(slice).toHaveBeenCalled();
+expect(then).toHaveBeenCalled();
+expect(tryNext).toHaveBeenCalled();
+// JSDOM verification:
+expect(document.getElementById('fpSearch')).toBeDefined();
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 30ms
+[PASS] document.getElementById('fpSearch'): defined
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

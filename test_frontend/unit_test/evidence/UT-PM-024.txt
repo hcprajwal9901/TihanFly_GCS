@@ -1,0 +1,66 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PM-024
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-manager.js
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Negative / Robustness
+Test Case Title     : should cover recreatePolygon failure when points < 3 or layers not ready
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock L Map layers.. Dependencies: Leaflet API initialized in setup.
+
+Test Inputs:
+pmInstance.polygonPoints = []
+resNoPoints = pmInstance.recreatePolygon()
+pmInstance.map = {}
+pmInstance.polygonLayer = null
+pmInstance.gridLayer = null
+pmInstance.polygonPoints = [
+window.L.latLng(17.600, 78.120),
+window.L.latLng(17.602, 78.120),
+window.L.latLng(17.601, 78.122)
+resNoLayers = pmInstance.recreatePolygon()
+
+Expected Behavior:
+Res No Points is equal to false.
+Res No Layers is equal to false.
+
+Actual Observations:
+resNoPoints = false
+resNoLayers = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(addTo).toHaveBeenCalled();
+expect(ensureLayersInitialized).toHaveBeenCalled();
+expect(polygon).toHaveBeenCalled();
+expect(transparent).toHaveBeenCalled();
+// JSDOM verification:
+expect(resNoPoints).toBe(false);
+expect(resNoLayers).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] resNoPoints = false
+[PASS] resNoLayers = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

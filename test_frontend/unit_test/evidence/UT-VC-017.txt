@@ -11,10 +11,10 @@ Test Case Title     : should validate JSON syntax in uploads and show warning me
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -62,7 +62,7 @@ expect(installBtn.disabled).toBe(false);
 expect(logBox.textContent).toContain('APJ file has no "image" field');
 
 Console Logs:
-[INFO] Jest executed test in 73ms
+[INFO] Jest executed test in 63ms
 [PASS] logBox.textContent contains 'APJ file is not valid JSON'
 [PASS] installBtn.disabled = false
 [PASS] logBox.textContent contains 'APJ file has no "image" field'

@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-GEO-008
 Requirement ID      : REQ-SAF-002
 Source File         : geofence.js
-Target Function     : geofence_boundary_check() [Line 66]
+Target Function     : init() [Line 540]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Geofence Boundary Violations and Autopilot RTL Trigger
+Test Case Title     : should handle already initialized state and missing host element
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,40 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for geofence.js.
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+window.Geofence.init()
+originalGetElementById = document.getElementById
+document.getElementById = Document.prototype.getElementById.bind(document)
+document.querySelectorAll('#panel-geofence').forEach(el => el.remove())
+if (window.Geofence && typeof window.Geofence._resetInitialised === 'function') {
+window.Geofence._resetInitialised()
+consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+window.Geofence.init()
+consoleSpy.mockRestore()
+document.getElementById = originalGetElementById
+newHost = document.createElement('div')
+newHost.id = 'panel-geofence'
+document.body.appendChild(newHost)
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Verify consoleSpy satisfies toHaveBeenCalledWith(expect.stringContaining('Host element #panel-geofence not found')).
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+consoleSpy: called with expect.stringContaining('Host element #panel-geofence not found')
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(wirePanel).toHaveBeenCalled();
+// JSDOM verification:
+expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Host element #panel-geofence not found'));
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 21ms
+[PASS] consoleSpy: called with expect.stringContaining('Host element #panel-geofence not found')
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

@@ -1,0 +1,76 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-023
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Positive / Functional
+Test Case Title     : should process arm / disarm / mode_change events
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.initWebSocket()
+ws = wsInstances[0]
+})
+})
+})
+
+Expected Behavior:
+Verify window.MsgConsole.arm satisfies toHaveBeenCalledWith('Vehicle armed').
+Verify window.ArmControl.setArmedState satisfies toHaveBeenCalledWith(true).
+Verify window.MsgConsole.disarm satisfies toHaveBeenCalledWith('Vehicle disarmed').
+Verify window.ArmControl.setArmedState satisfies toHaveBeenCalledWith(false).
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith(expect.stringContaining('Auto mode')).
+Mode Indicator Text exists.
+Active Mode Display exists.
+
+Actual Observations:
+window.MsgConsole.arm: called with 'Vehicle armed'
+window.ArmControl.setArmedState: called with true
+window.MsgConsole.disarm: called with 'Vehicle disarmed'
+window.ArmControl.setArmedState: called with false
+window.MsgConsole.info: called with expect.stringContaining('Auto mode')
+document.getElementById('modeIndicatorText').textContent = 'AUTO'
+document.getElementById('activeModeDisplay').textContent = 'AUTO'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.MsgConsole.arm).toHaveBeenCalledWith('Vehicle armed');
+expect(window.ArmControl.setArmedState).toHaveBeenCalledWith(true);
+expect(window.MsgConsole.disarm).toHaveBeenCalledWith('Vehicle disarmed');
+expect(window.ArmControl.setArmedState).toHaveBeenCalledWith(false);
+expect(window.MsgConsole.info).toHaveBeenCalledWith(expect.stringContaining('Auto mode'));
+expect(document.getElementById('modeIndicatorText').textContent).toBe('AUTO');
+expect(document.getElementById('activeModeDisplay').textContent).toBe('AUTO');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] window.MsgConsole.arm: called with 'Vehicle armed'
+[PASS] window.ArmControl.setArmedState: called with true
+[PASS] window.MsgConsole.disarm: called with 'Vehicle disarmed'
+[PASS] window.ArmControl.setArmedState: called with false
+[PASS] window.MsgConsole.info: called with expect.stringContaining('Auto mode')
+[PASS] document.getElementById('modeIndicatorText').textContent = 'AUTO'
+[PASS] document.getElementById('activeModeDisplay').textContent = 'AUTO'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

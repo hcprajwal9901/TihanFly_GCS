@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-TMA-018
 Requirement ID      : REQ-SYS-002
 Source File         : tmap.js
-Target Function     : update_compass_needle() [Line 136]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for Compass Telemetry Orientation and HUD Needle Rotations
+Target Function     : tmap_initialize() [Line 12]
+Test Category       : Positive / Functional
+Test Case Title     : should cover marker removal on click helpers
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,33 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-map = new TMap('map-element', [17.385, 78.486], 15, false)
+tmap = new TMap('map-container', [17.385, 78.486], 16, true)
+m1 = tmap.addMarker(17.385, 78.486)
+tmap.enableMarkerRemovalOnClick()
+m2 = tmap.addRemovableMarker(17.386, 78.487)
 
 Expected Behavior:
-Verify () => map.addMarker(999.0, 999.0) satisfies toThrow('Invalid coordinates').
+Tmap Get Marker Count() is equal to 1.
+Tmap Get Marker Count() is equal to 2.
 
 Actual Observations:
-() => map.addMarker(999.0, 999.0): throws
+tmap.getMarkerCount() = 1
+tmap.getMarkerCount() = 2
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => map.addMarker(999.0, 999.0)).toThrow('Invalid coordinates');
+expect(tmap.getMarkerCount()).toBe(1);
+expect(tmap.getMarkerCount()).toBe(2);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] () => map.addMarker(999.0, 999.0): throws
+[INFO] Jest executed test in 3ms
+[PASS] tmap.getMarkerCount() = 1
+[PASS] tmap.getMarkerCount() = 2
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

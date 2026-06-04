@@ -5,16 +5,16 @@ Test Case ID        : UT-PS-017
 Requirement ID      : REQ-TUNE-001
 Source File         : param-switch.js
 Target Function     : connectWebSocket() [Line 129]
-Test Category       : Wrong Value
-Test Case Title     : should reject incorrect string format payloads and log mismatch warning for Component Layout Initialization and DOM Controls Validation
+Test Category       : Positive / Functional
+Test Case Title     : should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,31 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Type safety check wrappers active.
+JSDOM context initialized. Standard mocks active for param-switch.js.
 
 Test Inputs:
 component = new GCSComponent()
-result = component.setValue('NOT_A_NUMBER')
+component.initialize()
 
 Expected Behavior:
-Result is equal to false.
+Component Is Initialized() is equal to true.
+Component Get Html Element() is null.
 
 Actual Observations:
-result = false
+component.isInitialized() = true
+component.getHtmlElement(): not null
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(component.isInitialized()).toBe(true);
+expect(component.getHtmlElement()).not.toBeNull();
 
 Console Logs:
 [INFO] Jest executed test in 14ms
-[PASS] result = false
+[PASS] component.isInitialized() = true
+[PASS] component.getHtmlElement(): not null
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

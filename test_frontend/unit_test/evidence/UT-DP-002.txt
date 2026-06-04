@@ -11,10 +11,10 @@ Test Case Title     : should compile correct serializable models of waypoints, m
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -36,6 +36,9 @@ Verify savedData.waypoints satisfies toHaveLength(1).
 Saved Data Waypoints[0] Lat is equal to 17.601.
 Saved Data Home Position Lat is equal to 17.601.
 Saved Data Ui State Map Zoom is equal to 18.
+Saved Data Compass State Heading is equal to 90.
+Saved Data Weather State Current Location Lat is equal to 17.6.
+Saved Data Command Editor State Current Tab is equal to 'mission'.
 
 Actual Observations:
 success = true
@@ -44,6 +47,9 @@ savedData.waypoints: toHaveLength(1)
 savedData.waypoints[0].lat = 17.601
 savedData.homePosition.lat = 17.601
 savedData.uiState.mapZoom = 18
+savedData.compassState.heading = 90
+savedData.weatherState.currentLocation.lat = 17.6
+savedData.commandEditorState.currentTab = 'mission'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
@@ -66,15 +72,21 @@ expect(savedData.waypoints).toHaveLength(1);
 expect(savedData.waypoints[0].lat).toBe(17.601);
 expect(savedData.homePosition.lat).toBe(17.601);
 expect(savedData.uiState.mapZoom).toBe(18);
+expect(savedData.compassState.heading).toBe(90);
+expect(savedData.weatherState.currentLocation.lat).toBe(17.6);
+expect(savedData.commandEditorState.currentTab).toBe('mission');
 
 Console Logs:
-[INFO] Jest executed test in 34ms
+[INFO] Jest executed test in 21ms
 [PASS] success = true
 [PASS] savedData.version = '5.0'
 [PASS] savedData.waypoints: toHaveLength(1)
 [PASS] savedData.waypoints[0].lat = 17.601
 [PASS] savedData.homePosition.lat = 17.601
 [PASS] savedData.uiState.mapZoom = 18
+[PASS] savedData.compassState.heading = 90
+[PASS] savedData.weatherState.currentLocation.lat = 17.6
+[PASS] savedData.commandEditorState.currentTab = 'mission'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

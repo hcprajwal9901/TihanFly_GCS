@@ -277,4 +277,155 @@ describe('GCS RC Switch Options Panel High-Fidelity Behavioral Test Suite (param
       expect(document.getElementById('swFooterInfo').textContent).toContain('defaults (not yet written to FC)');
     });
   });
+
+  describe('WebSocket, Backend Message and Event Handling Edge Cases', () => {
+    it('should retry connecting WebSocket on close event after timeout', () => {
+      // Mock console.warn
+      const spyWarn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      // Locate private ws created during beforeEach
+      expect(mockPrivateWs).toBeTruthy();
+
+      // Trigger close on private socket
+      mockPrivateWs.readyState = global.WebSocket.CLOSED;
+      mockPrivateWs.onclose();
+
+      expect(spyWarn).toHaveBeenCalledWith(
+        expect.stringContaining('closed — retrying in 3 s')
+      );
+
+      // Verify status banner text
+      expect(document.getElementById('swFooterInfo').textContent).toContain('Backend disconnected');
+
+      // Fast forward 3000ms
+      jest.advanceTimersByTime(3000);
+
+      // A new socket should have been created
+      expect(global.WebSocket.instances.length).toBe(2);
+
+      spyWarn.mockRestore();
+    });
+
+    it('should log error on private socket errors', () => {
+      const spyError = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      mockPrivateWs.onerror(new Error('Simulated socket error'));
+
+      expect(spyError).toHaveBeenCalledWith(
+        '[ParamSwitch] WebSocket error',
+        expect.any(Error)
+      );
+
+      spyError.mockRestore();
+    });
+
+    it('should handle backend param_error message', () => {
+      const spyError = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      triggerPrivateMessage({
+        type: 'param_error',
+        message: 'Invalid parameter requested'
+      });
+
+      expect(spyError).toHaveBeenCalledWith('[ParamSwitch] Backend error:', 'Invalid parameter requested');
+      expect(document.getElementById('swFooterInfo').textContent).toBe('Error: Invalid parameter requested');
+
+      spyError.mockRestore();
+    });
+
+    it('should handle backend param_set_sent message', () => {
+      const spyInfo = jest.spyOn(console, 'info').mockImplementation(() => {});
+
+      triggerPrivateMessage({
+        type: 'param_set_sent',
+        param_id: 'RC5_OPTION',
+        value: 12
+      });
+
+      expect(spyInfo).toHaveBeenCalledWith('[ParamSwitch] PARAM_SET sent for RC5_OPTION = 12');
+
+      spyInfo.mockRestore();
+    });
+
+    it('should ignore unrecognized backend message types', () => {
+      // Unrecognized message types should run default break and do nothing
+      triggerPrivateMessage({
+        type: 'unrecognized_type_test_message'
+      });
+      // Should not crash and state remains unchanged
+      expect(document.getElementById('swStatTotal').textContent).toBe('8');
+    });
+
+    it('should update local cached channels and reset dirty states on vehicle_selected event', () => {
+      const select5 = document.querySelector('select[data-name="RC5_OPTION"]');
+      select5.value = '4'; // RTL
+      select5.dispatchEvent(new Event('change', { bubbles: true }));
+      expect(document.getElementById('swStatDirty').textContent).toBe('1');
+
+      // Mark panel-param-switch as active (adds 'active' class to simulate open panel state)
+      const host = document.getElementById('panel-param-switch');
+      host.classList.add('active');
+
+      // Dispatch vehicle_selected event
+      window.dispatchEvent(new Event('vehicle_selected'));
+
+      // Check status banner indicates switching drone
+      expect(document.getElementById('swFooterInfo').textContent).toContain('Fetching RC switch options');
+
+      // State is reset, dirty is cleared
+      expect(document.getElementById('swStatDirty').textContent).toBe('0');
+      
+      host.classList.remove('active');
+    });
+
+    it('should fallback to private ws for writing if shared ws is closed', () => {
+      // Close global shared ws
+      const originalSharedWs = window.ws;
+      delete window.ws;
+
+      // Select channel and make it dirty
+      const select6 = document.querySelector('select[data-name="RC6_OPTION"]');
+      select6.value = '9';
+      select6.dispatchEvent(new Event('change', { bubbles: true }));
+
+      // Mock mockPrivateWs.send
+      mockPrivateWs.send = jest.fn();
+
+      const writeBtn = document.getElementById('swWriteBtn');
+      writeBtn.click();
+
+      expect(mockPrivateWs.send).toHaveBeenCalledWith(
+        JSON.stringify({
+          type: 'param_set',
+          param_id: 'RC6_OPTION',
+          value: 9
+        })
+      );
+
+      // Restore
+      window.ws = originalSharedWs;
+    });
+
+    it('should log error when trying to write while both sockets are disconnected', () => {
+      // Close global shared ws
+      const originalSharedWs = window.ws;
+      delete window.ws;
+      // Close private ws
+      mockPrivateWs.readyState = global.WebSocket.CLOSED;
+      mockPrivateWs.onclose();
+
+      // Select channel and make it dirty
+      const select6 = document.querySelector('select[data-name="RC6_OPTION"]');
+      select6.value = '9';
+      select6.dispatchEvent(new Event('change', { bubbles: true }));
+
+      const writeBtn = document.getElementById('swWriteBtn');
+      writeBtn.click();
+
+      expect(document.getElementById('swFooterInfo').textContent).toBe('WebSocket not connected. Cannot write parameters.');
+
+      // Restore
+      window.ws = originalSharedWs;
+    });
+  });
 });

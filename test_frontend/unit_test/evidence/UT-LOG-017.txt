@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-LOG-017
 Requirement ID      : REQ-LOG-001
 Source File         : login.js
-Target Function     : authenticate_user() [Line 129]
+Target Function     : updateConnectionStatus() [Line 91]
 Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for GCS Authentication and Local Database Storage Sync
+Test Case Title     : should cover WebSocket onopen ping heartbeat and onmessage error/parsing error
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,141 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
+type: String, callback: Function | Simulated: socket.ws.onopen()
+jest.advanceTimersByTime(25000)
+socket.ws.onmessage({ data: JSON.stringify({ type: 'error', message: 'Mock error payload' }) })
+socket.ws.onmessage({ data: 'invalid-json{' })
+socket.ws.onerror(new Event('error'))
+socket.ws.onclose()
+})
+document.getElementById('loginEmail').value = 'test@tihan.in'
+document.getElementById('loginPassword').value = 'password123'
+document.getElementById('signupFirst').value = 'Ravi'
+document.getElementById('signupLast').value = 'Kumar'
+document.getElementById('signupEmail').value = 'ravi@tihan.in'
+document.getElementById('signupPassword').value = 'password123'
+document.getElementById('signupConfirm').value = 'password123'
+document.getElementById('termsCheck').checked = true
+document.getElementById('adminUser').value = 'admin'
+document.getElementById('adminPass').value = 'admin123'
+handleLogin()
+socket.handlers['login_success'][0]({ message: 'Logged in' })
+jest.advanceTimersByTime(1000)
+handleLogin()
+socket.handlers['login_error'][0]({ message: 'Bad password' })
+handleSignup()
+socket.handlers['signup_pending'][0]({ message: 'Hold on' })
+socket.handlers['account_rejected'][0]({ message: 'No access' })
+rejOverlay = document.body.lastChild
+closeBtn = rejOverlay.querySelector('button')
+if (closeBtn) closeBtn.click()
+handleSignup()
+socket.handlers['signup_pending'][0]({ message: 'Hold on' })
+socket.handlers['account_approved'][0]({ message: 'Welcome user' })
+appOverlay = document.body.lastChild
+proceedBtn = appOverlay.querySelector('button')
+if (proceedBtn) proceedBtn.click()
+handleSignup()
+socket.handlers['signup_error'][0]({ message: 'Signup failed' })
+handleAdminLogin()
+socket.handlers['admin_login_error'][0]({ message: 'Access denied' })
+})
+handleNewSignupNotification({ userId: 'u123', firstName: 'A', lastName: 'B', email: 'a@b.com' })
+toast = document.body.lastChild
+toast.click()
+jest.advanceTimersByTime(300)
+jest.advanceTimersByTime(3000)
+toggleUserStatus('u123')
+socket.handlers['toggle_done'][0]()
+deleteUser('u123')
+socket.handlers['delete_done'][0]()
+handleAdminLogout()
+applyClientId()
+})
+clickFn = jest.fn()
+showToast('Title', 'Body', 'info', clickFn)
+toast = document.body.lastChild
+toast.click()
+jest.advanceTimersByTime(5000)
+jest.advanceTimersByTime(400)
+})
+document.getElementById('panelLogin').classList.add('active')
+document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+document.getElementById('panelLogin').classList.remove('active')
+document.getElementById('panelSignup').classList.add('active')
+document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+document.getElementById('panelSignup').classList.remove('active')
+document.getElementById('panelAdmin').classList.add('active')
+document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+jest.advanceTimersByTime(3000)
+})
 
 Expected Behavior:
-Verify () => component.load(null) satisfies toThrow().
+Auth Alert exists.
+Auth Alert exists.
+Document Body Contains(Rej Overlay) is equal to true.
+Document Body Contains(Rej Overlay) is equal to false.
+Document Body Contains(App Overlay) is equal to true.
+Document Body Contains(App Overlay) is equal to false.
+Auth Alert exists.
+Auth Alert exists.
+Click action triggered.
+Auth Alert exists.
+Auth Alert exists.
+Auth Alert exists.
 
 Actual Observations:
-() => component.load(null): throws
+document.getElementById('authAlert').textContent contains 'Mock error payload'
+document.getElementById('authAlert').textContent contains 'Bad password'
+document.body.contains(rejOverlay) = true
+document.body.contains(rejOverlay) = false
+document.body.contains(appOverlay) = true
+document.body.contains(appOverlay) = false
+document.getElementById('authAlert').textContent contains 'Signup failed'
+document.getElementById('authAlert').textContent contains 'Access denied'
+clickFn: called
+document.getElementById('authAlert').textContent contains 'All fields are required.'
+document.getElementById('authAlert').textContent contains 'Please fill in all fields.'
+document.getElementById('authAlert').textContent contains 'Both fields are required.'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => component.load(null)).toThrow();
+const res = on(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(document.getElementById('authAlert').textContent).toContain('Mock error payload');
+expect(document.getElementById('authAlert').textContent).toContain('Bad password');
+expect(document.body.contains(rejOverlay)).toBe(true);
+expect(document.body.contains(rejOverlay)).toBe(false);
+expect(document.body.contains(appOverlay)).toBe(true);
+expect(document.body.contains(appOverlay)).toBe(false);
+expect(document.getElementById('authAlert').textContent).toContain('Signup failed');
+expect(document.getElementById('authAlert').textContent).toContain('Access denied');
+expect(clickFn).toHaveBeenCalled();
+expect(document.getElementById('authAlert').textContent).toContain('All fields are required.');
+expect(document.getElementById('authAlert').textContent).toContain('Please fill in all fields.');
+expect(document.getElementById('authAlert').textContent).toContain('Both fields are required.');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] () => component.load(null): throws
+[INFO] Jest executed test in 8ms
+[PASS] document.getElementById('authAlert').textContent contains 'Mock error payload'
+[PASS] document.getElementById('authAlert').textContent contains 'Bad password'
+[PASS] document.body.contains(rejOverlay) = true
+[PASS] document.body.contains(rejOverlay) = false
+[PASS] document.body.contains(appOverlay) = true
+[PASS] document.body.contains(appOverlay) = false
+[PASS] document.getElementById('authAlert').textContent contains 'Signup failed'
+[PASS] document.getElementById('authAlert').textContent contains 'Access denied'
+[PASS] clickFn: called
+[PASS] document.getElementById('authAlert').textContent contains 'All fields are required.'
+[PASS] document.getElementById('authAlert').textContent contains 'Please fill in all fields.'
+[PASS] document.getElementById('authAlert').textContent contains 'Both fields are required.'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

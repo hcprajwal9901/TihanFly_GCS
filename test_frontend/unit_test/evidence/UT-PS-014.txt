@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PS-014
 Requirement ID      : REQ-TUNE-001
 Source File         : param-switch.js
-Target Function     : connectWebSocket() [Line 108]
+Target Function     : connectWebSocket() [Line 232]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Test Case Title     : should update local cached channels and reset dirty states on vehicle_selected event
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,40 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for param-switch.js.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+select5 = document.querySelector('select[data-name="RC5_OPTION"]')
+select5.value = '4'; // RTL
+select5.dispatchEvent(new Event('change', { bubbles: true }))
+host = document.getElementById('panel-param-switch')
+host.classList.add('active')
+window.dispatchEvent(new Event('vehicle_selected'))
+host.classList.remove('active')
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Sw Stat Dirty exists.
+Sw Footer Info exists.
+Sw Stat Dirty exists.
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+document.getElementById('swStatDirty').textContent = '1'
+document.getElementById('swFooterInfo').textContent contains 'Fetching RC switch options'
+document.getElementById('swStatDirty').textContent = '0'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(document.getElementById('swStatDirty').textContent).toBe('1');
+expect(document.getElementById('swFooterInfo').textContent).toContain('Fetching RC switch options');
+expect(document.getElementById('swStatDirty').textContent).toBe('0');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 767ms
+[PASS] document.getElementById('swStatDirty').textContent = '1'
+[PASS] document.getElementById('swFooterInfo').textContent contains 'Fetching RC switch options'
+[PASS] document.getElementById('swStatDirty').textContent = '0'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

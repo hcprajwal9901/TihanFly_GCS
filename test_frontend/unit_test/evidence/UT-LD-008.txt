@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-LD-008
 Requirement ID      : REQ-LOG-001
 Source File         : log-download.js
-Target Function     : _injectCSS() [Line 66]
+Target Function     : _injectCSS() [Line 105]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Test Case Title     : should cover Back button click and ldSelAll bulk check toggle
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,46 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for log-download.js.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+window.LogDownloadPanel.open()
+backBtn = document.getElementById('ldBackBtn')
+if (backBtn) backBtn.click()
+tbody = document.getElementById('ldTbody')
+tbody.innerHTML = `
+selAll = document.getElementById('ldSelAll')
+selAll.checked = true
+selAll.dispatchEvent(new Event('change'))
+chks = document.querySelectorAll('.ld-chk')
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Ld Window exists.
+Ld Window exists.
+Chks[0] Checked is equal to true.
+Chks[1] Checked is equal to true.
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+document.getElementById('ldWindow').classList.contains('ld-on') = true
+document.getElementById('ldWindow').classList.contains('ld-on') = false
+chks[0].checked = true
+chks[1].checked = true
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(document.getElementById('ldWindow').classList.contains('ld-on')).toBe(true);
+expect(document.getElementById('ldWindow').classList.contains('ld-on')).toBe(false);
+expect(chks[0].checked).toBe(true);
+expect(chks[1].checked).toBe(true);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 11ms
+[PASS] document.getElementById('ldWindow').classList.contains('ld-on') = true
+[PASS] document.getElementById('ldWindow').classList.contains('ld-on') = false
+[PASS] chks[0].checked = true
+[PASS] chks[1].checked = true
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

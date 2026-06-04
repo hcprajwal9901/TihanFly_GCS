@@ -6,15 +6,15 @@ Requirement ID      : REQ-COM-001
 Source File         : websocket.js
 Target Function     : updateVehicleSelector() [Line 55]
 Test Category       : Positive / Functional
-Test Case Title     : should update GPS coordinate positions on gps packet
+Test Case Title     : should rebuild dropdown options based on live vehicle status array
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -27,23 +27,37 @@ JSDOM context initialized via setup.js.
 Test Inputs:
 window.initWebSocket()
 ws = wsInstances[0]
-})
+payload = {
+ws.onmessage({ data: JSON.stringify(payload) })
+sel = document.getElementById('vehicleSelector')
 
 Expected Behavior:
-Verify mockTMap.updateDronePositionForSysid satisfies toHaveBeenCalledWith(3, 17.601, 78.126, 95).
+Verify sel.options satisfies toHaveLength(2).
+Sel Options[0] displays '1'.
+Sel Options[1] displays '3'.
+Vehicle Selector Wrap exists.
 
 Actual Observations:
-mockTMap.updateDronePositionForSysid: called with 3, 17.601, 78.126, 95
+sel.options: toHaveLength(2)
+sel.options[0].value = '1'
+sel.options[1].value = '3'
+document.getElementById('vehicleSelectorWrap').style.display = 'flex'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(mockTMap.updateDronePositionForSysid).toHaveBeenCalledWith(3, 17.601, 78.126, 95);
+expect(sel.options).toHaveLength(2);
+expect(sel.options[0].value).toBe('1');
+expect(sel.options[1].value).toBe('3');
+expect(document.getElementById('vehicleSelectorWrap').style.display).toBe('flex');
 
 Console Logs:
-[INFO] Jest executed test in 66ms
-[PASS] mockTMap.updateDronePositionForSysid: called with 3, 17.601, 78.126, 95
+[INFO] Jest executed test in 6ms
+[PASS] sel.options: toHaveLength(2)
+[PASS] sel.options[0].value = '1'
+[PASS] sel.options[1].value = '3'
+[PASS] document.getElementById('vehicleSelectorWrap').style.display = 'flex'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

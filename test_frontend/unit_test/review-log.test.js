@@ -683,4 +683,291 @@ describe('Review Log Browser High-Fidelity Behavioral Test Suite', () => {
       window.ReviewLog.handleFile = originalHandleFile;
     });
   });
+
+  describe('Event-Driven Zoom & Pan, Complete Decoder Types, & Error Catching', () => {
+    it('should dispatch actual wheel, drag mouse and touch events to verify zoom & pan behavior', () => {
+      // 1. Plot some series to initialize chart and xMin/xMax
+      const file = {
+        name: 'test_log.bin',
+        buffer: mockValidBinBuffer
+      };
+      window.ReviewLog.handleFile(file);
+      jest.advanceTimersByTime(500);
+
+      // Plot
+      const fieldRow = document.querySelector('.rl-field-row[data-field="Lat"]');
+      fieldRow.click();
+
+      const wrap = document.getElementById('rlChartWrap');
+      wrap.getBoundingClientRect = () => ({
+        left: 0,
+        top: 0,
+        width: 1000,
+        height: 400
+      });
+
+      // Dispatch wheel zoom in
+      const wheelIn = new WheelEvent('wheel', {
+        clientX: 500,
+        deltaY: -100,
+        bubbles: true,
+        cancelable: true
+      });
+      wrap.dispatchEvent(wheelIn);
+
+      // Dispatch wheel zoom out
+      const wheelOut = new WheelEvent('wheel', {
+        clientX: 500,
+        deltaY: 100,
+        bubbles: true,
+        cancelable: true
+      });
+      wrap.dispatchEvent(wheelOut);
+
+      // Dispatch mousedown drag pan
+      const mousedown = new MouseEvent('mousedown', {
+        clientX: 100,
+        button: 0,
+        bubbles: true
+      });
+      wrap.dispatchEvent(mousedown);
+
+      const mousemove = new MouseEvent('mousemove', {
+        clientX: 200,
+        bubbles: true
+      });
+      document.dispatchEvent(mousemove);
+
+      const mouseup = new MouseEvent('mouseup', {
+        bubbles: true
+      });
+      document.dispatchEvent(mouseup);
+
+      // Dispatch single touch pan
+      const touchstartPan = new TouchEvent('touchstart', {
+        changedTouches: [
+          { identifier: 1, clientX: 100 }
+        ],
+        bubbles: true,
+        cancelable: true
+      });
+      wrap.dispatchEvent(touchstartPan);
+
+      const touchmovePan = new TouchEvent('touchmove', {
+        changedTouches: [
+          { identifier: 1, clientX: 200 }
+        ],
+        bubbles: true,
+        cancelable: true
+      });
+      wrap.dispatchEvent(touchmovePan);
+
+      const touchendPan = new TouchEvent('touchend', {
+        changedTouches: [
+          { identifier: 1 }
+        ],
+        bubbles: true,
+        cancelable: true
+      });
+      wrap.dispatchEvent(touchendPan);
+
+      // Dispatch double touch pinch zoom
+      const touchstartPinch = new TouchEvent('touchstart', {
+        changedTouches: [
+          { identifier: 1, clientX: 100 },
+          { identifier: 2, clientX: 200 }
+        ],
+        bubbles: true,
+        cancelable: true
+      });
+      wrap.dispatchEvent(touchstartPinch);
+
+      const touchmovePinch = new TouchEvent('touchmove', {
+        changedTouches: [
+          { identifier: 1, clientX: 90 },
+          { identifier: 2, clientX: 210 }
+        ],
+        bubbles: true,
+        cancelable: true
+      });
+      wrap.dispatchEvent(touchmovePinch);
+
+      const touchendPinch = new TouchEvent('touchend', {
+        changedTouches: [
+          { identifier: 1 },
+          { identifier: 2 }
+        ],
+        bubbles: true,
+        cancelable: true
+      });
+      wrap.dispatchEvent(touchendPinch);
+
+      expect(ChartMock.instances.length).toBeGreaterThan(0);
+    });
+
+    it('should successfully decode all format types: bBhHiIfdcCeELnNZqQ', () => {
+      // Construct a binary packet covering all decoding types
+      // FMT type = 2, size = 145 (3 + 142 data bytes)
+      const fmtPkt = createFmtPacket(2, 145, 'TEST', 'bBhHiIfdcCeELnNZqQ', 'f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18');
+      
+      const payload = new Uint8Array(142);
+      const view = new DataView(payload.buffer);
+      
+      // Populate values:
+      view.setInt8(0, -5);              // b (1 byte)
+      view.setUint8(1, 200);            // B/M (1 byte)
+      view.setInt16(2, -500, true);     // h (2 bytes)
+      view.setUint16(4, 60000, true);   // H (2 bytes)
+      view.setInt32(6, -2000000, true); // i (4 bytes)
+      view.setUint32(10, 40000000, true);// I (4 bytes)
+      view.setFloat32(14, 1.2345, true); // f (4 bytes)
+      view.setFloat64(18, 9.87654321, true); // d (8 bytes)
+      view.setInt16(26, 12345, true);   // c (2 bytes -> /100 = 123.45)
+      view.setUint16(28, 54321, true);  // C (2 bytes -> /100 = 543.21)
+      view.setInt32(30, 987654, true);  // e (4 bytes -> /100 = 9876.54)
+      view.setUint32(34, 1234567, true); // E (4 bytes -> /100 = 12345.67)
+      view.setInt32(38, 174430000, true); // L (4 bytes -> /1e7 = 17.443)
+      
+      // n (char[4]):
+      for (let j = 0; j < 4; j++) payload[42 + j] = 'char'.charCodeAt(j);
+      // N (char[16]):
+      for (let j = 0; j < 16; j++) payload[46 + j] = 'sixteencharwords'.charCodeAt(j);
+      // Z (char[64]):
+      for (let j = 0; j < 64; j++) payload[62 + j] = 'sixtyfourcharslongstringtodecodeinsidetestsuiteforreviewlogparser'.charCodeAt(j);
+      
+      // q (int64):
+      view.setUint32(126, 1000, true);
+      view.setInt32(130, 0, true);
+      // Q (uint64):
+      view.setUint32(134, 2000, true);
+      view.setUint32(138, 0, true);
+
+      const dataPkt = createDataPacket(2, 145, payload);
+
+      const buffer = new ArrayBuffer(89 + 145);
+      new Uint8Array(buffer).set(fmtPkt, 0);
+      new Uint8Array(buffer).set(dataPkt, 89);
+
+      const file = {
+        name: 'full_decode.bin',
+        buffer
+      };
+
+      window.ReviewLog.handleFile(file);
+      jest.advanceTimersByTime(500);
+
+      // Verify that the tree count is updated and TEST is listed
+      expect(document.getElementById('rlMsgCount').textContent).toBe('1 types');
+      
+      const msgRow = document.querySelector('.rl-msg-row');
+      expect(msgRow.querySelector('.rl-msg-name').textContent).toBe('TEST');
+    });
+
+    it('should fall back to Chart.js v2 configuration format if Chart.version is v2', () => {
+      const originalVersion = ChartMock.version;
+      ChartMock.version = '2.9.0';
+
+      const file = {
+        name: 'test_log.bin',
+        buffer: mockValidBinBuffer
+      };
+      window.ReviewLog.handleFile(file);
+      jest.advanceTimersByTime(500);
+
+      const fieldRow = document.querySelector('.rl-field-row[data-field="Lat"]');
+      fieldRow.click(); // trigger renderChart with Chart v2
+
+      expect(ChartMock.instances[ChartMock.instances.length - 1].config.options.scales.xAxes).toBeDefined();
+
+      ChartMock.version = originalVersion;
+    });
+
+    it('should fetch and plot from backend if msgData is missing for a clicked field', async () => {
+      // Setup a binary packet with schema but no data values
+      const fmtPkt = createFmtPacket(3, 19, 'UNKN', 'ff', 'f1,f2');
+      const buffer = new ArrayBuffer(89);
+      new Uint8Array(buffer).set(fmtPkt, 0);
+
+      window.ReviewLog.handleFile({
+        name: 'unknown.bin',
+        buffer
+      });
+      jest.advanceTimersByTime(500);
+
+      // Click the field row for UNKN.f1
+      const unknRow = document.querySelector('.rl-field-row[data-msg="UNKN"][data-field="f1"]');
+      expect(unknRow).not.toBeNull();
+      
+      unknRow.click();
+      
+      // It should call fetch
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining('log_data?msg=UNKN&field=f1')
+      );
+
+      // Wait for fetch promises to resolve and execute code
+      for (let i = 0; i < 20; i++) {
+        jest.advanceTimersByTime(100);
+        await Promise.resolve();
+      }
+
+      expect(document.getElementById('rlStatRows').textContent).toBe('3');
+    });
+
+    it('should catch errors when _onSchemaReceived fails due to tree building issues', () => {
+      const spyGetElement = jest.spyOn(document, 'getElementById').mockImplementation((id) => {
+        if (id === 'rlTreeScroll') {
+          throw new Error('Mock tree build error');
+        }
+        return originalGetElementById(id);
+      });
+      const spyError = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      const file = {
+        name: 'test_log.bin',
+        buffer: mockValidBinBuffer
+      };
+      window.ReviewLog.handleFile(file);
+      jest.advanceTimersByTime(500);
+
+      expect(spyError).toHaveBeenCalled();
+      expect(document.getElementById('rlError').textContent).toContain('Mock tree build error');
+
+      spyGetElement.mockRestore();
+      spyError.mockRestore();
+    });
+
+    it('should catch decodeRow / processChunk errors gracefully when processChunk throws', () => {
+      const originalUint8Array = global.Uint8Array;
+      global.Uint8Array = jest.fn().mockImplementation((buf) => {
+        return new Proxy(new originalUint8Array(buf), {
+          get(target, prop) {
+            if (typeof prop === 'string' && !isNaN(prop)) {
+              throw new Error('Simulated binary read error');
+            }
+            return target[prop];
+          }
+        });
+      });
+
+      const spyError = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+      const file = {
+        name: 'err.bin',
+        buffer: mockValidBinBuffer
+      };
+
+      window.ReviewLog.handleFile(file);
+
+      jest.advanceTimersByTime(500);
+
+      expect(spyError).toHaveBeenCalledWith(
+        expect.stringContaining('processChunk threw'),
+        expect.any(Error)
+      );
+
+      spyError.mockRestore();
+      global.Uint8Array = originalUint8Array;
+    });
+  });
 });

@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-WEB-015
 Requirement ID      : REQ-COM-001
 Source File         : websocket.js
-Target Function     : websocket_telemetry_ping() [Line 115]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for WebSocket Connection State and Telemetry Stream Pings
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Positive / Functional
+Test Case Title     : should update attitude roll pitch yaw dials on attitude packet for selected vehicle
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,36 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-ws = new TelemetryWebSocket('ws://invalid-address')
-ws.connect()
+message.pitch ?? 0: String | Simulated: window.initWebSocket()
+ws = wsInstances[0]
+window.selectedSysId = 3
+})
+})
 
 Expected Behavior:
-Ws Is Connected() is equal to false.
-Ws Get Error Count() is equal to 1.
+Verify window.TelemetryDisplay.update satisfies toHaveBeenCalledWith().
+Verify window.compass.updateTelemetry satisfies toHaveBeenCalled().
 
 Actual Observations:
-ws.isConnected() = false
-ws.getErrorCount() = 1
+window.TelemetryDisplay.update: toHaveBeenCalledWith
+window.compass.updateTelemetry: called
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(ws.isConnected()).toBe(false);
-expect(ws.getErrorCount()).toBe(1);
+expect(updateTelemetry).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.TelemetryDisplay.update).toHaveBeenCalledWith({
+expect(window.compass.updateTelemetry).toHaveBeenCalled();
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] ws.isConnected() = false
-[PASS] ws.getErrorCount() = 1
+[INFO] Jest executed test in 2ms
+[PASS] window.TelemetryDisplay.update: toHaveBeenCalledWith
+[PASS] window.compass.updateTelemetry: called
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

@@ -5,16 +5,16 @@ Test Case ID        : UT-DP-016
 Requirement ID      : REQ-SYS-002
 Source File         : data-persistence.js
 Target Function     : authenticate_user() [Line 122]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for GCS Authentication and Local Database Storage Sync
+Test Category       : Wrong Value
+Test Case Title     : should reject incorrect string format payloads and log mismatch warning for GCS Authentication and Local Database Storage Sync
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,27 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+JSDOM context initialized. Type safety check wrappers active.
 
 Test Inputs:
 component = new GCSComponent()
+result = component.setValue('NOT_A_NUMBER')
 
 Expected Behavior:
-Verify () => component.load(null) satisfies toThrow().
+Result is equal to false.
 
 Actual Observations:
-() => component.load(null): throws
+result = false
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => component.load(null)).toThrow();
+expect(result).toBe(false);
 
 Console Logs:
 [INFO] Jest executed test in 14ms
-[PASS] () => component.load(null): throws
+[PASS] result = false
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

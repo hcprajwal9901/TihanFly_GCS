@@ -283,4 +283,129 @@ describe('Multi-Vehicle Selector Suite (js/multi-vehicle.js)', () => {
       JSON.stringify({ type: 'disconnect_vehicle', local_port: 11040 })
     );
   });
+
+  describe('Edge Cases & Uncovered Callbacks (Phase 2)', () => {
+    it('should cover buildDroneSelectorHtml and updateAllDroneSelectors with wrap containers', () => {
+      const container = document.createElement('div');
+      container.className = 'drone-selector-wrap-container';
+      document.body.appendChild(container);
+
+      const vehicles = [{ sysid: 1 }, { sysid: 2 }];
+      window.updateVehicleSelector(vehicles);
+
+      expect(container.innerHTML).toContain('mv-drone-selector-dropdown');
+      
+      // Clean up
+      container.remove();
+    });
+
+    it('should cover All Drones fleet card click', () => {
+      const vehicles = [{ sysid: 1 }, { sysid: 2 }];
+      window.updateVehicleSelector(vehicles);
+
+      const wrap = document.getElementById('vehicleSelectorWrap');
+      const allDronesCard = wrap.querySelector('.mv-drone-tab[data-sysid="0"]');
+      expect(allDronesCard).not.toBeNull();
+
+      allDronesCard.click();
+      expect(window.selectedSysId).toBe(0);
+      expect(window._primarySysId).toBe(1);
+    });
+
+    it('should cover modal close actions (close btn and backdrop)', () => {
+      window.openConnectionManager();
+      const modal = document.getElementById('mvConnModal');
+      expect(modal.style.display).toBe('flex');
+
+      // Click close button
+      const closeBtn = document.getElementById('mvConnClose');
+      closeBtn.click();
+      expect(modal.style.display).toBe('none');
+
+      // Re-open and click backdrop
+      window.openConnectionManager();
+      expect(modal.style.display).toBe('flex');
+      modal.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(modal.style.display).toBe('none');
+    });
+
+    it('should cover DOMContentLoaded, legacy select changes, and handleMvMessage ack failures', () => {
+      // Trigger DOMContentLoaded
+      document.dispatchEvent(new Event('DOMContentLoaded'));
+
+      // Test change listener callback on vehicleSelector
+      const select = document.getElementById('vehicleSelector');
+      select.innerHTML = '<option value="1">1</option><option value="2">2</option>';
+      select.value = '2';
+      select.dispatchEvent(new Event('change'));
+      expect(window.selectedSysId).toBe(2);
+
+      // Test handleMvMessage status !== 'ok' ack
+      window.openConnectionManager();
+      window._mvHandleMessage({
+        type: 'connect_vehicle_ack',
+        status: 'error',
+        message: 'Could not resolve hostname'
+      });
+      const statusText = document.getElementById('mvConnStatus');
+      expect(statusText.textContent).toBe('✗ Could not resolve hostname');
+
+      // Test disconnect vehicle ack msg
+      window._mvHandleMessage({
+        type: 'disconnect_vehicle_ack'
+      });
+    });
+
+    it('should cover ensureAddButton and its mouse hover/click callbacks', () => {
+      expect(typeof window.ensureAddButton).toBe('function');
+      window.ensureAddButton();
+
+      const btn = document.getElementById('mvAddDroneBtn');
+      expect(btn).not.toBeNull();
+
+      // Trigger hover / mouseenter
+      btn.dispatchEvent(new Event('mouseenter'));
+      expect(btn.style.background).toContain('#1565c0');
+
+      // Trigger hover / mouseleave
+      btn.dispatchEvent(new Event('mouseleave'));
+      expect(btn.style.background).toContain('#1e4a7a');
+
+      // Trigger click
+      btn.dispatchEvent(new Event('click'));
+      const modal = document.getElementById('mvConnModal');
+      expect(modal.style.display).toBe('flex');
+    });
+
+    it('should cover connection manager validations and safeSend option', () => {
+      window.openConnectionManager();
+
+      // 1. TCP empty IP validation
+      const select = document.getElementById('mvConnProtocol');
+      select.value = 'tcp';
+      select.dispatchEvent(new Event('change'));
+
+      const tcpIp = document.getElementById('mvTcpIp');
+      tcpIp.value = '';
+      const connectBtn = document.getElementById('mvConnectBtn');
+      connectBtn.click();
+      
+      const status = document.getElementById('mvConnStatus');
+      expect(status.textContent).toBe('Enter TCP IP address.');
+
+      // 2. Serial empty port validation
+      select.value = 'serial';
+      select.dispatchEvent(new Event('change'));
+      const serialPort = document.getElementById('mvSerialPort');
+      serialPort.innerHTML = ''; // Clear options
+      connectBtn.click();
+      expect(status.textContent).toBe('Select a serial port.');
+
+      // 3. safeSend execution check in _refreshMvPorts
+      window.safeSend = jest.fn();
+      document.getElementById('mvRefreshPorts').click();
+      expect(window.safeSend).toHaveBeenCalled();
+      delete window.safeSend;
+    });
+  });
 });

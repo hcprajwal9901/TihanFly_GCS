@@ -1,0 +1,59 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-025
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : updateVehicleSelector() [Line 55]
+Test Category       : Positive / Functional
+Test Case Title     : should process serial_ports list packets and query loader retry checks
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.initWebSocket()
+ws = wsInstances[0]
+portsPayload = {
+ws.onmessage({ data: JSON.stringify(portsPayload) })
+spyPopulate = jest.fn()
+window.vcPopulatePorts = spyPopulate
+ws.onmessage({ data: JSON.stringify(portsPayload) })
+jest.advanceTimersByTime(50)
+
+Expected Behavior:
+Window Vc Last Known Ports is equal to ['COM3', 'COM4'].
+Verify spyPopulate satisfies toHaveBeenCalled().
+
+Actual Observations:
+window._vcLastKnownPorts = ['COM3', 'COM4']
+spyPopulate: called
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window._vcLastKnownPorts).toEqual(['COM3', 'COM4']);
+expect(spyPopulate).toHaveBeenCalled();
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] window._vcLastKnownPorts = ['COM3', 'COM4']
+[PASS] spyPopulate: called
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

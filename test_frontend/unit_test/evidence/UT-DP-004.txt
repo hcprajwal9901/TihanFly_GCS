@@ -5,16 +5,16 @@ Test Case ID        : UT-DP-004
 Requirement ID      : REQ-SYS-002
 Source File         : data-persistence.js
 Target Function     : initializeDataPersistence() [Line 748]
-Test Category       : Positive / Functional
-Test Case Title     : should inject instant styles during page loads if plan mode was previously active
+Test Category       : Negative / Robustness
+Test Case Title     : should handle save error catching when localStorage throws
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,33 +22,46 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized via setup.js.
+Mock Strategy: Live execution.. Dependencies: localStorage initialized in setup.
 
 Test Inputs:
-testProfile = {
-global.localStorage.setItem('mission_flight_data_complete', JSON.stringify(testProfile))
-if (window.DataPersistence && window.DataPersistence._instance) {
-window.DataPersistence._instance.preActivatePlanModeIfNeeded()
+originalSetItem = global.localStorage.setItem
+global.localStorage.setItem = jest.fn().mockImplementation(() => {
+throw new Error('QuotaExceededError')
+})
+success = window.DataPersistence.save()
+global.localStorage.setItem = originalSetItem
 
 Expected Behavior:
-Document Document Element Class List Contains('Plan Mode Preload') is equal to true.
-Plan Mode Instant Css exists.
+Success is equal to false.
+Error logged to console.
 
 Actual Observations:
-document.documentElement.classList.contains('plan-mode-preload') = true
-document.getElementById('plan-mode-instant-css'): defined
+success = false
+console.error: called with '❌ Error saving data:', expect.any(Error)
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(document.documentElement.classList.contains('plan-mode-preload')).toBe(true);
-expect(document.getElementById('plan-mode-instant-css')).toBeDefined();
+expect(Date).toHaveBeenCalled();
+expect(getCommandEditorState).toHaveBeenCalled();
+expect(getCompassState).toHaveBeenCalled();
+expect(getHomePositionData).toHaveBeenCalled();
+expect(getPolygonData).toHaveBeenCalled();
+expect(getUIState).toHaveBeenCalled();
+expect(getWaypointsData).toHaveBeenCalled();
+expect(getWeatherState).toHaveBeenCalled();
+expect(stringify).toHaveBeenCalled();
+expect(toISOString).toHaveBeenCalled();
+// JSDOM verification:
+expect(success).toBe(false);
+expect(console.error).toHaveBeenCalledWith('❌ Error saving data:', expect.any(Error));
 
 Console Logs:
-[INFO] Jest executed test in 11ms
-[PASS] document.documentElement.classList.contains('plan-mode-preload') = true
-[PASS] document.getElementById('plan-mode-instant-css'): defined
+[INFO] Jest executed test in 6ms
+[PASS] success = false
+[PASS] console.error: called with '❌ Error saving data:', expect.any(Error)
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

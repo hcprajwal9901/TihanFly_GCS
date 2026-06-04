@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-MV-016
 Requirement ID      : REQ-SYS-002
 Source File         : multi-vehicle.js
-Target Function     : setSelectedSysId() [Line 122]
+Target Function     : setSelectedSysId() [Line 20]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Test Case Title     : should cover connection manager validations and safeSend option
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,50 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for multi-vehicle.js.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+window.openConnectionManager()
+select = document.getElementById('mvConnProtocol')
+select.value = 'tcp'
+select.dispatchEvent(new Event('change'))
+tcpIp = document.getElementById('mvTcpIp')
+tcpIp.value = ''
+connectBtn = document.getElementById('mvConnectBtn')
+connectBtn.click()
+status = document.getElementById('mvConnStatus')
+select.value = 'serial'
+select.dispatchEvent(new Event('change'))
+serialPort = document.getElementById('mvSerialPort')
+serialPort.innerHTML = ''; // Clear options
+connectBtn.click()
+window.safeSend = jest.fn()
+document.getElementById('mvRefreshPorts').click()
+delete window.safeSend
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Status displays 'Enter TCP IP address.'.
+Status displays 'Select a serial port.'.
+Verify window.safeSend satisfies toHaveBeenCalled().
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+status.textContent = 'Enter TCP IP address.'
+status.textContent = 'Select a serial port.'
+window.safeSend: called
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(status.textContent).toBe('Enter TCP IP address.');
+expect(status.textContent).toBe('Select a serial port.');
+expect(window.safeSend).toHaveBeenCalled();
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 41ms
+[PASS] status.textContent = 'Enter TCP IP address.'
+[PASS] status.textContent = 'Select a serial port.'
+[PASS] window.safeSend: called
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

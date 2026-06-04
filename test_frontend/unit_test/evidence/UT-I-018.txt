@@ -5,16 +5,16 @@ Test Case ID        : UT-I-018
 Requirement ID      : REQ-SYS-001
 Source File         : i18n.js
 Target Function     : update_system_settings() [Line 136]
-Test Category       : Wrong Value
-Test Case Title     : should reject incorrect string format payloads and log mismatch warning for System Configurations and Multi-language Translation Maps
+Test Category       : Edge Case
+Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for System Configurations and Multi-language Translation Maps
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,11 +22,11 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Type safety check wrappers active.
+JSDOM context initialized. Input buffer references set to null.
 
 Test Inputs:
 component = new GCSComponent()
-result = component.setValue('NOT_A_NUMBER')
+result = component.configure(undefined)
 
 Expected Behavior:
 Result is equal to false.

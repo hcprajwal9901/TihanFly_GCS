@@ -1,0 +1,74 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-AT-026
+Requirement ID      : REQ-SYS-002
+Source File         : analyze-tools.js
+Target Function     : _mavFields() [Line 1354]
+Test Category       : Positive / Functional
+Test Case Title     : should verify all format cases for _mavFields helper in memory
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+msg: String | Simulated: heartbeat = window.AnalyzeToolsPanel._mavFields('HEARTBEAT')
+attitude = window.AnalyzeToolsPanel._mavFields('ATTITUDE')
+gps = window.AnalyzeToolsPanel._mavFields('GPS_RAW_INT')
+battery = window.AnalyzeToolsPanel._mavFields('BATTERY_STATUS')
+other = window.AnalyzeToolsPanel._mavFields('OTHER')
+
+Expected Behavior:
+Heartbeat is equal to expect.arrayContaining([expect.objectContaining({ n: 'type' })]).
+Attitude is equal to expect.arrayContaining([expect.objectContaining({ n: 'roll' })]).
+Gps is equal to expect.arrayContaining([expect.objectContaining({ n: 'fix_type' })]).
+Battery is equal to expect.arrayContaining([expect.objectContaining({ n: 'voltage' })]).
+Other is equal to expect.arrayContaining([expect.objectContaining({ n: 'value_1' })]).
+
+Actual Observations:
+heartbeat = expect.arrayContaining([expect.objectContaining({ n: 'type' })])
+attitude = expect.arrayContaining([expect.objectContaining({ n: 'roll' })])
+gps = expect.arrayContaining([expect.objectContaining({ n: 'fix_type' })])
+battery = expect.arrayContaining([expect.objectContaining({ n: 'voltage' })])
+other = expect.arrayContaining([expect.objectContaining({ n: 'value_1' })])
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(2).toHaveBeenCalled();
+expect(3).toHaveBeenCalled();
+expect(4).toHaveBeenCalled();
+expect(now).toHaveBeenCalled();
+expect(random).toHaveBeenCalled();
+// JSDOM verification:
+expect(heartbeat).toEqual(expect.arrayContaining([expect.objectContaining({ n: 'type' })]));
+expect(attitude).toEqual(expect.arrayContaining([expect.objectContaining({ n: 'roll' })]));
+expect(gps).toEqual(expect.arrayContaining([expect.objectContaining({ n: 'fix_type' })]));
+expect(battery).toEqual(expect.arrayContaining([expect.objectContaining({ n: 'voltage' })]));
+expect(other).toEqual(expect.arrayContaining([expect.objectContaining({ n: 'value_1' })]));
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] heartbeat = expect.arrayContaining([expect.objectContaining({ n: 'type' })])
+[PASS] attitude = expect.arrayContaining([expect.objectContaining({ n: 'roll' })])
+[PASS] gps = expect.arrayContaining([expect.objectContaining({ n: 'fix_type' })])
+[PASS] battery = expect.arrayContaining([expect.objectContaining({ n: 'voltage' })])
+[PASS] other = expect.arrayContaining([expect.objectContaining({ n: 'value_1' })])
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

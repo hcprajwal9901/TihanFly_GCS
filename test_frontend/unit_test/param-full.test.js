@@ -348,4 +348,270 @@ describe('Full Parameter Panel Suite (js/param-full.js)', () => {
       JSON.stringify({ type: 'param_get_all', sysid: 2 })
     );
   });
+
+  describe('Additional Edge Cases for param-full.js', () => {
+    it('should test loadExternalMeta failure and default fetch errors', async () => {
+      // Mock fetch rejection
+      global.fetch.mockImplementationOnce(() => Promise.reject(new Error('Fetch failed')));
+      // We re-init to trigger loadExternalMeta
+      await initPanel();
+      // Should not crash and use default meta
+      expect(document.getElementById('fpSearch')).toBeDefined();
+    });
+
+    it('should fall back to regex checks in getMeta', async () => {
+      await initPanel();
+      // Check different parameter types matching regex patterns in getMeta
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'INS_ACC2OFFS_X', value: 1.0 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'INS_GYR2OFFS_X', value: 0.1 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'INS_GYR2_ID', value: 1234 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'BARO1_WCF', value: 0.5 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'GPS1_TYPE', value: 1 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'ATC_RAT_RLL_P', value: 0.15 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'PSC_POSXY_P', value: 1.0 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'WPNAV_RADIUS', value: 200 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'LOG_BITMASK', value: 65535 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'NTF_LED_BRIGHT', value: 3 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'PRX_TYPE', value: 0 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'FILT1_TYPE', value: 1 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'NET_ENABLE', value: 1 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'RNGFND_TYPE', value: 0 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'TEMP1_TYPE', value: 0 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'SR0_EXTRA1', value: 10 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'BATT_MONITOR', value: 4 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'MNT1_TYPE', value: 0 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'OSD1_TYPE', value: 0 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'CAN_TYPE', value: 0 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'LAND_SPEED', value: 50 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'UNKNOWN_PARAM', value: 10 }
+      }));
+
+      const tbody = document.getElementById('fpBody');
+      expect(tbody.querySelector('tr[data-param="INS_ACC2OFFS_X"]')).not.toBeNull();
+    });
+
+    it('should handle wsSend failure modes and status toasts', async () => {
+      window.SwUtil.toast = jest.fn();
+      await initPanel();
+
+      // Trigger param_file_saved, param_file_loaded, param_error messages
+      window.dispatchEvent(new CustomEvent('param_file_saved', {
+        detail: { type: 'param_file_saved', message: 'Custom save ok', path: '/test' }
+      }));
+      expect(window.SwUtil.toast).toHaveBeenCalledWith('Custom save ok');
+
+      window.dispatchEvent(new CustomEvent('param_file_loaded', {
+        detail: { type: 'param_file_loaded', message: 'Custom load ok', count: 10 }
+      }));
+      expect(window.SwUtil.toast).toHaveBeenCalledWith('Custom load ok');
+
+      window.dispatchEvent(new CustomEvent('param_error', {
+        detail: { type: 'param_error', message: 'Custom error occurred' }
+      }));
+      expect(window.SwUtil.toast).toHaveBeenCalledWith('⚠ Custom error occurred');
+
+      // wsSend fails when ws is not present
+      delete window.ws;
+      window.dispatchEvent(new CustomEvent('ws_connected')); // executes wsSend but does not throw
+    });
+
+    it('should handle complex range cell representation (bitmask, multi-options)', async () => {
+      // Configure metadata return for custom bitmask param
+      global.fetch = jest.fn().mockImplementation(() =>
+        Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve({
+            BITMASK_PARAM: {
+              d: 'Custom bitmask description',
+              isBitmask: true,
+              bitmask: [
+                { bit: 0, label: 'Bit 0 Label' },
+                { bit: 1, label: 'Bit 1 Label' }
+              ]
+            },
+            MANY_OPTS_PARAM: {
+              d: 'Custom options list',
+              options: [
+                { code: '0', label: 'Opt 0' },
+                { code: '1', label: 'Opt 1' },
+                { code: '2', label: 'Opt 2' },
+                { code: '3', label: 'Opt 3' }
+              ]
+            }
+          })
+        })
+      );
+
+      await initPanel();
+
+      window.dispatchEvent(new CustomEvent('param_all', {
+        detail: {
+          type: 'param_all',
+          params: [
+            { param_id: 'BITMASK_PARAM', value: 1 },
+            { param_id: 'MANY_OPTS_PARAM', value: 0 }
+          ]
+        }
+      }));
+
+      const tbody = document.getElementById('fpBody');
+      const bitmaskRow = tbody.querySelector('tr[data-param="BITMASK_PARAM"]');
+      expect(bitmaskRow.innerHTML).toContain('fp-bit');
+      expect(bitmaskRow.innerHTML).toContain('Bit 0 Label');
+
+      const optionsRow = tbody.querySelector('tr[data-param="MANY_OPTS_PARAM"]');
+      expect(optionsRow.innerHTML).toContain('+1 more');
+    });
+
+    it('should test input events, focus, blur, non-enter keydown, and empty keydown', async () => {
+      await initPanel();
+
+      window.dispatchEvent(new CustomEvent('param_all', {
+        detail: {
+          type: 'param_all',
+          params: [{ param_id: 'ACRO_BAL_PITCH', value: 1.5 }]
+        }
+      }));
+
+      const tbody = document.getElementById('fpBody');
+      const row = tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"]');
+      const input = row.querySelector('.param-val-input');
+
+      // Focus removes readonly
+      input.dispatchEvent(new Event('focus'));
+
+      // Non-numerical values on input
+      input.value = 'invalid-val';
+      input.dispatchEvent(new Event('input'));
+      expect(row.classList.contains('param-dirty')).toBe(false);
+
+      // Keydown other key (e.g. Tab) does nothing
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
+
+      // Keydown Enter on invalid value does not call wsSend
+      window.ws.send.mockClear();
+      input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      expect(window.ws.send).not.toHaveBeenCalled();
+    });
+
+    it('should test refresh button, prompt cancels, and write toast errors', async () => {
+      await initPanel();
+
+      // Refresh click clears all params and requests list
+      window.dispatchEvent(new CustomEvent('param_all', {
+        detail: {
+          type: 'param_all',
+          params: [{ param_id: 'ACRO_BAL_PITCH', value: 1.5 }]
+        }
+      }));
+      window.ws.send.mockClear();
+      const refreshBtn = document.getElementById('fpRefreshBtn');
+      refreshBtn.click();
+      expect(window.ws.send).toHaveBeenCalledWith(
+        JSON.stringify({ type: 'param_request_list', sysid: 1 })
+      );
+
+      // Prompt cancels on Load from File
+      window.prompt = jest.fn().mockReturnValue(null);
+      window.ws.send.mockClear();
+      const loadBtn = document.getElementById('fpLoadBtn');
+      loadBtn.click();
+      expect(window.ws.send).not.toHaveBeenCalled();
+
+      // Write button without changed params
+      window.SwUtil.toast = jest.fn();
+      const writeBtn = document.getElementById('fpWriteBtn');
+      writeBtn.click();
+      expect(window.SwUtil.toast).toHaveBeenCalledWith('No changed parameters');
+    });
+
+    it('should test vehicle_selected active class condition', async () => {
+      await initPanel();
+
+      // Remove active class from host panel
+      hostPanel.classList.remove('active');
+      window.ws.send.mockClear();
+
+      // Change vehicle when panel is inactive
+      window.selectedSysId = 3;
+      window.dispatchEvent(new CustomEvent('vehicle_selected'));
+      expect(window.ws.send).not.toHaveBeenCalled();
+
+      // Re-add active class
+      hostPanel.classList.add('active');
+      window.dispatchEvent(new CustomEvent('vehicle_selected'));
+      expect(window.ws.send).toHaveBeenCalledWith(
+        JSON.stringify({ type: 'param_get_all', sysid: 3 })
+      );
+    });
+
+    it('should check upsertRow on existing elements updates select/inputs', async () => {
+      await initPanel();
+
+      window.dispatchEvent(new CustomEvent('param_all', {
+        detail: {
+          type: 'param_all',
+          params: [
+            { param_id: 'ARMING_CHECK', value: 0 },
+            { param_id: 'ACRO_BAL_PITCH', value: 1.5 }
+          ]
+        }
+      }));
+
+      // Trigger param_value updates on existing parameter
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'ARMING_CHECK', value: 1 }
+      }));
+      window.dispatchEvent(new CustomEvent('param_value', {
+        detail: { type: 'param_value', param_id: 'ACRO_BAL_PITCH', value: 2.0 }
+      }));
+
+      const tbody = document.getElementById('fpBody');
+      expect(tbody.querySelector('tr[data-param="ARMING_CHECK"] .param-val-select').value).toBe('1');
+      expect(tbody.querySelector('tr[data-param="ACRO_BAL_PITCH"] .param-val-input').value).toBe('2');
+    });
+  });
 });

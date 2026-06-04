@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WCM-024
+Requirement ID      : REQ-NAV-001
+Source File         : waypoint-context-menu.js
+Target Function     : closeSubmenu() [Line 305]
+Test Category       : Positive / Functional
+Test Case Title     : should test connectToWaypointManager interval connection
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: waypointManager initialized in setup.
+
+Test Inputs:
+jest.useFakeTimers()
+delete window.WaypointManager
+menu = new window.WaypointContextMenu.constructor()
+jest.advanceTimersByTime(100)
+window.WaypointManager = mockWaypointManager
+jest.advanceTimersByTime(100)
+jest.useRealTimers()
+
+Expected Behavior:
+Menu Waypoint Manager is null.
+Menu Waypoint Manager is equal to mockWaypointManager.
+
+Actual Observations:
+menu.waypointManager: null
+menu.waypointManager = mockWaypointManager
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(clearInterval).toHaveBeenCalled();
+// JSDOM verification:
+expect(menu.waypointManager).toBeNull();
+expect(menu.waypointManager).toBe(mockWaypointManager);
+
+Console Logs:
+[INFO] Jest executed test in 136ms
+[PASS] menu.waypointManager: null
+[PASS] menu.waypointManager = mockWaypointManager
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-I-007
 Requirement ID      : REQ-SYS-001
 Source File         : i18n.js
-Target Function     : update_system_settings() [Line 59]
-Test Category       : Edge Case
-Test Case Title     : should handle null, empty, or undefined parameter structures gracefully for System Configurations and Multi-language Translation Maps
+Target Function     : t() [Line 250]
+Test Category       : Positive / Functional
+Test Case Title     : should toggle dropdown open/close on button click and close on clicking outside
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,58 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Input buffer references set to null.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.configure(undefined)
+key: String | Simulated: toggleBtn = document.getElementById('langToggleBtn')
+dropdown = document.getElementById('langDropdown')
+toggleBtn.dispatchEvent(new Event('click'))
+toggleBtn.dispatchEvent(new Event('click'))
+toggleBtn.dispatchEvent(new Event('click'))
+document.dispatchEvent(new Event('click'))
 
 Expected Behavior:
-Result is equal to false.
+Dropdown hidden.
+Dropdown displayed.
+Toggle Button Class List Contains('Active Lang') is equal to true.
+Dropdown hidden.
+Toggle Button Class List Contains('Active Lang') is equal to false.
+Dropdown displayed.
+Dropdown hidden.
 
 Actual Observations:
-result = false
+dropdown.style.display = 'none'
+dropdown.style.display = 'block'
+toggleBtn.classList.contains('active-lang') = true
+dropdown.style.display = 'none'
+toggleBtn.classList.contains('active-lang') = false
+dropdown.style.display = 'block'
+dropdown.style.display = 'none'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+const res = t(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(dropdown.style.display).toBe('none');
+expect(dropdown.style.display).toBe('block');
+expect(toggleBtn.classList.contains('active-lang')).toBe(true);
+expect(dropdown.style.display).toBe('none');
+expect(toggleBtn.classList.contains('active-lang')).toBe(false);
+expect(dropdown.style.display).toBe('block');
+expect(dropdown.style.display).toBe('none');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 81ms
+[PASS] dropdown.style.display = 'none'
+[PASS] dropdown.style.display = 'block'
+[PASS] toggleBtn.classList.contains('active-lang') = true
+[PASS] dropdown.style.display = 'none'
+[PASS] toggleBtn.classList.contains('active-lang') = false
+[PASS] dropdown.style.display = 'block'
+[PASS] dropdown.style.display = 'none'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

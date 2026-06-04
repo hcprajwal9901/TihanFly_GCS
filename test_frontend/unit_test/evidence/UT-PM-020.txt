@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PM-020
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-manager.js
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Positive / Functional
+Test Case Title     : should alert when calling editor settings if polygon does not exist
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+pmInstance.currentPolygon = null
+pmInstance.polygonPoints = []
+pmInstance.openSurveySettings()
+pmInstance.startEditing()
+pmInstance.showSurveyPatternModal()
+
+Expected Behavior:
+Verify window.alert satisfies toHaveBeenCalledWith(expect.stringContaining('Draw a polygon first!')).
+Verify window.alert satisfies toHaveBeenCalledWith(expect.stringContaining('No polygon to edit!')).
+Verify window.alert satisfies toHaveBeenCalledWith(expect.stringContaining('Draw a polygon first!')).
+
+Actual Observations:
+window.alert: called with expect.stringContaining('Draw a polygon first!')
+window.alert: called with expect.stringContaining('No polygon to edit!')
+window.alert: called with expect.stringContaining('Draw a polygon first!')
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.alert).toHaveBeenCalledWith(expect.stringContaining('Draw a polygon first!'));
+expect(window.alert).toHaveBeenCalledWith(expect.stringContaining('No polygon to edit!'));
+expect(window.alert).toHaveBeenCalledWith(expect.stringContaining('Draw a polygon first!'));
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] window.alert: called with expect.stringContaining('Draw a polygon first!')
+[PASS] window.alert: called with expect.stringContaining('No polygon to edit!')
+[PASS] window.alert: called with expect.stringContaining('Draw a polygon first!')
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

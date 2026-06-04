@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-GEO-011
 Requirement ID      : REQ-SAF-002
 Source File         : geofence.js
-Target Function     : geofence_boundary_check() [Line 87]
-Test Category       : Wrong Value
-Test Case Title     : should reject incorrect string format payloads and log mismatch warning for Geofence Boundary Violations and Autopilot RTL Trigger
+Target Function     : safeSendWrap() [Line 64]
+Test Category       : Negative / Robustness
+Test Case Title     : should handle WS message error and unrecognized types
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,32 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Type safety check wrappers active.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.setValue('NOT_A_NUMBER')
+window.dispatchEvent(new CustomEvent('calibration_ws_message', {
+}))
+window.dispatchEvent(new CustomEvent('calibration_ws_message', {
+}))
+badEvent = new CustomEvent('calibration_ws_message')
+})
+window.dispatchEvent(badEvent)
 
 Expected Behavior:
-Result is equal to false.
+Verify window.SwUtil.toast satisfies toHaveBeenCalledWith('Geofence param error: Mock FC parameter failure', true).
 
 Actual Observations:
-result = false
+window.SwUtil.toast: called with 'Geofence param error: Mock FC parameter failure', true
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(window.SwUtil.toast).toHaveBeenCalledWith('Geofence param error: Mock FC parameter failure', true);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 21ms
+[PASS] window.SwUtil.toast: called with 'Geofence param error: Mock FC parameter failure', true
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

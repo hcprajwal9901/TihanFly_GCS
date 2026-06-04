@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-MV-011
 Requirement ID      : REQ-SYS-002
 Source File         : multi-vehicle.js
-Target Function     : setSelectedSysId() [Line 87]
+Target Function     : updateAllDroneSelectors() [Line 52]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Component Layout Initialization and DOM Controls Validation
+Test Case Title     : should cover buildDroneSelectorHtml and updateAllDroneSelectors with wrap containers
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,34 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for multi-vehicle.js.
+Mock Strategy: Live execution.. Dependencies: DOM document initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
-component.initialize()
+container = document.createElement('div')
+container.className = 'drone-selector-wrap-container'
+document.body.appendChild(container)
+vehicles = [{ sysid: 1 }, { sysid: 2 }]
+window.updateVehicleSelector(vehicles)
+container.remove()
 
 Expected Behavior:
-Component Is Initialized() is equal to true.
-Component Get Html Element() is null.
+Container displays text containing 'mv-drone-selector-dropdown'.
 
 Actual Observations:
-component.isInitialized() = true
-component.getHtmlElement(): not null
+container.innerHTML contains 'mv-drone-selector-dropdown'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(component.isInitialized()).toBe(true);
-expect(component.getHtmlElement()).not.toBeNull();
+expect(buildDroneSelectorHtml).toHaveBeenCalled();
+expect(querySelectorAll).toHaveBeenCalled();
+// JSDOM verification:
+expect(container.innerHTML).toContain('mv-drone-selector-dropdown');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] component.isInitialized() = true
-[PASS] component.getHtmlElement(): not null
+[INFO] Jest executed test in 24ms
+[PASS] container.innerHTML contains 'mv-drone-selector-dropdown'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

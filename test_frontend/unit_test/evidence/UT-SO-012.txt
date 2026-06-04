@@ -11,10 +11,10 @@ Test Case Title     : should toast and error if ws message param_error received
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -47,7 +47,7 @@ expect(connBadge.className).toContain('fs-badge-error');
 expect(window.SwUtil.toast).toHaveBeenCalledWith('Servo param error: MAVLink link timeout', true);
 
 Console Logs:
-[INFO] Jest executed test in 151ms
+[INFO] Jest executed test in 118ms
 [PASS] connBadge.textContent = '✕ FC error'
 [PASS] connBadge.className contains 'fs-badge-error'
 [PASS] window.SwUtil.toast: called with 'Servo param error: MAVLink link timeout', true

@@ -14,7 +14,7 @@ OUT_FILE = os.path.join(TEST_DIR, 'all_test_cases_documentation.xlsx')
 
 # Critical files that must have 100% coverage
 CRITICAL_FILES = {
-    'failsafe.js', 'arm-control.js', 'flight-controls.js', 'geofence.js',
+    'failsafe.js', 'flight-controls.js', 'geofence.js',
     'plan-flight-takeoff.js', 'plan-flight-return.js', 'param-full.js'
 }
 

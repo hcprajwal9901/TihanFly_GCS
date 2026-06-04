@@ -190,4 +190,42 @@ describe('Mission Planner Core High-Fidelity Behavioral Test Suite (plan-flight-
       expect(window.WaypointManager.cancelCurrentOperation).not.toHaveBeenCalled();
     });
   });
+
+  describe('Debug & Edge Cases (Phase 2)', () => {
+    it('should support PlanFlight.debug() diagnostics call', () => {
+      console.log.mockClear();
+      window.PlanFlight.debug();
+      expect(console.log).toHaveBeenCalled();
+    });
+
+    it('should handle missing CommandEditor in timeout callback', () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error');
+      const originalCmdEditor = window.CommandEditor;
+      
+      delete window.CommandEditor;
+      
+      window.PlanFlight.enter();
+      jest.advanceTimersByTime(500);
+      
+      expect(consoleErrorSpy).toHaveBeenCalledWith('❌ window.CommandEditor not found!');
+      
+      window.CommandEditor = originalCmdEditor;
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should handle missing WaypointManager in timeout callback', () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error');
+      const originalWpManager = window.WaypointManager;
+      
+      delete window.WaypointManager;
+      
+      window.PlanFlight.enter();
+      jest.advanceTimersByTime(500);
+      
+      expect(consoleErrorSpy).toHaveBeenCalledWith('❌ window.WaypointManager not found!');
+      
+      window.WaypointManager = originalWpManager;
+      consoleErrorSpy.mockRestore();
+    });
+  });
 });

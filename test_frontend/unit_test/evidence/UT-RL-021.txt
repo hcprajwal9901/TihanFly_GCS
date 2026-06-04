@@ -1,0 +1,88 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-RL-021
+Requirement ID      : REQ-LOG-001
+Source File         : review-log.js
+Target Function     : build() [Line 263]
+Test Category       : Positive / Functional
+Test Case Title     : should dispatch actual wheel, drag mouse and touch events to verify zoom & pan behavior
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+file = {
+window.ReviewLog.handleFile(file)
+jest.advanceTimersByTime(500)
+fieldRow = document.querySelector('.rl-field-row[data-field="Lat"]')
+fieldRow.click()
+wrap = document.getElementById('rlChartWrap')
+wrap.getBoundingClientRect = () => ({
+})
+wheelIn = new WheelEvent('wheel', {
+})
+wrap.dispatchEvent(wheelIn)
+wheelOut = new WheelEvent('wheel', {
+})
+wrap.dispatchEvent(wheelOut)
+mousedown = new MouseEvent('mousedown', {
+})
+wrap.dispatchEvent(mousedown)
+mousemove = new MouseEvent('mousemove', {
+})
+document.dispatchEvent(mousemove)
+mouseup = new MouseEvent('mouseup', {
+})
+document.dispatchEvent(mouseup)
+touchstartPan = new TouchEvent('touchstart', {
+})
+wrap.dispatchEvent(touchstartPan)
+touchmovePan = new TouchEvent('touchmove', {
+})
+wrap.dispatchEvent(touchmovePan)
+touchendPan = new TouchEvent('touchend', {
+})
+wrap.dispatchEvent(touchendPan)
+touchstartPinch = new TouchEvent('touchstart', {
+})
+wrap.dispatchEvent(touchstartPinch)
+touchmovePinch = new TouchEvent('touchmove', {
+})
+wrap.dispatchEvent(touchmovePinch)
+touchendPinch = new TouchEvent('touchend', {
+})
+wrap.dispatchEvent(touchendPinch)
+
+Expected Behavior:
+Verify ChartMock.instances.length satisfies toBeGreaterThan(0).
+
+Actual Observations:
+ChartMock.instances.length > 0
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(ChartMock.instances.length).toBeGreaterThan(0);
+
+Console Logs:
+[INFO] Jest executed test in 61ms
+[PASS] ChartMock.instances.length > 0
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

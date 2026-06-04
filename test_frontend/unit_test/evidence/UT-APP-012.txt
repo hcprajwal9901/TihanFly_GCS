@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-APP-012
 Requirement ID      : REQ-SYS-002
 Source File         : app.js
-Target Function     : initializeApplication() [Line 94]
-Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for Component Layout Initialization and DOM Controls Validation
+Target Function     : connect() [Line 111]
+Test Category       : Positive / Functional
+Test Case Title     : should update telemetry details if drone is active/connected
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,26 +22,56 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+Mock Strategy: Live execution.. Dependencies: TelemetryStore initialized in setup.
 
 Test Inputs:
-component = new GCSComponent()
+wsMockInstance.readyState = 1; // Open
+wsMockInstance.onopen()
+})
+telemetryMessage = {
+wsMockInstance.onmessage(telemetryMessage)
 
 Expected Behavior:
-Verify () => component.load(null) satisfies toThrow().
+Global Compass Get Telemetry() Speed is equal to 8.2.
+Global Compass Get Telemetry() Satellites is equal to 12.
+Global Compass Get Telemetry() Altitude is equal to 45.2.
 
 Actual Observations:
-() => component.load(null): throws
+global.compass.getTelemetry().speed = 8.2
+global.compass.getTelemetry().satellites = 12
+global.compass.getTelemetry().altitude = 45.2
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(() => component.load(null)).toThrow();
+expect(WebSocket).toHaveBeenCalled();
+expect(clearDroneMarkers).toHaveBeenCalled();
+expect(connected).toHaveBeenCalled();
+expect(haversineDistance).toHaveBeenCalled();
+expect(home).toHaveBeenCalled();
+expect(keys).toHaveBeenCalled();
+expect(parse).toHaveBeenCalled();
+expect(radians).toHaveBeenCalled();
+expect(setDroneAutoPan).toHaveBeenCalled();
+expect(setHeaderStatus).toHaveBeenCalled();
+expect(setHeading).toHaveBeenCalled();
+expect(setView).toHaveBeenCalled();
+expect(updateDronePosition).toHaveBeenCalled();
+expect(updateDronePositionForSysid).toHaveBeenCalled();
+expect(updateTelemetry).toHaveBeenCalled();
+expect(warn).toHaveBeenCalled();
+expect(warning).toHaveBeenCalled();
+// JSDOM verification:
+expect(global.compass.getTelemetry().speed).toBe(8.2);
+expect(global.compass.getTelemetry().satellites).toBe(12);
+expect(global.compass.getTelemetry().altitude).toBe(45.2);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] () => component.load(null): throws
+[INFO] Jest executed test in 23ms
+[PASS] global.compass.getTelemetry().speed = 8.2
+[PASS] global.compass.getTelemetry().satellites = 12
+[PASS] global.compass.getTelemetry().altitude = 45.2
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

@@ -201,4 +201,111 @@ describe('Geofence Manager Configuration High-Fidelity Behavioral Test Suite (ge
       expect(document.getElementById('gf-breach-banner').classList.contains('visible')).toBe(false);
     });
   });
+  describe('Edge Cases & Uncovered Paths', () => {
+    it('should handle already initialized state and missing host element', () => {
+      // Calling init when already initialized should do nothing/return early
+      window.Geofence.init();
+
+      // Temporarily restore original getElementById to allow returning null
+      const originalGetElementById = document.getElementById;
+      document.getElementById = Document.prototype.getElementById.bind(document);
+
+      // Delete all host elements and try to init
+      document.querySelectorAll('#panel-geofence').forEach(el => el.remove());
+      
+      if (window.Geofence && typeof window.Geofence._resetInitialised === 'function') {
+        window.Geofence._resetInitialised();
+      }
+      
+      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      window.Geofence.init();
+      expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Host element #panel-geofence not found'));
+      consoleSpy.mockRestore();
+
+      // Restore custom setup.js mock
+      document.getElementById = originalGetElementById;
+
+      // Restore host for other tests
+      const newHost = document.createElement('div');
+      newHost.id = 'panel-geofence';
+      document.body.appendChild(newHost);
+    });
+
+    it('should warn when safeSend is missing', () => {
+      const originalSafeSend = window.safeSend;
+      delete window.safeSend;
+      
+      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      // Trigger a refresh/request
+      document.getElementById('gf-refresh-btn').click();
+      
+      expect(consoleSpy).toHaveBeenCalledWith('[Geofence] safeSend not available');
+      consoleSpy.mockRestore();
+      window.safeSend = originalSafeSend;
+    });
+
+    it('should fail validation on invalid input values', () => {
+      // 1. Invalid altmax
+      document.getElementById('gf-altmax-inp').value = '5';
+      document.getElementById('gf-save-btn').click();
+      expect(window.SwUtil.toast).toHaveBeenCalledWith('FENCE_ALT_MAX must be 10–1000 m', true);
+
+      // Restore altmax, invalid radius
+      document.getElementById('gf-altmax-inp').value = '100';
+      document.getElementById('gf-radius-inp').value = '20';
+      document.getElementById('gf-save-btn').click();
+      expect(window.SwUtil.toast).toHaveBeenCalledWith('FENCE_RADIUS must be 30–10000 m', true);
+
+      // Restore radius, invalid margin
+      document.getElementById('gf-radius-inp').value = '150';
+      document.getElementById('gf-margin-inp').value = '0.5';
+      document.getElementById('gf-save-btn').click();
+      expect(window.SwUtil.toast).toHaveBeenCalledWith('FENCE_MARGIN must be 1–10 m', true);
+    });
+
+    it('should handle WS message error and unrecognized types', () => {
+      // 1. WS msg.type = param_error
+      window.dispatchEvent(new CustomEvent('calibration_ws_message', {
+        detail: {
+          type: 'param_error',
+          message: 'Mock FC parameter failure'
+        }
+      }));
+      expect(window.SwUtil.toast).toHaveBeenCalledWith('Geofence param error: Mock FC parameter failure', true);
+
+      // 2. Unrecognized msg type
+      window.dispatchEvent(new CustomEvent('calibration_ws_message', {
+        detail: {
+          type: 'unrecognized_type'
+        }
+      }));
+
+      // 3. WS message parsing error (evt.detail getter throws)
+      const badEvent = new CustomEvent('calibration_ws_message');
+      Object.defineProperty(badEvent, 'detail', {
+        get: () => { throw new Error('Detail access failure'); }
+      });
+      window.dispatchEvent(badEvent);
+    });
+
+    it('should ignore param_value or param_set_sent with unrecognized param_id', () => {
+      // 1. param_value unrecognized id
+      window.dispatchEvent(new CustomEvent('calibration_ws_message', {
+        detail: {
+          type: 'param_value',
+          param_id: 'UNKNOWN_PARAM',
+          value: '42'
+        }
+      }));
+
+      // 2. param_set_sent unrecognized id
+      window.dispatchEvent(new CustomEvent('calibration_ws_message', {
+        detail: {
+          type: 'param_set_sent',
+          param_id: 'UNKNOWN_PARAM',
+          value: '42'
+        }
+      }));
+    });
+  });
 });

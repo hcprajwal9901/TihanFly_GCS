@@ -1,0 +1,71 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PM-025
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-manager.js
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Negative / Robustness
+Test Case Title     : should cover createPolygon catch block error handling
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Mock external boundaries: Mock L Map layers.. Dependencies: Leaflet API initialized in setup.
+
+Test Inputs:
+originalPolygon = window.L.polygon
+window.L.polygon = jest.fn().mockImplementation(() => {
+throw new Error('Mock Polygon Creation Failure')
+})
+pmInstance.polygonPoints = [
+window.L.latLng(17.600, 78.120),
+window.L.latLng(17.602, 78.120),
+window.L.latLng(17.601, 78.122)
+consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+res = pmInstance.createPolygon()
+consoleSpy.mockRestore()
+window.L.polygon = originalPolygon
+
+Expected Behavior:
+Res is equal to false.
+Verify consoleSpy satisfies toHaveBeenCalledWith(expect.stringContaining('Error creating polygon:'), expect.any(Error)).
+
+Actual Observations:
+res = false
+consoleSpy: called with expect.stringContaining('Error creating polygon:'), expect.any(Error)
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(_addVertexMarker).toHaveBeenCalled();
+expect(addTo).toHaveBeenCalled();
+expect(calculatePolygonArea).toHaveBeenCalled();
+expect(clearLayers).toHaveBeenCalled();
+expect(ensureLayersInitialized).toHaveBeenCalled();
+expect(polygon).toHaveBeenCalled();
+expect(transparent).toHaveBeenCalled();
+// JSDOM verification:
+expect(res).toBe(false);
+expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining('Error creating polygon:'), expect.any(Error));
+
+Console Logs:
+[INFO] Jest executed test in 1ms
+[PASS] res = false
+[PASS] consoleSpy: called with expect.stringContaining('Error creating polygon:'), expect.any(Error)
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

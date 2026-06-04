@@ -1,0 +1,64 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-PM-021
+Requirement ID      : REQ-NAV-001
+Source File         : polygon-manager.js
+Target Function     : tryInitialize() [Line 57]
+Test Category       : Positive / Functional
+Test Case Title     : should center, stop editing, and export polygon correctly
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+fitBoundsSpy = jest.spyOn(pmInstance.getLeafletMap(), 'fitBounds')
+pmInstance.centerPolygon()
+pmInstance.stopEditing()
+pmInstance.surveySettings.altitude = 10
+exported = pmInstance.exportPolygon()
+
+Expected Behavior:
+Verify fitBoundsSpy satisfies toHaveBeenCalled().
+Pm Instance Is Editing is equal to false.
+Exported Points Length is equal to 3.
+Exported Settings Altitude is equal to 10.
+
+Actual Observations:
+fitBoundsSpy: called
+pmInstance.isEditing = false
+exported.points.length = 3
+exported.settings.altitude = 10
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(fitBoundsSpy).toHaveBeenCalled();
+expect(pmInstance.isEditing).toBe(false);
+expect(exported.points.length).toBe(3);
+expect(exported.settings.altitude).toBe(10);
+
+Console Logs:
+[INFO] Jest executed test in 2ms
+[PASS] fitBoundsSpy: called
+[PASS] pmInstance.isEditing = false
+[PASS] exported.points.length = 3
+[PASS] exported.settings.altitude = 10
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

@@ -1,0 +1,153 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-APP-021
+Requirement ID      : REQ-SYS-002
+Source File         : app.js
+Target Function     : initializeApplication() [Line 26]
+Test Category       : Positive / Functional
+Test Case Title     : should export all module controls in GCS global object
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+JSDOM context initialized via setup.js.
+
+Test Inputs:
+window.GCS.centerOn(12.34, 56.78, 12)
+locMarker = window.GCS.addLocation(10.1, 20.2, 'Test Loc')
+homeMarker = window.GCS.addHomeMarker(11.1, 22.2, 'Test Home')
+window.GCS.goHome(); // Warning path first since homeMarker is not set on app.js closure
+window.GCS.testWeather()
+window.GCS.debug()
+window.GCS.maximizeVideo()
+window.GCS.minimizeVideo()
+window.GCS.toggleVideo()
+window.GCS.startWebcam()
+window.GCS.stopWebcam()
+window.GCS.toggleWebcam()
+window.GCS.addWaypoint()
+window.GCS.clearWaypoints()
+window.GCS.enterPlanMode()
+window.GCS.exitPlanMode()
+window.GCS.centerOnDrone(); // Warning path as no drone marker
+window.GCS.droneAutoPan(true)
+
+Expected Behavior:
+Verify window.GCS satisfies toBeDefined().
+Window Gcs Map() is equal to global.tmap.
+Window Gcs Compass() is equal to global.compass.
+Window Gcs Flight Controls() is equal to window.flightControls.
+Window Gcs Weather() is equal to window.weatherDashboard.
+Window Gcs Waypoints() is equal to window.WaypointManager.
+Global Tmap Center is equal to [12.34, 56.78].
+Loc Marker is equal to { lat: 10.1, lng: 20.2 }.
+Home Marker is equal to { lat: 11.1, lng: 22.2 }.
+Verify console.warn satisfies toHaveBeenCalledWith('⚠️ Home marker not set').
+Verify window.weatherDashboard.fetchWeather satisfies toHaveBeenCalled().
+Log message recorded.
+Window Video Maximize Is Maximized() is equal to true.
+Window Video Maximize Is Maximized() is equal to false.
+Window Video Maximize Is Maximized() is equal to true.
+Window Gcs Is Web Camera Active() is equal to true.
+Verify window.WaypointManager.startAddingWaypoint satisfies toHaveBeenCalled().
+Verify window.WaypointManager.clearAllWaypoints satisfies toHaveBeenCalled().
+Verify window.PlanFlight.enter satisfies toHaveBeenCalled().
+Verify window.PlanFlight.exit satisfies toHaveBeenCalled().
+Verify console.warn satisfies toHaveBeenCalledWith('⚠️ No drone marker yet').
+Global Tmap Drone Auto Pan is equal to true.
+Window Gcs Is Drone Active() is equal to false.
+
+Actual Observations:
+window.GCS: defined
+window.GCS.map() = global.tmap
+window.GCS.compass() = global.compass
+window.GCS.flightControls() = window.flightControls
+window.GCS.weather() = window.weatherDashboard
+window.GCS.waypoints() = window.WaypointManager
+global.tmap.center = [12.34, 56.78]
+locMarker = { lat: 10.1, lng: 20.2 }
+homeMarker = { lat: 11.1, lng: 22.2 }
+console.warn: called with '⚠️ Home marker not set'
+window.weatherDashboard.fetchWeather: called
+console.log: called with expect.stringContaining('Component Debug Information')
+window.VideoMaximize.isMaximized() = true
+window.VideoMaximize.isMaximized() = false
+window.VideoMaximize.isMaximized() = true
+window.GCS.isWebcamActive() = true
+window.WaypointManager.startAddingWaypoint: called
+window.WaypointManager.clearAllWaypoints: called
+window.PlanFlight.enter: called
+window.PlanFlight.exit: called
+console.warn: called with '⚠️ No drone marker yet'
+global.tmap.droneAutoPan = true
+window.GCS.isDroneActive() = false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(window.GCS).toBeDefined();
+expect(window.GCS.map()).toBe(global.tmap);
+expect(window.GCS.compass()).toBe(global.compass);
+expect(window.GCS.flightControls()).toBe(window.flightControls);
+expect(window.GCS.weather()).toBe(window.weatherDashboard);
+expect(window.GCS.waypoints()).toBe(window.WaypointManager);
+expect(global.tmap.center).toEqual([12.34, 56.78]);
+expect(locMarker).toEqual({ lat: 10.1, lng: 20.2 });
+expect(homeMarker).toEqual({ lat: 11.1, lng: 22.2 });
+expect(console.warn).toHaveBeenCalledWith('⚠️ Home marker not set');
+expect(window.weatherDashboard.fetchWeather).toHaveBeenCalled();
+expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Component Debug Information'));
+expect(window.VideoMaximize.isMaximized()).toBe(true);
+expect(window.VideoMaximize.isMaximized()).toBe(false);
+expect(window.VideoMaximize.isMaximized()).toBe(true);
+expect(window.GCS.isWebcamActive()).toBe(true);
+expect(window.WaypointManager.startAddingWaypoint).toHaveBeenCalled();
+expect(window.WaypointManager.clearAllWaypoints).toHaveBeenCalled();
+expect(window.PlanFlight.enter).toHaveBeenCalled();
+expect(window.PlanFlight.exit).toHaveBeenCalled();
+expect(console.warn).toHaveBeenCalledWith('⚠️ No drone marker yet');
+expect(global.tmap.droneAutoPan).toBe(true);
+expect(window.GCS.isDroneActive()).toBe(false);
+
+Console Logs:
+[INFO] Jest executed test in 32ms
+[PASS] window.GCS: defined
+[PASS] window.GCS.map() = global.tmap
+[PASS] window.GCS.compass() = global.compass
+[PASS] window.GCS.flightControls() = window.flightControls
+[PASS] window.GCS.weather() = window.weatherDashboard
+[PASS] window.GCS.waypoints() = window.WaypointManager
+[PASS] global.tmap.center = [12.34, 56.78]
+[PASS] locMarker = { lat: 10.1, lng: 20.2 }
+[PASS] homeMarker = { lat: 11.1, lng: 22.2 }
+[PASS] console.warn: called with '⚠️ Home marker not set'
+[PASS] window.weatherDashboard.fetchWeather: called
+[PASS] console.log: called with expect.stringContaining('Component Debug Information')
+[PASS] window.VideoMaximize.isMaximized() = true
+[PASS] window.VideoMaximize.isMaximized() = false
+[PASS] window.VideoMaximize.isMaximized() = true
+[PASS] window.GCS.isWebcamActive() = true
+[PASS] window.WaypointManager.startAddingWaypoint: called
+[PASS] window.WaypointManager.clearAllWaypoints: called
+[PASS] window.PlanFlight.enter: called
+[PASS] window.PlanFlight.exit: called
+[PASS] console.warn: called with '⚠️ No drone marker yet'
+[PASS] global.tmap.droneAutoPan = true
+[PASS] window.GCS.isDroneActive() = false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

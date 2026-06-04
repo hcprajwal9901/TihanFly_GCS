@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-PS-012
 Requirement ID      : REQ-TUNE-001
 Source File         : param-switch.js
-Target Function     : connectWebSocket() [Line 94]
-Test Category       : Wrong Value
-Test Case Title     : should reject incorrect string format payloads and log mismatch warning for Component Layout Initialization and DOM Controls Validation
+Target Function     : connectWebSocket() [Line 232]
+Test Category       : Positive / Functional
+Test Case Title     : should handle backend param_set_sent message
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,27 +22,28 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Type safety check wrappers active.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-component = new GCSComponent()
-result = component.setValue('NOT_A_NUMBER')
+spyInfo = jest.spyOn(console, 'info').mockImplementation(() => {})
+})
+spyInfo.mockRestore()
 
 Expected Behavior:
-Result is equal to false.
+Verify spyInfo satisfies toHaveBeenCalledWith('[ParamSwitch] PARAM_SET sent for RC5_OPTION = 12').
 
 Actual Observations:
-result = false
+spyInfo: called with '[ParamSwitch] PARAM_SET sent for RC5_OPTION = 12'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(result).toBe(false);
+expect(spyInfo).toHaveBeenCalledWith('[ParamSwitch] PARAM_SET sent for RC5_OPTION = 12');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] result = false
+[INFO] Jest executed test in 572ms
+[PASS] spyInfo: called with '[ParamSwitch] PARAM_SET sent for RC5_OPTION = 12'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

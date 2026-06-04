@@ -343,4 +343,180 @@ describe('WaypointContextMenu High-Fidelity Behavioral Test Suite (waypoint-cont
       expect(spyShowMenu).toHaveBeenCalledWith(250, 320, dummyWp);
     });
   });
+
+  describe('Additional Edge Cases and Coverage Expansion', () => {
+    it('should test connectToWaypointManager interval connection', () => {
+      jest.useFakeTimers();
+      
+      // Delete manager to reset connection loop
+      delete window.WaypointManager;
+      
+      // Instantiate context menu again to trigger connection search
+      const menu = new window.WaypointContextMenu.constructor();
+      
+      // Advance by 100ms: WaypointManager is still missing
+      jest.advanceTimersByTime(100);
+      expect(menu.waypointManager).toBeNull();
+      
+      // Define WaypointManager and advance by 100ms
+      window.WaypointManager = mockWaypointManager;
+      jest.advanceTimersByTime(100);
+      expect(menu.waypointManager).toBe(mockWaypointManager);
+      
+      jest.useRealTimers();
+    });
+
+    it('should close menu when clicking outside of it', () => {
+      menuInstance.menu.style.display = 'block';
+      
+      // Click on body element
+      document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(menuInstance.menu.style.display).toBe('none');
+    });
+
+    it('should handle menu item clicks in DOM', () => {
+      const spyHandleAction = jest.spyOn(menuInstance, 'handleMenuAction');
+      
+      // Click a separator (should not trigger any action)
+      const separator = menuInstance.menu.querySelector('.context-menu-separator');
+      separator.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(spyHandleAction).not.toHaveBeenCalled();
+      
+      // Click a context menu item
+      const item = menuInstance.menu.querySelector('[data-action="delete-wp"]');
+      item.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(spyHandleAction).toHaveBeenCalledWith('delete-wp');
+      
+      spyHandleAction.mockRestore();
+    });
+
+    it('should prevent default context menu events on the menu container', () => {
+      const preventSpy = jest.fn();
+      const dummyEvt = { preventDefault: preventSpy };
+      
+      menuInstance.menu.dispatchEvent(new MouseEvent('contextmenu'));
+      // Since JSDOM event dispatching might not trigger the inline listener directly, we test the handler
+      const menuEl = document.getElementById('waypointContextMenu');
+      const event = new Event('contextmenu', { cancelable: true });
+      event.preventDefault = preventSpy;
+      menuEl.dispatchEvent(event);
+      expect(preventSpy).toHaveBeenCalled();
+    });
+
+    it('should position and display polygon submenu', () => {
+      jest.useFakeTimers();
+
+      // Clean up any pre-existing submenu
+      const existingSub = document.querySelector('.polygon-submenu');
+      if (existingSub) existingSub.remove();
+
+      // Stub getBoundingClientRect for polygon item
+      const polygonItem = menuInstance.menu.querySelector('[data-action="polygon"]');
+      polygonItem.getBoundingClientRect = jest.fn().mockReturnValue({
+        right: 150,
+        top: 200
+      });
+
+      menuInstance.showPolygonSubmenu();
+
+      const submenu = document.querySelector('.polygon-submenu');
+      expect(submenu).toBeTruthy();
+      expect(submenu.style.left).toBe('155px');
+      expect(submenu.style.top).toBe('200px');
+
+      // Click outside submenu to close it
+      jest.advanceTimersByTime(100);
+      
+      document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(submenu.style.display).toBe('none');
+      jest.useRealTimers();
+    });
+
+    it('should handle polygon file imports', () => {
+      const clickSpy = jest.fn();
+      const originalCreate = document.createElement;
+      document.createElement = jest.fn().mockImplementation((tag) => {
+        const el = originalCreate.call(document, tag);
+        if (tag === 'input') {
+          el.click = clickSpy;
+        }
+        return el;
+      });
+
+      menuInstance.handlePolygonAction('polygon-load');
+
+      expect(clickSpy).toHaveBeenCalled();
+      document.createElement = originalCreate;
+    });
+
+    it('should trigger polygon-from-shp alert', () => {
+      menuInstance.handlePolygonAction('polygon-from-shp');
+      expect(window.MsgConsole.info).toHaveBeenCalledWith('SHP import feature coming soon');
+    });
+
+    it('should cover polygon-offset prompt failures', () => {
+      // 1. Prompt returns null
+      window.prompt.mockReturnValueOnce(null);
+      menuInstance.handlePolygonAction('polygon-offset');
+      expect(mockPolygonManager.offsetPolygon).not.toHaveBeenCalled();
+
+      // 2. Prompt returns non-number
+      window.prompt.mockReturnValueOnce('abc');
+      menuInstance.handlePolygonAction('polygon-offset');
+      expect(mockPolygonManager.offsetPolygon).not.toHaveBeenCalled();
+
+      // 3. Polygon list is empty
+      mockPolygonManager.polygons = [];
+      window.prompt.mockReturnValueOnce('10');
+      menuInstance.handlePolygonAction('polygon-offset');
+      expect(window.MsgConsole.warning).toHaveBeenCalledWith('No polygon to offset');
+    });
+
+    it('should cover polygon-area list empty check', () => {
+      mockPolygonManager.polygons = [];
+      menuInstance.handlePolygonAction('polygon-area');
+      expect(window.MsgConsole.warning).toHaveBeenCalledWith('No polygons available');
+    });
+
+    it('should cover takeoff and land actions when waypoint is null', () => {
+      menuInstance.currentWaypoint = null;
+      
+      menuInstance.handleMenuAction('land');
+      expect(mockWaypointManager.currentMode).toBe('land');
+      expect(mockWaypointManager.tmap.enableClick).toHaveBeenCalled();
+    });
+
+    it('should check isFirstTakeoffWaypoint helper', () => {
+      // Case 1: waypoint is null
+      expect(menuInstance.isFirstTakeoffWaypoint(null)).toBe(false);
+
+      // Case 2: WaypointManager is missing
+      menuInstance.waypointManager = null;
+      expect(menuInstance.isFirstTakeoffWaypoint({})).toBe(false);
+      menuInstance.waypointManager = mockWaypointManager;
+
+      // Case 3: first waypoint is takeoff type
+      const firstWp = { type: 'takeoff' };
+      mockWaypointManager.waypoints = [firstWp];
+      expect(menuInstance.isFirstTakeoffWaypoint(firstWp)).toBe(true);
+
+      // Case 4: first waypoint is not takeoff
+      const regularWp = { type: 'waypoint' };
+      mockWaypointManager.waypoints = [regularWp];
+      expect(menuInstance.isFirstTakeoffWaypoint(regularWp)).toBe(false);
+    });
+
+    it('should log warning for unimplemented actions', () => {
+      menuInstance.handleMenuAction('unknown-action-test');
+      expect(window.MsgConsole.info).toHaveBeenCalledWith('unknown-action-test feature coming soon');
+    });
+
+    it('should cover error logs when WaypointManager is not initialized', () => {
+      menuInstance.waypointManager = null;
+      
+      menuInstance.handleMenuAction('delete-wp');
+      
+      expect(window.MsgConsole.error).toHaveBeenCalledWith('WaypointManager not initialized');
+    });
+  });
 });

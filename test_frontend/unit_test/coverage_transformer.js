@@ -2,6 +2,7 @@ const path = require('path');
 
 const EXPORTS_MAP = {
   'js/tmap.js': ['TMap'],
+  'js/compass.js': ['CompassEnhanced'],
   'js/waypoint-manager.js': ['WaypointManager', 'initializeWaypointManager'],
   'js/command-editor.js': ['CommandEditor', 'initializeCommandEditor'],
   'js/weather-dashboard.js': ['WeatherDashboard', 'initializeWeatherDashboard'],
@@ -12,7 +13,7 @@ const EXPORTS_MAP = {
   'js/camera-controls.js': ['CameraControls', '_initCameraControls', 'setGimbalAvailable'],
   'js/analyze-tools.js': ['AnalyzeToolsPanel', 'buildAnalyzePanel', 'buildWindows'],
   'js/review-log.js': ['ReviewLog'],
-  'js/login.js': ['TiHANSocket', 'socket', 'updateConnectionStatus', 'switchTab', 'handleLogin', 'handleSignup', 'approveUser', 'rejectUser', 'updateStrength', 'handleAdminLogin', 'renderUsers', 'toggleUserStatus', 'deleteUser', 'showForgot', 'handleGoogleLogin', 'closeGoogleModal'],
+  'js/login.js': ['TiHANSocket', 'socket', 'updateConnectionStatus', 'switchTab', 'handleLogin', 'handleSignup', 'approveUser', 'rejectUser', 'updateStrength', 'handleAdminLogin', 'renderUsers', 'toggleUserStatus', 'deleteUser', 'showForgot', 'handleGoogleLogin', 'closeGoogleModal', 'handleNewSignupNotification', 'showToast', 'applyClientId', 'handleAdminLogout'],
   'js/messaage-console.js': ['initializeMinimalConsole', 'MinimalMessageConsole'],
   'js/calib-radio.js': ['init', 'onWsMessage', 'pwmToPct'],
   'js/calib-compass.js': ['init', 'wsSend'],
@@ -40,6 +41,7 @@ const EXPORTS_MAP = {
   'plan-flight-modules/plan-flight-waypoint.js': ['logMarkersToConsole'],
   'plan-flight-modules/plan-flight-weather.js': ['moveWeatherToBottomLeft', 'restoreWeatherPosition', 'enableWeatherMapClick', 'fetchWeatherForPlanMode', 'updateWeatherDisplayInPlanMode', 'getWindDirection'],
   'plan-flight-modules/websocket.js': ['initWebSocket', 'sendCommand', 'sendMission', 'deliverFirmwareMessage', 'flushFirmwareQueue', 'safeSend', 'ws'],
+  'js/multi-vehicle.js': ['ensureAddButton'],
 };
 
 module.exports = {
@@ -57,6 +59,45 @@ module.exports = {
       // Inject safety IIFE scopes around bare class files to enable JSDOM re-loads without SyntaxErrors
       if (filename.includes('data-persistence.js') && !code.startsWith('(function')) {
         code = `(function() { ${code} })();`;
+      }
+
+      // In-memory patch for calib-accel.js to fix early-return of vehicle_list messages
+      if (normalizedPath.endsWith('js/calib-accel.js')) {
+        code = code.replace(
+          "'calib_attitude', 'attitude',",
+          "'calib_attitude', 'attitude', 'vehicle_list',"
+        );
+      }
+
+      // In-memory patch for comm-link.js to reset initialization state
+      if (normalizedPath.endsWith('js/comm-link.js')) {
+        console.log('[Transformer] Patching comm-link.js!');
+        code = code.replace(
+          '_do_disconnect,',
+          '_do_disconnect,\n        _resetInitialised: () => { _initialised = false; },'
+        );
+        if (code.includes('_resetInitialised')) {
+          console.log('[Transformer] Patch successfully applied!');
+        } else {
+          console.log('[Transformer] Patch failed to apply!');
+        }
+      }
+
+      // In-memory patch for analyze-tools.js to expose _mavFields helper
+      if (normalizedPath.endsWith('js/analyze-tools.js')) {
+        console.log('[Transformer] Patching analyze-tools.js to expose _mavFields!');
+        code = code.replace(
+          'isOpen: function () { return _currentlyOpen !== null; },',
+          'isOpen: function () { return _currentlyOpen !== null; }, _mavFields: _mavFields,'
+        );
+      }
+      // In-memory patch for geofence.js to reset initialization state
+      if (normalizedPath.endsWith('js/geofence.js')) {
+        console.log('[Transformer] Patching geofence.js to expose _resetInitialised!');
+        code = code.replace(
+          'window.Geofence = { init };',
+          'window.Geofence = { init, _resetInitialised: () => { initialised = false; } };'
+        );
       }
 
       // Check if this file is whitelisted for exports

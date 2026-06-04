@@ -1,0 +1,60 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-WEB-019
+Requirement ID      : REQ-COM-001
+Source File         : websocket.js
+Target Function     : handleTelemetryUpdate() [Line 815]
+Test Category       : Positive / Functional
+Test Case Title     : should route telemetry messages through handleTelemetryUpdate
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+data: Object | Simulated: window.initWebSocket()
+ws = wsInstances[0]
+window.selectedSysId = 1
+})
+
+Expected Behavior:
+Verify window.TelemetryDisplay.update satisfies toHaveBeenCalled().
+Verify mockTMap.updateDronePositionForSysid satisfies toHaveBeenCalledWith(1, 17.601, 78.125, 100).
+
+Actual Observations:
+window.TelemetryDisplay.update: called
+mockTMap.updateDronePositionForSysid: called with 1, 17.601, 78.125, 100
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+expect(messages).toHaveBeenCalled();
+expect(update).toHaveBeenCalled();
+expect(updateDronePosition).toHaveBeenCalled();
+expect(updateDronePositionForSysid).toHaveBeenCalled();
+// JSDOM verification:
+expect(window.TelemetryDisplay.update).toHaveBeenCalled();
+expect(mockTMap.updateDronePositionForSysid).toHaveBeenCalledWith(1, 17.601, 78.125, 100);
+
+Console Logs:
+[INFO] Jest executed test in 12ms
+[PASS] window.TelemetryDisplay.update: called
+[PASS] mockTMap.updateDronePositionForSysid: called with 1, 17.601, 78.125, 100
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

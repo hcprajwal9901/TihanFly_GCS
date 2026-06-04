@@ -6,15 +6,15 @@ Requirement ID      : REQ-HW-001
 Source File         : calib-level.js
 Target Function     : buildSuccessModal() [Line 11]
 Test Category       : Positive / Functional
-Test Case Title     : should handle explicit done results and pop success modals
+Test Case Title     : should start level calibration and trigger 15-second response timeouts
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -25,44 +25,56 @@ Pre-conditions:
 JSDOM context initialized via setup.js.
 
 Test Inputs:
+window.g_vehicles = []
+triggerSocketMessage({ type: 'vehicles_update' })
+window.selectedSysId = 12; // fallback active drone
+startBtn = document.getElementById('levelStartBtn')
+statusText = document.getElementById('levelStatus')
 hint = document.getElementById('levelStepHint')
-status = document.getElementById('levelStatus')
-modal = document.getElementById('levelModal')
-})
-})
-document.getElementById('levelModalOkBtn').click()
+startBtn.click()
+)
+jest.advanceTimersByTime(14900)
+jest.advanceTimersByTime(200)
 
 Expected Behavior:
-Hint displays 'Calibrating horizon...'.
-Status displays 'DONE'.
-Modal Class List Contains('Show') is equal to true.
-Modal Class List Contains('Show') is equal to false.
-Status displays 'NOT STARTED'.
+Start Button Disabled is equal to true.
+Status Text displays 'STARTED'.
+Hint displays text containing 'Sending command to drone...'.
+Verify mockSocket.send satisfies toHaveBeenCalledWith().
+Status Text displays 'STARTED'.
+Status Text displays 'FAILED'.
+Level Error Text exists.
 
 Actual Observations:
-hint.textContent = 'Calibrating horizon...'
-status.textContent = 'DONE'
-modal.classList.contains('show') = true
-modal.classList.contains('show') = false
-status.textContent = 'NOT STARTED'
+startBtn.disabled = true
+statusText.textContent = 'STARTED'
+hint.textContent contains 'Sending command to drone...'
+mockSocket.send: toHaveBeenCalledWith
+statusText.textContent = 'STARTED'
+statusText.textContent = 'FAILED'
+document.getElementById('levelErrorText').textContent contains 'Timeout waiting for drone'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(hint.textContent).toBe('Calibrating horizon...');
-expect(status.textContent).toBe('DONE');
-expect(modal.classList.contains('show')).toBe(true);
-expect(modal.classList.contains('show')).toBe(false);
-expect(status.textContent).toBe('NOT STARTED');
+expect(startBtn.disabled).toBe(true);
+expect(statusText.textContent).toBe('STARTED');
+expect(hint.textContent).toContain('Sending command to drone...');
+expect(mockSocket.send).toHaveBeenCalledWith(
+expect(statusText.textContent).toBe('STARTED');
+expect(statusText.textContent).toBe('FAILED');
+expect(document.getElementById('levelErrorText').textContent).toContain('Timeout waiting for drone');
 
 Console Logs:
-[INFO] Jest executed test in 57ms
-[PASS] hint.textContent = 'Calibrating horizon...'
-[PASS] status.textContent = 'DONE'
-[PASS] modal.classList.contains('show') = true
-[PASS] modal.classList.contains('show') = false
-[PASS] status.textContent = 'NOT STARTED'
+[INFO] Jest executed test in 49ms
+[PASS] startBtn.disabled = true
+[PASS] statusText.textContent = 'STARTED'
+[PASS] hint.textContent contains 'Sending command to drone...'
+[PASS] mockSocket.send: toHaveBeenCalledWith
+[PASS] statusText.textContent = 'STARTED'
+[PASS] statusText.textContent = 'FAILED'
+[PASS] document.getElementById('levelErrorText').textContent contains 'Timeout waiting for drone'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

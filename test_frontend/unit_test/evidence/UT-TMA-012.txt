@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-TMA-012
 Requirement ID      : REQ-SYS-002
 Source File         : tmap.js
-Target Function     : update_compass_needle() [Line 94]
+Target Function     : tmap_initialize() [Line 12]
 Test Category       : Positive / Functional
-Test Case Title     : should successfully verify normal happy-path operation for Compass Telemetry Orientation and HUD Needle Rotations
+Test Case Title     : should cover addRotatingHomeMarker options and returns
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,48 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. Standard mocks active for tmap.js.
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
 
 Test Inputs:
-map = new TMap('map-element', [17.385, 78.486], 15, false)
-marker = map.addMarker(17.385, 78.486, true)
+lat: Number, lng: Number, label = 'Home': String, options = {}: String | Simulated: tmap = new TMap('map-container', [17.385, 78.486], 16, true)
+home1 = tmap.addRotatingHomeMarker(17.385, 78.486, 'Home Bottom', { labelDirection: 'bottom' })
+home2 = tmap.addRotatingHomeMarker(17.385, 78.486, 'Home Top', { labelDirection: 'top' })
+home3 = tmap.addRotatingHomeMarker(17.385, 78.486, 'Home Left', { labelDirection: 'left' })
+home4 = tmap.addRotatingHomeMarker(17.385, 78.486, 'Home Right', { labelDirection: 'right' })
+home5 = tmap.addRotatingHomeMarker(17.385, 78.486, 'Home No Label', { permanentLabel: false })
+home1.center()
+initialCount = tmap.getMarkerCount()
+home1.remove()
 
 Expected Behavior:
-Map Get Marker Count() is equal to 1.
-Verify marker.getLatLng().lat satisfies toBeCloseTo(17.385).
+Typeof Home1 Remove is equal to 'function'.
+Typeof Home1 Center is equal to 'function'.
+Verify mapMock.setView satisfies toHaveBeenCalledWith([17.385, 78.486], 18).
+Tmap Get Marker Count() is equal to initialCount - 1.
 
 Actual Observations:
-map.getMarkerCount() = 1
-marker.getLatLng().lat = 17.385
+typeof home1.remove = 'function'
+typeof home1.center = 'function'
+mapMock.setView: called with [17.385, 78.486], 18
+tmap.getMarkerCount() = initialCount - 1
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(map.getMarkerCount()).toBe(1);
-expect(marker.getLatLng().lat).toBeCloseTo(17.385);
+expect(addRotatingHomeMarker).toBeDefined();
+// JSDOM verification:
+expect(typeof home1.remove).toBe('function');
+expect(typeof home1.center).toBe('function');
+expect(mapMock.setView).toHaveBeenCalledWith([17.385, 78.486], 18);
+expect(tmap.getMarkerCount()).toBe(initialCount - 1);
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] map.getMarkerCount() = 1
-[PASS] marker.getLatLng().lat = 17.385
+[INFO] Jest executed test in 3ms
+[PASS] typeof home1.remove = 'function'
+[PASS] typeof home1.center = 'function'
+[PASS] mapMock.setView: called with [17.385, 78.486], 18
+[PASS] tmap.getMarkerCount() = initialCount - 1
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS

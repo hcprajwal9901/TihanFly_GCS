@@ -1,0 +1,68 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-LOG-021
+Requirement ID      : REQ-LOG-001
+Source File         : login.js
+Target Function     : updateConnectionStatus() [Line 91]
+Test Category       : Positive / Functional
+Test Case Title     : should cover document keydown event listener and HUD coordinates ticker
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-04
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : 19fd714
+Simulated Browser   : Chrome 148 / Headless V8 JSDOM
+Node Engine         : v22.2.0
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+Mock Strategy: Live execution.. Dependencies: Pure algorithmic logic (Independent module) initialized in setup.
+
+Test Inputs:
+type: String, callback: Function | Simulated: document.getElementById('panelLogin').classList.add('active')
+document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+document.getElementById('panelLogin').classList.remove('active')
+document.getElementById('panelSignup').classList.add('active')
+document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+document.getElementById('panelSignup').classList.remove('active')
+document.getElementById('panelAdmin').classList.add('active')
+document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }))
+document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+jest.advanceTimersByTime(3000)
+
+Expected Behavior:
+Auth Alert exists.
+Auth Alert exists.
+Auth Alert exists.
+
+Actual Observations:
+document.getElementById('authAlert').textContent contains 'All fields are required.'
+document.getElementById('authAlert').textContent contains 'Please fill in all fields.'
+document.getElementById('authAlert').textContent contains 'Both fields are required.'
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & JEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+const res = on(...);
+expect(res).toBeDefined();
+// JSDOM verification:
+expect(document.getElementById('authAlert').textContent).toContain('All fields are required.');
+expect(document.getElementById('authAlert').textContent).toContain('Please fill in all fields.');
+expect(document.getElementById('authAlert').textContent).toContain('Both fields are required.');
+
+Console Logs:
+[INFO] Jest executed test in 3ms
+[PASS] document.getElementById('authAlert').textContent contains 'All fields are required.'
+[PASS] document.getElementById('authAlert').textContent contains 'Please fill in all fields.'
+[PASS] document.getElementById('authAlert').textContent contains 'Both fields are required.'
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

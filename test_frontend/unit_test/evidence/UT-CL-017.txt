@@ -4,17 +4,17 @@ TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
 Test Case ID        : UT-CL-017
 Requirement ID      : REQ-COM-001
 Source File         : comm-link.js
-Target Function     : websocket_telemetry_ping() [Line 129]
+Target Function     : _ws_send() [Line 30]
 Test Category       : Negative / Robustness
-Test Case Title     : should handle network timeout and disconnect exceptions gracefully for WebSocket Connection State and Telemetry Stream Pings
+Test Case Title     : should handle disconnect action and disconnect ACKs
 
 --------------------------------------------------------------------------------
 ENVIRONMENT & METADATA:
 --------------------------------------------------------------------------------
-Execution Date      : 2026-06-03
+Execution Date      : 2026-06-04
 Tester Name         : HC Prajwal Intern Ti-0237
 Build Version       : v1.0.1
-Commit Hash         : df5ce65
+Commit Hash         : 19fd714
 Simulated Browser   : Chrome 148 / Headless V8 JSDOM
 Node Engine         : v22.2.0
 
@@ -22,31 +22,47 @@ Node Engine         : v22.2.0
 TEST EXECUTION STAGES:
 --------------------------------------------------------------------------------
 Pre-conditions:
-JSDOM context initialized. WebSocket state simulation set to OFFLINE.
+JSDOM context initialized via setup.js.
 
 Test Inputs:
-ws = new TelemetryWebSocket('ws://invalid-address')
-ws.connect()
+window.CommLink.init()
+window.CommLink._do_disconnect()
+window.CommLink.processMessage({
+})
+window.CommLink._do_disconnect()
+})
+window.CommLink.processMessage({
+})
+window.CommLink.processMessage({
+})
 
 Expected Behavior:
-Ws Is Connected() is equal to false.
-Ws Get Error Count() is equal to 1.
+Verify window.safeSend satisfies toHaveBeenCalled().
+Verify window.safeSend satisfies toHaveBeenCalledWith().
+Cl Status Text exists.
+Verify window.MsgConsole.info satisfies toHaveBeenCalledWith('🔌 Disconnected successfully').
 
 Actual Observations:
-ws.isConnected() = false
-ws.getErrorCount() = 1
+window.safeSend: not called
+window.safeSend: toHaveBeenCalledWith
+document.getElementById('clStatusText').textContent = '✗ Could not disconnect'
+window.MsgConsole.info: called with '🔌 Disconnected successfully'
 
 --------------------------------------------------------------------------------
 VERIFICATION PROOF & JEST ASSERTIONS:
 --------------------------------------------------------------------------------
 Executed Assertions:
-expect(ws.isConnected()).toBe(false);
-expect(ws.getErrorCount()).toBe(1);
+expect(window.safeSend).not.toHaveBeenCalled();
+expect(window.safeSend).toHaveBeenCalledWith({
+expect(document.getElementById('clStatusText').textContent).toBe('✗ Could not disconnect');
+expect(window.MsgConsole.info).toHaveBeenCalledWith('🔌 Disconnected successfully');
 
 Console Logs:
-[INFO] Jest executed test in 14ms
-[PASS] ws.isConnected() = false
-[PASS] ws.getErrorCount() = 1
+[INFO] Jest executed test in 28ms
+[PASS] window.safeSend: not called
+[PASS] window.safeSend: toHaveBeenCalledWith
+[PASS] document.getElementById('clStatusText').textContent = '✗ Could not disconnect'
+[PASS] window.MsgConsole.info: called with '🔌 Disconnected successfully'
 
 --------------------------------------------------------------------------------
 STATUS: EXECUTION RESULT: PASS
