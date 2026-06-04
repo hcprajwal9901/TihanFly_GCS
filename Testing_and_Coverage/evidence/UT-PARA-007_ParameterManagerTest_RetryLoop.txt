@@ -1,0 +1,43 @@
+========================================================================
+  EVIDENCE FILE  :  UT-PARA-007
+  Test            :  ParameterManagerTest.RetryLoop
+  Module          :  ParameterManager
+  Source File     :  test_parameter_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] pm->requestAllParameters();
+  [2] mavlink_message_t msg1 = create_param_value("PARAM_1", 10.0f, 0, 2);
+  [3] pm->processMessage(msg1);
+  [4] std::this_thread::sleep_for(std::chrono::milliseconds(1200));
+  [5] mavlink_msg_param_request_read_decode(&m, &req);
+  [6] mavlink_message_t msg2 = create_param_value("PARAM_2", 20.0f, 1, 2);
+  [7] pm->processMessage(msg2);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(requested_missing);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FALSE(pm->isLoading());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: boolean state. Module 'ParameterManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] ParameterManagerTest.RetryLoop
+  [ParameterManager] Initialized (sysid=1 compid=1 cache=./test_param_cache)
+  [ParameterManager] Sent PARAM_REQUEST_LIST (sysid=1)
+  [ParameterManager] Sent PARAM_REQUEST_LIST (sysid=1)
+  [ParameterManager] Retry thread started
+  [ParameterManager] Stream idle 501 ms — starting retry (rcv=1/2)
+  [ParameterManager] Retry pass: 1 missing / 2 (rcv=1)
+  [ParameterManager] Retry pass: 1 missing / 2 (rcv=1)
+  [ParameterManager] Retry thread exiting
+  [ParameterManager] Load complete: 2 params in 1310 ms
+  [       OK ] ParameterManagerTest.RetryLoop (1310 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

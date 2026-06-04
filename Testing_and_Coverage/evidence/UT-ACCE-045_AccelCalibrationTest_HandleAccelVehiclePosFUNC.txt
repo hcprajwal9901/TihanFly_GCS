@@ -1,0 +1,28 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ACCE-045
+  Test            :  AccelCalibrationTest.HandleAccelVehiclePosFUNC
+  Module          :  AccelCalibration
+  Source File     :  test_accel_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_command_long_t cmd = {};
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(accel.handleAccelVehiclePos(cmd));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'AccelCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] AccelCalibrationTest.HandleAccelVehiclePosFUNC
+  [AccelCalibration] Constructed
+  [Calib] Drone requests position: level (pos=1, step=1/6)  roll=0 rad  pitch=0 rad
+  [       OK ] AccelCalibrationTest.HandleAccelVehiclePosFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

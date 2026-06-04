@@ -1,0 +1,28 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-046
+  Test            :  FirmwareTest.MalformedApjFileHandling
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::vector<uint8_t> result = manager->load_apj_file("/dev/null");
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(result.empty());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: boolean state. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.MalformedApjFileHandling
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [FirmwareManager] JSON parse error in /dev/null: [json.exception.parse_error.101] parse error at line 1, column 1: syntax error while parsing value - unexpected end of input; expected '[', '{', or a literal
+  [       OK ] FirmwareTest.MalformedApjFileHandling (65 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

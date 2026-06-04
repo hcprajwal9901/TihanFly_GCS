@@ -1,0 +1,32 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMM-016
+  Test            :  CommandManagerTest.InvalidCommandHandling
+  Module          :  CommandManager
+  Source File     :  test_command_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] cmd_manager->add_command(-1, "INVALID_CMD_NAME");
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(cmd_manager->process());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'CommandManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CommandManagerTest.InvalidCommandHandling
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [Command] Executing: INVALID_CMD_NAME
+  [Command] ERROR: no routing configured — call set_vehicle_direct() or set_vehicle_manager()
+  [       OK ] CommandManagerTest.InvalidCommandHandling (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,35 @@
+========================================================================
+  EVIDENCE FILE  :  UT-PARA-009
+  Test            :  ParameterManagerTest.RelistTimeout
+  Module          :  ParameterManager
+  Source File     :  test_parameter_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] pm->requestAllParameters();
+  [2] std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_GE(request_list_count, 2);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: boundary. Module 'ParameterManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] ParameterManagerTest.RelistTimeout
+  [ParameterManager] Initialized (sysid=1 compid=1 cache=./test_param_cache)
+  [ParameterManager] Sent PARAM_REQUEST_LIST (sysid=1)
+  [ParameterManager] Sent PARAM_REQUEST_LIST (sysid=1)
+  [ParameterManager] Retry thread started
+  [ParameterManager] Stream idle 501 ms — starting retry (rcv=0/0)
+  [ParameterManager] No param count received — re-sending PARAM_REQUEST_LIST
+  [ParameterManager] Sent PARAM_REQUEST_LIST (sysid=1)
+  [ParameterManager] Retry thread exiting
+  [       OK ] ParameterManagerTest.RelistTimeout (5256 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

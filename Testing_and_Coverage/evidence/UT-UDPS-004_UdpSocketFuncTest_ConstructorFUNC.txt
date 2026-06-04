@@ -1,0 +1,28 @@
+========================================================================
+  EVIDENCE FILE  :  UT-UDPS-004
+  Test            :  UdpSocketFuncTest.ConstructorFUNC
+  Module          :  UdpSocket
+  Source File     :  test_udp.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto sock = std::make_shared<udp_socket>(io, 17010);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW({
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_NE(sock, nullptr);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: exception safety. Module 'UdpSocket' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] UdpSocketFuncTest.ConstructorFUNC
+  [       OK ] UdpSocketFuncTest.ConstructorFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

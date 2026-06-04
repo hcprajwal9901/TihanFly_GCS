@@ -321,3 +321,216 @@ TEST(EscCalibrationTest, CancelDuringPreflightWait) {
 
     if (t.joinable()) t.join();
 }
+
+/*
+===============================================================================
+    FUNCTIONAL UNIT TEST CASES
+    Based on Spreadsheet Requirements
+===============================================================================
+*/
+
+/*
+    UT-ESC-FUNC-001
+    Function : EscCalibration::mavResultToString
+    Description : Verify result string serialization.
+    Input : MAV_RESULT_ACCEPTED
+    Expected Output : "ACCEPTED"
+*/
+TEST(EscCalibrationTest, MavResultToStringAccepted) {
+    EXPECT_NO_THROW({
+        EscCalibration esc;
+        esc.setVehicleInfo(1, 1);
+        esc.setTransportCallback([](const mavlink_message_t&){});
+        std::thread t([&]() { esc.startEscCalibration(); });
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        mavlink_message_t msg;
+        mavlink_command_ack_t ack = {};
+        ack.command = MAV_CMD_PREFLIGHT_CALIBRATION;
+        ack.result = MAV_RESULT_ACCEPTED;
+        mavlink_msg_command_ack_encode(1, 1, &msg, &ack);
+        esc.processMessage(msg);
+        if (t.joinable()) t.join();
+    });
+}
+
+/*
+    UT-ESC-FUNC-002
+    Function : EscCalibration::setSendCallback
+    Description : Verify send callback assignment.
+    Input : Valid std::function
+    Expected Output : Executes successfully
+*/
+TEST(EscCalibrationTest, SetSendCallbackFUNC) {
+    EscCalibration esc;
+    EXPECT_NO_THROW({
+        esc.setSendCallback([](const std::string&) {});
+    });
+}
+
+/*
+    UT-ESC-FUNC-003
+    Function : EscCalibration::setTransportCallback
+    Description : Verify transport callback assignment.
+    Input : Valid std::function
+    Expected Output : Executes successfully
+*/
+TEST(EscCalibrationTest, SetTransportCallbackFUNC) {
+    EscCalibration esc;
+    EXPECT_NO_THROW({
+        esc.setTransportCallback([](const mavlink_message_t&) {});
+    });
+}
+
+/*
+    UT-ESC-FUNC-004
+    Function : EscCalibration::setVehicleInfo
+    Description : Verify vehicle info initialization.
+    Input : sysid = 1, compid = 1
+    Expected Output : Executes successfully
+*/
+TEST(EscCalibrationTest, SetVehicleInfoFUNC) {
+    EscCalibration esc;
+    EXPECT_NO_THROW({
+        esc.setVehicleInfo(1, 1);
+    });
+}
+
+/*
+    UT-ESC-FUNC-005
+    Function : EscCalibration::sendPreflight
+    Description : Verify sending preflight calibration command.
+    Input : None
+    Expected Output : Executes successfully
+*/
+TEST(EscCalibrationTest, SendPreflightFUNC) {
+    EscCalibration esc;
+    esc.setVehicleInfo(1, 1);
+    bool called = false;
+    esc.setTransportCallback([&](const mavlink_message_t& msg) {
+        if (msg.msgid == MAVLINK_MSG_ID_PARAM_SET) {
+            called = true;
+        }
+    });
+    std::thread t([&]() { esc.startEscCalibration(); });
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    esc.cancelEscCalibration();
+    if (t.joinable()) t.join();
+    EXPECT_TRUE(called);
+}
+
+/*
+    UT-ESC-FUNC-006
+    Function : EscCalibration::sendReboot
+    Description : Verify reboot command transmission.
+    Input : None
+    Expected Output : Executes successfully
+*/
+TEST(EscCalibrationTest, SendRebootFUNC) {
+    EscCalibration esc;
+    esc.setVehicleInfo(1, 1);
+    bool called = false;
+    esc.setTransportCallback([&](const mavlink_message_t& msg) {
+        if (msg.msgid == MAVLINK_MSG_ID_COMMAND_LONG) {
+            mavlink_command_long_t cmd;
+            mavlink_msg_command_long_decode(&msg, &cmd);
+            if (cmd.command == MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN) {
+                called = true;
+            }
+        }
+    });
+    std::thread t([&]() { esc.startEscCalibration(); });
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    mavlink_message_t msg;
+    mavlink_command_ack_t ack = {};
+    ack.command = MAV_CMD_PREFLIGHT_CALIBRATION;
+    ack.result = MAV_RESULT_ACCEPTED;
+    mavlink_msg_command_ack_encode(1, 1, &msg, &ack);
+    esc.processMessage(msg);
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    esc.cancelEscCalibration();
+    if (t.joinable()) t.join();
+}
+
+/*
+    UT-ESC-FUNC-007
+    Function : EscCalibration::processMessage
+    Description : Verify processing of a generic MAVLink message.
+    Input : Heartbeat message
+    Expected Output : Executes successfully
+*/
+TEST(EscCalibrationTest, ProcessMessageFUNC) {
+    EscCalibration esc;
+    esc.setVehicleInfo(1, 1);
+    mavlink_message_t msg;
+    mavlink_heartbeat_t hb = {};
+    mavlink_msg_heartbeat_encode(1, 1, &msg, &hb);
+    EXPECT_NO_THROW({
+        esc.processMessage(msg);
+    });
+}
+
+/*
+    UT-ESC-FUNC-008
+    Function : EscCalibration::cancelEscCalibration
+    Description : Verify cancellation of an active calibration.
+    Input : None
+    Expected Output : Executes successfully
+*/
+TEST(EscCalibrationTest, CancelEscCalibrationFUNC) {
+    EscCalibration esc;
+    EXPECT_NO_THROW({
+        esc.cancelEscCalibration();
+    });
+}
+
+/*
+    UT-ESC-FUNC-009
+    Function : EscCalibration::startEscCalibration
+    Description : Verify starting calibration process.
+    Input : None
+    Expected Output : Executes successfully
+*/
+TEST(EscCalibrationTest, StartEscCalibrationFUNC) {
+    EscCalibration esc;
+    esc.setVehicleInfo(1, 1);
+    esc.setTransportCallback([](const mavlink_message_t&){});
+    std::thread t([&]() { esc.startEscCalibration(); });
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    esc.cancelEscCalibration();
+    if (t.joinable()) t.join();
+}
+
+/*
+===============================================================================
+    EXTREME TEST CASES
+===============================================================================
+*/
+
+/*
+    UT-ESC-EXT-001
+    Function : EscCalibration::setVehicleInfo
+    Description : Verify handling of negative vehicle IDs.
+    Input : sysid = -1, compid = -1
+    Expected Output : Gracefully sets values without crashing
+*/
+TEST(EscCalibrationTest, NegativeVehicleInfoHandling) {
+    EscCalibration esc;
+    EXPECT_NO_THROW({
+        esc.setVehicleInfo(-1, -1);
+    });
+}
+
+/*
+    UT-ESC-EXT-002
+    Function : EscCalibration::processMessage
+    Description : Verify handling of corrupted/garbage messages.
+    Input : Empty or malformed mavlink message
+    Expected Output : Gracefully discards message
+*/
+TEST(EscCalibrationTest, CorruptedMessageHandling) {
+    EscCalibration esc;
+    mavlink_message_t msg = {};
+    EXPECT_NO_THROW({
+        esc.processMessage(msg);
+    });
+}

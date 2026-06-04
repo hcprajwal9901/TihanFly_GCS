@@ -1,0 +1,34 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMM-019
+  Test            :  CommandManagerTest.SendMissionCountFUNC
+  Module          :  CommandManager
+  Source File     :  test_command_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] cmd_manager->set_vehicle_direct(direct_vehicle.get());
+  [2] cmd_manager->set_transport(mock_transport);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_CALL(*mock_transport, async_send(_, _)).Times(AtLeast(0));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_NO_THROW(cmd_manager->send_mission_count());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: exception safety. Module 'CommandManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CommandManagerTest.SendMissionCountFUNC
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [Mission] Sent MISSION_COUNT=0
+  [       OK ] CommandManagerTest.SendMissionCountFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

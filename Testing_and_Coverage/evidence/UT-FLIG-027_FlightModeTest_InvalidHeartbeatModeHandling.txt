@@ -1,0 +1,30 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FLIG-027
+  Test            :  FlightModeTest.InvalidHeartbeatModeHandling
+  Module          :  FlightMode
+  Source File     :  test_flight_mode.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_message_t msg =
+  [2] create_heartbeat(
+  [3] fm.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW({
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'FlightMode' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FlightModeTest.InvalidHeartbeatModeHandling
+  [FlightMode] Module created
+  [FlightMode] Sysid 1 Mode (heartbeat, armed) → AUTOTUNE
+  [       OK ] FlightModeTest.InvalidHeartbeatModeHandling (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

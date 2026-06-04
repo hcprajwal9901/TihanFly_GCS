@@ -1,0 +1,29 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMP-005
+  Test            :  CompassCalibrationTest.AcceptWhenNotDone
+  Module          :  CompassCalibration
+  Source File     :  test_compass_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] compass.setTransportCallback([&](const mavlink_message_t& msg) {
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_FALSE(transport_called);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: boolean state. Module 'CompassCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CompassCalibrationTest.AcceptWhenNotDone
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Compass] Accept ignored — calibration not in DONE state
+  [       OK ] CompassCalibrationTest.AcceptWhenNotDone (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

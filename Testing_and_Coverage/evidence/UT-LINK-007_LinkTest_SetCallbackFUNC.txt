@@ -1,0 +1,26 @@
+========================================================================
+  EVIDENCE FILE  :  UT-LINK-007
+  Test            :  LinkTest.SetCallbackFUNC
+  Module          :  Link
+  Source File     :  test_link.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto mock_transport = std::make_shared<MockTransport>();
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(link.set_callback([](const mavlink_message_t&, int){}));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'Link' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] LinkTest.SetCallbackFUNC
+  [       OK ] LinkTest.SetCallbackFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,46 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FLIG-005
+  Test            :  FlightModeTest.ParamValueHandling
+  Module          :  FlightMode
+  Source File     :  test_flight_mode.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_message_t msg = create_param_value("FLTMODE3", 4.0f);
+  [2] fm.processMessage(msg);
+  [3] json j = json::parse(sent_ws_messages[0]);
+  [4] msg = create_rc_channels(1400);
+  [5] fm.processMessage(msg);
+  [6] json j2 = json::parse(ws);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : ASSERT_EQ(sent_ws_messages.size(), 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(j["type"], "flight_mode_param");
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(j["slot"], 2);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(j["mode_id"], 4);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(j["mode"], "GUIDED");
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(j2["mode"], "GUIDED");
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(found);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 7 assertion(s) satisfied. Verified: boolean state, equality. Module 'FlightMode' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FlightModeTest.ParamValueHandling
+  [FlightMode] Module created
+  [FlightMode] {"event":"flight_mode_param_received","id":4,"mode":"GUIDED","param":"FLTMODE3"}
+  [FlightMode] {"event":"flight_mode_change","mode":"GUIDED","pwm":1400,"slot":2,"sysid":1}
+  [       OK ] FlightModeTest.ParamValueHandling (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

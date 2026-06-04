@@ -1,0 +1,31 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ESCC-008
+  Test            :  EscCalibrationTest.OtherMessages
+  Module          :  EscCalibration
+  Source File     :  test_esc_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_message_t msg;
+  [2] mavlink_heartbeat_t hb = {};
+  [3] mavlink_msg_heartbeat_encode(1, 1, &msg, &hb);
+  [4] esc.processMessage(msg);
+  [5] mavlink_command_ack_t ack = {};
+  [6] mavlink_msg_command_ack_encode(1, 1, &msg, &ack);
+  [7] esc.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] EscCalibrationTest.OtherMessages
+  [       OK ] EscCalibrationTest.OtherMessages (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

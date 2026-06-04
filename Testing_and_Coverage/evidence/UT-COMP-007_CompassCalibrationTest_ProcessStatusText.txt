@@ -1,0 +1,36 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMP-007
+  Test            :  CompassCalibrationTest.ProcessStatusText
+  Module          :  CompassCalibration
+  Source File     :  test_compass_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] compass.setTransportCallback([&](const mavlink_message_t& msg) {});
+  [2] mavlink_message_t msg;
+  [3] mavlink_statustext_t st = {};
+  [4] mavlink_msg_statustext_encode(1, 1, &msg, &st);
+  [5] compass.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CompassCalibrationTest.ProcessStatusText
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Compass] Starting calibration (large_vehicle=false)
+  [Compass] Sent DO_START_MAG_CAL (confirmation=1)
+  [Compass] STATUSTEXT: Mag calibration started
+  [Compass] Implicit ACK received (MAG_CAL_PROGRESS / STATUSTEXT) — stopping retry watcher and arming overall timeout
+  [Compass] Overall timeout armed
+  [       OK ] CompassCalibrationTest.ProcessStatusText (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

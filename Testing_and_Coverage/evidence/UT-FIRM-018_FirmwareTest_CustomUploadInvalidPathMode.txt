@@ -1,0 +1,47 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-018
+  Test            :  FirmwareTest.CustomUploadInvalidPathMode
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] json msg = {
+  [2] std::string bad_path = test_dir + "/bad.apj";
+  [3] std::ofstream out(bad_path); out << "bad"; out.close();
+  [4] msg = {
+  [5] msg = {
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_THAT(last_ws_message, HasSubstr("Firmware file not found"));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_THAT(last_ws_message, HasSubstr("Failed to decode"));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_THAT(last_ws_message, HasSubstr("requires either"));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 6 assertion(s) satisfied. Verified: boolean state. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.CustomUploadInvalidPathMode
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [FirmwareManager] [error] Firmware file not found: /tmp/firmware_test_dir/nonexistent.apj
+  [FirmwareManager] JSON parse error in /tmp/firmware_test_dir/bad.apj: [json.exception.parse_error.101] parse error at line 1, column 1: syntax error while parsing value - invalid literal; last read: 'b'
+  [FirmwareManager] [error] Failed to decode firmware file: bad.apj
+  [FirmwareManager] [error] install_firmware_custom requires either:
+    "apj": { <APJ JSON object> }   for browser file uploads
+    "path": "/path/to/file.apj"  for server-side files
+  [       OK ] FirmwareTest.CustomUploadInvalidPathMode (57 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

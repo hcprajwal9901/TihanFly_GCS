@@ -1,0 +1,41 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ACCE-020
+  Test            :  AccelCalibrationTest.SendCalibJSONWithStepIndex
+  Module          :  AccelCalibration
+  Source File     :  test_accel_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::string last_json;
+  [2] accel.setSendCallback([&](const std::string& json) {
+  [3] last_json = json;
+  [4] accel.setTransportCallback([](const mavlink_message_t&) {});
+  [5] mavlink_message_t msg;
+  [6] mavlink_command_long_t pos_cmd = {};
+  [7] mavlink_msg_command_long_encode(1, 1, &msg, &pos_cmd);
+  [8] accel.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NE(last_json.find("step_index"), std::string::npos);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_NE(last_json.find("total_steps"), std::string::npos);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: correctness. Module 'AccelCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] AccelCalibrationTest.SendCalibJSONWithStepIndex
+  [AccelCalibration] Constructed
+  [Calib] Cancel sent to reset any stale drone state
+  [Calib] MAV_CMD_PREFLIGHT_CALIBRATION sent → sysid=1 compid=1
+  [Calib][RX] msgid=76 (COMMAND_LONG) from=1/1
+  [Calib][RX] COMMAND_LONG cmd=42429 p1=1 target=0/0
+  [Calib] Drone requests position: level (pos=1, step=1/6)  roll=0 rad  pitch=0 rad
+  [       OK ] AccelCalibrationTest.SendCalibJSONWithStepIndex (400 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,30 @@
+========================================================================
+  EVIDENCE FILE  :  UT-PARA-011
+  Test            :  ParameterManagerTest.IgnoreDifferentSysid
+  Module          :  ParameterManager
+  Source File     :  test_parameter_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_message_t msg;
+  [2] mavlink_param_value_t pv = {};
+  [3] mavlink_msg_param_value_encode(99, 1, &msg, &pv);
+  [4] pm->processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(pm->receivedCount(), 0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: equality. Module 'ParameterManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] ParameterManagerTest.IgnoreDifferentSysid
+  [ParameterManager] Initialized (sysid=1 compid=1 cache=./test_param_cache)
+  [       OK ] ParameterManagerTest.IgnoreDifferentSysid (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

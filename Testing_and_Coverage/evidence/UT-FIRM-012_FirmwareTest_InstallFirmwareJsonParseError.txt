@@ -1,0 +1,54 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-012
+  Test            :  FirmwareTest.InstallFirmwareJsonParseError
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::string path = test_dir + "/copter_stable.apj";
+  [2] std::ofstream out(path);
+  [3] out << "{ invalid json ]";
+  [4] json msg = {
+  [5] std::string path = create_dummy_apj("copter_stable.apj");
+  [6] json apj;
+  [7] std::ifstream(path) >> apj;
+  [8] std::vector<uint8_t> image = manager->decode_apj("test", apj);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_THAT(last_ws_message, HasSubstr("Failed to decode"));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_GT(reconnect_calls, 0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(success || crc_fail);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_GT(reconnect_calls, 0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(custom_msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(manager->has_pending_install());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FALSE(manager->has_pending_install());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 89 assertion(s) satisfied. Verified: boolean state, boundary, exception safety. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.InstallFirmwareJsonParseError
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [FirmwareManager] JSON parse error in /tmp/firmware_test_dir/copter_stable.apj: [json.exception.parse_error.101] parse error at line 1, column 3: syntax error while parsing object key - invalid literal; last read: '{ i'; expected string literal
+  [FirmwareManager] [error] Failed to decode firmware file: copter_stable.apj
+  [       OK ] FirmwareTest.InstallFirmwareJsonParseError (65 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

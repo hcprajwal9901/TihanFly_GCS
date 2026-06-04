@@ -1,0 +1,30 @@
+========================================================================
+  EVIDENCE FILE  :  UT-LINK-009
+  Test            :  LinkManagerTest.SendFUNC
+  Module          :  LinkManager
+  Source File     :  test_link_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto t = std::make_shared<MockTransport>();
+  [2] uint8_t data[] = {1, 2, 3};
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_CALL(*t, async_send(data, 3)).Times(1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_NO_THROW(manager.send(id, data, 3));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: exception safety. Module 'LinkManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] LinkManagerTest.SendFUNC
+  [Link] Added link 0
+  [       OK ] LinkManagerTest.SendFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

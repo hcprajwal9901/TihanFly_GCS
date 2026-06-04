@@ -1,0 +1,54 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMP-020
+  Test            :  CompassCalibrationTest.ProcessReportBadOrientationAndRadius
+  Module          :  CompassCalibration
+  Source File     :  test_compass_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] compass.setTransportCallback([](const mavlink_message_t&) {});
+  [2] compass.setSendCallback([](const std::string&) {});
+  [3] mavlink_message_t msg;
+  [4] mavlink_mag_cal_progress_t prog = {};
+  [5] mavlink_msg_mag_cal_progress_encode(1, 1, &msg, &prog);
+  [6] compass.processMessage(msg);
+  [7] mavlink_msg_mag_cal_progress_encode(1, 1, &msg, &prog);
+  [8] compass.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(compass.compassState.load(), CompassCalibration::CompassCalibState::IN_PROGRESS);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(compass.compassState.load(), CompassCalibration::CompassCalibState::FAILED);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: boundary, equality. Module 'CompassCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CompassCalibrationTest.ProcessReportBadOrientationAndRadius
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Compass] Starting calibration (large_vehicle=false)
+  [Compass] Sent DO_START_MAG_CAL (confirmation=1)
+  [Compass] MAG_CAL_PROGRESS received — state=1
+  [Compass] Implicit ACK received (MAG_CAL_PROGRESS / STATUSTEXT) — stopping retry watcher and arming overall timeout
+  [Compass] Overall timeout armed
+  [Compass] Progress compass_id=0 pct=0%
+  [Compass] compass_id=0 registered as active (total active=1)
+  [Compass] MAG_CAL_PROGRESS received — state=1
+  [Compass] Progress compass_id=1 pct=0%
+  [Compass] compass_id=1 registered as active (total active=2)
+  [Compass] MAG_CAL_REPORT received — state=1
+  [Compass] MAG_CAL_REPORT compass_id=0 status=6 (BAD_ORIENTATION) fitness=0 active=2 succeeded=0
+  [Compass] Compass 0 FAILED: BAD_ORIENTATION (failed=1 succeeded=0 active=2)
+  [Compass] 1 compass(es) still in progress after compass 0 failed — waiting...
+  [Compass] MAG_CAL_REPORT received — state=1
+  [Compass] MAG_CAL_REPORT compass_id=1 status=7 (BAD_RADIUS) fitness=0 active=2 succeeded=0
+  [Compass] Compass 1 FAILED: BAD_RADIUS (failed=2 succeeded=0 active=2)
+  [       OK ] CompassCalibrationTest.ProcessReportBadOrientationAndRadius (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

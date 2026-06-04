@@ -1,0 +1,45 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMM-002
+  Test            :  CommandManagerTest.ModeConfiguration
+  Module          :  CommandManager
+  Source File     :  test_command_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] cmd_manager->set_vehicle_direct(direct_vehicle.get());
+  [2] cmd_manager->add_command(1, "ARM");
+  [3] cmd_manager->set_vehicle_manager(vehicle_manager.get());
+  [4] mavlink_message_t msg;
+  [5] mavlink_msg_heartbeat_pack(42, 1, &msg, MAV_TYPE_QUADROTOR, MAV_AUTOPILOT_ARDUPILOTMEGA, MAV_MODE_GUIDED_ARMED, 0, MAV_STATE_ACTIVE);
+  [6] vehicle_manager->handle_message(msg, 0);
+  [7] cmd_manager->add_command(2, "DISARM");
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(cmd_manager->process());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_NO_THROW(cmd_manager->process());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: exception safety. Module 'CommandManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CommandManagerTest.ModeConfiguration
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [Command] Executing: ARM
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=42 compid=1
+  [Vehicle] Created sysid=42 link_id=0
+  [VehicleManager] New vehicle discovered: sysid=42 ui_sysid=42 compid=1 link_id=0
+  [Command] Executing: DISARM
+  [       OK ] CommandManagerTest.ModeConfiguration (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

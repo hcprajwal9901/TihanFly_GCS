@@ -31,18 +31,18 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">278</td>
+            <td class="headerCovTableEntry">282</td>
             <td class="headerCovTableEntry">309</td>
-            <td class="headerCovTableEntryHi">90.0 %</td>
+            <td class="headerCovTableEntryHi">91.3 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2026-05-26 10:38:26</td>
+            <td class="headerValue">2026-06-04 11:54:51</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">23</td>
+            <td class="headerCovTableEntry">24</td>
             <td class="headerCovTableEntry">25</td>
-            <td class="headerCovTableEntryHi">92.0 %</td>
+            <td class="headerCovTableEntryHi">96.0 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -136,24 +136,24 @@
 <a name="74"><span class="lineNum">      74 </span>            : bool     FirmwareUploader::crc_table_ready_ = false;</a>
 <a name="75"><span class="lineNum">      75 </span>            : </a>
 <a name="76"><span class="lineNum">      76 </span>            : // ── ctor / dtor ────────────────────────────────────────────────────────</a>
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">         21 : FirmwareUploader::FirmwareUploader()</span></a>
-<a name="78"><span class="lineNum">      78 </span><span class="lineCov">         21 :     : port_(io_ctx_)</span></a>
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">         35 : FirmwareUploader::FirmwareUploader()</span></a>
+<a name="78"><span class="lineNum">      78 </span><span class="lineCov">         35 :     : port_(io_ctx_)</span></a>
 <a name="79"><span class="lineNum">      79 </span>            : {</a>
-<a name="80"><span class="lineNum">      80 </span><span class="lineCov">         21 :     build_crc_table();</span></a>
-<a name="81"><span class="lineNum">      81 </span><span class="lineCov">         21 : }</span></a>
+<a name="80"><span class="lineNum">      80 </span><span class="lineCov">         35 :     build_crc_table();</span></a>
+<a name="81"><span class="lineNum">      81 </span><span class="lineCov">         35 : }</span></a>
 <a name="82"><span class="lineNum">      82 </span>            : </a>
-<a name="83"><span class="lineNum">      83 </span><span class="lineCov">         21 : FirmwareUploader::~FirmwareUploader()</span></a>
+<a name="83"><span class="lineNum">      83 </span><span class="lineCov">         35 : FirmwareUploader::~FirmwareUploader()</span></a>
 <a name="84"><span class="lineNum">      84 </span>            : {</a>
-<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         21 :     close_port();</span></a>
-<a name="86"><span class="lineNum">      86 </span><span class="lineCov">         21 : }</span></a>
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         35 :     close_port();</span></a>
+<a name="86"><span class="lineNum">      86 </span><span class="lineCov">         35 : }</span></a>
 <a name="87"><span class="lineNum">      87 </span>            : </a>
 <a name="88"><span class="lineNum">      88 </span>            : // ─────────────────────────────────────────────────────────────────────</a>
 <a name="89"><span class="lineNum">      89 </span>            : // Logging</a>
 <a name="90"><span class="lineNum">      90 </span>            : // ─────────────────────────────────────────────────────────────────────</a>
-<a name="91"><span class="lineNum">      91 </span><span class="lineNoCov">          0 : void FirmwareUploader::log(const std::string&amp; msg)</span></a>
+<a name="91"><span class="lineNum">      91 </span><span class="lineCov">          1 : void FirmwareUploader::log(const std::string&amp; msg)</span></a>
 <a name="92"><span class="lineNum">      92 </span>            : {</a>
-<a name="93"><span class="lineNum">      93 </span><span class="lineCov">        231 :     if (log_cb_) log_cb_(msg);</span></a>
-<a name="94"><span class="lineNum">      94 </span><span class="lineNoCov">          0 : }</span></a>
+<a name="93"><span class="lineNum">      93 </span><span class="lineCov">        285 :     if (log_cb_) log_cb_(msg);</span></a>
+<a name="94"><span class="lineNum">      94 </span><span class="lineCov">          1 : }</span></a>
 <a name="95"><span class="lineNum">      95 </span>            : </a>
 <a name="96"><span class="lineNum">      96 </span><span class="lineCov">          7 : static std::string hex8(uint8_t v)</span></a>
 <a name="97"><span class="lineNum">      97 </span>            : {</a>
@@ -172,13 +172,13 @@
 <a name="110"><span class="lineNum">     110 </span>            : // Port management</a>
 <a name="111"><span class="lineNum">     111 </span>            : // ─────────────────────────────────────────────────────────────────────</a>
 <a name="112"><span class="lineNum">     112 </span>            : </a>
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">         21 : bool FirmwareUploader::open_port(const std::string&amp; port, int baud)</span></a>
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">         22 : bool FirmwareUploader::open_port(const std::string&amp; port, int baud)</span></a>
 <a name="114"><span class="lineNum">     114 </span>            : {</a>
 <a name="115"><span class="lineNum">     115 </span>            :     try {</a>
-<a name="116"><span class="lineNum">     116 </span><span class="lineCov">         21 :         if (port_.is_open())</span></a>
+<a name="116"><span class="lineNum">     116 </span><span class="lineCov">         22 :         if (port_.is_open())</span></a>
 <a name="117"><span class="lineNum">     117 </span><span class="lineCov">          1 :             port_.close();</span></a>
 <a name="118"><span class="lineNum">     118 </span>            : </a>
-<a name="119"><span class="lineNum">     119 </span><span class="lineCov">         21 :         port_.open(port);</span></a>
+<a name="119"><span class="lineNum">     119 </span><span class="lineCov">         22 :         port_.open(port);</span></a>
 <a name="120"><span class="lineNum">     120 </span>            : </a>
 <a name="121"><span class="lineNum">     121 </span>            :         using SP = asio::serial_port;</a>
 <a name="122"><span class="lineNum">     122 </span><span class="lineCov">         20 :         port_.set_option(SP::baud_rate(static_cast&lt;unsigned&gt;(baud)));</span></a>
@@ -190,71 +190,71 @@
 <a name="128"><span class="lineNum">     128 </span><span class="lineCov">         40 :         log(&quot;→ Port &quot; + port + &quot; opened @ &quot; + std::to_string(baud) + &quot; baud&quot;);</span></a>
 <a name="129"><span class="lineNum">     129 </span><span class="lineCov">         20 :         return true;</span></a>
 <a name="130"><span class="lineNum">     130 </span>            :     }</a>
-<a name="131"><span class="lineNum">     131 </span><span class="lineCov">          1 :     catch (const std::exception&amp; e) {</span></a>
-<a name="132"><span class="lineNum">     132 </span><span class="lineCov">          2 :         log(&quot;❌ Failed to open port '&quot; + port + &quot;': &quot; + e.what());</span></a>
+<a name="131"><span class="lineNum">     131 </span><span class="lineCov">          2 :     catch (const std::exception&amp; e) {</span></a>
+<a name="132"><span class="lineNum">     132 </span><span class="lineCov">          4 :         log(&quot;❌ Failed to open port '&quot; + port + &quot;': &quot; + e.what());</span></a>
 <a name="133"><span class="lineNum">     133 </span>            :         return false;</a>
-<a name="134"><span class="lineNum">     134 </span><span class="lineCov">          1 :     }</span></a>
+<a name="134"><span class="lineNum">     134 </span><span class="lineCov">          2 :     }</span></a>
 <a name="135"><span class="lineNum">     135 </span>            : }</a>
 <a name="136"><span class="lineNum">     136 </span>            : </a>
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">         38 : void FirmwareUploader::close_port()</span></a>
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">         53 : void FirmwareUploader::close_port()</span></a>
 <a name="138"><span class="lineNum">     138 </span>            : {</a>
 <a name="139"><span class="lineNum">     139 </span>            :     try {</a>
-<a name="140"><span class="lineNum">     140 </span><span class="lineCov">         38 :         if (port_.is_open())</span></a>
+<a name="140"><span class="lineNum">     140 </span><span class="lineCov">         53 :         if (port_.is_open())</span></a>
 <a name="141"><span class="lineNum">     141 </span><span class="lineCov">         19 :             port_.close();</span></a>
 <a name="142"><span class="lineNum">     142 </span>            :     }</a>
 <a name="143"><span class="lineNum">     143 </span><span class="lineCov">          1 :     catch (...) { /* best-effort */ }</span></a>
-<a name="144"><span class="lineNum">     144 </span><span class="lineCov">         38 : }</span></a>
+<a name="144"><span class="lineNum">     144 </span><span class="lineCov">         53 : }</span></a>
 <a name="145"><span class="lineNum">     145 </span>            : </a>
-<a name="146"><span class="lineNum">     146 </span><span class="lineCov">        120 : bool FirmwareUploader::write_bytes(const uint8_t* data, size_t len)</span></a>
+<a name="146"><span class="lineNum">     146 </span><span class="lineCov">        147 : bool FirmwareUploader::write_bytes(const uint8_t* data, size_t len)</span></a>
 <a name="147"><span class="lineNum">     147 </span>            : {</a>
 <a name="148"><span class="lineNum">     148 </span>            :     try {</a>
-<a name="149"><span class="lineNum">     149 </span><span class="lineCov">        120 :         size_t written = asio::write(port_, asio::buffer(data, len));</span></a>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">        147 :         size_t written = asio::write(port_, asio::buffer(data, len));</span></a>
 <a name="150"><span class="lineNum">     150 </span><span class="lineCov">        119 :         return written == len;</span></a>
 <a name="151"><span class="lineNum">     151 </span>            :     }</a>
-<a name="152"><span class="lineNum">     152 </span><span class="lineCov">          1 :     catch (const std::exception&amp; e) {</span></a>
-<a name="153"><span class="lineNum">     153 </span><span class="lineCov">          2 :         log(&quot;❌ Serial write error: &quot; + std::string(e.what()));</span></a>
+<a name="152"><span class="lineNum">     152 </span><span class="lineCov">         28 :     catch (const std::exception&amp; e) {</span></a>
+<a name="153"><span class="lineNum">     153 </span><span class="lineCov">         56 :         log(&quot;❌ Serial write error: &quot; + std::string(e.what()));</span></a>
 <a name="154"><span class="lineNum">     154 </span>            :         return false;</a>
-<a name="155"><span class="lineNum">     155 </span><span class="lineCov">          1 :     }</span></a>
+<a name="155"><span class="lineNum">     155 </span><span class="lineCov">         28 :     }</span></a>
 <a name="156"><span class="lineNum">     156 </span>            : }</a>
 <a name="157"><span class="lineNum">     157 </span>            : </a>
 <a name="158"><span class="lineNum">     158 </span>            : // FIX-3 / FIX-10: async read with a proper cancelling deadline timer.</a>
 <a name="159"><span class="lineNum">     159 </span>            : // io_ctx_ must be restart()ed before each run() call.</a>
-<a name="160"><span class="lineNum">     160 </span><span class="lineCov">        526 : std::optional&lt;uint8_t&gt; FirmwareUploader::read_byte(int timeout_ms)</span></a>
+<a name="160"><span class="lineNum">     160 </span><span class="lineCov">        550 : std::optional&lt;uint8_t&gt; FirmwareUploader::read_byte(int timeout_ms)</span></a>
 <a name="161"><span class="lineNum">     161 </span>            : {</a>
-<a name="162"><span class="lineNum">     162 </span><span class="lineCov">        526 :     uint8_t  byte      = 0;</span></a>
-<a name="163"><span class="lineNum">     163 </span><span class="lineCov">        526 :     bool     received  = false;</span></a>
-<a name="164"><span class="lineNum">     164 </span><span class="lineCov">        526 :     bool     cancelled = false;</span></a>
+<a name="162"><span class="lineNum">     162 </span><span class="lineCov">        550 :     uint8_t  byte      = 0;</span></a>
+<a name="163"><span class="lineNum">     163 </span><span class="lineCov">        550 :     bool     received  = false;</span></a>
+<a name="164"><span class="lineNum">     164 </span><span class="lineCov">        550 :     bool     cancelled = false;</span></a>
 <a name="165"><span class="lineNum">     165 </span>            : </a>
 <a name="166"><span class="lineNum">     166 </span>            :     io_ctx_.restart(); // FIX-10</a>
 <a name="167"><span class="lineNum">     167 </span>            : </a>
-<a name="168"><span class="lineNum">     168 </span><span class="lineCov">        526 :     asio::steady_timer timer(io_ctx_);</span></a>
-<a name="169"><span class="lineNum">     169 </span><span class="lineCov">        526 :     timer.expires_after(std::chrono::milliseconds(timeout_ms));</span></a>
+<a name="168"><span class="lineNum">     168 </span><span class="lineCov">        550 :     asio::steady_timer timer(io_ctx_);</span></a>
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">        550 :     timer.expires_after(std::chrono::milliseconds(timeout_ms));</span></a>
 <a name="170"><span class="lineNum">     170 </span>            : </a>
-<a name="171"><span class="lineNum">     171 </span><span class="lineCov">        526 :     timer.async_wait([&amp;](const asio::error_code&amp; ec) {</span></a>
-<a name="172"><span class="lineNum">     172 </span><span class="lineCov">        526 :         if (!ec) {</span></a>
+<a name="171"><span class="lineNum">     171 </span><span class="lineCov">        550 :     timer.async_wait([&amp;](const asio::error_code&amp; ec) {</span></a>
+<a name="172"><span class="lineNum">     172 </span><span class="lineCov">        550 :         if (!ec) {</span></a>
 <a name="173"><span class="lineNum">     173 </span><span class="lineCov">         40 :             cancelled = true;</span></a>
 <a name="174"><span class="lineNum">     174 </span><span class="lineCov">         40 :             port_.cancel(); // cancels the pending async_read</span></a>
 <a name="175"><span class="lineNum">     175 </span>            :         }</a>
 <a name="176"><span class="lineNum">     176 </span>            :     });</a>
 <a name="177"><span class="lineNum">     177 </span>            : </a>
-<a name="178"><span class="lineNum">     178 </span><span class="lineCov">        526 :     asio::async_read(port_, asio::buffer(&amp;byte, 1),</span></a>
+<a name="178"><span class="lineNum">     178 </span><span class="lineCov">        550 :     asio::async_read(port_, asio::buffer(&amp;byte, 1),</span></a>
 <a name="179"><span class="lineNum">     179 </span>            :         [&amp;](const asio::error_code&amp; ec, std::size_t /*n*/) {</a>
-<a name="180"><span class="lineNum">     180 </span><span class="lineCov">        526 :             if (!ec) {</span></a>
+<a name="180"><span class="lineNum">     180 </span><span class="lineCov">        550 :             if (!ec) {</span></a>
 <a name="181"><span class="lineNum">     181 </span><span class="lineCov">        486 :                 received = true;</span></a>
 <a name="182"><span class="lineNum">     182 </span>            :             }</a>
-<a name="183"><span class="lineNum">     183 </span><span class="lineCov">        526 :             timer.cancel(); // stop the timer (may already be expired)</span></a>
-<a name="184"><span class="lineNum">     184 </span><span class="lineCov">        526 :         });</span></a>
+<a name="183"><span class="lineNum">     183 </span><span class="lineCov">        550 :             timer.cancel(); // stop the timer (may already be expired)</span></a>
+<a name="184"><span class="lineNum">     184 </span><span class="lineCov">        550 :         });</span></a>
 <a name="185"><span class="lineNum">     185 </span>            : </a>
-<a name="186"><span class="lineNum">     186 </span><span class="lineCov">        526 :     io_ctx_.run();</span></a>
+<a name="186"><span class="lineNum">     186 </span><span class="lineCov">        550 :     io_ctx_.run();</span></a>
 <a name="187"><span class="lineNum">     187 </span>            : </a>
-<a name="188"><span class="lineNum">     188 </span><span class="lineCov">       1052 :     return received ? std::optional&lt;uint8_t&gt;(byte) : std::nullopt;</span></a>
+<a name="188"><span class="lineNum">     188 </span><span class="lineCov">       1100 :     return received ? std::optional&lt;uint8_t&gt;(byte) : std::nullopt;</span></a>
 <a name="189"><span class="lineNum">     189 </span>            : }</a>
 <a name="190"><span class="lineNum">     190 </span>            : </a>
-<a name="191"><span class="lineNum">     191 </span><span class="lineCov">          1 : bool FirmwareUploader::read_exact(uint8_t* buf, size_t len, int timeout_ms)</span></a>
+<a name="191"><span class="lineNum">     191 </span><span class="lineCov">          3 : bool FirmwareUploader::read_exact(uint8_t* buf, size_t len, int timeout_ms)</span></a>
 <a name="192"><span class="lineNum">     192 </span>            : {</a>
-<a name="193"><span class="lineNum">     193 </span><span class="lineCov">        639 :     for (size_t i = 0; i &lt; len; ++i) {</span></a>
-<a name="194"><span class="lineNum">     194 </span><span class="lineCov">        475 :         auto b = read_byte(timeout_ms);</span></a>
-<a name="195"><span class="lineNum">     195 </span><span class="lineCov">        475 :         if (!b) return false;</span></a>
+<a name="193"><span class="lineNum">     193 </span><span class="lineCov">        641 :     for (size_t i = 0; i &lt; len; ++i) {</span></a>
+<a name="194"><span class="lineNum">     194 </span><span class="lineCov">        477 :         auto b = read_byte(timeout_ms);</span></a>
+<a name="195"><span class="lineNum">     195 </span><span class="lineCov">        477 :         if (!b) return false;</span></a>
 <a name="196"><span class="lineNum">     196 </span><span class="lineCov">        466 :         buf[i] = *b;</span></a>
 <a name="197"><span class="lineNum">     197 </span>            :     }</a>
 <a name="198"><span class="lineNum">     198 </span>            :     return true;</a>
@@ -262,33 +262,33 @@
 <a name="200"><span class="lineNum">     200 </span>            : </a>
 <a name="201"><span class="lineNum">     201 </span>            : // FIX-4: drain RX buffer — read until quiet for window_ms,</a>
 <a name="202"><span class="lineNum">     202 </span>            : // but never spend more than max_total_ms total.</a>
-<a name="203"><span class="lineNum">     203 </span><span class="lineCov">         26 : void FirmwareUploader::drain(int window_ms, int max_total_ms)</span></a>
+<a name="203"><span class="lineNum">     203 </span><span class="lineCov">         47 : void FirmwareUploader::drain(int window_ms, int max_total_ms)</span></a>
 <a name="204"><span class="lineNum">     204 </span>            : {</a>
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">         26 :     auto start     = std::chrono::steady_clock::now();</span></a>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">         47 :     auto start     = std::chrono::steady_clock::now();</span></a>
 <a name="206"><span class="lineNum">     206 </span>            :     int  discarded = 0;</a>
 <a name="207"><span class="lineNum">     207 </span>            : </a>
 <a name="208"><span class="lineNum">     208 </span>            :     while (true) {</a>
 <a name="209"><span class="lineNum">     209 </span>            :         auto elapsed = std::chrono::duration_cast&lt;std::chrono::milliseconds&gt;(</a>
-<a name="210"><span class="lineNum">     210 </span><span class="lineCov">         26 :                            std::chrono::steady_clock::now() - start).count();</span></a>
-<a name="211"><span class="lineNum">     211 </span><span class="lineCov">         26 :         if (elapsed &gt;= max_total_ms) break;</span></a>
+<a name="210"><span class="lineNum">     210 </span><span class="lineCov">         47 :                            std::chrono::steady_clock::now() - start).count();</span></a>
+<a name="211"><span class="lineNum">     211 </span><span class="lineCov">         47 :         if (elapsed &gt;= max_total_ms) break;</span></a>
 <a name="212"><span class="lineNum">     212 </span>            : </a>
-<a name="213"><span class="lineNum">     213 </span><span class="lineCov">         26 :         auto b = read_byte(window_ms);</span></a>
-<a name="214"><span class="lineNum">     214 </span><span class="lineCov">         26 :         if (!b) break;           // quiet for window_ms → done</span></a>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">         47 :         auto b = read_byte(window_ms);</span></a>
+<a name="214"><span class="lineNum">     214 </span><span class="lineCov">         47 :         if (!b) break;           // quiet for window_ms → done</span></a>
 <a name="215"><span class="lineNum">     215 </span><span class="lineNoCov">          0 :         ++discarded;</span></a>
 <a name="216"><span class="lineNum">     216 </span><span class="lineNoCov">          0 :     }</span></a>
 <a name="217"><span class="lineNum">     217 </span>            : </a>
-<a name="218"><span class="lineNum">     218 </span><span class="lineCov">         26 :     if (discarded &gt; 0)</span></a>
+<a name="218"><span class="lineNum">     218 </span><span class="lineCov">         47 :     if (discarded &gt; 0)</span></a>
 <a name="219"><span class="lineNum">     219 </span><span class="lineNoCov">          0 :         log(&quot;→ Drained &quot; + std::to_string(discarded) + &quot; stale RX byte(s)&quot;);</span></a>
-<a name="220"><span class="lineNum">     220 </span><span class="lineCov">         26 : }</span></a>
+<a name="220"><span class="lineNum">     220 </span><span class="lineCov">         47 : }</span></a>
 <a name="221"><span class="lineNum">     221 </span>            : </a>
 <a name="222"><span class="lineNum">     222 </span>            : // ─────────────────────────────────────────────────────────────────────</a>
 <a name="223"><span class="lineNum">     223 </span>            : // Protocol helpers</a>
 <a name="224"><span class="lineNum">     224 </span>            : // ─────────────────────────────────────────────────────────────────────</a>
 <a name="225"><span class="lineNum">     225 </span>            : </a>
-<a name="226"><span class="lineNum">     226 </span><span class="lineCov">         25 : bool FirmwareUploader::get_sync(int timeout_ms)</span></a>
+<a name="226"><span class="lineNum">     226 </span><span class="lineCov">         43 : bool FirmwareUploader::get_sync(int timeout_ms)</span></a>
 <a name="227"><span class="lineNum">     227 </span>            : {</a>
-<a name="228"><span class="lineNum">     228 </span><span class="lineCov">         25 :     const uint8_t cmd[2] = { PROTO_GET_SYNC, PROTO_EOC };</span></a>
-<a name="229"><span class="lineNum">     229 </span><span class="lineCov">         25 :     if (!write_bytes(cmd, 2)) return false;</span></a>
+<a name="228"><span class="lineNum">     228 </span><span class="lineCov">         43 :     const uint8_t cmd[2] = { PROTO_GET_SYNC, PROTO_EOC };</span></a>
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">         43 :     if (!write_bytes(cmd, 2)) return false;</span></a>
 <a name="230"><span class="lineNum">     230 </span>            : </a>
 <a name="231"><span class="lineNum">     231 </span><span class="lineCov">         25 :     uint8_t resp[2] = {};</span></a>
 <a name="232"><span class="lineNum">     232 </span><span class="lineCov">          8 :     if (!read_exact(resp, 2, timeout_ms)) return false;</span></a>
@@ -296,18 +296,18 @@
 <a name="234"><span class="lineNum">     234 </span><span class="lineCov">         17 :     return (resp[0] == PROTO_INSYNC &amp;&amp; resp[1] == PROTO_OK);</span></a>
 <a name="235"><span class="lineNum">     235 </span>            : }</a>
 <a name="236"><span class="lineNum">     236 </span>            : </a>
-<a name="237"><span class="lineNum">     237 </span><span class="lineCov">         17 : bool FirmwareUploader::enter_bootloader()</span></a>
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">         18 : bool FirmwareUploader::enter_bootloader()</span></a>
 <a name="238"><span class="lineNum">     238 </span>            : {</a>
 <a name="239"><span class="lineNum">     239 </span>            :     // ── Fast-path: board may already be in bootloader mode ────────────</a>
-<a name="240"><span class="lineNum">     240 </span><span class="lineCov">         17 :     log(&quot;→ Checking if board is already in bootloader…&quot;);</span></a>
-<a name="241"><span class="lineNum">     241 </span><span class="lineCov">         17 :     drain(30, 150);</span></a>
-<a name="242"><span class="lineNum">     242 </span><span class="lineCov">         17 :     if (get_sync(200)) {</span></a>
+<a name="240"><span class="lineNum">     240 </span><span class="lineCov">         18 :     log(&quot;→ Checking if board is already in bootloader…&quot;);</span></a>
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">         18 :     drain(30, 150);</span></a>
+<a name="242"><span class="lineNum">     242 </span><span class="lineCov">         18 :     if (get_sync(200)) {</span></a>
 <a name="243"><span class="lineNum">     243 </span><span class="lineCov">         16 :         log(&quot;✓ Board already in bootloader mode&quot;);</span></a>
 <a name="244"><span class="lineNum">     244 </span><span class="lineCov">         16 :         return true;</span></a>
 <a name="245"><span class="lineNum">     245 </span>            :     }</a>
 <a name="246"><span class="lineNum">     246 </span>            : </a>
 <a name="247"><span class="lineNum">     247 </span>            :     // ── DTR toggle helper ─────────────────────────────────────────────</a>
-<a name="248"><span class="lineNum">     248 </span><span class="lineCov">          1 :     auto toggle_dtr = [&amp;]() {</span></a>
+<a name="248"><span class="lineNum">     248 </span><span class="lineCov">          4 :     auto toggle_dtr = [&amp;]() {</span></a>
 <a name="249"><span class="lineNum">     249 </span>            : #ifdef _WIN32</a>
 <a name="250"><span class="lineNum">     250 </span>            :         HANDLE h = port_.native_handle();</a>
 <a name="251"><span class="lineNum">     251 </span>            :         EscapeCommFunction(h, CLRDTR);</a>
@@ -317,66 +317,66 @@
 <a name="255"><span class="lineNum">     255 </span>            :         EscapeCommFunction(h, CLRDTR);</a>
 <a name="256"><span class="lineNum">     256 </span>            :         std::this_thread::sleep_for(std::chrono::milliseconds(100));</a>
 <a name="257"><span class="lineNum">     257 </span>            : #else</a>
-<a name="258"><span class="lineNum">     258 </span><span class="lineCov">          1 :         int fd  = port_.native_handle();</span></a>
-<a name="259"><span class="lineNum">     259 </span><span class="lineCov">          1 :         int dtr = TIOCM_DTR;</span></a>
-<a name="260"><span class="lineNum">     260 </span><span class="lineCov">          1 :         ioctl(fd, TIOCMBIC, &amp;dtr);   // de-assert first (start clean / HIGH)</span></a>
-<a name="261"><span class="lineNum">     261 </span><span class="lineCov">          1 :         std::this_thread::sleep_for(std::chrono::milliseconds(50));</span></a>
-<a name="262"><span class="lineNum">     262 </span><span class="lineCov">          1 :         ioctl(fd, TIOCMBIS, &amp;dtr);   // assert = LOW = reset pulse</span></a>
-<a name="263"><span class="lineNum">     263 </span><span class="lineCov">          1 :         std::this_thread::sleep_for(std::chrono::milliseconds(50));</span></a>
-<a name="264"><span class="lineNum">     264 </span><span class="lineCov">          1 :         ioctl(fd, TIOCMBIC, &amp;dtr);   // de-assert = HIGH = release</span></a>
-<a name="265"><span class="lineNum">     265 </span><span class="lineCov">          1 :         std::this_thread::sleep_for(std::chrono::milliseconds(100));</span></a>
+<a name="258"><span class="lineNum">     258 </span><span class="lineCov">          4 :         int fd  = port_.native_handle();</span></a>
+<a name="259"><span class="lineNum">     259 </span><span class="lineCov">          4 :         int dtr = TIOCM_DTR;</span></a>
+<a name="260"><span class="lineNum">     260 </span><span class="lineCov">          4 :         ioctl(fd, TIOCMBIC, &amp;dtr);   // de-assert first (start clean / HIGH)</span></a>
+<a name="261"><span class="lineNum">     261 </span><span class="lineCov">          4 :         std::this_thread::sleep_for(std::chrono::milliseconds(50));</span></a>
+<a name="262"><span class="lineNum">     262 </span><span class="lineCov">          4 :         ioctl(fd, TIOCMBIS, &amp;dtr);   // assert = LOW = reset pulse</span></a>
+<a name="263"><span class="lineNum">     263 </span><span class="lineCov">          4 :         std::this_thread::sleep_for(std::chrono::milliseconds(50));</span></a>
+<a name="264"><span class="lineNum">     264 </span><span class="lineCov">          4 :         ioctl(fd, TIOCMBIC, &amp;dtr);   // de-assert = HIGH = release</span></a>
+<a name="265"><span class="lineNum">     265 </span><span class="lineCov">          4 :         std::this_thread::sleep_for(std::chrono::milliseconds(100));</span></a>
 <a name="266"><span class="lineNum">     266 </span>            : #endif</a>
-<a name="267"><span class="lineNum">     267 </span><span class="lineCov">          2 :     };</span></a>
+<a name="267"><span class="lineNum">     267 </span><span class="lineCov">          6 :     };</span></a>
 <a name="268"><span class="lineNum">     268 </span>            : </a>
 <a name="269"><span class="lineNum">     269 </span>            :     // ── Rapid sync burst ──────────────────────────────────────────────</a>
-<a name="270"><span class="lineNum">     270 </span><span class="lineCov">          2 :     auto try_sync_burst = [&amp;](int n, const char* ctx) -&gt; bool {</span></a>
-<a name="271"><span class="lineNum">     271 </span><span class="lineCov">          9 :         for (int i = 1; i &lt;= n; ++i) {</span></a>
-<a name="272"><span class="lineNum">     272 </span><span class="lineCov">          8 :             if (abort_.load()) return false;</span></a>
-<a name="273"><span class="lineNum">     273 </span><span class="lineCov">         16 :             log(&quot;→ Sync attempt &quot; + std::to_string(i) +</span></a>
-<a name="274"><span class="lineNum">     274 </span><span class="lineCov">         24 :                 &quot;/&quot; + std::to_string(n) + &quot; (&quot; + ctx + &quot;)…&quot;);</span></a>
-<a name="275"><span class="lineNum">     275 </span><span class="lineCov">          8 :             drain(20, 100);</span></a>
-<a name="276"><span class="lineNum">     276 </span><span class="lineCov">          8 :             if (get_sync(SYNC_TIMEOUT_MS)) return true;</span></a>
-<a name="277"><span class="lineNum">     277 </span><span class="lineCov">          7 :             std::this_thread::sleep_for(std::chrono::milliseconds(100));</span></a>
+<a name="270"><span class="lineNum">     270 </span><span class="lineCov">          6 :     auto try_sync_burst = [&amp;](int n, const char* ctx) -&gt; bool {</span></a>
+<a name="271"><span class="lineNum">     271 </span><span class="lineCov">         29 :         for (int i = 1; i &lt;= n; ++i) {</span></a>
+<a name="272"><span class="lineNum">     272 </span><span class="lineCov">         24 :             if (abort_.load()) return false;</span></a>
+<a name="273"><span class="lineNum">     273 </span><span class="lineCov">         48 :             log(&quot;→ Sync attempt &quot; + std::to_string(i) +</span></a>
+<a name="274"><span class="lineNum">     274 </span><span class="lineCov">         72 :                 &quot;/&quot; + std::to_string(n) + &quot; (&quot; + ctx + &quot;)…&quot;);</span></a>
+<a name="275"><span class="lineNum">     275 </span><span class="lineCov">         24 :             drain(20, 100);</span></a>
+<a name="276"><span class="lineNum">     276 </span><span class="lineCov">         24 :             if (get_sync(SYNC_TIMEOUT_MS)) return true;</span></a>
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">         23 :             std::this_thread::sleep_for(std::chrono::milliseconds(100));</span></a>
 <a name="278"><span class="lineNum">     278 </span>            :         }</a>
 <a name="279"><span class="lineNum">     279 </span>            :         return false;</a>
-<a name="280"><span class="lineNum">     280 </span><span class="lineCov">          1 :     };</span></a>
+<a name="280"><span class="lineNum">     280 </span><span class="lineCov">          2 :     };</span></a>
 <a name="281"><span class="lineNum">     281 </span>            : </a>
 <a name="282"><span class="lineNum">     282 </span>            :     // ── Send 0x7F autopilot-sync byte ────────────────────────────────</a>
 <a name="283"><span class="lineNum">     283 </span>            :     {</a>
-<a name="284"><span class="lineNum">     284 </span><span class="lineCov">          1 :         const uint8_t sync_byte = 0x7F;</span></a>
-<a name="285"><span class="lineNum">     285 </span><span class="lineCov">          1 :         write_bytes(&amp;sync_byte, 1);</span></a>
-<a name="286"><span class="lineNum">     286 </span><span class="lineCov">          2 :         log(&quot;→ Sent 0x7F autopilot-sync byte&quot;);</span></a>
-<a name="287"><span class="lineNum">     287 </span><span class="lineCov">          1 :         std::this_thread::sleep_for(std::chrono::milliseconds(100));</span></a>
+<a name="284"><span class="lineNum">     284 </span><span class="lineCov">          2 :         const uint8_t sync_byte = 0x7F;</span></a>
+<a name="285"><span class="lineNum">     285 </span><span class="lineCov">          2 :         write_bytes(&amp;sync_byte, 1);</span></a>
+<a name="286"><span class="lineNum">     286 </span><span class="lineCov">          4 :         log(&quot;→ Sent 0x7F autopilot-sync byte&quot;);</span></a>
+<a name="287"><span class="lineNum">     287 </span><span class="lineCov">          2 :         std::this_thread::sleep_for(std::chrono::milliseconds(100));</span></a>
 <a name="288"><span class="lineNum">     288 </span>            :     }</a>
 <a name="289"><span class="lineNum">     289 </span>            : </a>
-<a name="290"><span class="lineNum">     290 </span><span class="lineCov">          1 :     if (try_sync_burst(4, &quot;post-0x7F&quot;)) {</span></a>
+<a name="290"><span class="lineNum">     290 </span><span class="lineCov">          2 :     if (try_sync_burst(4, &quot;post-0x7F&quot;)) {</span></a>
 <a name="291"><span class="lineNum">     291 </span><span class="lineNoCov">          0 :         log(&quot;✓ Bootloader sync OK after 0x7F probe&quot;);</span></a>
 <a name="292"><span class="lineNum">     292 </span><span class="lineNoCov">          0 :         return true;</span></a>
 <a name="293"><span class="lineNum">     293 </span>            :     }</a>
 <a name="294"><span class="lineNum">     294 </span>            : </a>
 <a name="295"><span class="lineNum">     295 </span>            :     // ── DTR reset loop ────────────────────────────────────────────────</a>
-<a name="296"><span class="lineNum">     296 </span><span class="lineCov">          1 :     for (int reset = 1; reset &lt;= 3; ++reset) {</span></a>
-<a name="297"><span class="lineNum">     297 </span><span class="lineCov">          2 :         if (abort_.load()) return false;</span></a>
+<a name="296"><span class="lineNum">     296 </span><span class="lineCov">          5 :     for (int reset = 1; reset &lt;= 3; ++reset) {</span></a>
+<a name="297"><span class="lineNum">     297 </span><span class="lineCov">          5 :         if (abort_.load()) return false;</span></a>
 <a name="298"><span class="lineNum">     298 </span>            : </a>
-<a name="299"><span class="lineNum">     299 </span><span class="lineCov">          2 :         log(&quot;→ DTR reset #&quot; + std::to_string(reset));</span></a>
-<a name="300"><span class="lineNum">     300 </span><span class="lineCov">          1 :         toggle_dtr();</span></a>
+<a name="299"><span class="lineNum">     299 </span><span class="lineCov">          8 :         log(&quot;→ DTR reset #&quot; + std::to_string(reset));</span></a>
+<a name="300"><span class="lineNum">     300 </span><span class="lineCov">          4 :         toggle_dtr();</span></a>
 <a name="301"><span class="lineNum">     301 </span>            : </a>
-<a name="302"><span class="lineNum">     302 </span><span class="lineCov">          1 :         std::this_thread::sleep_for(std::chrono::milliseconds(300));</span></a>
-<a name="303"><span class="lineNum">     303 </span><span class="lineCov">          1 :         drain(20, 200);</span></a>
+<a name="302"><span class="lineNum">     302 </span><span class="lineCov">          4 :         std::this_thread::sleep_for(std::chrono::milliseconds(300));</span></a>
+<a name="303"><span class="lineNum">     303 </span><span class="lineCov">          4 :         drain(20, 200);</span></a>
 <a name="304"><span class="lineNum">     304 </span>            : </a>
-<a name="305"><span class="lineNum">     305 </span><span class="lineCov">          1 :         const uint8_t sync_byte = 0x7F;</span></a>
-<a name="306"><span class="lineNum">     306 </span><span class="lineCov">          1 :         write_bytes(&amp;sync_byte, 1);</span></a>
-<a name="307"><span class="lineNum">     307 </span><span class="lineCov">          1 :         std::this_thread::sleep_for(std::chrono::milliseconds(50));</span></a>
+<a name="305"><span class="lineNum">     305 </span><span class="lineCov">          4 :         const uint8_t sync_byte = 0x7F;</span></a>
+<a name="306"><span class="lineNum">     306 </span><span class="lineCov">          4 :         write_bytes(&amp;sync_byte, 1);</span></a>
+<a name="307"><span class="lineNum">     307 </span><span class="lineCov">          4 :         std::this_thread::sleep_for(std::chrono::milliseconds(50));</span></a>
 <a name="308"><span class="lineNum">     308 </span>            : </a>
-<a name="309"><span class="lineNum">     309 </span><span class="lineCov">          2 :         std::string ctx = &quot;after reset #&quot; + std::to_string(reset);</span></a>
-<a name="310"><span class="lineNum">     310 </span><span class="lineCov">          1 :         if (try_sync_burst(SYNC_RETRIES / 3, ctx.c_str())) {</span></a>
+<a name="309"><span class="lineNum">     309 </span><span class="lineCov">          8 :         std::string ctx = &quot;after reset #&quot; + std::to_string(reset);</span></a>
+<a name="310"><span class="lineNum">     310 </span><span class="lineCov">          4 :         if (try_sync_burst(SYNC_RETRIES / 3, ctx.c_str())) {</span></a>
 <a name="311"><span class="lineNum">     311 </span><span class="lineCov">          2 :             log(&quot;✓ Bootloader sync OK on reset #&quot; + std::to_string(reset));</span></a>
 <a name="312"><span class="lineNum">     312 </span>            :             return true;</a>
 <a name="313"><span class="lineNum">     313 </span>            :         }</a>
 <a name="314"><span class="lineNum">     314 </span>            :     }</a>
 <a name="315"><span class="lineNum">     315 </span>            : </a>
-<a name="316"><span class="lineNum">     316 </span><span class="lineNoCov">          0 :     log(&quot;❌ Bootloader not responding after 3 DTR resets&quot;);</span></a>
-<a name="317"><span class="lineNum">     317 </span><span class="lineNoCov">          0 :     return false;</span></a>
+<a name="316"><span class="lineNum">     316 </span><span class="lineCov">          1 :     log(&quot;❌ Bootloader not responding after 3 DTR resets&quot;);</span></a>
+<a name="317"><span class="lineNum">     317 </span><span class="lineCov">          1 :     return false;</span></a>
 <a name="318"><span class="lineNum">     318 </span>            : }</a>
 <a name="319"><span class="lineNum">     319 </span>            : </a>
 <a name="320"><span class="lineNum">     320 </span>            : // ─────────────────────────────────────────────────────────────────────</a>
@@ -390,10 +390,10 @@
 <a name="328"><span class="lineNum">     328 </span>            : // The old C++ read INSYNC+OK first, then the 4-byte value — backwards.</a>
 <a name="329"><span class="lineNum">     329 </span>            : // This caused every GET_DEVICE query to fail or return garbage.</a>
 <a name="330"><span class="lineNum">     330 </span>            : // ─────────────────────────────────────────────────────────────────────</a>
-<a name="331"><span class="lineNum">     331 </span><span class="lineCov">         62 : bool FirmwareUploader::get_info_word(uint8_t param, uint32_t&amp; out, int timeout_ms)</span></a>
+<a name="331"><span class="lineNum">     331 </span><span class="lineCov">         63 : bool FirmwareUploader::get_info_word(uint8_t param, uint32_t&amp; out, int timeout_ms)</span></a>
 <a name="332"><span class="lineNum">     332 </span>            : {</a>
-<a name="333"><span class="lineNum">     333 </span><span class="lineCov">         62 :     const uint8_t cmd[3] = { PROTO_GET_DEVICE, param, PROTO_EOC };</span></a>
-<a name="334"><span class="lineNum">     334 </span><span class="lineCov">         62 :     if (!write_bytes(cmd, 3)) return false;</span></a>
+<a name="333"><span class="lineNum">     333 </span><span class="lineCov">         63 :     const uint8_t cmd[3] = { PROTO_GET_DEVICE, param, PROTO_EOC };</span></a>
+<a name="334"><span class="lineNum">     334 </span><span class="lineCov">         63 :     if (!write_bytes(cmd, 3)) return false;</span></a>
 <a name="335"><span class="lineNum">     335 </span>            : </a>
 <a name="336"><span class="lineNum">     336 </span>            :     // Step 1: read the 4-byte value FIRST (matches Python __recv_int())</a>
 <a name="337"><span class="lineNum">     337 </span><span class="lineCov">         62 :     uint8_t word[4] = {};</span></a>
@@ -455,14 +455,14 @@
 <a name="393"><span class="lineNum">     393 </span>            : </a>
 <a name="394"><span class="lineNum">     394 </span>            : // FIX-6: erase_chip fires erase_progress_cb while polling so the UI</a>
 <a name="395"><span class="lineNum">     395 </span>            : // progress bar animates during the (up to 20 s) erase wait.</a>
-<a name="396"><span class="lineNum">     396 </span><span class="lineCov">         13 : bool FirmwareUploader::erase_chip()</span></a>
+<a name="396"><span class="lineNum">     396 </span><span class="lineCov">         14 : bool FirmwareUploader::erase_chip()</span></a>
 <a name="397"><span class="lineNum">     397 </span>            : {</a>
-<a name="398"><span class="lineNum">     398 </span><span class="lineCov">         26 :     log(&quot;→ Erasing flash — may take up to 20 s…&quot;);</span></a>
+<a name="398"><span class="lineNum">     398 </span><span class="lineCov">         28 :     log(&quot;→ Erasing flash — may take up to 20 s…&quot;);</span></a>
 <a name="399"><span class="lineNum">     399 </span>            : </a>
-<a name="400"><span class="lineNum">     400 </span><span class="lineCov">         19 :     if (erase_progress_cb_) erase_progress_cb_(0.0f);</span></a>
+<a name="400"><span class="lineNum">     400 </span><span class="lineCov">         20 :     if (erase_progress_cb_) erase_progress_cb_(0.0f);</span></a>
 <a name="401"><span class="lineNum">     401 </span>            : </a>
-<a name="402"><span class="lineNum">     402 </span><span class="lineCov">         13 :     const uint8_t cmd[2] = { PROTO_CHIP_ERASE, PROTO_EOC };</span></a>
-<a name="403"><span class="lineNum">     403 </span><span class="lineCov">         13 :     if (!write_bytes(cmd, 2)) return false;</span></a>
+<a name="402"><span class="lineNum">     402 </span><span class="lineCov">         14 :     const uint8_t cmd[2] = { PROTO_CHIP_ERASE, PROTO_EOC };</span></a>
+<a name="403"><span class="lineNum">     403 </span><span class="lineCov">         14 :     if (!write_bytes(cmd, 2)) return false;</span></a>
 <a name="404"><span class="lineNum">     404 </span>            : </a>
 <a name="405"><span class="lineNum">     405 </span><span class="lineCov">         13 :     const auto start    = std::chrono::steady_clock::now();</span></a>
 <a name="406"><span class="lineNum">     406 </span>            :     const auto deadline = start + std::chrono::milliseconds(ERASE_TIMEOUT_MS);</a>
@@ -506,36 +506,36 @@
 <a name="444"><span class="lineNum">     444 </span>            : }</a>
 <a name="445"><span class="lineNum">     445 </span>            : </a>
 <a name="446"><span class="lineNum">     446 </span>            : // FIX-7: program checks abort_ between chunks and logs at 10 % intervals.</a>
-<a name="447"><span class="lineNum">     447 </span><span class="lineCov">          9 : bool FirmwareUploader::program(const std::vector&lt;uint8_t&gt;&amp; image)</span></a>
+<a name="447"><span class="lineNum">     447 </span><span class="lineCov">         10 : bool FirmwareUploader::program(const std::vector&lt;uint8_t&gt;&amp; image)</span></a>
 <a name="448"><span class="lineNum">     448 </span>            : {</a>
-<a name="449"><span class="lineNum">     449 </span><span class="lineCov">         18 :     log(&quot;→ Programming &quot; + std::to_string(image.size()) + &quot; bytes…&quot;);</span></a>
+<a name="449"><span class="lineNum">     449 </span><span class="lineCov">         20 :     log(&quot;→ Programming &quot; + std::to_string(image.size()) + &quot; bytes…&quot;);</span></a>
 <a name="450"><span class="lineNum">     450 </span>            : </a>
-<a name="451"><span class="lineNum">     451 </span><span class="lineCov">         13 :     if (write_progress_cb_) write_progress_cb_(0.0f);</span></a>
+<a name="451"><span class="lineNum">     451 </span><span class="lineCov">         14 :     if (write_progress_cb_) write_progress_cb_(0.0f);</span></a>
 <a name="452"><span class="lineNum">     452 </span>            : </a>
 <a name="453"><span class="lineNum">     453 </span>            :     const size_t total        = image.size();</a>
 <a name="454"><span class="lineNum">     454 </span>            :     size_t       offset       = 0;</a>
 <a name="455"><span class="lineNum">     455 </span>            :     int          last_logged_pct = -1;</a>
 <a name="456"><span class="lineNum">     456 </span>            : </a>
-<a name="457"><span class="lineNum">     457 </span><span class="lineCov">         16 :     while (offset &lt; total) {</span></a>
-<a name="458"><span class="lineNum">     458 </span><span class="lineCov">          9 :         if (abort_.load()) {</span></a>
+<a name="457"><span class="lineNum">     457 </span><span class="lineCov">         17 :     while (offset &lt; total) {</span></a>
+<a name="458"><span class="lineNum">     458 </span><span class="lineCov">         10 :         if (abort_.load()) {</span></a>
 <a name="459"><span class="lineNum">     459 </span><span class="lineNoCov">          0 :             log(&quot;⚠ Programming aborted by user&quot;);</span></a>
-<a name="460"><span class="lineNum">     460 </span><span class="lineCov">          2 :             return false;</span></a>
+<a name="460"><span class="lineNum">     460 </span><span class="lineCov">          3 :             return false;</span></a>
 <a name="461"><span class="lineNum">     461 </span>            :         }</a>
 <a name="462"><span class="lineNum">     462 </span>            : </a>
 <a name="463"><span class="lineNum">     463 </span>            :         const size_t chunk =</a>
-<a name="464"><span class="lineNum">     464 </span><span class="lineCov">         18 :             std::min(static_cast&lt;size_t&gt;(MAX_PROG_BYTES), total - offset);</span></a>
+<a name="464"><span class="lineNum">     464 </span><span class="lineCov">         20 :             std::min(static_cast&lt;size_t&gt;(MAX_PROG_BYTES), total - offset);</span></a>
 <a name="465"><span class="lineNum">     465 </span>            : </a>
 <a name="466"><span class="lineNum">     466 </span>            :         // PROG_MULTI frame: [CMD, len, data…, EOC]</a>
 <a name="467"><span class="lineNum">     467 </span>            :         std::vector&lt;uint8_t&gt; frame;</a>
-<a name="468"><span class="lineNum">     468 </span><span class="lineCov">          9 :         frame.reserve(3 + chunk);</span></a>
-<a name="469"><span class="lineNum">     469 </span><span class="lineCov">          9 :         frame.push_back(PROTO_PROG_MULTI);</span></a>
-<a name="470"><span class="lineNum">     470 </span><span class="lineCov">          9 :         frame.push_back(static_cast&lt;uint8_t&gt;(chunk));</span></a>
-<a name="471"><span class="lineNum">     471 </span><span class="lineCov">          9 :         frame.insert(frame.end(),</span></a>
+<a name="468"><span class="lineNum">     468 </span><span class="lineCov">         10 :         frame.reserve(3 + chunk);</span></a>
+<a name="469"><span class="lineNum">     469 </span><span class="lineCov">         10 :         frame.push_back(PROTO_PROG_MULTI);</span></a>
+<a name="470"><span class="lineNum">     470 </span><span class="lineCov">         10 :         frame.push_back(static_cast&lt;uint8_t&gt;(chunk));</span></a>
+<a name="471"><span class="lineNum">     471 </span><span class="lineCov">         10 :         frame.insert(frame.end(),</span></a>
 <a name="472"><span class="lineNum">     472 </span>            :                      image.begin() + static_cast&lt;std::ptrdiff_t&gt;(offset),</a>
-<a name="473"><span class="lineNum">     473 </span><span class="lineCov">          9 :                      image.begin() + static_cast&lt;std::ptrdiff_t&gt;(offset + chunk));</span></a>
-<a name="474"><span class="lineNum">     474 </span><span class="lineCov">          9 :         frame.push_back(PROTO_EOC);</span></a>
+<a name="473"><span class="lineNum">     473 </span><span class="lineCov">         10 :                      image.begin() + static_cast&lt;std::ptrdiff_t&gt;(offset + chunk));</span></a>
+<a name="474"><span class="lineNum">     474 </span><span class="lineCov">         10 :         frame.push_back(PROTO_EOC);</span></a>
 <a name="475"><span class="lineNum">     475 </span>            : </a>
-<a name="476"><span class="lineNum">     476 </span><span class="lineCov">          9 :         if (!write_bytes(frame.data(), frame.size())) return false;</span></a>
+<a name="476"><span class="lineNum">     476 </span><span class="lineCov">         10 :         if (!write_bytes(frame.data(), frame.size())) return false;</span></a>
 <a name="477"><span class="lineNum">     477 </span>            : </a>
 <a name="478"><span class="lineNum">     478 </span><span class="lineCov">          9 :         uint8_t resp[2] = {};</span></a>
 <a name="479"><span class="lineNum">     479 </span>            :         if (!read_exact(resp, 2, WRITE_TIMEOUT_MS)) {</a>
@@ -629,19 +629,19 @@
 <a name="567"><span class="lineNum">     567 </span>            : // BUG-5 FIX: reboot() — attempt get_sync() after sending REBOOT (BL ≥ 3).</a>
 <a name="568"><span class="lineNum">     568 </span>            : // Python __reboot(): if self.bl_rev &gt;= 3: self.__getSync()</a>
 <a name="569"><span class="lineNum">     569 </span>            : // We don't track bl_rev separately, so always attempt and ignore timeout.</a>
-<a name="570"><span class="lineNum">     570 </span><span class="lineCov">          1 : bool FirmwareUploader::reboot()</span></a>
+<a name="570"><span class="lineNum">     570 </span><span class="lineCov">          2 : bool FirmwareUploader::reboot()</span></a>
 <a name="571"><span class="lineNum">     571 </span>            : {</a>
-<a name="572"><span class="lineNum">     572 </span><span class="lineCov">          1 :     log(&quot;Rebooting board&quot;);</span></a>
-<a name="573"><span class="lineNum">     573 </span><span class="lineCov">          1 :     const uint8_t cmd[2] = { PROTO_REBOOT, PROTO_EOC };</span></a>
-<a name="574"><span class="lineNum">     574 </span><span class="lineCov">          1 :     write_bytes(cmd, 2);  // best-effort send</span></a>
+<a name="572"><span class="lineNum">     572 </span><span class="lineCov">          2 :     log(&quot;Rebooting board&quot;);</span></a>
+<a name="573"><span class="lineNum">     573 </span><span class="lineCov">          2 :     const uint8_t cmd[2] = { PROTO_REBOOT, PROTO_EOC };</span></a>
+<a name="574"><span class="lineNum">     574 </span><span class="lineCov">          2 :     write_bytes(cmd, 2);  // best-effort send</span></a>
 <a name="575"><span class="lineNum">     575 </span>            : </a>
 <a name="576"><span class="lineNum">     576 </span>            :     // Best-effort ACK read — board may reboot before the ACK arrives.</a>
 <a name="577"><span class="lineNum">     577 </span>            :     // Ignore result; a timeout here is normal and not a failure.</a>
-<a name="578"><span class="lineNum">     578 </span><span class="lineCov">          1 :     uint8_t resp[2] = {};</span></a>
-<a name="579"><span class="lineNum">     579 </span><span class="lineCov">          1 :     read_exact(resp, 2, REBOOT_TIMEOUT_MS);  // result intentionally ignored</span></a>
+<a name="578"><span class="lineNum">     578 </span><span class="lineCov">          2 :     uint8_t resp[2] = {};</span></a>
+<a name="579"><span class="lineNum">     579 </span><span class="lineCov">          2 :     read_exact(resp, 2, REBOOT_TIMEOUT_MS);  // result intentionally ignored</span></a>
 <a name="580"><span class="lineNum">     580 </span>            : </a>
-<a name="581"><span class="lineNum">     581 </span><span class="lineCov">          1 :     std::this_thread::sleep_for(std::chrono::milliseconds(REBOOT_TIMEOUT_MS));</span></a>
-<a name="582"><span class="lineNum">     582 </span><span class="lineCov">          1 :     return true;</span></a>
+<a name="581"><span class="lineNum">     581 </span><span class="lineCov">          2 :     std::this_thread::sleep_for(std::chrono::milliseconds(REBOOT_TIMEOUT_MS));</span></a>
+<a name="582"><span class="lineNum">     582 </span><span class="lineCov">          2 :     return true;</span></a>
 <a name="583"><span class="lineNum">     583 </span>            : }</a>
 <a name="584"><span class="lineNum">     584 </span>            : </a>
 <a name="585"><span class="lineNum">     585 </span>            : // ─────────────────────────────────────────────────────────────────────</a>
@@ -657,16 +657,16 @@
 <a name="595"><span class="lineNum">     595 </span>            : //     image.size() to (flash_size - 1), stepping 4 each iteration —</a>
 <a name="596"><span class="lineNum">     596 </span>            : //     matching Python:  range(len(self.image), (padlen - 1), 4)</a>
 <a name="597"><span class="lineNum">     597 </span>            : // ─────────────────────────────────────────────────────────────────────</a>
-<a name="598"><span class="lineNum">     598 </span><span class="lineCov">         21 : void FirmwareUploader::build_crc_table()</span></a>
+<a name="598"><span class="lineNum">     598 </span><span class="lineCov">         36 : void FirmwareUploader::build_crc_table()</span></a>
 <a name="599"><span class="lineNum">     599 </span>            : {</a>
-<a name="600"><span class="lineNum">     600 </span><span class="lineCov">         21 :     if (crc_table_ready_) return;</span></a>
-<a name="601"><span class="lineNum">     601 </span><span class="lineCov">       5397 :     for (uint32_t i = 0; i &lt; 256; ++i) {</span></a>
+<a name="600"><span class="lineNum">     600 </span><span class="lineCov">         36 :     if (crc_table_ready_) return;</span></a>
+<a name="601"><span class="lineNum">     601 </span><span class="lineCov">       8995 :     for (uint32_t i = 0; i &lt; 256; ++i) {</span></a>
 <a name="602"><span class="lineNum">     602 </span>            :         uint32_t crc = i;</a>
-<a name="603"><span class="lineNum">     603 </span><span class="lineCov">      48384 :         for (int j = 0; j &lt; 8; ++j)</span></a>
-<a name="604"><span class="lineNum">     604 </span><span class="lineCov">      64512 :             crc = (crc &gt;&gt; 1) ^ ((crc &amp; 1u) ? 0xEDB88320u : 0u);</span></a>
-<a name="605"><span class="lineNum">     605 </span><span class="lineCov">       5376 :         crc_table_[i] = crc;</span></a>
+<a name="603"><span class="lineNum">     603 </span><span class="lineCov">      80640 :         for (int j = 0; j &lt; 8; ++j)</span></a>
+<a name="604"><span class="lineNum">     604 </span><span class="lineCov">     107520 :             crc = (crc &gt;&gt; 1) ^ ((crc &amp; 1u) ? 0xEDB88320u : 0u);</span></a>
+<a name="605"><span class="lineNum">     605 </span><span class="lineCov">       8960 :         crc_table_[i] = crc;</span></a>
 <a name="606"><span class="lineNum">     606 </span>            :     }</a>
-<a name="607"><span class="lineNum">     607 </span><span class="lineCov">         21 :     crc_table_ready_ = true;</span></a>
+<a name="607"><span class="lineNum">     607 </span><span class="lineCov">         35 :     crc_table_ready_ = true;</span></a>
 <a name="608"><span class="lineNum">     608 </span>            : }</a>
 <a name="609"><span class="lineNum">     609 </span>            : </a>
 <a name="610"><span class="lineNum">     610 </span><span class="lineNoCov">          0 : uint32_t FirmwareUploader::crc32_accumulate(uint32_t crc,</span></a>

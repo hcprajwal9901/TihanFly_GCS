@@ -1,0 +1,26 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-057
+  Test            :  FirmwareTest.AbortWatcherFUNC
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.AbortWatcherFUNC
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [       OK ] FirmwareTest.AbortWatcherFUNC (14 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

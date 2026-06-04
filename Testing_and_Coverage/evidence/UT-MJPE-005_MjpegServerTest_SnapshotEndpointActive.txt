@@ -1,0 +1,49 @@
+========================================================================
+  EVIDENCE FILE  :  UT-MJPE-005
+  Test            :  MjpegServerTest.SnapshotEndpointActive
+  Module          :  MjpegServer
+  Source File     :  test_mjpeg_server.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  [2] server_->stop();
+  [3] server_ = std::make_unique<MjpegServer>(io_context_, capture, test_port_);
+  [4] server_->start();
+  [5] server_thread_ = std::thread([this]() {
+  [6] catch (const std::exception&) {}
+  [7] std::this_thread::sleep_for(100ms);
+  [8] asio::ip::tcp::resolver::results_type endpoints = resolver.resolve("127.0.0.1", std::to_string(test_port_));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : ASSERT_FALSE(ec);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(status_code, 200);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: boolean state, equality. Module 'MjpegServer' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] MjpegServerTest.SnapshotEndpointActive
+  [MjpegServer] Listening on port 8089
+  [Camera] Opened: 1280x720
+  [Camera] Capture started  source=dummy.jpg  1280x720 @ 30fps
+  [Camera] Opened: 1280x720
+  [Camera] Opened: 1280x720
+  [Camera] Opened: 1280x720
+  [Camera] Opened: 1280x720
+  [MjpegServer] Listening on port 8090
+  [Camera] Opened: 1280x720
+  [MjpegServer] Client connected: 127.0.0.1:34940
+  [MjpegServer] GET /snapshot
+  [Camera] Capture stopped
+  [Camera] Capture stopped
+  [Camera] Capture stopped
+  [       OK ] MjpegServerTest.SnapshotEndpointActive (958 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

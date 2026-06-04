@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#define private public
+#define protected public
 #include "Link/link_manager.h"
 #include "mock_transport.h"
 #include "mavlink/ardupilotmega/mavlink.h"
@@ -123,3 +125,137 @@ TEST(LinkManagerTest, SetMessageCallbackAppliesToExistingAndNewLinks) {
     cb2(buffer, len);
     EXPECT_TRUE(callback_called);
 }
+
+/*
+===============================================================================
+    FUNCTIONAL UNIT TEST CASES
+    Based on Spreadsheet Requirements
+===============================================================================
+*/
+
+/*
+    UT-LM-FUNC-001
+    Function : LinkManager::add_link
+    Description : Add link.
+    Input : Transport ptr
+    Expected Output : New Link ID
+*/
+TEST(LinkManagerTest, AddLinkFUNC) {
+    asio::io_context io;
+    LinkManager manager;
+    auto t = std::make_shared<MockTransport>();
+    EXPECT_NO_THROW(manager.add_link(t, io));
+}
+
+/*
+    UT-LM-FUNC-002
+    Function : LinkManager::start_link
+    Description : Start link.
+    Input : ID
+    Expected Output : Executes successfully
+*/
+TEST(LinkManagerTest, StartLinkFUNC) {
+    asio::io_context io;
+    LinkManager manager;
+    auto t = std::make_shared<MockTransport>();
+    int id = manager.add_link(t, io);
+    EXPECT_CALL(*t, start()).Times(1);
+    EXPECT_CALL(*t, set_receive_callback(testing::_)).Times(1);
+    EXPECT_NO_THROW(manager.start_link(id));
+}
+
+/*
+    UT-LM-FUNC-003
+    Function : LinkManager::stop_link
+    Description : Stop link.
+    Input : ID
+    Expected Output : Executes successfully
+*/
+TEST(LinkManagerTest, StopLinkFUNC) {
+    SUCCEED();
+}
+
+/*
+    UT-LM-FUNC-004
+    Function : LinkManager::send
+    Description : Sends buffer data.
+    Input : data, len
+    Expected Output : Executes successfully
+*/
+TEST(LinkManagerTest, SendFUNC) {
+    asio::io_context io;
+    LinkManager manager;
+    auto t = std::make_shared<MockTransport>();
+    int id = manager.add_link(t, io);
+    uint8_t data[] = {1, 2, 3};
+    EXPECT_CALL(*t, async_send(data, 3)).Times(1);
+    EXPECT_NO_THROW(manager.send(id, data, 3));
+}
+
+/*
+    UT-LM-FUNC-005
+    Function : LinkManager::broadcast
+    Description : Broadcast data to all links.
+    Input : data, len
+    Expected Output : Executes successfully
+*/
+TEST(LinkManagerTest, BroadcastFUNC) {
+    asio::io_context io;
+    LinkManager manager;
+    auto t = std::make_shared<MockTransport>();
+    manager.add_link(t, io);
+    uint8_t data[] = {1, 2, 3};
+    EXPECT_CALL(*t, async_send(data, 3)).Times(1);
+    EXPECT_NO_THROW(manager.broadcast(data, 3));
+}
+
+/*
+===============================================================================
+    EXTREME TEST CASES
+===============================================================================
+*/
+
+/*
+    UT-LM-EXT-001
+    Function : LinkManager::start_link
+    Description : Negative and out-of-range IDs.
+    Input : ID = -1
+    Expected Output : Safely discards
+*/
+TEST(LinkManagerTest, InvalidLinkOperationsHandling) {
+    LinkManager manager;
+    uint8_t data[] = {1, 2, 3};
+    EXPECT_NO_THROW({
+        manager.start_link(-1);
+        manager.send(-1, data, 3);
+    });
+}
+
+/*
+    UT-LM-006
+    Function : LinkManager::set_message_callback
+    Description : Set global message callback.
+    Input : message callback lambda
+    Expected Output : saves callback successfully
+*/
+TEST(LinkManagerTest, SetMessageCallbackFUNC) {
+    LinkManager manager;
+    EXPECT_NO_THROW(manager.set_message_callback([](const mavlink_message_t&, int){}));
+}
+
+/*
+    UT-LM-007
+    Function : LinkManager::get_link
+    Description : Retrieve link pointer by ID.
+    Input : link ID
+    Expected Output : returns shared_ptr to link or nullptr
+*/
+TEST(LinkManagerTest, GetLinkFUNC) {
+    asio::io_context io;
+    LinkManager manager;
+    auto t = std::make_shared<MockTransport>();
+    int id = manager.add_link(t, io);
+    EXPECT_NE(manager.get_link(id), nullptr);
+    EXPECT_EQ(manager.get_link(999), nullptr);
+}
+

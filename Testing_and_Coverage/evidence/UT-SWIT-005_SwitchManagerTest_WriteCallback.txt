@@ -1,0 +1,41 @@
+========================================================================
+  EVIDENCE FILE  :  UT-SWIT-005
+  Test            :  SwitchManagerTest.WriteCallback
+  Module          :  SwitchManager
+  Source File     :  test_switch_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] sm->set_on_write([&](int ch, const std::string& name, int val) {
+  [2] sm->set_switch_option(7, 41);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(ch, 7);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(name, "RC7_OPTION");
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(val, 41);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(callback_count, 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 4 assertion(s) satisfied. Verified: equality. Module 'SwitchManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] SwitchManagerTest.WriteCallback
+  [Link] Added link 0
+  [SwitchManager] Initialised
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [VehicleManager] New vehicle discovered: sysid=1 ui_sysid=1 compid=1 link_id=0
+  [SwitchManager] Set RC7_OPTION = 41  (sysid=1 link_id=0)
+  [       OK ] SwitchManagerTest.WriteCallback (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

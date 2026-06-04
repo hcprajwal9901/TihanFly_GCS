@@ -1,0 +1,27 @@
+========================================================================
+  EVIDENCE FILE  :  UT-LINK-011
+  Test            :  LinkManagerTest.InvalidLinkOperationsHandling
+  Module          :  LinkManager
+  Source File     :  test_link_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] uint8_t data[] = {1, 2, 3};
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW({
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'LinkManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] LinkManagerTest.InvalidLinkOperationsHandling
+  [Link] start_link: invalid id -1
+  [       OK ] LinkManagerTest.InvalidLinkOperationsHandling (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

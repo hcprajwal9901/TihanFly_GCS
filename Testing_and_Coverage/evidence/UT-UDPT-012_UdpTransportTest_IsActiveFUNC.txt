@@ -1,0 +1,29 @@
+========================================================================
+  EVIDENCE FILE  :  UT-UDPT-012
+  Test            :  UdpTransportTest.IsActiveFUNC
+  Module          :  UdpTransport
+  Source File     :  test_udp.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] udp->active_ = true;
+  [2] udp->last_receive_ = std::chrono::steady_clock::now();
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(udp->is_active());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: boolean state. Module 'UdpTransport' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] UdpTransportTest.IsActiveFUNC
+  [UDP] Bound to port 16001
+  [UDP] Started
+  [       OK ] UdpTransportTest.IsActiveFUNC (50 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

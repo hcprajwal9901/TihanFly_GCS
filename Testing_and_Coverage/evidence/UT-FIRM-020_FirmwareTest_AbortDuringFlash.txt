@@ -1,0 +1,84 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-020
+  Test            :  FirmwareTest.AbortDuringFlash
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::string path = create_dummy_apj("copter_stable.apj");
+  [2] json msg = {
+  [3] for(int i = 0; i < 200 && !manager->is_flashing(); i++) {
+  [4] std::this_thread::sleep_for(std::chrono::milliseconds(50));
+  [5] std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  [6] manager->abort();
+  [7] for (int i = 0; i < 100 && manager->is_flashing(); ++i) {
+  [8] std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FALSE(manager->is_flashing());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_THAT(last_ws_message, HasSubstr("cancelled by user"));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 3 assertion(s) satisfied. Verified: boolean state. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.AbortDuringFlash
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [DEBUG] Decoding APJ JSON for: /tmp/firmware_test_dir/copter_stable.apj
+  {
+    "board_id": 9,
+    "image": "eJzzSM3JyQ/PL8pJ8aAZCwDWvSfZ",
+    "image_size": 100
+  }
+  [FirmwareManager] Decoded 100 bytes from /tmp/firmware_test_dir/copter_stable.apj
+  [FirmwareManager] install_firmware: copter_stable.apj on /dev/pts/2
+  [FirmwareManager] Waiting for /dev/pts/2 to disappear (bootloader re-enum)…
+  [FirmwareManager] /dev/pts/2 still present — assuming board already in bootloader.
+  [FirmwareManager] -- Flash start --------------------------
+  [FirmwareManager]   port    : /dev/pts/2
+  [FirmwareManager]   firmware: copter_stable.apj
+  [FirmwareManager]   size    : 100 bytes
+  [FirmwareManager] [preflight] 🔍 Running pre-flight checks... (0%)
+  [FirmwareManager] [abort] Aborting firmware flash – please wait...
+  [FirmwareManager] Abort requested
+  [FirmwareManager] Suspending MAVLink serial transport
+  [FirmwareManager] [start] 🚀 Starting firmware flash on /dev/pts/2…
+  📦 Firmware: copter_stable.apj
+  📡 Port:     /dev/pts/2 (0%)
+  [FirmwareUploader] → Port /dev/pts/2 opened @ 115200 baud
+  [FirmwareManager] [log] → Port /dev/pts/2 opened @ 115200 baud
+  [FirmwareUploader] → Checking if board is already in bootloader…
+  [FirmwareManager] [log] → Checking if board is already in bootloader…
+  [FirmwareUploader] ✓ Board already in bootloader mode
+  [FirmwareManager] [log] ✓ Board already in bootloader mode
+  [FirmwareUploader] Connected to bootloader:
+  [FirmwareManager] [log] Connected to bootloader:
+  [FirmwareUploader] → Reading device info…
+  [FirmwareManager] [log] → Reading device info…
+  [FirmwareUploader] → BL_REV=0  BOARD_ID=9  BOARD_REV=0  FLASH=100 B
+  [FirmwareManager] [log] → BL_REV=0  BOARD_ID=9  BOARD_REV=0  FLASH=100 B
+  [FirmwareUploader] Version: 0
+  [FirmwareManager] [log] Version: 0
+  [FirmwareUploader] Board ID: 9
+  [FirmwareManager] [log] Board ID: 9
+  [FirmwareUploader] Flash size: 100
+  [FirmwareManager] [log] Flash size: 100
+  [FirmwareUploader] → Erasing flash — may take up to 20 s…
+  [FirmwareManager] [log] → Erasing flash — may take up to 20 s…
+  [FirmwareManager] [erase] Erasing flash... (0%)
+  [FirmwareManager] [abort] ℹ️  Flash cancelled by user.
+  [FirmwareManager] Flash aborted by user
+  [FirmwareManager] Re-enabling serial monitor
+  [FirmwareManager] -- Flash end ----------------------------
+  [       OK ] FirmwareTest.AbortDuringFlash (5713 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

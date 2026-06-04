@@ -1,0 +1,33 @@
+========================================================================
+  EVIDENCE FILE  :  UT-SWIT-006
+  Test            :  SwitchManagerTest.HandleWSMessageFUNC
+  Module          :  SwitchManager
+  Source File     :  test_switch_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(sm->pending_count(), 0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: equality. Module 'SwitchManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] SwitchManagerTest.HandleWSMessageFUNC
+  [Link] Added link 0
+  [SwitchManager] Initialised
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [VehicleManager] New vehicle discovered: sysid=1 ui_sysid=1 compid=1 link_id=0
+  [       OK ] SwitchManagerTest.HandleWSMessageFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

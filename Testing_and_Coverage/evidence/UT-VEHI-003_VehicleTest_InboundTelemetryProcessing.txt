@@ -1,0 +1,55 @@
+========================================================================
+  EVIDENCE FILE  :  UT-VEHI-003
+  Test            :  VehicleTest.InboundTelemetryProcessing
+  Module          :  Vehicle
+  Source File     :  test_vehicle.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto v = std::make_shared<Vehicle>(1, 1, 0, link_manager.get(), 1);
+  [2] mavlink_message_t sys_msg;
+  [3] mavlink_msg_sys_status_pack(1, 1, &sys_msg, 0, 0, 0, 500, 11500, -1, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+  [4] v->process_message(sys_msg);
+  [5] mavlink_message_t gps_msg;
+  [6] mavlink_msg_gps_raw_int_pack(1, 1, &gps_msg, 0, 3, 400000000, -730000000, 100000, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0);
+  [7] v->process_message(gps_msg);
+  [8] mavlink_message_t bat_msg;
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(v->battery_remaining(), 50);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FLOAT_EQ(v->battery_voltage(), 11.5f);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(v->gps_fix_type(), 3);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(v->gps_satellites(), 10);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_DOUBLE_EQ(v->latitude(), 40.0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_DOUBLE_EQ(v->longitude(), -73.0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FLOAT_EQ(v->altitude_msl(), 100.0f);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(v->battery_remaining(), 40);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FLOAT_EQ(v->battery_voltage(), 11.4f);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_DOUBLE_EQ(v->latitude(), 40.0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 20 assertion(s) satisfied. Verified: boolean state, boundary, equality, exception safety. Module 'Vehicle' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] VehicleTest.InboundTelemetryProcessing
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [       OK ] VehicleTest.InboundTelemetryProcessing (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

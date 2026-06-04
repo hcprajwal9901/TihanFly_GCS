@@ -1,0 +1,35 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ACCE-004
+  Test            :  AccelCalibrationTest.ProcessAttitude
+  Module          :  AccelCalibration
+  Source File     :  test_accel_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] accel.setSendCallback([&](const std::string& json) {
+  [2] mavlink_message_t msg;
+  [3] mavlink_attitude_t att = {};
+  [4] mavlink_msg_attitude_encode(1, 1, &msg, &att);
+  [5] accel.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(json_sent);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: boolean state. Module 'AccelCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] AccelCalibrationTest.ProcessAttitude
+  [AccelCalibration] Constructed
+  [Calib] Cancel sent to reset any stale drone state
+  [AccelCalibration] WARNING: no transport callback!
+  [Calib] MAV_CMD_PREFLIGHT_CALIBRATION sent → sysid=1 compid=1
+  [Calib][RX] msgid=30 (ATTITUDE) from=1/1
+  [       OK ] AccelCalibrationTest.ProcessAttitude (400 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

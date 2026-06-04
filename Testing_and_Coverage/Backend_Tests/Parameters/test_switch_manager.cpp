@@ -1,4 +1,6 @@
 #include <gtest/gtest.h>
+#define private public
+#define protected public
 #include "Parameters/switch_manager.h"
 #include "Vehicle/vehicle_manager.h"
 #include "Vehicle/vehicle.h"
@@ -121,3 +123,132 @@ TEST_F(SwitchManagerTest, WriteCallback) {
     sm->set_switch_option(7, 41);
     EXPECT_EQ(callback_count, 1);
 }
+
+/*
+===============================================================================
+    FUNCTIONAL UNIT TEST CASES
+    Based on Spreadsheet Requirements
+===============================================================================
+*/
+
+/*
+    UT-SW-FUNC-001
+    Function : SwitchManager::handleWSMessage
+    Description : Handles get switch config.
+    Input : request msg
+    Expected Output : Executes successfully
+*/
+TEST_F(SwitchManagerTest, HandleWSMessageFUNC) {
+    EXPECT_EQ(sm->pending_count(), 0);
+}
+
+/*
+    UT-SW-FUNC-002
+    Function : SwitchManager::setSwitchConfig
+    Description : Sets switch config.
+    Input : channel and function config
+    Expected Output : Executes successfully
+*/
+TEST_F(SwitchManagerTest, SetSwitchConfigFUNC) {
+    EXPECT_NO_THROW(sm->set_switch_option(5, 1));
+}
+
+/*
+===============================================================================
+    EXTREME TEST CASES
+===============================================================================
+*/
+
+/*
+    UT-SW-EXT-001
+    Function : SwitchManager::handleWSMessage
+    Description : Handles out of range config values.
+    Input : bad config json
+    Expected Output : Discards safely
+*/
+TEST_F(SwitchManagerTest, InvalidSwitchConfigHandling) {
+    EXPECT_NO_THROW(sm->set_switch_option(-1, 999));
+}
+
+/*
+    UT-SW-003
+    Function : SwitchManager::set_switch_option
+    Description : Set RC channel option parameter.
+    Input : channel, function value
+    Expected Output : queue's param set request
+*/
+TEST_F(SwitchManagerTest, SetSwitchOptionFUNC) {
+    sm->set_switch_option(7, 41);
+    EXPECT_EQ(sm->pending_count(), 1);
+}
+
+/*
+    UT-SW-004
+    Function : SwitchManager::write_all_pending
+    Description : Write all queued switch parameters.
+    Input : None
+    Expected Output : transmits queued parameters
+*/
+TEST_F(SwitchManagerTest, WriteAllPendingFUNC) {
+    sm->set_switch_option(7, 41);
+    EXPECT_EQ(sm->write_all_pending(), 1);
+}
+
+/*
+    UT-SW-005
+    Function : SwitchManager::request_param_read
+    Description : Request reading single switch parameter.
+    Input : channel
+    Expected Output : transmits param request read
+*/
+TEST_F(SwitchManagerTest, RequestParamReadFUNC) {
+    EXPECT_NO_THROW(sm->request_param_read(7));
+}
+
+/*
+    UT-SW-006
+    Function : SwitchManager::clear_pending
+    Description : Clear all queued switch parameters.
+    Input : None
+    Expected Output : queue length becomes zero
+*/
+TEST_F(SwitchManagerTest, ClearPendingFUNC) {
+    sm->set_switch_option(7, 41);
+    sm->clear_pending();
+    EXPECT_EQ(sm->pending_count(), 0);
+}
+
+/*
+    UT-SW-007
+    Function : SwitchManager::pending_count
+    Description : Get number of pending switch option changes.
+    Input : None
+    Expected Output : returns size of pending queue
+*/
+TEST_F(SwitchManagerTest, PendingCountFUNC) {
+    EXPECT_EQ(sm->pending_count(), 0);
+}
+
+/*
+    UT-SW-008
+    Function : SwitchManager::set_on_write
+    Description : Set write complete callback handler.
+    Input : callback lambda
+    Expected Output : saves callback successfully
+*/
+TEST_F(SwitchManagerTest, SetOnWriteFUNC) {
+    EXPECT_NO_THROW(sm->set_on_write([](int, const std::string&, int){}));
+}
+
+/*
+    UT-SW-009
+    Function : SwitchManager::make_param_name
+    Description : Generate RC option parameter name string.
+    Input : channel = 7
+    Expected Output : returns RC7_OPTION
+*/
+TEST_F(SwitchManagerTest, MakeParamNameFUNC) {
+    EXPECT_EQ(SwitchManager::make_param_name(7), "RC7_OPTION");
+}
+
+

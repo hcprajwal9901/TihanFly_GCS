@@ -1,0 +1,43 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ESCC-007
+  Test            :  EscCalibrationTest.TemporarilyRejectedExhaustion
+  Module          :  EscCalibration
+  Source File     :  test_esc_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] esc.setTransportCallback([&](const mavlink_message_t& msg) {
+  [2] std::thread t([&]() {
+  [3] std::this_thread::sleep_for(std::chrono::milliseconds(50));
+  [4] mavlink_message_t msg;
+  [5] mavlink_command_ack_t ack = {};
+  [6] mavlink_msg_command_ack_encode(1, 1, &msg, &ack);
+  [7] esc.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] EscCalibrationTest.TemporarilyRejectedExhaustion
+  [ESC] Stage=preflight | Setting ESC_CALIBRATION=3 on FC
+  [ESC] ESC_CALIBRATION param set to 3
+  [ESC] COMMAND_ACK preflight result=3 (TEMPORARILY_REJECTED) — FC busy
+  [ESC] COMMAND_ACK preflight result=3 (TEMPORARILY_REJECTED) — FC busy
+  [ESC] COMMAND_ACK preflight result=3 (TEMPORARILY_REJECTED) — FC busy
+  [ESC] Stage=retrying | FC temporarily busy (result=3) — retrying in 2 s (2/3)
+  [ESC] Stage=preflight | Setting ESC_CALIBRATION=3 on FC (attempt 2/3)
+  [ESC] ESC_CALIBRATION param set to 3
+  [ESC] Stage=accepted | FC acknowledged (result=0 (ACCEPTED))
+  [ESC] Stage=rebooting | Rebooting FC — wait for it to restart (≈5 s)
+  [ESC] Reboot command sent to FC
+  [ESC] Stage=power_cycle | FC is rebooting. Once restarted — long-press safety button (≥2 s). ESCs will beep max throttle, then min throttle, then FC reboots normally.
+  [       OK ] EscCalibrationTest.TemporarilyRejectedExhaustion (8019 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

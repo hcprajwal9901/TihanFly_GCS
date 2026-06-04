@@ -1,0 +1,34 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-040
+  Test            :  FirmwareTest.LoadApjFileFUNC
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::string path = create_dummy_apj();
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_FALSE(manager->load_apj_file(path).empty());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: boolean state. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.LoadApjFileFUNC
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [DEBUG] Decoding APJ JSON for: /tmp/firmware_test_dir/dummy.apj
+  {
+    "board_id": 9,
+    "image": "eJzzSM3JyQ/PL8pJ8aAZCwDWvSfZ",
+    "image_size": 100
+  }
+  [FirmwareManager] Decoded 100 bytes from /tmp/firmware_test_dir/dummy.apj
+  [       OK ] FirmwareTest.LoadApjFileFUNC (66 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

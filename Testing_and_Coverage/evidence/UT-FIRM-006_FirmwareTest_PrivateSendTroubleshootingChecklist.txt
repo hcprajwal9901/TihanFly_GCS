@@ -1,0 +1,47 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-006
+  Test            :  FirmwareTest.PrivateSendTroubleshootingChecklist
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] manager->send_troubleshooting_checklist("/dev/ttyDummy");
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_THAT(last_ws_message, HasSubstr("Troubleshooting checklist"));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: correctness. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.PrivateSendTroubleshootingChecklist
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [FirmwareManager] [troubleshoot] 
+  📋 Troubleshooting checklist:
+  
+     1. Is ModemManager running?  Stop it:
+        sudo systemctl stop ModemManager.service
+  
+     2. Is the board in bootloader mode?
+        - No GPS light should be visible
+        - Try power cycling the board
+  
+     3. Does the firmware match your board?
+        - Check board ID in firmware vs device
+        - CubeOrange+ should use 0x2dae firmware
+  
+     4. Try using 115200 baud for both rates
+  
+     5. Check port permissions:
+        sudo chmod 666 /dev/ttyDummy
+        OR:  sudo usermod -aG dialout $USER
+  
+  [       OK ] FirmwareTest.PrivateSendTroubleshootingChecklist (66 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

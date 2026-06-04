@@ -1,0 +1,42 @@
+========================================================================
+  EVIDENCE FILE  :  UT-LINK-003
+  Test            :  LinkTest.ReceiveCallbackParsesMavlinkAndTriggersCallback
+  Module          :  Link
+  Source File     :  test_link.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto mock_transport = std::make_shared<MockTransport>();
+  [2] link.set_callback([&](const mavlink_message_t& m, int link_id) {
+  [3] mavlink_message_t msg;
+  [4] mavlink_msg_heartbeat_pack(1, 200, &msg, MAV_TYPE_QUADROTOR, MAV_AUTOPILOT_ARDUPILOTMEGA, MAV_MODE_GUIDED_ARMED, 0, MAV_STATE_ACTIVE);
+  [5] uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+  [6] uint16_t len = mavlink_msg_to_send_buffer(buffer, &msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_CALL(*mock_transport, start()).Times(1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_CALL(*mock_transport, set_receive_callback(_))
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(m.msgid, MAVLINK_MSG_ID_HEARTBEAT);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(link_id, 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : ASSERT_TRUE(captured_cb != nullptr);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(callback_called);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 6 assertion(s) satisfied. Verified: boolean state, equality. Module 'Link' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] LinkTest.ReceiveCallbackParsesMavlinkAndTriggersCallback
+  [Link] Listening...
+  [       OK ] LinkTest.ReceiveCallbackParsesMavlinkAndTriggersCallback (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

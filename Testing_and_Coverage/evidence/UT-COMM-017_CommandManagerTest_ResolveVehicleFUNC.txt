@@ -1,0 +1,30 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMM-017
+  Test            :  CommandManagerTest.ResolveVehicleFUNC
+  Module          :  CommandManager
+  Source File     :  test_command_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] cmd_manager->set_vehicle_direct(direct_vehicle.get());
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(cmd_manager->resolve_vehicle(cmd), direct_vehicle.get());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: equality. Module 'CommandManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CommandManagerTest.ResolveVehicleFUNC
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [       OK ] CommandManagerTest.ResolveVehicleFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

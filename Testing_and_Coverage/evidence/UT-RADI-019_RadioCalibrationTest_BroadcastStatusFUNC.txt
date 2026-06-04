@@ -1,0 +1,33 @@
+========================================================================
+  EVIDENCE FILE  :  UT-RADI-019
+  Test            :  RadioCalibrationTest.BroadcastStatusFUNC
+  Module          :  RadioCalibration
+  Source File     :  test_radio_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] radio.setSendCallback([&](const std::string& json) {
+  [2] if (json.find("Test") != std::string::npos) {
+  [3] mavlink_message_t msg;
+  [4] mavlink_command_ack_t ack = {};
+  [5] mavlink_msg_command_ack_encode(1, 1, &msg, &ack);
+  [6] radio.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] RadioCalibrationTest.BroadcastStatusFUNC
+  [RadioCalib] WARNING: no transport callback
+  [RadioCalib] Calibration started
+  [RadioCalib] COMMAND_ACK: hard failure result=2
+  [       OK ] RadioCalibrationTest.BroadcastStatusFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

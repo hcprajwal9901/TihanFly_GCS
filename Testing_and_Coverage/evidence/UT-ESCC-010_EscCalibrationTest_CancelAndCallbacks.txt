@@ -1,0 +1,26 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ESCC-010
+  Test            :  EscCalibrationTest.CancelAndCallbacks
+  Module          :  EscCalibration
+  Source File     :  test_esc_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] esc.setSendCallback([&](const std::string& json) { json_sent = true; });
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] EscCalibrationTest.CancelAndCallbacks
+  [ESC] Stage=error | No vehicle connected — cannot start ESC calibration
+  [       OK ] EscCalibrationTest.CancelAndCallbacks (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

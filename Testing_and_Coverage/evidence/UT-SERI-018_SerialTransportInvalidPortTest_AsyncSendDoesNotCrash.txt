@@ -1,0 +1,29 @@
+========================================================================
+  EVIDENCE FILE  :  UT-SERI-018
+  Test            :  SerialTransportInvalidPortTest.AsyncSendDoesNotCrash
+  Module          :  SerialTransport
+  Source File     :  test_serial.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto serial = std::make_shared<SerialTransport>(io, "INVALID_COM_PORT", 57600);
+  [2] std::vector<uint8_t> dummy = {1};
+  [3] serial->async_send(dummy.data(), dummy.size());
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW({
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'SerialTransport' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] SerialTransportInvalidPortTest.AsyncSendDoesNotCrash
+  [Serial] Failed to open INVALID_COM_PORT
+  [       OK ] SerialTransportInvalidPortTest.AsyncSendDoesNotCrash (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

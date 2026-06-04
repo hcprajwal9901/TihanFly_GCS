@@ -1,0 +1,35 @@
+========================================================================
+  EVIDENCE FILE  :  UT-UDPS-007
+  Test            :  UdpSocketFuncTest.OnDataReceivedCallbackFUNC
+  Module          :  UdpSocket
+  Source File     :  test_udp.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto sock = std::make_shared<udp_socket>(io, 17013);
+  [2] std::atomic<bool> received{false};
+  [3] std::atomic<size_t> received_len{0};
+  [4] sock->on_data_recived_ = [&](const std::error_code& ec, size_t len, const uint8_t*) {
+  [5] sock->start_receive();
+  [6] std::thread t([&]() { io.run(); });
+  [7] std::vector<uint8_t> pkt = {1, 2, 3, 4};
+  [8] std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(received);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(received_len, 4u);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: boolean state, equality. Module 'UdpSocket' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] UdpSocketFuncTest.OnDataReceivedCallbackFUNC
+  [       OK ] UdpSocketFuncTest.OnDataReceivedCallbackFUNC (200 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

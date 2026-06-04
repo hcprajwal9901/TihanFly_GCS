@@ -1,0 +1,30 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-011
+  Test            :  FirmwareTest.InstallFirmwareInvalidFile
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] json msg = {
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_THAT(last_ws_message, HasSubstr("Firmware file not found"));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: boolean state. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.InstallFirmwareInvalidFile
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [FirmwareManager] [error] Firmware file not found: /tmp/firmware_test_dir/rover_stable.apj
+  [       OK ] FirmwareTest.InstallFirmwareInvalidFile (66 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

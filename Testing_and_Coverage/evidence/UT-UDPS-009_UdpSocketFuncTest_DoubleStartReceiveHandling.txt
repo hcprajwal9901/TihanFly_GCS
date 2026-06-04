@@ -1,0 +1,28 @@
+========================================================================
+  EVIDENCE FILE  :  UT-UDPS-009
+  Test            :  UdpSocketFuncTest.DoubleStartReceiveHandling
+  Module          :  UdpSocket
+  Source File     :  test_udp.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto sock = std::make_shared<udp_socket>(io, 17015);
+  [2] sock->start_receive();
+  [3] sock->start_receive();
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW({
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'UdpSocket' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] UdpSocketFuncTest.DoubleStartReceiveHandling
+  [       OK ] UdpSocketFuncTest.DoubleStartReceiveHandling (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

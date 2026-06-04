@@ -1,0 +1,28 @@
+========================================================================
+  EVIDENCE FILE  :  UT-VEHI-001
+  Test            :  VehicleTest.InitializationAndEmptyState
+  Module          :  Vehicle
+  Source File     :  test_vehicle.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(manager->get_active_vehicle(), nullptr);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(manager->get_all_sysids().empty());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: boolean state, equality. Module 'Vehicle' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] VehicleTest.InitializationAndEmptyState
+  [       OK ] VehicleTest.InitializationAndEmptyState (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

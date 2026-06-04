@@ -1,0 +1,50 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMM-004
+  Test            :  CommandManagerTest.SpecificCommandsTranslation
+  Module          :  CommandManager
+  Source File     :  test_command_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] cmd_manager->set_vehicle_direct(direct_vehicle.get());
+  [2] std::string last_response;
+  [3] cmd_manager->set_response_callback([&](const std::string& res) {
+  [4] cmd_manager->add_command(1, "SET_MODE", 0, 0, "GUIDED");
+  [5] cmd_manager->process();
+  [6] cmd_manager->add_command(2, "UNKNOWN_CMD");
+  [7] cmd_manager->process();
+  [8] cmd_manager->add_command(3, "SET_MODE", 0, 0, "UNKNOWN_MODE");
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(cb_count, 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(j["command"], "SET_MODE");
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(cb_count, 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(cb_count, 2);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 4 assertion(s) satisfied. Verified: equality. Module 'CommandManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CommandManagerTest.SpecificCommandsTranslation
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [Command] Executing: SET_MODE
+  [Command] Setting mode: GUIDED (custom_mode=4)
+  [Command] Executing: UNKNOWN_CMD
+  [Command] Unknown command: UNKNOWN_CMD
+  [Command] Executing: SET_MODE
+  [Command] Unknown mode: UNKNOWN_MODE
+  [Command] Setting mode: UNKNOWN_MODE (custom_mode=0)
+  [       OK ] CommandManagerTest.SpecificCommandsTranslation (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

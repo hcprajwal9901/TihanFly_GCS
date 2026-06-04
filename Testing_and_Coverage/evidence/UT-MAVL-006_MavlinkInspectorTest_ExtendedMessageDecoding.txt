@@ -1,0 +1,37 @@
+========================================================================
+  EVIDENCE FILE  :  UT-MAVL-006
+  Test            :  MavlinkInspectorTest.ExtendedMessageDecoding
+  Module          :  MavlinkInspector
+  Source File     :  test_mavlink_inspector.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::string captured_json;
+  [2] inspector.set_ws_callback([&](const std::string& json) {
+  [3] captured_json = json;
+  [4] mavlink_message_t msg_att;
+  [5] mavlink_msg_attitude_pack(1, 1, &msg_att, 12345, 0.1, 0.2, 0.3, 0.01, 0.02, 0.03);
+  [6] mavlink_message_t msg_text;
+  [7] mavlink_msg_statustext_pack(1, 1, &msg_text, MAV_SEVERITY_INFO, "Hello World", 0, 0);
+  [8] asio::steady_timer stop_timer(io, std::chrono::milliseconds(300));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : ASSERT_FALSE(captured_json.empty());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(captured_json.find("Hello World") != std::string::npos);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(captured_json.find("0.1") != std::string::npos || captured_json.find("0.1000") != std::string::npos);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 3 assertion(s) satisfied. Verified: boolean state. Module 'MavlinkInspector' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] MavlinkInspectorTest.ExtendedMessageDecoding
+  [       OK ] MavlinkInspectorTest.ExtendedMessageDecoding (300 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

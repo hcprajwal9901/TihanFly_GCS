@@ -1,0 +1,34 @@
+========================================================================
+  EVIDENCE FILE  :  UT-PARA-003
+  Test            :  ParameterManagerTest.RequestParameter
+  Module          :  ParameterManager
+  Source File     :  test_parameter_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] pm->requestParameter("TEST_PARAM");
+  [2] mavlink_msg_param_request_read_decode(&sent_mavlink_messages[0], &req);
+  [3] std::string param_id(req.param_id, strnlen(req.param_id, 16));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : ASSERT_EQ(sent_mavlink_messages.size(), 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(param_id, "TEST_PARAM");
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(req.param_index, -1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 3 assertion(s) satisfied. Verified: equality. Module 'ParameterManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] ParameterManagerTest.RequestParameter
+  [ParameterManager] Initialized (sysid=1 compid=1 cache=./test_param_cache)
+  [ParameterManager] Sent PARAM_REQUEST_READ for 'TEST_PARAM'
+  [       OK ] ParameterManagerTest.RequestParameter (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

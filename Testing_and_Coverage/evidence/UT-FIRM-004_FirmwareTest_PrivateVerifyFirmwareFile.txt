@@ -1,0 +1,41 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-004
+  Test            :  FirmwareTest.PrivateVerifyFirmwareFile
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::string path = test_dir + "/test.apj";
+  [2] std::string unreadable = test_dir + "/unreadable.apj";
+  [3] std::string nonapj = test_dir + "/test.bin";
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(manager->verify_firmware_file(path));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FALSE(manager->verify_firmware_file(test_dir + "/nonexistent.apj"));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FALSE(manager->verify_firmware_file(unreadable));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(manager->verify_firmware_file(nonapj));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_THAT(last_ws_message, HasSubstr("File does not have a .apj extension"));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 5 assertion(s) satisfied. Verified: boolean state. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.PrivateVerifyFirmwareFile
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [FirmwareManager] [error] ❌ Firmware file not found: /tmp/firmware_test_dir/nonexistent.apj
+  [FirmwareManager] [error] ❌ Cannot read firmware file: /tmp/firmware_test_dir/unreadable.apj
+  [FirmwareManager] ⚠️  WARNING: file doesn't have .apj extension: /tmp/firmware_test_dir/test.bin
+  [FirmwareManager] [warning] ⚠️  File does not have a .apj extension – proceeding anyway.
+  [       OK ] FirmwareTest.PrivateVerifyFirmwareFile (53 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

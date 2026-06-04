@@ -1,0 +1,30 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-034
+  Test            :  FirmwareTest.UploaderEraseTimeout
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::atomic<bool> done{false};
+  [2] std::thread t([&]() {
+  [3] std::vector<uint8_t> dummy_image = {0x01, 0x02, 0x03};
+  [4] std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(done);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: boolean state. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.UploaderEraseTimeout
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [       OK ] FirmwareTest.UploaderEraseTimeout (547 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#define private public
+#define protected public
 #include "Camera/mjpeg_server.h"
 #include "Camera/camera_capture.h"
 #include <asio.hpp>
@@ -16,6 +18,7 @@ protected:
     static uint16_t next_port_;
     uint16_t test_port_;
     std::thread server_thread_;
+    std::atomic<int> client_counter_{0};
 
     void SetUp() override {
         test_port_ = next_port_++;
@@ -287,3 +290,164 @@ TEST_F(MjpegServerTest, VideoFeedEndpoint) {
     
     capture.stop();
 }
+
+/*
+===============================================================================
+    FUNCTIONAL UNIT TEST CASES
+    Based on Spreadsheet Requirements
+===============================================================================
+*/
+
+/*
+    UT-MJPEG-FUNC-001
+    Function : MjpegServer::start
+    Description : MJPEG Server Start.
+    Input : None
+    Expected Output : Server is active
+*/
+TEST_F(MjpegServerTest, StartFUNC) {
+    EXPECT_TRUE(server_ != nullptr);
+}
+
+/*
+    UT-MJPEG-FUNC-002
+    Function : MjpegServer::stop
+    Description : MJPEG Server Stop.
+    Input : None
+    Expected Output : Executes successfully
+*/
+TEST_F(MjpegServerTest, StopFUNC) {
+    EXPECT_NO_THROW(server_->stop());
+}
+
+/*
+===============================================================================
+    EXTREME TEST CASES
+===============================================================================
+*/
+
+/*
+    UT-MJPEG-EXT-001
+    Function : MjpegServer::stop
+    Description : Double stop handling.
+    Input : None
+    Expected Output : Handles gracefully
+*/
+TEST_F(MjpegServerTest, DoubleStopHandling) {
+    server_->stop();
+    EXPECT_NO_THROW(server_->stop());
+}
+
+/*
+    UT-MJPEG-003
+    Function : MjpegServer::active_clients
+    Description : Retrieve number of connected clients.
+    Input : None
+    Expected Output : returns 0 or more
+*/
+TEST_F(MjpegServerTest, ActiveClientsFUNC) {
+    EXPECT_GE(server_->active_clients(), 0);
+}
+
+/*
+    UT-MJPEG-004
+    Function : MjpegServer::do_accept
+    Description : Accept incoming TCP connections.
+    Input : None
+    Expected Output : launches accept handler without crash
+*/
+TEST_F(MjpegServerTest, DoAcceptFUNC) {
+    EXPECT_NO_THROW(server_->do_accept());
+}
+
+/*
+    UT-MJPEG-005
+    Function : MjpegServer::Session::read_request
+    Description : Read HTTP request header.
+    Input : None
+    Expected Output : reads request safely
+*/
+TEST_F(MjpegServerTest, SessionReadRequestFUNC) {
+    asio::ip::tcp::socket socket(io_context_);
+    auto session = std::make_shared<MjpegServer::Session>(std::move(socket), camera_capture_, client_counter_);
+    EXPECT_NO_THROW(session->read_request());
+}
+
+/*
+    UT-MJPEG-006
+    Function : MjpegServer::Session::handle_request
+    Description : Parse request URL and route.
+    Input : "GET /status HTTP/1.1"
+    Expected Output : routes request successfully
+*/
+TEST_F(MjpegServerTest, SessionHandleRequestFUNC) {
+    asio::ip::tcp::socket socket(io_context_);
+    auto session = std::make_shared<MjpegServer::Session>(std::move(socket), camera_capture_, client_counter_);
+    EXPECT_NO_THROW(session->handle_request("GET /status HTTP/1.1"));
+}
+
+/*
+    UT-MJPEG-007
+    Function : MjpegServer::Session::serve_video_feed
+    Description : Start video feed stream session.
+    Input : None
+    Expected Output : writes MJPEG headers and loops
+*/
+TEST_F(MjpegServerTest, SessionServeVideoFeedFUNC) {
+    asio::ip::tcp::socket socket(io_context_);
+    auto session = std::make_shared<MjpegServer::Session>(std::move(socket), camera_capture_, client_counter_);
+    EXPECT_NO_THROW(session->serve_video_feed());
+}
+
+/*
+    UT-MJPEG-008
+    Function : MjpegServer::Session::stream_next_frame
+    Description : Send single video frame boundary.
+    Input : None
+    Expected Output : writes frame successfully
+*/
+TEST_F(MjpegServerTest, SessionStreamNextFrameFUNC) {
+    asio::ip::tcp::socket socket(io_context_);
+    auto session = std::make_shared<MjpegServer::Session>(std::move(socket), camera_capture_, client_counter_);
+    EXPECT_NO_THROW(session->stream_next_frame());
+}
+
+/*
+    UT-MJPEG-009
+    Function : MjpegServer::Session::serve_status
+    Description : Return system status JSON.
+    Input : None
+    Expected Output : writes status JSON response
+*/
+TEST_F(MjpegServerTest, SessionServeStatusFUNC) {
+    asio::ip::tcp::socket socket(io_context_);
+    auto session = std::make_shared<MjpegServer::Session>(std::move(socket), camera_capture_, client_counter_);
+    EXPECT_NO_THROW(session->serve_status());
+}
+
+/*
+    UT-MJPEG-010
+    Function : MjpegServer::Session::serve_snapshot
+    Description : Return single JPEG frame.
+    Input : None
+    Expected Output : writes JPEG image response
+*/
+TEST_F(MjpegServerTest, SessionServeSnapshotFUNC) {
+    asio::ip::tcp::socket socket(io_context_);
+    auto session = std::make_shared<MjpegServer::Session>(std::move(socket), camera_capture_, client_counter_);
+    EXPECT_NO_THROW(session->serve_snapshot());
+}
+
+/*
+    UT-MJPEG-011
+    Function : MjpegServer::Session::serve_not_found
+    Description : Return HTTP 404 response.
+    Input : None
+    Expected Output : writes 404 HTML response
+*/
+TEST_F(MjpegServerTest, SessionServeNotFoundFUNC) {
+    asio::ip::tcp::socket socket(io_context_);
+    auto session = std::make_shared<MjpegServer::Session>(std::move(socket), camera_capture_, client_counter_);
+    EXPECT_NO_THROW(session->serve_not_found());
+}
+

@@ -1,0 +1,29 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMP-034
+  Test            :  CompassCalibrationTest.HandleCommandAckFUNC
+  Module          :  CompassCalibration
+  Source File     :  test_compass_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_command_ack_t ack = {};
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(compass.handleCommandAck(ack));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'CompassCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CompassCalibrationTest.HandleCommandAckFUNC
+  [CompassCalibration] Constructed
+  [Compass] DO_START_MAG_CAL accepted by drone
+  [Compass] Overall timeout armed
+  [       OK ] CompassCalibrationTest.HandleCommandAckFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

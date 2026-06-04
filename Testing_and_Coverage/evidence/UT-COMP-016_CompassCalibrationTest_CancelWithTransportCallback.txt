@@ -1,0 +1,40 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMP-016
+  Test            :  CompassCalibrationTest.CancelWithTransportCallback
+  Module          :  CompassCalibration
+  Source File     :  test_compass_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] compass.setTransportCallback([&](const mavlink_message_t& msg) {
+  [2] mavlink_msg_command_long_decode(&msg, &cmd);
+  [3] compass.setSendCallback([&](const std::string& json) {
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(compass.compassState.load(), CompassCalibration::CompassCalibState::IN_PROGRESS);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(cancel_sent);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(json_sent);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(compass.compassState.load(), CompassCalibration::CompassCalibState::FAILED);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 4 assertion(s) satisfied. Verified: boolean state, boundary, equality. Module 'CompassCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CompassCalibrationTest.CancelWithTransportCallback
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Compass] Starting calibration (large_vehicle=false)
+  [Compass] Sent DO_START_MAG_CAL (confirmation=1)
+  [Compass] Calibration cancelled by user
+  [Compass] Sent DO_CANCEL_MAG_CAL
+  [       OK ] CompassCalibrationTest.CancelWithTransportCallback (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

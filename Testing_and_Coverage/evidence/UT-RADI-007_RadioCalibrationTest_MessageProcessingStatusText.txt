@@ -1,0 +1,35 @@
+========================================================================
+  EVIDENCE FILE  :  UT-RADI-007
+  Test            :  RadioCalibrationTest.MessageProcessingStatusText
+  Module          :  RadioCalibration
+  Source File     :  test_radio_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] radio.setSendCallback([&](const std::string& json) {
+  [2] mavlink_message_t msg;
+  [3] mavlink_statustext_t st = {};
+  [4] mavlink_msg_statustext_encode(1, 1, &msg, &st);
+  [5] radio.processMessage(msg);
+  [6] mavlink_msg_statustext_encode(1, 1, &msg, &st);
+  [7] radio.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_FALSE(json_sent);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(json_sent);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: boolean state. Module 'RadioCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] RadioCalibrationTest.MessageProcessingStatusText
+  [RadioCalib] STATUSTEXT: Radio calibration successful
+  [       OK ] RadioCalibrationTest.MessageProcessingStatusText (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,28 @@
+========================================================================
+  EVIDENCE FILE  :  UT-UDPT-010
+  Test            :  UdpTransportTest.SetReceiveCallbackFUNC
+  Module          :  UdpTransport
+  Source File     :  test_udp.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(udp->set_receive_callback([](const uint8_t*, size_t){}));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'UdpTransport' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] UdpTransportTest.SetReceiveCallbackFUNC
+  [UDP] Bound to port 16001
+  [UDP] Started
+  [       OK ] UdpTransportTest.SetReceiveCallbackFUNC (50 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

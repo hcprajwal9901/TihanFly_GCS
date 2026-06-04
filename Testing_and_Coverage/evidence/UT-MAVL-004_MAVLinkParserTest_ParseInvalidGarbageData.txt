@@ -1,0 +1,27 @@
+========================================================================
+  EVIDENCE FILE  :  UT-MAVL-004
+  Test            :  MAVLinkParserTest.ParseInvalidGarbageData
+  Module          :  MAVLinkParser
+  Source File     :  test_mavlink_parser.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] parser.set_message_callback([&](const mavlink_message_t& msg) {
+  [2] std::vector<uint8_t> garbage = {0xFF, 0x00, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0x11, 0x22};
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(call_count, 0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: equality. Module 'MAVLinkParser' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] MAVLinkParserTest.ParseInvalidGarbageData
+  [       OK ] MAVLinkParserTest.ParseInvalidGarbageData (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

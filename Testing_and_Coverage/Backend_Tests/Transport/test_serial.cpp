@@ -3,6 +3,8 @@
 #include <thread>
 #include <atomic>
 #include <vector>
+#define private public
+#define protected public
 #include "Transport/serial.h"
 
 #ifndef _WIN32
@@ -120,3 +122,119 @@ TEST(SerialTransportInvalidPortTest, AsyncSendDoesNotCrash) {
         serial->async_send(dummy.data(), dummy.size());
     });
 }
+
+/*
+===============================================================================
+    FUNCTIONAL UNIT TEST CASES
+    Based on Spreadsheet Requirements
+===============================================================================
+*/
+
+/*
+    UT-SER-FUNC-001
+    Function : SerialTransport::start
+    Description : Starts serial receiver loop.
+    Input : None
+    Expected Output : Loop active
+*/
+TEST_F(SerialTransportTest, StartFUNC) {
+    EXPECT_NO_THROW(serial->start());
+}
+
+/*
+    UT-SER-FUNC-002
+    Function : SerialTransport::stop
+    Description : Stops serial receiver loop.
+    Input : None
+    Expected Output : Loop stopped
+*/
+TEST_F(SerialTransportTest, StopFUNC) {
+    EXPECT_NO_THROW(serial->stop());
+}
+
+/*
+    UT-SER-FUNC-003
+    Function : SerialTransport::async_send
+    Description : Sends packet data.
+    Input : data, len
+    Expected Output : Data written
+*/
+TEST_F(SerialTransportTest, AsyncSendFUNC) {
+    uint8_t data[] = {1, 2, 3};
+    EXPECT_NO_THROW(serial->async_send(data, 3));
+}
+
+/*
+===============================================================================
+    EXTREME TEST CASES
+===============================================================================
+*/
+
+/*
+    UT-SER-EXT-001
+    Function : SerialTransport::async_send
+    Description : Null data buffer send.
+    Input : null ptr
+    Expected Output : Safely discarded
+*/
+TEST_F(SerialTransportTest, NullSendHandling) {
+    EXPECT_NO_THROW(serial->async_send(nullptr, 0));
+}
+
+/*
+    UT-SER-004
+    Function : SerialTransport::get_baudrate
+    Description : Retrieve baud rate setting.
+    Input : None
+    Expected Output : returns configured baud rate
+*/
+TEST_F(SerialTransportTest, GetBaudrateFUNC) {
+    EXPECT_EQ(serial->get_baudrate(), 57600);
+}
+
+/*
+    UT-SER-005
+    Function : SerialTransport::set_receive_callback
+    Description : Set incoming packet callback handler.
+    Input : callback lambda
+    Expected Output : saves callback successfully
+*/
+TEST_F(SerialTransportTest, SetReceiveCallbackFUNC) {
+    EXPECT_NO_THROW(serial->set_receive_callback([](const uint8_t*, size_t){}));
+}
+
+/*
+    UT-SER-006
+    Function : SerialTransport::is_open
+    Description : Check if port file descriptor is open.
+    Input : None
+    Expected Output : returns boolean open status
+*/
+TEST_F(SerialTransportTest, IsOpenFUNC) {
+    EXPECT_TRUE(serial->is_open());
+}
+
+/*
+    UT-SER-007
+    Function : SerialTransport::is_active
+    Description : Check if receiver thread loop is running.
+    Input : None
+    Expected Output : returns boolean active status
+*/
+TEST_F(SerialTransportTest, IsActiveFUNC) {
+    serial->active_ = true;
+    serial->last_receive_ = std::chrono::steady_clock::now();
+    EXPECT_TRUE(serial->is_active());
+}
+
+/*
+    UT-SER-008
+    Function : SerialTransport::do_receive
+    Description : Asynchronous read scheduler loop.
+    Input : None
+    Expected Output : schedules async read successfully
+*/
+TEST_F(SerialTransportTest, DoReceiveFUNC) {
+    EXPECT_NO_THROW(serial->do_receive());
+}
+

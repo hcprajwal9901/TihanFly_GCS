@@ -1,0 +1,49 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-014
+  Test            :  FirmwareTest.InstallFirmwareWithPortHotFlashPhase2Timeout
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] create_dummy_apj("copter_stable.apj");
+  [2] json msg = {
+  [3] std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_GT(reconnect_calls, 0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: boolean state, boundary. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.InstallFirmwareWithPortHotFlashPhase2Timeout
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [DEBUG] Decoding APJ JSON for: /tmp/firmware_test_dir/copter_stable.apj
+  {
+    "board_id": 9,
+    "image": "eJzzSM3JyQ/PL8pJ8aAZCwDWvSfZ",
+    "image_size": 100
+  }
+  [FirmwareManager] Decoded 100 bytes from /tmp/firmware_test_dir/copter_stable.apj
+  [FirmwareManager] install_firmware: copter_stable.apj on /dev/nonexistent_port_for_timeout
+  [FirmwareManager] Waiting for /dev/nonexistent_port_for_timeout to disappear (bootloader re-enum)…
+  [FirmwareManager] /dev/nonexistent_port_for_timeout disappeared.
+  [FirmwareManager] Waiting for bootloader port to appear…
+  [FirmwareManager] Bootloader port did not appear — falling back to /dev/nonexistent_port_for_timeout
+  [FirmwareManager] -- Flash start --------------------------
+  [FirmwareManager]   port    : /dev/nonexistent_port_for_timeout
+  [FirmwareManager]   firmware: copter_stable.apj
+  [FirmwareManager]   size    : 100 bytes
+  [FirmwareManager] [preflight] 🔍 Running pre-flight checks... (0%)
+  [FirmwareManager] [error] ❌ Port /dev/nonexistent_port_for_timeout does not exist!
+  [       OK ] FirmwareTest.InstallFirmwareWithPortHotFlashPhase2Timeout (8144 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

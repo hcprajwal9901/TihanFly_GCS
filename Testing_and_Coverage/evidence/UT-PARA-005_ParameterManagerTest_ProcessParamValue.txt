@@ -1,0 +1,40 @@
+========================================================================
+  EVIDENCE FILE  :  UT-PARA-005
+  Test            :  ParameterManagerTest.ProcessParamValue
+  Module          :  ParameterManager
+  Source File     :  test_parameter_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_message_t msg = create_param_value("BATT_VOLT", 12.5f, 0, 1);
+  [2] pm->processMessage(msg);
+  [3] json j = json::parse(ws);
+  [4] json all = pm->getAllParametersJson();
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(pm->receivedCount(), 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(pm->totalCount(), 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(j["value"], 12.5f);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(found);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(all.size(), 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(all[0]["param_id"], "BATT_VOLT");
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 6 assertion(s) satisfied. Verified: boolean state, boundary, equality. Module 'ParameterManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] ParameterManagerTest.ProcessParamValue
+  [ParameterManager] Initialized (sysid=1 compid=1 cache=./test_param_cache)
+  [       OK ] ParameterManagerTest.ProcessParamValue (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,43 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-015
+  Test            :  FirmwareTest.CustomUploadInlineApj
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] json custom_msg = {
+  [2] manager->abort();
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(custom_msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(manager->has_pending_install());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FALSE(manager->has_pending_install());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 3 assertion(s) satisfied. Verified: boolean state. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.CustomUploadInlineApj
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [DEBUG] Decoding APJ JSON for: custom
+  {
+    "board_id": 9,
+    "image": "eJzzSM3JyQ/PL8pJ8aAZCwDWvSfZ",
+    "image_size": 100
+  }
+  [FirmwareManager] Decoded 100 bytes from custom
+  [FirmwareManager] install_firmware_custom: queued custom, waiting for port
+  [FirmwareManager] [waiting] Plug in your flight controller now to begin flashing.
+  [FirmwareManager] [abort] Pending firmware install cancelled.
+  [FirmwareManager] Pending install cancelled
+  [       OK ] FirmwareTest.CustomUploadInlineApj (66 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

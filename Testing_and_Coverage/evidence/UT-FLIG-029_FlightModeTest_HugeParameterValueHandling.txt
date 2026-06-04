@@ -1,0 +1,31 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FLIG-029
+  Test            :  FlightModeTest.HugeParameterValueHandling
+  Module          :  FlightMode
+  Source File     :  test_flight_mode.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_message_t msg =
+  [2] create_param_value(
+  [3] std::numeric_limits<float>::max()
+  [4] fm.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW({
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'FlightMode' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FlightModeTest.HugeParameterValueHandling
+  [FlightMode] Module created
+  [FlightMode] {"event":"flight_mode_param_received","id":0,"mode":"STABILIZE","param":"FLTMODE1"}
+  [       OK ] FlightModeTest.HugeParameterValueHandling (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

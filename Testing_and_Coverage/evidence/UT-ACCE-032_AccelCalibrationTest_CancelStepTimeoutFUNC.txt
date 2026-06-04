@@ -1,0 +1,25 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ACCE-032
+  Test            :  AccelCalibrationTest.CancelStepTimeoutFUNC
+  Module          :  AccelCalibration
+  Source File     :  test_accel_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] AccelCalibrationTest.CancelStepTimeoutFUNC
+  [       OK ] AccelCalibrationTest.CancelStepTimeoutFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,29 @@
+========================================================================
+  EVIDENCE FILE  :  UT-LINK-013
+  Test            :  LinkManagerTest.GetLinkFUNC
+  Module          :  LinkManager
+  Source File     :  test_link_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto t = std::make_shared<MockTransport>();
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NE(manager.get_link(id), nullptr);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(manager.get_link(999), nullptr);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: equality. Module 'LinkManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] LinkManagerTest.GetLinkFUNC
+  [Link] Added link 0
+  [       OK ] LinkManagerTest.GetLinkFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

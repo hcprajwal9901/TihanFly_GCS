@@ -1,0 +1,46 @@
+========================================================================
+  EVIDENCE FILE  :  UT-CAME-005
+  Test            :  CameraCaptureTest.StartDummyImage
+  Module          :  CameraCapture
+  Source File     :  test_camera_capture.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(started);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(capture.start());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(capture.is_active());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_GT(capture.frame_count(), 0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FALSE(frame.empty()); // Should have a JPEG frame
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FALSE(capture.is_active());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 6 assertion(s) satisfied. Verified: boolean state, boundary. Module 'CameraCapture' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CameraCaptureTest.StartDummyImage
+  [Camera] Opened: 1280x720
+  [Camera] Capture started  source=dummy.jpg  1280x720 @ 10fps
+  [Camera] Already running
+  [Camera] Opened: 1280x720
+  [Camera] Opened: 1280x720
+  [Camera] Opened: 1280x720
+  [Camera] Opened: 1280x720
+  [Camera] Opened: 1280x720
+  [Camera] Capture stopped
+  [Camera] Capture stopped
+  [       OK ] CameraCaptureTest.StartDummyImage (819 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

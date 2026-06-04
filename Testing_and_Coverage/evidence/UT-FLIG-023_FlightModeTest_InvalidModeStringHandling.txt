@@ -1,0 +1,27 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FLIG-023
+  Test            :  FlightModeTest.InvalidModeStringHandling
+  Module          :  FlightMode
+  Source File     :  test_flight_mode.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: equality. Module 'FlightMode' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FlightModeTest.InvalidModeStringHandling
+  [FlightMode] Module created
+  [       OK ] FlightModeTest.InvalidModeStringHandling (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,27 @@
+========================================================================
+  EVIDENCE FILE  :  UT-SERI-002
+  Test            :  SerialTransportTest.ReceivedDataSizeIsCorrect
+  Module          :  SerialTransport
+  Source File     :  test_serial.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] SendPacketAndWait({9, 8, 7});
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(received_data.size(), 3);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: equality. Module 'SerialTransport' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] SerialTransportTest.ReceivedDataSizeIsCorrect
+  [Serial] Opened /dev/pts/2 at 57600 baud
+  [       OK ] SerialTransportTest.ReceivedDataSizeIsCorrect (300 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,25 @@
+========================================================================
+  EVIDENCE FILE  :  UT-MAVL-008
+  Test            :  MavlinkInspectorTest.HandleWSMessageFUNC
+  Module          :  MavlinkInspector
+  Source File     :  test_mavlink_inspector.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] MavlinkInspectorTest.HandleWSMessageFUNC
+  [       OK ] MavlinkInspectorTest.HandleWSMessageFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

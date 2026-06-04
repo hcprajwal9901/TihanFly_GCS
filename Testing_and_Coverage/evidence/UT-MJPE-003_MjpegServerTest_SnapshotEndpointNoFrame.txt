@@ -1,0 +1,36 @@
+========================================================================
+  EVIDENCE FILE  :  UT-MJPE-003
+  Test            :  MjpegServerTest.SnapshotEndpointNoFrame
+  Module          :  MjpegServer
+  Source File     :  test_mjpeg_server.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] asio::ip::tcp::resolver::results_type endpoints = resolver.resolve("127.0.0.1", std::to_string(test_port_));
+  [2] std::string request = "GET /snapshot HTTP/1.1\r\nHost: 127.0.0.1\r\n\r\n";
+  [3] std::istream response_stream(&response_buf);
+  [4] std::string http_version;
+  [5] std::this_thread::sleep_for(50ms);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : ASSERT_FALSE(ec);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(status_code, 404);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: boolean state, equality. Module 'MjpegServer' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] MjpegServerTest.SnapshotEndpointNoFrame
+  [MjpegServer] Listening on port 8087
+  [MjpegServer] Client connected: 127.0.0.1:52722
+  [MjpegServer] GET /snapshot
+  [Camera] Capture stopped
+  [       OK ] MjpegServerTest.SnapshotEndpointNoFrame (151 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

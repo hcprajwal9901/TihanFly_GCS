@@ -1,0 +1,33 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ACCE-014
+  Test            :  AccelCalibrationTest.HeartbeatLandedState
+  Module          :  AccelCalibration
+  Source File     :  test_accel_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_message_t msg;
+  [2] mavlink_heartbeat_t hb = {};
+  [3] mavlink_msg_heartbeat_encode(1, 1, &msg, &hb);
+  [4] accel.processMessage(msg); // Should trigger failure if armed while in progress
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] AccelCalibrationTest.HeartbeatLandedState
+  [AccelCalibration] Constructed
+  [Calib] Cancel sent to reset any stale drone state
+  [AccelCalibration] WARNING: no transport callback!
+  [Calib] MAV_CMD_PREFLIGHT_CALIBRATION sent → sysid=1 compid=1
+  [Calib][RX] msgid=0 (HEARTBEAT) from=1/1
+  [       OK ] AccelCalibrationTest.HeartbeatLandedState (400 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

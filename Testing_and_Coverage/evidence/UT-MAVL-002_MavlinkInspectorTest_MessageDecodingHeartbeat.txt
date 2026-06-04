@@ -1,0 +1,38 @@
+========================================================================
+  EVIDENCE FILE  :  UT-MAVL-002
+  Test            :  MavlinkInspectorTest.MessageDecodingHeartbeat
+  Module          :  MavlinkInspector
+  Source File     :  test_mavlink_inspector.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::string captured_json;
+  [2] inspector.set_ws_callback([&](const std::string& json) {
+  [3] captured_json = json;
+  [4] mavlink_message_t msg;
+  [5] mavlink_msg_heartbeat_pack(1, 1, &msg, MAV_TYPE_QUADROTOR, MAV_AUTOPILOT_ARDUPILOTMEGA, MAV_MODE_GUIDED_ARMED, 0, MAV_STATE_ACTIVE);
+  [6] asio::steady_timer stop_timer(io, std::chrono::milliseconds(300));
+  [7] stop_timer.async_wait([&](const std::error_code&) { inspector.stop(); });
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : ASSERT_FALSE(captured_json.empty());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(captured_json.find("\"name\":\"HEARTBEAT\"") != std::string::npos);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(captured_json.find("\"autopilot\":\"3\"") != std::string::npos); // MAV_AUTOPILOT_ARDUPILOTMEGA is 3
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(captured_json.find("\"type\":\"2\"") != std::string::npos);      // MAV_TYPE_QUADROTOR is 2
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 4 assertion(s) satisfied. Verified: boolean state. Module 'MavlinkInspector' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] MavlinkInspectorTest.MessageDecodingHeartbeat
+  [       OK ] MavlinkInspectorTest.MessageDecodingHeartbeat (300 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,27 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FLIG-013
+  Test            :  FlightModeTest.SetSendCallbackValidation
+  Module          :  FlightMode
+  Source File     :  test_flight_mode.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] [](const std::string& msg) {}
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW({
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'FlightMode' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FlightModeTest.SetSendCallbackValidation
+  [FlightMode] Module created
+  [       OK ] FlightModeTest.SetSendCallbackValidation (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

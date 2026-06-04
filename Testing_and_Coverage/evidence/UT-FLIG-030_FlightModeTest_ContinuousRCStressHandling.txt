@@ -1,0 +1,34 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FLIG-030
+  Test            :  FlightModeTest.ContinuousRCStressHandling
+  Module          :  FlightMode
+  Source File     :  test_flight_mode.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_message_t msg =
+  [2] create_rc_channels(
+  [3] fm.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW({
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'FlightMode' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FlightModeTest.ContinuousRCStressHandling
+  [FlightMode] Module created
+  [FlightMode] {"event":"flight_mode_change","mode":"STABILIZE","pwm":1231,"slot":1,"sysid":1}
+  [FlightMode] {"event":"flight_mode_change","mode":"STABILIZE","pwm":1361,"slot":2,"sysid":1}
+  [FlightMode] {"event":"flight_mode_change","mode":"STABILIZE","pwm":1491,"slot":3,"sysid":1}
+  [FlightMode] {"event":"flight_mode_change","mode":"STABILIZE","pwm":1621,"slot":4,"sysid":1}
+  [FlightMode] {"event":"flight_mode_change","mode":"STABILIZE","pwm":1750,"slot":5,"sysid":1}
+  [       OK ] FlightModeTest.ContinuousRCStressHandling (2 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

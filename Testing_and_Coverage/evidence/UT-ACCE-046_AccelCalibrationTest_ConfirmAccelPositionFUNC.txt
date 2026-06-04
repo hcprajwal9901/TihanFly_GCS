@@ -1,0 +1,28 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ACCE-046
+  Test            :  AccelCalibrationTest.ConfirmAccelPositionFUNC
+  Module          :  AccelCalibration
+  Source File     :  test_accel_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] AccelCalibrationTest.ConfirmAccelPositionFUNC
+  [AccelCalibration] Constructed
+  [Calib] User confirmed position: level — sending COMMAND_LONG MAV_CMD_ACCELCAL_VEHICLE_POS pos=1 to drone
+  [AccelCalibration] WARNING: no transport callback!
+  [       OK ] AccelCalibrationTest.ConfirmAccelPositionFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

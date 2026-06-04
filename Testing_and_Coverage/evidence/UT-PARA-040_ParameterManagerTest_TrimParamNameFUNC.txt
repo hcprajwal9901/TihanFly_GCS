@@ -1,0 +1,27 @@
+========================================================================
+  EVIDENCE FILE  :  UT-PARA-040
+  Test            :  ParameterManagerTest.TrimParamNameFUNC
+  Module          :  ParameterManager
+  Source File     :  test_parameter_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(pm->trim_param_name("TEST_PARAM_NAME_LONG", 10), "TEST_PARAM");
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: equality. Module 'ParameterManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] ParameterManagerTest.TrimParamNameFUNC
+  [ParameterManager] Initialized (sysid=1 compid=1 cache=./test_param_cache)
+  [       OK ] ParameterManagerTest.TrimParamNameFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

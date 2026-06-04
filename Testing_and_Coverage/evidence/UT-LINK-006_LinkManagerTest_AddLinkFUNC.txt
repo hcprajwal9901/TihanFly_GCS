@@ -1,0 +1,27 @@
+========================================================================
+  EVIDENCE FILE  :  UT-LINK-006
+  Test            :  LinkManagerTest.AddLinkFUNC
+  Module          :  LinkManager
+  Source File     :  test_link_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto t = std::make_shared<MockTransport>();
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(manager.add_link(t, io));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'LinkManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] LinkManagerTest.AddLinkFUNC
+  [Link] Added link 0
+  [       OK ] LinkManagerTest.AddLinkFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

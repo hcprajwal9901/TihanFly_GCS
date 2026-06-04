@@ -1,0 +1,56 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ACCE-007
+  Test            :  AccelCalibrationTest.SuccessfulCalibrationFlow
+  Module          :  AccelCalibration
+  Source File     :  test_accel_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_message_t msg;
+  [2] mavlink_command_ack_t ack = {};
+  [3] mavlink_msg_command_ack_encode(1, 1, &msg, &ack);
+  [4] accel.processMessage(msg);
+  [5] mavlink_command_long_t pos_cmd = {};
+  [6] mavlink_msg_command_long_encode(1, 1, &msg, &pos_cmd);
+  [7] accel.processMessage(msg);
+  [8] mavlink_msg_command_long_encode(1, 1, &msg, &pos_cmd);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(accel.accelState, AccelCalibration::AccelCalibState::DONE);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: equality. Module 'AccelCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] AccelCalibrationTest.SuccessfulCalibrationFlow
+  [AccelCalibration] Constructed
+  [Calib] Cancel sent to reset any stale drone state
+  [AccelCalibration] WARNING: no transport callback!
+  [Calib] MAV_CMD_PREFLIGHT_CALIBRATION sent → sysid=1 compid=1
+  [Calib][RX] msgid=77 (COMMAND_ACK) from=1/1
+  [Calib][RX] COMMAND_ACK cmd=241 result=0
+  [Calib] Drone accepted preflight calib — waiting for first position request
+  [Calib][RX] msgid=76 (COMMAND_LONG) from=1/1
+  [Calib][RX] COMMAND_LONG cmd=42429 p1=1 target=0/0
+  [Calib] Drone requests position: level (pos=1, step=1/6)  roll=0 rad  pitch=0 rad
+  [Calib] User confirmed position: level — sending COMMAND_LONG MAV_CMD_ACCELCAL_VEHICLE_POS pos=1 to drone
+  [AccelCalibration] WARNING: no transport callback!
+  [Calib][RX] msgid=76 (COMMAND_LONG) from=1/1
+  [Calib][RX] COMMAND_LONG cmd=42429 p1=2 target=0/0
+  [Calib] Drone requests position: left (pos=2, step=2/6)  roll=0 rad  pitch=0 rad
+  [Calib] User confirmed position: left — sending COMMAND_LONG MAV_CMD_ACCELCAL_VEHICLE_POS pos=2 to drone
+  [AccelCalibration] WARNING: no transport callback!
+  [Calib][RX] msgid=76 (COMMAND_LONG) from=1/1
+  [Calib][RX] COMMAND_LONG cmd=42429 p1=3 target=0/0
+  [Calib] Drone requests position: right (pos=3, step=3/6)  roll=0 rad  pitch=0 rad
+  [Calib][RX] msgid=76 (COMMAND_LONG) from=1/1
+  [Calib][RX] COMMAND_LONG cmd=42429 p1=16384 target=0/0
+  [Calib] ACCELCAL_POS_SUCCESS (pos=16384)
+  [       OK ] AccelCalibrationTest.SuccessfulCalibrationFlow (450 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

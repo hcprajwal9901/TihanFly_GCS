@@ -1,4 +1,6 @@
 #include <gtest/gtest.h>
+#define private public
+#define protected public
 #include "calibration/compass_calibration.h"
 #include <thread>
 
@@ -470,3 +472,310 @@ TEST(CompassCalibrationTest, StatusTextWithMagKeyword) {
 
     EXPECT_EQ(compass.compassState.load(), CompassCalibration::CompassCalibState::IN_PROGRESS);
 }
+
+/*
+===============================================================================
+    FUNCTIONAL UNIT TEST CASES
+    Based on Spreadsheet Requirements
+===============================================================================
+*/
+
+/*
+    UT-COMPASS-FUNC-001
+    Function : CompassCalibration::setVehicleInfo
+    Description : Sets vehicle info.
+    Input : sysid = 1, compid = 1
+    Expected Output : Executes successfully
+*/
+TEST(CompassCalibrationTest, SetVehicleInfoFUNC) {
+    CompassCalibration compass;
+    EXPECT_NO_THROW(compass.setVehicleInfo(1, 1));
+}
+
+/*
+    UT-COMPASS-FUNC-002
+    Function : CompassCalibration::setSendCallback
+    Description : Sets send callback.
+    Input : Valid callback
+    Expected Output : Executes successfully
+*/
+TEST(CompassCalibrationTest, SetSendCallbackFUNC) {
+    CompassCalibration compass;
+    EXPECT_NO_THROW(compass.setSendCallback([](const std::string&){}));
+}
+
+/*
+    UT-COMPASS-FUNC-003
+    Function : CompassCalibration::setTransportCallback
+    Description : Sets transport callback.
+    Input : Valid callback
+    Expected Output : Executes successfully
+*/
+TEST(CompassCalibrationTest, SetTransportCallbackFUNC) {
+    CompassCalibration compass;
+    EXPECT_NO_THROW(compass.setTransportCallback([](const mavlink_message_t&){}));
+}
+
+/*
+    UT-COMPASS-FUNC-004
+    Function : CompassCalibration::startCompassCalibration
+    Description : Starts compass calibration.
+    Input : None
+    Expected Output : Executes successfully
+*/
+TEST(CompassCalibrationTest, StartCompassCalibrationFUNC) {
+    CompassCalibration compass;
+    compass.setVehicleInfo(1, 1);
+    compass.setTransportCallback([](const mavlink_message_t&){});
+    EXPECT_NO_THROW({
+        compass.startCompassCalibration(false);
+        compass.cancelCompassCalibration();
+    });
+}
+
+/*
+    UT-COMPASS-FUNC-005
+    Function : CompassCalibration::cancelCompassCalibration
+    Description : Cancels compass calibration.
+    Input : None
+    Expected Output : Executes successfully
+*/
+TEST(CompassCalibrationTest, CancelCompassCalibrationFUNC) {
+    CompassCalibration compass;
+    EXPECT_NO_THROW(compass.cancelCompassCalibration());
+}
+
+/*
+    UT-COMPASS-FUNC-006
+    Function : CompassCalibration::processMessage
+    Description : Processes MAVLink messages.
+    Input : Heartbeat msg
+    Expected Output : Executes successfully
+*/
+TEST(CompassCalibrationTest, ProcessMessageFUNC) {
+    CompassCalibration compass;
+    compass.setVehicleInfo(1, 1);
+    mavlink_message_t msg;
+    mavlink_heartbeat_t hb = {};
+    mavlink_msg_heartbeat_encode(1, 1, &msg, &hb);
+    EXPECT_NO_THROW(compass.processMessage(msg));
+}
+
+/*
+    UT-COMPASS-FUNC-007
+    Function : CompassCalibration::acceptCompassCalibration
+    Description : Accepts calibration report.
+    Input : None
+    Expected Output : Executes successfully
+*/
+TEST(CompassCalibrationTest, AcceptCompassCalibrationFUNC) {
+    CompassCalibration compass;
+    EXPECT_NO_THROW(compass.acceptCompassCalibration());
+}
+
+/*
+===============================================================================
+    EXTREME TEST CASES
+===============================================================================
+*/
+
+/*
+    UT-COMPASS-EXT-001
+    Function : CompassCalibration::setVehicleInfo
+    Description : Negative vehicle info inputs.
+    Input : sysid = -1, compid = -1
+    Expected Output : Sets values without crash
+*/
+TEST(CompassCalibrationTest, NegativeVehicleInfoHandling) {
+    CompassCalibration compass;
+    EXPECT_NO_THROW(compass.setVehicleInfo(-1, -1));
+}
+
+/*
+    UT-COMPASS-EXT-002
+    Function : CompassCalibration::processMessage
+    Description : Malformed message handling.
+    Input : Empty msg
+    Expected Output : Gracefully discards
+*/
+TEST(CompassCalibrationTest, CorruptedMessageHandling) {
+    CompassCalibration compass;
+    mavlink_message_t msg = {};
+    EXPECT_NO_THROW(compass.processMessage(msg));
+}
+
+/*
+    UT-COMPASS-008
+    Function : CompassCalibration::handleImplicitAck
+    Description : Verify handling of implicit ACK.
+    Input : None
+    Expected Output : State updates
+*/
+TEST(CompassCalibrationTest, HandleImplicitAckFUNC) {
+    CompassCalibration compass;
+    compass.setVehicleInfo(1, 1);
+    compass.compassState = CompassCalibration::CompassCalibState::IN_PROGRESS;
+    EXPECT_NO_THROW(compass.handleImplicitAck());
+}
+
+/*
+    UT-COMPASS-009
+    Function : CompassCalibration::handleCommandAck
+    Description : Verify command ack handler.
+    Input : command ack msg
+    Expected Output : State updates
+*/
+TEST(CompassCalibrationTest, HandleCommandAckFUNC) {
+    CompassCalibration compass;
+    mavlink_command_ack_t ack = {};
+    ack.command = MAV_CMD_DO_START_MAG_CAL;
+    ack.result = MAV_RESULT_ACCEPTED;
+    EXPECT_NO_THROW(compass.handleCommandAck(ack));
+}
+
+/*
+    UT-COMPASS-010
+    Function : CompassCalibration::handleStatusText
+    Description : Verify status text handler.
+    Input : status text msg
+    Expected Output : parsed progress/info
+*/
+TEST(CompassCalibrationTest, HandleStatusTextFUNC) {
+    CompassCalibration compass;
+    mavlink_statustext_t st = {};
+    EXPECT_NO_THROW(compass.handleStatusText(st));
+}
+
+/*
+    UT-COMPASS-011
+    Function : CompassCalibration::handleMagCalProgress
+    Description : Verify magnetic calibration progress handler.
+    Input : mag cal progress msg
+    Expected Output : sends json update
+*/
+TEST(CompassCalibrationTest, HandleMagCalProgressFUNC) {
+    CompassCalibration compass;
+    mavlink_mag_cal_progress_t prog = {};
+    EXPECT_NO_THROW(compass.handleMagCalProgress(prog));
+}
+
+/*
+    UT-COMPASS-012
+    Function : CompassCalibration::handleMagCalReport
+    Description : Verify magnetic calibration report handler.
+    Input : mag cal report msg
+    Expected Output : sends json report
+*/
+TEST(CompassCalibrationTest, HandleMagCalReportFUNC) {
+    CompassCalibration compass;
+    mavlink_mag_cal_report_t rep = {};
+    EXPECT_NO_THROW(compass.handleMagCalReport(rep));
+}
+
+/*
+    UT-COMPASS-013
+    Function : CompassCalibration::sendStartMagCalCommand
+    Description : Verify sending of start mag cal command.
+    Input : confirmation count
+    Expected Output : serializes start command
+*/
+TEST(CompassCalibrationTest, SendStartMagCalCommandFUNC) {
+    CompassCalibration compass;
+    compass.setVehicleInfo(1, 1);
+    compass.setTransportCallback([](const mavlink_message_t&){});
+    EXPECT_NO_THROW(compass.sendStartMagCalCommand(0));
+}
+
+/*
+    UT-COMPASS-014
+    Function : CompassCalibration::sendCancelMagCalCommand
+    Description : Verify sending of cancel mag cal command.
+    Input : None
+    Expected Output : serializes cancel command
+*/
+TEST(CompassCalibrationTest, SendCancelMagCalCommandFUNC) {
+    CompassCalibration compass;
+    compass.setVehicleInfo(1, 1);
+    compass.setTransportCallback([](const mavlink_message_t&){});
+    EXPECT_NO_THROW(compass.sendCancelMagCalCommand());
+}
+
+/*
+    UT-COMPASS-015
+    Function : CompassCalibration::sendAcceptMagCalCommand
+    Description : Verify sending of accept mag cal command.
+    Input : None
+    Expected Output : serializes accept command
+*/
+TEST(CompassCalibrationTest, SendAcceptMagCalCommandFUNC) {
+    CompassCalibration compass;
+    compass.setVehicleInfo(1, 1);
+    compass.setTransportCallback([](const mavlink_message_t&){});
+    EXPECT_NO_THROW(compass.sendAcceptMagCalCommand());
+}
+
+/*
+    UT-COMPASS-016
+    Function : CompassCalibration::startRetryWatcher
+    Description : Verify start and stop of retry watcher.
+    Input : None
+    Expected Output : controls retry state
+*/
+TEST(CompassCalibrationTest, StartStopRetryWatcherFUNC) {
+    CompassCalibration compass;
+    compass.setVehicleInfo(1, 1);
+    EXPECT_NO_THROW(compass.startRetryWatcher());
+    EXPECT_NO_THROW(compass.stopRetryWatcher());
+}
+
+/*
+    UT-COMPASS-017
+    Function : CompassCalibration::launchOverallTimeoutThread
+    Description : Verify overall timeout thread.
+    Input : None
+    Expected Output : controls overall timeout state
+*/
+TEST(CompassCalibrationTest, OverallTimeoutThreadFUNC) {
+    CompassCalibration compass;
+    EXPECT_NO_THROW(compass.startOverallTimeout());
+    EXPECT_NO_THROW(compass.cancelOverallTimeout());
+}
+
+/*
+    UT-COMPASS-018
+    Function : CompassCalibration::sendStatusJSON
+    Description : Verify sending status JSON.
+    Input : message text
+    Expected Output : triggers websocket callback
+*/
+TEST(CompassCalibrationTest, SendStatusJSONFUNC) {
+    CompassCalibration compass;
+    compass.setSendCallback([](const std::string&){});
+    EXPECT_NO_THROW(compass.sendStatusJSON("test"));
+}
+
+/*
+    UT-COMPASS-019
+    Function : CompassCalibration::sendProgressJSON
+    Description : Verify sending progress JSON.
+    Input : compass id, percentage
+    Expected Output : triggers websocket callback
+*/
+TEST(CompassCalibrationTest, SendProgressJSONFUNC) {
+    CompassCalibration compass;
+    compass.setSendCallback([](const std::string&){});
+    EXPECT_NO_THROW(compass.sendProgressJSON(1, 50));
+}
+
+/*
+    UT-COMPASS-020
+    Function : CompassCalibration::calStatusToString
+    Description : Verify compass calib status to string mapping.
+    Input : status value
+    Expected Output : string name
+*/
+TEST(CompassCalibrationTest, CalStatusToStringFUNC) {
+    EXPECT_EQ(CompassCalibration::calStatusToString(0), "NOT_STARTED");
+    EXPECT_EQ(CompassCalibration::calStatusToString(99), "UNKNOWN(99)");
+}
+

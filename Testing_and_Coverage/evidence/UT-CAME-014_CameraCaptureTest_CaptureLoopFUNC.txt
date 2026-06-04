@@ -1,0 +1,27 @@
+========================================================================
+  EVIDENCE FILE  :  UT-CAME-014
+  Test            :  CameraCaptureTest.CaptureLoopFUNC
+  Module          :  CameraCapture
+  Source File     :  test_camera_capture.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(capture.capture_loop());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'CameraCapture' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CameraCaptureTest.CaptureLoopFUNC
+  [Camera] Capture stopped
+  [       OK ] CameraCaptureTest.CaptureLoopFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

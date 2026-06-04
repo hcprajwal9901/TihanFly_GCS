@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#define private public
+#define protected public
 #include "Command/command_manager.h"
 #include "Vehicle/vehicle.h"
 #include "Vehicle/vehicle_manager.h"
@@ -166,3 +168,184 @@ TEST_F(CommandManagerTest, MissionUploadErrorHandling) {
     cmd_manager->upload_mission(101, wps, 1, 0, nullptr);
     EXPECT_TRUE(cb_fired);
 }
+
+/*
+===============================================================================
+    FUNCTIONAL UNIT TEST CASES
+    Based on Spreadsheet Requirements
+===============================================================================
+*/
+
+/*
+    UT-CMD-FUNC-001
+    Function : CommandManager::set_vehicle_direct
+    Description : Sets vehicle direct.
+    Input : Vehicle ptr
+    Expected Output : Executes successfully
+*/
+TEST_F(CommandManagerTest, SetVehicleDirectFUNC) {
+    EXPECT_NO_THROW(cmd_manager->set_vehicle_direct(direct_vehicle.get()));
+}
+
+/*
+    UT-CMD-FUNC-002
+    Function : CommandManager::set_vehicle_manager
+    Description : Sets vehicle manager.
+    Input : VehicleManager ptr
+    Expected Output : Executes successfully
+*/
+TEST_F(CommandManagerTest, SetVehicleManagerFUNC) {
+    EXPECT_NO_THROW(cmd_manager->set_vehicle_manager(vehicle_manager.get()));
+}
+
+/*
+    UT-CMD-FUNC-003
+    Function : CommandManager::set_response_callback
+    Description : Sets response callback.
+    Input : Valid callback
+    Expected Output : Executes successfully
+*/
+TEST_F(CommandManagerTest, SetResponseCallbackFUNC) {
+    EXPECT_NO_THROW(cmd_manager->set_response_callback([](const std::string&){}));
+}
+
+/*
+    UT-CMD-FUNC-004
+    Function : CommandManager::add_command
+    Description : Adds command to queue.
+    Input : sysid=1, cmd="ARM"
+    Expected Output : Executes successfully
+*/
+TEST_F(CommandManagerTest, AddCommandFUNC) {
+    EXPECT_NO_THROW(cmd_manager->add_command(1, "ARM"));
+}
+
+/*
+    UT-CMD-FUNC-005
+    Function : CommandManager::process
+    Description : Processes queue.
+    Input : None
+    Expected Output : Executes successfully
+*/
+TEST_F(CommandManagerTest, ProcessFUNC) {
+    EXPECT_NO_THROW(cmd_manager->process());
+}
+
+/*
+    UT-CMD-FUNC-006
+    Function : CommandManager::set_transport
+    Description : Sets transport interface.
+    Input : MockTransport ptr
+    Expected Output : Executes successfully
+*/
+TEST_F(CommandManagerTest, SetTransportFUNC) {
+    EXPECT_NO_THROW(cmd_manager->set_transport(mock_transport));
+}
+
+/*
+    UT-CMD-FUNC-007
+    Function : CommandManager::upload_mission
+    Description : Uploads mission waypoint items.
+    Input : wps
+    Expected Output : Executes successfully
+*/
+TEST_F(CommandManagerTest, UploadMissionFUNC) {
+    std::vector<WaypointItem> wps;
+    EXPECT_NO_THROW(cmd_manager->upload_mission(1, wps, 1, 0, nullptr));
+}
+
+/*
+    UT-CMD-FUNC-008
+    Function : CommandManager::on_mission_request
+    Description : Mission item request handler.
+    Input : seq = 0
+    Expected Output : Executes successfully
+*/
+TEST_F(CommandManagerTest, OnMissionRequestFUNC) {
+    EXPECT_NO_THROW(cmd_manager->on_mission_request(0));
+}
+
+/*
+    UT-CMD-FUNC-009
+    Function : CommandManager::on_mission_ack
+    Description : Mission ack handler.
+    Input : result = 0
+    Expected Output : Executes successfully
+*/
+TEST_F(CommandManagerTest, OnMissionAckFUNC) {
+    EXPECT_NO_THROW(cmd_manager->on_mission_ack(0));
+}
+
+/*
+===============================================================================
+    EXTREME TEST CASES
+===============================================================================
+*/
+
+/*
+    UT-CMD-EXT-001
+    Function : CommandManager::add_command
+    Description : Invalid command parameters.
+    Input : sysid=-1, cmd="INVALID"
+    Expected Output : Discards or reports failure
+*/
+TEST_F(CommandManagerTest, InvalidCommandHandling) {
+    cmd_manager->add_command(-1, "INVALID_CMD_NAME");
+    EXPECT_NO_THROW(cmd_manager->process());
+}
+
+/*
+    UT-CMD-010
+    Function : CommandManager::resolve_vehicle
+    Description : Resolve target vehicle.
+    Input : Command object
+    Expected Output : returns Vehicle pointer
+*/
+TEST_F(CommandManagerTest, ResolveVehicleFUNC) {
+    Command cmd;
+    cmd_manager->set_vehicle_direct(direct_vehicle.get());
+    EXPECT_EQ(cmd_manager->resolve_vehicle(cmd), direct_vehicle.get());
+}
+
+/*
+    UT-CMD-011
+    Function : CommandManager::execute
+    Description : Directly execute a single command.
+    Input : Command object
+    Expected Output : executes successfully
+*/
+TEST_F(CommandManagerTest, ExecuteFUNC) {
+    Command cmd;
+    cmd.name = "ARM";
+    cmd_manager->set_vehicle_direct(direct_vehicle.get());
+    EXPECT_NO_THROW(cmd_manager->execute(cmd));
+}
+
+/*
+    UT-CMD-012
+    Function : CommandManager::send_mission_count
+    Description : Send mission item count command.
+    Input : None
+    Expected Output : sends mission count mavlink packet
+*/
+TEST_F(CommandManagerTest, SendMissionCountFUNC) {
+    cmd_manager->set_vehicle_direct(direct_vehicle.get());
+    cmd_manager->set_transport(mock_transport);
+    EXPECT_CALL(*mock_transport, async_send(_, _)).Times(AtLeast(0));
+    EXPECT_NO_THROW(cmd_manager->send_mission_count());
+}
+
+/*
+    UT-CMD-013
+    Function : CommandManager::send_mission_item
+    Description : Send single mission item.
+    Input : sequence index
+    Expected Output : sends mission item mavlink packet
+*/
+TEST_F(CommandManagerTest, SendMissionItemFUNC) {
+    cmd_manager->set_vehicle_direct(direct_vehicle.get());
+    cmd_manager->set_transport(mock_transport);
+    EXPECT_CALL(*mock_transport, async_send(_, _)).Times(AtLeast(0));
+    EXPECT_NO_THROW(cmd_manager->send_mission_item(0));
+}
+

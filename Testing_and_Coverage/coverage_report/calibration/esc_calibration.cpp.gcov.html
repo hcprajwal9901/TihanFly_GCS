@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2026-05-26 10:38:26</td>
+            <td class="headerValue">2026-06-04 11:54:51</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">10</td>
@@ -97,11 +97,11 @@
 <a name="35"><span class="lineNum">      35 </span>            : //  Result code → human-readable string</a>
 <a name="36"><span class="lineNum">      36 </span>            : // ─────────────────────────────────────────────────────────────────────────────</a>
 <a name="37"><span class="lineNum">      37 </span>            : </a>
-<a name="38"><span class="lineNum">      38 </span><span class="lineCov">         21 : static std::string mavResultToString(int result)</span></a>
+<a name="38"><span class="lineNum">      38 </span><span class="lineCov">         24 : static std::string mavResultToString(int result)</span></a>
 <a name="39"><span class="lineNum">      39 </span>            : {</a>
-<a name="40"><span class="lineNum">      40 </span><span class="lineCov">         21 :     switch (result)</span></a>
+<a name="40"><span class="lineNum">      40 </span><span class="lineCov">         24 :     switch (result)</span></a>
 <a name="41"><span class="lineNum">      41 </span>            :     {</a>
-<a name="42"><span class="lineNum">      42 </span><span class="lineCov">          4 :         case MAV_RESULT_ACCEPTED:             return &quot;0 (ACCEPTED)&quot;;</span></a>
+<a name="42"><span class="lineNum">      42 </span><span class="lineCov">          7 :         case MAV_RESULT_ACCEPTED:             return &quot;0 (ACCEPTED)&quot;;</span></a>
 <a name="43"><span class="lineNum">      43 </span><span class="lineCov">          4 :         case MAV_RESULT_DENIED:               return &quot;1 (DENIED) — check pre-arm, RC, or disarm state&quot;;</span></a>
 <a name="44"><span class="lineNum">      44 </span><span class="lineCov">          1 :         case MAV_RESULT_FAILED:               return &quot;2 (FAILED) — execution error&quot;;</span></a>
 <a name="45"><span class="lineNum">      45 </span><span class="lineCov">          7 :         case MAV_RESULT_TEMPORARILY_REJECTED: return &quot;3 (TEMPORARILY_REJECTED) — FC busy&quot;;</span></a>
@@ -116,47 +116,47 @@
 <a name="54"><span class="lineNum">      54 </span>            : //  Wiring</a>
 <a name="55"><span class="lineNum">      55 </span>            : // ─────────────────────────────────────────────────────────────────────────────</a>
 <a name="56"><span class="lineNum">      56 </span>            : </a>
-<a name="57"><span class="lineNum">      57 </span><span class="lineCov">          4 : void EscCalibration::setSendCallback(SendCallback cb)           { send_cb_      = std::move(cb); }</span></a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineCov">         14 : void EscCalibration::setTransportCallback(TransportCallback cb) { transport_cb_ = std::move(cb); }</span></a>
-<a name="59"><span class="lineNum">      59 </span><span class="lineCov">         36 : void EscCalibration::setVehicleInfo(int sysid, int compid)      { sysid_ = sysid; compid_ = compid; }</span></a>
+<a name="57"><span class="lineNum">      57 </span><span class="lineCov">          5 : void EscCalibration::setSendCallback(SendCallback cb)           { send_cb_      = std::move(cb); }</span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">         19 : void EscCalibration::setTransportCallback(TransportCallback cb) { transport_cb_ = std::move(cb); }</span></a>
+<a name="59"><span class="lineNum">      59 </span><span class="lineCov">         97 : void EscCalibration::setVehicleInfo(int sysid, int compid)      { sysid_ = sysid; compid_ = compid; }</span></a>
 <a name="60"><span class="lineNum">      60 </span>            : </a>
 <a name="61"><span class="lineNum">      61 </span>            : // ─────────────────────────────────────────────────────────────────────────────</a>
 <a name="62"><span class="lineNum">      62 </span>            : //  Status broadcast</a>
 <a name="63"><span class="lineNum">      63 </span>            : // ─────────────────────────────────────────────────────────────────────────────</a>
 <a name="64"><span class="lineNum">      64 </span>            : </a>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">         45 : void EscCalibration::sendStatus(const std::string&amp; stage,</span></a>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">         55 : void EscCalibration::sendStatus(const std::string&amp; stage,</span></a>
 <a name="66"><span class="lineNum">      66 </span>            :                                 const std::string&amp; message,</a>
 <a name="67"><span class="lineNum">      67 </span>            :                                 bool               busy)</a>
 <a name="68"><span class="lineNum">      68 </span>            : {</a>
 <a name="69"><span class="lineNum">      69 </span>            :     json j;</a>
-<a name="70"><span class="lineNum">      70 </span><span class="lineCov">         90 :     j[&quot;type&quot;]    = &quot;esc_calibration_status&quot;;</span></a>
-<a name="71"><span class="lineNum">      71 </span><span class="lineCov">         90 :     j[&quot;stage&quot;]   = stage;</span></a>
-<a name="72"><span class="lineNum">      72 </span><span class="lineCov">         90 :     j[&quot;message&quot;] = message;</span></a>
-<a name="73"><span class="lineNum">      73 </span><span class="lineCov">         90 :     j[&quot;busy&quot;]    = busy;</span></a>
+<a name="70"><span class="lineNum">      70 </span><span class="lineCov">        110 :     j[&quot;type&quot;]    = &quot;esc_calibration_status&quot;;</span></a>
+<a name="71"><span class="lineNum">      71 </span><span class="lineCov">        110 :     j[&quot;stage&quot;]   = stage;</span></a>
+<a name="72"><span class="lineNum">      72 </span><span class="lineCov">        110 :     j[&quot;message&quot;] = message;</span></a>
+<a name="73"><span class="lineNum">      73 </span><span class="lineCov">        110 :     j[&quot;busy&quot;]    = busy;</span></a>
 <a name="74"><span class="lineNum">      74 </span>            : </a>
-<a name="75"><span class="lineNum">      75 </span><span class="lineCov">         45 :     std::cout &lt;&lt; &quot;[ESC] Stage=&quot; &lt;&lt; stage &lt;&lt; &quot; | &quot; &lt;&lt; message &lt;&lt; &quot;\n&quot;;</span></a>
+<a name="75"><span class="lineNum">      75 </span><span class="lineCov">         55 :     std::cout &lt;&lt; &quot;[ESC] Stage=&quot; &lt;&lt; stage &lt;&lt; &quot; | &quot; &lt;&lt; message &lt;&lt; &quot;\n&quot;;</span></a>
 <a name="76"><span class="lineNum">      76 </span>            : </a>
-<a name="77"><span class="lineNum">      77 </span><span class="lineCov">         45 :     if (send_cb_)</span></a>
+<a name="77"><span class="lineNum">      77 </span><span class="lineCov">         55 :     if (send_cb_)</span></a>
 <a name="78"><span class="lineNum">      78 </span><span class="lineCov">         20 :         send_cb_(j.dump());</span></a>
-<a name="79"><span class="lineNum">      79 </span><span class="lineCov">         45 : }</span></a>
+<a name="79"><span class="lineNum">      79 </span><span class="lineCov">         55 : }</span></a>
 <a name="80"><span class="lineNum">      80 </span>            : </a>
 <a name="81"><span class="lineNum">      81 </span>            : // ─────────────────────────────────────────────────────────────────────────────</a>
 <a name="82"><span class="lineNum">      82 </span>            : //  MAVLink helpers</a>
 <a name="83"><span class="lineNum">      83 </span>            : // ─────────────────────────────────────────────────────────────────────────────</a>
 <a name="84"><span class="lineNum">      84 </span>            : </a>
-<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         17 : void EscCalibration::sendPreflight()</span></a>
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         21 : void EscCalibration::sendPreflight()</span></a>
 <a name="86"><span class="lineNum">      86 </span>            : {</a>
-<a name="87"><span class="lineNum">      87 </span><span class="lineCov">         17 :     if (!transport_cb_) return;</span></a>
+<a name="87"><span class="lineNum">      87 </span><span class="lineCov">         21 :     if (!transport_cb_) return;</span></a>
 <a name="88"><span class="lineNum">      88 </span>            : </a>
 <a name="89"><span class="lineNum">      89 </span>            :     // ArduPilot requires ESC_CALIBRATION param = 3 before reboot</a>
 <a name="90"><span class="lineNum">      90 </span>            :     // This is more reliable than MAV_CMD_PREFLIGHT_CALIBRATION param7=1</a>
 <a name="91"><span class="lineNum">      91 </span>            :     mavlink_message_t  msg;</a>
-<a name="92"><span class="lineNum">      92 </span><span class="lineCov">         17 :     mavlink_param_set_t param{};</span></a>
+<a name="92"><span class="lineNum">      92 </span><span class="lineCov">         21 :     mavlink_param_set_t param{};</span></a>
 <a name="93"><span class="lineNum">      93 </span>            : </a>
-<a name="94"><span class="lineNum">      94 </span><span class="lineCov">         17 :     param.target_system    = static_cast&lt;uint8_t&gt;(sysid_);</span></a>
-<a name="95"><span class="lineNum">      95 </span><span class="lineCov">         17 :     param.target_component = static_cast&lt;uint8_t&gt;(compid_);</span></a>
-<a name="96"><span class="lineNum">      96 </span><span class="lineCov">         17 :     param.param_value      = 3.0f;   // 3 = calibrate on next boot</span></a>
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         17 :     param.param_type       = MAV_PARAM_TYPE_INT8;</span></a>
+<a name="94"><span class="lineNum">      94 </span><span class="lineCov">         21 :     param.target_system    = static_cast&lt;uint8_t&gt;(sysid_);</span></a>
+<a name="95"><span class="lineNum">      95 </span><span class="lineCov">         21 :     param.target_component = static_cast&lt;uint8_t&gt;(compid_);</span></a>
+<a name="96"><span class="lineNum">      96 </span><span class="lineCov">         21 :     param.param_value      = 3.0f;   // 3 = calibrate on next boot</span></a>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">         21 :     param.param_type       = MAV_PARAM_TYPE_INT8;</span></a>
 <a name="98"><span class="lineNum">      98 </span>            : </a>
 <a name="99"><span class="lineNum">      99 </span>            :     // Copy param name — must be exactly &quot;ESC_CALIBRATION&quot;</a>
 <a name="100"><span class="lineNum">     100 </span>            :     strncpy(param.param_id, &quot;ESC_CALIBRATION&quot;, sizeof(param.param_id));</a>
@@ -164,21 +164,21 @@
 <a name="102"><span class="lineNum">     102 </span>            :     mavlink_msg_param_set_encode(255, MAV_COMP_ID_MISSIONPLANNER, &amp;msg, &amp;param);</a>
 <a name="103"><span class="lineNum">     103 </span>            :     transport_cb_(msg);</a>
 <a name="104"><span class="lineNum">     104 </span>            : </a>
-<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         17 :     std::cout &lt;&lt; &quot;[ESC] ESC_CALIBRATION param set to 3\n&quot;;</span></a>
+<a name="105"><span class="lineNum">     105 </span><span class="lineCov">         21 :     std::cout &lt;&lt; &quot;[ESC] ESC_CALIBRATION param set to 3\n&quot;;</span></a>
 <a name="106"><span class="lineNum">     106 </span>            : }</a>
 <a name="107"><span class="lineNum">     107 </span>            : </a>
-<a name="108"><span class="lineNum">     108 </span><span class="lineCov">          4 : void EscCalibration::sendReboot()</span></a>
+<a name="108"><span class="lineNum">     108 </span><span class="lineCov">          5 : void EscCalibration::sendReboot()</span></a>
 <a name="109"><span class="lineNum">     109 </span>            : {</a>
-<a name="110"><span class="lineNum">     110 </span><span class="lineCov">          4 :     if (!transport_cb_) return;</span></a>
+<a name="110"><span class="lineNum">     110 </span><span class="lineCov">          5 :     if (!transport_cb_) return;</span></a>
 <a name="111"><span class="lineNum">     111 </span>            : </a>
 <a name="112"><span class="lineNum">     112 </span>            :     mavlink_message_t      msg;</a>
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">          4 :     mavlink_command_long_t cmd{};</span></a>
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">          5 :     mavlink_command_long_t cmd{};</span></a>
 <a name="114"><span class="lineNum">     114 </span>            : </a>
-<a name="115"><span class="lineNum">     115 </span><span class="lineCov">          4 :     cmd.target_system    = static_cast&lt;uint8_t&gt;(sysid_);</span></a>
-<a name="116"><span class="lineNum">     116 </span><span class="lineCov">          4 :     cmd.target_component = static_cast&lt;uint8_t&gt;(compid_);</span></a>
-<a name="117"><span class="lineNum">     117 </span><span class="lineCov">          4 :     cmd.command          = MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN;</span></a>
+<a name="115"><span class="lineNum">     115 </span><span class="lineCov">          5 :     cmd.target_system    = static_cast&lt;uint8_t&gt;(sysid_);</span></a>
+<a name="116"><span class="lineNum">     116 </span><span class="lineCov">          5 :     cmd.target_component = static_cast&lt;uint8_t&gt;(compid_);</span></a>
+<a name="117"><span class="lineNum">     117 </span><span class="lineCov">          5 :     cmd.command          = MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN;</span></a>
 <a name="118"><span class="lineNum">     118 </span>            :     cmd.confirmation     = 0;</a>
-<a name="119"><span class="lineNum">     119 </span><span class="lineCov">          4 :     cmd.param1 = 1;   // 1 = reboot autopilot</span></a>
+<a name="119"><span class="lineNum">     119 </span><span class="lineCov">          5 :     cmd.param1 = 1;   // 1 = reboot autopilot</span></a>
 <a name="120"><span class="lineNum">     120 </span>            :     cmd.param2 = 0;</a>
 <a name="121"><span class="lineNum">     121 </span>            :     cmd.param3 = 0;</a>
 <a name="122"><span class="lineNum">     122 </span>            :     cmd.param4 = 0;</a>
@@ -186,39 +186,39 @@
 <a name="124"><span class="lineNum">     124 </span>            :     cmd.param6 = 0;</a>
 <a name="125"><span class="lineNum">     125 </span>            :     cmd.param7 = 0;</a>
 <a name="126"><span class="lineNum">     126 </span>            : </a>
-<a name="127"><span class="lineNum">     127 </span><span class="lineCov">          4 :     mavlink_msg_command_long_encode(255, MAV_COMP_ID_MISSIONPLANNER, &amp;msg, &amp;cmd);</span></a>
+<a name="127"><span class="lineNum">     127 </span><span class="lineCov">          5 :     mavlink_msg_command_long_encode(255, MAV_COMP_ID_MISSIONPLANNER, &amp;msg, &amp;cmd);</span></a>
 <a name="128"><span class="lineNum">     128 </span>            :     transport_cb_(msg);</a>
 <a name="129"><span class="lineNum">     129 </span>            : </a>
-<a name="130"><span class="lineNum">     130 </span><span class="lineCov">          4 :     std::cout &lt;&lt; &quot;[ESC] Reboot command sent to FC\n&quot;;</span></a>
+<a name="130"><span class="lineNum">     130 </span><span class="lineCov">          5 :     std::cout &lt;&lt; &quot;[ESC] Reboot command sent to FC\n&quot;;</span></a>
 <a name="131"><span class="lineNum">     131 </span>            : }</a>
 <a name="132"><span class="lineNum">     132 </span>            : </a>
 <a name="133"><span class="lineNum">     133 </span>            : // ─────────────────────────────────────────────────────────────────────────────</a>
 <a name="134"><span class="lineNum">     134 </span>            : //  Inbound MAVLink</a>
 <a name="135"><span class="lineNum">     135 </span>            : // ─────────────────────────────────────────────────────────────────────────────</a>
 <a name="136"><span class="lineNum">     136 </span>            : </a>
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">         16 : void EscCalibration::processMessage(const mavlink_message_t&amp; msg)</span></a>
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">         20 : void EscCalibration::processMessage(const mavlink_message_t&amp; msg)</span></a>
 <a name="138"><span class="lineNum">     138 </span>            : {</a>
-<a name="139"><span class="lineNum">     139 </span><span class="lineCov">         17 :     if (msg.msgid != MAVLINK_MSG_ID_COMMAND_ACK) return;</span></a>
-<a name="140"><span class="lineNum">     140 </span><span class="lineCov">         15 :     if (!calibrating_) return;</span></a>
+<a name="139"><span class="lineNum">     139 </span><span class="lineCov">         21 :     if (msg.msgid != MAVLINK_MSG_ID_COMMAND_ACK) return;</span></a>
+<a name="140"><span class="lineNum">     140 </span><span class="lineCov">         17 :     if (!calibrating_) return;</span></a>
 <a name="141"><span class="lineNum">     141 </span>            : </a>
 <a name="142"><span class="lineNum">     142 </span>            :     mavlink_command_ack_t ack;</a>
-<a name="143"><span class="lineNum">     143 </span><span class="lineCov">         14 :     mavlink_msg_command_ack_decode(&amp;msg, &amp;ack);</span></a>
+<a name="143"><span class="lineNum">     143 </span><span class="lineCov">         16 :     mavlink_msg_command_ack_decode(&amp;msg, &amp;ack);</span></a>
 <a name="144"><span class="lineNum">     144 </span>            : </a>
-<a name="145"><span class="lineNum">     145 </span><span class="lineCov">         14 :     if (ack.command != MAV_CMD_PREFLIGHT_CALIBRATION) return;</span></a>
+<a name="145"><span class="lineNum">     145 </span><span class="lineCov">         16 :     if (ack.command != MAV_CMD_PREFLIGHT_CALIBRATION) return;</span></a>
 <a name="146"><span class="lineNum">     146 </span>            : </a>
-<a name="147"><span class="lineNum">     147 </span><span class="lineCov">         14 :     ack_result_.store(static_cast&lt;int&gt;(ack.result));</span></a>
+<a name="147"><span class="lineNum">     147 </span><span class="lineCov">         16 :     ack_result_.store(static_cast&lt;int&gt;(ack.result));</span></a>
 <a name="148"><span class="lineNum">     148 </span>            :     ack_received_.store(true);</a>
 <a name="149"><span class="lineNum">     149 </span>            : </a>
-<a name="150"><span class="lineNum">     150 </span><span class="lineCov">         42 :     std::cout &lt;&lt; &quot;[ESC] COMMAND_ACK preflight result=&quot; &lt;&lt; mavResultToString(ack.result) &lt;&lt; &quot;\n&quot;;</span></a>
+<a name="150"><span class="lineNum">     150 </span><span class="lineCov">         48 :     std::cout &lt;&lt; &quot;[ESC] COMMAND_ACK preflight result=&quot; &lt;&lt; mavResultToString(ack.result) &lt;&lt; &quot;\n&quot;;</span></a>
 <a name="151"><span class="lineNum">     151 </span>            : }</a>
 <a name="152"><span class="lineNum">     152 </span>            : </a>
 <a name="153"><span class="lineNum">     153 </span>            : // ─────────────────────────────────────────────────────────────────────────────</a>
 <a name="154"><span class="lineNum">     154 </span>            : //  Cancel</a>
 <a name="155"><span class="lineNum">     155 </span>            : // ─────────────────────────────────────────────────────────────────────────────</a>
 <a name="156"><span class="lineNum">     156 </span>            : </a>
-<a name="157"><span class="lineNum">     157 </span><span class="lineCov">          9 : void EscCalibration::cancelEscCalibration()</span></a>
+<a name="157"><span class="lineNum">     157 </span><span class="lineCov">         13 : void EscCalibration::cancelEscCalibration()</span></a>
 <a name="158"><span class="lineNum">     158 </span>            : {</a>
-<a name="159"><span class="lineNum">     159 </span><span class="lineCov">          9 :     if (!calibrating_) return;</span></a>
+<a name="159"><span class="lineNum">     159 </span><span class="lineCov">         13 :     if (!calibrating_) return;</span></a>
 <a name="160"><span class="lineNum">     160 </span>            :     cancelled_.store(true);</a>
 <a name="161"><span class="lineNum">     161 </span>            : }</a>
 <a name="162"><span class="lineNum">     162 </span>            : </a>
@@ -226,20 +226,20 @@
 <a name="164"><span class="lineNum">     164 </span>            : //  Calibration sequence  (blocking — run on a detached thread)</a>
 <a name="165"><span class="lineNum">     165 </span>            : // ─────────────────────────────────────────────────────────────────────────────</a>
 <a name="166"><span class="lineNum">     166 </span>            : </a>
-<a name="167"><span class="lineNum">     167 </span><span class="lineCov">         17 : void EscCalibration::startEscCalibration()</span></a>
+<a name="167"><span class="lineNum">     167 </span><span class="lineCov">         21 : void EscCalibration::startEscCalibration()</span></a>
 <a name="168"><span class="lineNum">     168 </span>            : {</a>
-<a name="169"><span class="lineNum">     169 </span><span class="lineCov">         17 :     bool expected = false;</span></a>
-<a name="170"><span class="lineNum">     170 </span><span class="lineCov">         17 :     if (!calibrating_.compare_exchange_strong(expected, true))</span></a>
+<a name="169"><span class="lineNum">     169 </span><span class="lineCov">         21 :     bool expected = false;</span></a>
+<a name="170"><span class="lineNum">     170 </span><span class="lineCov">         21 :     if (!calibrating_.compare_exchange_strong(expected, true))</span></a>
 <a name="171"><span class="lineNum">     171 </span>            :     {</a>
 <a name="172"><span class="lineNum">     172 </span><span class="lineCov">          2 :         sendStatus(&quot;busy&quot;, &quot;ESC calibration already in progress&quot;, false);</span></a>
-<a name="173"><span class="lineNum">     173 </span><span class="lineCov">         14 :         return;</span></a>
+<a name="173"><span class="lineNum">     173 </span><span class="lineCov">         17 :         return;</span></a>
 <a name="174"><span class="lineNum">     174 </span>            :     }</a>
 <a name="175"><span class="lineNum">     175 </span>            : </a>
 <a name="176"><span class="lineNum">     176 </span>            :     cancelled_    .store(false);</a>
 <a name="177"><span class="lineNum">     177 </span>            :     ack_received_ .store(false);</a>
 <a name="178"><span class="lineNum">     178 </span>            :     ack_result_   .store(-1);</a>
 <a name="179"><span class="lineNum">     179 </span>            : </a>
-<a name="180"><span class="lineNum">     180 </span><span class="lineCov">         16 :     if (!transport_cb_)</span></a>
+<a name="180"><span class="lineNum">     180 </span><span class="lineCov">         20 :     if (!transport_cb_)</span></a>
 <a name="181"><span class="lineNum">     181 </span>            :     {</a>
 <a name="182"><span class="lineNum">     182 </span><span class="lineCov">          6 :         sendStatus(&quot;error&quot;, &quot;No vehicle connected — cannot start ESC calibration&quot;, false);</span></a>
 <a name="183"><span class="lineNum">     183 </span>            :         calibrating_.store(false);</a>
@@ -251,58 +251,58 @@
 <a name="189"><span class="lineNum">     189 </span>            :     int  retry_count   = 0;</a>
 <a name="190"><span class="lineNum">     190 </span>            :     bool preflight_done = false;</a>
 <a name="191"><span class="lineNum">     191 </span>            : </a>
-<a name="192"><span class="lineNum">     192 </span><span class="lineCov">         21 :     while (!preflight_done &amp;&amp; !cancelled_.load())</span></a>
+<a name="192"><span class="lineNum">     192 </span><span class="lineCov">         26 :     while (!preflight_done &amp;&amp; !cancelled_.load())</span></a>
 <a name="193"><span class="lineNum">     193 </span>            :     {</a>
 <a name="194"><span class="lineNum">     194 </span>            :         ack_received_.store(false);</a>
 <a name="195"><span class="lineNum">     195 </span>            :         ack_result_.store(-1);</a>
 <a name="196"><span class="lineNum">     196 </span>            : </a>
 <a name="197"><span class="lineNum">     197 </span>            :         std::string attempt_suffix;</a>
-<a name="198"><span class="lineNum">     198 </span><span class="lineCov">         17 :         if (retry_count &gt; 0)</span></a>
+<a name="198"><span class="lineNum">     198 </span><span class="lineCov">         21 :         if (retry_count &gt; 0)</span></a>
 <a name="199"><span class="lineNum">     199 </span><span class="lineCov">          6 :             attempt_suffix = &quot; (attempt &quot; + std::to_string(retry_count + 1) +</span></a>
 <a name="200"><span class="lineNum">     200 </span><span class="lineCov">         12 :                              &quot;/&quot; + std::to_string(MAX_RETRIES) + &quot;)&quot;;</span></a>
 <a name="201"><span class="lineNum">     201 </span>            : </a>
-<a name="202"><span class="lineNum">     202 </span><span class="lineCov">         34 : sendStatus(&quot;preflight&quot;,</span></a>
-<a name="203"><span class="lineNum">     203 </span><span class="lineCov">         17 :            &quot;Setting ESC_CALIBRATION=3 on FC&quot; + attempt_suffix,</span></a>
+<a name="202"><span class="lineNum">     202 </span><span class="lineCov">         42 : sendStatus(&quot;preflight&quot;,</span></a>
+<a name="203"><span class="lineNum">     203 </span><span class="lineCov">         21 :            &quot;Setting ESC_CALIBRATION=3 on FC&quot; + attempt_suffix,</span></a>
 <a name="204"><span class="lineNum">     204 </span>            :            true);</a>
-<a name="205"><span class="lineNum">     205 </span><span class="lineCov">         17 : sendPreflight();</span></a>
+<a name="205"><span class="lineNum">     205 </span><span class="lineCov">         21 : sendPreflight();</span></a>
 <a name="206"><span class="lineNum">     206 </span>            : </a>
 <a name="207"><span class="lineNum">     207 </span>            : // Wait 2 s for param to be written — no ACK needed for PARAM_SET</a>
-<a name="208"><span class="lineNum">     208 </span><span class="lineCov">        426 : for (int i = 0; i &lt; 40 &amp;&amp; !cancelled_.load(); ++i)</span></a>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">        409 :     std::this_thread::sleep_for(std::chrono::milliseconds(50));</span></a>
+<a name="208"><span class="lineNum">     208 </span><span class="lineCov">        474 : for (int i = 0; i &lt; 40 &amp;&amp; !cancelled_.load(); ++i)</span></a>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">        453 :     std::this_thread::sleep_for(std::chrono::milliseconds(50));</span></a>
 <a name="210"><span class="lineNum">     210 </span>            : </a>
 <a name="211"><span class="lineNum">     211 </span>            : // If no real ACK arrived from processMessage(), treat as success (PARAM_SET has no ACK).</a>
 <a name="212"><span class="lineNum">     212 </span>            : // But if processMessage() DID set a result, honour it so error branches are reachable.</a>
-<a name="213"><span class="lineNum">     213 </span><span class="lineCov">         17 : if (!ack_received_.load())</span></a>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">         21 : if (!ack_received_.load())</span></a>
 <a name="214"><span class="lineNum">     214 </span>            : {</a>
 <a name="215"><span class="lineNum">     215 </span>            :     ack_received_.store(true);</a>
 <a name="216"><span class="lineNum">     216 </span>            :     ack_result_.store(MAV_RESULT_ACCEPTED);</a>
 <a name="217"><span class="lineNum">     217 </span>            : }</a>
 <a name="218"><span class="lineNum">     218 </span>            : </a>
 <a name="219"><span class="lineNum">     219 </span>            : </a>
-<a name="220"><span class="lineNum">     220 </span><span class="lineCov">         17 :         if (cancelled_.load())</span></a>
+<a name="220"><span class="lineNum">     220 </span><span class="lineCov">         21 :         if (cancelled_.load())</span></a>
 <a name="221"><span class="lineNum">     221 </span>            :         {</a>
-<a name="222"><span class="lineNum">     222 </span><span class="lineCov">         21 :             sendStatus(&quot;cancelled&quot;, &quot;ESC calibration cancelled&quot;, false);</span></a>
+<a name="222"><span class="lineNum">     222 </span><span class="lineCov">         30 :             sendStatus(&quot;cancelled&quot;, &quot;ESC calibration cancelled&quot;, false);</span></a>
 <a name="223"><span class="lineNum">     223 </span>            :             calibrating_.store(false);</a>
-<a name="224"><span class="lineNum">     224 </span><span class="lineCov">          7 :             return;</span></a>
+<a name="224"><span class="lineNum">     224 </span><span class="lineCov">         10 :             return;</span></a>
 <a name="225"><span class="lineNum">     225 </span>            :         }</a>
 <a name="226"><span class="lineNum">     226 </span>            : </a>
 <a name="227"><span class="lineNum">     227 </span>            :         const int result = ack_result_.load();</a>
 <a name="228"><span class="lineNum">     228 </span>            : </a>
-<a name="229"><span class="lineNum">     229 </span><span class="lineCov">         10 :         if (!ack_received_.load())</span></a>
+<a name="229"><span class="lineNum">     229 </span><span class="lineCov">         11 :         if (!ack_received_.load())</span></a>
 <a name="230"><span class="lineNum">     230 </span>            :         {</a>
 <a name="231"><span class="lineNum">     231 </span><span class="lineNoCov">          0 :             sendStatus(&quot;timeout&quot;,</span></a>
 <a name="232"><span class="lineNum">     232 </span>            :                        &quot;No COMMAND_ACK from FC (3 s timeout) — proceeding&quot;,</a>
 <a name="233"><span class="lineNum">     233 </span>            :                        true);</a>
 <a name="234"><span class="lineNum">     234 </span>            :             preflight_done = true;</a>
 <a name="235"><span class="lineNum">     235 </span>            :         }</a>
-<a name="236"><span class="lineNum">     236 </span><span class="lineCov">         10 :         else if (result == MAV_RESULT_ACCEPTED   ||</span></a>
-<a name="237"><span class="lineNum">     237 </span><span class="lineCov">         10 :                  result == MAV_RESULT_IN_PROGRESS ||</span></a>
+<a name="236"><span class="lineNum">     236 </span><span class="lineCov">         11 :         else if (result == MAV_RESULT_ACCEPTED   ||</span></a>
+<a name="237"><span class="lineNum">     237 </span><span class="lineCov">         11 :                  result == MAV_RESULT_IN_PROGRESS ||</span></a>
 <a name="238"><span class="lineNum">     238 </span>            :                  result == MAV_RESULT_UNSUPPORTED)</a>
 <a name="239"><span class="lineNum">     239 </span>            :         {</a>
-<a name="240"><span class="lineNum">     240 </span><span class="lineCov">          8 :             sendStatus(&quot;accepted&quot;,</span></a>
-<a name="241"><span class="lineNum">     241 </span><span class="lineCov">          8 :                        &quot;FC acknowledged (result=&quot; + mavResultToString(result) + &quot;)&quot;,</span></a>
+<a name="240"><span class="lineNum">     240 </span><span class="lineCov">         10 :             sendStatus(&quot;accepted&quot;,</span></a>
+<a name="241"><span class="lineNum">     241 </span><span class="lineCov">         10 :                        &quot;FC acknowledged (result=&quot; + mavResultToString(result) + &quot;)&quot;,</span></a>
 <a name="242"><span class="lineNum">     242 </span>            :                        true);</a>
-<a name="243"><span class="lineNum">     243 </span><span class="lineCov">          4 :             preflight_done = true;</span></a>
+<a name="243"><span class="lineNum">     243 </span><span class="lineCov">          5 :             preflight_done = true;</span></a>
 <a name="244"><span class="lineNum">     244 </span>            :         }</a>
 <a name="245"><span class="lineNum">     245 </span><span class="lineCov">          6 :         else if (result == MAV_RESULT_TEMPORARILY_REJECTED)</span></a>
 <a name="246"><span class="lineNum">     246 </span>            :         {</a>
@@ -339,7 +339,7 @@
 <a name="277"><span class="lineNum">     277 </span>            :         }</a>
 <a name="278"><span class="lineNum">     278 </span>            :     }</a>
 <a name="279"><span class="lineNum">     279 </span>            : </a>
-<a name="280"><span class="lineNum">     280 </span><span class="lineCov">          4 :     if (cancelled_.load())</span></a>
+<a name="280"><span class="lineNum">     280 </span><span class="lineCov">          5 :     if (cancelled_.load())</span></a>
 <a name="281"><span class="lineNum">     281 </span>            :     {</a>
 <a name="282"><span class="lineNum">     282 </span><span class="lineNoCov">          0 :         sendStatus(&quot;cancelled&quot;, &quot;ESC calibration cancelled&quot;, false);</span></a>
 <a name="283"><span class="lineNum">     283 </span>            :         calibrating_.store(false);</a>
@@ -348,16 +348,16 @@
 <a name="286"><span class="lineNum">     286 </span>            : </a>
 <a name="287"><span class="lineNum">     287 </span>            :     // ── STEP 2: Instruct user to power-cycle — NO reboot command sent ─────────</a>
 <a name="288"><span class="lineNum">     288 </span>            : // ── STEP 2: Reboot the FC via MAVLink (matches Mission Planner behaviour) ──</a>
-<a name="289"><span class="lineNum">     289 </span><span class="lineCov">          8 : sendStatus(&quot;rebooting&quot;,</span></a>
+<a name="289"><span class="lineNum">     289 </span><span class="lineCov">         10 : sendStatus(&quot;rebooting&quot;,</span></a>
 <a name="290"><span class="lineNum">     290 </span>            :            &quot;Rebooting FC — wait for it to restart (≈5 s)&quot;,</a>
 <a name="291"><span class="lineNum">     291 </span>            :            true);</a>
-<a name="292"><span class="lineNum">     292 </span><span class="lineCov">          4 : sendReboot();</span></a>
+<a name="292"><span class="lineNum">     292 </span><span class="lineCov">          5 : sendReboot();</span></a>
 <a name="293"><span class="lineNum">     293 </span>            : </a>
 <a name="294"><span class="lineNum">     294 </span>            : // Give reboot command time to transmit before serial link drops</a>
-<a name="295"><span class="lineNum">     295 </span><span class="lineCov">        128 : for (int i = 0; i &lt; 40 &amp;&amp; !cancelled_.load(); ++i)</span></a>
-<a name="296"><span class="lineNum">     296 </span><span class="lineCov">        124 :     std::this_thread::sleep_for(std::chrono::milliseconds(50));</span></a>
+<a name="295"><span class="lineNum">     295 </span><span class="lineCov">        169 : for (int i = 0; i &lt; 40 &amp;&amp; !cancelled_.load(); ++i)</span></a>
+<a name="296"><span class="lineNum">     296 </span><span class="lineCov">        164 :     std::this_thread::sleep_for(std::chrono::milliseconds(50));</span></a>
 <a name="297"><span class="lineNum">     297 </span>            : </a>
-<a name="298"><span class="lineNum">     298 </span><span class="lineCov">          4 : if (cancelled_.load())</span></a>
+<a name="298"><span class="lineNum">     298 </span><span class="lineCov">          5 : if (cancelled_.load())</span></a>
 <a name="299"><span class="lineNum">     299 </span>            : {</a>
 <a name="300"><span class="lineNum">     300 </span><span class="lineCov">          3 :     sendStatus(&quot;cancelled&quot;, &quot;ESC calibration cancelled&quot;, false);</span></a>
 <a name="301"><span class="lineNum">     301 </span>            :     calibrating_.store(false);</a>
@@ -365,7 +365,7 @@
 <a name="303"><span class="lineNum">     303 </span>            : }</a>
 <a name="304"><span class="lineNum">     304 </span>            : </a>
 <a name="305"><span class="lineNum">     305 </span>            : // ── STEP 3: Instruct user to press safety button ──────────────────────────</a>
-<a name="306"><span class="lineNum">     306 </span><span class="lineCov">          9 : sendStatus(&quot;power_cycle&quot;,</span></a>
+<a name="306"><span class="lineNum">     306 </span><span class="lineCov">         12 : sendStatus(&quot;power_cycle&quot;,</span></a>
 <a name="307"><span class="lineNum">     307 </span>            :            &quot;FC is rebooting. Once restarted — long-press safety button (≥2 s). &quot;</a>
 <a name="308"><span class="lineNum">     308 </span>            :            &quot;ESCs will beep max throttle, then min throttle, then FC reboots normally.&quot;,</a>
 <a name="309"><span class="lineNum">     309 </span>            :            false);</a>

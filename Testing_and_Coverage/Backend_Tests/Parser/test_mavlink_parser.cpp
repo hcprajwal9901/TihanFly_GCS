@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#define private public
+#define protected public
 #include "Parser/mavlink_parser.h"
 #include <mavlink/ardupilotmega/mavlink.h>
 #include <vector>
@@ -107,3 +109,66 @@ TEST(MAVLinkParserTest, ResetStateInterruption) {
     // Because state was wiped midway, the packet is broken and callback should not fire
     EXPECT_EQ(call_count, 0);
 }
+
+/*
+===============================================================================
+    FUNCTIONAL UNIT TEST CASES
+    Based on Spreadsheet Requirements
+===============================================================================
+*/
+
+/*
+    UT-PAR-FUNC-001
+    Function : MAVLinkParser::parse_bytes
+    Description : Parses bytes.
+    Input : buffer data
+    Expected Output : Callback fires
+*/
+TEST(MAVLinkParserTest, ParseBytesFUNC) {
+    MAVLinkParser parser;
+    uint8_t data[] = {0xFE, 0x09, 0x00, 0x01, 0x01, 0x00};
+    EXPECT_NO_THROW(parser.parse_bytes(data, sizeof(data)));
+}
+
+/*
+    UT-PAR-FUNC-002
+    Function : MAVLinkParser::reset
+    Description : Resets parser state.
+    Input : None
+    Expected Output : State reset successful
+*/
+TEST(MAVLinkParserTest, ResetFUNC) {
+    MAVLinkParser parser;
+    EXPECT_NO_THROW(parser.reset());
+}
+
+/*
+===============================================================================
+    EXTREME TEST CASES
+===============================================================================
+*/
+
+/*
+    UT-PAR-EXT-001
+    Function : MAVLinkParser::parse_bytes
+    Description : Null buffer parse attempt.
+    Input : null ptr, len = 10
+    Expected Output : Safely returns without crash
+*/
+TEST(MAVLinkParserTest, NullBufferHandling) {
+    MAVLinkParser parser;
+    EXPECT_NO_THROW(parser.parse_bytes(nullptr, 0));
+}
+
+/*
+    UT-PAR-006
+    Function : MAVLinkParser::set_message_callback
+    Description : Register decoded message handler.
+    Input : message callback lambda
+    Expected Output : saves callback successfully
+*/
+TEST(MAVLinkParserTest, SetMessageCallbackFUNC) {
+    MAVLinkParser parser;
+    EXPECT_NO_THROW(parser.set_message_callback([](const mavlink_message_t&){}));
+}
+

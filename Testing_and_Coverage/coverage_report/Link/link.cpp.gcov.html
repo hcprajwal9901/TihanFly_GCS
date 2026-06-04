@@ -31,17 +31,17 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">21</td>
-            <td class="headerCovTableEntry">21</td>
+            <td class="headerCovTableEntry">23</td>
+            <td class="headerCovTableEntry">23</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2026-05-26 10:38:26</td>
+            <td class="headerValue">2026-06-04 11:54:51</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">5</td>
-            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">6</td>
+            <td class="headerCovTableEntry">6</td>
             <td class="headerCovTableEntryHi">100.0 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
@@ -63,22 +63,22 @@
 <a name="1"><span class="lineNum">       1 </span>            : #include &quot;link.h&quot;</a>
 <a name="2"><span class="lineNum">       2 </span>            : #include &lt;iostream&gt;</a>
 <a name="3"><span class="lineNum">       3 </span>            : </a>
-<a name="4"><span class="lineNum">       4 </span><span class="lineCov">         17 : Link::Link(int id,</span></a>
+<a name="4"><span class="lineNum">       4 </span><span class="lineCov">         37 : Link::Link(int id,</span></a>
 <a name="5"><span class="lineNum">       5 </span>            :            std::shared_ptr&lt;Transport&gt; transport,</a>
-<a name="6"><span class="lineNum">       6 </span><span class="lineCov">         17 :            asio::io_context&amp; io)</span></a>
-<a name="7"><span class="lineNum">       7 </span><span class="lineCov">         17 :     : id_(id), transport_(transport), io_(io)</span></a>
+<a name="6"><span class="lineNum">       6 </span><span class="lineCov">         37 :            asio::io_context&amp; io)</span></a>
+<a name="7"><span class="lineNum">       7 </span><span class="lineCov">         37 :     : id_(id), transport_(transport), io_(io)</span></a>
 <a name="8"><span class="lineNum">       8 </span>            : {</a>
-<a name="9"><span class="lineNum">       9 </span><span class="lineCov">         17 : }</span></a>
+<a name="9"><span class="lineNum">       9 </span><span class="lineCov">         37 : }</span></a>
 <a name="10"><span class="lineNum">      10 </span>            : </a>
-<a name="11"><span class="lineNum">      11 </span><span class="lineCov">          5 : void Link::start()</span></a>
+<a name="11"><span class="lineNum">      11 </span><span class="lineCov">          7 : void Link::start()</span></a>
 <a name="12"><span class="lineNum">      12 </span>            : {</a>
 <a name="13"><span class="lineNum">      13 </span>            :     std::cout &lt;&lt; &quot;[Link] Listening...&quot; &lt;&lt; std::endl;</a>
 <a name="14"><span class="lineNum">      14 </span>            : </a>
 <a name="15"><span class="lineNum">      15 </span>            :     // Start UDP/Serial transport</a>
-<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          5 :     transport_-&gt;start();</span></a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          7 :     transport_-&gt;start();</span></a>
 <a name="17"><span class="lineNum">      17 </span>            : </a>
 <a name="18"><span class="lineNum">      18 </span>            :     // Set receive callback (IMPORTANT FIX)</a>
-<a name="19"><span class="lineNum">      19 </span><span class="lineCov">          5 :     transport_-&gt;set_receive_callback(</span></a>
+<a name="19"><span class="lineNum">      19 </span><span class="lineCov">          7 :     transport_-&gt;set_receive_callback(</span></a>
 <a name="20"><span class="lineNum">      20 </span><span class="lineCov">          3 :         [this](const uint8_t* data, std::size_t len)</span></a>
 <a name="21"><span class="lineNum">      21 </span>            :         {</a>
 <a name="22"><span class="lineNum">      22 </span>            :             mavlink_message_t msg;</a>
@@ -94,22 +94,28 @@
 <a name="32"><span class="lineNum">      32 </span>            :                                        &amp;msg,</a>
 <a name="33"><span class="lineNum">      33 </span>            :                                        &amp;status))</a>
 <a name="34"><span class="lineNum">      34 </span>            :                 {</a>
-<a name="35"><span class="lineNum">      35 </span><span class="lineCov">          3 :                     if (callback_)</span></a>
-<a name="36"><span class="lineNum">      36 </span><span class="lineCov">          3 :                         callback_(msg, id_);</span></a>
-<a name="37"><span class="lineNum">      37 </span>            :                 }</a>
-<a name="38"><span class="lineNum">      38 </span>            :             }</a>
-<a name="39"><span class="lineNum">      39 </span><span class="lineCov">          3 :         });</span></a>
-<a name="40"><span class="lineNum">      40 </span><span class="lineCov">          5 : }</span></a>
-<a name="41"><span class="lineNum">      41 </span>            : </a>
-<a name="42"><span class="lineNum">      42 </span><span class="lineCov">          3 : void Link::set_callback(Callback cb)</span></a>
-<a name="43"><span class="lineNum">      43 </span>            : {</a>
-<a name="44"><span class="lineNum">      44 </span><span class="lineCov">          3 :     callback_ = cb;</span></a>
-<a name="45"><span class="lineNum">      45 </span><span class="lineCov">          3 : }</span></a>
-<a name="46"><span class="lineNum">      46 </span>            : </a>
-<a name="47"><span class="lineNum">      47 </span><span class="lineCov">         12 : std::shared_ptr&lt;Transport&gt; Link::get_transport()</span></a>
-<a name="48"><span class="lineNum">      48 </span>            : {</a>
-<a name="49"><span class="lineNum">      49 </span><span class="lineCov">         12 :     return transport_;</span></a>
-<a name="50"><span class="lineNum">      50 </span>            : }</a>
+<a name="35"><span class="lineNum">      35 </span>            :                     valid_msg_count_.fetch_add(1, std::memory_order_relaxed);</a>
+<a name="36"><span class="lineNum">      36 </span><span class="lineCov">          3 :                     if (callback_)</span></a>
+<a name="37"><span class="lineNum">      37 </span><span class="lineCov">          3 :                         callback_(msg, id_);</span></a>
+<a name="38"><span class="lineNum">      38 </span>            :                 }</a>
+<a name="39"><span class="lineNum">      39 </span>            :             }</a>
+<a name="40"><span class="lineNum">      40 </span><span class="lineCov">          3 :         });</span></a>
+<a name="41"><span class="lineNum">      41 </span><span class="lineCov">          7 : }</span></a>
+<a name="42"><span class="lineNum">      42 </span>            : </a>
+<a name="43"><span class="lineNum">      43 </span><span class="lineCov">          4 : void Link::set_callback(Callback cb)</span></a>
+<a name="44"><span class="lineNum">      44 </span>            : {</a>
+<a name="45"><span class="lineNum">      45 </span><span class="lineCov">          4 :     callback_ = cb;</span></a>
+<a name="46"><span class="lineNum">      46 </span><span class="lineCov">          4 : }</span></a>
+<a name="47"><span class="lineNum">      47 </span>            : </a>
+<a name="48"><span class="lineNum">      48 </span><span class="lineCov">         22 : std::shared_ptr&lt;Transport&gt; Link::get_transport()</span></a>
+<a name="49"><span class="lineNum">      49 </span>            : {</a>
+<a name="50"><span class="lineNum">      50 </span><span class="lineCov">         22 :     return transport_;</span></a>
+<a name="51"><span class="lineNum">      51 </span>            : }</a>
+<a name="52"><span class="lineNum">      52 </span>            : </a>
+<a name="53"><span class="lineNum">      53 </span><span class="lineCov">          1 : uint64_t Link::get_valid_msg_count() const</span></a>
+<a name="54"><span class="lineNum">      54 </span>            : {</a>
+<a name="55"><span class="lineNum">      55 </span><span class="lineCov">          1 :     return valid_msg_count_.load(std::memory_order_relaxed);</span></a>
+<a name="56"><span class="lineNum">      56 </span>            : }</a>
 </pre>
       </td>
     </tr>

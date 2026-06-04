@@ -1,0 +1,50 @@
+========================================================================
+  EVIDENCE FILE  :  UT-MJPE-006
+  Test            :  MjpegServerTest.VideoFeedEndpoint
+  Module          :  MjpegServer
+  Source File     :  test_mjpeg_server.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] server_->stop();
+  [2] server_ = std::make_unique<MjpegServer>(io_context_, capture, test_port_);
+  [3] server_->start();
+  [4] server_thread_ = std::thread([this]() {
+  [5] catch (const std::exception&) {}
+  [6] std::this_thread::sleep_for(100ms);
+  [7] asio::ip::tcp::resolver::results_type endpoints = resolver.resolve("127.0.0.1", std::to_string(test_port_));
+  [8] std::string request = "GET /video_feed HTTP/1.1\r\nHost: 127.0.0.1\r\n\r\n";
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : ASSERT_FALSE(ec);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(status_code, 200);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FALSE(ec);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 3 assertion(s) satisfied. Verified: boolean state, equality. Module 'MjpegServer' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] MjpegServerTest.VideoFeedEndpoint
+  [MjpegServer] Listening on port 8091
+  [Camera] Opened: 1280x720
+  [Camera] Capture started  source=dummy.jpg  1280x720 @ 30fps
+  [MjpegServer] Listening on port 8092
+  [MjpegServer] Client connected: 127.0.0.1:57190
+  [MjpegServer] GET /video_feed
+  [Camera] Opened: 1280x720
+  [Camera] Opened: 1280x720
+  [Camera] Opened: 1280x720
+  [Camera] Opened: 1280x720
+  [Camera] Capture stopped
+  [Camera] Capture stopped
+  [Camera] Capture stopped
+  [       OK ] MjpegServerTest.VideoFeedEndpoint (573 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,114 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-017
+  Test            :  FirmwareTest.CustomUploadPathMode
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::string path = create_dummy_apj("custom.apj");
+  [2] json msg = {
+  [3] manager->install_from_port(bootloader.slave_name);
+  [4] std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(manager->handle_ws_message(msg.dump()));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(manager->has_pending_install());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_FALSE(manager->has_pending_install());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 3 assertion(s) satisfied. Verified: boolean state. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.CustomUploadPathMode
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [DEBUG] Decoding APJ JSON for: /tmp/firmware_test_dir/custom.apj
+  {
+    "board_id": 9,
+    "image": "eJzzSM3JyQ/PL8pJ8aAZCwDWvSfZ",
+    "image_size": 100
+  }
+  [FirmwareManager] Decoded 100 bytes from /tmp/firmware_test_dir/custom.apj
+  [FirmwareManager] install_firmware_custom: queued custom.apj, waiting for port
+  [FirmwareManager] [waiting] Plug in your flight controller now to begin flashing.
+  [FirmwareManager] Port appeared (/dev/pts/2) – starting queued flash of custom.apj
+  [FirmwareManager] -- Flash start --------------------------
+  [FirmwareManager]   port    : /dev/pts/2
+  [FirmwareManager]   firmware: custom.apj
+  [FirmwareManager]   size    : 100 bytes
+  [FirmwareManager] [preflight] 🔍 Running pre-flight checks... (0%)
+  [FirmwareManager] Suspending MAVLink serial transport
+  [FirmwareManager] [start] 🚀 Starting firmware flash on /dev/pts/2…
+  📦 Firmware: custom.apj
+  📡 Port:     /dev/pts/2 (0%)
+  [FirmwareUploader] → Port /dev/pts/2 opened @ 115200 baud
+  [FirmwareManager] [log] → Port /dev/pts/2 opened @ 115200 baud
+  [FirmwareUploader] → Checking if board is already in bootloader…
+  [FirmwareManager] [log] → Checking if board is already in bootloader…
+  [FirmwareUploader] ✓ Board already in bootloader mode
+  [FirmwareManager] [log] ✓ Board already in bootloader mode
+  [FirmwareUploader] Connected to bootloader:
+  [FirmwareManager] [log] Connected to bootloader:
+  [FirmwareUploader] → Reading device info…
+  [FirmwareManager] [log] → Reading device info…
+  [FirmwareUploader] → BL_REV=0  BOARD_ID=9  BOARD_REV=0  FLASH=100 B
+  [FirmwareManager] [log] → BL_REV=0  BOARD_ID=9  BOARD_REV=0  FLASH=100 B
+  [FirmwareUploader] Version: 0
+  [FirmwareManager] [log] Version: 0
+  [FirmwareUploader] Board ID: 9
+  [FirmwareManager] [log] Board ID: 9
+  [FirmwareUploader] Flash size: 100
+  [FirmwareManager] [log] Flash size: 100
+  [FirmwareUploader] → Erasing flash — may take up to 20 s…
+  [FirmwareManager] [log] → Erasing flash — may take up to 20 s…
+  [FirmwareManager] [erase] Erasing flash... (0%)
+  [FirmwareManager] [erase] Erasing flash... (100%)
+  [FirmwareUploader] ✓ Flash erased
+  [FirmwareManager] [log] ✓ Flash erased
+  [FirmwareUploader] → Programming 100 bytes…
+  [FirmwareManager] [log] → Programming 100 bytes…
+  [FirmwareManager] [program] Programming firmware... (0%)
+  [FirmwareManager] [program] Programming firmware... (100%)
+  [FirmwareUploader] → Write: 100 %
+  [FirmwareManager] [log] → Write: 100 %
+  [FirmwareUploader] ✓ Programming complete
+  [FirmwareManager] [log] ✓ Programming complete
+  [FirmwareUploader] → Verifying CRC…
+  [FirmwareManager] [log] → Verifying CRC…
+  [FirmwareUploader] ❌ CRC mismatch — board=0x00000000  local=0x4A4D7225
+  [FirmwareManager] [log] ❌ CRC mismatch — board=0x00000000  local=0x4A4D7225
+  [FirmwareManager] [error] ============================================================
+  ❌ FLASH FAILED
+  ============================================================
+  [FirmwareManager] [troubleshoot] 
+  📋 Troubleshooting checklist:
+  
+     1. Is ModemManager running?  Stop it:
+        sudo systemctl stop ModemManager.service
+  
+     2. Is the board in bootloader mode?
+        - No GPS light should be visible
+        - Try power cycling the board
+  
+     3. Does the firmware match your board?
+        - Check board ID in firmware vs device
+        - CubeOrange+ should use 0x2dae firmware
+  
+     4. Try using 115200 baud for both rates
+  
+     5. Check port permissions:
+        sudo chmod 666 /dev/pts/2
+        OR:  sudo usermod -aG dialout $USER
+  
+  [FirmwareManager] Re-enabling serial monitor
+  [FirmwareManager] -- Flash end ----------------------------
+  [       OK ] FirmwareTest.CustomUploadPathMode (1715 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

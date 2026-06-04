@@ -1,0 +1,27 @@
+========================================================================
+  EVIDENCE FILE  :  UT-PARA-032
+  Test            :  ParameterManagerTest.UpdateParamCacheFUNC
+  Module          :  ParameterManager
+  Source File     :  test_parameter_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(pm->updateParamCache("PARAM1", 1.0f));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'ParameterManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] ParameterManagerTest.UpdateParamCacheFUNC
+  [ParameterManager] Initialized (sysid=1 compid=1 cache=./test_param_cache)
+  [       OK ] ParameterManagerTest.UpdateParamCacheFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

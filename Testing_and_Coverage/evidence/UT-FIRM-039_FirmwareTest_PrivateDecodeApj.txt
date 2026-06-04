@@ -1,0 +1,33 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-039
+  Test            :  FirmwareTest.PrivateDecodeApj
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] json apj = {
+  [2] std::vector<uint8_t> out = manager->decode_apj("test", apj);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(out.empty());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: boolean state. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.PrivateDecodeApjEmptyImage
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [DEBUG] Decoding APJ JSON for: test
+  {
+    "image": ""
+  }
+  [FirmwareManager] APJ 'image' is empty: test
+  [       OK ] FirmwareTest.PrivateDecodeApjEmptyImage (3 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

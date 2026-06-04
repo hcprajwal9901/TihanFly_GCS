@@ -1,0 +1,29 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMP-014
+  Test            :  CompassCalibrationTest.CancelCalibration
+  Module          :  CompassCalibration
+  Source File     :  test_compass_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] compass.setSendCallback([&](const std::string& json) { json_sent = true; });
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CompassCalibrationTest.CancelCalibration
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Compass] ERROR: transport_cb_ not set — call setTransportCallback() before starting calibration
+  [Compass] Cancel ignored — not in progress state
+  [       OK ] CompassCalibrationTest.CancelCalibration (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,28 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMP-035
+  Test            :  CompassCalibrationTest.HandleStatusTextFUNC
+  Module          :  CompassCalibration
+  Source File     :  test_compass_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_statustext_t st = {};
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(compass.handleStatusText(st));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'CompassCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CompassCalibrationTest.HandleStatusTextFUNC
+  [CompassCalibration] Constructed
+  [Compass] STATUSTEXT: 
+  [       OK ] CompassCalibrationTest.HandleStatusTextFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

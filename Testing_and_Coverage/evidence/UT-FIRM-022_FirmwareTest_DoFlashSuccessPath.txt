@@ -1,0 +1,85 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FIRM-022
+  Test            :  FirmwareTest.DoFlashSuccessPath
+  Module          :  FirmwareManager
+  Source File     :  test_firmware.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::vector<uint8_t> dummy_image = {0x01, 0x02, 0x03};
+  [2] manager->do_flash(bootloader.slave_name, dummy_image, "direct_test");
+  [3] bool success = last_ws_message.find("FLASH COMPLETED SUCCESSFULLY") != std::string::npos;
+  [4] bool crc_fail = last_ws_message.find("Troubleshooting") != std::string::npos;
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(success || crc_fail);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: boolean state. Module 'FirmwareManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FirmwareTest.DoFlashSuccessPath
+  [FirmwareManager] Initialised, firmware_dir=/tmp/firmware_test_dir/
+  [FirmwareManager] -- Flash start --------------------------
+  [FirmwareManager]   port    : /dev/pts/2
+  [FirmwareManager]   firmware: direct_test
+  [FirmwareManager]   size    : 3 bytes
+  [FirmwareManager] [preflight] 🔍 Running pre-flight checks... (0%)
+  [FirmwareManager] Suspending MAVLink serial transport
+  [FirmwareManager] [start] 🚀 Starting firmware flash on /dev/pts/2…
+  📦 Firmware: direct_test
+  📡 Port:     /dev/pts/2 (0%)
+  [FirmwareUploader] → Port /dev/pts/2 opened @ 115200 baud
+  [FirmwareManager] [log] → Port /dev/pts/2 opened @ 115200 baud
+  [FirmwareUploader] → Checking if board is already in bootloader…
+  [FirmwareManager] [log] → Checking if board is already in bootloader…
+  [FirmwareUploader] ✓ Board already in bootloader mode
+  [FirmwareManager] [log] ✓ Board already in bootloader mode
+  [FirmwareUploader] Connected to bootloader:
+  [FirmwareManager] [log] Connected to bootloader:
+  [FirmwareUploader] → Reading device info…
+  [FirmwareManager] [log] → Reading device info…
+  [FirmwareUploader] → BL_REV=0  BOARD_ID=9  BOARD_REV=0  FLASH=100 B
+  [FirmwareManager] [log] → BL_REV=0  BOARD_ID=9  BOARD_REV=0  FLASH=100 B
+  [FirmwareUploader] Version: 0
+  [FirmwareManager] [log] Version: 0
+  [FirmwareUploader] Board ID: 9
+  [FirmwareManager] [log] Board ID: 9
+  [FirmwareUploader] Flash size: 100
+  [FirmwareManager] [log] Flash size: 100
+  [FirmwareUploader] → Erasing flash — may take up to 20 s…
+  [FirmwareManager] [log] → Erasing flash — may take up to 20 s…
+  [FirmwareManager] [erase] Erasing flash... (0%)
+  [FirmwareManager] [erase] Erasing flash... (100%)
+  [FirmwareUploader] ✓ Flash erased
+  [FirmwareManager] [log] ✓ Flash erased
+  [FirmwareUploader] → Programming 3 bytes…
+  [FirmwareManager] [log] → Programming 3 bytes…
+  [FirmwareManager] [program] Programming firmware... (0%)
+  [FirmwareManager] [program] Programming firmware... (100%)
+  [FirmwareUploader] → Write: 100 %
+  [FirmwareManager] [log] → Write: 100 %
+  [FirmwareUploader] ✓ Programming complete
+  [FirmwareManager] [log] ✓ Programming complete
+  [FirmwareUploader] → Verifying CRC…
+  [FirmwareManager] [log] → Verifying CRC…
+  [FirmwareUploader] ✓ CRC verified: 0x421DBD21
+  [FirmwareManager] [log] ✓ CRC verified: 0x421DBD21
+  [FirmwareUploader] Rebooting board
+  [FirmwareManager] [log] Rebooting board
+  [FirmwareUploader] ✓ ════════════ Firmware flash successful! ════════════ ✓
+  [FirmwareManager] [log] ✓ ════════════ Firmware flash successful! ════════════ ✓
+  [FirmwareManager] [complete] ============================================================
+  ✅ FLASH COMPLETED SUCCESSFULLY!
+  ============================================================ (100%)
+  [FirmwareManager] Flash complete OK
+  [FirmwareManager] Re-enabling serial monitor
+  [FirmwareManager] -- Flash end ----------------------------
+  [       OK ] FirmwareTest.DoFlashSuccessPath (2119 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

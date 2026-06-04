@@ -1,0 +1,48 @@
+========================================================================
+  EVIDENCE FILE  :  UT-PARA-006
+  Test            :  ParameterManagerTest.CacheManagement
+  Module          :  ParameterManager
+  Source File     :  test_parameter_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] pm->requestAllParameters();
+  [2] mavlink_message_t msg = create_param_value("BATT_VOLT", 12.5f, 0, 1);
+  [3] pm->processMessage(msg);
+  [4] mavlink_message_t msg2 = create_param_value("BATT_VOLT", 12.6f, 0, 1);
+  [5] pm->processMessage(msg2);
+  [6] pm->setParameter("BATT_VOLT", 12.7f);
+  [7] std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  [8] pm = std::make_unique<ParameterManager>(1, 1, test_cache_dir);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(pm->receivedCount(), 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: equality. Module 'ParameterManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] ParameterManagerTest.CacheManagement
+  [ParameterManager] Initialized (sysid=1 compid=1 cache=./test_param_cache)
+  [ParameterManager] Sent PARAM_REQUEST_LIST (sysid=1)
+  [ParameterManager] Sent PARAM_REQUEST_LIST (sysid=1)
+  [ParameterManager] Retry thread started
+  [ParameterManager] Retry thread exiting
+  [ParameterManager] Load complete: 1 params in 100 ms
+  [ParameterManager] Sent PARAM_SET BATT_VOLT = 12.7
+  [ParameterManager] Cache saved: ./test_param_cache/sysid_1.json (1 params)
+  [ParameterManager] Initialized (sysid=1 compid=1 cache=./test_param_cache)
+  [ParameterManager] Loaded 1 params from cache: ./test_param_cache/sysid_1.json
+  [ParameterManager] Sent PARAM_REQUEST_LIST (sysid=1)
+  [ParameterManager] Sent PARAM_REQUEST_LIST (sysid=1)
+  [ParameterManager] Retry thread started
+  [ParameterManager] Cache deleted: ./test_param_cache/sysid_1.json
+  [ParameterManager] Retry thread exiting
+  [       OK ] ParameterManagerTest.CacheManagement (852 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

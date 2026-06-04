@@ -1,0 +1,31 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ESCC-020
+  Test            :  EscCalibrationTest.SendPreflightFUNC
+  Module          :  EscCalibration
+  Source File     :  test_esc_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] esc.setTransportCallback([&](const mavlink_message_t& msg) {
+  [2] std::thread t([&]() { esc.startEscCalibration(); });
+  [3] std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(called);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: boolean state. Module 'EscCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] EscCalibrationTest.SendPreflightFUNC
+  [ESC] Stage=preflight | Setting ESC_CALIBRATION=3 on FC
+  [ESC] ESC_CALIBRATION param set to 3
+  [ESC] Stage=cancelled | ESC calibration cancelled
+  [       OK ] EscCalibrationTest.SendPreflightFUNC (50 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

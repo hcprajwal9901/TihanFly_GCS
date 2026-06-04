@@ -1,0 +1,37 @@
+========================================================================
+  EVIDENCE FILE  :  UT-MAVL-004
+  Test            :  MavlinkInspectorTest.RateCalculation
+  Module          :  MavlinkInspector
+  Source File     :  test_mavlink_inspector.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::string captured_json;
+  [2] inspector.set_ws_callback([&](const std::string& json) {
+  [3] captured_json = json;
+  [4] mavlink_message_t msg;
+  [5] mavlink_msg_heartbeat_pack(1, 1, &msg, MAV_TYPE_QUADROTOR, MAV_AUTOPILOT_ARDUPILOTMEGA, MAV_MODE_GUIDED_ARMED, 0, MAV_STATE_ACTIVE);
+  [6] std::this_thread::sleep_for(std::chrono::milliseconds(50));
+  [7] std::this_thread::sleep_for(std::chrono::milliseconds(50));
+  [8] asio::steady_timer stop_timer(io, std::chrono::milliseconds(300));
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : ASSERT_FALSE(captured_json.empty());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(captured_json.find("\"rate\":0.00") == std::string::npos);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(captured_json.find("\"count\":3") != std::string::npos);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 3 assertion(s) satisfied. Verified: boolean state. Module 'MavlinkInspector' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] MavlinkInspectorTest.RateCalculation
+  [       OK ] MavlinkInspectorTest.RateCalculation (400 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

@@ -1,0 +1,29 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ESCC-005
+  Test            :  EscCalibrationTest.Denied
+  Module          :  EscCalibration
+  Source File     :  test_esc_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] EscCalibrationTest.Denied
+  [ESC] Stage=preflight | Setting ESC_CALIBRATION=3 on FC
+  [ESC] ESC_CALIBRATION param set to 3
+  [ESC] COMMAND_ACK preflight result=1 (DENIED) — check pre-arm, RC, or disarm state
+  [ESC] Stage=error | FC rejected ESC calibration (1 (DENIED) — check pre-arm, RC, or disarm state)
+  [       OK ] EscCalibrationTest.Denied (2004 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

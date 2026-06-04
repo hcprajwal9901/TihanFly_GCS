@@ -1,0 +1,29 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ACCE-035
+  Test            :  AccelCalibrationTest.BroadcastStatusFUNC
+  Module          :  AccelCalibration
+  Source File     :  test_accel_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] accel.setSendCallback([&](const std::string& json){
+  [2] accel.setTransportCallback([](const mavlink_message_t&){});
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] AccelCalibrationTest.BroadcastStatusFUNC
+  [AccelCalibration] Constructed
+  [Calib] Cancel sent to reset any stale drone state
+  [Calib] MAV_CMD_PREFLIGHT_CALIBRATION sent → sysid=1 compid=1
+  [       OK ] AccelCalibrationTest.BroadcastStatusFUNC (400 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

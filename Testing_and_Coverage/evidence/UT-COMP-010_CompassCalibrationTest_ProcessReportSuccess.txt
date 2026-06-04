@@ -1,0 +1,60 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMP-010
+  Test            :  CompassCalibrationTest.ProcessReportSuccess
+  Module          :  CompassCalibration
+  Source File     :  test_compass_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] compass.setTransportCallback([&](const mavlink_message_t& msg) {});
+  [2] mavlink_message_t msg;
+  [3] mavlink_mag_cal_progress_t prog = {};
+  [4] mavlink_msg_mag_cal_progress_encode(1, 1, &msg, &prog);
+  [5] compass.processMessage(msg);
+  [6] mavlink_msg_mag_cal_progress_encode(1, 1, &msg, &prog);
+  [7] compass.processMessage(msg);
+  [8] mavlink_mag_cal_report_t rep = {};
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(compass.compassState.load(), CompassCalibration::CompassCalibState::IN_PROGRESS);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(compass.compassState.load(), CompassCalibration::CompassCalibState::DONE);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 2 assertion(s) satisfied. Verified: equality. Module 'CompassCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CompassCalibrationTest.ProcessReportSuccess
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Compass] Starting calibration (large_vehicle=false)
+  [Compass] Sent DO_START_MAG_CAL (confirmation=1)
+  [Compass] MAG_CAL_PROGRESS received — state=1
+  [Compass] Implicit ACK received (MAG_CAL_PROGRESS / STATUSTEXT) — stopping retry watcher and arming overall timeout
+  [Compass] Overall timeout armed
+  [Compass] Progress compass_id=0 pct=10%
+  [Compass] compass_id=0 registered as active (total active=1)
+  [Compass] MAG_CAL_PROGRESS received — state=1
+  [Compass] Progress compass_id=1 pct=10%
+  [Compass] compass_id=1 registered as active (total active=2)
+  [Compass] MAG_CAL_REPORT received — state=1
+  [Compass] MAG_CAL_REPORT compass_id=0 status=4 (SUCCESS) fitness=0 active=2 succeeded=0
+  [Compass] Compass 0 SUCCESS (1/2 done)
+  [Compass] Waiting for remaining 1 compass(es)...
+  [Compass] MAG_CAL_REPORT received — state=1
+  [Compass] MAG_CAL_REPORT compass_id=0 status=4 (SUCCESS) fitness=0 active=2 succeeded=1
+  [Compass] MAG_CAL_REPORT for compass_id=0 already processed — SKIPPING duplicate
+  [Compass] MAG_CAL_REPORT received — state=1
+  [Compass] MAG_CAL_REPORT compass_id=1 status=4 (SUCCESS) fitness=0 active=2 succeeded=1
+  [Compass] Compass 1 SUCCESS (2/2 done)
+  [Compass] All 2 compass(es) succeeded — marking DONE
+  [Compass] Auto-accepting offsets (DO_ACCEPT_MAG_CAL)
+  [Compass] Sent DO_ACCEPT_MAG_CAL — offsets will be saved to EEPROM
+  [       OK ] CompassCalibrationTest.ProcessReportSuccess (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

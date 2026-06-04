@@ -1,0 +1,39 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ACCE-017
+  Test            :  AccelCalibrationTest.ValidateAttitudeDefaultCase
+  Module          :  AccelCalibration
+  Source File     :  test_accel_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] accel.setSendCallback([](const std::string&) {});
+  [2] accel.setTransportCallback([](const mavlink_message_t&) {});
+  [3] mavlink_message_t msg;
+  [4] mavlink_attitude_t att = {};
+  [5] mavlink_msg_attitude_encode(1, 1, &msg, &att);
+  [6] accel.processMessage(msg);
+  [7] mavlink_statustext_t st = {};
+  [8] mavlink_msg_statustext_encode(1, 1, &msg, &st);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(accel.pendingPosition, 0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: equality. Module 'AccelCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] AccelCalibrationTest.ValidateAttitudeDefaultCase
+  [AccelCalibration] Constructed
+  [Calib] Cancel sent to reset any stale drone state
+  [Calib] MAV_CMD_PREFLIGHT_CALIBRATION sent → sysid=1 compid=1
+  [Calib][RX] msgid=30 (ATTITUDE) from=1/1
+  [Calib][RX] msgid=253 (STATUSTEXT) from=1/1
+  [Calib][RX] STATUSTEXT: some unknown text
+  [       OK ] AccelCalibrationTest.ValidateAttitudeDefaultCase (400 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

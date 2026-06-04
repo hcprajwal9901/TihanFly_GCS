@@ -1,0 +1,36 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ACCE-018
+  Test            :  AccelCalibrationTest.StartLevelCalibrationHappyPath
+  Module          :  AccelCalibration
+  Source File     :  test_accel_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] accel.setSendCallback([&](const std::string& json) {
+  [2] accel.setTransportCallback([&](const mavlink_message_t& msg) {
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NE(json.find("level"), std::string::npos);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(msg.msgid, MAVLINK_MSG_ID_COMMAND_LONG);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(json_sent);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_TRUE(transport_called);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 4 assertion(s) satisfied. Verified: boolean state, equality. Module 'AccelCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] AccelCalibrationTest.StartLevelCalibrationHappyPath
+  [AccelCalibration] Constructed
+  [LevelCalib] Sending MAV_CMD_PREFLIGHT_CALIBRATION param5=2
+  [LevelCalib] Command sent → sysid=1 compid=1
+  [       OK ] AccelCalibrationTest.StartLevelCalibrationHappyPath (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

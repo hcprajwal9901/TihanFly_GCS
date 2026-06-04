@@ -1,4 +1,6 @@
 #include <gtest/gtest.h>
+#define private public
+#define protected public
 #include "Camera/camera_capture.h"
 
 class CameraCaptureTest : public ::testing::Test {
@@ -97,3 +99,148 @@ TEST_F(CameraCaptureTest, StartDummyImage) {
     capture.stop();
     EXPECT_FALSE(capture.is_active());
 }
+
+/*
+===============================================================================
+    FUNCTIONAL UNIT TEST CASES
+    Based on Spreadsheet Requirements
+===============================================================================
+*/
+
+/*
+    UT-CAM-FUNC-001
+    Function : CameraCapture::start
+    Description : Starts camera capture.
+    Input : None
+    Expected Output : Executes successfully
+*/
+TEST_F(CameraCaptureTest, StartFUNC) {
+    CameraCapture cc;
+    EXPECT_NO_THROW(cc.start());
+    cc.stop();
+}
+
+/*
+    UT-CAM-FUNC-002
+    Function : CameraCapture::stop
+    Description : Stops camera capture.
+    Input : None
+    Expected Output : Executes successfully
+*/
+TEST_F(CameraCaptureTest, StopFUNC) {
+    CameraCapture cc;
+    cc.start();
+    EXPECT_NO_THROW(cc.stop());
+}
+
+/*
+    UT-CAM-FUNC-003
+    Function : CameraCapture::capture
+    Description : Captures a frame.
+    Input : Mat frame
+    Expected Output : Executes successfully
+*/
+TEST_F(CameraCaptureTest, CaptureFUNC) {
+    CameraCapture cc;
+    cc.start();
+    EXPECT_NO_THROW({
+        std::vector<uint8_t> frame = cc.read_frame();
+    });
+    cc.stop();
+}
+
+/*
+===============================================================================
+    EXTREME TEST CASES
+===============================================================================
+*/
+
+/*
+    UT-CAM-EXT-001
+    Function : CameraCapture::start
+    Description : Double start handling.
+    Input : None
+    Expected Output : Handles gracefully
+*/
+TEST_F(CameraCaptureTest, DoubleStartHandling) {
+    CameraCapture cc;
+    cc.start();
+    EXPECT_NO_THROW(cc.start());
+    cc.stop();
+}
+
+/*
+    UT-CAM-004
+    Function : CameraCapture::read_frame
+    Description : Read JPEG-compressed frame.
+    Input : None
+    Expected Output : Returns compressed bytes
+*/
+TEST_F(CameraCaptureTest, ReadFrameFUNC) {
+    CameraCapture capture;
+    auto frame = capture.read_frame();
+    EXPECT_TRUE(frame.empty());
+}
+
+/*
+    UT-CAM-005
+    Function : CameraCapture::is_active
+    Description : Check active status.
+    Input : None
+    Expected Output : Returns bool
+*/
+TEST_F(CameraCaptureTest, IsActiveFUNC) {
+    CameraCapture capture;
+    EXPECT_FALSE(capture.is_active());
+}
+
+/*
+    UT-CAM-006
+    Function : CameraCapture::open_camera
+    Description : Try to open camera source.
+    Input : None
+    Expected Output : returns bool status
+*/
+TEST_F(CameraCaptureTest, OpenCameraFUNC) {
+    CameraCapture capture;
+    EXPECT_FALSE(capture.open_camera());
+}
+
+/*
+    UT-CAM-007
+    Function : CameraCapture::release_camera
+    Description : Release OpenCV camera resources.
+    Input : None
+    Expected Output : Releases resources safely
+*/
+TEST_F(CameraCaptureTest, ReleaseCameraFUNC) {
+    CameraCapture capture;
+    EXPECT_NO_THROW(capture.release_camera());
+}
+
+/*
+    UT-CAM-008
+    Function : CameraCapture::capture_loop
+    Description : Run capture thread logic.
+    Input : None
+    Expected Output : exits gracefully when active is false
+*/
+TEST_F(CameraCaptureTest, CaptureLoopFUNC) {
+    CameraCapture capture;
+    capture.running_ = false;
+    EXPECT_NO_THROW(capture.capture_loop());
+}
+
+/*
+    UT-CAM-009
+    Function : CameraCapture::draw_overlay
+    Description : Draw debug overlay on Mat.
+    Input : Mat frame
+    Expected Output : Draws successfully
+*/
+TEST_F(CameraCaptureTest, DrawOverlayFUNC) {
+    CameraCapture capture;
+    cv::Mat dummy_frame = cv::Mat::zeros(480, 640, CV_8UC3);
+    EXPECT_NO_THROW(capture.draw_overlay(dummy_frame));
+}
+

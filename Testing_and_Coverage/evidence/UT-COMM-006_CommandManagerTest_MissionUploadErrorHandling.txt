@@ -1,0 +1,33 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMM-006
+  Test            :  CommandManagerTest.MissionUploadErrorHandling
+  Module          :  CommandManager
+  Source File     :  test_command_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] cmd_manager->set_response_callback([&](const std::string& res) {
+  [2] std::vector<WaypointItem> wps;
+  [3] cmd_manager->upload_mission(101, wps, 1, 0, nullptr);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_TRUE(cb_fired);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: boolean state. Module 'CommandManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CommandManagerTest.MissionUploadErrorHandling
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [Mission] ERROR: no active transport and no target vehicle — call set_transport() or pass a Vehicle* to upload_mission()
+  [       OK ] CommandManagerTest.MissionUploadErrorHandling (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

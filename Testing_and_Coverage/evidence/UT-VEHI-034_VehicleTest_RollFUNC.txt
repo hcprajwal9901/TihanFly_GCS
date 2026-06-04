@@ -1,0 +1,30 @@
+========================================================================
+  EVIDENCE FILE  :  UT-VEHI-034
+  Test            :  VehicleTest.RollFUNC
+  Module          :  Vehicle
+  Source File     :  test_vehicle.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto v = std::make_shared<Vehicle>(1, 1, 0, link_manager.get(), 1);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_FLOAT_EQ(v->roll(), 0.0f);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: equality. Module 'Vehicle' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] VehicleTest.RollFUNC
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [       OK ] VehicleTest.RollFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

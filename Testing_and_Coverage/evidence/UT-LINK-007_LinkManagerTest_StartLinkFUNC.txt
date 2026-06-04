@@ -1,0 +1,33 @@
+========================================================================
+  EVIDENCE FILE  :  UT-LINK-007
+  Test            :  LinkManagerTest.StartLinkFUNC
+  Module          :  LinkManager
+  Source File     :  test_link_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] auto t = std::make_shared<MockTransport>();
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_CALL(*t, start()).Times(1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_CALL(*t, set_receive_callback(testing::_)).Times(1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_NO_THROW(manager.start_link(id));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 3 assertion(s) satisfied. Verified: exception safety. Module 'LinkManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] LinkManagerTest.StartLinkFUNC
+  [Link] Added link 0
+  [Link] Listening...
+  [Link] Started link 0
+  [       OK ] LinkManagerTest.StartLinkFUNC (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

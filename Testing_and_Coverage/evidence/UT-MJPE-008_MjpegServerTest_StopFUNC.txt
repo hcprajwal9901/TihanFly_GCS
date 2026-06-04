@@ -1,0 +1,28 @@
+========================================================================
+  EVIDENCE FILE  :  UT-MJPE-008
+  Test            :  MjpegServerTest.StopFUNC
+  Module          :  MjpegServer
+  Source File     :  test_mjpeg_server.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(server_->stop());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'MjpegServer' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] MjpegServerTest.StopFUNC
+  [MjpegServer] Listening on port 8094
+  [Camera] Capture stopped
+  [       OK ] MjpegServerTest.StopFUNC (100 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

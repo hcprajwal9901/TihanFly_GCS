@@ -1,0 +1,28 @@
+========================================================================
+  EVIDENCE FILE  :  UT-MJPE-011
+  Test            :  MjpegServerTest.DoAcceptFUNC
+  Module          :  MjpegServer
+  Source File     :  test_mjpeg_server.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_NO_THROW(server_->do_accept());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 1 assertion(s) satisfied. Verified: exception safety. Module 'MjpegServer' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] MjpegServerTest.DoAcceptFUNC
+  [MjpegServer] Listening on port 8097
+  [Camera] Capture stopped
+  [       OK ] MjpegServerTest.DoAcceptFUNC (100 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

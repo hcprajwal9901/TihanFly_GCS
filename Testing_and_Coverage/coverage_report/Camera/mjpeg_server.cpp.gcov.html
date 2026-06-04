@@ -31,18 +31,18 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntry">112</td>
+            <td class="headerCovTableEntry">115</td>
             <td class="headerCovTableEntry">120</td>
-            <td class="headerCovTableEntryHi">93.3 %</td>
+            <td class="headerCovTableEntryHi">95.8 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2026-05-26 10:38:26</td>
+            <td class="headerValue">2026-06-04 11:54:51</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">17</td>
             <td class="headerCovTableEntry">18</td>
-            <td class="headerCovTableEntryMed">88.9 %</td>
+            <td class="headerCovTableEntryHi">94.4 %</td>
           </tr>
           <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
         </table>
@@ -74,63 +74,63 @@
 <a name="12"><span class="lineNum">      12 </span>            : //  MjpegServer</a>
 <a name="13"><span class="lineNum">      13 </span>            : // ────────────────────────────────────────────────────────────────────────────</a>
 <a name="14"><span class="lineNum">      14 </span>            : </a>
-<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          8 : MjpegServer::MjpegServer(asio::io_context&amp; io,</span></a>
+<a name="15"><span class="lineNum">      15 </span><span class="lineCov">         20 : MjpegServer::MjpegServer(asio::io_context&amp; io,</span></a>
 <a name="16"><span class="lineNum">      16 </span>            :                          CameraCapture&amp;    camera,</a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineCov">          8 :                          uint16_t          port)</span></a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          8 :     : io_(io)</span></a>
-<a name="19"><span class="lineNum">      19 </span><span class="lineCov">          8 :     , camera_(camera)</span></a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">          8 :     , acceptor_(io,</span></a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineCov">          8 :                 asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))</span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineCov">         20 :                          uint16_t          port)</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">         20 :     : io_(io)</span></a>
+<a name="19"><span class="lineNum">      19 </span><span class="lineCov">         20 :     , camera_(camera)</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">         20 :     , acceptor_(io,</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">         20 :                 asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))</span></a>
 <a name="22"><span class="lineNum">      22 </span>            : {</a>
 <a name="23"><span class="lineNum">      23 </span>            :     // Allow quick restart after crash</a>
-<a name="24"><span class="lineNum">      24 </span><span class="lineCov">          8 :     acceptor_.set_option(asio::socket_base::reuse_address(true));</span></a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineCov">          8 :     std::cout &lt;&lt; &quot;[MjpegServer] Listening on port &quot; &lt;&lt; port &lt;&lt; &quot;\n&quot;;</span></a>
-<a name="26"><span class="lineNum">      26 </span><span class="lineCov">          8 : }</span></a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineCov">         20 :     acceptor_.set_option(asio::socket_base::reuse_address(true));</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">         20 :     std::cout &lt;&lt; &quot;[MjpegServer] Listening on port &quot; &lt;&lt; port &lt;&lt; &quot;\n&quot;;</span></a>
+<a name="26"><span class="lineNum">      26 </span><span class="lineCov">         20 : }</span></a>
 <a name="27"><span class="lineNum">      27 </span>            : </a>
-<a name="28"><span class="lineNum">      28 </span><span class="lineCov">          8 : void MjpegServer::start()</span></a>
+<a name="28"><span class="lineNum">      28 </span><span class="lineCov">         20 : void MjpegServer::start()</span></a>
 <a name="29"><span class="lineNum">      29 </span>            : {</a>
 <a name="30"><span class="lineNum">      30 </span>            :     do_accept();</a>
-<a name="31"><span class="lineNum">      31 </span><span class="lineCov">          8 : }</span></a>
+<a name="31"><span class="lineNum">      31 </span><span class="lineCov">         20 : }</span></a>
 <a name="32"><span class="lineNum">      32 </span>            : </a>
-<a name="33"><span class="lineNum">      33 </span><span class="lineCov">          8 : void MjpegServer::stop()</span></a>
+<a name="33"><span class="lineNum">      33 </span><span class="lineCov">         23 : void MjpegServer::stop()</span></a>
 <a name="34"><span class="lineNum">      34 </span>            : {</a>
 <a name="35"><span class="lineNum">      35 </span>            :     std::error_code ec;</a>
 <a name="36"><span class="lineNum">      36 </span>            :     acceptor_.close(ec);</a>
-<a name="37"><span class="lineNum">      37 </span><span class="lineCov">          8 : }</span></a>
+<a name="37"><span class="lineNum">      37 </span><span class="lineCov">         23 : }</span></a>
 <a name="38"><span class="lineNum">      38 </span>            : </a>
-<a name="39"><span class="lineNum">      39 </span><span class="lineCov">          1 : int MjpegServer::active_clients() const</span></a>
+<a name="39"><span class="lineNum">      39 </span><span class="lineCov">          2 : int MjpegServer::active_clients() const</span></a>
 <a name="40"><span class="lineNum">      40 </span>            : {</a>
-<a name="41"><span class="lineNum">      41 </span><span class="lineCov">          1 :     return active_clients_.load();</span></a>
+<a name="41"><span class="lineNum">      41 </span><span class="lineCov">          2 :     return active_clients_.load();</span></a>
 <a name="42"><span class="lineNum">      42 </span>            : }</a>
 <a name="43"><span class="lineNum">      43 </span>            : </a>
-<a name="44"><span class="lineNum">      44 </span><span class="lineNoCov">          0 : void MjpegServer::do_accept()</span></a>
+<a name="44"><span class="lineNum">      44 </span><span class="lineCov">          1 : void MjpegServer::do_accept()</span></a>
 <a name="45"><span class="lineNum">      45 </span>            : {</a>
-<a name="46"><span class="lineNum">      46 </span><span class="lineCov">         14 :     acceptor_.async_accept(</span></a>
-<a name="47"><span class="lineNum">      47 </span><span class="lineCov">         13 :         [this](std::error_code ec, asio::ip::tcp::socket socket)</span></a>
+<a name="46"><span class="lineNum">      46 </span><span class="lineCov">         28 :     acceptor_.async_accept(</span></a>
+<a name="47"><span class="lineNum">      47 </span><span class="lineCov">         14 :         [this](std::error_code ec, asio::ip::tcp::socket socket)</span></a>
 <a name="48"><span class="lineNum">      48 </span>            :         {</a>
-<a name="49"><span class="lineNum">      49 </span><span class="lineCov">          8 :             if (!ec)</span></a>
+<a name="49"><span class="lineNum">      49 </span><span class="lineCov">          9 :             if (!ec)</span></a>
 <a name="50"><span class="lineNum">      50 </span>            :             {</a>
 <a name="51"><span class="lineNum">      51 </span>            :                 std::cout &lt;&lt; &quot;[MjpegServer] Client connected: &quot;</a>
 <a name="52"><span class="lineNum">      52 </span><span class="lineCov">          5 :                           &lt;&lt; socket.remote_endpoint() &lt;&lt; &quot;\n&quot;;</span></a>
 <a name="53"><span class="lineNum">      53 </span><span class="lineCov">          5 :                 std::make_shared&lt;Session&gt;(</span></a>
 <a name="54"><span class="lineNum">      54 </span><span class="lineCov">          5 :                     std::move(socket), camera_, active_clients_)-&gt;start();</span></a>
 <a name="55"><span class="lineNum">      55 </span>            :             }</a>
-<a name="56"><span class="lineNum">      56 </span><span class="lineCov">          8 :             if (acceptor_.is_open())</span></a>
+<a name="56"><span class="lineNum">      56 </span><span class="lineCov">          9 :             if (acceptor_.is_open())</span></a>
 <a name="57"><span class="lineNum">      57 </span>            :                 do_accept();</a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineCov">          8 :         });</span></a>
-<a name="59"><span class="lineNum">      59 </span><span class="lineCov">          6 : }</span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineCov">          9 :         });</span></a>
+<a name="59"><span class="lineNum">      59 </span><span class="lineCov">          7 : }</span></a>
 <a name="60"><span class="lineNum">      60 </span>            : </a>
 <a name="61"><span class="lineNum">      61 </span>            : // ────────────────────────────────────────────────────────────────────────────</a>
 <a name="62"><span class="lineNum">      62 </span>            : //  Session</a>
 <a name="63"><span class="lineNum">      63 </span>            : // ────────────────────────────────────────────────────────────────────────────</a>
 <a name="64"><span class="lineNum">      64 </span>            : </a>
-<a name="65"><span class="lineNum">      65 </span><span class="lineCov">          5 : MjpegServer::Session::Session(asio::ip::tcp::socket socket,</span></a>
+<a name="65"><span class="lineNum">      65 </span><span class="lineCov">         12 : MjpegServer::Session::Session(asio::ip::tcp::socket socket,</span></a>
 <a name="66"><span class="lineNum">      66 </span>            :                                CameraCapture&amp;        camera,</a>
-<a name="67"><span class="lineNum">      67 </span><span class="lineCov">          5 :                                std::atomic&lt;int&gt;&amp;     client_counter)</span></a>
+<a name="67"><span class="lineNum">      67 </span><span class="lineCov">         12 :                                std::atomic&lt;int&gt;&amp;     client_counter)</span></a>
 <a name="68"><span class="lineNum">      68 </span>            :     : socket_(std::move(socket))</a>
-<a name="69"><span class="lineNum">      69 </span><span class="lineCov">          5 :     , camera_(camera)</span></a>
-<a name="70"><span class="lineNum">      70 </span><span class="lineCov">          5 :     , client_counter_(client_counter)</span></a>
-<a name="71"><span class="lineNum">      71 </span><span class="lineCov">          5 : {}</span></a>
+<a name="69"><span class="lineNum">      69 </span><span class="lineCov">         12 :     , camera_(camera)</span></a>
+<a name="70"><span class="lineNum">      70 </span><span class="lineCov">         12 :     , client_counter_(client_counter)</span></a>
+<a name="71"><span class="lineNum">      71 </span><span class="lineCov">         12 : {}</span></a>
 <a name="72"><span class="lineNum">      72 </span>            : </a>
 <a name="73"><span class="lineNum">      73 </span><span class="lineNoCov">          0 : void MjpegServer::Session::start()</span></a>
 <a name="74"><span class="lineNum">      74 </span>            : {</a>
@@ -139,12 +139,12 @@
 <a name="77"><span class="lineNum">      77 </span>            : </a>
 <a name="78"><span class="lineNum">      78 </span>            : // ── Read the first line of the HTTP request ───────────────────────────────</a>
 <a name="79"><span class="lineNum">      79 </span>            : </a>
-<a name="80"><span class="lineNum">      80 </span><span class="lineCov">          5 : void MjpegServer::Session::read_request()</span></a>
+<a name="80"><span class="lineNum">      80 </span><span class="lineCov">          6 : void MjpegServer::Session::read_request()</span></a>
 <a name="81"><span class="lineNum">      81 </span>            : {</a>
 <a name="82"><span class="lineNum">      82 </span>            :     auto self = shared_from_this();</a>
-<a name="83"><span class="lineNum">      83 </span><span class="lineCov">         10 :     asio::async_read_until(</span></a>
-<a name="84"><span class="lineNum">      84 </span><span class="lineCov">          5 :         socket_, request_buf_, &quot;\r\n&quot;,</span></a>
-<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         20 :         [this, self](std::error_code ec, std::size_t /*len*/)</span></a>
+<a name="83"><span class="lineNum">      83 </span><span class="lineCov">         12 :     asio::async_read_until(</span></a>
+<a name="84"><span class="lineNum">      84 </span><span class="lineCov">          6 :         socket_, request_buf_, &quot;\r\n&quot;,</span></a>
+<a name="85"><span class="lineNum">      85 </span><span class="lineCov">         23 :         [this, self](std::error_code ec, std::size_t /*len*/)</span></a>
 <a name="86"><span class="lineNum">      86 </span>            :         {</a>
 <a name="87"><span class="lineNum">      87 </span><span class="lineCov">          5 :             if (ec) return;</span></a>
 <a name="88"><span class="lineNum">      88 </span>            : </a>
@@ -156,34 +156,34 @@
 <a name="94"><span class="lineNum">      94 </span>            : </a>
 <a name="95"><span class="lineNum">      95 </span><span class="lineCov">          5 :             handle_request(line);</span></a>
 <a name="96"><span class="lineNum">      96 </span>            :         });</a>
-<a name="97"><span class="lineNum">      97 </span><span class="lineCov">          5 : }</span></a>
+<a name="97"><span class="lineNum">      97 </span><span class="lineCov">          6 : }</span></a>
 <a name="98"><span class="lineNum">      98 </span>            : </a>
 <a name="99"><span class="lineNum">      99 </span>            : // ── Route dispatcher ─────────────────────────────────────────────────────</a>
 <a name="100"><span class="lineNum">     100 </span>            : </a>
-<a name="101"><span class="lineNum">     101 </span><span class="lineCov">          5 : void MjpegServer::Session::handle_request(const std::string&amp; request_line)</span></a>
+<a name="101"><span class="lineNum">     101 </span><span class="lineCov">          6 : void MjpegServer::Session::handle_request(const std::string&amp; request_line)</span></a>
 <a name="102"><span class="lineNum">     102 </span>            : {</a>
 <a name="103"><span class="lineNum">     103 </span>            :     // &quot;GET /video_feed HTTP/1.1&quot;</a>
-<a name="104"><span class="lineNum">     104 </span><span class="lineCov">          5 :     std::istringstream iss(request_line);</span></a>
+<a name="104"><span class="lineNum">     104 </span><span class="lineCov">          6 :     std::istringstream iss(request_line);</span></a>
 <a name="105"><span class="lineNum">     105 </span>            :     std::string method, path;</a>
-<a name="106"><span class="lineNum">     106 </span><span class="lineCov">          5 :     iss &gt;&gt; method &gt;&gt; path;</span></a>
+<a name="106"><span class="lineNum">     106 </span><span class="lineCov">          6 :     iss &gt;&gt; method &gt;&gt; path;</span></a>
 <a name="107"><span class="lineNum">     107 </span>            : </a>
-<a name="108"><span class="lineNum">     108 </span><span class="lineCov">          5 :     std::cout &lt;&lt; &quot;[MjpegServer] &quot; &lt;&lt; method &lt;&lt; &quot; &quot; &lt;&lt; path &lt;&lt; &quot;\n&quot;;</span></a>
+<a name="108"><span class="lineNum">     108 </span><span class="lineCov">          6 :     std::cout &lt;&lt; &quot;[MjpegServer] &quot; &lt;&lt; method &lt;&lt; &quot; &quot; &lt;&lt; path &lt;&lt; &quot;\n&quot;;</span></a>
 <a name="109"><span class="lineNum">     109 </span>            : </a>
-<a name="110"><span class="lineNum">     110 </span><span class="lineCov">          5 :     if (path == &quot;/video_feed&quot;)</span></a>
+<a name="110"><span class="lineNum">     110 </span><span class="lineCov">          6 :     if (path == &quot;/video_feed&quot;)</span></a>
 <a name="111"><span class="lineNum">     111 </span><span class="lineCov">          1 :         serve_video_feed();</span></a>
-<a name="112"><span class="lineNum">     112 </span><span class="lineCov">          4 :     else if (path == &quot;/status&quot;)</span></a>
-<a name="113"><span class="lineNum">     113 </span><span class="lineCov">          1 :         serve_status();</span></a>
+<a name="112"><span class="lineNum">     112 </span><span class="lineCov">          5 :     else if (path == &quot;/status&quot;)</span></a>
+<a name="113"><span class="lineNum">     113 </span><span class="lineCov">          2 :         serve_status();</span></a>
 <a name="114"><span class="lineNum">     114 </span><span class="lineCov">          3 :     else if (path == &quot;/snapshot&quot;)</span></a>
 <a name="115"><span class="lineNum">     115 </span><span class="lineCov">          2 :         serve_snapshot();</span></a>
 <a name="116"><span class="lineNum">     116 </span>            :     else</a>
 <a name="117"><span class="lineNum">     117 </span><span class="lineCov">          1 :         serve_not_found();</span></a>
-<a name="118"><span class="lineNum">     118 </span><span class="lineCov">          5 : }</span></a>
+<a name="118"><span class="lineNum">     118 </span><span class="lineCov">          6 : }</span></a>
 <a name="119"><span class="lineNum">     119 </span>            : </a>
 <a name="120"><span class="lineNum">     120 </span>            : // ── /video_feed ──────────────────────────────────────────────────────────</a>
 <a name="121"><span class="lineNum">     121 </span>            : </a>
-<a name="122"><span class="lineNum">     122 </span><span class="lineCov">          1 : void MjpegServer::Session::serve_video_feed()</span></a>
+<a name="122"><span class="lineNum">     122 </span><span class="lineCov">          2 : void MjpegServer::Session::serve_video_feed()</span></a>
 <a name="123"><span class="lineNum">     123 </span>            : {</a>
-<a name="124"><span class="lineNum">     124 </span><span class="lineCov">          1 :     ++client_counter_;</span></a>
+<a name="124"><span class="lineNum">     124 </span><span class="lineCov">          2 :     ++client_counter_;</span></a>
 <a name="125"><span class="lineNum">     125 </span>            : </a>
 <a name="126"><span class="lineNum">     126 </span>            :     // HTTP response header for MJPEG</a>
 <a name="127"><span class="lineNum">     127 </span>            :     const std::string header =</a>
@@ -192,30 +192,30 @@
 <a name="130"><span class="lineNum">     130 </span>            :         &quot;Cache-Control: no-cache, no-store, must-revalidate\r\n&quot;</a>
 <a name="131"><span class="lineNum">     131 </span>            :         &quot;Pragma: no-cache\r\n&quot;</a>
 <a name="132"><span class="lineNum">     132 </span>            :         &quot;Access-Control-Allow-Origin: *\r\n&quot;</a>
-<a name="133"><span class="lineNum">     133 </span><span class="lineCov">          1 :         &quot;Connection: keep-alive\r\n\r\n&quot;;</span></a>
+<a name="133"><span class="lineNum">     133 </span><span class="lineCov">          2 :         &quot;Connection: keep-alive\r\n\r\n&quot;;</span></a>
 <a name="134"><span class="lineNum">     134 </span>            : </a>
 <a name="135"><span class="lineNum">     135 </span>            :     auto self = shared_from_this();</a>
-<a name="136"><span class="lineNum">     136 </span><span class="lineCov">          1 :     asio::async_write(socket_, asio::buffer(header),</span></a>
-<a name="137"><span class="lineNum">     137 </span><span class="lineCov">          5 :         [this, self](std::error_code ec, std::size_t)</span></a>
+<a name="136"><span class="lineNum">     136 </span><span class="lineCov">          2 :     asio::async_write(socket_, asio::buffer(header),</span></a>
+<a name="137"><span class="lineNum">     137 </span><span class="lineCov">          9 :         [this, self](std::error_code ec, std::size_t)</span></a>
 <a name="138"><span class="lineNum">     138 </span>            :         {</a>
 <a name="139"><span class="lineNum">     139 </span><span class="lineCov">          1 :             if (!ec)</span></a>
 <a name="140"><span class="lineNum">     140 </span><span class="lineCov">          1 :                 stream_next_frame();</span></a>
 <a name="141"><span class="lineNum">     141 </span>            :             else</a>
 <a name="142"><span class="lineNum">     142 </span><span class="lineNoCov">          0 :                 --client_counter_;</span></a>
 <a name="143"><span class="lineNum">     143 </span><span class="lineCov">          1 :         });</span></a>
-<a name="144"><span class="lineNum">     144 </span><span class="lineCov">          1 : }</span></a>
+<a name="144"><span class="lineNum">     144 </span><span class="lineCov">          2 : }</span></a>
 <a name="145"><span class="lineNum">     145 </span>            : </a>
-<a name="146"><span class="lineNum">     146 </span><span class="lineCov">         27 : void MjpegServer::Session::stream_next_frame()</span></a>
+<a name="146"><span class="lineNum">     146 </span><span class="lineCov">         29 : void MjpegServer::Session::stream_next_frame()</span></a>
 <a name="147"><span class="lineNum">     147 </span>            : {</a>
 <a name="148"><span class="lineNum">     148 </span>            :     auto self = shared_from_this();</a>
-<a name="149"><span class="lineNum">     149 </span><span class="lineCov">         27 :     auto frame = camera_.read_frame();</span></a>
+<a name="149"><span class="lineNum">     149 </span><span class="lineCov">         29 :     auto frame = camera_.read_frame();</span></a>
 <a name="150"><span class="lineNum">     150 </span>            : </a>
 <a name="151"><span class="lineNum">     151 </span>            :     // If camera has no frame yet, wait 33ms and retry</a>
-<a name="152"><span class="lineNum">     152 </span><span class="lineCov">         27 :     if (frame.empty())</span></a>
+<a name="152"><span class="lineNum">     152 </span><span class="lineCov">         29 :     if (frame.empty())</span></a>
 <a name="153"><span class="lineNum">     153 </span>            :     {</a>
 <a name="154"><span class="lineNum">     154 </span>            :         auto timer = std::make_shared&lt;asio::steady_timer&gt;(</a>
-<a name="155"><span class="lineNum">     155 </span><span class="lineNoCov">          0 :             socket_.get_executor(), std::chrono::milliseconds(33));</span></a>
-<a name="156"><span class="lineNum">     156 </span><span class="lineNoCov">          0 :         timer-&gt;async_wait([this, self, timer](std::error_code)</span></a>
+<a name="155"><span class="lineNum">     155 </span><span class="lineCov">          1 :             socket_.get_executor(), std::chrono::milliseconds(33));</span></a>
+<a name="156"><span class="lineNum">     156 </span><span class="lineCov">          4 :         timer-&gt;async_wait([this, self, timer](std::error_code)</span></a>
 <a name="157"><span class="lineNum">     157 </span>            :         {</a>
 <a name="158"><span class="lineNum">     158 </span><span class="lineNoCov">          0 :             stream_next_frame();</span></a>
 <a name="159"><span class="lineNum">     159 </span>            :         });</a>
@@ -223,13 +223,13 @@
 <a name="161"><span class="lineNum">     161 </span>            :     }</a>
 <a name="162"><span class="lineNum">     162 </span>            : </a>
 <a name="163"><span class="lineNum">     163 </span>            :     // Skip identical frames to save bandwidth</a>
-<a name="164"><span class="lineNum">     164 </span><span class="lineCov">         27 :     if (frame == last_frame_)</span></a>
+<a name="164"><span class="lineNum">     164 </span><span class="lineCov">         28 :     if (frame == last_frame_)</span></a>
 <a name="165"><span class="lineNum">     165 </span>            :     {</a>
 <a name="166"><span class="lineNum">     166 </span>            :         auto timer = std::make_shared&lt;asio::steady_timer&gt;(</a>
-<a name="167"><span class="lineNum">     167 </span><span class="lineCov">         23 :             socket_.get_executor(), std::chrono::milliseconds(16));</span></a>
-<a name="168"><span class="lineNum">     168 </span><span class="lineCov">         92 :         timer-&gt;async_wait([this, self, timer](std::error_code)</span></a>
+<a name="167"><span class="lineNum">     167 </span><span class="lineCov">         24 :             socket_.get_executor(), std::chrono::milliseconds(16));</span></a>
+<a name="168"><span class="lineNum">     168 </span><span class="lineCov">         96 :         timer-&gt;async_wait([this, self, timer](std::error_code)</span></a>
 <a name="169"><span class="lineNum">     169 </span>            :         {</a>
-<a name="170"><span class="lineNum">     170 </span><span class="lineCov">         22 :             stream_next_frame();</span></a>
+<a name="170"><span class="lineNum">     170 </span><span class="lineCov">         23 :             stream_next_frame();</span></a>
 <a name="171"><span class="lineNum">     171 </span>            :         });</a>
 <a name="172"><span class="lineNum">     172 </span>            :         return;</a>
 <a name="173"><span class="lineNum">     173 </span>            :     }</a>
@@ -266,24 +266,24 @@
 <a name="204"><span class="lineNum">     204 </span>            : </a>
 <a name="205"><span class="lineNum">     205 </span>            : // ── /status ──────────────────────────────────────────────────────────────</a>
 <a name="206"><span class="lineNum">     206 </span>            : </a>
-<a name="207"><span class="lineNum">     207 </span><span class="lineCov">          1 : void MjpegServer::Session::serve_status()</span></a>
+<a name="207"><span class="lineNum">     207 </span><span class="lineCov">          3 : void MjpegServer::Session::serve_status()</span></a>
 <a name="208"><span class="lineNum">     208 </span>            : {</a>
-<a name="209"><span class="lineNum">     209 </span><span class="lineCov">          1 :     bool active = camera_.is_active();</span></a>
-<a name="210"><span class="lineNum">     210 </span><span class="lineCov">          1 :     uint64_t fc = camera_.frame_count();</span></a>
-<a name="211"><span class="lineNum">     211 </span><span class="lineCov">          1 :     const auto&amp; cfg = camera_.config();</span></a>
+<a name="209"><span class="lineNum">     209 </span><span class="lineCov">          3 :     bool active = camera_.is_active();</span></a>
+<a name="210"><span class="lineNum">     210 </span><span class="lineCov">          3 :     uint64_t fc = camera_.frame_count();</span></a>
+<a name="211"><span class="lineNum">     211 </span><span class="lineCov">          3 :     const auto&amp; cfg = camera_.config();</span></a>
 <a name="212"><span class="lineNum">     212 </span>            : </a>
-<a name="213"><span class="lineNum">     213 </span><span class="lineCov">          1 :     std::ostringstream json;</span></a>
+<a name="213"><span class="lineNum">     213 </span><span class="lineCov">          3 :     std::ostringstream json;</span></a>
 <a name="214"><span class="lineNum">     214 </span>            :     json &lt;&lt; &quot;{&quot;</a>
 <a name="215"><span class="lineNum">     215 </span>            :          &lt;&lt; &quot;\&quot;camera_active\&quot;:&quot; &lt;&lt; (active ? &quot;true&quot; : &quot;false&quot;) &lt;&lt; &quot;,&quot;</a>
-<a name="216"><span class="lineNum">     216 </span><span class="lineCov">          2 :          &lt;&lt; &quot;\&quot;frame_count\&quot;:&quot;   &lt;&lt; fc &lt;&lt; &quot;,&quot;</span></a>
+<a name="216"><span class="lineNum">     216 </span><span class="lineCov">          6 :          &lt;&lt; &quot;\&quot;frame_count\&quot;:&quot;   &lt;&lt; fc &lt;&lt; &quot;,&quot;</span></a>
 <a name="217"><span class="lineNum">     217 </span>            :          &lt;&lt; &quot;\&quot;source\&quot;:\&quot;&quot;      &lt;&lt; cfg.source &lt;&lt; &quot;\&quot;,&quot;</a>
-<a name="218"><span class="lineNum">     218 </span><span class="lineCov">          1 :          &lt;&lt; &quot;\&quot;width\&quot;:&quot;         &lt;&lt; cfg.width &lt;&lt; &quot;,&quot;</span></a>
-<a name="219"><span class="lineNum">     219 </span><span class="lineCov">          1 :          &lt;&lt; &quot;\&quot;height\&quot;:&quot;        &lt;&lt; cfg.height &lt;&lt; &quot;,&quot;</span></a>
-<a name="220"><span class="lineNum">     220 </span><span class="lineCov">          1 :          &lt;&lt; &quot;\&quot;fps\&quot;:&quot;           &lt;&lt; cfg.fps</span></a>
-<a name="221"><span class="lineNum">     221 </span><span class="lineCov">          1 :          &lt;&lt; &quot;}&quot;;</span></a>
+<a name="218"><span class="lineNum">     218 </span><span class="lineCov">          3 :          &lt;&lt; &quot;\&quot;width\&quot;:&quot;         &lt;&lt; cfg.width &lt;&lt; &quot;,&quot;</span></a>
+<a name="219"><span class="lineNum">     219 </span><span class="lineCov">          3 :          &lt;&lt; &quot;\&quot;height\&quot;:&quot;        &lt;&lt; cfg.height &lt;&lt; &quot;,&quot;</span></a>
+<a name="220"><span class="lineNum">     220 </span><span class="lineCov">          3 :          &lt;&lt; &quot;\&quot;fps\&quot;:&quot;           &lt;&lt; cfg.fps</span></a>
+<a name="221"><span class="lineNum">     221 </span><span class="lineCov">          3 :          &lt;&lt; &quot;}&quot;;</span></a>
 <a name="222"><span class="lineNum">     222 </span>            : </a>
 <a name="223"><span class="lineNum">     223 </span>            :     const std::string body = json.str();</a>
-<a name="224"><span class="lineNum">     224 </span><span class="lineCov">          1 :     std::ostringstream response;</span></a>
+<a name="224"><span class="lineNum">     224 </span><span class="lineCov">          3 :     std::ostringstream response;</span></a>
 <a name="225"><span class="lineNum">     225 </span>            :     response &lt;&lt; &quot;HTTP/1.1 200 OK\r\n&quot;</a>
 <a name="226"><span class="lineNum">     226 </span>            :              &lt;&lt; &quot;Content-Type: application/json\r\n&quot;</a>
 <a name="227"><span class="lineNum">     227 </span>            :              &lt;&lt; &quot;Content-Length: &quot; &lt;&lt; body.size() &lt;&lt; &quot;\r\n&quot;</a>
@@ -293,19 +293,19 @@
 <a name="231"><span class="lineNum">     231 </span>            : </a>
 <a name="232"><span class="lineNum">     232 </span>            :     const std::string resp = response.str();</a>
 <a name="233"><span class="lineNum">     233 </span>            :     auto self = shared_from_this();</a>
-<a name="234"><span class="lineNum">     234 </span><span class="lineCov">          1 :     asio::async_write(socket_, asio::buffer(resp),</span></a>
-<a name="235"><span class="lineNum">     235 </span><span class="lineCov">          1 :         [self](std::error_code, std::size_t) {});</span></a>
-<a name="236"><span class="lineNum">     236 </span><span class="lineCov">          2 : }</span></a>
+<a name="234"><span class="lineNum">     234 </span><span class="lineCov">          3 :     asio::async_write(socket_, asio::buffer(resp),</span></a>
+<a name="235"><span class="lineNum">     235 </span><span class="lineCov">          3 :         [self](std::error_code, std::size_t) {});</span></a>
+<a name="236"><span class="lineNum">     236 </span><span class="lineCov">          6 : }</span></a>
 <a name="237"><span class="lineNum">     237 </span>            : </a>
 <a name="238"><span class="lineNum">     238 </span>            : // ── /snapshot ────────────────────────────────────────────────────────────</a>
 <a name="239"><span class="lineNum">     239 </span>            : </a>
-<a name="240"><span class="lineNum">     240 </span><span class="lineCov">          2 : void MjpegServer::Session::serve_snapshot()</span></a>
+<a name="240"><span class="lineNum">     240 </span><span class="lineCov">          3 : void MjpegServer::Session::serve_snapshot()</span></a>
 <a name="241"><span class="lineNum">     241 </span>            : {</a>
-<a name="242"><span class="lineNum">     242 </span><span class="lineCov">          2 :     auto frame = camera_.read_frame();</span></a>
+<a name="242"><span class="lineNum">     242 </span><span class="lineCov">          3 :     auto frame = camera_.read_frame();</span></a>
 <a name="243"><span class="lineNum">     243 </span>            : </a>
-<a name="244"><span class="lineNum">     244 </span><span class="lineCov">          2 :     if (frame.empty())</span></a>
+<a name="244"><span class="lineNum">     244 </span><span class="lineCov">          3 :     if (frame.empty())</span></a>
 <a name="245"><span class="lineNum">     245 </span>            :     {</a>
-<a name="246"><span class="lineNum">     246 </span><span class="lineCov">          1 :         serve_not_found();</span></a>
+<a name="246"><span class="lineNum">     246 </span><span class="lineCov">          2 :         serve_not_found();</span></a>
 <a name="247"><span class="lineNum">     247 </span>            :         return;</a>
 <a name="248"><span class="lineNum">     248 </span>            :     }</a>
 <a name="249"><span class="lineNum">     249 </span>            : </a>
@@ -328,17 +328,17 @@
 <a name="266"><span class="lineNum">     266 </span>            : </a>
 <a name="267"><span class="lineNum">     267 </span>            : // ── 404 ──────────────────────────────────────────────────────────────────</a>
 <a name="268"><span class="lineNum">     268 </span>            : </a>
-<a name="269"><span class="lineNum">     269 </span><span class="lineCov">          2 : void MjpegServer::Session::serve_not_found()</span></a>
+<a name="269"><span class="lineNum">     269 </span><span class="lineCov">          4 : void MjpegServer::Session::serve_not_found()</span></a>
 <a name="270"><span class="lineNum">     270 </span>            : {</a>
 <a name="271"><span class="lineNum">     271 </span>            :     const std::string resp =</a>
 <a name="272"><span class="lineNum">     272 </span>            :         &quot;HTTP/1.1 404 Not Found\r\n&quot;</a>
 <a name="273"><span class="lineNum">     273 </span>            :         &quot;Content-Length: 0\r\n&quot;</a>
-<a name="274"><span class="lineNum">     274 </span><span class="lineCov">          2 :         &quot;Access-Control-Allow-Origin: *\r\n\r\n&quot;;</span></a>
+<a name="274"><span class="lineNum">     274 </span><span class="lineCov">          4 :         &quot;Access-Control-Allow-Origin: *\r\n\r\n&quot;;</span></a>
 <a name="275"><span class="lineNum">     275 </span>            : </a>
 <a name="276"><span class="lineNum">     276 </span>            :     auto self = shared_from_this();</a>
-<a name="277"><span class="lineNum">     277 </span><span class="lineCov">          2 :     asio::async_write(socket_, asio::buffer(resp),</span></a>
-<a name="278"><span class="lineNum">     278 </span><span class="lineCov">          2 :         [self](std::error_code, std::size_t) {});</span></a>
-<a name="279"><span class="lineNum">     279 </span><span class="lineCov">          2 : }</span></a>
+<a name="277"><span class="lineNum">     277 </span><span class="lineCov">          4 :     asio::async_write(socket_, asio::buffer(resp),</span></a>
+<a name="278"><span class="lineNum">     278 </span><span class="lineCov">          4 :         [self](std::error_code, std::size_t) {});</span></a>
+<a name="279"><span class="lineNum">     279 </span><span class="lineCov">          4 : }</span></a>
 </pre>
       </td>
     </tr>

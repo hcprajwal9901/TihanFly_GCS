@@ -1,0 +1,44 @@
+========================================================================
+  EVIDENCE FILE  :  UT-COMM-003
+  Test            :  CommandManagerTest.CommandQueueingProcessing
+  Module          :  CommandManager
+  Source File     :  test_command_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] cmd_manager->set_vehicle_direct(direct_vehicle.get());
+  [2] std::string last_response;
+  [3] cmd_manager->set_response_callback([&](const std::string& res) {
+  [4] cmd_manager->add_command(1, "TAKEOFF", 20.0f);
+  [5] cmd_manager->add_command(2, "LAND");
+  [6] cmd_manager->process();
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(cb_count, 0);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(cb_count, 2);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(j["command"], "LAND");
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(j["status"], "success");
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 4 assertion(s) satisfied. Verified: equality. Module 'CommandManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] CommandManagerTest.CommandQueueingProcessing
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [Command] Executing: TAKEOFF
+  [Command] Takeoff altitude: 20m
+  [Command] Executing: LAND
+  [       OK ] CommandManagerTest.CommandQueueingProcessing (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

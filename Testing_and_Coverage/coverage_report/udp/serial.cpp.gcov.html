@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2026-05-26 10:38:26</td>
+            <td class="headerValue">2026-06-04 11:54:51</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">3</td>
@@ -62,29 +62,29 @@
 <pre class="source">
 <a name="1"><span class="lineNum">       1 </span>            : #include &quot;serial.h&quot;</a>
 <a name="2"><span class="lineNum">       2 </span>            : </a>
-<a name="3"><span class="lineNum">       3 </span><span class="lineCov">          3 : serial_port::serial_port(asio::io_context&amp; io, const std::string&amp; port_name, unsigned int baud_rate)</span></a>
-<a name="4"><span class="lineNum">       4 </span><span class="lineCov">          3 :     : serial_(io, port_name)</span></a>
+<a name="3"><span class="lineNum">       3 </span><span class="lineCov">          6 : serial_port::serial_port(asio::io_context&amp; io, const std::string&amp; port_name, unsigned int baud_rate)</span></a>
+<a name="4"><span class="lineNum">       4 </span><span class="lineCov">          6 :     : serial_(io, port_name)</span></a>
 <a name="5"><span class="lineNum">       5 </span>            : {</a>
-<a name="6"><span class="lineNum">       6 </span><span class="lineCov">          2 :     serial_.set_option(asio::serial_port_base::baud_rate(baud_rate));</span></a>
-<a name="7"><span class="lineNum">       7 </span><span class="lineCov">          2 :     serial_.set_option(asio::serial_port_base::character_size(8));</span></a>
-<a name="8"><span class="lineNum">       8 </span><span class="lineCov">          2 :     serial_.set_option(asio::serial_port_base::parity(asio::serial_port_base::parity::none));</span></a>
-<a name="9"><span class="lineNum">       9 </span><span class="lineCov">          2 :     serial_.set_option(asio::serial_port_base::stop_bits(asio::serial_port_base::stop_bits::one));</span></a>
-<a name="10"><span class="lineNum">      10 </span><span class="lineCov">          2 :     serial_.set_option(asio::serial_port_base::flow_control(asio::serial_port_base::flow_control::none));</span></a>
-<a name="11"><span class="lineNum">      11 </span><span class="lineCov">          2 : }</span></a>
+<a name="6"><span class="lineNum">       6 </span><span class="lineCov">          4 :     serial_.set_option(asio::serial_port_base::baud_rate(baud_rate));</span></a>
+<a name="7"><span class="lineNum">       7 </span><span class="lineCov">          4 :     serial_.set_option(asio::serial_port_base::character_size(8));</span></a>
+<a name="8"><span class="lineNum">       8 </span><span class="lineCov">          4 :     serial_.set_option(asio::serial_port_base::parity(asio::serial_port_base::parity::none));</span></a>
+<a name="9"><span class="lineNum">       9 </span><span class="lineCov">          4 :     serial_.set_option(asio::serial_port_base::stop_bits(asio::serial_port_base::stop_bits::one));</span></a>
+<a name="10"><span class="lineNum">      10 </span><span class="lineCov">          4 :     serial_.set_option(asio::serial_port_base::flow_control(asio::serial_port_base::flow_control::none));</span></a>
+<a name="11"><span class="lineNum">      11 </span><span class="lineCov">          4 : }</span></a>
 <a name="12"><span class="lineNum">      12 </span>            : </a>
-<a name="13"><span class="lineNum">      13 </span><span class="lineCov">          2 : serial_port::~serial_port()</span></a>
+<a name="13"><span class="lineNum">      13 </span><span class="lineCov">          4 : serial_port::~serial_port()</span></a>
 <a name="14"><span class="lineNum">      14 </span>            : {</a>
-<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          2 :     serial_.cancel();</span></a>
-<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          2 :     serial_.close();</span></a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineCov">          2 : }</span></a>
+<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          4 :     serial_.cancel();</span></a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          4 :     serial_.close();</span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineCov">          4 : }</span></a>
 <a name="18"><span class="lineNum">      18 </span>            : </a>
-<a name="19"><span class="lineNum">      19 </span><span class="lineCov">          1 : void serial_port::start_receive()</span></a>
+<a name="19"><span class="lineNum">      19 </span><span class="lineCov">          2 : void serial_port::start_receive()</span></a>
 <a name="20"><span class="lineNum">      20 </span>            : {</a>
 <a name="21"><span class="lineNum">      21 </span>            :     // Implementation for starting asynchronous receive can be added here</a>
 <a name="22"><span class="lineNum">      22 </span>            :     std::shared_ptr&lt;serial_port&gt; self = shared_from_this();</a>
 <a name="23"><span class="lineNum">      23 </span>            :     std::shared_ptr&lt;std::array&lt;uint8_t, 512&gt;&gt; recive_buffer_ = std::make_shared&lt;std::array&lt;uint8_t, 512&gt;&gt;();//adjust size as needed</a>
 <a name="24"><span class="lineNum">      24 </span>            :     </a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineCov">          1 : }</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineCov">          2 : }</span></a>
 </pre>
       </td>
     </tr>

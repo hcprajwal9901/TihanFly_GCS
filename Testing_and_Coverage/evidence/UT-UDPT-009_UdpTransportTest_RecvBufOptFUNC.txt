@@ -1,0 +1,27 @@
+========================================================================
+  EVIDENCE FILE  :  UT-UDPT-009
+  Test            :  UdpTransportTest.RecvBufOptFUNC
+  Module          :  UdpTransport
+  Source File     :  test_udp.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  No explicit input data – module uses fixture initialization values.
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] UdpTransportTest.RecvBufOptFUNC
+  [UDP] Bound to port 16001
+  [UDP] Started
+  [       OK ] UdpTransportTest.RecvBufOptFUNC (50 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

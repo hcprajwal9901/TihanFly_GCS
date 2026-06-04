@@ -1,0 +1,41 @@
+========================================================================
+  EVIDENCE FILE  :  UT-RADI-008
+  Test            :  RadioCalibrationTest.Complete
+  Module          :  RadioCalibration
+  Source File     :  test_radio_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_message_t msg;
+  [2] mavlink_rc_channels_t rc = {};
+  [3] mavlink_msg_rc_channels_encode(1, 1, &msg, &rc);
+  [4] radio.processMessage(msg);
+  [5] mavlink_msg_rc_channels_encode(1, 1, &msg, &rc);
+  [6] radio.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_FALSE(radio.isRunning());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(radio.channel(0).trim, 1500); // Average of 1000 and 2000
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(radio.channel(1).trim, 1500); // Did not move, should be default/last
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(radio.channel(2).trim, 1000); // Throttle min
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 4 assertion(s) satisfied. Verified: boolean state, equality. Module 'RadioCalibration' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] RadioCalibrationTest.Complete
+  [RadioCalib] WARNING: no transport callback
+  [RadioCalib] Calibration started
+  [RadioCalib] Completing calibration — computing min/max/trim
+  [RadioCalib] Calibration complete — 3 channels reported
+  [       OK ] RadioCalibrationTest.Complete (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

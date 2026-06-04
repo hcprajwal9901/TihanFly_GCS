@@ -1,0 +1,52 @@
+========================================================================
+  EVIDENCE FILE  :  UT-VEHI-007
+  Test            :  VehicleTest.AdvancedRoutingAndLookups
+  Module          :  Vehicle
+  Source File     :  test_vehicle.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] mavlink_message_t gcs_msg;
+  [2] mavlink_msg_heartbeat_pack(255, 0, &gcs_msg, MAV_TYPE_GCS, MAV_AUTOPILOT_INVALID, 0, 0, 0);
+  [3] manager->handle_message(gcs_msg, 0);
+  [4] mavlink_message_t msg = create_heartbeat(42);
+  [5] manager->handle_message(msg, 1);
+  [6] auto v = manager->get_vehicle(42);
+  [7] auto ui_sysids = manager->get_all_ui_sysids();
+  [8] v->register_handler(MAVLINK_MSG_ID_STATUSTEXT, [&](const mavlink_message_t&) {
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(manager->get_vehicle(255), nullptr);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : ASSERT_NE(v, nullptr);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(manager->get_vehicle_by_link(1), v);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(manager->get_vehicle_by_ui_sysid(v->ui_sysid()), v);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : ASSERT_EQ(ui_sysids.size(), 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(ui_sysids[0], v->ui_sysid());
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(callback_count, 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 7 assertion(s) satisfied. Verified: equality. Module 'Vehicle' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] VehicleTest.AdvancedRoutingAndLookups
+  [VehicleManager] Ignored non-FC heartbeat: sysid=255 compid=0 type=6 autopilot=8
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=42 compid=1
+  [Vehicle] Created sysid=42 link_id=1
+  [VehicleManager] New vehicle discovered: sysid=42 ui_sysid=42 compid=1 link_id=1
+  [VehicleManager] sysid=0 broadcast msgid=253 → routing to 1 vehicle(s)
+  [       OK ] VehicleTest.AdvancedRoutingAndLookups (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

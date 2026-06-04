@@ -1,0 +1,36 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ESCC-021
+  Test            :  EscCalibrationTest.SendRebootFUNC
+  Module          :  EscCalibration
+  Source File     :  test_esc_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] esc.setTransportCallback([&](const mavlink_message_t& msg) {
+  [2] mavlink_msg_command_long_decode(&msg, &cmd);
+  [3] std::thread t([&]() { esc.startEscCalibration(); });
+  [4] std::this_thread::sleep_for(std::chrono::milliseconds(50));
+  [5] mavlink_message_t msg;
+  [6] mavlink_command_ack_t ack = {};
+  [7] mavlink_msg_command_ack_encode(1, 1, &msg, &ack);
+  [8] esc.processMessage(msg);
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] EscCalibrationTest.SendRebootFUNC
+  [ESC] Stage=preflight | Setting ESC_CALIBRATION=3 on FC
+  [ESC] ESC_CALIBRATION param set to 3
+  [ESC] COMMAND_ACK preflight result=0 (ACCEPTED)
+  [ESC] Stage=cancelled | ESC calibration cancelled
+  [       OK ] EscCalibrationTest.SendRebootFUNC (100 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

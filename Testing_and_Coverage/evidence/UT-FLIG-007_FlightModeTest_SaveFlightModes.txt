@@ -1,0 +1,44 @@
+========================================================================
+  EVIDENCE FILE  :  UT-FLIG-007
+  Test            :  FlightModeTest.SaveFlightModes
+  Module          :  FlightMode
+  Source File     :  test_flight_mode.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] std::array<uint8_t, 6> modes = {0, 1, 2, 3, 4, 5};
+  [2] mavlink_msg_param_set_decode(&sent_mavlink_messages[i], &ps);
+  [3] std::string param_id(ps.param_id, strnlen(ps.param_id, 16));
+  [4] std::string expected = "FLTMODE" + std::to_string(i + 1);
+  [5] json j = json::parse(sent_ws_messages.back());
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : ASSERT_EQ(sent_mavlink_messages.size(), 6);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(ps.param_value, static_cast<float>(i));
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(ps.param_type, MAV_PARAM_TYPE_INT32);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(param_id, expected);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : ASSERT_GE(sent_ws_messages.size(), 1);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(j["type"], "flight_mode_saved");
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 6 assertion(s) satisfied. Verified: boundary, equality. Module 'FlightMode' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] FlightModeTest.SaveFlightModes
+  [FlightMode] Module created
+  [FlightMode] {"event":"flight_modes_saved","slots":[{"id":0,"mode":"STABILIZE","param":"FLTMODE1"},{"id":1,"mode":"ACRO","param":"FLTMODE2"},{"id":2,"mode":"ALT_HOLD","param":"FLTMODE3"},{"id":3,"mode":"AUTO","param":"FLTMODE4"},{"id":4,"mode":"GUIDED","param":"FLTMODE5"},{"id":5,"mode":"LOITER","param":"FLTMODE6"}],"sysid":1}
+  [FlightMode] Module created
+  [FlightMode] WARNING: no transport callback for saveFlightModes
+  [       OK ] FlightModeTest.SaveFlightModes (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

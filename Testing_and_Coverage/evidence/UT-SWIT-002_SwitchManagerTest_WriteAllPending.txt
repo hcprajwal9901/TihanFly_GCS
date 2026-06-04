@@ -1,0 +1,45 @@
+========================================================================
+  EVIDENCE FILE  :  UT-SWIT-002
+  Test            :  SwitchManagerTest.WriteAllPending
+  Module          :  SwitchManager
+  Source File     :  test_switch_manager.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] sm->set_switch_option(7, 41);
+  [2] sm->set_switch_option(8, 42);
+  [3] mock_transport->sent_data.clear();
+  [4] int count = sm->write_all_pending();
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  CHECK : EXPECT_EQ(count, 2);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(sent_messages.size(), 2);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+  CHECK : EXPECT_EQ(sm->pending_count(), 2);
+  RESULT: PASS ✓  [Expected vs Actual verified by GTest runtime]
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  All 3 assertion(s) satisfied. Verified: equality. Module 'SwitchManager' returned expected state.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] SwitchManagerTest.WriteAllPending
+  [Link] Added link 0
+  [SwitchManager] Initialised
+  [AccelCalibration] Constructed
+  [CompassCalibration] Constructed
+  [Compass] Vehicle info set: sysid=1 compid=1
+  [Vehicle] Created sysid=1 link_id=0
+  [VehicleManager] New vehicle discovered: sysid=1 ui_sysid=1 compid=1 link_id=0
+  [SwitchManager] Set RC7_OPTION = 41  (sysid=1 link_id=0)
+  [SwitchManager] Set RC8_OPTION = 42  (sysid=1 link_id=0)
+  [SwitchManager] Set RC8_OPTION = 42  (sysid=1 link_id=0)
+  [SwitchManager] Set RC7_OPTION = 41  (sysid=1 link_id=0)
+  [SwitchManager] Wrote 2 pending RC switch option(s)
+  [       OK ] SwitchManagerTest.WriteAllPending (0 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================

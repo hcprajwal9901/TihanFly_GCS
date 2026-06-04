@@ -1,0 +1,28 @@
+========================================================================
+  EVIDENCE FILE  :  UT-ACCE-034
+  Test            :  AccelCalibrationTest.SendPreflightCalibCommandFUNC
+  Module          :  AccelCalibration
+  Source File     :  test_accel_calibration.cpp
+  Execution Date  :  2026-06-04 11:58:48
+  Status          :  PASS
+========================================================================
+
+─── ACTUAL INPUT ───────────────────────────────────────────────────────
+  [1] accel.setTransportCallback([&](const mavlink_message_t& msg){
+
+─── ASSERTION CHECK ─────────────────────────────────────────────────────
+  SUCCEED() / EXPECT_NO_THROW() – implicit pass on no exception.
+
+─── ACTUAL RESULT ───────────────────────────────────────────────────────
+  Function executed successfully; no assertion failures detected.
+
+─── CONSOLE OUTPUT ──────────────────────────────────────────────────────
+  [ RUN      ] AccelCalibrationTest.SendPreflightCalibCommandFUNC
+  [AccelCalibration] Constructed
+  [Calib] Cancel sent to reset any stale drone state
+  [Calib] MAV_CMD_PREFLIGHT_CALIBRATION sent → sysid=1 compid=1
+  [       OK ] AccelCalibrationTest.SendPreflightCalibCommandFUNC (400 ms)
+
+─── FINAL STATUS ────────────────────────────────────────────────────────
+  ✓ TEST PASSED
+========================================================================
