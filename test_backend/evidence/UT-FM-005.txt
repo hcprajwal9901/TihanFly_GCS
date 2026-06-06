@@ -1,0 +1,48 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-FM-005
+Requirement ID      : REQ-FLM-001
+Source File         : test_flight_mode.cpp
+Target Function     : FlightModeTest
+Test Category       : Positive / Functional
+Test Case Title     : should verify SetMode_SendsSetModeCommand behavior
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-06
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : f450372
+Simulated Runtime   : GCS Backend Core Engine (C++17)
+Compiler / Tool     : MSVC C++17 / CMake
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+GoogleTest framework environment initialized. Objects constructed.
+
+Test Inputs:
+No external inputs required.
+
+Expected Behavior:
+Verify Comp.Is Initialized() is true.
+
+Actual Observations:
+comp.isInitialized() is true
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & GOOGLETEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+EXPECT_TRUE(comp.isInitialized());
+
+Console Logs:
+[INFO] GoogleTest executed test in 0ss
+[PASS] comp.isInitialized() is true
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

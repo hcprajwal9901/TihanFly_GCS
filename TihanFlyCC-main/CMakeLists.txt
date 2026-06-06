@@ -178,4 +178,4 @@ endif()
 install(TARGETS TiHANFly DESTINATION bin)
 
 # ── Testing Subdirectory ──────────────────────────────────────────────────────
-add_subdirectory(../Testing_and_Coverage/Backend_Tests ${CMAKE_CURRENT_BINARY_DIR}/Backend_Tests_build)
+add_subdirectory(../test_backend ${CMAKE_CURRENT_BINARY_DIR}/test_backend_build)

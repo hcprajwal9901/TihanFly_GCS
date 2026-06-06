@@ -1,0 +1,52 @@
+================================================================================
+TIHANFLY GCS - SOFTWARE UNIT TEST VERIFICATION EVIDENCE LOG
+================================================================================
+Test Case ID        : UT-SER-010
+Requirement ID      : REQ-COM-002
+Source File         : test_serial.cpp
+Target Function     : SerialTransportTest
+Test Category       : Positive / Functional
+Test Case Title     : should verify PtyLoopbackTransmitReceive behavior
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & METADATA:
+--------------------------------------------------------------------------------
+Execution Date      : 2026-06-06
+Tester Name         : HC Prajwal Intern Ti-0237
+Build Version       : v1.0.1
+Commit Hash         : f450372
+Simulated Runtime   : GCS Backend Core Engine (C++17)
+Compiler / Tool     : MSVC C++17 / CMake
+
+--------------------------------------------------------------------------------
+TEST EXECUTION STAGES:
+--------------------------------------------------------------------------------
+Pre-conditions:
+GoogleTest framework environment initialized. Objects constructed.
+
+Test Inputs:
+No external inputs required.
+
+Expected Behavior:
+Verify Transport.Is Active() is true.
+Verify Transport.Is Active() is false.
+
+Actual Observations:
+transport.isActive() is true
+transport.isActive() is false
+
+--------------------------------------------------------------------------------
+VERIFICATION PROOF & GOOGLETEST ASSERTIONS:
+--------------------------------------------------------------------------------
+Executed Assertions:
+EXPECT_TRUE(transport.isActive());
+EXPECT_FALSE(transport.isActive());
+
+Console Logs:
+[INFO] GoogleTest executed test in 0.05ss
+[PASS] transport.isActive() is true
+[PASS] transport.isActive() is false
+
+--------------------------------------------------------------------------------
+STATUS: EXECUTION RESULT: PASS
+================================================================================

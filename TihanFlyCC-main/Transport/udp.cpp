@@ -27,6 +27,8 @@ UdpTransport::UdpTransport(asio::io_context& io,
 
 void UdpTransport::start()
 {
+    if (running_.exchange(true))
+        return;
     std::cout << "[UDP] Started\n";
     do_receive();
 }
@@ -38,6 +40,7 @@ void UdpTransport::set_receive_callback(ReceiveCallback cb)
 
 void UdpTransport::do_receive()
 {
+    if (!running_.load()) return;
     auto read_buf = std::make_shared<std::vector<uint8_t>>(2048);
 
     socket_.async_receive_from(
@@ -55,7 +58,8 @@ void UdpTransport::do_receive()
             // Immediately re-arm the next async read before calling the callback!
             // This ensures the OS-level UDP queue is continuously emptied even if the
             // callback takes time (e.g. processing MAVLink messages or WebSocket writes).
-            do_receive();
+            if (running_.load())
+                do_receive();
 
             if (len > 0)
             {
@@ -108,6 +112,8 @@ bool UdpTransport::is_active()
 
 void UdpTransport::stop()
 {
+    if (!running_.exchange(false))
+        return;
     active_ = false;
     std::error_code ec;
     socket_.close(ec);

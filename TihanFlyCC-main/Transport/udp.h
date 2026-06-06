@@ -43,5 +43,6 @@ private:
     ReceiveCallback callback_;
 
     std::atomic<bool> active_{false};
+    std::atomic<bool> running_{false};
     std::chrono::steady_clock::time_point last_receive_;
 };

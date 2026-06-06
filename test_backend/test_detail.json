@@ -1,0 +1,2989 @@
+{
+  "tests": 278,
+  "failures": 0,
+  "disabled": 0,
+  "errors": 0,
+  "timestamp": "2026-06-06T10:35:39Z",
+  "time": "72.172s",
+  "name": "AllTests",
+  "testsuites": [
+    {
+      "name": "MAVLinkParserTest",
+      "tests": 5,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:39Z",
+      "time": "0s",
+      "testsuite": [
+        {
+          "name": "InitializationAndReset",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parser\/test_mavlink_parser.cpp",
+          "line": 19,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:39Z",
+          "time": "0s",
+          "classname": "MAVLinkParserTest"
+        },
+        {
+          "name": "ParseCompleteBuffer",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parser\/test_mavlink_parser.cpp",
+          "line": 25,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:39Z",
+          "time": "0s",
+          "classname": "MAVLinkParserTest"
+        },
+        {
+          "name": "ParsePartialBytes",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parser\/test_mavlink_parser.cpp",
+          "line": 44,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:39Z",
+          "time": "0s",
+          "classname": "MAVLinkParserTest"
+        },
+        {
+          "name": "ParseInvalidGarbageData",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parser\/test_mavlink_parser.cpp",
+          "line": 70,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:39Z",
+          "time": "0s",
+          "classname": "MAVLinkParserTest"
+        },
+        {
+          "name": "ResetStateInterruption",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parser\/test_mavlink_parser.cpp",
+          "line": 86,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:39Z",
+          "time": "0s",
+          "classname": "MAVLinkParserTest"
+        }
+      ]
+    },
+    {
+      "name": "MavlinkInspectorTest",
+      "tests": 6,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:39Z",
+      "time": "1.563s",
+      "testsuite": [
+        {
+          "name": "InitializationAndCallbackRegistration",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Inspector\/test_mavlink_inspector.cpp",
+          "line": 20,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:39Z",
+          "time": "0.002s",
+          "classname": "MavlinkInspectorTest"
+        },
+        {
+          "name": "MessageDecodingHeartbeat",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Inspector\/test_mavlink_inspector.cpp",
+          "line": 34,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:39Z",
+          "time": "0.3s",
+          "classname": "MavlinkInspectorTest"
+        },
+        {
+          "name": "UnknownMessageHandling",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Inspector\/test_mavlink_inspector.cpp",
+          "line": 66,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:40Z",
+          "time": "0.314s",
+          "classname": "MavlinkInspectorTest"
+        },
+        {
+          "name": "RateCalculation",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Inspector\/test_mavlink_inspector.cpp",
+          "line": 101,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:40Z",
+          "time": "0.343s",
+          "classname": "MavlinkInspectorTest"
+        },
+        {
+          "name": "JsonBroadcastFormat",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Inspector\/test_mavlink_inspector.cpp",
+          "line": 132,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:40Z",
+          "time": "0.3s",
+          "classname": "MavlinkInspectorTest"
+        },
+        {
+          "name": "ExtendedMessageDecoding",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Inspector\/test_mavlink_inspector.cpp",
+          "line": 158,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.3s",
+          "classname": "MavlinkInspectorTest"
+        }
+      ]
+    },
+    {
+      "name": "UdpTransportTest",
+      "tests": 18,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:41Z",
+      "time": "0.295s",
+      "testsuite": [
+        {
+          "name": "Initialization_BindsCorrectly",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 60,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.002s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "TransmitReceive_Success",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 71,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.003s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "ReplyEndpoint_UpdatesOnReceive",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 110,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.003s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "Boundary_ZeroLengthAndLargeBuffer",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 168,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.001s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "NullCallback_DoesNotCrash",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 206,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.01s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "StateVerification_IsActiveTimeout",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 232,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "Stop_ClosesSocket",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 256,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "Concurrency_MultiThreadedSend",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 273,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.002s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "DoubleStart_NoCrash",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 320,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "DoubleStop_NoCrash",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 334,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "SendAfterStop_HandledGracefully",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 347,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "InvalidIpAddress_FailsCleanly",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 362,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.005s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "ReceiveCallbackThrows_NoTransportCrash",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 370,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.001s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "MaximumUdpPayload_Success",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 411,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "OversizedUdpPayload_Rejected",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 428,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "BurstTraffic_1000Packets",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 445,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.257s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "ConcurrentStartStop_NoDeadlock",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 486,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.003s",
+          "classname": "UdpTransportTest"
+        },
+        {
+          "name": "SocketErrorBranch_Covered",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_udp.cpp",
+          "line": 509,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "UdpTransportTest"
+        }
+      ]
+    },
+    {
+      "name": "SerialTransportTest",
+      "tests": 11,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:41Z",
+      "time": "0.171s",
+      "testsuite": [
+        {
+          "name": "Initialization_BaudrateGetterCorrect",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_serial.cpp",
+          "line": 49,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.014s",
+          "classname": "SerialTransportTest"
+        },
+        {
+          "name": "StateVerification_IsActiveTimeout",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_serial.cpp",
+          "line": 61,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "SerialTransportTest"
+        },
+        {
+          "name": "InvalidPort_HandlesExceptionsCleanly",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_serial.cpp",
+          "line": 86,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "SerialTransportTest"
+        },
+        {
+          "name": "Start_OnClosedPortGraceful",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_serial.cpp",
+          "line": 96,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "SerialTransportTest"
+        },
+        {
+          "name": "Send_OnClosedPortDoesNotCrash",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_serial.cpp",
+          "line": 109,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "SerialTransportTest"
+        },
+        {
+          "name": "DoubleStart_NoCrash",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_serial.cpp",
+          "line": 122,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "SerialTransportTest"
+        },
+        {
+          "name": "DoubleStop_NoCrash",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_serial.cpp",
+          "line": 135,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "SerialTransportTest"
+        },
+        {
+          "name": "Concurrency_ConcurrentStartStop",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_serial.cpp",
+          "line": 148,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.001s",
+          "classname": "SerialTransportTest"
+        },
+        {
+          "name": "SetCallback_Succeeds",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_serial.cpp",
+          "line": 174,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "SerialTransportTest"
+        },
+        {
+          "name": "PtyLoopbackTransmitReceive",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_serial.cpp",
+          "line": 194,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.05s",
+          "classname": "SerialTransportTest"
+        },
+        {
+          "name": "PtyReceiveErrorHandling",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Transport\/test_serial.cpp",
+          "line": 262,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.1s",
+          "classname": "SerialTransportTest"
+        }
+      ]
+    },
+    {
+      "name": "LinkTest",
+      "tests": 8,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:41Z",
+      "time": "0.031s",
+      "testsuite": [
+        {
+          "name": "Construction_GettersReturnExpectedValues",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link.cpp",
+          "line": 33,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.017s",
+          "classname": "LinkTest"
+        },
+        {
+          "name": "Start_CallsTransportStartAndSetCallback",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link.cpp",
+          "line": 43,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "LinkTest"
+        },
+        {
+          "name": "StartReceive_ParsesMavlinkAndTriggersCallback",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link.cpp",
+          "line": 56,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.001s",
+          "classname": "LinkTest"
+        },
+        {
+          "name": "Boundary_ZeroLengthDataIgnored",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link.cpp",
+          "line": 93,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "LinkTest"
+        },
+        {
+          "name": "Error_CorruptedPacketsIgnored",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link.cpp",
+          "line": 120,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "LinkTest"
+        },
+        {
+          "name": "Boundary_PartialPacketsAssembled",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link.cpp",
+          "line": 148,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.01s",
+          "classname": "LinkTest"
+        },
+        {
+          "name": "StateVerification_MultiplePacketsInStream",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link.cpp",
+          "line": 185,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "LinkTest"
+        },
+        {
+          "name": "Concurrency_SafeConcurrentInbound",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link.cpp",
+          "line": 218,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.001s",
+          "classname": "LinkTest"
+        }
+      ]
+    },
+    {
+      "name": "LinkManagerTest",
+      "tests": 5,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:41Z",
+      "time": "0.004s",
+      "testsuite": [
+        {
+          "name": "AddLink_IncrementsIdAndStoresLink",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link_manager.cpp",
+          "line": 32,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.001s",
+          "classname": "LinkManagerTest"
+        },
+        {
+          "name": "SetMessageCallback_AppliesToExistingAndNewLinks",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link_manager.cpp",
+          "line": 55,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.001s",
+          "classname": "LinkManagerTest"
+        },
+        {
+          "name": "Send_DelegatesToCorrectTransport",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link_manager.cpp",
+          "line": 102,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.001s",
+          "classname": "LinkManagerTest"
+        },
+        {
+          "name": "Broadcast_SendsToAllLinks",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link_manager.cpp",
+          "line": 121,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "LinkManagerTest"
+        },
+        {
+          "name": "InvalidLinkIds_SafelyIgnored",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Link\/test_link_manager.cpp",
+          "line": 140,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "LinkManagerTest"
+        }
+      ]
+    },
+    {
+      "name": "CommandManagerTest",
+      "tests": 14,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:41Z",
+      "time": "0.016s",
+      "testsuite": [
+        {
+          "name": "ModeA_ArmDisarmCommands",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 53,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.005s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "ModeA_TakeoffCommand",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 91,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "ModeA_SetModeCommand",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 126,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "ModeB_ResolveActiveVehicle",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 161,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "MissionUpload_StatefulHandshake",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 199,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.002s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "Boundary_EmptyOrUnknownCommands",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 280,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "LandRtlForceArmCommands",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 298,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "SetMode_VariousModes",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 347,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "ResolveVehicle_ErrorBranches",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 393,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "MissionUpload_ErrorBranches",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 414,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "MissionUpload_MultiVehicleRoute",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 466,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "CommandSpecificVehicleOverride",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 509,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "SetMode_AllModes",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 537,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.002s",
+          "classname": "CommandManagerTest"
+        },
+        {
+          "name": "ResponseCallback_NormalAndTakeoff",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Command\/test_command_manager.cpp",
+          "line": 563,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "CommandManagerTest"
+        }
+      ]
+    },
+    {
+      "name": "VehicleTest",
+      "tests": 17,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:41Z",
+      "time": "0.013s",
+      "testsuite": [
+        {
+          "name": "Construction_PropertiesCorrect",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 59,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.001s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "SetLinkId_UpdatesLinkProperty",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 71,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "SendMavlink_RoutesToLinkManagerAndTransport",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 83,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "ProcessMessage_DispatchesToRegisteredHandlers",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 115,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "ProcessMessage_DecodesHeartbeatTelemetry",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 135,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "ProcessMessage_DecodesGPSTelemetry",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 162,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "ProcessMessage_DecodesBatteryTelemetry",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 180,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "LivenessCheck_BootGrace_And_Timeout",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 199,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "RebootDetection_GapTriggeredOnce",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 221,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "Construction_NullLinkManagerThrows",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 243,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.003s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "ProcessMessage_CopterModeNameOutOfBounds",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 248,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "ProcessMessage_DecodesSysStatusTelemetry",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 263,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "ProcessMessage_DecodesAttitudeTelemetry",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 276,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "ProcessMessage_DecodesGlobalPositionTelemetry",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 290,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "ProcessMessage_DecodesVfrHudTelemetry",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 304,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "Getters_GpsFixType",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 317,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        },
+        {
+          "name": "Getters_CalibrationModules",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle.cpp",
+          "line": 328,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleTest"
+        }
+      ]
+    },
+    {
+      "name": "VehicleManagerTest",
+      "tests": 11,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:41Z",
+      "time": "0.007s",
+      "testsuite": [
+        {
+          "name": "HandleMessage_DiscoversNewVehicleOnHeartbeat",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle_manager.cpp",
+          "line": 52,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.002s",
+          "classname": "VehicleManagerTest"
+        },
+        {
+          "name": "HandleMessage_IgnoresNonHeartbeatForUnknownVehicles",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle_manager.cpp",
+          "line": 86,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleManagerTest"
+        },
+        {
+          "name": "HandleMessage_TracksSeparateVehiclesForSameSysidOnDifferentLinks",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle_manager.cpp",
+          "line": 109,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.001s",
+          "classname": "VehicleManagerTest"
+        },
+        {
+          "name": "CheckTimeouts_EvictsDeadVehicles",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle_manager.cpp",
+          "line": 135,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleManagerTest"
+        },
+        {
+          "name": "Construction_NullLinkManagerThrows",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle_manager.cpp",
+          "line": 167,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleManagerTest"
+        },
+        {
+          "name": "HandleMessage_BroadcastRoutesToLiveVehicles",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle_manager.cpp",
+          "line": 172,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleManagerTest"
+        },
+        {
+          "name": "HandleMessage_IgnoresNonFcHeartbeats",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle_manager.cpp",
+          "line": 198,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleManagerTest"
+        },
+        {
+          "name": "HandleMessage_UpdatesLinkIdOnSubsequentHeartbeats",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle_manager.cpp",
+          "line": 221,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleManagerTest"
+        },
+        {
+          "name": "CheckTimeouts_KeepsLiveVehicles",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle_manager.cpp",
+          "line": 240,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleManagerTest"
+        },
+        {
+          "name": "GetVehicle_ReturnsFoundDeadIfNoneAlive",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle_manager.cpp",
+          "line": 251,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleManagerTest"
+        },
+        {
+          "name": "Getters_AllUiSysidsAndUiSysidLookups",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Vehicle\/test_vehicle_manager.cpp",
+          "line": 270,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0s",
+          "classname": "VehicleManagerTest"
+        }
+      ]
+    },
+    {
+      "name": "ParameterManagerTest",
+      "tests": 19,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:41Z",
+      "time": "13.265s",
+      "testsuite": [
+        {
+          "name": "ConstructionAndConfiguration",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 35,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.007s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "RequestAllParameters_SendsRequestList",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 47,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.114s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "RequestParameter_SendsRequestRead",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 74,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.007s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "SetParameter_SendsParamSet",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 100,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:41Z",
+          "time": "0.212s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "ProcessMessage_UpdatesParametersOnValueReceipt",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 127,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:42Z",
+          "time": "0.006s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "Serialization_LoadsAndSavesFileCache",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 158,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:42Z",
+          "time": "2.234s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "SetRequestSpacingFromBaudrate_SetsCorrectSpacing",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 184,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:44Z",
+          "time": "0.006s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "VehicleInfoAndDispatcherRouting",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 199,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:44Z",
+          "time": "0.006s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "MissingTransportErrorPaths",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 228,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:44Z",
+          "time": "0.005s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "RequestAllParameters_AlreadyLoadingGuard",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 252,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:44Z",
+          "time": "0.112s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "UpdateAndSetExistingParameter",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 266,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:44Z",
+          "time": "0.213s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "CacheDeletionAndCleanUp",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 288,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:44Z",
+          "time": "4.424s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "CorruptCacheFileExceptionHandling",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 320,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:50Z",
+          "time": "0.028s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "DirectoryCreationExceptionHandling",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 334,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:50Z",
+          "time": "0.011s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "RequestAllParameters_FullLoadAndRetrySequence",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 349,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:50Z",
+          "time": "0.361s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "ProcessMessage_UpdatesExistingParameterOnValueReceipt",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 401,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:50Z",
+          "time": "0.007s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "RequestAllParameters_WithExistingCache",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 420,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:50Z",
+          "time": "2.337s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "RequestAllParameters_RetryIndexRequests",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 440,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:52Z",
+          "time": "0.946s",
+          "classname": "ParameterManagerTest"
+        },
+        {
+          "name": "SaveAndDeleteCache_ExceptionHandling",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_parameter_manager.cpp",
+          "line": 478,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:53Z",
+          "time": "2.217s",
+          "classname": "ParameterManagerTest"
+        }
+      ]
+    },
+    {
+      "name": "SwitchManagerTest",
+      "tests": 5,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:55Z",
+      "time": "0.016s",
+      "testsuite": [
+        {
+          "name": "SetSwitchOption_StagesOptionAndDispatchesParamSet",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_switch_manager.cpp",
+          "line": 40,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0.013s",
+          "classname": "SwitchManagerTest"
+        },
+        {
+          "name": "WriteAllPending_SendsStagedOptions",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_switch_manager.cpp",
+          "line": 90,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0s",
+          "classname": "SwitchManagerTest"
+        },
+        {
+          "name": "RequestParamRead_SendsRequestRead",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_switch_manager.cpp",
+          "line": 121,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0s",
+          "classname": "SwitchManagerTest"
+        },
+        {
+          "name": "ClearPending_DiscardsStagedOptions",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_switch_manager.cpp",
+          "line": 158,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0s",
+          "classname": "SwitchManagerTest"
+        },
+        {
+          "name": "NoActiveVehicle_SafelyAborts",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Parameters\/test_switch_manager.cpp",
+          "line": 177,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0s",
+          "classname": "SwitchManagerTest"
+        }
+      ]
+    },
+    {
+      "name": "FlightModeTest",
+      "tests": 6,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:55Z",
+      "time": "0.003s",
+      "testsuite": [
+        {
+          "name": "HelperMethods_TranslateCorrectly",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Flightmode\/test_flight_mode.cpp",
+          "line": 25,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0s",
+          "classname": "FlightModeTest"
+        },
+        {
+          "name": "ProcessMessage_RCChannelsTriggersPWMAndStatusBroadcasts",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Flightmode\/test_flight_mode.cpp",
+          "line": 32,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0.002s",
+          "classname": "FlightModeTest"
+        },
+        {
+          "name": "ProcessMessage_HeartbeatArmedEventAndModeOverride",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Flightmode\/test_flight_mode.cpp",
+          "line": 71,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0s",
+          "classname": "FlightModeTest"
+        },
+        {
+          "name": "RequestParams_DispatchesParamReads",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Flightmode\/test_flight_mode.cpp",
+          "line": 111,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0s",
+          "classname": "FlightModeTest"
+        },
+        {
+          "name": "SetMode_SendsSetModeCommand",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Flightmode\/test_flight_mode.cpp",
+          "line": 133,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0s",
+          "classname": "FlightModeTest"
+        },
+        {
+          "name": "SaveFlightModes_SendsParamSets",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Flightmode\/test_flight_mode.cpp",
+          "line": 158,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0s",
+          "classname": "FlightModeTest"
+        }
+      ]
+    },
+    {
+      "name": "FirmwareManagerTest",
+      "tests": 36,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:35:55Z",
+      "time": "6.162s",
+      "testsuite": [
+        {
+          "name": "Initialization_DefaultsAreCorrect",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 127,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:55Z",
+          "time": "0.008s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "DecodeApj_DecodesAndPadsCorrectly",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 138,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.004s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "DecodeApj_DecodesAndPadsCorrectly_ViaAccessor",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 166,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.009s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "VerifyPortAccess_ValidatesCorrectly",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 187,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.003s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "VerifyFirmwareFile_ChecksExistenceAndExtension",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 204,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.007s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_InstallFirmwareQueuesWithoutPort",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 218,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.007s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_InstallFirmwareCustomInline",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 246,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.002s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_InstallFirmwareCustomPath",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 275,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.007s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_AbortPendingInstall",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 295,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.013s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_RejectsInvalidMessages",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 321,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.003s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "EdgeCase_NullWebSocketCallback_NoCrash",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 332,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.002s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "EdgeCase_EmptyFirmwareDirectory_Fails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 338,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.002s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "EdgeCase_ZeroLengthWebSocketMessage_Ignored",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 354,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.003s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "BoundaryValue_MinApjFileSize_Fails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 361,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.005s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "BoundaryValue_ZeroLengthPayload_Fails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 374,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.002s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "BoundaryValue_MaxBase64Padding_Succeeds",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 383,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.007s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "NegativeCase_InvalidBase64Characters_Fails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 397,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.002s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "NegativeCase_ZlibCorruptHeader_Fails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 406,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "0.002s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "PtyHotFlashHappyPath",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 516,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:35:56Z",
+          "time": "5.741s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "DecodeApj_MissingImageField",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 576,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.005s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "DecodeApj_ImageFieldNotString",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 584,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.005s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "DecodeApj_ImageFieldEmpty",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 593,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.006s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "DecodeApj_Base64Invalid",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 602,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.005s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "DecodeApj_ZlibDecompressFails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 611,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.005s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "LoadApjFile_NonexistentFile",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 621,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.006s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "LoadApjFile_JsonParseError",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 629,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.009s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "VerifyFirmwareFile_WrongExtensionWarning",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 642,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.011s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_InstallFirmwareBusy",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 656,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.005s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_InstallFirmwareCustomBusy",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 676,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.005s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_InstallFirmwareFileNotFound",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 695,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.005s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_InstallFirmwareDecodeFails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 711,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.012s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_InstallFirmwareCustomInvalidInlineFormat",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 733,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.004s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_InstallFirmwareCustomMissingParams",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 748,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.004s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_InstallFirmwareCustomNonexistentPath",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 762,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.004s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "HandleWsMessage_InstallFirmwareCustomDecodeFails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 777,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.008s",
+          "classname": "FirmwareManagerTest"
+        },
+        {
+          "name": "CallbacksAndHotplugMonitor_AbortsOnMissingPort",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_manager.cpp",
+          "line": 797,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:01Z",
+          "time": "0.213s",
+          "classname": "FirmwareManagerTest"
+        }
+      ]
+    },
+    {
+      "name": "FirmwareUploaderTest",
+      "tests": 30,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:36:02Z",
+      "time": "23.823s",
+      "testsuite": [
+        {
+          "name": "BuildCrcTable_InitializesCorrectly",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 35,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "0.001s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "Crc32Accumulate_VerifyCorrectChecksum",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 56,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "0s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "ComputePaddedCrc_AppliesPaddingCorrectly",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 72,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "0s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "Abort_SetsFlagAndStateCorrectly",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 93,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "0s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "Flash_EmptyImage_ReturnsFalse",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 112,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "0s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "Flash_InvalidPort_ReturnsFalse",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 134,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "0s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "SetCallbacks_RegistersSuccessfully",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 156,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "0s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashHappyPath",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 345,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "0.541s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashBoardIdMismatch",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 383,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "0.041s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashImageTooLarge",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 412,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "0.042s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashCrcMismatch",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 441,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "0.042s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashCrcNack",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 470,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:02Z",
+          "time": "1.04s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashRequiresDtrReset",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 500,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:03Z",
+          "time": "1.586s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashGetInfoTimeout",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 539,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:05Z",
+          "time": "1.037s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashEraseTimeoutOnSecondByte",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 572,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:06Z",
+          "time": "0.541s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashEraseInvalidResponse",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 605,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:07Z",
+          "time": "0.043s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashProgramTimeout",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 638,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:07Z",
+          "time": "3.033s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashProgramNack",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 671,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:10Z",
+          "time": "0.043s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashCrcTimeout",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 704,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:10Z",
+          "time": "1.034s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "PtyFlashAbortDuringProgram",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 737,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:11Z",
+          "time": "0.042s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "Drain_LogsDiscardedBytes",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 780,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:11Z",
+          "time": "13.583s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "OpenPortTwice_ClosesFirst",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 816,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:25Z",
+          "time": "0s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "EdgeCase_ZeroFlashSize_Rejected",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 831,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:25Z",
+          "time": "0.042s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "BoundaryValue_MaxImageSize_Succeeds",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 906,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:25Z",
+          "time": "0.536s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "BoundaryValue_MinImageSize_Succeeds",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 935,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:26Z",
+          "time": "0.538s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "BoundaryValue_ThresholdPlusOneImageSize_Fails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 964,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:26Z",
+          "time": "0.044s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "EdgeCase_NullCallbacks_NoCrash",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 992,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:26Z",
+          "time": "0s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "EdgeCase_EmptyPortName_Fails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 1003,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:26Z",
+          "time": "0s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "NegativeCase_InvalidBaudrate_Fails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 1011,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:26Z",
+          "time": "0s",
+          "classname": "FirmwareUploaderTest"
+        },
+        {
+          "name": "NegativeCase_AbortBeforeStart_Fails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/Firmware\/test_firmware_uploader.cpp",
+          "line": 1019,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:26Z",
+          "time": "0s",
+          "classname": "FirmwareUploaderTest"
+        }
+      ]
+    },
+    {
+      "name": "AccelCalibrationTest",
+      "tests": 26,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:36:26Z",
+      "time": "16.052s",
+      "testsuite": [
+        {
+          "name": "Initialization_DefaultsAreCorrect",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 107,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:26Z",
+          "time": "0.003s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Start_ArmedRejectsImmediately",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 114,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:26Z",
+          "time": "0s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Start_DisarmedSendsCalibrationCommand",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 132,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:26Z",
+          "time": "0.401s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Ingest_PreflightAckAccepted",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 156,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:27Z",
+          "time": "0.401s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Ingest_PreflightAckRejectedFails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 178,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:27Z",
+          "time": "0.401s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Telemetry_ForwardsAttitudeWhenInProgress",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 201,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:28Z",
+          "time": "1.402s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Ingest_HandlesAccelVehiclePos",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 226,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:29Z",
+          "time": "1.402s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Ingest_HandlesStatusTextFallback",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 249,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:30Z",
+          "time": "1.402s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Ingest_HandlesCalibrationSuccessfulStatustext",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 267,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:32Z",
+          "time": "1.403s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "ValidateAttitude_RollAndPitchChecks",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 290,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:33Z",
+          "time": "0s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "RetryWatcher_TriggersCommandResend",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 314,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:33Z",
+          "time": "2.403s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "StepWatchdog_TriggersTimeoutStatus",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 336,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:36Z",
+          "time": "0.2s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "StartLevelCalibration_SendsCommand",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 368,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:36Z",
+          "time": "0s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "MavlinkMsgName_Coverage",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 385,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:36Z",
+          "time": "0s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Ingest_IgnoresMismatchedSysid",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 422,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:36Z",
+          "time": "0.401s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Ingest_UpdatesArmedStateFromHeartbeat",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 441,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:36Z",
+          "time": "0s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "LevelCalibration_HandlesAcks",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 465,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:36Z",
+          "time": "0s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "LevelCalibration_ArmedRejection",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 508,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:36Z",
+          "time": "0s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "ConfirmPosition_NotInProgressWarning",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 526,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:36Z",
+          "time": "0s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "ConfirmPosition_WrongAttitudeWarning",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 535,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:36Z",
+          "time": "0.001s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "HandleAccelVehiclePos_EdgeAndDuplicate",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 576,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:36Z",
+          "time": "0s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Ingest_HandlesCalibrationFailedStatustext",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 617,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:36Z",
+          "time": "0.401s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "Ingest_HandlesVehiclePosAck",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 635,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:37Z",
+          "time": "0s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "NoTransportCallbackWarnings",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 664,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:37Z",
+          "time": "1.403s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "ConfirmPosition_HandlesPreConfirmNext",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 681,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:38Z",
+          "time": "0.001s",
+          "classname": "AccelCalibrationTest"
+        },
+        {
+          "name": "RetryWatcher_ExhaustionFails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_accel_calibration.cpp",
+          "line": 707,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:38Z",
+          "time": "4.412s",
+          "classname": "AccelCalibrationTest"
+        }
+      ]
+    },
+    {
+      "name": "CompassCalibrationTest",
+      "tests": 37,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:36:42Z",
+      "time": "4.479s",
+      "testsuite": [
+        {
+          "name": "Initialization_DefaultsAreCorrect",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 78,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:42Z",
+          "time": "0.016s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Start_ArmedRejectsImmediately",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 87,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:42Z",
+          "time": "0s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Start_DisarmedSendsStartCommand",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 105,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:42Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_CommandAckStartAccepted",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 126,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:43Z",
+          "time": "0.102s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_ImplicitAckViaProgressWhenIdle",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 149,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:43Z",
+          "time": "0.001s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_ProgressUpdatesPercentage",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 179,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:43Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_ReportSuccessCompletesSession",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 209,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:43Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Accept_SendsAcceptCommandWhenDone",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 255,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:43Z",
+          "time": "0s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Cancel_SendsCancelCommandAndSetsFailedState",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 272,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:43Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "RetryWatcher_TriggersStartResend",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 289,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:43Z",
+          "time": "1.203s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "CalStatusToString_VerifyAll",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 311,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:44Z",
+          "time": "0s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Start_InProgressRejectsImmediately",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 325,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:44Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Start_MissingTransportCallbackFails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 335,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:44Z",
+          "time": "0.001s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Start_WarningWhenSysidCompidZero",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 353,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:44Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Accept_IgnoredWhenNotDone",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 362,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:44Z",
+          "time": "0s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Accept_WarningWhenNoTransportCallback",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 368,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:44Z",
+          "time": "0.001s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Cancel_IgnoredWhenNotInProgress",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 376,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:44Z",
+          "time": "0s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Cancel_WarningWhenNoTransportCallback",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 382,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:44Z",
+          "time": "0.001s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_CommandAckCancelIgnored",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 392,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:44Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_CommandAckStartDeniedFailsSession",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 409,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:44Z",
+          "time": "0.102s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_HeartbeatSafetyArmedPreventsStart",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 428,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:45Z",
+          "time": "0s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_StatusTextTriggersImplicitAck",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 445,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:45Z",
+          "time": "0.102s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_ProgressPercentagesCappedAt99",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 468,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:45Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_MagCalReportIgnoresDuplicates",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 494,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:45Z",
+          "time": "0.102s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_MagCalReportIgnoredWhenIdle",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 521,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:45Z",
+          "time": "0s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_MagCalReportPartialSuccess",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 533,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:45Z",
+          "time": "0.102s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_MagCalReportAllFailed",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 579,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:45Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "RetryWatcher_ExhaustsRetriesAndFails",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 619,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:45Z",
+          "time": "1.201s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "Ingest_MessageCounterDiagnosticLog",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 641,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:46Z",
+          "time": "0.001s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "EdgeCase_NullCallbacks_NoCrash",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 654,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:46Z",
+          "time": "0.002s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "EdgeCase_UninitializedVehicleInfo_SendsWithDefault",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 674,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:46Z",
+          "time": "0.001s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "EdgeCase_ZeroProgressPacket_HandlesCleanly",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 690,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:46Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "BoundaryValue_MaxCompassId_Ignored",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 710,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:46Z",
+          "time": "0.102s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "BoundaryValue_MinCompassId_Succeeds",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 731,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:46Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "BoundaryValue_MaxProgressPercent_Clamped",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 747,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:47Z",
+          "time": "0.102s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "NegativeCase_InvalidMavlinkMessageId_Ignored",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 773,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:47Z",
+          "time": "0.101s",
+          "classname": "CompassCalibrationTest"
+        },
+        {
+          "name": "NegativeCase_AckErrorResult_FailsSession",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_compass_calibration.cpp",
+          "line": 785,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:47Z",
+          "time": "0.102s",
+          "classname": "CompassCalibrationTest"
+        }
+      ]
+    },
+    {
+      "name": "EscCalibrationTest",
+      "tests": 9,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:36:47Z",
+      "time": "6.261s",
+      "testsuite": [
+        {
+          "name": "Initialization_DefaultsAreCorrect",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_esc_calibration.cpp",
+          "line": 75,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:47Z",
+          "time": "0.014s",
+          "classname": "EscCalibrationTest"
+        },
+        {
+          "name": "Ingest_PreflightAckSetsAckReceived",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_esc_calibration.cpp",
+          "line": 81,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:47Z",
+          "time": "0s",
+          "classname": "EscCalibrationTest"
+        },
+        {
+          "name": "Start_RejectsIfAlreadyCalibrating",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_esc_calibration.cpp",
+          "line": 104,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:47Z",
+          "time": "0s",
+          "classname": "EscCalibrationTest"
+        },
+        {
+          "name": "Start_CancellationExitsImmediately",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_esc_calibration.cpp",
+          "line": 120,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:47Z",
+          "time": "0.051s",
+          "classname": "EscCalibrationTest"
+        },
+        {
+          "name": "Start_SendsCommandsThenExitsOnCancel",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_esc_calibration.cpp",
+          "line": 147,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:47Z",
+          "time": "0.051s",
+          "classname": "EscCalibrationTest"
+        },
+        {
+          "name": "Start_HappyPathFullRun",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_esc_calibration.cpp",
+          "line": 174,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:47Z",
+          "time": "4.031s",
+          "classname": "EscCalibrationTest"
+        },
+        {
+          "name": "CoverMavResultToString",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_esc_calibration.cpp",
+          "line": 214,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:51Z",
+          "time": "0s",
+          "classname": "EscCalibrationTest"
+        },
+        {
+          "name": "Start_NoTransportRejects",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_esc_calibration.cpp",
+          "line": 240,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:51Z",
+          "time": "0s",
+          "classname": "EscCalibrationTest"
+        },
+        {
+          "name": "Start_TemporarilyRejectedRetryThenCancel",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_esc_calibration.cpp",
+          "line": 253,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:51Z",
+          "time": "2.111s",
+          "classname": "EscCalibrationTest"
+        }
+      ]
+    },
+    {
+      "name": "RadioCalibrationTest",
+      "tests": 15,
+      "failures": 0,
+      "disabled": 0,
+      "errors": 0,
+      "timestamp": "2026-06-06T10:36:54Z",
+      "time": "0.002s",
+      "testsuite": [
+        {
+          "name": "Initialization_DefaultsAreCorrect",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 54,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Start_DisarmedResetsChannelsAndSendsCommand",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 68,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Ingest_RcChannelsUpdatesMinMaxRanges",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 91,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Ingest_CommandAckSoftVsHardRejections",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 141,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Complete_CalculatesTrimsAndEmitsReport",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 171,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Cancel_SendsCancelCommandAndHalts",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 219,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Start_AlreadyAccumulatingIgnores",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 238,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Cancel_NotAccumulatingIgnores",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 250,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Complete_NotAccumulatingIgnores",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 257,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Ingest_IgnoresMismatchedSysid",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 264,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Ingest_RcChannelsRawUpdatesMinMax",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 278,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Ingest_CommandAckAccepted",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 298,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Ingest_StatusTextRelayed",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 313,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "Channel_OutOfBoundsReturnsDummy",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 330,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        },
+        {
+          "name": "NoTransportCallbackWarnings",
+          "file": "\/mnt\/e\/TiHAN\/TflyGCS (1)\/TflyGCS\/test_backend\/calibration\/test_radio_calibration.cpp",
+          "line": 339,
+          "status": "RUN",
+          "result": "COMPLETED",
+          "timestamp": "2026-06-06T10:36:54Z",
+          "time": "0s",
+          "classname": "RadioCalibrationTest"
+        }
+      ]
+    }
+  ]
+}

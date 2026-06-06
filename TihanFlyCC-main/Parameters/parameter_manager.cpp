@@ -607,29 +607,32 @@ bool ParameterManager::load_cache_file()
         json arr = json::parse(f);
         if (!arr.is_array() || arr.empty()) return false;
 
-        std::lock_guard<std::mutex> lk(mutex_);
-        params_.clear();
-        received_indices_.clear();
-
-        for (const auto& item : arr)
         {
-            Parameter p;
-            p.name        = item.value("param_id", "");
-            p.value       = item.value("value",    0.f);
-            p.default_val = item.value("default",  p.value);
-            p.type        = static_cast<uint8_t>(item.value("type",  0));
-            p.index       = static_cast<uint16_t>(item.value("index", 0));
-            p.default_set = true;
-            if (!p.name.empty())
+            std::lock_guard<std::mutex> lk(mutex_);
+            params_.clear();
+            received_indices_.clear();
+
+            for (const auto& item : arr)
             {
-                params_[p.name] = p;
-                received_indices_.insert(p.index);
+                Parameter p;
+                p.name        = item.value("param_id", "");
+                p.value       = item.value("value",    0.f);
+                p.default_val = item.value("default",  p.value);
+                p.type        = static_cast<uint8_t>(item.value("type",  0));
+                p.index       = static_cast<uint16_t>(item.value("index", 0));
+                p.default_set = true;
+                if (!p.name.empty())
+                {
+                    params_[p.name] = p;
+                    received_indices_.insert(p.index);
+                }
             }
+
+            const int cnt = static_cast<int>(params_.size());
+            received_.store(cnt);
         }
 
-        const int cnt = static_cast<int>(params_.size());
-        received_.store(cnt);
-        std::cout << "[ParameterManager] Loaded " << cnt
+        std::cout << "[ParameterManager] Loaded " << received_.load()
                   << " params from cache: " << path << "\n";
 
         // Push cached snapshot to frontend (instant)
