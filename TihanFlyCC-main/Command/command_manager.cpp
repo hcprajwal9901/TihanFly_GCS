@@ -258,64 +258,62 @@ void CommandManager::execute(const Command& cmd)
     {
         // ArduCopter custom mode numbers
         // https://ardupilot.org/copter/docs/flight-modes.html
-        static std::unordered_map<std::string, int> MODE_MAP;
-        if (MODE_MAP.empty())
-        {
-            MODE_MAP["STABILIZE"]     = 0;
-            MODE_MAP["Stabilize"]     = 0;
-            MODE_MAP["ACRO"]          = 1;
-            MODE_MAP["Acro"]          = 1;
-            MODE_MAP["ALT_HOLD"]      = 2;
-            MODE_MAP["Altitude Hold"] = 2;
-            MODE_MAP["Alt Hold"]      = 2;
-            MODE_MAP["AUTO"]          = 3;
-            MODE_MAP["Auto"]          = 3;
-            MODE_MAP["GUIDED"]        = 4;
-            MODE_MAP["Guided"]        = 4;
-            MODE_MAP["LOITER"]        = 5;
-            MODE_MAP["Loiter"]        = 5;
-            MODE_MAP["RTL"]           = 6;
-            MODE_MAP["CIRCLE"]        = 7;
-            MODE_MAP["Circle"]        = 7;
-            MODE_MAP["LAND"]          = 9;
-            MODE_MAP["Land"]          = 9;
-            MODE_MAP["DRIFT"]         = 11;
-            MODE_MAP["Drift"]         = 11;
-            MODE_MAP["SPORT"]         = 13;
-            MODE_MAP["Sport"]         = 13;
-            MODE_MAP["FLIP"]          = 14;
-            MODE_MAP["Flip"]          = 14;
-            MODE_MAP["AUTOTUNE"]      = 15;
-            MODE_MAP["AutoTune"]      = 15;
-            MODE_MAP["POSHOLD"]       = 16;
-            MODE_MAP["Position Hold"] = 16;
-            MODE_MAP["Position"]      = 16;
-            MODE_MAP["Pos Hold"]      = 16;
-            MODE_MAP["BRAKE"]         = 17;
-            MODE_MAP["Brake"]         = 17;
-            MODE_MAP["THROW"]         = 18;
-            MODE_MAP["Throw"]         = 18;
-            MODE_MAP["AVOID_ADSB"]    = 19;
-            MODE_MAP["Avoid ADSB"]    = 19;
-            MODE_MAP["GUIDED_NOGPS"]  = 20;
-            MODE_MAP["Guided No GPS"] = 20;
-            MODE_MAP["SMART_RTL"]     = 21;
-            MODE_MAP["Smart RTL"]     = 21;
-            MODE_MAP["FLOWHOLD"]      = 22;
-            MODE_MAP["Flow Hold"]     = 22;
-            MODE_MAP["FOLLOW"]        = 23;
-            MODE_MAP["Follow"]        = 23;
-            MODE_MAP["Follow Me"]     = 23;
-            MODE_MAP["ZIGZAG"]        = 24;
-            MODE_MAP["Zigzag"]        = 24;
-            MODE_MAP["ZigZag"]        = 24;
-            MODE_MAP["SYSTEMID"]      = 25;
-            MODE_MAP["System ID"]     = 25;
-            MODE_MAP["AUTOROTATE"]    = 26;
-            MODE_MAP["Heli Autorotate"] = 26;
-            MODE_MAP["AUTO_RTL"]      = 27;
-            MODE_MAP["Auto RTL"]      = 27;
-        }
+        static const std::unordered_map<std::string, int> MODE_MAP = {
+            {"STABILIZE",     0},
+            {"Stabilize",     0},
+            {"ACRO",          1},
+            {"Acro",          1},
+            {"ALT_HOLD",      2},
+            {"Altitude Hold", 2},
+            {"Alt Hold",      2},
+            {"AUTO",          3},
+            {"Auto",          3},
+            {"GUIDED",        4},
+            {"Guided",        4},
+            {"LOITER",        5},
+            {"Loiter",        5},
+            {"RTL",           6},
+            {"CIRCLE",        7},
+            {"Circle",        7},
+            {"LAND",          9},
+            {"Land",          9},
+            {"DRIFT",         11},
+            {"Drift",         11},
+            {"SPORT",         13},
+            {"Sport",         13},
+            {"FLIP",          14},
+            {"Flip",          14},
+            {"AUTOTUNE",      15},
+            {"AutoTune",      15},
+            {"POSHOLD",       16},
+            {"Position Hold", 16},
+            {"Position",      16},
+            {"Pos Hold",      16},
+            {"BRAKE",         17},
+            {"Brake",         17},
+            {"THROW",         18},
+            {"Throw",         18},
+            {"AVOID_ADSB",    19},
+            {"Avoid ADSB",    19},
+            {"GUIDED_NOGPS",  20},
+            {"Guided No GPS", 20},
+            {"SMART_RTL",     21},
+            {"Smart RTL",     21},
+            {"FLOWHOLD",      22},
+            {"Flow Hold",     22},
+            {"FOLLOW",        23},
+            {"Follow",        23},
+            {"Follow Me",     23},
+            {"ZIGZAG",        24},
+            {"Zigzag",        24},
+            {"ZigZag",        24},
+            {"SYSTEMID",      25},
+            {"System ID",     25},
+            {"AUTOROTATE",    26},
+            {"Heli Autorotate", 26},
+            {"AUTO_RTL",      27},
+            {"Auto RTL",      27},
+        };
 
         int custom_mode = 0;
         auto it = MODE_MAP.find(cmd.mode_name);

@@ -4286,34 +4286,6 @@ int main()
             }
         }
 
-        // ── SERVO_OUTPUT_RAW — servo output position values ─────────────────
-        else if (msg.msgid == MAVLINK_MSG_ID_SERVO_OUTPUT_RAW)
-        {
-            mavlink_servo_output_raw_t servo;
-            mavlink_msg_servo_output_raw_decode(&msg, &servo);
-
-            json j;
-            j["type"]  = "servo_output_raw";
-            j["sysid"] = ui_sysid;
-            j["ch1"]   = servo.servo1_raw;
-            j["ch2"]   = servo.servo2_raw;
-            j["ch3"]   = servo.servo3_raw;
-            j["ch4"]   = servo.servo4_raw;
-            j["ch5"]   = servo.servo5_raw;
-            j["ch6"]   = servo.servo6_raw;
-            j["ch7"]   = servo.servo7_raw;
-            j["ch8"]   = servo.servo8_raw;
-            j["ch9"]   = servo.servo9_raw;
-            j["ch10"]  = servo.servo10_raw;
-            j["ch11"]  = servo.servo11_raw;
-            j["ch12"]  = servo.servo12_raw;
-            j["ch13"]  = servo.servo13_raw;
-            j["ch14"]  = servo.servo14_raw;
-            j["ch15"]  = servo.servo15_raw;
-            j["ch16"]  = servo.servo16_raw;
-            send_ws_safe(j.dump());
-        }
-
         // ── STATUSTEXT — drone/MAVProxy console messages ──────────────────
         // Forward every STATUSTEXT packet from the drone to the browser so
         // the message console shows real MAVProxy output instead of GCS
