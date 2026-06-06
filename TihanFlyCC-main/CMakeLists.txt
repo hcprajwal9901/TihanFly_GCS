@@ -4,6 +4,15 @@ project(TiHANFly CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+enable_testing()
+
+# ── Coverage Configuration ───────────────────────────────────────────────────
+option(ENABLE_COVERAGE "Enable Code Coverage testing" OFF)
+if(ENABLE_COVERAGE)
+    add_compile_options(--coverage)
+    add_link_options(--coverage)
+endif()
+
 # ── Build type default ────────────────────────────────────────────────────────
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
@@ -93,6 +102,9 @@ set(SOURCES
 
     # ── MAVLink Inspector ─────────────────────────────────────────────────
     Inspector/mavlink_inspector.cpp
+    
+    # ── Parser ────────────────────────────────────────────────────────────
+    Parser/mavlink_parser.cpp
 )
 
 # ── Executable ────────────────────────────────────────────────────────────────
@@ -164,3 +176,6 @@ endif()
 
 # ── Install rule (optional) ───────────────────────────────────────────────────
 install(TARGETS TiHANFly DESTINATION bin)
+
+# ── Testing Subdirectory ──────────────────────────────────────────────────────
+add_subdirectory(../test_backend ${CMAKE_CURRENT_BINARY_DIR}/test_backend_build)

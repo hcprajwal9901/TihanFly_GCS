@@ -8,6 +8,7 @@ MAVLinkParser::MAVLinkParser()
 void MAVLinkParser::reset()
 {
     status_ = {};
+    mavlink_reset_channel_status(MAVLINK_COMM_0);
 }
 
 void MAVLinkParser::set_message_callback(MessageCallback cb)
