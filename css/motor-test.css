@@ -98,7 +98,7 @@
 /* ── Controls section ───────────────────────────────────────────────────────── */
 .mt-controls {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     margin-bottom: 20px;
 }
@@ -391,5 +391,34 @@
 }
 
 /* Content inside a disabled overlay */
-.mt-content { transition: opacity 0.25s ease; }
-.mt-content.mt-locked { opacity: 0.3; pointer-events: none; user-select: none; }
+.mt-locked { opacity: 0.3; pointer-events: none; user-select: none; transition: opacity 0.25s ease; }
+
+/* Spin settings action buttons */
+.mt-btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.12), rgba(76, 175, 80, 0.05));
+    border: 1px solid rgba(76, 175, 80, 0.35);
+    border-radius: 6px;
+    color: #81c784;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+    user-select: none;
+}
+.mt-btn-action:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.22), rgba(76, 175, 80, 0.12));
+    border-color: rgba(76, 175, 80, 0.55);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+    transform: translateY(-1px);
+}
+.mt-btn-action:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+.mt-btn-action:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}

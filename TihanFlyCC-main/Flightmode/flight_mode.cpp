@@ -134,6 +134,11 @@ void FlightMode::pushStatus()
 
 void FlightMode::processMessage(const mavlink_message_t& msg)
 {
+    // Only process status messages from the main autopilot component (compid == 1).
+    // This prevents non-autopilot components (like companion computers or gimbals)
+    // on the same sysid from repeatedly overwriting the active mode and armed state.
+    if (msg.compid != 1) return;
+
     const uint8_t sid = msg.sysid;
 
     // ── RC_CHANNELS (id 65) — flight-mode channel (ch5) ──────────────────────

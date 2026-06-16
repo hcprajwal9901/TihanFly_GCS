@@ -1182,10 +1182,10 @@ void start_serial_monitor(asio::io_context& io,
     std::thread([&io, &link_manager, &cmd_manager]()
     {
         // Ports that failed to open: maps port → time of last failure.
-        // We skip retry for 30 s so Bluetooth/SLCAN/other non-MAVLink ports
-        // don't spam the log every 2 seconds.
+        // We skip retry for 5 s so Bluetooth/SLCAN/other non-MAVLink ports
+        // don't spam the log too frequently, but we reconnect quickly after reboot.
         std::map<std::string, std::chrono::steady_clock::time_point> failed_ports;
-        constexpr auto RETRY_INTERVAL = std::chrono::seconds(30);
+        constexpr auto RETRY_INTERVAL = std::chrono::seconds(5);
 
         // Track which ports were in the registry last scan so we can clear
         // the blacklist when a port disappears and reappears (re-plug).
@@ -1205,7 +1205,7 @@ void start_serial_monitor(asio::io_context& io,
 
         while (true)
         {
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
             if (firmware_flashing.load()) continue;
 
@@ -1252,20 +1252,20 @@ void start_serial_monitor(asio::io_context& io,
                 const auto age_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - probe.opened_time).count();
                 
                 // Speed up connection:
-                // 1. If we got absolutely 0 bytes of raw activity for 1500 ms, we know the baudrate is wrong.
-                // 2. If we got bytes but no valid MAVLink packets after 3000 ms, the baudrate is wrong.
+                // 1. If we got absolutely 0 bytes of raw activity for 1000 ms, we know the baudrate is wrong.
+                // 2. If we got bytes but no valid MAVLink packets after 2000 ms, the baudrate is wrong.
                 bool baudrate_failed = false;
                 std::string reason;
 
-                if (age_ms >= 1500 && !probe.transport->is_active())
+                if (age_ms >= 1000 && !probe.transport->is_active())
                 {
                     baudrate_failed = true;
-                    reason = "no raw bytes received after 1.5s";
+                    reason = "no raw bytes received after 1.0s";
                 }
-                else if (age_ms >= 3000)
+                else if (age_ms >= 2000)
                 {
                     baudrate_failed = true;
-                    reason = "no valid MAVLink packets after 3.0s";
+                    reason = "no valid MAVLink packets after 2.0s";
                 }
 
                 if (baudrate_failed)
@@ -2829,6 +2829,8 @@ void start_websocket(CommandManager* cmd_manager,
                             else if (type == "motor_test")
                             {
                                 int   motor_index  = j.value("motor_index",  1);
+                                int   test_order   = j.value("test_order", 0);
+                                int   motor_count  = j.value("motor_count", 0);
                                 float throttle_pct = static_cast<float>(j.value("throttle_pct", 0));
                                 float duration_sec = static_cast<float>(j.value("duration_sec", 2));
 
@@ -2866,8 +2868,8 @@ void start_websocket(CommandManager* cmd_manager,
                                     mav_cmd.param2           = 0;   // MOTOR_TEST_THROTTLE_PERCENT
                                     mav_cmd.param3           = throttle_pct;
                                     mav_cmd.param4           = duration_sec;
-                                    mav_cmd.param5           = 0;   // motor count: 0 = one
-                                    mav_cmd.param6           = 0;   // order: default
+                                    mav_cmd.param5           = static_cast<float>(motor_count);
+                                    mav_cmd.param6           = static_cast<float>(test_order);
                                     mav_cmd.param7           = 0;
 
                                     mavlink_msg_command_long_encode(
