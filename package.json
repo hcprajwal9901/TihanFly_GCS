@@ -4,7 +4,11 @@
   "description": "TihanFly Ground Control Station",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "report:excel": "python test_frontend/generate_excel_report.py",
+    "test:integration": "node test_frontend/run_tests.js",
+    "test:sitl": "npx playwright test --project=sitl",
+    "test:flaky": "npx playwright test --repeat-each=10"
   },
   "author": "Pavan",
   "license": "MIT",
@@ -12,6 +16,8 @@
     "ws": "^8.0.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.61.0",
     "electron": "^29.0.0",
     "electron-builder": "^24.0.0"
   },

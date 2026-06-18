@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "required": ["type", "sysid", "data"],
+  "properties": {
+    "type": { "type": "string", "const": "telemetry" },
+    "sysid": { "type": "integer" },
+    "data": {
+      "type": "object",
+      "required": ["sysid", "battery_pct"],
+      "properties": {
+        "sysid": { "type": "integer" },
+        "battery_pct": { "type": "integer" },
+        "battery_v": { "type": "number" },
+        "groundspeed": { "type": "number" },
+        "satellites": { "type": "integer" },
+        "altitude": { "type": "number" }
+      }
+    }
+  }
+}

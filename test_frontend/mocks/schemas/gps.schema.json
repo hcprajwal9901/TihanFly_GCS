@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "required": ["type", "sysid", "latitude", "longitude"],
+  "properties": {
+    "type": { "type": "string", "const": "gps" },
+    "sysid": { "type": "integer" },
+    "latitude": { "type": "number" },
+    "longitude": { "type": "number" },
+    "altitude": { "type": "number" },
+    "heading": { "type": "number" },
+    "satellites": { "type": "integer" }
+  }
+}

@@ -103,7 +103,7 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
 
 function initializeDroneWebSocket() {
     const WS_URL = 'ws://127.0.0.1:9002';
-    const RECONNECT_DELAY_MS = 3000;
+    const RECONNECT_DELAY_MS = 500;
 
     // Tracks drone connection state — only log to console on actual changes
     let droneConnectionState = null;  // e.g. 'connected:UDP', 'disconnected'

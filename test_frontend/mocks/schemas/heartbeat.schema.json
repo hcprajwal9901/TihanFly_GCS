@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "required": ["type", "connected", "vehicles"],
+  "properties": {
+    "type": { "type": "string", "const": "status" },
+    "connected": { "type": "boolean" },
+    "connection": { "type": "string" },
+    "vehicles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["sysid"],
+        "properties": {
+          "sysid": { "type": "integer" },
+          "lat": { "type": "number" },
+          "lon": { "type": "number" },
+          "yaw": { "type": "number" },
+          "mode": { "type": "string" },
+          "battery_pct": { "type": "integer" },
+          "battery_v": { "type": "number" },
+          "num_sats": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

@@ -289,6 +289,7 @@ class FlightModeSelector {
 class ArmToggle {
     constructor() {
         this.isArmed = false;
+        this.isPending = false;
         this.btn     = null;
         this.label   = null;
         this.icon    = null;
@@ -304,10 +305,43 @@ class ArmToggle {
         if (!this.btn) { console.error('❌ ArmToggle: #armBtn not found'); return; }
 
         this.btn.addEventListener('click', () => this.toggle());
+
+        // Listen for responses and timeouts to clear pending state
+        window.addEventListener('calibration_ws_message', (e) => {
+            const msg = e.detail;
+            if (msg.type === 'response' && (msg.command === 'ARM' || msg.command === 'DISARM')) {
+                this.clearPendingState();
+            }
+            if (msg.type === 'event' && (msg.event === 'armed' || msg.event === 'disarmed')) {
+                this.clearPendingState();
+            }
+        });
+
+        window.addEventListener('command_timeout', (e) => {
+            const cmd = e.detail.command;
+            if (cmd === 'ARM' || cmd === 'DISARM') {
+                this.clearPendingState();
+                // Reset visual state back
+                this.setArmedState(cmd === 'DISARM'); // if DISARM timed out, stay armed. If ARM timed out, stay disarmed.
+            }
+        });
+
         console.log('✅ ArmToggle initialized');
     }
 
-    toggle() { this.isArmed ? this.disarm() : this.arm(); }
+    toggle() {
+        if (this.isPending) return;
+        this.isPending = true;
+        this.btn.disabled = true;
+        this.btn.style.opacity = '0.5';
+        this.isArmed ? this.disarm() : this.arm();
+    }
+
+    clearPendingState() {
+        this.isPending = false;
+        this.btn.disabled = false;
+        this.btn.style.opacity = '';
+    }
 
     setArmedState(isArmed) {
         if (this.isArmed === isArmed) return;
