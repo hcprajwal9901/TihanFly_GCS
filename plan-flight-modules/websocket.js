@@ -37,6 +37,7 @@ let heartbeatTimer = null;
 let isIntentionallyClosed = false;
 let telemetryRequested = false; // [FIX #11] guard against repeated requests
 let _lastStatusKey = null;  // dedup guard: only log on real state changes
+const pendingCommands = {};
 
 // ── [FIX #13] Multi-vehicle selected sysid ───────────────────────────────────
 // Default 1 (first/only drone in a single-vehicle setup).
@@ -99,7 +100,7 @@ const _firmwareMsgQueue = [];
 let _firmwareQueueTimer = null;
 
 const MAX_RECONNECT_ATTEMPTS = 10;
-const BASE_RECONNECT_MS = 3000;
+const BASE_RECONNECT_MS = 500;
 const MAX_RECONNECT_MS = 30000;
 const HEARTBEAT_INTERVAL_MS = 15000;
 
@@ -516,6 +517,19 @@ function handleBackendMessage(message) {
         // ── Command ACK ───────────────────────────────────────────────────────
         case 'response':
             console.log('[WS] Command response:', message);
+            // Clear pending timeout
+            if (message.id && pendingCommands[message.id]) {
+                clearTimeout(pendingCommands[message.id].timer);
+                delete pendingCommands[message.id];
+            }
+            // Fallback: search by command name if id is not preserved by mock
+            for (const id in pendingCommands) {
+                if (pendingCommands[id].command === message.command) {
+                    clearTimeout(pendingCommands[id].timer);
+                    delete pendingCommands[id];
+                }
+            }
+
             if (message.status === 'success') {
                 window.MsgConsole?.success(message.message);
             } else {
@@ -886,13 +900,30 @@ function sendCommand(command, params = {}) {
         params
     };
     console.log('[WS] sendCommand →', payload);
+
+    const activeSysid = window.selectedSysId ?? 1;
+    payload.sysid = activeSysid;
+
+    // Track command ACK timeout
+    const cmdId = payload.id;
+    pendingCommands[cmdId] = {
+        command: command,
+        sysid: activeSysid,
+        timer: setTimeout(() => {
+            console.warn(`[WS] Command ${command} timed out (no ACK)`);
+            if (window.MsgConsole) {
+                window.MsgConsole.error(`⚠ Command ${command} timed out — no acknowledgement received.`);
+            }
+            window.dispatchEvent(new CustomEvent('command_timeout', { detail: { command, sysid: activeSysid } }));
+            delete pendingCommands[cmdId];
+        }, 4000)
+    };
     
     if (window.sendToSelected) {
         window.sendToSelected(payload);
         return true;
     }
     
-    payload.sysid = window.selectedSysId ?? 1;
     return safeSend(payload);
 }
 

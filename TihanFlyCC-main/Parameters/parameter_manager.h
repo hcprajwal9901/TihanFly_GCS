@@ -152,6 +152,7 @@ public:
     bool isLoading()      const { return loading_.load(); }
     int  receivedCount()  const { return received_.load(); }
     int  totalCount()     const { return total_.load(); }
+    int  cacheKey()       const { return cache_key_; }
 
 private:
     int sysid_;

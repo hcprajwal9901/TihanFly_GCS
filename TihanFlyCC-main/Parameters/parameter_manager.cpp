@@ -59,9 +59,32 @@ void ParameterManager::setTransportCallback(TransportCb cb) { transport_cb_ = st
 
 void ParameterManager::setCacheKey(int key)
 {
-    cache_key_ = key;
-    std::cout << "[ParameterManager] Cache key set → " << key
-              << " (file: sysid_" << key << ".json)\n";
+    if (key != cache_key_)
+    {
+        // Flush any pending save for the current key before switching
+        if (save_timer_deadline_ms_.load() > 0)
+        {
+            std::cout << "[ParameterManager] Flushing pending cache save for old key "
+                      << cache_key_ << " before switching to " << key << "\n";
+            save_cache_file();
+            save_timer_deadline_ms_.store(0); // clear deadline
+        }
+        cache_key_ = key;
+        std::cout << "[ParameterManager] Cache key set → " << key
+                  << " (file: sysid_" << key << ".json)\n";
+
+        // Load the new cache file immediately so that the manager's memory
+        // represents the newly selected vehicle.
+        if (!load_cache_file())
+        {
+            std::lock_guard<std::mutex> lk(mutex_);
+            params_.clear();
+            received_indices_.clear();
+            received_.store(0);
+            total_.store(0);
+            loading_.store(false);
+        }
+    }
 }
 
 void ParameterManager::setVehicleInfo(int sysid, int compid)
@@ -193,6 +216,7 @@ void ParameterManager::handle_param_value(const mavlink_message_t& msg)
             all_msg["type"]   = "param_all";
             all_msg["params"] = getAllParametersJson();
             all_msg["cached"] = false;
+            all_msg["sysid"]  = cache_key_;
             send_cb_(all_msg.dump());
         }
 
@@ -203,6 +227,7 @@ void ParameterManager::handle_param_value(const mavlink_message_t& msg)
         done["type"]       = "param_load_complete";
         done["count"]      = rcv;
         done["elapsed_ms"] = elapsed;
+        done["sysid"]      = cache_key_;
         done["message"]    = "All " + std::to_string(rcv)
                              + " parameters loaded in "
                              + std::to_string(elapsed) + " ms";
@@ -276,6 +301,7 @@ void ParameterManager::requestAllParameters(bool force)
     json start;
     start["type"]       = "param_load_start";
     start["from_cache"] = had_cache;
+    start["sysid"]      = cache_key_;
     start["message"]    = had_cache
         ? "Loaded " + std::to_string(params_.size()) + " params from cache — refreshing from FC…"
         : "Requesting all parameters from flight controller…";
@@ -559,6 +585,7 @@ void ParameterManager::setParameter(const std::string& param_name,
     ack["type"]     = "param_set_sent";
     ack["param_id"] = param_name;
     ack["value"]    = value;
+    ack["sysid"]    = cache_key_;
     ack["message"]  = "PARAM_SET sent — waiting for FC echo…";
     if (send_cb_) send_cb_(ack.dump());
 }
@@ -639,6 +666,7 @@ bool ParameterManager::load_cache_file()
             snap["type"]   = "param_all";
             snap["params"] = getAllParametersJson();
             snap["cached"] = true;
+            snap["sysid"]  = cache_key_;
             send_cb_(snap.dump());
         }
 
@@ -835,6 +863,7 @@ void ParameterManager::push_param_update(const Parameter& p) const
     j["index"]    = p.index;
     j["count"]    = p.count;
     j["type_id"]  = p.type;
+    j["sysid"]    = cache_key_;
 
     send_cb_(j.dump());
 }
@@ -851,6 +880,7 @@ void ParameterManager::push_load_progress() const
     j["received"] = rcv;
     j["total"]    = tot;
     j["percent"]  = (tot > 0) ? (rcv * 100 / tot) : 0;
+    j["sysid"]    = cache_key_;
 
     send_cb_(j.dump());
 }
@@ -863,6 +893,7 @@ void ParameterManager::push_error(const std::string& message) const
     json j;
     j["type"]    = "param_error";
     j["message"] = message;
+    j["sysid"]   = cache_key_;
     send_cb_(j.dump());
 }
 

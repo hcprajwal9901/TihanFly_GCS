@@ -46,6 +46,22 @@ ipcMain.handle('save_file', async (event, { defaultName, base64Data, mimeType })
     }
 });
 
+// ── RTSP IPC Mock Handlers (required by preload/renderer) ──
+ipcMain.handle('rtsp-start', async (event, { rtspUrl, port }) => {
+    console.log('[Main] RTSP start requested for:', rtspUrl, 'on port:', port);
+    return { ok: true };
+});
+
+ipcMain.handle('rtsp-stop', async () => {
+    console.log('[Main] RTSP stop requested');
+    return { ok: true };
+});
+
+ipcMain.handle('rtsp-status', async () => {
+    return { running: false };
+});
+
+
 function _filtersFor(mimeType) {
     if (!mimeType) return [{ name: 'All Files', extensions: ['*'] }];
     if (mimeType.includes('mp4'))  return [{ name: 'MP4 Video',  extensions: ['mp4']  }];

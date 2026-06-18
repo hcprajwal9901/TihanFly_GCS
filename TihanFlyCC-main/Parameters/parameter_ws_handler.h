@@ -110,6 +110,35 @@ inline bool handle_param_ws_command(const std::string& type,
                                     const json&         j,
                                     ParameterManager&   pm)
 {
+    // Update target sysid and cache key if provided in the WebSocket message
+    if (j.contains("sysid"))
+    {
+        try
+        {
+            int req_sysid = j["sysid"].get<int>();
+            if (req_sysid > 0 && req_sysid != pm.cacheKey())
+            {
+                pm.setVehicleInfo(req_sysid, 1);
+                pm.setCacheKey(req_sysid);
+                // If this is a request to get all cached parameters, or if we're setting a parameter,
+                // load the cache for the new vehicle. If no cache exists, trigger a fresh load.
+                if (type == "param_get_all" || type == "param_set")
+                {
+                    if (!pm.loadCache())
+                    {
+                        pm.requestAllParameters(true);
+                    }
+                }
+            }
+            else if (req_sysid > 0)
+            {
+                pm.setVehicleInfo(req_sysid, 1);
+                pm.setCacheKey(req_sysid);
+            }
+        }
+        catch (...) {}
+    }
+
     // ── Request all parameters from the FC (PARAM_REQUEST_LIST) ──────────────
     if (type == "param_request_list")
     {
@@ -130,6 +159,7 @@ inline bool handle_param_ws_command(const std::string& type,
             json err;
             err["type"]    = "param_error";
             err["message"] = "param_set: 'param_id' field is required";
+            err["sysid"]   = pm.cacheKey();
             send_ws_safe(err.dump());
             return true;
         }
@@ -148,6 +178,7 @@ inline bool handle_param_ws_command(const std::string& type,
             json err;
             err["type"]    = "param_error";
             err["message"] = "param_request_one: 'name' field is required";
+            err["sysid"]   = pm.cacheKey();
             send_ws_safe(err.dump());
             return true;
         }
@@ -173,6 +204,7 @@ inline bool handle_param_ws_command(const std::string& type,
             resp["type"]   = "param_all";
             resp["params"] = pm.getAllParametersJson();
             resp["cached"] = true;
+            resp["sysid"]  = pm.cacheKey();
             send_ws_safe(resp.dump());
         }
         else
@@ -212,6 +244,7 @@ inline bool handle_param_ws_command(const std::string& type,
             resp["type"]    = "param_file_saved";
             resp["path"]    = path;
             resp["count"]   = static_cast<int>(all_params.size());
+            resp["sysid"]   = pm.cacheKey();
             resp["message"] = std::to_string(all_params.size())
                               + " parameters saved to " + path;
             send_ws_safe(resp.dump());
@@ -221,6 +254,7 @@ inline bool handle_param_ws_command(const std::string& type,
             json err;
             err["type"]    = "param_error";
             err["message"] = std::string("Save failed: ") + ex.what();
+            err["sysid"]   = pm.cacheKey();
             send_ws_safe(err.dump());
         }
         return true;
@@ -235,6 +269,7 @@ inline bool handle_param_ws_command(const std::string& type,
             json err;
             err["type"]    = "param_error";
             err["message"] = "param_load_file: 'path' field is required";
+            err["sysid"]   = pm.cacheKey();
             send_ws_safe(err.dump());
             return true;
         }
@@ -245,6 +280,7 @@ inline bool handle_param_ws_command(const std::string& type,
             json err;
             err["type"]    = "param_error";
             err["message"] = "No parameters loaded from '" + path + "'";
+            err["sysid"]   = pm.cacheKey();
             send_ws_safe(err.dump());
             return true;
         }
@@ -259,6 +295,7 @@ inline bool handle_param_ws_command(const std::string& type,
         resp["type"]    = "param_file_loaded";
         resp["path"]    = path;
         resp["count"]   = static_cast<int>(entries.size());
+        resp["sysid"]   = pm.cacheKey();
         resp["message"] = std::to_string(entries.size())
                           + " parameters written from " + path;
         send_ws_safe(resp.dump());

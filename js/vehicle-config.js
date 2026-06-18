@@ -487,14 +487,14 @@ window.VehicleConfig = (() => {
     <div class="vc-section">
       <div class="vc-baud-row">
         <label class="vc-baud-label">Bootloader Baud:</label>
-        <select class="vc-baud-select" id="vcBootBaud">
+        <select class="vc-baud-select" id="vcBootBaud" aria-label="Bootloader Baud">
           <option>115200</option><option>57600</option>
           <option>38400</option><option>9600</option>
         </select>
       </div>
       <div class="vc-baud-row">
         <label class="vc-baud-label">Flash Baud:</label>
-        <select class="vc-baud-select" id="vcFlashBaud">
+        <select class="vc-baud-select" id="vcFlashBaud" aria-label="Flash Baud">
           <option>115200</option><option>57600</option>
           <option>38400</option><option>9600</option>
         </select>
@@ -981,10 +981,11 @@ window.VehicleConfig = (() => {
      ════════════════════════════════════════════════════════════ */
 
   function vcLog(type, msg) {
-    // Always buffer so replaying on open() works even after a page reload
+    // Always buffer so replaying on open() works even after a session/reconnect reload
     _flashLogBuffer.push({ type, msg });
 
-    const box = document.getElementById('vcFlashLog');
+    const overlay = document.getElementById('vehicleConfigOverlay');
+    const box = overlay ? overlay.querySelector('#vcFlashLog') : document.getElementById('vcFlashLog');
     if (!box) return;
 
     // On the very first real log entry after the panel opened, clear the
@@ -1006,12 +1007,14 @@ window.VehicleConfig = (() => {
     if (barId === 'vcEraseBar') _eraseProgress = value;
     if (barId === 'vcWriteBar') _writeProgress = value;
 
-    const bar = document.getElementById(barId);
+    const overlay = document.getElementById('vehicleConfigOverlay');
+    const bar = overlay ? overlay.querySelector(`#${barId}`) : document.getElementById(barId);
     if (bar) bar.style.width = value + '%';
   }
 
   function vcAnimBar(barId, from, to, dur, cb) {
-    const bar = document.getElementById(barId);
+    const overlay = document.getElementById('vehicleConfigOverlay');
+    const bar = overlay ? overlay.querySelector(`#${barId}`) : document.getElementById(barId);
     if (!bar) return;
     const start = performance.now();
     (function step(now) {
@@ -1029,7 +1032,8 @@ window.VehicleConfig = (() => {
        • The page was reloaded while a flash was in progress
   ──────────────────────────────────────────────────────────── */
   function replayFlashState() {
-    const box = document.getElementById('vcFlashLog');
+    const overlay = document.getElementById('vehicleConfigOverlay');
+    const box = overlay ? overlay.querySelector('#vcFlashLog') : document.getElementById('vcFlashLog');
     if (box) {
       if (_flashLogBuffer.length > 0) {
         // Clear the placeholder "Vehicle Configuration ready." line
@@ -1051,8 +1055,8 @@ window.VehicleConfig = (() => {
     }
 
     // Always restore progress bars to their last known values
-    const eraseBar = document.getElementById('vcEraseBar');
-    const writeBar = document.getElementById('vcWriteBar');
+    const eraseBar = overlay ? overlay.querySelector('#vcEraseBar') : document.getElementById('vcEraseBar');
+    const writeBar = overlay ? overlay.querySelector('#vcWriteBar') : document.getElementById('vcWriteBar');
     if (eraseBar) eraseBar.style.width = _eraseProgress + '%';
     if (writeBar) writeBar.style.width = _writeProgress + '%';
   }
@@ -1189,7 +1193,8 @@ window.VehicleConfig = (() => {
           // Also clear the DOM log box immediately (including any placeholder
           // or leftover lines from the prior session) so the new session starts
           // from a clean slate without waiting for replayFlashState().
-          { const box = document.getElementById('vcFlashLog');
+          { const overlay = document.getElementById('vehicleConfigOverlay');
+            const box = overlay ? overlay.querySelector('#vcFlashLog') : document.getElementById('vcFlashLog');
             if (box) box.innerHTML = ''; }
           // Reset both bars so they animate from 0 when the new flash begins.
           vcSetBar('vcEraseBar', 0);

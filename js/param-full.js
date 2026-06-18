@@ -943,6 +943,13 @@ function loadExternalMeta() {
     }
 
 function handleMessage(data) {
+    if (!data) return;
+    if (data.sysid !== undefined && data.sysid !== null) {
+        const targetSysid = _currentParamSysid !== null ? _currentParamSysid : (window.selectedSysId > 0 ? window.selectedSysId : 1);
+        if (Number(data.sysid) !== Number(targetSysid)) {
+            return;
+        }
+    }
     const t = data.type;
     if (t === 'param_load_start') {
         isLoading = true; dirtyParams = {}; allParams = {};
@@ -1336,6 +1343,12 @@ function init() {
 
             // ── Re-fetch when the user selects a different drone ──────────────
             window.addEventListener('vehicle_selected', () => {
+                const targetSysid = (window.selectedSysId && window.selectedSysId > 0)
+                    ? window.selectedSysId
+                    : (window.activeSysids && window.activeSysids.length > 0 ? window.activeSysids[0] : 1);
+                _currentParamSysid = targetSysid;
+                _updateDroneBadge();
+
                 const panelActive = document.querySelector('#panel-param-full.active') ||
                                     document.querySelector('#panel-param-full[style*="block"]');
                 // Only auto-refresh if the Full Params panel is currently visible
@@ -1348,6 +1361,25 @@ function init() {
                     wsSend({ type: 'param_get_all' });
                 }
             });
+
+            // ── Bind to Settings Sidebar Navigation button ────────────────────
+            const navBtn = document.querySelector('.settings-nav-btn[data-panel="param-full"]');
+            if (navBtn) {
+                navBtn.addEventListener('click', () => {
+                    const targetSysid = (window.selectedSysId && window.selectedSysId > 0)
+                        ? window.selectedSysId
+                        : (window.activeSysids && window.activeSysids.length > 0 ? window.activeSysids[0] : 1);
+                    if (_currentParamSysid !== targetSysid) {
+                        _currentParamSysid = targetSysid;
+                        _updateDroneBadge();
+                        allParams = {}; dirtyParams = {};
+                        const tbody = document.getElementById('fpBody');
+                        if (tbody) tbody.innerHTML = '';
+                        setStatus('Switching drone — loading parameters…');
+                        wsSend({ type: 'param_get_all' });
+                    }
+                });
+            }
         }
 
         // Initialise drone badge on first open

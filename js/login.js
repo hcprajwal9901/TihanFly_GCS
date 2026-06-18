@@ -53,8 +53,8 @@ class TiHANSocket {
                 this.connected = false;
                 clearInterval(this.heartbeat);
                 updateConnectionStatus(false);
-                console.log('[WS] Disconnected — reconnecting in 3s...');
-                setTimeout(() => this.connect(), 3000);
+                console.log('[WS] Disconnected — reconnecting in 500ms...');
+                setTimeout(() => this.connect(), 500);
             };
 
             this.ws.onerror = (e) => {
@@ -62,7 +62,7 @@ class TiHANSocket {
             };
         } catch(e) {
             console.error('[WS] Connection failed', e);
-            setTimeout(() => this.connect(), 3000);
+            setTimeout(() => this.connect(), 500);
         }
     }
 
@@ -593,4 +593,4 @@ setInterval(() => {
     const lat = (17.4065 + (Math.random()-0.5)*0.0001).toFixed(4);
     const el  = document.getElementById('hudCoords');
     if (el) el.textContent = `LAT: ${lat}° N`;
-}, 3000); b 
+}, 3000);
