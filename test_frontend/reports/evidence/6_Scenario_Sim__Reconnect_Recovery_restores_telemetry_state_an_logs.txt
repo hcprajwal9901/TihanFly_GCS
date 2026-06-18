@@ -1,0 +1,6 @@
+[MockServer] Triggering disconnect...
+[MockServer] WebSocket client disconnected
+[MockServer] WebSocket client disconnected
+[MockServer] WebSocket client connected
+[MockServer] Reconnect allowed, resuming telemetry...
+[MockServer] Scenario variables reset

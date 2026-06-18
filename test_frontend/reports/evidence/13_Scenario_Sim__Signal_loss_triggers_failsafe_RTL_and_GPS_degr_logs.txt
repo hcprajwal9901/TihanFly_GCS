@@ -1,0 +1,10 @@
+[MockServer] GPS sat count set to 12
+[MockServer] GPS sat count set to 8
+[MockServer] GPS sat count set to 5
+[MockServer] GPS sat count set to 2
+[MockServer] GPS sat count set to 0
+[MockServer] GPS sat count set to 2
+[MockServer] GPS sat count set to 5
+[MockServer] GPS sat count set to 8
+[MockServer] GPS sat count set to 12
+[MockServer] Scenario variables reset

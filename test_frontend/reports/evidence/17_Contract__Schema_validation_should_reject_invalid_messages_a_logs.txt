@@ -1,0 +1,5 @@
+[MockServer] WebSocket client disconnected
+[MockServer] WebSocket client disconnected
+[MockServer] Stopped servers
+[MainWindowTest] Written structured KPIs to kpis.json
+[Contract] Property "battery_pct" is not an integer

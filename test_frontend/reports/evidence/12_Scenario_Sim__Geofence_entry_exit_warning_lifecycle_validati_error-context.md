@@ -1,0 +1,289 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: main_window.spec.js >> MainWindow Electron Integration Tests >> Scenario Sim: Geofence entry/exit warning lifecycle validation
+- Location: test_frontend\integration_test\main_window.spec.js:479:3
+
+# Error details
+
+```
+Error: expect(locator).toHaveClass(expected) failed
+
+Locator: locator('#gf-breach-banner')
+Expected pattern: /visible/
+Received string:  "gf-breach-banner"
+Timeout: 3000ms
+
+Call log:
+  - Expect "toHaveClass" with timeout 3000ms
+  - waiting for locator('#gf-breach-banner')
+    9 × locator resolved to <div id="gf-breach-banner" class="gf-breach-banner">…</div>
+      - unexpected value "gf-breach-banner"
+
+```
+
+```yaml
+- img "Menu"
+- text: UDP
+- img "Mode"
+- text: Guided
+- img "Signal"
+- text: 0% SATS 9
+- img "GPS"
+- img "Battery"
+- text: 12.0 V 90%
+- button "English":
+  - text: English
+  - img
+- button "Appearance":
+  - text: Appearance
+  - img
+- text: 1 DRONE ▼
+- button "+"
+- img "DX4 Logo"
+- button "drone D-1":
+  - img "drone"
+  - text: D-1
+- text: ALT 120.0 m SPD 0.0 m/s LAT 17.601000
+- img "Compass Dial"
+- img "Compass Arrow"
+- text: 45° DIST 0 m SAT 9 LON 78.126000
+- img
+- text: NO SIGNAL NO SIGNAL
+- textbox "rtsp://192.168.1.10:554/stream or rtmp://host/app/stream":
+  - /placeholder: rtsp://192.168.1.10:554/stream  or  rtmp://host/app/stream
+- button "▶ CONNECT"
+- button "Toggle Video Fullscreen":
+  - img
+- button "Capture Photo":
+  - img
+- button "Start/Stop Recording":
+  - img
+- text: 📷 Photo saved
+- button "ARM":
+  - img
+  - text: ARM
+- button "FORCE ARM":
+  - img
+  - text: FORCE ARM
+- button "Takeoff TAKEOFF":
+  - img "Takeoff"
+  - text: TAKEOFF
+- button "Land LAND":
+  - img "Land"
+  - text: LAND
+- button "RTL RTL":
+  - img "RTL"
+  - text: RTL
+- button "Mode MODE":
+  - img "Mode"
+  - text: MODE
+- text: ✓ ✅ Mission File Manager ready 13:12:20 ✓ Backend connected 13:12:20 ✓ 🔌 Backend connected 13:12:20 ✓ 🚁 Drone connected via UDP 13:12:20 ✓ 🚁 Drone connected via UDP 13:12:20 ✓ ✅ Waypoint Manager ready 13:12:20 ✓ 🎯 Map locked to drone GPS 13:12:21 ✓ 🚁 TiHANFly GCS Ready 13:12:21 ℹ 🏠 Simple home marker active 13:12:21 ℹ Click video to maximize - Click PLAN to enter flight planning 13:12:21 ✓ 💾 Complete system state restored 13:12:22
+- img
+- text: Weather
+- button "×"
+- img
+- text: "-- --, --"
+- img "Weather"
+- text: "--°C --"
+- img
+- text: Feels Like --°C
+- img
+- text: Humidity --%
+- img
+- text: Wind Speed -- m/s
+- img
+- text: Pressure -- hPa
+- img
+- text: Visibility -- km
+- img
+- text: "Clouds --% Click map to load weather Select Serial Port:"
+- table:
+  - rowgroup:
+    - row "Port Board ID Manufacturer Brand Description":
+      - columnheader "Port"
+      - columnheader "Board ID"
+      - columnheader "Manufacturer"
+      - columnheader "Brand"
+      - columnheader "Description"
+  - rowgroup:
+    - row "/dev/ttyS4 n/a":
+      - cell "/dev/ttyS4"
+      - cell
+      - cell
+      - cell
+      - cell "n/a"
+    - row "/dev/ttyS31 n/a":
+      - cell "/dev/ttyS31"
+      - cell
+      - cell
+      - cell
+      - cell "n/a"
+    - row "/dev/ttyS30 n/a":
+      - cell "/dev/ttyS30"
+      - cell
+      - cell
+      - cell
+      - cell "n/a"
+    - row "/dev/ttyS29 n/a":
+      - cell "/dev/ttyS29"
+      - cell
+      - cell
+      - cell
+      - cell "n/a"
+- button "Refresh Ports"
+- text: "Bootloader Baud:"
+- combobox "Bootloader Baud":
+  - option "115200" [selected]
+  - option "57600"
+  - option "38400"
+  - option "9600"
+- text: "Flash Baud:"
+- combobox "Flash Baud":
+  - option "115200" [selected]
+  - option "57600"
+  - option "38400"
+  - option "9600"
+- text: "Flashing Log: → Ready Erase Progress: Write Progress: Select Drone Type"
+- img "Ti-Shadow"
+- text: Ti-Shadow Surveillance Drone
+- button "UNLOCK":
+  - img
+  - text: UNLOCK
+- button "INSTALL":
+  - img
+  - text: INSTALL
+- img "Spider Drone"
+- text: Spider Drone Hexacopter Drone
+- button "UNLOCK":
+  - img
+  - text: UNLOCK
+- button "INSTALL":
+  - img
+  - text: INSTALL
+- img "Kala Drone"
+- text: Kala Drone Payload Dropping Drone
+- button "UNLOCK":
+  - img
+  - text: UNLOCK
+- button "INSTALL":
+  - img
+  - text: INSTALL
+- img "Palyanka Drone"
+- text: Palyanka Drone Air Taxi
+- button "UNLOCK":
+  - img
+  - text: UNLOCK
+- button "INSTALL":
+  - img
+  - text: INSTALL
+- img "Chakravyuh Drone"
+- text: Chakrayukhan Drone Heavy Payload Cargo Drone Industrial-grade heavy lifting
+- button "UNLOCK":
+  - img
+  - text: UNLOCK
+- button "INSTALL":
+  - img
+  - text: INSTALL
+- img
+- text: Vehicle Configuration TiHANFly Ground Control Station
+- button "×"
+- text: Calibration
+- button "Accelerometer":
+  - img
+  - text: Accelerometer
+- button "Compass":
+  - img
+  - text: Compass
+- button "Level":
+  - img
+  - text: Level
+- button "Radio":
+  - img
+  - text: Radio
+- button "ESC":
+  - img
+  - text: ESC
+- text: Parameters
+- button "RC Switch Options":
+  - img
+  - text: RC Switch Options
+- button "Full Params":
+  - img
+  - text: Full Params
+- text: Flight
+- button "Flight Modes":
+  - img
+  - text: Flight Modes
+- text: Safety
+- button "Failsafe":
+  - img
+  - text: Failsafe
+- button "Geofence":
+  - img
+  - text: Geofence
+- text: Outputs
+- button "Servo Output":
+  - img
+  - text: Servo Output
+- button "Motor Test":
+  - img
+  - text: Motor Test
+- text: Airframe
+- button "Frame Type":
+  - img
+  - text: Frame Type
+- button "Initial Tune":
+  - img
+  - text: Initial Tune
+- text: Tuning
+- button "PID Tuning":
+  - img
+  - text: PID Tuning
+- text: Connection
+- button "Comm Links":
+  - img
+  - text: Comm Links
+- text: "Geofence Target Drone:"
+- combobox:
+  - option "D1" [selected]
+- img
+- text: Geofence FENCE_ENABLE — When breached, the selected action triggers on the FC. OFF
+- checkbox
+- text: ✓ Synced with FC Parameters are read from and written directly to the flight controller.
+- button "Refresh from FC":
+  - img
+  - text: Refresh from FC
+- text: ALTITUDE -- m RADIUS -- m FENCE_TYPE Which boundary types are active
+- combobox:
+  - option "Altitude Only"
+  - option "Circle Only"
+  - option "Altitude + Circle" [selected]
+  - option "All (Alt + Circle + Polygon)"
+- text: FENCE_ACTION Action taken when fence is breached
+- combobox:
+  - option "Report Only"
+  - option "RTL or Land" [selected]
+  - option "Always Land"
+  - option "SmartRTL or Land"
+  - option "Brake or Land"
+- text: RTL if GPS available, otherwise Land. FENCE_ALT_MAX Maximum altitude — fence breaches above this
+- spinbutton: "100"
+- text: meters (range 10 – 1000) FENCE_RADIUS Maximum horizontal distance from home
+- spinbutton: "150"
+- text: meters (range 30 – 10000) FENCE_MARGIN Early-warning margin inside the fence boundary
+- spinbutton: "2.0"
+- text: meters (range 1 – 10)
+- img
+- text: The fence is enforced by the flight controller firmware — actions trigger autonomously even without GCS connection. Polygon fences must be uploaded separately via the Plan screen. The GCS live indicator above is a visual aid only. ✓ Saved to FC
+- button "Write to Flight Controller":
+  - img
+  - text: Write to Flight Controller
+- button "Close"
+- text: ✓ Geofence settings written to flight controller
+```

@@ -1,0 +1,18 @@
+[SITLTest] WSL proxy stats reset.
+[SITLTest] Performing Arm sequence...
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 1, 'target_component': 1, 'command': 400, 'confirmation': 0, 'param1': 1.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
+[MAVProxy-1] Got COMMAND_ACK: COMPONENT_ARM_DISARM: ACCEPTED
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=400 sysid=1 pending=[400]
+[MAVProxy-1] AP: Arming motors
+[SITLTest] Vehicle successfully Armed!
+[SITLTest] Measured Arm Command ACK latency: 8.240222930908203 ms
+[MAVProxy-1] ARMED
+[MAVProxy-1] Arming checks disabled
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[SITLTest] Performing Disarm sequence...
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 1, 'target_component': 1, 'command': 400, 'confirmation': 0, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
+[MAVProxy-1] Got COMMAND_ACK: COMPONENT_ARM_DISARM: ACCEPTED
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=400 sysid=1 pending=[400]
+[MAVProxy-1] AP: Disarming motors
+[SITLTest] Vehicle successfully Disarmed!

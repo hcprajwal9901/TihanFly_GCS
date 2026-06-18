@@ -1,0 +1,8 @@
+[MainWindowTest] Starting mock servers co-hosted on ports: WS=54073, HTTP=54074
+[MockServer] HTTP server running on port 54074
+[MockServer] WebSocket client connected
+[MockServer] WebSocket client connected
+[MockServer] Received WS payload: { type: [32m'list_serial_ports'[39m }
+[MockServer] Serial ports requested by client
+[MockServer] Received WS payload: { id: [33m1781770686713[39m, type: [32m'request'[39m, request: [32m'telemetry'[39m, sysid: [33m1[39m }
+[MockServer] Telemetry requested by client

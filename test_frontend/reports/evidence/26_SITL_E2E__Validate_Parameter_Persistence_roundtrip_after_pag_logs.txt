@@ -1,0 +1,14 @@
+[SITLTest] WSL proxy stats reset.
+[SITLTest] Setting parameter RTL_ALT_M to 25 (25m)...
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'RTL_ALT_M', 'param_value': 25.0, 'param_type': 9}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[SITLTest] Triggering GCS page reload to disconnect and reconnect...
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[MAVProxy-1] AP: EKF3 IMU0 is using GPS
+[MAVProxy-1] AP: EKF3 IMU1 is using GPS
+[SITLTest] Navigating to Full Parameters panel...
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[SITLTest] RTL_ALT_M value verified as 25 inside settings UI.
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}

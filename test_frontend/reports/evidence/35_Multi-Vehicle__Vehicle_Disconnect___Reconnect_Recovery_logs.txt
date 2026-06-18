@@ -1,0 +1,109 @@
+[MultiVehicleTest] WSL proxy reset.
+[MultiVehicleTest] Simulating disconnect of Vehicle 2...
+[Proxy] [Proxy] Muted vehicle 2
+[MultiVehicleTest] Waiting 7 seconds for heartbeat timeout...
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 683}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 684}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 685}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 686}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 687}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 688}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 689}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 728}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 896}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1032}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1354}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1358}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1359}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1360}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[MAVProxy-1] Flight battery 100 percent
+[MAVProxy-3] Flight battery 100 percent
+[MAVProxy-2] Flight battery 100 percent
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[MultiVehicleTest] Verified: Vehicle 2 evicted, Vehicles 1 and 3 remain active.
+[MultiVehicleTest] Reconnecting Vehicle 2...
+[Proxy] [Proxy] Unmuted vehicle 2
+[MultiVehicleTest] Waiting for Vehicle 2 auto-rediscovery...
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 3, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 2, 'req_message_rate': 2, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 6, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 10, 'req_message_rate': 20, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 11, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 1, 'req_message_rate': 2, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 1, 'target_component': 1, 'command': 511, 'confirmation': 0, 'param1': 24.0, 'param2': 500000.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
+[MAVProxy-1] Got COMMAND_ACK: SET_MESSAGE_INTERVAL: ACCEPTED
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=511 sysid=1 pending=[511]
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
+[MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
+[MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
+AP: Frame: QUAD/PLUS
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 3, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 2, 'req_message_rate': 2, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 6, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 10, 'req_message_rate': 20, 'start_stop': 1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 11, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 1, 'req_message_rate': 2, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 2, 'target_component': 1, 'command': 511, 'confirmation': 0, 'param1': 24.0, 'param2': 500000.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
+[MAVProxy-2] Got COMMAND_ACK: SET_MESSAGE_INTERVAL: ACCEPTED
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=511 sysid=2 pending=[511]
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE1', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE2', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE3', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE4', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE5', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE6', 'param_index': -1}
+[MultiVehicleTest] Checking parameter persistence for Vehicle 2 after reconnect...
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 2, 'target_component': 1}
+[MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
+[MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
+[MAVProxy-2] AP: Frame: QUAD/PLUS
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 2, 'target_component': 1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE1', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE2', 'param_index': -1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE3', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE4', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE5', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE6', 'param_index': -1}
+[MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
+[MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
+[MAVProxy-1] AP: Frame: QUAD/PLUS
+[MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
+[MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
+[MAVProxy-2] AP: Frame: QUAD/PLUS
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 773}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 862}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 863}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 864}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 865}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 973}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 1266}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 1267}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 1268}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[MultiVehicleTest] Vehicle 2 fully recovered and parameter state verified.
+[MultiVehicleTest] Written KPIs to kpis.json.
+[MultiVehicleTest] Closing GCS app...
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[MultiVehicleTest] Stopping orchestrator...
+[Orchestrator] Cleaning up SITL processes inside WSL...
+[Orchestrator] Cleanup completed successfully.
+[SITL-1 Error] bash: line 1:   436 Killed                  ( :; /home/hcprajwal/ardupilot/build/sitl/bin/arducopter --model + --speedup 1 --slave 0 --sysid 1 --wipe --defaults ../Tools/autotest/default_params/copter.parm,'/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param' --sim-address=127.0.0.1 -I0 )
+[SITL-2 Error] bash: line 1:   445 Killed                  ( :; /home/hcprajwal/ardupilot/build/sitl/bin/arducopter --model + --speedup 1 --slave 0 --sysid 2 --wipe --defaults ../Tools/autotest/default_params/copter.parm,'/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param' --sim-address=127.0.0.1 -I1 )
+[SITL-3 Error] bash: line 1:   449 Killed                  ( :; /home/hcprajwal/ardupilot/build/sitl/bin/arducopter --model + --speedup 1 --slave 0 --sysid 3 --wipe --defaults ../Tools/autotest/default_params/copter.parm,'/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param' --sim-address=127.0.0.1 -I2 )

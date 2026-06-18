@@ -1,0 +1,15 @@
+[MockServer] Received WS payload: { type: [32m'list_serial_ports'[39m }
+[MockServer] Serial ports requested by client
+[MockServer] Received WS payload: { type: [32m'list_serial_ports'[39m }
+[MockServer] Serial ports requested by client
+[MockServer] Received WS payload: {
+  type: [32m'install_firmware_custom'[39m,
+  drone: [32m'ti-shadow'[39m,
+  port: [32m'/dev/ttyS4'[39m,
+  boot_baud: [33m115200[39m,
+  apj: { image: [32m'valid_image_payload'[39m }
+}
+[MockServer] install_firmware_custom triggered
+[MockServer] Abruptly closing client connection for flash interrupted scenario
+[MockServer] WebSocket client disconnected
+[MockServer] Scenario variables reset

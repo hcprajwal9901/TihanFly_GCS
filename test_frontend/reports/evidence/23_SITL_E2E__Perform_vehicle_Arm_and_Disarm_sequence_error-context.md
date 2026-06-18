@@ -1,0 +1,351 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: sitl_validation.spec.js >> GCS SITL End-to-End Validation (Phase 4) >> SITL E2E: Perform vehicle Arm and Disarm sequence
+- Location: test_frontend\integration_test\sitl_validation.spec.js:284:3
+
+# Error details
+
+```
+Error: expect(received).not.toBeNull()
+
+Received: null
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - img "Menu" [ref=e5] [cursor=pointer]
+        - generic [ref=e6]: UDP
+      - generic [ref=e7]:
+        - generic [ref=e8]:
+          - img "Mode" [ref=e9]
+          - generic [ref=e10]: Stabilize
+        - generic "RC Signal Rank" [ref=e11]:
+          - img "Signal" [ref=e12]
+          - generic [ref=e13]: 0%
+        - generic "GPS Satellites" [ref=e14]:
+          - generic [ref=e15]:
+            - generic [ref=e16]: SATS
+            - generic [ref=e17]: "10"
+          - img "GPS" [ref=e18]
+        - generic "Battery Info" [ref=e19]:
+          - img "Battery" [ref=e20]
+          - generic [ref=e22]: 12.6 V
+          - generic [ref=e23]: 100%
+      - button "English" [ref=e25] [cursor=pointer]:
+        - generic: English
+        - img
+      - button "Appearance" [ref=e27] [cursor=pointer]:
+        - generic: Appearance
+        - img
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - generic "Click to view drone list" [ref=e30] [cursor=pointer]:
+            - generic [ref=e32]: 1 DRONE
+            - generic [ref=e33]: ▼
+          - button "+" [ref=e34] [cursor=pointer]
+        - img "DX4 Logo" [ref=e35]
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - button "drone D-1" [ref=e38] [cursor=pointer]:
+          - generic [ref=e39]:
+            - img "drone" [ref=e40]
+            - generic [ref=e41]: D-1
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - generic [ref=e45]: ALT
+              - generic [ref=e46]: "-0.0 m"
+            - generic [ref=e47]:
+              - generic [ref=e48]: SPD
+              - generic [ref=e49]: 0.0 m/s
+            - generic [ref=e50]:
+              - generic [ref=e51]: LAT
+              - generic [ref=e52]: "-35.363262"
+          - generic [ref=e54]:
+            - img "Compass Dial" [ref=e55]
+            - img "Compass Arrow" [ref=e56]
+            - generic [ref=e58]: 356°
+          - generic [ref=e59]:
+            - generic [ref=e60]:
+              - generic [ref=e61]: DIST
+              - generic [ref=e62]: 0 m
+            - generic [ref=e63]:
+              - generic [ref=e64]: SAT
+              - generic [ref=e65]: "10"
+            - generic [ref=e66]:
+              - generic [ref=e67]: LON
+              - generic [ref=e68]: "149.165237"
+      - generic [ref=e70]:
+        - generic:
+          - img
+          - generic: NO SIGNAL
+        - generic [ref=e71]:
+          - generic [ref=e74]: NO SIGNAL
+          - textbox "rtsp://192.168.1.10:554/stream or rtmp://host/app/stream" [ref=e75]:
+            - /placeholder: rtsp://192.168.1.10:554/stream  or  rtmp://host/app/stream
+          - button "▶ CONNECT" [ref=e76] [cursor=pointer]
+        - generic [ref=e77]:
+          - button "Toggle Video Fullscreen" [ref=e78] [cursor=pointer]:
+            - img [ref=e79]
+          - button "Capture Photo" [ref=e84] [cursor=pointer]:
+            - img [ref=e85]
+          - button "Start/Stop Recording" [ref=e88] [cursor=pointer]:
+            - img [ref=e89]
+        - generic: 📷 Photo saved
+    - generic:
+      - button "DISARM" [disabled] [ref=e91]:
+        - img [ref=e92]
+        - generic [ref=e95]: DISARM
+      - button "FORCE ARM" [ref=e96] [cursor=pointer]:
+        - img [ref=e97]
+        - generic [ref=e100]: FORCE ARM
+      - button "Takeoff TAKEOFF" [ref=e101] [cursor=pointer]:
+        - img "Takeoff" [ref=e102]
+        - generic [ref=e103]: TAKEOFF
+      - button "Land LAND" [ref=e104] [cursor=pointer]:
+        - img "Land" [ref=e105]
+        - generic [ref=e106]: LAND
+      - button "RTL RTL" [ref=e107] [cursor=pointer]:
+        - img "RTL" [ref=e108]
+        - generic [ref=e109]: RTL
+      - button "Mode MODE" [ref=e111] [cursor=pointer]:
+        - img "Mode" [ref=e112]
+        - generic [ref=e113]: MODE
+    - generic "Console Messages" [ref=e115]:
+      - generic [ref=e116]:
+        - generic [ref=e117]: ✓
+        - generic [ref=e118]: ✅ Mission File Manager ready
+        - generic [ref=e119]: 13:23:34
+      - generic [ref=e120]:
+        - generic [ref=e121]: ✓
+        - generic [ref=e122]: ✅ Waypoint Manager ready
+        - generic [ref=e123]: 13:23:34
+      - generic [ref=e124]:
+        - generic [ref=e125]: ✓
+        - generic [ref=e126]: Backend connected
+        - generic [ref=e127]: 13:23:34
+      - generic [ref=e128]:
+        - generic [ref=e129]: ✓
+        - generic [ref=e130]: 🔌 Backend connected
+        - generic [ref=e131]: 13:23:34
+      - generic [ref=e132]:
+        - generic [ref=e133]: ✓
+        - generic [ref=e134]: 🚁 Drone connected via UDP
+        - generic [ref=e135]: 13:23:34
+      - generic [ref=e136]:
+        - generic [ref=e137]: ✓
+        - generic [ref=e138]: 🚁 Drone connected via UDP
+        - generic [ref=e139]: 13:23:34
+      - generic [ref=e140]:
+        - generic [ref=e141]: ℹ
+        - generic [ref=e142]: cf1923076b304546a65e9b53f25e36de
+        - generic [ref=e143]: 13:23:35
+      - generic [ref=e144]:
+        - generic [ref=e145]: ℹ
+        - generic [ref=e146]: "Frame: QUAD/PLUS"
+        - generic [ref=e147]: 13:23:35
+      - generic [ref=e148]:
+        - generic [ref=e149]: ✓
+        - generic [ref=e150]: 🎯 Map locked to drone GPS
+        - generic [ref=e151]: 13:23:35
+      - generic [ref=e152]:
+        - generic [ref=e153]: ✓
+        - generic [ref=e154]: 🚁 TiHANFly GCS Ready
+        - generic [ref=e155]: 13:23:35
+      - generic [ref=e156]:
+        - generic [ref=e157]: ℹ
+        - generic [ref=e158]: 🏠 Simple home marker active
+        - generic [ref=e159]: 13:23:35
+      - generic [ref=e160]:
+        - generic [ref=e161]: ℹ
+        - generic [ref=e162]: Click video to maximize - Click PLAN to enter flight planning
+        - generic [ref=e163]: 13:23:35
+      - generic [ref=e164]:
+        - generic [ref=e165]: ✓
+        - generic [ref=e166]: 💾 Complete system state restored
+        - generic [ref=e167]: 13:23:36
+    - generic [ref=e168]:
+      - generic [ref=e169]:
+        - generic [ref=e170]:
+          - img [ref=e171]
+          - generic [ref=e173]: Weather
+        - button "×" [ref=e174] [cursor=pointer]
+      - generic [ref=e175]:
+        - generic [ref=e176]:
+          - img [ref=e177]
+          - generic [ref=e180]:
+            - generic [ref=e181]: "--"
+            - generic [ref=e182]: "--, --"
+        - generic [ref=e183]:
+          - img "Weather" [ref=e185]
+          - generic [ref=e186]:
+            - generic [ref=e187]: "--°C"
+            - generic [ref=e188]: "--"
+        - generic [ref=e189]:
+          - generic [ref=e190]:
+            - img [ref=e191]
+            - generic [ref=e193]:
+              - generic [ref=e194]: Feels Like
+              - generic [ref=e195]: "--°C"
+          - generic [ref=e196]:
+            - img [ref=e197]
+            - generic [ref=e199]:
+              - generic [ref=e200]: Humidity
+              - generic [ref=e201]: "--%"
+          - generic [ref=e202]:
+            - img [ref=e203]
+            - generic [ref=e205]:
+              - generic [ref=e206]: Wind Speed
+              - generic [ref=e207]: "-- m/s"
+          - generic [ref=e208]:
+            - img [ref=e209]
+            - generic [ref=e212]:
+              - generic [ref=e213]: Pressure
+              - generic [ref=e214]: "-- hPa"
+          - generic [ref=e215]:
+            - img [ref=e216]
+            - generic [ref=e218]:
+              - generic [ref=e219]: Visibility
+              - generic [ref=e220]: "-- km"
+          - generic [ref=e221]:
+            - img [ref=e222]
+            - generic [ref=e224]:
+              - generic [ref=e225]: Clouds
+              - generic [ref=e226]: "--%"
+        - generic [ref=e227]: Click map to load weather
+  - generic [ref=e228]:
+    - generic [ref=e229]:
+      - generic [ref=e230]:
+        - generic [ref=e231]: "Select Serial Port:"
+        - table [ref=e233]:
+          - rowgroup [ref=e234]:
+            - row "Port Board ID Manufacturer Brand Description" [ref=e235]:
+              - columnheader "Port" [ref=e236]
+              - columnheader "Board ID" [ref=e237]
+              - columnheader "Manufacturer" [ref=e238]
+              - columnheader "Brand" [ref=e239]
+              - columnheader "Description" [ref=e240]
+          - rowgroup [ref=e241]:
+            - row "/dev/ttyS4 n/a" [ref=e242] [cursor=pointer]:
+              - cell "/dev/ttyS4" [ref=e243]
+              - cell [ref=e244]
+              - cell [ref=e245]
+              - cell [ref=e246]
+              - cell "n/a" [ref=e247]
+            - row "/dev/ttyS31 n/a" [ref=e248] [cursor=pointer]:
+              - cell "/dev/ttyS31" [ref=e249]
+              - cell [ref=e250]
+              - cell [ref=e251]
+              - cell [ref=e252]
+              - cell "n/a" [ref=e253]
+            - row "/dev/ttyS30 n/a" [ref=e254] [cursor=pointer]:
+              - cell "/dev/ttyS30" [ref=e255]
+              - cell [ref=e256]
+              - cell [ref=e257]
+              - cell [ref=e258]
+              - cell "n/a" [ref=e259]
+            - row "/dev/ttyS29 n/a" [ref=e260] [cursor=pointer]:
+              - cell "/dev/ttyS29" [ref=e261]
+              - cell [ref=e262]
+              - cell [ref=e263]
+              - cell [ref=e264]
+              - cell "n/a" [ref=e265]
+        - button "Refresh Ports" [ref=e267] [cursor=pointer]
+      - generic [ref=e268]:
+        - generic [ref=e269]:
+          - generic [ref=e270]: "Bootloader Baud:"
+          - combobox "Bootloader Baud" [ref=e271] [cursor=pointer]:
+            - option "115200" [selected]
+            - option "57600"
+            - option "38400"
+            - option "9600"
+        - generic [ref=e272]:
+          - generic [ref=e273]: "Flash Baud:"
+          - combobox "Flash Baud" [ref=e274] [cursor=pointer]:
+            - option "115200" [selected]
+            - option "57600"
+            - option "38400"
+            - option "9600"
+      - generic [ref=e275]:
+        - generic [ref=e276]: "Flashing Log:"
+        - generic [ref=e278]: → Ready
+      - generic [ref=e279]:
+        - generic [ref=e281]: "Erase Progress:"
+        - generic [ref=e284]: "Write Progress:"
+    - generic [ref=e286]:
+      - generic [ref=e287]: Select Drone Type
+      - generic [ref=e288]:
+        - generic [ref=e289] [cursor=pointer]:
+          - img "Ti-Shadow" [ref=e291]
+          - generic [ref=e292]:
+            - generic [ref=e293]: Ti-Shadow
+            - generic [ref=e294]: Surveillance Drone
+          - generic [ref=e295]:
+            - button "UNLOCK" [ref=e296]:
+              - img [ref=e297]
+              - text: UNLOCK
+            - button "INSTALL" [ref=e300]:
+              - img [ref=e301]
+              - text: INSTALL
+        - generic [ref=e303] [cursor=pointer]:
+          - img "Spider Drone" [ref=e305]
+          - generic [ref=e306]:
+            - generic [ref=e307]: Spider Drone
+            - generic [ref=e308]: Hexacopter Drone
+          - generic [ref=e309]:
+            - button "UNLOCK" [ref=e310]:
+              - img [ref=e311]
+              - text: UNLOCK
+            - button "INSTALL" [ref=e314]:
+              - img [ref=e315]
+              - text: INSTALL
+        - generic [ref=e317] [cursor=pointer]:
+          - img "Kala Drone" [ref=e319]
+          - generic [ref=e320]:
+            - generic [ref=e321]: Kala Drone
+            - generic [ref=e322]: Payload Dropping Drone
+          - generic [ref=e323]:
+            - button "UNLOCK" [ref=e324]:
+              - img [ref=e325]
+              - text: UNLOCK
+            - button "INSTALL" [ref=e328]:
+              - img [ref=e329]
+              - text: INSTALL
+        - generic [ref=e331] [cursor=pointer]:
+          - img "Palyanka Drone" [ref=e333]
+          - generic [ref=e334]:
+            - generic [ref=e335]: Palyanka Drone
+            - generic [ref=e336]: Air Taxi
+          - generic [ref=e337]:
+            - button "UNLOCK" [ref=e338]:
+              - img [ref=e339]
+              - text: UNLOCK
+            - button "INSTALL" [ref=e342]:
+              - img [ref=e343]
+              - text: INSTALL
+        - generic [ref=e345] [cursor=pointer]:
+          - img "Chakravyuh Drone" [ref=e347]
+          - generic [ref=e348]:
+            - generic [ref=e349]: Chakrayukhan Drone
+            - generic [ref=e350]: Heavy Payload Cargo Drone
+            - generic [ref=e351]: Industrial-grade heavy lifting
+          - generic [ref=e352]:
+            - button "UNLOCK" [ref=e353]:
+              - img [ref=e354]
+              - text: UNLOCK
+            - button "INSTALL" [ref=e357]:
+              - img [ref=e358]
+              - text: INSTALL
+  - text: "🟢 UDP :14550 🟢 Serial: \\\\.\\COM3"
+```

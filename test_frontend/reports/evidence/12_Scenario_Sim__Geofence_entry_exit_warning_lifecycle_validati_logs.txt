@@ -1,0 +1,21 @@
+[MockServer] Scenario variables reset
+[MockServer] WebSocket client disconnected
+[MockServer] WebSocket client connected
+[MockServer] WebSocket client connected
+[MockServer] Received WS payload: { type: [32m'list_serial_ports'[39m }
+[MockServer] Serial ports requested by client
+[MockServer] Received WS payload: { id: [33m1781770710425[39m, type: [32m'request'[39m, request: [32m'telemetry'[39m, sysid: [33m1[39m }
+[MockServer] Telemetry requested by client
+[MockServer] Received WS payload: { type: [32m'param_request_one'[39m, name: [32m'FENCE_ENABLE'[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { type: [32m'param_request_one'[39m, name: [32m'FENCE_TYPE'[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { type: [32m'param_request_one'[39m, name: [32m'FENCE_ACTION'[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { type: [32m'param_request_one'[39m, name: [32m'FENCE_ALT_MAX'[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { type: [32m'param_request_one'[39m, name: [32m'FENCE_RADIUS'[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { type: [32m'param_request_one'[39m, name: [32m'FENCE_MARGIN'[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { type: [32m'param_set'[39m, param_id: [32m'FENCE_ENABLE'[39m, value: [33m1[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { type: [32m'param_set'[39m, param_id: [32m'FENCE_TYPE'[39m, value: [33m3[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { type: [32m'param_set'[39m, param_id: [32m'FENCE_ACTION'[39m, value: [33m1[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { type: [32m'param_set'[39m, param_id: [32m'FENCE_ALT_MAX'[39m, value: [33m100[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { type: [32m'param_set'[39m, param_id: [32m'FENCE_RADIUS'[39m, value: [33m150[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { type: [32m'param_set'[39m, param_id: [32m'FENCE_MARGIN'[39m, value: [33m2[39m, sysid: [33m1[39m }
+[MockServer] Scenario variables reset
