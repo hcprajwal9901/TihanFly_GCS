@@ -1,9 +1,11 @@
+[MockServer] Received WS payload: {
+  id: [33m1781848567940[39m,
+  type: [32m'mission'[39m,
+  waypoints: [ { seq: [33m0[39m, x: [33m17.6[39m, y: [33m78.1[39m, z: [33m10[39m } ],
+  sysid: [33m1[39m
+}
 [MockServer] Triggering disconnect...
 [MockServer] WebSocket client disconnected
-[MockServer] WebSocket client connected
-[MockServer] Received WS payload: { type: [32m'list_serial_ports'[39m }
-[MockServer] Serial ports requested by client
-[MockServer] Received WS payload: { id: [33m1781770698774[39m, type: [32m'request'[39m, request: [32m'telemetry'[39m, sysid: [33m1[39m }
-[MockServer] Telemetry requested by client
+[MockServer] WebSocket client disconnected
 [MockServer] WebSocket client connected
 [MockServer] Scenario variables reset

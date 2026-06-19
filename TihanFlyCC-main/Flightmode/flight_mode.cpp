@@ -125,21 +125,31 @@ void FlightMode::setTransportCallback(std::function<void(const mavlink_message_t
 
 void FlightMode::pushStatus()
 {
-    broadcastStatus(sysid_, activeModeMap_[sysid_], lastPwmMap_[sysid_]);
+    if (activeModeMap_.empty())
+    {
+        broadcastStatus(sysid_, activeModeMap_[sysid_], lastPwmMap_[sysid_]);
+    }
+    else
+    {
+        for (const auto& [sid, mode] : activeModeMap_)
+        {
+            broadcastStatus(sid, mode, lastPwmMap_[sid]);
+        }
+    }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
 //  MAVLink ingress
 // ═══════════════════════════════════════════════════════════════════════════════
 
-void FlightMode::processMessage(const mavlink_message_t& msg)
+void FlightMode::processMessage(const mavlink_message_t& msg, int ui_sysid)
 {
     // Only process status messages from the main autopilot component (compid == 1).
     // This prevents non-autopilot components (like companion computers or gimbals)
     // on the same sysid from repeatedly overwriting the active mode and armed state.
     if (msg.compid != 1) return;
 
-    const uint8_t sid = msg.sysid;
+    const uint8_t sid = (ui_sysid > 0) ? static_cast<uint8_t>(ui_sysid) : msg.sysid;
 
     // ── RC_CHANNELS (id 65) — flight-mode channel (ch5) ──────────────────────
     if (msg.msgid == MAVLINK_MSG_ID_RC_CHANNELS)
@@ -398,7 +408,12 @@ void FlightMode::sendParamSet(const char* param_id, float value)
 
 void FlightMode::requestParams()
 {
-    if (!transport_cb_)
+    requestParams(transport_cb_, sysid_, compid_);
+}
+
+void FlightMode::requestParams(std::function<void(const mavlink_message_t&)> transport_cb, int sysid, int compid)
+{
+    if (!transport_cb)
     {
         std::cout << "[FlightMode] WARNING: no transport callback for requestParams\n";
         return;
@@ -412,16 +427,16 @@ void FlightMode::requestParams()
         mavlink_message_t        mavmsg;
         mavlink_param_request_read_t req{};
 
-        req.target_system    = static_cast<uint8_t>(sysid_);
-        req.target_component = static_cast<uint8_t>(compid_);
+        req.target_system    = static_cast<uint8_t>(sysid);
+        req.target_component = static_cast<uint8_t>(compid);
         req.param_index      = -1;          // -1 = look up by name
         std::strncpy(req.param_id, PARAM_NAMES[i], 16);
 
         mavlink_msg_param_request_read_encode(
             255, MAV_COMP_ID_MISSIONPLANNER, &mavmsg, &req);
-        transport_cb_(mavmsg);
+        transport_cb(mavmsg);
     }
 
     paramsRequested_ = true;
-    std::cout << "[FlightMode] Requested FLTMODE1-6 from autopilot\n";
+    std::cout << "[FlightMode] Requested FLTMODE1-6 from autopilot sysid=" << sysid << "\n";
 }

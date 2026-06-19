@@ -1,5 +1,5 @@
 [MockServer] Received WS payload: {
-  id: [33m1781770716369[39m,
+  id: [33m1781848587146[39m,
   type: [32m'mission'[39m,
   waypoints: [
     { seq: [33m0[39m, x: [33m17.601[39m, y: [33m78.126[39m, z: [33m10[39m },
@@ -107,5 +107,5 @@
   sysid: [33m1[39m
 }
 [StressTest] Upload response resolved: [33mtrue[39m
-[Memory] Heap usage - Before: 13.862 MB, After: 14.337 MB
+[Memory] Heap usage - Before: 14.014 MB, After: 14.484 MB
 [Memory] Large waypoint upload memory footprint delta: 0.47 MB

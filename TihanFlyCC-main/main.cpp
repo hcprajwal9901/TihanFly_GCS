@@ -2450,6 +2450,21 @@ void start_websocket(CommandManager* cmd_manager,
                                         modes[i] = static_cast<uint8_t>(
                                                         j["modes"][i].get<int>());
 
+                                    int sysid = j.value("sysid", -1);
+                                    if (sysid > 0 && g_vehicle_manager)
+                                    {
+                                        auto fv = g_vehicle_manager->get_vehicle_by_ui_sysid(sysid);
+                                        if (fv)
+                                        {
+                                            auto fvp = fv;
+                                            flightMode.setTransportCallback(
+                                                [fvp](const mavlink_message_t& m)
+                                                { fvp->send_mavlink(m); });
+                                            flightMode.setVehicleInfo(
+                                                fv->sysid(), fv->compid());
+                                        }
+                                    }
+
                                     std::cout << "[FlightMode] Save requested\n";
                                     std::thread([modes]() {
                                         flightMode.saveFlightModes(modes);
@@ -3888,11 +3903,11 @@ int main()
 
         // FlightMode
         vehicle->register_handler(MAVLINK_MSG_ID_HEARTBEAT,
-            [](const mavlink_message_t& m){ flightMode.processMessage(m); });
+            [ui_sysid = vehicle->ui_sysid()](const mavlink_message_t& m){ flightMode.processMessage(m, ui_sysid); });
         vehicle->register_handler(MAVLINK_MSG_ID_RC_CHANNELS,
-            [](const mavlink_message_t& m){ flightMode.processMessage(m); });
+            [ui_sysid = vehicle->ui_sysid()](const mavlink_message_t& m){ flightMode.processMessage(m, ui_sysid); });
         vehicle->register_handler(MAVLINK_MSG_ID_PARAM_VALUE,
-            [](const mavlink_message_t& m){ flightMode.processMessage(m); });
+            [ui_sysid = vehicle->ui_sysid()](const mavlink_message_t& m){ flightMode.processMessage(m, ui_sysid); });
 
         // ── Wire modules to the active (first/primary) vehicle only ──────────
         // wire_modules_to_active_vehicle() points the shared param_manager at
@@ -3937,7 +3952,9 @@ int main()
                 // or call requestAllParameters().
                 std::thread([vehicle]() {
                     std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    flightMode.requestParams();
+                    flightMode.requestParams(
+                        [vehicle](const mavlink_message_t& m) { vehicle->send_mavlink(m); },
+                        vehicle->sysid(), vehicle->compid());
                     std::cout << "[GCS] Swarm secondary sysid="
                               << vehicle->sysid()
                               << " — skipping auto param-load (use UI to fetch)\n";

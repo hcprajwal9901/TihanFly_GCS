@@ -8,11 +8,11 @@
 [SITLTest] Triggering faked mission download/retrieval via proxy...
 [Proxy] [Proxy DBG] handle_faked_download: sysid=1 msg_type=MISSION_COUNT fields={'mavpackettype': 'MISSION_COUNT', 'target_system': 255, 'target_component': 190, 'count': 3, 'mission_type': 0}
 [MAVProxy-1] Mission is stale
-[Proxy] [Proxy DBG] send_mission_request_int: sysid=1 seq=0 target compid=1, destination=('127.0.0.1', 57165)
+[Proxy] [Proxy DBG] send_mission_request_int: sysid=1 seq=0 target compid=1, destination=('127.0.0.1', 59353)
 [Proxy] [Proxy DBG] handle_faked_download: sysid=1 msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 255, 'target_component': 190, 'seq': 0, 'frame': 0, 'command': 16, 'current': 0, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': -353632621, 'y': 1491652374, 'z': 584.0899658203125, 'mission_type': 0}
-[Proxy DBG] send_mission_request_int: sysid=1 seq=1 target compid=1, destination=('127.0.0.1', 57165)
+[Proxy] [Proxy DBG] send_mission_request_int: sysid=1 seq=1 target compid=1, destination=('127.0.0.1', 59353)
 [Proxy] [Proxy DBG] handle_faked_download: sysid=1 msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 255, 'target_component': 190, 'seq': 1, 'frame': 3, 'command': 16, 'current': 0, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': 0, 'y': 0, 'z': 0.0, 'mission_type': 0}
-[Proxy DBG] send_mission_request_int: sysid=1 seq=2 target compid=1, destination=('127.0.0.1', 57165)
+[Proxy DBG] send_mission_request_int: sysid=1 seq=2 target compid=1, destination=('127.0.0.1', 59353)
 [Proxy] [Proxy DBG] handle_faked_download: sysid=1 msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 255, 'target_component': 190, 'seq': 2, 'frame': 3, 'command': 16, 'current': 0, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': 0, 'y': 0, 'z': 0.0, 'mission_type': 0}
-[Proxy DBG] send_mission_ack: sysid=1 ack_type=0 target compid=1, destination=('127.0.0.1', 57165)
+[Proxy DBG] send_mission_ack: sysid=1 ack_type=0 target compid=1, destination=('127.0.0.1', 59353)
 [SITLTest] Faked mission download complete. Retrieved 3 items.

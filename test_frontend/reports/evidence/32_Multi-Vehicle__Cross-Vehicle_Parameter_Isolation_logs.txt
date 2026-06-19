@@ -1,130 +1,38 @@
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1278}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1279}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1280}
-[Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1281}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1282}
-[MAVProxy-3] AP: EKF3 IMU0 is using GPS
-[MAVProxy-1] AP: EKF3 IMU0 is using GPS
-AP: EKF3 IMU1 is using GPS
-[MAVProxy-3] AP: EKF3 IMU1 is using GPS
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1283}
-[MAVProxy-2] AP: EKF3 IMU0 is using GPS
 [MultiVehicleTest] WSL proxy reset.
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1284}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1285}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1286}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1287}
 [MultiVehicleTest] Setting distinct parameters per vehicle...
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1288}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1289}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'RTL_ALT_M', 'param_value': 10.0, 'param_type': 9}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1290}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1291}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1292}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1293}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1294}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1295}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1296}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1297}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1298}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1299}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1300}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1301}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1302}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1303}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1304}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1305}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1306}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1307}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1308}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1309}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1310}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1311}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1312}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1313}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1314}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1315}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1316}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1317}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1318}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1319}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1320}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1321}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1322}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1323}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1324}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1325}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1326}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1327}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1328}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1329}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1330}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1331}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1332}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1333}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1334}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1335}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1336}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1337}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1338}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1339}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1340}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1341}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1342}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1343}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1344}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1345}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1346}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1347}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1348}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1349}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1350}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1351}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1352}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1353}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1354}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1355}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1356}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1357}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1358}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1359}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1360}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1361}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 2, 'target_component': 1, 'param_id': 'RTL_ALT_M', 'param_value': 20.0, 'param_type': 9}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 1362}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 3, 'target_component': 1, 'param_id': 'RTL_ALT_M', 'param_value': 30.0, 'param_type': 9}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[MAVProxy-2] AP: EKF3 IMU1 is using GPS
+[MAVProxy-1] AP: EKF3 IMU1 is using GPS
+[MAVProxy-2] AP: EKF3 IMU0 is using GPS
+[MAVProxy-1] AP: EKF3 IMU0 is using GPS
+[MAVProxy-3] AP: EKF3 IMU0 is using GPS
+[MAVProxy-3] AP: EKF3 IMU1 is using GPS
 [MultiVehicleTest] Reloading GCS window to clear session context...
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MultiVehicleTest] Opening Full Parameters panel...
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
+[MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
+[MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
+[MAVProxy-1] AP: Frame: QUAD/PLUS
 [MultiVehicleTest] Checking RTL_ALT_M for Vehicle 1...
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
 [MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
 [MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
 [MAVProxy-1] AP: Frame: QUAD/PLUS
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
-[MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
-[MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
-[MAVProxy-1] AP: Frame: QUAD/PLUS
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1354}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1355}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1358}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1359}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1360}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1361}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1362}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1363}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 1364}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 301}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 302}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 776}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MultiVehicleTest] Checking RTL_ALT_M for Vehicle 2...
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 2, 'target_component': 1}
 [MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
 [MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
@@ -133,10 +41,6 @@ AP: EKF3 IMU1 is using GPS
 [MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
 [MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
 [MAVProxy-2] AP: Frame: QUAD/PLUS
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 877}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 878}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MultiVehicleTest] Checking RTL_ALT_M for Vehicle 3...

@@ -839,21 +839,45 @@ function getMeta(name) {
 let externalMeta = {};
 
 function loadExternalMeta() {
-    // Build a list of candidate URLs to try in order:
-    //  1. Electron packaged app: param_metadata.json is in extraResources → resources/
-    //     process.resourcesPath is available in both main and renderer in Electron.
-    //  2. Dev mode: relative path next to the HTML file.
-    const candidates = [];
-
-    // Packaged Electron: resourcesPath points to the resources/ folder inside the exe
-    if (typeof process !== 'undefined' && process.resourcesPath) {
-        // Convert Windows path to a file:// URL
-        const rp = process.resourcesPath.replace(/\\/g, '/');
-        candidates.push('file:///' + rp + '/param_metadata.json');
+    // 1. Try native Electron IPC if available (safely avoids CORS issues)
+    if (window.electronParamMetadata?.read) {
+        return window.electronParamMetadata.read()
+            .then(res => {
+                if (res.ok) {
+                    externalMeta = res.data;
+                    console.log('[ParamFull] Metadata loaded via Electron IPC —', Object.keys(res.data).length, 'entries');
+                } else {
+                    console.warn('[ParamFull] Failed to load metadata via Electron IPC:', res.error, '— falling back to fetch…');
+                    return runFetchFallback();
+                }
+            })
+            .catch(err => {
+                console.warn('[ParamFull] Error loading metadata via Electron IPC:', err.message, '— falling back to fetch…');
+                return runFetchFallback();
+            });
     }
 
-    // Dev / browser fallback: relative fetch
-    candidates.push('../param_metadata.json');
+    return runFetchFallback();
+
+    function runFetchFallback() {
+        // Build a list of candidate URLs to try in order:
+        //  1. Electron packaged app: param_metadata.json is in extraResources → resources/
+        //     process.resourcesPath is available in both main and renderer in Electron.
+        //  2. Dev mode: relative path next to the HTML file.
+        const candidates = [];
+
+        // Packaged Electron: resourcesPath points to the resources/ folder inside the exe
+        if (typeof process !== 'undefined' && process.resourcesPath) {
+            // Convert Windows path to a file:// URL
+            const rp = process.resourcesPath.replace(/\\/g, '/');
+            candidates.push('file:///' + rp + '/param_metadata.json');
+        }
+
+        // Dev / browser fallback: relative fetch
+        candidates.push('../param_metadata.json');
+
+        return tryNext(candidates);
+    }
 
     function tryNext(urls) {
         if (!urls.length) {
@@ -872,8 +896,6 @@ function loadExternalMeta() {
                 return tryNext(urls.slice(1));
             });
     }
-
-    return tryNext(candidates);
 }
     // ── State ─────────────────────────────────────────────────────────────────
     let allParams   = {};

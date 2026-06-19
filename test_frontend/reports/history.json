@@ -759,5 +759,47 @@
     "git_commit": "34cf857",
     "branch": "intergration_testing",
     "duration_ms": 212832.358
+  },
+  {
+    "build": "Local-59",
+    "timestamp": "2026-06-19 09:51:33",
+    "total": 35,
+    "passed": 33,
+    "failed": 1,
+    "skipped": 1,
+    "pass_rate": 94.29,
+    "flaky_rate": 0.0,
+    "status": "BLOCKED",
+    "git_commit": "054419c",
+    "branch": "intergration_testing",
+    "duration_ms": 181803.272
+  },
+  {
+    "build": "Local-60",
+    "timestamp": "2026-06-19 10:06:09",
+    "total": 35,
+    "passed": 35,
+    "failed": 0,
+    "skipped": 0,
+    "pass_rate": 100.0,
+    "flaky_rate": 0.0,
+    "status": "APPROVED WITH PROTOCOL DEBT",
+    "git_commit": "054419c",
+    "branch": "intergration_testing",
+    "duration_ms": 196220.965
+  },
+  {
+    "build": "Local-61",
+    "timestamp": "2026-06-19 11:29:24",
+    "total": 35,
+    "passed": 35,
+    "failed": 0,
+    "skipped": 0,
+    "pass_rate": 100.0,
+    "flaky_rate": 0.0,
+    "status": "APPROVED WITH PROTOCOL DEBT",
+    "git_commit": "054419c",
+    "branch": "intergration_testing",
+    "duration_ms": 212101.148
   }
 ]

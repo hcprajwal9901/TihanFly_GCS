@@ -553,20 +553,42 @@ function handleBackendMessage(message) {
         // ── Arm/disarm/mode events ────────────────────────────────────────────
         case 'event': {
             const evt = message.event;
+            const sid = message.sysid ?? 1;
+            const selected = window.selectedSysId;
+
+            // Filter out events from other drones if a specific drone is selected
+            if (selected && selected !== 0 && sid !== selected) {
+                break;
+            }
+
+            let msgText = message.message || '';
+            const droneCount = (window.activeSysids && window.activeSysids.length > 0)
+                ? window.activeSysids.length
+                : (window._lastVehicleCount || 1);
+            if (droneCount > 1) {
+                msgText = `[D${sid}] ${msgText}`;
+            }
+
+            // For the active GCS controls, only sync if it is the target drone
+            const targetSysId = window.selectedSysId === 0 ? (window._primarySysId || 1) : window.selectedSysId;
+            const isTarget = (sid === targetSysId);
+
             if (evt === 'armed') {
-                window.MsgConsole?.arm?.(message.message);
-                window.ArmControl?.setArmedState?.(true);
+                window.MsgConsole?.arm?.(msgText);
+                if (isTarget) window.ArmControl?.setArmedState?.(true);
             }
             else if (evt === 'disarmed') {
-                window.MsgConsole?.disarm?.(message.message);
-                window.ArmControl?.setArmedState?.(false);
+                window.MsgConsole?.disarm?.(msgText);
+                if (isTarget) window.ArmControl?.setArmedState?.(false);
             }
             else if (evt === 'mode_change') {
-                window.MsgConsole?.info('\ud83d\udeeb\ufe0f ' + message.message);
-                const modeText = document.getElementById('modeIndicatorText');
-                if (modeText && message.mode) modeText.textContent = message.mode;
-                const activeModeDisplay = document.getElementById('activeModeDisplay');
-                if (activeModeDisplay && message.mode) activeModeDisplay.textContent = message.mode;
+                window.MsgConsole?.info('\ud83d\udeeb\ufe0f ' + msgText);
+                if (isTarget) {
+                    const modeText = document.getElementById('modeIndicatorText');
+                    if (modeText && message.mode) modeText.textContent = message.mode;
+                    const activeModeDisplay = document.getElementById('activeModeDisplay');
+                    if (activeModeDisplay && message.mode) activeModeDisplay.textContent = message.mode;
+                }
             }
             break;
         }
@@ -610,18 +632,22 @@ function handleBackendMessage(message) {
         // Payload: { type: "flight_mode_status", mode: "STABILIZE", pwm: 0, slot: 0 }
         case 'flight_mode_status': {
             const mode = message.mode;
-            console.log('[WS] Flight mode:', mode);
+            const sid = message.sysid ?? 1;
+            console.log('[WS] Flight mode status:', mode, 'for sysid:', sid);
 
-            // Update the flight mode selector badge / highlight
-            window.FlightModeSelector?.setMode?.(mode);
+            const targetSysId = window.selectedSysId === 0 ? (window._primarySysId || 1) : window.selectedSysId;
+            if (sid === targetSysId) {
+                // Update the flight mode selector badge / highlight
+                window.FlightModeSelector?.setMode?.(mode);
 
-            // Update any HUD / telemetry display
-            window.TelemetryDisplay?.setFlightMode?.(mode);
+                // Update any HUD / telemetry display
+                window.TelemetryDisplay?.setFlightMode?.(mode);
 
-            // Broadcast so other modules can react
-            window.dispatchEvent(
-                new CustomEvent('flight_mode_changed', { detail: { mode, pwm: message.pwm, slot: message.slot } })
-            );
+                // Broadcast so other modules can react
+                window.dispatchEvent(
+                    new CustomEvent('flight_mode_changed', { detail: { mode, pwm: message.pwm, slot: message.slot } })
+                );
+            }
             break;
         }
 
@@ -629,7 +655,10 @@ function handleBackendMessage(message) {
         // Payload: { type: "flight_mode", event: "flight_mode_change", mode: "...", ... }
         case 'flight_mode': {
             const mode = message.mode;
-            if (mode) {
+            const sid = message.sysid ?? 1;
+            const targetSysId = window.selectedSysId === 0 ? (window._primarySysId || 1) : window.selectedSysId;
+
+            if (mode && sid === targetSysId) {
                 window.FlightModeSelector?.setMode?.(mode);
                 window.TelemetryDisplay?.setFlightMode?.(mode);
                 window.dispatchEvent(

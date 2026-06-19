@@ -10,7 +10,7 @@
 [MockServer] WebSocket client connected
 [MockServer] Received WS payload: { type: [32m'list_serial_ports'[39m }
 [MockServer] Serial ports requested by client
-[MockServer] Received WS payload: { id: [33m1781770704839[39m, type: [32m'request'[39m, request: [32m'telemetry'[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { id: [33m1781848574522[39m, type: [32m'request'[39m, request: [32m'telemetry'[39m, sysid: [33m1[39m }
 [MockServer] Telemetry requested by client
 [MockServer] Received WS payload: { type: [32m'param_request_one'[39m, name: [32m'FENCE_ENABLE'[39m, sysid: [33m1[39m }
 [MockServer] Received WS payload: { type: [32m'param_request_one'[39m, name: [32m'FENCE_TYPE'[39m, sysid: [33m1[39m }
@@ -30,7 +30,7 @@
 [MockServer] WebSocket client connected
 [MockServer] Received WS payload: { type: [32m'list_serial_ports'[39m }
 [MockServer] Serial ports requested by client
-[MockServer] Received WS payload: { id: [33m1781770706757[39m, type: [32m'request'[39m, request: [32m'telemetry'[39m, sysid: [33m1[39m }
+[MockServer] Received WS payload: { id: [33m1781848576827[39m, type: [32m'request'[39m, request: [32m'telemetry'[39m, sysid: [33m1[39m }
 [MockServer] Telemetry requested by client
 [MockServer] Received WS payload: { type: [32m'param_request_one'[39m, name: [32m'FENCE_ENABLE'[39m, sysid: [33m1[39m }
 [MockServer] Received WS payload: { type: [32m'param_request_one'[39m, name: [32m'FENCE_TYPE'[39m, sysid: [33m1[39m }

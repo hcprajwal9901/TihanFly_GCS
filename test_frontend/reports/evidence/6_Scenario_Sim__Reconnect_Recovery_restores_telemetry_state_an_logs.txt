@@ -3,4 +3,9 @@
 [MockServer] WebSocket client disconnected
 [MockServer] WebSocket client connected
 [MockServer] Reconnect allowed, resuming telemetry...
+[MockServer] WebSocket client connected
+[MockServer] Received WS payload: { type: [32m'list_serial_ports'[39m }
+[MockServer] Serial ports requested by client
+[MockServer] Received WS payload: { id: [33m1781848567816[39m, type: [32m'request'[39m, request: [32m'telemetry'[39m, sysid: [33m1[39m }
+[MockServer] Telemetry requested by client
 [MockServer] Scenario variables reset

@@ -35,3 +35,7 @@ contextBridge.exposeInMainWorld('electronRTSP', {
 contextBridge.exposeInMainWorld('electronSaveFile', {
     save: (opts) => ipcRenderer.invoke('save_file', opts),
 });
+
+contextBridge.exposeInMainWorld('electronParamMetadata', {
+    read: () => ipcRenderer.invoke('read_param_metadata'),
+});

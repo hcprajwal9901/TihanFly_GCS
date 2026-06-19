@@ -1,23 +1,23 @@
 [MultiVehicleTest] WSL proxy reset.
 [MultiVehicleTest] Dispatching parallel operations across the fleet...
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 1, 'target_component': 1, 'command': 400, 'confirmation': 0, 'param1': 1.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 2, 'target_component': 1, 'command': 176, 'confirmation': 0, 'param1': 1.0, 'param2': 4.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
-[Proxy DBG] set pending_mode_change for sysid=2 (COMMAND_LONG): {'custom_mode': 4, 'time': 1781770872.189784}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 3, 'target_component': 1, 'command': 176, 'confirmation': 0, 'param1': 1.0, 'param2': 6.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
-[Proxy DBG] set pending_mode_change for sysid=3 (COMMAND_LONG): {'custom_mode': 6, 'time': 1781770872.1900728}
+[Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 2, 'target_component': 1, 'command': 176, 'confirmation': 0, 'param1': 1.0, 'param2': 4.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
+[Proxy DBG] set pending_mode_change for sysid=2 (COMMAND_LONG): {'custom_mode': 4, 'time': 1781848730.8225691}
+[Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 3, 'target_component': 1, 'command': 176, 'confirmation': 0, 'param1': 1.0, 'param2': 6.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
+[Proxy DBG] set pending_mode_change for sysid=3 (COMMAND_LONG): {'custom_mode': 6, 'time': 1781848730.8229847}
 [MAVProxy-1] Got COMMAND_ACK: COMPONENT_ARM_DISARM: ACCEPTED
-[MAVProxy-2] Got COMMAND_ACK: DO_SET_MODE: ACCEPTED
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=176 sysid=2 pending=[176]
-[Proxy DBG] Intercepted COMMAND_ACK: command=400 sysid=1 pending=[400]
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=400 sysid=1 pending=[400]
+[Proxy DBG] Intercepted COMMAND_ACK: command=176 sysid=3 pending=[176]
 [MAVProxy-3] Got COMMAND_ACK: DO_SET_MODE: ACCEPTED
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=176 sysid=3 pending=[176]
 [MAVProxy-1] AP: Arming motors
-[MAVProxy-2] GUIDED> Mode GUIDED
-[Proxy] [Proxy DBG] checking heartbeat mode: sysid=2 current=4, pending=4
-[Proxy] [Proxy DBG] mode latency matched for sysid=2: 10.84589958190918 ms
 [MAVProxy-3] RTL> Mode RTL
 [Proxy] [Proxy DBG] checking heartbeat mode: sysid=3 current=6, pending=6
-[Proxy DBG] mode latency matched for sysid=3: 12.049198150634766 ms
+[Proxy DBG] mode latency matched for sysid=3: 8.370637893676758 ms
+[MAVProxy-2] Got COMMAND_ACK: DO_SET_MODE: ACCEPTED
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=176 sysid=2 pending=[176]
+[MAVProxy-2] GUIDED> Mode GUIDED
+[Proxy] [Proxy DBG] checking heartbeat mode: sysid=2 current=4, pending=4
+[Proxy DBG] mode latency matched for sysid=2: 12.737274169921875 ms
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MAVProxy-1] ARMED
 [MAVProxy-1] Arming checks disabled
@@ -27,10 +27,10 @@
 [MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
 [MAVProxy-2] AP: Frame: QUAD/PLUS
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 2, 'target_component': 1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
-AP: df1923076b304546a65e9b53f25e36de
-AP: Frame: QUAD/PLUS
+[MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
+[MAVProxy-2] AP: Frame: QUAD/PLUS
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 3, 'target_component': 1}
 [MAVProxy-3] AP: ArduCopter V4.8.0-dev (6e741784)
 [MAVProxy-3] AP: ef1923076b304546a65e9b53f25e36de
@@ -40,17 +40,17 @@ AP: Frame: QUAD/PLUS
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
 [MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
 [MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
-AP: Frame: QUAD/PLUS
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
-[MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
-[MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
-AP: Frame: QUAD/PLUS
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 1, 'target_component': 1, 'command': 400, 'confirmation': 0, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[MAVProxy-1] AP: Frame: QUAD/PLUS
 [MAVProxy-3] AP: ArduCopter V4.8.0-dev (6e741784)
 [MAVProxy-3] AP: ef1923076b304546a65e9b53f25e36de
 [MAVProxy-3] AP: Frame: QUAD/PLUS
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 1, 'target_component': 1, 'command': 400, 'confirmation': 0, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
+[MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
+AP: cf1923076b304546a65e9b53f25e36de
+AP: Frame: QUAD/PLUS
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MAVProxy-1] Got COMMAND_ACK: COMPONENT_ARM_DISARM: ACCEPTED
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=400 sysid=1 pending=[400]
 [MAVProxy-1] AP: Disarming motors
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=400 sysid=1 pending=[400]
 [MAVProxy-1] DISARMED

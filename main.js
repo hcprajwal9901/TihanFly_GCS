@@ -61,6 +61,21 @@ ipcMain.handle('rtsp-status', async () => {
     return { running: false };
 });
 
+ipcMain.handle('read_param_metadata', async () => {
+    try {
+        const filePath = app.isPackaged 
+            ? path.join(process.resourcesPath, 'param_metadata.json')
+            : path.join(__dirname, 'param_metadata.json');
+        if (fs.existsSync(filePath)) {
+            const content = fs.readFileSync(filePath, 'utf8');
+            return { ok: true, data: JSON.parse(content) };
+        }
+        return { ok: false, error: 'File not found at ' + filePath };
+    } catch (err) {
+        return { ok: false, error: err.message };
+    }
+});
+
 
 function _filtersFor(mimeType) {
     if (!mimeType) return [{ name: 'All Files', extensions: ['*'] }];
