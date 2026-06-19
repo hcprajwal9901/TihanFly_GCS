@@ -5,11 +5,11 @@
 [Orchestrator] Executing proxy command: wsl bash -c "python3 /mnt/e/TiHAN/TflyGCS\\ \\(1\\)/TflyGCS/test_frontend/simulators/mavlink_proxy.py --sitl-ports 14590,14591,14592 --gcs-port 14550 --http-port 14599"
 [Orchestrator] Starting WSL ArduCopter SITL with 3 vehicle(s)...
 [Orchestrator] Spawning ArduCopter vehicle 1: wsl bash -c "source ~/venv-ardupilot/bin/activate && cd ~/ardupilot/ArduCopter && ( : ; /home/hcprajwal/ardupilot/build/sitl/bin/arducopter --model + --speedup 1 --slave 0 --sysid 1 --wipe --defaults ../Tools/autotest/default_params/copter.parm,'/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param' --sim-address=127.0.0.1 -I0 )"
-[Orchestrator] Spawning MAVProxy vehicle 1: wsl bash -c "source ~/venv-ardupilot/bin/activate && /home/hcprajwal/venv-ardupilot/bin/mavproxy.py --daemon --retries 5 --master tcp:127.0.0.1:5760 --sitl 127.0.0.1:5501 --out 127.0.0.1:14590"
+[Orchestrator] Spawning MAVProxy vehicle 1: wsl bash -c "source ~/venv-ardupilot/bin/activate && /home/hcprajwal/venv-ardupilot/bin/mavproxy.py --daemon --retries 5 --streamrate=10 --master tcp:127.0.0.1:5760 --sitl 127.0.0.1:5501 --out 127.0.0.1:14590"
 [Orchestrator] Spawning ArduCopter vehicle 2: wsl bash -c "source ~/venv-ardupilot/bin/activate && cd ~/ardupilot/ArduCopter && ( : ; /home/hcprajwal/ardupilot/build/sitl/bin/arducopter --model + --speedup 1 --slave 0 --sysid 2 --wipe --defaults ../Tools/autotest/default_params/copter.parm,'/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param' --sim-address=127.0.0.1 -I1 )"
-[Orchestrator] Spawning MAVProxy vehicle 2: wsl bash -c "source ~/venv-ardupilot/bin/activate && /home/hcprajwal/venv-ardupilot/bin/mavproxy.py --daemon --retries 5 --master tcp:127.0.0.1:5770 --sitl 127.0.0.1:5511 --out 127.0.0.1:14591"
+[Orchestrator] Spawning MAVProxy vehicle 2: wsl bash -c "source ~/venv-ardupilot/bin/activate && /home/hcprajwal/venv-ardupilot/bin/mavproxy.py --daemon --retries 5 --streamrate=10 --master tcp:127.0.0.1:5770 --sitl 127.0.0.1:5511 --out 127.0.0.1:14591"
 [Orchestrator] Spawning ArduCopter vehicle 3: wsl bash -c "source ~/venv-ardupilot/bin/activate && cd ~/ardupilot/ArduCopter && ( : ; /home/hcprajwal/ardupilot/build/sitl/bin/arducopter --model + --speedup 1 --slave 0 --sysid 3 --wipe --defaults ../Tools/autotest/default_params/copter.parm,'/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param' --sim-address=127.0.0.1 -I2 )"
-[Orchestrator] Spawning MAVProxy vehicle 3: wsl bash -c "source ~/venv-ardupilot/bin/activate && /home/hcprajwal/venv-ardupilot/bin/mavproxy.py --daemon --retries 5 --master tcp:127.0.0.1:5780 --sitl 127.0.0.1:5521 --out 127.0.0.1:14592"
+[Orchestrator] Spawning MAVProxy vehicle 3: wsl bash -c "source ~/venv-ardupilot/bin/activate && /home/hcprajwal/venv-ardupilot/bin/mavproxy.py --daemon --retries 5 --streamrate=10 --master tcp:127.0.0.1:5780 --sitl 127.0.0.1:5521 --out 127.0.0.1:14592"
 [Orchestrator] Waiting 30 seconds for simulation to stabilize...
 [SITL-1] Setting SIM_SPEEDUP=1.000000
 Setting MAV_SYSID=1
@@ -24,26 +24,50 @@ Suggested EK3_DRAG_BCOEF_* = 17.209, EK3_DRAG_MCOEF = 0.209
 Starting sketch 'ArduCopter'
 Starting SITL input
 Using Irlock at port : 9015
-Waiting for connection ....
+[SITL-2] Waiting for connection ....
 [SITL-3] Setting SIM_SPEEDUP=1.000000
 Setting MAV_SYSID=3
 Suggested EK3_DRAG_BCOEF_* = 17.209, EK3_DRAG_MCOEF = 0.209
-[SITL-3] Starting sketch 'ArduCopter'
+Starting sketch 'ArduCopter'
 Starting SITL input
-Using Irlock at port : 9025
+[SITL-3] Using Irlock at port : 9025
 Waiting for connection ....
-[SITL-2] Connection on serial port 5770
 [SITL-1] Connection on serial port 5760
-[SITL-3] Connection on serial port 5780
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-2] Home: -35.363262 149.165237 alt=584.000000m hdg=353.000000
-[SITL-2] Smoothing reset at 0.001
 [SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
 [SITL-1] Home: -35.363262 149.165237 alt=584.000000m hdg=353.000000
-[SITL-1] Smoothing reset at 0.001
+Smoothing reset at 0.001
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-3] Connection on serial port 5780
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
 [SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
 [SITL-3] Home: -35.363262 149.165237 alt=584.000000m hdg=353.000000
 [SITL-3] Smoothing reset at 0.001
+[SITL-2] Connection on serial port 5770
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+Home: -35.363262 149.165237 alt=584.000000m hdg=353.000000
+[SITL-2] Smoothing reset at 0.001
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
 [SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
 [SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
 [SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
@@ -61,63 +85,34 @@ Waiting for connection ....
 [SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
 [SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
 [SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
 [SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
 [SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
 [SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
 [SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
-[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
-[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
 [SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
 [SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
 [SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
 [SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
 [SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
-[MAVProxy-2] Connect tcp:127.0.0.1:5770 source_system=255
-Log Directory: 
-Telemetry log: mav.tlog
-Waiting for heartbeat from tcp:127.0.0.1:5770
-AP: RCInput: decoding UDP (Pulses)
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-1] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
+[SITL-3] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid3.param
+[SITL-2] Loaded defaults from ../Tools/autotest/default_params/copter.parm,/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid2.param
 [MAVProxy-1] Connect tcp:127.0.0.1:5760 source_system=255
 Log Directory: 
 Telemetry log: mav.tlog
@@ -128,51 +123,42 @@ Log Directory:
 Telemetry log: mav.tlog
 Waiting for heartbeat from tcp:127.0.0.1:5780
 AP: RCInput: decoding UDP (Pulses)
-[MAVProxy-2] AP: Calibrating barometer
+[MAVProxy-2] Connect tcp:127.0.0.1:5770 source_system=255
+Log Directory: 
+Telemetry log: mav.tlog
+Waiting for heartbeat from tcp:127.0.0.1:5770
+AP: RCInput: decoding UDP (Pulses)
 [MAVProxy-1] AP: Calibrating barometer
 [MAVProxy-3] AP: Calibrating barometer
-[MAVProxy-3] AP: ArduCopter V4.8.0-dev (6e741784)
-[MAVProxy-3] AP: ef1923076b304546a65e9b53f25e36de
-AP: Frame: QUAD/PLUS
-[MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
-[MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
-[MAVProxy-2] AP: Frame: QUAD/PLUS
-[MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
-[MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
-[MAVProxy-1] AP: Frame: QUAD/PLUS
-[MAVProxy-2] Detected vehicle 2:1 on link 0
-online system 2
-[MAVProxy-2] STABILIZE> Mode STABILIZE
-[MAVProxy-1] Detected vehicle 1:1 on link 0
-online system 1
-[MAVProxy-1] STABILIZE> Mode STABILIZE
-[MAVProxy-3] Detected vehicle 3:1 on link 0
-online system 3
-[MAVProxy-3] STABILIZE> Mode STABILIZE
-[MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
-[MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
-[MAVProxy-2] AP: Frame: QUAD/PLUS
+[MAVProxy-2] AP: Calibrating barometer
 [MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
 [MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
 [MAVProxy-1] AP: Frame: QUAD/PLUS
 [MAVProxy-3] AP: ArduCopter V4.8.0-dev (6e741784)
 [MAVProxy-3] AP: ef1923076b304546a65e9b53f25e36de
 [MAVProxy-3] AP: Frame: QUAD/PLUS
-[Proxy] [Proxy] HTTP status API running on port 14599
-[Proxy] Found Windows Host IP: 172.26.32.1
-[Proxy] Bound to SITL port 14590
-[Proxy] Bound to SITL port 14591
-[Proxy] Bound to SITL port 14592
-[Proxy] Proxying: SITL ports [14590, 14591, 14592] <-> GCS (172.26.32.1:14550)
-[Proxy] Outbound GCS socket bound to dynamic port: 52031
-[Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
-[MAVProxy-2] Received 1371 parameters (ftp)
-Saved 1371 parameters to mav_2_1.parm
-AP: Barometer 1 calibration complete
-[MAVProxy-2] AP: Barometer 2 calibration complete
-[MAVProxy-2] Init Gyro[MAVProxy-1] Received 1371 parameters (ftp)
+[MAVProxy-1] Detected vehicle 1:1 on link 0
+online system 1
+[MAVProxy-1] STABILIZE> Mode STABILIZE
+[MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
+[MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
+[MAVProxy-2] AP: Frame: QUAD/PLUS
+[MAVProxy-3] Detected vehicle 3:1 on link 0
+online system 3
+[MAVProxy-3] STABILIZE> Mode STABILIZE
+[MAVProxy-2] Detected vehicle 2:1 on link 0
+online system 2
+[MAVProxy-2] STABILIZE> Mode STABILIZE
+[MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
+[MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
+[MAVProxy-1] AP: Frame: QUAD/PLUS
+[MAVProxy-3] AP: ArduCopter V4.8.0-dev (6e741784)
+[MAVProxy-3] AP: ef1923076b304546a65e9b53f25e36de
+[MAVProxy-3] AP: Frame: QUAD/PLUS
+[MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
+[MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
+[MAVProxy-2] AP: Frame: QUAD/PLUS
+[MAVProxy-1] Received 1371 parameters (ftp)
 Saved 1371 parameters to mav.parm
 AP: Barometer 1 calibration complete
 [MAVProxy-1] AP: Barometer 2 calibration complete
@@ -180,70 +166,83 @@ AP: Barometer 1 calibration complete
 Saved 1371 parameters to mav_3_1.parm
 AP: Barometer 1 calibration complete
 [MAVProxy-3] AP: Barometer 2 calibration complete
-[MAVProxy-3] Init Gyro[MAVProxy-2] *[MAVProxy-1] *[MAVProxy-3] *[MAVProxy-2] *[MAVProxy-1] *[MAVProxy-3] *[MAVProxy-2] 
-[MAVProxy-2] AP: ArduPilot Ready
-[MAVProxy-2] AP: AHRS: DCM active
-[MAVProxy-1] 
-AP: ArduPilot Ready
+[MAVProxy-3] Init Gyro[MAVProxy-1] *[MAVProxy-2] Received 1371 parameters (ftp)
+Saved 1371 parameters to mav_2_1.parm
+AP: Barometer 1 calibration complete
+[MAVProxy-2] AP: Barometer 2 calibration complete
+[MAVProxy-2] Init Gyro[Proxy] [Proxy] HTTP status API running on port 14599
+[Proxy] Found Windows Host IP: 172.26.32.1
+[Proxy] Bound to SITL port 14590
+[Proxy] Bound to SITL port 14591
+[Proxy] Bound to SITL port 14592
+[Proxy] Proxying: SITL ports [14590, 14591, 14592] <-> GCS (172.26.32.1:14550)
+[Proxy] Outbound GCS socket bound to dynamic port: 39401
+[Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
+[MAVProxy-3] *[MAVProxy-2] *[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
+[MAVProxy-1] *[MAVProxy-3] *[MAVProxy-2] *[MAVProxy-1] 
+[MAVProxy-1] AP: ArduPilot Ready
 [MAVProxy-1] AP: AHRS: DCM active
 [MAVProxy-3] 
 [MAVProxy-3] AP: ArduPilot Ready
 [MAVProxy-3] AP: AHRS: DCM active
-[MAVProxy-2] AP: RC7: SaveWaypoint LOW
+[MAVProxy-2] 
+[MAVProxy-2] AP: ArduPilot Ready
+[MAVProxy-2] AP: AHRS: DCM active
 [MAVProxy-1] AP: RC7: SaveWaypoint LOW
 [MAVProxy-3] AP: RC7: SaveWaypoint LOW
+[MAVProxy-2] AP: RC7: SaveWaypoint LOW
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
-[MAVProxy-2] AP: EKF3 IMU0 initialised
-[MAVProxy-2] AP: EKF3 IMU1 initialised
-[MAVProxy-2] AP: AHRS: EKF3 active
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
 [MAVProxy-1] AP: EKF3 IMU0 initialised
 [MAVProxy-1] AP: EKF3 IMU1 initialised
 [MAVProxy-1] AP: AHRS: EKF3 active
 [MAVProxy-3] AP: EKF3 IMU0 initialised
 [MAVProxy-3] AP: EKF3 IMU1 initialised
 [MAVProxy-3] AP: AHRS: EKF3 active
-[MAVProxy-2] AP: EKF3 IMU0 tilt alignment complete
-AP: EKF3 IMU1 tilt alignment complete
+[MAVProxy-2] AP: EKF3 IMU0 initialised
+[MAVProxy-2] AP: EKF3 IMU1 initialised
+[MAVProxy-2] AP: AHRS: EKF3 active
 [MAVProxy-1] AP: EKF3 IMU0 tilt alignment complete
 [MAVProxy-1] AP: EKF3 IMU1 tilt alignment complete
 [MAVProxy-3] AP: EKF3 IMU0 tilt alignment complete
 [MAVProxy-3] AP: EKF3 IMU1 tilt alignment complete
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
-[MAVProxy-2] AP: EKF3 IMU0 MAG0 initial yaw alignment complete
-[MAVProxy-2] AP: EKF3 IMU1 MAG0 initial yaw alignment complete
+[MAVProxy-2] AP: EKF3 IMU0 tilt alignment complete
+[MAVProxy-2] AP: EKF3 IMU1 tilt alignment complete
 [MAVProxy-1] AP: EKF3 IMU0 MAG0 initial yaw alignment complete
 [MAVProxy-1] AP: EKF3 IMU1 MAG0 initial yaw alignment complete
 [MAVProxy-3] AP: EKF3 IMU0 MAG0 initial yaw alignment complete
 [MAVProxy-3] AP: EKF3 IMU1 MAG0 initial yaw alignment complete
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
-[Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
+[MAVProxy-2] AP: EKF3 IMU0 MAG0 initial yaw alignment complete
+[MAVProxy-2] AP: EKF3 IMU1 MAG0 initial yaw alignment complete
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
-[MAVProxy-2] AP: GPS 1: probing for u-blox at 230400 baud
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
 [MAVProxy-1] AP: GPS 1: probing for u-blox at 230400 baud
 [MAVProxy-3] AP: GPS 1: probing for u-blox at 230400 baud
-[MAVProxy-2] AP: GPS 1: detected u-blox
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
-[Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
 [MAVProxy-1] AP: GPS 1: detected u-blox
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
+[MAVProxy-2] AP: GPS 1: probing for u-blox at 230400 baud
 [MAVProxy-3] AP: GPS 1: detected u-blox
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
+[MAVProxy-2] AP: GPS 1: detected u-blox
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
-[MAVProxy-2] fence present
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
 [MAVProxy-1] fence present
 [MAVProxy-3] fence present
+[MAVProxy-2] fence present
 [MAVProxy-1] Flight battery 100 percent
-[MAVProxy-2] Flight battery 100 percent
 [MAVProxy-3] Flight battery 100 percent
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
+[MAVProxy-2] Flight battery 100 percent
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
@@ -251,25 +250,26 @@ AP: EKF3 IMU1 tilt alignment complete
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
 [Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=1 pending=[]
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
-[MAVProxy-2] AP: EKF3 IMU0 origin set
 [MAVProxy-1] AP: EKF3 IMU0 origin set
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=3 pending=[]
 [MAVProxy-3] AP: EKF3 IMU0 origin set
-[MAVProxy-2] AP: Field Elevation Set: 584m
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=410 sysid=2 pending=[]
+[MAVProxy-2] AP: EKF3 IMU0 origin set
 [MAVProxy-1] AP: Field Elevation Set: 584m
 [MAVProxy-3] AP: Field Elevation Set: 584m
-[MAVProxy-2] AP: EKF3 IMU1 origin set
+[MAVProxy-2] AP: Field Elevation Set: 584m
 [MAVProxy-1] AP: EKF3 IMU1 origin set
 [MAVProxy-3] AP: EKF3 IMU1 origin set
+[MAVProxy-2] AP: EKF3 IMU1 origin set
 [Orchestrator] Simulation initialization delay completed.
 [MultiVehicleTest] Launching GCS Electron app...
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 3, 'req_message_rate': 10, 'start_stop': 1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 2, 'req_message_rate': 2, 'start_stop': 1}
-[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 6, 'req_message_rate': 10, 'start_stop': 1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 10, 'req_message_rate': 20, 'start_stop': 1}
-[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 11, 'req_message_rate': 10, 'start_stop': 1}
-[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 1, 'req_message_rate': 2, 'start_stop': 1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 2, 'target_component': 1, 'command': 511, 'confirmation': 0, 'param1': 24.0, 'param2': 500000.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 3, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 2, 'req_message_rate': 2, 'start_stop': 1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 6, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 10, 'req_message_rate': 20, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 11, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 1, 'req_message_rate': 2, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 1, 'target_component': 1, 'command': 511, 'confirmation': 0, 'param1': 24.0, 'param2': 500000.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
 [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 3, 'req_message_rate': 10, 'start_stop': 1}
 [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 2, 'req_message_rate': 2, 'start_stop': 1}
 [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 6, 'req_message_rate': 10, 'start_stop': 1}
@@ -277,41 +277,7 @@ AP: EKF3 IMU1 tilt alignment complete
 [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 11, 'req_message_rate': 10, 'start_stop': 1}
 [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 1, 'target_component': 1, 'req_stream_id': 1, 'req_message_rate': 2, 'start_stop': 1}
 [Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 1, 'target_component': 1, 'command': 511, 'confirmation': 0, 'param1': 24.0, 'param2': 500000.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
-[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 3, 'req_message_rate': 10, 'start_stop': 1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 2, 'req_message_rate': 2, 'start_stop': 1}
-[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 6, 'req_message_rate': 10, 'start_stop': 1}
-[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 10, 'req_message_rate': 20, 'start_stop': 1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 11, 'req_message_rate': 10, 'start_stop': 1}
-[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 1, 'req_message_rate': 2, 'start_stop': 1}
-[Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 2, 'target_component': 1, 'command': 511, 'confirmation': 0, 'param1': 24.0, 'param2': 500000.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
-[Proxy DBG] Intercepted COMMAND_ACK: command=511 sysid=2 pending=[511]
-[MAVProxy-1] Got COMMAND_ACK: SET_MESSAGE_INTERVAL: ACCEPTED
-[MAVProxy-2] Got COMMAND_ACK: SET_MESSAGE_INTERVAL: ACCEPTED
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=511 sysid=1 pending=[511]
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 2, 'target_component': 1}
-[MAVProxy-2] Got COMMAND_ACK: SET_MESSAGE_INTERVAL: ACCEPTED
-[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=511 sysid=2 pending=[]
-[MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
-AP: df1923076b304546a65e9b53f25e36de
-AP: Frame: QUAD/PLUS
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 2, 'target_component': 1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE1', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE2', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE3', 'param_index': -1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE4', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE5', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE6', 'param_index': -1}
-[MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
-[MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
-[MAVProxy-2] AP: Frame: QUAD/PLUS
-[MultiVehicleTest] WSL proxy reset.
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE1', 'param_index': -1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE2', 'param_index': -1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE3', 'param_index': -1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE4', 'param_index': -1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE5', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE6', 'param_index': -1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 3, 'target_component': 1, 'req_stream_id': 3, 'req_message_rate': 10, 'start_stop': 1}
 [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 3, 'target_component': 1, 'req_stream_id': 2, 'req_message_rate': 2, 'start_stop': 1}
 [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 3, 'target_component': 1, 'req_stream_id': 6, 'req_message_rate': 10, 'start_stop': 1}
@@ -319,32 +285,72 @@ AP: Frame: QUAD/PLUS
 [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 3, 'target_component': 1, 'req_stream_id': 11, 'req_message_rate': 10, 'start_stop': 1}
 [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 3, 'target_component': 1, 'req_stream_id': 1, 'req_message_rate': 2, 'start_stop': 1}
 [Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 3, 'target_component': 1, 'command': 511, 'confirmation': 0, 'param1': 24.0, 'param2': 500000.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
-[Proxy DBG] Intercepted COMMAND_ACK: command=511 sysid=3 pending=[511]
+[MAVProxy-1] Got COMMAND_ACK: SET_MESSAGE_INTERVAL: ACCEPTED
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=511 sysid=1 pending=[511]
+[Proxy DBG] Intercepted COMMAND_ACK: command=511 sysid=1 pending=[]
+[MAVProxy-1] Got COMMAND_ACK: SET_MESSAGE_INTERVAL: ACCEPTED
 [MAVProxy-3] Got COMMAND_ACK: SET_MESSAGE_INTERVAL: ACCEPTED
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=511 sysid=3 pending=[511]
+[MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
+[MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
+[MAVProxy-1] AP: Frame: QUAD/PLUS
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 3, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 2, 'req_message_rate': 2, 'start_stop': 1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 6, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 10, 'req_message_rate': 20, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 11, 'req_message_rate': 10, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=REQUEST_DATA_STREAM fields={'mavpackettype': 'REQUEST_DATA_STREAM', 'target_system': 2, 'target_component': 1, 'req_stream_id': 1, 'req_message_rate': 2, 'start_stop': 1}
+[Proxy DBG] GCS packet parsed: msg_type=COMMAND_LONG fields={'mavpackettype': 'COMMAND_LONG', 'target_system': 2, 'target_component': 1, 'command': 511, 'confirmation': 0, 'param1': 24.0, 'param2': 500000.0, 'param3': 0.0, 'param4': 0.0, 'param5': 0.0, 'param6': 0.0, 'param7': 0.0}
+[MAVProxy-2] Got COMMAND_ACK: SET_MESSAGE_INTERVAL: ACCEPTED
+[Proxy] [Proxy DBG] Intercepted COMMAND_ACK: command=511 sysid=2 pending=[511]
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE1', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE2', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE3', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE4', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE5', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FLTMODE6', 'param_index': -1}
+[MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
+AP: cf1923076b304546a65e9b53f25e36de
+AP: Frame: QUAD/PLUS
+[MultiVehicleTest] WSL proxy reset.
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE1', 'param_index': -1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE2', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE3', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE4', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE5', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': 'FLTMODE6', 'param_index': -1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE1', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE2', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE3', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE4', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE5', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE6', 'param_index': -1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MultiVehicleTest] Waiting for GCS to discover 3 vehicles...
 [MultiVehicleTest] Verified: 3 vehicles discovered successfully!
-[MultiVehicleTest] Active SysIDs in frontend: [2,1,3]
+[MultiVehicleTest] Active SysIDs in frontend: [1,3,2]
 [SITL-1 Error] bind port 5760 for SERIAL0
 SERIAL0 on TCP port 5760
 [SITL-2 Error] bind port 5770 for SERIAL0
 SERIAL0 on TCP port 5770
 [SITL-3 Error] bind port 5780 for SERIAL0
 SERIAL0 on TCP port 5780
-[SITL-2 Error] bind port 5772 for SERIAL1
-SERIAL1 on TCP port 5772
-[SITL-2 Error] bind port 5773 for SERIAL2
-SERIAL2 on TCP port 5773
 [SITL-1 Error] bind port 5762 for SERIAL1
 SERIAL1 on TCP port 5762
 bind port 5763 for SERIAL2
 SERIAL2 on TCP port 5763
+[SITL-1 Error] validate_structures:538: Validating structures
+[SITL-1 Error] Waiting for internal clock bits to be set (current=0x00)
 [SITL-3 Error] bind port 5782 for SERIAL1
 SERIAL1 on TCP port 5782
 bind port 5783 for SERIAL2
 SERIAL2 on TCP port 5783
-[SITL-2 Error] validate_structures:538: Validating structures
-[SITL-2 Error] Waiting for internal clock bits to be set (current=0x00)
-[SITL-1 Error] validate_structures:538: Validating structures
-[SITL-1 Error] Waiting for internal clock bits to be set (current=0x00)
 [SITL-3 Error] validate_structures:538: Validating structures
 [SITL-3 Error] Waiting for internal clock bits to be set (current=0x00)
+[SITL-2 Error] bind port 5772 for SERIAL1
+SERIAL1 on TCP port 5772
+[SITL-2 Error] bind port 5773 for SERIAL2
+SERIAL2 on TCP port 5773
+[SITL-2 Error] validate_structures:538: Validating structures
+[SITL-2 Error] Waiting for internal clock bits to be set (current=0x00)

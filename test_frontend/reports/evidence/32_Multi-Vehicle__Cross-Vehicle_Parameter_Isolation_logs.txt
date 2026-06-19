@@ -4,19 +4,18 @@
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 2, 'target_component': 1, 'param_id': 'RTL_ALT_M', 'param_value': 20.0, 'param_type': 9}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 3, 'target_component': 1, 'param_id': 'RTL_ALT_M', 'param_value': 30.0, 'param_type': 9}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
-[MAVProxy-2] AP: EKF3 IMU1 is using GPS
 [MAVProxy-1] AP: EKF3 IMU1 is using GPS
-[MAVProxy-2] AP: EKF3 IMU0 is using GPS
+[MAVProxy-2] AP: EKF3 IMU1 is using GPS
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 3, 'target_component': 1, 'param_id': 'RTL_ALT_M', 'param_value': 30.0, 'param_type': 9}
 [MAVProxy-1] AP: EKF3 IMU0 is using GPS
 [MAVProxy-3] AP: EKF3 IMU0 is using GPS
 [MAVProxy-3] AP: EKF3 IMU1 is using GPS
+[MAVProxy-2] AP: EKF3 IMU0 is using GPS
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MultiVehicleTest] Reloading GCS window to clear session context...
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MultiVehicleTest] Opening Full Parameters panel...
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
 [MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
 [MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
@@ -27,9 +26,6 @@
 [MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
 [MAVProxy-1] AP: Frame: QUAD/PLUS
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 301}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 302}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': '', 'param_index': 776}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MultiVehicleTest] Checking RTL_ALT_M for Vehicle 2...
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}

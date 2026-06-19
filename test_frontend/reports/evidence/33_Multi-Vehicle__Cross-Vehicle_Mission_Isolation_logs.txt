@@ -7,12 +7,12 @@
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 1, 'target_component': 1}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=MISSION_COUNT fields={'mavpackettype': 'MISSION_COUNT', 'target_system': 1, 'target_component': 1, 'count': 1, 'mission_type': 0}
 [MAVProxy-1] AP: ArduCopter V4.8.0-dev (6e741784)
-[MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 1, 'target_component': 1, 'seq': 0, 'frame': 6, 'command': 16, 'current': 1, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': 0, 'y': 0, 'z': 0.0, 'mission_type': 0}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[MAVProxy-1] AP: cf1923076b304546a65e9b53f25e36de
 [MAVProxy-1] AP: Frame: QUAD/PLUS
 [MAVProxy-1] Got MISSION_ACK: TYPE_MISSION: ACCEPTED
 [MAVProxy-1] AP: Flight plan received
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 2, 'target_component': 1}
@@ -21,22 +21,21 @@
 [MAVProxy-2] AP: Frame: QUAD/PLUS
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 2, 'target_component': 1}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=MISSION_COUNT fields={'mavpackettype': 'MISSION_COUNT', 'target_system': 2, 'target_component': 1, 'count': 2, 'mission_type': 0}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MAVProxy-2] AP: ArduCopter V4.8.0-dev (6e741784)
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 2, 'target_component': 1, 'seq': 0, 'frame': 6, 'command': 16, 'current': 1, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': 0, 'y': 0, 'z': 0.0, 'mission_type': 0}
 [MAVProxy-2] AP: df1923076b304546a65e9b53f25e36de
 [MAVProxy-2] AP: Frame: QUAD/PLUS
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 2, 'target_component': 1, 'seq': 0, 'frame': 6, 'command': 16, 'current': 1, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': 0, 'y': 0, 'z': 0.0, 'mission_type': 0}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 2, 'target_component': 1, 'seq': 1, 'frame': 6, 'command': 16, 'current': 0, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': 0, 'y': 0, 'z': 0.0, 'mission_type': 0}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MAVProxy-2] Got MISSION_ACK: TYPE_MISSION: ACCEPTED
 [MAVProxy-2] AP: Flight plan received
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 3, 'target_component': 1}
 [MAVProxy-3] AP: ArduCopter V4.8.0-dev (6e741784)
 [MAVProxy-3] AP: ef1923076b304546a65e9b53f25e36de
 [MAVProxy-3] AP: Frame: QUAD/PLUS
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_LIST fields={'mavpackettype': 'PARAM_REQUEST_LIST', 'target_system': 3, 'target_component': 1}
-[Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=MISSION_COUNT fields={'mavpackettype': 'MISSION_COUNT', 'target_system': 3, 'target_component': 1, 'count': 3, 'mission_type': 0}
 [MAVProxy-3] AP: ArduCopter V4.8.0-dev (6e741784)
 [MAVProxy-3] AP: ef1923076b304546a65e9b53f25e36de
@@ -48,29 +47,30 @@
 [MAVProxy-3] AP: Flight plan received
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MultiVehicleTest] Downloading missions back to verify isolation...
 [Proxy] [Proxy DBG] handle_faked_download: sysid=1 msg_type=MISSION_COUNT fields={'mavpackettype': 'MISSION_COUNT', 'target_system': 255, 'target_component': 190, 'count': 1, 'mission_type': 0}
-[Proxy] [Proxy DBG] send_mission_request_int: sysid=1 seq=0 target compid=1, destination=('127.0.0.1', 45682)
+[Proxy DBG] send_mission_request_int: sysid=1 seq=0 target compid=1, destination=('127.0.0.1', 44686)
 [MAVProxy-1] Mission is stale
 [Proxy] [Proxy DBG] handle_faked_download: sysid=1 msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 255, 'target_component': 190, 'seq': 0, 'frame': 0, 'command': 16, 'current': 0, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': -353632621, 'y': 1491652374, 'z': 584.0899658203125, 'mission_type': 0}
-[Proxy] [Proxy DBG] send_mission_ack: sysid=1 ack_type=0 target compid=1, destination=('127.0.0.1', 45682)
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy DBG] send_mission_ack: sysid=1 ack_type=0 target compid=1, destination=('127.0.0.1', 44686)
 [MultiVehicleTest] Verified: Mission A on Vehicle 1 has 1 item.
-[MAVProxy-2] Mission is stale
 [Proxy] [Proxy DBG] handle_faked_download: sysid=2 msg_type=MISSION_COUNT fields={'mavpackettype': 'MISSION_COUNT', 'target_system': 255, 'target_component': 190, 'count': 2, 'mission_type': 0}
-[Proxy DBG] send_mission_request_int: sysid=2 seq=0 target compid=1, destination=('127.0.0.1', 53120)
+[Proxy DBG] send_mission_request_int: sysid=2 seq=0 target compid=1, destination=('127.0.0.1', 35431)
+[MAVProxy-2] Mission is stale
 [Proxy] [Proxy DBG] handle_faked_download: sysid=2 msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 255, 'target_component': 190, 'seq': 0, 'frame': 0, 'command': 16, 'current': 0, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': -353632621, 'y': 1491652374, 'z': 584.0899658203125, 'mission_type': 0}
-[Proxy] [Proxy DBG] send_mission_request_int: sysid=2 seq=1 target compid=1, destination=('127.0.0.1', 53120)
+[Proxy DBG] send_mission_request_int: sysid=2 seq=1 target compid=1, destination=('127.0.0.1', 35431)
 [Proxy] [Proxy DBG] handle_faked_download: sysid=2 msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 255, 'target_component': 190, 'seq': 1, 'frame': 3, 'command': 16, 'current': 0, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': 0, 'y': 0, 'z': 0.0, 'mission_type': 0}
-[Proxy DBG] send_mission_ack: sysid=2 ack_type=0 target compid=1, destination=('127.0.0.1', 53120)
+[Proxy DBG] send_mission_ack: sysid=2 ack_type=0 target compid=1, destination=('127.0.0.1', 35431)
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MultiVehicleTest] Verified: Mission B on Vehicle 2 has 2 items.
 [Proxy] [Proxy DBG] handle_faked_download: sysid=3 msg_type=MISSION_COUNT fields={'mavpackettype': 'MISSION_COUNT', 'target_system': 255, 'target_component': 190, 'count': 3, 'mission_type': 0}
-[Proxy DBG] send_mission_request_int: sysid=3 seq=0 target compid=1, destination=('127.0.0.1', 41094)
+[Proxy DBG] send_mission_request_int: sysid=3 seq=0 target compid=1, destination=('127.0.0.1', 53877)
+[Proxy DBG] handle_faked_download: sysid=3 msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 255, 'target_component': 190, 'seq': 0, 'frame': 0, 'command': 16, 'current': 0, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': -353632621, 'y': 1491652374, 'z': 584.0899658203125, 'mission_type': 0}
+[Proxy DBG] send_mission_request_int: sysid=3 seq=1 target compid=1, destination=('127.0.0.1', 53877)
 [MAVProxy-3] Mission is stale
-[Proxy] [Proxy DBG] handle_faked_download: sysid=3 msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 255, 'target_component': 190, 'seq': 0, 'frame': 0, 'command': 16, 'current': 0, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': -353632621, 'y': 1491652374, 'z': 584.0899658203125, 'mission_type': 0}
-[Proxy DBG] send_mission_request_int: sysid=3 seq=1 target compid=1, destination=('127.0.0.1', 41094)
 [Proxy] [Proxy DBG] handle_faked_download: sysid=3 msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 255, 'target_component': 190, 'seq': 1, 'frame': 3, 'command': 16, 'current': 0, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': 0, 'y': 0, 'z': 0.0, 'mission_type': 0}
-[Proxy DBG] send_mission_request_int: sysid=3 seq=2 target compid=1, destination=('127.0.0.1', 41094)
+[Proxy] [Proxy DBG] send_mission_request_int: sysid=3 seq=2 target compid=1, destination=('127.0.0.1', 53877)
 [Proxy] [Proxy DBG] handle_faked_download: sysid=3 msg_type=MISSION_ITEM_INT fields={'mavpackettype': 'MISSION_ITEM_INT', 'target_system': 255, 'target_component': 190, 'seq': 2, 'frame': 3, 'command': 16, 'current': 0, 'autocontinue': 1, 'param1': 0.0, 'param2': 0.0, 'param3': 0.0, 'param4': 0.0, 'x': 0, 'y': 0, 'z': 0.0, 'mission_type': 0}
-[Proxy DBG] send_mission_ack: sysid=3 ack_type=0 target compid=1, destination=('127.0.0.1', 41094)
+[Proxy DBG] send_mission_ack: sysid=3 ack_type=0 target compid=1, destination=('127.0.0.1', 53877)
 [MultiVehicleTest] Verified: Mission C on Vehicle 3 has 3 items.

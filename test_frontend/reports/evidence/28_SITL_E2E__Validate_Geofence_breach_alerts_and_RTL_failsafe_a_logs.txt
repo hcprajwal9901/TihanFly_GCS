@@ -4,34 +4,32 @@
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_ENABLE', 'param_value': 1.0, 'param_type': 9}
 [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_TYPE', 'param_value': 1.0, 'param_type': 9}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_ALT_MAX', 'param_value': 10.0, 'param_type': 9}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_MARGIN', 'param_value': 1.0, 'param_type': 9}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_MARGIN', 'param_value': 1.0, 'param_type': 9}
 [MAVProxy-1] fence enabled
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_ENABLE', 'param_index': -1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_TYPE', 'param_index': -1}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_ACTION', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_ALT_MAX', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_TYPE', 'param_index': -1}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_ACTION', 'param_index': -1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_ALT_MAX', 'param_index': -1}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_RADIUS', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_MARGIN', 'param_index': -1}
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_MARGIN', 'param_index': -1}
 [SITLTest] Simulating altitude breach of 15m...
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [SITLTest] Geofence breach banner is visible!
 [SITLTest] Simulating RTL failsafe flight mode transition...
 [SITLTest] Mode indicator successfully transitioned to RTL.
 [SITLTest] Simulating recovery from breach...
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [SITLTest] Geofence breach cleared successfully.
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'FENCE_ENABLE', 'param_value': 0.0, 'param_type': 9}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MAVProxy-1] fence disabled
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [SITLTest] Written final MAVLink KPIs to kpis.json under mavlink key.
 [SITLTest] Closing GCS app...
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [SITLTest] Stopping simulation orchestrator...
 [Orchestrator] Cleaning up SITL processes inside WSL...
 [Orchestrator] Cleanup completed successfully.
-[SITL-1 Error] bash: line 1:  5404 Killed                  ( :; /home/hcprajwal/ardupilot/build/sitl/bin/arducopter --model + --speedup 1 --slave 0 --sysid 1 --wipe --defaults ../Tools/autotest/default_params/copter.parm,'/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param' --sim-address=127.0.0.1 -I0 )
+[SITL-1 Error] bash: line 1:   375 Killed                  ( :; /home/hcprajwal/ardupilot/build/sitl/bin/arducopter --model + --speedup 1 --slave 0 --sysid 1 --wipe --defaults ../Tools/autotest/default_params/copter.parm,'/mnt/e/TiHAN/TflyGCS (1)/TflyGCS/test_frontend/simulators/sysid1.param' --sim-address=127.0.0.1 -I0 )

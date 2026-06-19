@@ -14,7 +14,7 @@
 ```
 Error: expect(received).toBe(expected) // Object.is equality
 
-Expected: 2
+Expected: 3
 Received: 1
 ```
 
@@ -71,7 +71,7 @@ Received: 1
                 - text: RTK Fixed · 10 sats
             - generic [ref=e47] [cursor=pointer]:
               - generic [ref=e48]:
-                - generic [ref=e50]: D-2
+                - generic [ref=e50]: D-3
                 - generic [ref=e51]: DSRM
               - generic [ref=e52]:
                 - generic [ref=e53]: ✈
@@ -84,7 +84,7 @@ Received: 1
                 - text: RTK Fixed · 10 sats
             - generic [ref=e58] [cursor=pointer]:
               - generic [ref=e59]:
-                - generic [ref=e61]: D-3
+                - generic [ref=e61]: D-2
                 - generic [ref=e62]: DSRM
               - generic [ref=e63]:
                 - generic [ref=e64]: ✈
@@ -114,19 +114,19 @@ Received: 1
               - generic [ref=e82]:
                 - img "drone" [ref=e83]
                 - generic [ref=e84]: D-1
-            - button "drone D-2" [ref=e85] [cursor=pointer]:
+            - button "drone D-3" [ref=e85] [cursor=pointer]:
               - generic [ref=e86]:
                 - img "drone" [ref=e87]
-                - generic [ref=e88]: D-2
-            - button "drone D-3" [ref=e89] [cursor=pointer]:
+                - generic [ref=e88]: D-3
+            - button "drone D-2" [ref=e89] [cursor=pointer]:
               - generic [ref=e90]:
                 - img "drone" [ref=e91]
-                - generic [ref=e92]: D-3
+                - generic [ref=e92]: D-2
         - generic [ref=e93]:
           - generic [ref=e94]:
             - generic [ref=e95]:
               - generic [ref=e96]: ALT
-              - generic [ref=e97]: 0.0 m
+              - generic [ref=e97]: "-0.0 m"
             - generic [ref=e98]:
               - generic [ref=e99]: SPD
               - generic [ref=e100]: 0.0 m/s
@@ -136,7 +136,7 @@ Received: 1
           - generic [ref=e105]:
             - img "Compass Dial" [ref=e106]
             - img "Compass Arrow" [ref=e107]
-            - generic [ref=e109]: 354°
+            - generic [ref=e109]: 355°
           - generic [ref=e110]:
             - generic [ref=e111]:
               - generic [ref=e112]: DIST
@@ -186,375 +186,326 @@ Received: 1
     - generic "Console Messages" [ref=e166]:
       - generic [ref=e167]:
         - generic [ref=e168]: ℹ
-        - generic [ref=e169]: 📋 Requesting all parameters from flight controller…
-        - generic [ref=e170]: 13:45:42
+        - generic [ref=e169]: "[D2] df1923076b304546a65e9b53f25e36de"
+        - generic [ref=e170]: 11:53:59
       - generic [ref=e171]:
         - generic [ref=e172]: ℹ
-        - generic [ref=e173]: "[D1] ArduCopter V4.8.0-dev (6e741784)"
-        - generic [ref=e174]: 13:45:42
+        - generic [ref=e173]: "[D2] Frame: QUAD/PLUS"
+        - generic [ref=e174]: 11:53:59
       - generic [ref=e175]:
-        - generic [ref=e176]: ℹ
-        - generic [ref=e177]: "[D1] cf1923076b304546a65e9b53f25e36de"
-        - generic [ref=e178]: 13:45:42
+        - generic [ref=e176]: ✓
+        - generic [ref=e177]: ✅ All 1371 parameters loaded in 1516 ms
+        - generic [ref=e178]: 11:54:01
       - generic [ref=e179]:
         - generic [ref=e180]: ℹ
-        - generic [ref=e181]: "[D1] Frame: QUAD/PLUS"
-        - generic [ref=e182]: 13:45:42
+        - generic [ref=e181]: 📋 Requesting all parameters from flight controller…
+        - generic [ref=e182]: 11:54:03
       - generic [ref=e183]:
         - generic [ref=e184]: ℹ
-        - generic [ref=e185]: "[D1] ArduCopter V4.8.0-dev (6e741784)"
-        - generic [ref=e186]: 13:45:42
+        - generic [ref=e185]: "[D3] ArduCopter V4.8.0-dev (6e741784)"
+        - generic [ref=e186]: 11:54:03
       - generic [ref=e187]:
         - generic [ref=e188]: ℹ
-        - generic [ref=e189]: "[D1] cf1923076b304546a65e9b53f25e36de"
-        - generic [ref=e190]: 13:45:42
+        - generic [ref=e189]: "[D3] ef1923076b304546a65e9b53f25e36de"
+        - generic [ref=e190]: 11:54:03
       - generic [ref=e191]:
         - generic [ref=e192]: ℹ
-        - generic [ref=e193]: "[D1] Frame: QUAD/PLUS"
-        - generic [ref=e194]: 13:45:42
+        - generic [ref=e193]: "[D3] Frame: QUAD/PLUS"
+        - generic [ref=e194]: 11:54:03
       - generic [ref=e195]:
-        - generic [ref=e196]: ✓
-        - generic [ref=e197]: ✅ All 1371 parameters loaded in 1751 ms
-        - generic [ref=e198]: 13:45:46
+        - generic [ref=e196]: ℹ
+        - generic [ref=e197]: "[D3] ArduCopter V4.8.0-dev (6e741784)"
+        - generic [ref=e198]: 11:54:03
       - generic [ref=e199]:
         - generic [ref=e200]: ℹ
-        - generic [ref=e201]: 📋 Requesting all parameters from flight controller…
-        - generic [ref=e202]: 13:45:48
+        - generic [ref=e201]: "[D3] ef1923076b304546a65e9b53f25e36de"
+        - generic [ref=e202]: 11:54:03
       - generic [ref=e203]:
         - generic [ref=e204]: ℹ
-        - generic [ref=e205]: "[D2] ArduCopter V4.8.0-dev (6e741784)"
-        - generic [ref=e206]: 13:45:48
+        - generic [ref=e205]: "[D3] Frame: QUAD/PLUS"
+        - generic [ref=e206]: 11:54:03
       - generic [ref=e207]:
-        - generic [ref=e208]: ℹ
-        - generic [ref=e209]: "[D2] df1923076b304546a65e9b53f25e36de"
-        - generic [ref=e210]: 13:45:48
+        - generic [ref=e208]: ✓
+        - generic [ref=e209]: ✅ All 1371 parameters loaded in 1082 ms
+        - generic [ref=e210]: 11:54:05
       - generic [ref=e211]:
         - generic [ref=e212]: ℹ
-        - generic [ref=e213]: "[D2] Frame: QUAD/PLUS"
-        - generic [ref=e214]: 13:45:48
+        - generic [ref=e213]: Uploading 1 waypoints…
+        - generic [ref=e214]: 11:54:07
       - generic [ref=e215]:
         - generic [ref=e216]: ℹ
-        - generic [ref=e217]: "[D2] ArduCopter V4.8.0-dev (6e741784)"
-        - generic [ref=e218]: 13:45:48
+        - generic [ref=e217]: 📋 Requesting all parameters from flight controller…
+        - generic [ref=e218]: 11:54:07
       - generic [ref=e219]:
         - generic [ref=e220]: ℹ
-        - generic [ref=e221]: "[D2] df1923076b304546a65e9b53f25e36de"
-        - generic [ref=e222]: 13:45:48
+        - generic [ref=e221]: "[D1] ArduCopter V4.8.0-dev (6e741784)"
+        - generic [ref=e222]: 11:54:07
       - generic [ref=e223]:
         - generic [ref=e224]: ℹ
-        - generic [ref=e225]: "[D2] Frame: QUAD/PLUS"
-        - generic [ref=e226]: 13:45:48
+        - generic [ref=e225]: "[D1] cf1923076b304546a65e9b53f25e36de"
+        - generic [ref=e226]: 11:54:07
       - generic [ref=e227]:
-        - generic [ref=e228]: ✓
-        - generic [ref=e229]: ✅ All 1371 parameters loaded in 2123 ms
-        - generic [ref=e230]: 13:45:51
+        - generic [ref=e228]: ℹ
+        - generic [ref=e229]: "[D1] Frame: QUAD/PLUS"
+        - generic [ref=e230]: 11:54:07
       - generic [ref=e231]:
         - generic [ref=e232]: ℹ
-        - generic [ref=e233]: 📋 Requesting all parameters from flight controller…
-        - generic [ref=e234]: 13:45:52
+        - generic [ref=e233]: "[D1] ArduCopter V4.8.0-dev (6e741784)"
+        - generic [ref=e234]: 11:54:07
       - generic [ref=e235]:
         - generic [ref=e236]: ℹ
-        - generic [ref=e237]: "[D3] ArduCopter V4.8.0-dev (6e741784)"
-        - generic [ref=e238]: 13:45:53
+        - generic [ref=e237]: "[D1] cf1923076b304546a65e9b53f25e36de"
+        - generic [ref=e238]: 11:54:07
       - generic [ref=e239]:
         - generic [ref=e240]: ℹ
-        - generic [ref=e241]: "[D3] ef1923076b304546a65e9b53f25e36de"
-        - generic [ref=e242]: 13:45:53
+        - generic [ref=e241]: "[D1] Frame: QUAD/PLUS"
+        - generic [ref=e242]: 11:54:07
       - generic [ref=e243]:
-        - generic [ref=e244]: ℹ
-        - generic [ref=e245]: "[D3] Frame: QUAD/PLUS"
-        - generic [ref=e246]: 13:45:53
+        - generic [ref=e244]: ✓
+        - generic [ref=e245]: Mission uploaded ✅ (Drone )
+        - generic [ref=e246]: 11:54:09
       - generic [ref=e247]:
         - generic [ref=e248]: ℹ
-        - generic [ref=e249]: "[D3] ArduCopter V4.8.0-dev (6e741784)"
-        - generic [ref=e250]: 13:45:53
+        - generic [ref=e249]: "[D1] Flight plan received"
+        - generic [ref=e250]: 11:54:09
       - generic [ref=e251]:
-        - generic [ref=e252]: ℹ
-        - generic [ref=e253]: "[D3] ef1923076b304546a65e9b53f25e36de"
-        - generic [ref=e254]: 13:45:53
+        - generic [ref=e252]: ✗
+        - generic [ref=e253]: "Mission upload failed (Drone ): Mission upload failed (ack=1)"
+        - generic [ref=e254]: 11:54:09
       - generic [ref=e255]:
-        - generic [ref=e256]: ℹ
-        - generic [ref=e257]: "[D3] Frame: QUAD/PLUS"
-        - generic [ref=e258]: 13:45:53
+        - generic [ref=e256]: ✓
+        - generic [ref=e257]: ✅ All 1371 parameters loaded in 3046 ms
+        - generic [ref=e258]: 11:54:11
       - generic [ref=e259]:
-        - generic [ref=e260]: ✓
-        - generic [ref=e261]: ✅ All 1371 parameters loaded in 1701 ms
-        - generic [ref=e262]: 13:45:55
+        - generic [ref=e260]: ℹ
+        - generic [ref=e261]: Uploading 2 waypoints…
+        - generic [ref=e262]: 11:54:11
       - generic [ref=e263]:
         - generic [ref=e264]: ℹ
-        - generic [ref=e265]: Uploading 1 waypoints…
-        - generic [ref=e266]: 13:45:59
+        - generic [ref=e265]: 📋 Requesting all parameters from flight controller…
+        - generic [ref=e266]: 11:54:12
       - generic [ref=e267]:
         - generic [ref=e268]: ℹ
-        - generic [ref=e269]: 📋 Requesting all parameters from flight controller…
-        - generic [ref=e270]: 13:45:59
+        - generic [ref=e269]: "[D2] ArduCopter V4.8.0-dev (6e741784)"
+        - generic [ref=e270]: 11:54:12
       - generic [ref=e271]:
         - generic [ref=e272]: ℹ
-        - generic [ref=e273]: "[D1] ArduCopter V4.8.0-dev (6e741784)"
-        - generic [ref=e274]: 13:45:59
+        - generic [ref=e273]: "[D2] df1923076b304546a65e9b53f25e36de"
+        - generic [ref=e274]: 11:54:12
       - generic [ref=e275]:
         - generic [ref=e276]: ℹ
-        - generic [ref=e277]: "[D1] cf1923076b304546a65e9b53f25e36de"
-        - generic [ref=e278]: 13:45:59
+        - generic [ref=e277]: "[D2] Frame: QUAD/PLUS"
+        - generic [ref=e278]: 11:54:12
       - generic [ref=e279]:
         - generic [ref=e280]: ℹ
-        - generic [ref=e281]: "[D1] Frame: QUAD/PLUS"
-        - generic [ref=e282]: 13:45:59
+        - generic [ref=e281]: "[D2] ArduCopter V4.8.0-dev (6e741784)"
+        - generic [ref=e282]: 11:54:13
       - generic [ref=e283]:
         - generic [ref=e284]: ℹ
-        - generic [ref=e285]: Uploading 2 waypoints…
-        - generic [ref=e286]: 13:46:00
+        - generic [ref=e285]: "[D2] df1923076b304546a65e9b53f25e36de"
+        - generic [ref=e286]: 11:54:13
       - generic [ref=e287]:
         - generic [ref=e288]: ℹ
-        - generic [ref=e289]: 📋 Requesting all parameters from flight controller…
-        - generic [ref=e290]: 13:46:00
+        - generic [ref=e289]: "[D2] Frame: QUAD/PLUS"
+        - generic [ref=e290]: 11:54:13
       - generic [ref=e291]:
         - generic [ref=e292]: ℹ
-        - generic [ref=e293]: "[D2] ArduCopter V4.8.0-dev (6e741784)"
-        - generic [ref=e294]: 13:46:01
+        - generic [ref=e293]: Uploading 3 waypoints…
+        - generic [ref=e294]: 11:54:14
       - generic [ref=e295]:
         - generic [ref=e296]: ℹ
-        - generic [ref=e297]: "[D2] df1923076b304546a65e9b53f25e36de"
-        - generic [ref=e298]: 13:46:01
+        - generic [ref=e297]: 📋 Requesting all parameters from flight controller…
+        - generic [ref=e298]: 11:54:14
       - generic [ref=e299]:
         - generic [ref=e300]: ℹ
-        - generic [ref=e301]: "[D2] Frame: QUAD/PLUS"
-        - generic [ref=e302]: 13:46:01
+        - generic [ref=e301]: "[D3] ArduCopter V4.8.0-dev (6e741784)"
+        - generic [ref=e302]: 11:54:15
       - generic [ref=e303]:
         - generic [ref=e304]: ℹ
-        - generic [ref=e305]: "[D2] ArduCopter V4.8.0-dev (6e741784)"
-        - generic [ref=e306]: 13:46:01
+        - generic [ref=e305]: "[D3] ef1923076b304546a65e9b53f25e36de"
+        - generic [ref=e306]: 11:54:15
       - generic [ref=e307]:
         - generic [ref=e308]: ℹ
-        - generic [ref=e309]: "[D2] df1923076b304546a65e9b53f25e36de"
-        - generic [ref=e310]: 13:46:01
+        - generic [ref=e309]: "[D3] Frame: QUAD/PLUS"
+        - generic [ref=e310]: 11:54:15
       - generic [ref=e311]:
-        - generic [ref=e312]: ℹ
-        - generic [ref=e313]: "[D2] Frame: QUAD/PLUS"
-        - generic [ref=e314]: 13:46:01
+        - generic [ref=e312]: ✗
+        - generic [ref=e313]: "Mission upload failed (Drone ): Mission upload failed (ack=13)"
+        - generic [ref=e314]: 11:54:15
       - generic [ref=e315]:
-        - generic [ref=e316]: ℹ
-        - generic [ref=e317]: Uploading 3 waypoints…
-        - generic [ref=e318]: 13:46:01
+        - generic [ref=e316]: ✓
+        - generic [ref=e317]: Mission uploaded ✅ (Drone )
+        - generic [ref=e318]: 11:54:15
       - generic [ref=e319]:
-        - generic [ref=e320]: ℹ
-        - generic [ref=e321]: 📋 Requesting all parameters from flight controller…
-        - generic [ref=e322]: 13:46:01
+        - generic [ref=e320]: ✗
+        - generic [ref=e321]: "Mission upload failed (Drone ): Mission upload failed (ack=13)"
+        - generic [ref=e322]: 11:54:15
       - generic [ref=e323]:
         - generic [ref=e324]: ℹ
         - generic [ref=e325]: "[D3] ef1923076b304546a65e9b53f25e36de"
-        - generic [ref=e326]: 13:46:02
+        - generic [ref=e326]: 11:54:16
       - generic [ref=e327]:
         - generic [ref=e328]: ℹ
-        - generic [ref=e329]: "[D3] ArduCopter V4.8.0-dev (6e741784)"
-        - generic [ref=e330]: 13:46:02
+        - generic [ref=e329]: "[D3] Frame: QUAD/PLUS"
+        - generic [ref=e330]: 11:54:16
       - generic [ref=e331]:
         - generic [ref=e332]: ✓
-        - generic [ref=e333]: Mission uploaded ✅ (Drone )
-        - generic [ref=e334]: 13:46:02
+        - generic [ref=e333]: ✅ All 1371 parameters loaded in 3177 ms
+        - generic [ref=e334]: 11:54:19
       - generic [ref=e335]:
-        - generic [ref=e336]: ℹ
-        - generic [ref=e337]: "[D3] Frame: QUAD/PLUS"
-        - generic [ref=e338]: 13:46:02
+        - generic [ref=e336]: ✓
+        - generic [ref=e337]: ✅ All 1371 parameters loaded in 3177 ms
+        - generic [ref=e338]: 11:54:20
       - generic [ref=e339]:
-        - generic [ref=e340]: ✗
-        - generic [ref=e341]: "Mission upload failed (Drone ): Mission upload failed (ack=1)"
-        - generic [ref=e342]: 13:46:02
+        - generic [ref=e340]: ✓
+        - generic [ref=e341]: ✅ All 1371 parameters loaded in 3177 ms
+        - generic [ref=e342]: 11:54:20
       - generic [ref=e343]:
-        - generic [ref=e344]: ℹ
-        - generic [ref=e345]: "[D3] ArduCopter V4.8.0-dev (6e741784)"
-        - generic [ref=e346]: 13:46:02
+        - generic [ref=e344]: ✓
+        - generic [ref=e345]: ✅ All 1371 parameters loaded in 3177 ms
+        - generic [ref=e346]: 11:54:25
       - generic [ref=e347]:
-        - generic [ref=e348]: ℹ
-        - generic [ref=e349]: "[D3] ef1923076b304546a65e9b53f25e36de"
-        - generic [ref=e350]: 13:46:02
+        - generic [ref=e348]: ✓
+        - generic [ref=e349]: ✅ All 1371 parameters loaded in 3177 ms
+        - generic [ref=e350]: 11:54:25
       - generic [ref=e351]:
-        - generic [ref=e352]: ℹ
-        - generic [ref=e353]: "[D3] Frame: QUAD/PLUS"
-        - generic [ref=e354]: 13:46:02
+        - generic [ref=e352]: ✓
+        - generic [ref=e353]: ✅ All 1371 parameters loaded in 3177 ms
+        - generic [ref=e354]: 11:54:26
       - generic [ref=e355]:
         - generic [ref=e356]: ✓
-        - generic [ref=e357]: ✅ All 1371 parameters loaded in 1357 ms
-        - generic [ref=e358]: 13:46:04
+        - generic [ref=e357]: ✅ All 1371 parameters loaded in 3177 ms
+        - generic [ref=e358]: 11:54:26
       - generic [ref=e359]:
         - generic [ref=e360]: ✓
-        - generic [ref=e361]: Mission uploaded ✅ (Drone )
-        - generic [ref=e362]: 13:46:05
+        - generic [ref=e361]: ✅ All 1371 parameters loaded in 3177 ms
+        - generic [ref=e362]: 11:54:26
       - generic [ref=e363]:
         - generic [ref=e364]: ℹ
-        - generic [ref=e365]: "[D3] Flight plan received"
-        - generic [ref=e366]: 13:46:05
-    - generic [ref=e367]:
-      - generic [ref=e368]:
-        - generic [ref=e369]:
-          - img [ref=e370]
-          - generic [ref=e372]: Weather
-        - button "×" [ref=e373] [cursor=pointer]
-      - generic [ref=e374]:
-        - generic [ref=e375]:
-          - img [ref=e376]
-          - generic [ref=e379]:
-            - generic [ref=e380]: "--"
-            - generic [ref=e381]: "--, --"
-        - generic [ref=e382]:
-          - img "Weather" [ref=e384]
-          - generic [ref=e385]:
-            - generic [ref=e386]: "--°C"
-            - generic [ref=e387]: "--"
-        - generic [ref=e388]:
-          - generic [ref=e389]:
-            - img [ref=e390]
-            - generic [ref=e392]:
-              - generic [ref=e393]: Feels Like
-              - generic [ref=e394]: "--°C"
-          - generic [ref=e395]:
-            - img [ref=e396]
-            - generic [ref=e398]:
-              - generic [ref=e399]: Humidity
-              - generic [ref=e400]: "--%"
-          - generic [ref=e401]:
-            - img [ref=e402]
-            - generic [ref=e404]:
-              - generic [ref=e405]: Wind Speed
-              - generic [ref=e406]: "-- m/s"
-          - generic [ref=e407]:
-            - img [ref=e408]
-            - generic [ref=e411]:
-              - generic [ref=e412]: Pressure
-              - generic [ref=e413]: "-- hPa"
-          - generic [ref=e414]:
-            - img [ref=e415]
-            - generic [ref=e417]:
-              - generic [ref=e418]: Visibility
-              - generic [ref=e419]: "-- km"
-          - generic [ref=e420]:
-            - img [ref=e421]
-            - generic [ref=e423]:
-              - generic [ref=e424]: Clouds
-              - generic [ref=e425]: "--%"
-        - generic [ref=e426]: Click map to load weather
-  - generic [ref=e427]:
-    - generic [ref=e428]:
-      - generic [ref=e429]:
-        - generic [ref=e430]: "Select Serial Port:"
-        - table [ref=e432]:
-          - rowgroup [ref=e433]:
-            - row "Port Board ID Manufacturer Brand Description" [ref=e434]:
-              - columnheader "Port" [ref=e435]
-              - columnheader "Board ID" [ref=e436]
-              - columnheader "Manufacturer" [ref=e437]
-              - columnheader "Brand" [ref=e438]
-              - columnheader "Description" [ref=e439]
-          - rowgroup [ref=e440]:
-            - row "/dev/ttyS4 n/a" [ref=e441] [cursor=pointer]:
-              - cell "/dev/ttyS4" [ref=e442]
-              - cell [ref=e443]
-              - cell [ref=e444]
-              - cell [ref=e445]
-              - cell "n/a" [ref=e446]
-            - row "/dev/ttyS31 n/a" [ref=e447] [cursor=pointer]:
-              - cell "/dev/ttyS31" [ref=e448]
-              - cell [ref=e449]
-              - cell [ref=e450]
-              - cell [ref=e451]
-              - cell "n/a" [ref=e452]
-            - row "/dev/ttyS30 n/a" [ref=e453] [cursor=pointer]:
-              - cell "/dev/ttyS30" [ref=e454]
-              - cell [ref=e455]
-              - cell [ref=e456]
-              - cell [ref=e457]
-              - cell "n/a" [ref=e458]
-            - row "/dev/ttyS29 n/a" [ref=e459] [cursor=pointer]:
-              - cell "/dev/ttyS29" [ref=e460]
-              - cell [ref=e461]
-              - cell [ref=e462]
-              - cell [ref=e463]
-              - cell "n/a" [ref=e464]
-        - button "Refresh Ports" [ref=e466] [cursor=pointer]
-      - generic [ref=e467]:
-        - generic [ref=e468]:
-          - generic [ref=e469]: "Bootloader Baud:"
-          - combobox "Bootloader Baud" [ref=e470] [cursor=pointer]:
+        - generic [ref=e365]: 📋 Requesting all parameters from flight controller…
+        - generic [ref=e366]: 11:54:27
+  - generic [ref=e367]:
+    - generic [ref=e368]:
+      - generic [ref=e369]:
+        - generic [ref=e370]: "Select Serial Port:"
+        - table [ref=e372]:
+          - rowgroup [ref=e373]:
+            - row "Port Board ID Manufacturer Brand Description" [ref=e374]:
+              - columnheader "Port" [ref=e375]
+              - columnheader "Board ID" [ref=e376]
+              - columnheader "Manufacturer" [ref=e377]
+              - columnheader "Brand" [ref=e378]
+              - columnheader "Description" [ref=e379]
+          - rowgroup [ref=e380]:
+            - row "/dev/ttyS4 n/a" [ref=e381] [cursor=pointer]:
+              - cell "/dev/ttyS4" [ref=e382]
+              - cell [ref=e383]
+              - cell [ref=e384]
+              - cell [ref=e385]
+              - cell "n/a" [ref=e386]
+            - row "/dev/ttyS31 n/a" [ref=e387] [cursor=pointer]:
+              - cell "/dev/ttyS31" [ref=e388]
+              - cell [ref=e389]
+              - cell [ref=e390]
+              - cell [ref=e391]
+              - cell "n/a" [ref=e392]
+            - row "/dev/ttyS30 n/a" [ref=e393] [cursor=pointer]:
+              - cell "/dev/ttyS30" [ref=e394]
+              - cell [ref=e395]
+              - cell [ref=e396]
+              - cell [ref=e397]
+              - cell "n/a" [ref=e398]
+            - row "/dev/ttyS29 n/a" [ref=e399] [cursor=pointer]:
+              - cell "/dev/ttyS29" [ref=e400]
+              - cell [ref=e401]
+              - cell [ref=e402]
+              - cell [ref=e403]
+              - cell "n/a" [ref=e404]
+        - button "Refresh Ports" [ref=e406] [cursor=pointer]
+      - generic [ref=e407]:
+        - generic [ref=e408]:
+          - generic [ref=e409]: "Bootloader Baud:"
+          - combobox "Bootloader Baud" [ref=e410] [cursor=pointer]:
             - option "115200" [selected]
             - option "57600"
             - option "38400"
             - option "9600"
-        - generic [ref=e471]:
-          - generic [ref=e472]: "Flash Baud:"
-          - combobox "Flash Baud" [ref=e473] [cursor=pointer]:
+        - generic [ref=e411]:
+          - generic [ref=e412]: "Flash Baud:"
+          - combobox "Flash Baud" [ref=e413] [cursor=pointer]:
             - option "115200" [selected]
             - option "57600"
             - option "38400"
             - option "9600"
-      - generic [ref=e474]:
-        - generic [ref=e475]: "Flashing Log:"
-        - generic [ref=e477]: → Ready
-      - generic [ref=e478]:
-        - generic [ref=e480]: "Erase Progress:"
-        - generic [ref=e483]: "Write Progress:"
-    - generic [ref=e485]:
-      - generic [ref=e486]: Select Drone Type
-      - generic [ref=e487]:
-        - generic [ref=e488] [cursor=pointer]:
-          - img "Ti-Shadow" [ref=e490]
+      - generic [ref=e414]:
+        - generic [ref=e415]: "Flashing Log:"
+        - generic [ref=e417]: → Ready
+      - generic [ref=e418]:
+        - generic [ref=e420]: "Erase Progress:"
+        - generic [ref=e423]: "Write Progress:"
+    - generic [ref=e425]:
+      - generic [ref=e426]: Select Drone Type
+      - generic [ref=e427]:
+        - generic [ref=e428] [cursor=pointer]:
+          - img "Ti-Shadow" [ref=e430]
+          - generic [ref=e431]:
+            - generic [ref=e432]: Ti-Shadow
+            - generic [ref=e433]: Surveillance Drone
+          - generic [ref=e434]:
+            - button "UNLOCK" [ref=e435]:
+              - img [ref=e436]
+              - text: UNLOCK
+            - button "INSTALL" [ref=e439]:
+              - img [ref=e440]
+              - text: INSTALL
+        - generic [ref=e442] [cursor=pointer]:
+          - img "Spider Drone" [ref=e444]
+          - generic [ref=e445]:
+            - generic [ref=e446]: Spider Drone
+            - generic [ref=e447]: Hexacopter Drone
+          - generic [ref=e448]:
+            - button "UNLOCK" [ref=e449]:
+              - img [ref=e450]
+              - text: UNLOCK
+            - button "INSTALL" [ref=e453]:
+              - img [ref=e454]
+              - text: INSTALL
+        - generic [ref=e456] [cursor=pointer]:
+          - img "Kala Drone" [ref=e458]
+          - generic [ref=e459]:
+            - generic [ref=e460]: Kala Drone
+            - generic [ref=e461]: Payload Dropping Drone
+          - generic [ref=e462]:
+            - button "UNLOCK" [ref=e463]:
+              - img [ref=e464]
+              - text: UNLOCK
+            - button "INSTALL" [ref=e467]:
+              - img [ref=e468]
+              - text: INSTALL
+        - generic [ref=e470] [cursor=pointer]:
+          - img "Palyanka Drone" [ref=e472]
+          - generic [ref=e473]:
+            - generic [ref=e474]: Palyanka Drone
+            - generic [ref=e475]: Air Taxi
+          - generic [ref=e476]:
+            - button "UNLOCK" [ref=e477]:
+              - img [ref=e478]
+              - text: UNLOCK
+            - button "INSTALL" [ref=e481]:
+              - img [ref=e482]
+              - text: INSTALL
+        - generic [ref=e484] [cursor=pointer]:
+          - img "Chakravyuh Drone" [ref=e486]
+          - generic [ref=e487]:
+            - generic [ref=e488]: Chakrayukhan Drone
+            - generic [ref=e489]: Heavy Payload Cargo Drone
+            - generic [ref=e490]: Industrial-grade heavy lifting
           - generic [ref=e491]:
-            - generic [ref=e492]: Ti-Shadow
-            - generic [ref=e493]: Surveillance Drone
-          - generic [ref=e494]:
-            - button "UNLOCK" [ref=e495]:
-              - img [ref=e496]
+            - button "UNLOCK" [ref=e492]:
+              - img [ref=e493]
               - text: UNLOCK
-            - button "INSTALL" [ref=e499]:
-              - img [ref=e500]
+            - button "INSTALL" [ref=e496]:
+              - img [ref=e497]
               - text: INSTALL
-        - generic [ref=e502] [cursor=pointer]:
-          - img "Spider Drone" [ref=e504]
-          - generic [ref=e505]:
-            - generic [ref=e506]: Spider Drone
-            - generic [ref=e507]: Hexacopter Drone
-          - generic [ref=e508]:
-            - button "UNLOCK" [ref=e509]:
-              - img [ref=e510]
-              - text: UNLOCK
-            - button "INSTALL" [ref=e513]:
-              - img [ref=e514]
-              - text: INSTALL
-        - generic [ref=e516] [cursor=pointer]:
-          - img "Kala Drone" [ref=e518]
-          - generic [ref=e519]:
-            - generic [ref=e520]: Kala Drone
-            - generic [ref=e521]: Payload Dropping Drone
-          - generic [ref=e522]:
-            - button "UNLOCK" [ref=e523]:
-              - img [ref=e524]
-              - text: UNLOCK
-            - button "INSTALL" [ref=e527]:
-              - img [ref=e528]
-              - text: INSTALL
-        - generic [ref=e530] [cursor=pointer]:
-          - img "Palyanka Drone" [ref=e532]
-          - generic [ref=e533]:
-            - generic [ref=e534]: Palyanka Drone
-            - generic [ref=e535]: Air Taxi
-          - generic [ref=e536]:
-            - button "UNLOCK" [ref=e537]:
-              - img [ref=e538]
-              - text: UNLOCK
-            - button "INSTALL" [ref=e541]:
-              - img [ref=e542]
-              - text: INSTALL
-        - generic [ref=e544] [cursor=pointer]:
-          - img "Chakravyuh Drone" [ref=e546]
-          - generic [ref=e547]:
-            - generic [ref=e548]: Chakrayukhan Drone
-            - generic [ref=e549]: Heavy Payload Cargo Drone
-            - generic [ref=e550]: Industrial-grade heavy lifting
-          - generic [ref=e551]:
-            - button "UNLOCK" [ref=e552]:
-              - img [ref=e553]
-              - text: UNLOCK
-            - button "INSTALL" [ref=e556]:
-              - img [ref=e557]
-              - text: INSTALL
-  - text: "🟢 UDP :14550 🔴 Serial: not found"
+  - text: "🟢 UDP :14550 🟢 Serial: \\\\.\\COM3"
 ```

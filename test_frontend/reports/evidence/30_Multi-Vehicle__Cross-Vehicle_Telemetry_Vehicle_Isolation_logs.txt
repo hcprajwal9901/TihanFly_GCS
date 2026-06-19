@@ -1,12 +1,5 @@
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE1', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE2', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE3', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE4', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE5', 'param_index': -1}
-[Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 3, 'target_component': 1, 'param_id': 'FLTMODE6', 'param_index': -1}
 [MultiVehicleTest] WSL proxy reset.
 [MultiVehicleTest] Verifying telemetry isolation...
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_REQUEST_READ fields={'mavpackettype': 'PARAM_REQUEST_READ', 'target_system': 2, 'target_component': 1, 'param_id': '', 'param_index': 770}
 [MultiVehicleTest] Telemetry for SysID 2 was successfully isolated (did not write to SysID 1).
+[Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [MultiVehicleTest] Telemetry for SysID 1 correctly updated UI store.

@@ -2,7 +2,7 @@
 [SITLTest] Disabling pre-arm checks and throttle/GCS failsafes for test stability...
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'ARMING_CHECK', 'param_value': 0.0, 'param_type': 9}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'FS_THR_ENABLE', 'param_value': 0.0, 'param_type': 9}
-[Proxy] [Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'FS_GCS_ENABLE', 'param_value': 0.0, 'param_type': 9}
+[Proxy DBG] GCS packet parsed: msg_type=PARAM_SET fields={'mavpackettype': 'PARAM_SET', 'target_system': 1, 'target_component': 1, 'param_id': 'FS_GCS_ENABLE', 'param_value': 0.0, 'param_type': 9}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [Proxy] [Proxy DBG] GCS packet parsed: msg_type=HEARTBEAT fields={'mavpackettype': 'HEARTBEAT', 'type': 6, 'autopilot': 8, 'base_mode': 0, 'custom_mode': 0, 'system_status': 4, 'mavlink_version': 3}
 [SITLTest] Autopilot test parameters applied.

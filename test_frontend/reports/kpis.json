@@ -2,17 +2,17 @@
   "build": "Local-KPI",
   "metrics": {
     "reconnect_time_ms": {
-      "measured": 1050,
+      "measured": 1030,
       "target": 2000,
       "pass": true
     },
     "ack_timeout_detection_ms": {
-      "measured": 4821,
+      "measured": 4740,
       "target": 5000,
       "pass": true
     },
     "geofence_warning_latency_ms": {
-      "measured": 240,
+      "measured": 408,
       "target": 1000,
       "pass": true
     }
@@ -32,34 +32,34 @@
       "GLOBAL_POSITION_INT",
       "HEARTBEAT",
       "PARAM_SET",
-      "COMMAND_LONG",
-      "COMMAND_ACK",
       "STATUSTEXT",
+      "COMMAND_ACK",
+      "COMMAND_LONG",
+      "MISSION_ACK",
       "MISSION_ITEM_INT",
-      "MISSION_COUNT",
-      "MISSION_ACK"
+      "MISSION_COUNT"
     ],
     "observed_optional": [
-      "ATTITUDE",
       "VFR_HUD",
-      "GPS_RAW_INT",
-      "SYS_STATUS"
+      "ATTITUDE",
+      "SYS_STATUS",
+      "GPS_RAW_INT"
     ],
-    "packet_loss_pct": 1.8788627935723117,
-    "packets_received": 3969,
-    "packets_lost": 76,
+    "packet_loss_pct": 0.8737283064033513,
+    "packets_received": 8282,
+    "packets_lost": 73,
     "crc_failures": 0,
-    "sequence_gaps": 76,
+    "sequence_gaps": 73,
     "duplicate_sequences": 0,
-    "out_of_order_sequences": 3,
+    "out_of_order_sequences": 2,
     "heartbeat_hz": 1,
-    "gps_hz": 4,
-    "sys_status_hz": 4,
-    "attitude_hz": 4,
-    "telemetry_hz": 115,
-    "jitter_ms": 321.75302505493164,
-    "arm_latency_ms": 3.142118453979492,
-    "mode_latency_ms": 3.6504268646240234,
+    "gps_hz": 10,
+    "sys_status_hz": 10,
+    "attitude_hz": 18.2,
+    "telemetry_hz": 282.2,
+    "jitter_ms": 348.7677574157715,
+    "arm_latency_ms": 1.9359588623046875,
+    "mode_latency_ms": 7.2879791259765625,
     "last_observed_sysid": 1,
     "last_observed_compid": 1,
     "latest_gcs_endpoint": "172.26.32.1:14550",
@@ -67,16 +67,16 @@
     "download_item_count": 3,
     "sequence_stats": {
       "SITL_TO_GCS": {
-        "gaps": 0,
+        "gaps": 1,
         "duplicates": 0,
         "out_of_order": 0,
-        "received": 3901
+        "received": 8219
       },
       "GCS_TO_SITL": {
-        "gaps": 76,
+        "gaps": 72,
         "duplicates": 0,
-        "out_of_order": 3,
-        "received": 68
+        "out_of_order": 2,
+        "received": 63
       }
     }
   },

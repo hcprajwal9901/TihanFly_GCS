@@ -1,5 +1,5 @@
 [MockServer] Received WS payload: {
-  id: [33m1781848566688[39m,
+  id: [33m1781859019027[39m,
   type: [32m'command'[39m,
   command: [32m'ARM'[39m,
   params: {},

@@ -91,7 +91,7 @@ class SITLOrchestrator {
       // 2. Spawn MAVProxy directly to bridge SITL and GCS proxy
       const masterPort = 5760 + 10 * i;
       const sitlInPort = 5501 + 10 * i;
-      const mavproxyCmd = `wsl bash -c "source ~/venv-ardupilot/bin/activate && /home/hcprajwal/venv-ardupilot/bin/mavproxy.py --daemon --retries 5 --master tcp:127.0.0.1:${masterPort} --sitl 127.0.0.1:${sitlInPort} --out 127.0.0.1:${sitlPort}"`;
+      const mavproxyCmd = `wsl bash -c "source ~/venv-ardupilot/bin/activate && /home/hcprajwal/venv-ardupilot/bin/mavproxy.py --daemon --retries 5 --streamrate=10 --master tcp:127.0.0.1:${masterPort} --sitl 127.0.0.1:${sitlInPort} --out 127.0.0.1:${sitlPort}"`;
       console.log(`[Orchestrator] Spawning MAVProxy vehicle ${i+1}: ${mavproxyCmd}`);
       
       const proxyProc = spawn(mavproxyCmd, {

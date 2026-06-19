@@ -1,5 +1,5 @@
 [MockServer] Received WS payload: {
-  id: [33m1781848556865[39m,
+  id: [33m1781859009110[39m,
   type: [32m'command'[39m,
   command: [32m'ARM'[39m,
   params: {},
@@ -7,7 +7,7 @@
 }
 [MockServer] Processing command: ARM (sysid: 1)
 [MockServer] Received WS payload: {
-  id: [33m1781848557416[39m,
+  id: [33m1781859009670[39m,
   type: [32m'command'[39m,
   command: [32m'SET_MODE'[39m,
   params: { mode: [32m'GUIDED'[39m },
@@ -15,7 +15,7 @@
 }
 [MockServer] Processing command: SET_MODE (sysid: 1)
 [MockServer] Received WS payload: {
-  id: [33m1781848557973[39m,
+  id: [33m1781859010063[39m,
   type: [32m'command'[39m,
   command: [32m'SET_MODE'[39m,
   params: { mode: [32m'Guided'[39m },
@@ -23,7 +23,7 @@
 }
 [MockServer] Processing command: SET_MODE (sysid: 1)
 [MockServer] Received WS payload: {
-  id: [33m1781848558625[39m,
+  id: [33m1781859010885[39m,
   type: [32m'command'[39m,
   command: [32m'ARM'[39m,
   params: {},
@@ -31,7 +31,7 @@
 }
 [MockServer] Processing command: ARM (sysid: 1)
 [MockServer] Received WS payload: {
-  id: [33m1781848560921[39m,
+  id: [33m1781859013185[39m,
   type: [32m'command'[39m,
   command: [32m'TAKEOFF'[39m,
   params: { altitude: [33m10[39m, speed: [33m2[39m },
@@ -39,7 +39,7 @@
 }
 [MockServer] Processing command: TAKEOFF (sysid: 1)
 [MockServer] Received WS payload: {
-  id: [33m1781848561293[39m,
+  id: [33m1781859013865[39m,
   type: [32m'command'[39m,
   command: [32m'RTL'[39m,
   params: {},
@@ -47,7 +47,7 @@
 }
 [MockServer] Processing command: RTL (sysid: 1)
 [MockServer] Received WS payload: {
-  id: [33m1781848561538[39m,
+  id: [33m1781859014146[39m,
   type: [32m'command'[39m,
   command: [32m'DISARM'[39m,
   params: {},
