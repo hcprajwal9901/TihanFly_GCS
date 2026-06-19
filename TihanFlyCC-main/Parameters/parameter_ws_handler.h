@@ -118,7 +118,19 @@ inline bool handle_param_ws_command(const std::string& type,
             int req_sysid = j["sysid"].get<int>();
             if (req_sysid > 0 && req_sysid != pm.cacheKey())
             {
-                pm.setVehicleInfo(req_sysid, 1);
+                int real_sysid = req_sysid;
+                int compid = 1;
+                extern VehicleManager* g_vehicle_manager;
+                if (g_vehicle_manager)
+                {
+                    auto tv = g_vehicle_manager->get_vehicle_by_ui_sysid(req_sysid);
+                    if (tv)
+                    {
+                        real_sysid = tv->sysid();
+                        compid = tv->compid();
+                    }
+                }
+                pm.setVehicleInfo(real_sysid, compid);
                 pm.setCacheKey(req_sysid);
                 // If this is a request to get all cached parameters, or if we're setting a parameter,
                 // load the cache for the new vehicle. If no cache exists, trigger a fresh load.
@@ -132,7 +144,19 @@ inline bool handle_param_ws_command(const std::string& type,
             }
             else if (req_sysid > 0)
             {
-                pm.setVehicleInfo(req_sysid, 1);
+                int real_sysid = req_sysid;
+                int compid = 1;
+                extern VehicleManager* g_vehicle_manager;
+                if (g_vehicle_manager)
+                {
+                    auto tv = g_vehicle_manager->get_vehicle_by_ui_sysid(req_sysid);
+                    if (tv)
+                    {
+                        real_sysid = tv->sysid();
+                        compid = tv->compid();
+                    }
+                }
+                pm.setVehicleInfo(real_sysid, compid);
                 pm.setCacheKey(req_sysid);
             }
         }

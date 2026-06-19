@@ -455,6 +455,19 @@ document.addEventListener('DOMContentLoaded', () => {
         flightModeSelector.setMode(e.detail.mode);
     });
 
+    // Sync UI controls state on active vehicle selection change
+    window.addEventListener('vehicle_selected', (e) => {
+        const sysid = e.detail.sysid;
+        const targetSysId = sysid === 0 ? (window._primarySysId || 1) : sysid;
+        if (window.latestVehiclesState) {
+            const v = window.latestVehiclesState.find(x => x.sysid === targetSysId);
+            if (v) {
+                armToggle.setArmedState(!!v.armed);
+                flightModeSelector.setMode(v.mode || 'STABILIZE');
+            }
+        }
+    });
+
     // ── Expose globals ─────────────────────────────────────────────────────
     window.FlightControls     = flightControls;
     window.ArmControl         = armToggle;

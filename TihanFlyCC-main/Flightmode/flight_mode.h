@@ -92,7 +92,7 @@ public:
     void setTransportCallback(std::function<void(const mavlink_message_t&)> cb);
 
     // ── MAVLink ingress ───────────────────────────────────────────────────────
-    void processMessage(const mavlink_message_t& msg);
+    void processMessage(const mavlink_message_t& msg, int ui_sysid = -1);
 
     /**
      * Push current mode + PWM state immediately to all WebSocket clients.
@@ -107,6 +107,7 @@ public:
      * NOT from inside the heartbeat handler where transport may not be ready.
      */
     void requestParams();
+    void requestParams(std::function<void(const mavlink_message_t&)> transport_cb, int sysid, int compid);
 
     /**
      * Reset the params-requested flag so requestParams() will fire again.

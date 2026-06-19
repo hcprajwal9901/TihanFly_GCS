@@ -15,6 +15,7 @@
 // ── State ────────────────────────────────────────────────────────────────────
 window.selectedSysId = 1;
 window.activeSysids = [];
+window.latestVehiclesState = [];
 let _dynLinks = [];   // copy of dyn_udp_links from last status packet
 
 function setSelectedSysId(id) {
@@ -111,6 +112,8 @@ function updateVehicleSelector(vehicles, dynLinks) {
         if (item !== null && typeof item === 'object') return item;
         return { sysid: item };
     }).filter(v => typeof v.sysid === 'number' && v.sysid > 0);
+
+    window.latestVehiclesState = list;
 
     // ── Hidden <select> (legacy compat) ──────────────────────────────────────
     const sel = document.getElementById('vehicleSelector');
