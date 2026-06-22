@@ -1,0 +1,15 @@
+{
+  "tester": "H C Prajwal",
+  "environment": "Windows 11 Pro (build 22631)",
+  "build_version": "v1.1.0-RC3",
+  "electron_version": "29.0.0",
+  "node_version": "20.11.0",
+  "compiler_version": "MSVC 2022 (C++17)",
+  "ardupilot_version": "ArduPilot Copter 4.5.1",
+  "mavproxy_version": "1.8.64",
+  "hardware_specs": "Intel Core i7-13700H @ 2.4GHz, 16GB LPDDR5 RAM, 512GB NVMe SSD",
+  "network_config": "Localhost loopback (127.0.0.1) & WSL2 Virtual Ethernet Adapter",
+  "execution_date": "2026-06-22",
+  "execution_mode": "HYBRID",
+  "git_commit": "34cf857"
+}

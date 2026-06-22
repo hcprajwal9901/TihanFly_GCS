@@ -790,3 +790,26 @@ div .compass-telemetry-container,
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(230, 0, 126, 0.7);
 }
+
+/* ============================================================================
+   HIGH CONTRAST THEME STYLING
+   ============================================================================ */
+body.high-contrast-theme {
+    filter: contrast(1.15) saturate(1.1);
+}
+body.high-contrast-theme .header-bar {
+    background: #ffffff !important;
+    border-bottom: 4px solid #000000 !important;
+}
+body.high-contrast-theme .indicator-text {
+    color: #000000 !important;
+    font-weight: 800 !important;
+}
+body.high-contrast-theme .dropdown-menu-strip {
+    background: #000000 !important;
+    border-top: 3px solid #ffffff !important;
+}
+body.high-contrast-theme .dropdown-menu-btn {
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}

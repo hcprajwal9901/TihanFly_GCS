@@ -37,11 +37,16 @@ class TMap {
     // ========================================================================
     
     loadTiles(useOffline) {
+        this.useOffline = useOffline;
+        if (this.tileLayer) {
+            this.map.removeLayer(this.tileLayer);
+        }
         if (useOffline) {
-            L.tileLayer('tiles/{z}/{x}/{y}.png', {
+            this.tileLayer = L.tileLayer('tiles/{z}/{x}/{y}.png', {
                 maxZoom: 18,
                 attribution: 'Offline Map Data'
-            }).addTo(this.map);
+            });
+            this.tileLayer.addTo(this.map);
         } else {
             const GoogleSatellite = L.TileLayer.extend({
                 getTileUrl: function (coords) {
@@ -56,10 +61,51 @@ class TMap {
                 }
             });
 
-            new GoogleSatellite('', {
+            this.tileLayer = new GoogleSatellite('', {
                 maxZoom: 22,
                 attribution: '\u00a9 Google'
-            }).addTo(this.map);
+            });
+            this.tileLayer.addTo(this.map);
+        }
+    }
+
+    setTheme(themeName) {
+        console.log(`[TMap] Setting map theme to: ${themeName}`);
+        this.currentTheme = themeName;
+        
+        // Remove existing theme layer if any
+        if (this.themeLayer) {
+            this.map.removeLayer(this.themeLayer);
+            this.themeLayer = null;
+        }
+
+        if (themeName === 'high-contrast') {
+            const isOffline = this.useOffline || !navigator.onLine;
+            if (isOffline) {
+                console.warn('[TMap] Offline mode active. Falling back to local offline tiles for High Contrast theme.');
+                // Revert to default offline tiles
+                this.loadTiles(true);
+            } else {
+                console.log('[TMap] Network available. Loading online high contrast tiles.');
+                try {
+                    // Try to load online high contrast stylesheet layer
+                    this.themeLayer = L.tileLayer('https://{s}.tile.jawg.io/jawg-contrast/{z}/{x}/{y}{r}.png?access-token=dummy', {
+                        maxZoom: 18,
+                        attribution: 'Jawg Contrast'
+                    });
+                    this.themeLayer.addTo(this.map);
+                    // Remove standard tile layer to show theme layer
+                    if (this.tileLayer) {
+                        this.map.removeLayer(this.tileLayer);
+                    }
+                } catch (error) {
+                    console.error('[TMap] Error loading online contrast layer, falling back to offline tiles:', error);
+                    this.loadTiles(true);
+                }
+            }
+        } else {
+            // Restore default tiles
+            this.loadTiles(this.useOffline);
         }
     }
 

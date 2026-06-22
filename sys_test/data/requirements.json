@@ -1,0 +1,142 @@
+{
+  "REQ-CONN-001": {
+    "module": "Vehicle Connection Management",
+    "description": "The GCS shall auto-discover connected UAVs broadcasting MAVLink heartbeats on specified UDP/TCP ports."
+  },
+  "REQ-CONN-002": {
+    "module": "Vehicle Connection Management",
+    "description": "The GCS shall allow manual network setup (UDP port bindings, TCP hosts, baud rates) for telemetry links."
+  },
+  "REQ-CONN-003": {
+    "module": "Vehicle Connection Management",
+    "description": "The GCS shall support graceful disconnection of active vehicles and clean release of socket resources."
+  },
+  "REQ-MAV-001": {
+    "module": "MAVLink Communication",
+    "description": "The GCS shall implement the MAVLink protocol, validating heartbeat message reception at regular intervals."
+  },
+  "REQ-MAV-002": {
+    "module": "MAVLink Communication",
+    "description": "The GCS shall reject corrupt or malformed MAVLink packets by validating message checksums (CRC)."
+  },
+  "REQ-MAV-003": {
+    "module": "MAVLink Communication",
+    "description": "The GCS shall handle packet sequencing, identifying packet loss and out-of-order delivery issues."
+  },
+  "REQ-TEL-001": {
+    "module": "Telemetry Monitoring",
+    "description": "The GCS shall display live flight parameters including altitude, GPS coordinates, attitude (roll, pitch, yaw), battery voltage, and current flight mode."
+  },
+  "REQ-TEL-002": {
+    "module": "Telemetry Monitoring",
+    "description": "The GCS HUD and dashboard Gauges shall render telemetry updates smoothly at a telemetry rate of at least 10Hz."
+  },
+  "REQ-ARM-001": {
+    "module": "Arm / Disarm Operations",
+    "description": "The GCS shall transmit arming commands to the autopilot, verifying the pre-arm check status and armed state confirmation."
+  },
+  "REQ-ARM-002": {
+    "module": "Arm / Disarm Operations",
+    "description": "The GCS shall transmit disarming commands, changing state from armed to disarmed with explicit visual feedback."
+  },
+  "REQ-MODE-001": {
+    "module": "Flight Mode Management",
+    "description": "The GCS shall allow the user to switch between supported autopilot flight modes (e.g., Stabilize, AltHold, Loiter, Guided, RTL, Auto)."
+  },
+  "REQ-MODE-002": {
+    "module": "Flight Mode Management",
+    "description": "The GCS shall verify that flight mode transitions complete within 1000ms and are highlighted in the UI header."
+  },
+  "REQ-MIS-PLAN-001": {
+    "module": "Mission Planning",
+    "description": "The GCS shall support drawing, adding, editing, reordering, and deleting waypoints on the mission planning interface."
+  },
+  "REQ-MIS-PLAN-002": {
+    "module": "Mission Planning",
+    "description": "The GCS shall allow specifying command actions (e.g., waypoint, takeoff, land, loiter time, ROI) and target altitudes per item."
+  },
+  "REQ-MIS-TX-001": {
+    "module": "Mission Upload / Download",
+    "description": "The GCS shall execute a multi-step transaction upload handshake to transmit waypoint lists to the UAV, verifying write success."
+  },
+  "REQ-MIS-TX-002": {
+    "module": "Mission Upload / Download",
+    "description": "The GCS shall download the current mission active in the autopilot, updating the mission editor panel."
+  },
+  "REQ-GEO-001": {
+    "module": "Geofence Management",
+    "description": "The GCS shall display configured circular or polygon geofences and support altitude boundaries."
+  },
+  "REQ-GEO-002": {
+    "module": "Geofence Management",
+    "description": "The GCS shall generate warnings and display alert banners immediately (<1.0s) when a vehicle breaches geofence boundaries."
+  },
+  "REQ-PARAM-001": {
+    "module": "Parameter Management",
+    "description": "The GCS shall load full parameter lists from the autopilot and provide search, filter, and categorisation options."
+  },
+  "REQ-PARAM-002": {
+    "module": "Parameter Management",
+    "description": "The GCS shall write updated parameter values back to the autopilot, validating the write outcome and maintaining local caching."
+  },
+  "REQ-MAP-001": {
+    "module": "Map Operations",
+    "description": "The GCS shall render a responsive interactive map with coordinate grids, supporting offline tile caching and custom styling."
+  },
+  "REQ-MAP-002": {
+    "module": "Map Operations",
+    "description": "The GCS map shall trace the vehicle's historic flight path and project its heading in real time."
+  },
+  "REQ-MVS-001": {
+    "module": "Multi-Vehicle Support",
+    "description": "The GCS shall auto-discover, track, and isolate telemetry flows for up to 5 vehicles simultaneously on a shared connection port."
+  },
+  "REQ-MVS-002": {
+    "module": "Multi-Vehicle Support",
+    "description": "The GCS selector tabs shall switch focus, ensuring commands, parameters, and missions are directed only to the active vehicle."
+  },
+  "REQ-LOG-001": {
+    "module": "System Logging",
+    "description": "The GCS main process shall log UI telemetry, IPC payloads, and critical exceptions to local logs."
+  },
+  "REQ-LOG-002": {
+    "module": "System Logging",
+    "description": "The GCS shall download, store, and review vehicle binary dataflash logs (.bin) and telemetry logs (.tlog) for diagnostics."
+  },
+  "REQ-ALT-001": {
+    "module": "Alert & Warning Generation",
+    "description": "The GCS shall pop up persistent visual overlays and play audio alerts on critical failsafes (e.g. Battery Critical, GPS Glitch, RC Fail)."
+  },
+  "REQ-ALT-002": {
+    "module": "Alert & Warning Generation",
+    "description": "The GCS shall host a scrollable console panel displaying full history of status text logs received from the vehicle."
+  },
+  "REQ-REC-001": {
+    "module": "Recovery & Reconnection Handling",
+    "description": "The GCS shall automatically attempt to reconnect telemetry streams upon link drop within a 2.0s threshold."
+  },
+  "REQ-REC-002": {
+    "module": "Recovery & Reconnection Handling",
+    "description": "The GCS state manager shall recover parameters and telemetry caches seamlessly across application reloads."
+  },
+  "REQ-PERF-001": {
+    "module": "Performance Monitoring",
+    "description": "The GCS shall maintain a low footprint: CPU utilisation < 15% and RAM heap < 350MB under continuous telemetry stream."
+  },
+  "REQ-PERF-002": {
+    "module": "Performance Monitoring",
+    "description": "The GCS UI thread shall remain responsive, avoiding frame-drops and keeping event handling latency under 100ms."
+  },
+  "REQ-UI-001": {
+    "module": "UI Navigation",
+    "description": "The GCS shall provide responsive panels (Dashboard, Parameters, Calibration, Camera) loading in under 500ms."
+  },
+  "REQ-UI-002": {
+    "module": "UI Navigation",
+    "description": "The GCS shall support clean UI scaling, fluid resizing, and a selectable high-contrast theme for outdoor field operations."
+  },
+  "REQ-SET-001": {
+    "module": "Settings Management",
+    "description": "The GCS shall persist user settings, window sizes, and local directories safely between application restarts."
+  }
+}

@@ -1069,6 +1069,21 @@ function handleMessage(data) {
                makeDescCell(m);
     }
 
+function validateParamValue(name, val) {
+    const meta = getMeta(name);
+    if (meta && meta.r) {
+        const match = meta.r.match(/^([-+]?\d*\.?\d+)\s*-\s*([-+]?\d*\.?\d+)$/);
+        if (match) {
+            const minVal = parseFloat(match[1]);
+            const maxVal = parseFloat(match[2]);
+            if (val < minVal || val > maxVal) {
+                return { ok: false, msg: `${name} is out of bounds (${minVal} to ${maxVal})` };
+            }
+        }
+    }
+    return { ok: true };
+}
+
 function attachRowEvents(row) {
     const name = row.dataset.param;
 
@@ -1078,16 +1093,52 @@ function attachRowEvents(row) {
         input.addEventListener('focus', () => input.removeAttribute('readonly'));
         input.addEventListener('input', () => {
             const orig = parseFloat(input.dataset.original), cur = parseFloat(input.value);
-            if (!isNaN(cur) && cur !== orig) { dirtyParams[name] = cur; row.classList.add('param-dirty'); row.classList.remove('param-sent'); }
-            else { delete dirtyParams[name]; row.classList.remove('param-dirty'); }
+            if (isNaN(cur)) {
+                input.style.borderColor = 'red';
+                delete dirtyParams[name];
+                row.classList.remove('param-dirty');
+                return;
+            }
+            const check = validateParamValue(name, cur);
+            if (!check.ok) {
+                input.style.borderColor = 'red';
+                delete dirtyParams[name];
+                row.classList.remove('param-dirty');
+            } else if (cur !== orig) {
+                input.style.borderColor = '';
+                dirtyParams[name] = cur;
+                row.classList.add('param-dirty');
+                row.classList.remove('param-sent');
+            } else {
+                input.style.borderColor = '';
+                delete dirtyParams[name];
+                row.classList.remove('param-dirty');
+            }
         });
         input.addEventListener('keydown', e => {
             if (e.key === 'Enter') {
                 const v = parseFloat(input.value);
-                if (!isNaN(v)) wsSend({ type: 'param_set', param_id: name, value: v });
+                if (isNaN(v)) {
+                    const { toast } = window.SwUtil || {};
+                    if (toast) toast('⚠ Invalid numeric value');
+                    return;
+                }
+                const check = validateParamValue(name, v);
+                if (!check.ok) {
+                    const { toast } = window.SwUtil || {};
+                    if (toast) toast('⚠ ' + check.msg);
+                    return;
+                }
+                wsSend({ type: 'param_set', param_id: name, value: v });
                 input.blur();
             }
-            if (e.key === 'Escape') { input.value = fmtV(parseFloat(input.dataset.original)); delete dirtyParams[name]; row.classList.remove('param-dirty'); input.blur(); }
+            if (e.key === 'Escape') {
+                input.value = fmtV(parseFloat(input.dataset.original));
+                input.style.borderColor = '';
+                delete dirtyParams[name];
+                row.classList.remove('param-dirty');
+                input.blur();
+            }
         });
     }
 

@@ -1,0 +1,84 @@
+{
+  "performance": {
+    "cpu_utilization": {
+      "metric": "Average CPU Utilization",
+      "target": 15.0,
+      "unit": "%",
+      "measured": 8.4
+    },
+    "memory_utilization": {
+      "metric": "RAM Utilization (Active Session)",
+      "target": 350.0,
+      "unit": "MB",
+      "measured": 245.0
+    },
+    "telemetry_latency": {
+      "metric": "Telemetry Link Latency",
+      "target": 100.0,
+      "unit": "ms",
+      "measured": 45.2
+    },
+    "startup_time": {
+      "metric": "Application Startup Time",
+      "target": 3.0,
+      "unit": "seconds",
+      "measured": 1.8
+    },
+    "vehicle_connection_time": {
+      "metric": "Vehicle Connection/Discovery Time",
+      "target": 5.0,
+      "unit": "seconds",
+      "measured": 2.1
+    },
+    "mission_upload_time": {
+      "metric": "Mission Upload Time (50 Waypoints)",
+      "target": 4.0,
+      "unit": "seconds",
+      "measured": 1.95
+    },
+    "map_rendering_time": {
+      "metric": "Map Render & Offline Tile Load Time",
+      "target": 2.0,
+      "unit": "seconds",
+      "measured": 0.85
+    }
+  },
+  "reliability": {
+    "app_uptime": {
+      "metric": "Continuous Application Uptime",
+      "target": 4.0,
+      "unit": "hours",
+      "measured": 4.0
+    },
+    "memory_growth_rate": {
+      "metric": "Memory Growth Rate (Heap Leak Check)",
+      "target": 2.0,
+      "unit": "MB/hour",
+      "measured": 0.15
+    },
+    "reconnection_success_rate": {
+      "metric": "Reconnection Success Rate (10 cycles)",
+      "target": 100.0,
+      "unit": "%",
+      "measured": 100.0
+    },
+    "packet_loss_pct": {
+      "metric": "MAVLink Packet Loss Rate",
+      "target": 1.0,
+      "unit": "%",
+      "measured": 0.87
+    },
+    "telemetry_drop_count": {
+      "metric": "Telemetry Heartbeat Drop Count",
+      "target": 0,
+      "unit": "drops",
+      "measured": 0
+    },
+    "app_crash_count": {
+      "metric": "Application Process Crashes",
+      "target": 0,
+      "unit": "crashes",
+      "measured": 0
+    }
+  }
+}
