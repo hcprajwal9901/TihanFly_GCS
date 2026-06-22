@@ -371,6 +371,11 @@ window.CommLink = (function () {
                 if (btn) { btn.disabled = false; btn.textContent = '🔗 Connect'; }
                 return;
             }
+            if (isNaN(port) || port < 1 || port > 65535) {
+                _setStatus('error', 'Invalid port range. Value must be between 1 and 65535.');
+                if (btn) { btn.disabled = false; btn.textContent = '🔗 Connect'; }
+                return;
+            }
             _ws_send({ type: 'manual_connect', conn_type: 'tcp', ip, port });
 
         } else {  // UDP
@@ -378,8 +383,8 @@ window.CommLink = (function () {
             const remoteIp   = (document.getElementById('clIpInput')?.value || '').trim() || '127.0.0.1';
             const remotePort = parseInt(document.getElementById('clPortInput')?.value) || 0;
 
-            if (!listenPort) {
-                _setStatus('error', 'Enter the GCS Listen Port (e.g. 11040).');
+            if (isNaN(listenPort) || listenPort < 1024 || listenPort > 65535) {
+                _setStatus('error', 'Invalid port range. Value must be between 1024 and 65535.');
                 if (btn) { btn.disabled = false; btn.textContent = '🔗 Connect'; }
                 return;
             }

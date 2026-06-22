@@ -1075,6 +1075,25 @@ function initializeUIAppearance() {
         });
         makeDraggable(consoleContainer);
     }
+
+    const toggleContrast = document.getElementById('toggleContrastTheme');
+    if (toggleContrast) {
+        toggleContrast.addEventListener('change', (e) => {
+            const isHighContrast = e.target.checked;
+            console.log(`[UI] High Contrast theme toggled: ${isHighContrast}`);
+            if (isHighContrast) {
+                document.body.classList.add('high-contrast-theme');
+                if (window.tmap) {
+                    window.tmap.setTheme('high-contrast');
+                }
+            } else {
+                document.body.classList.remove('high-contrast-theme');
+                if (window.tmap) {
+                    window.tmap.setTheme('default');
+                }
+            }
+        });
+    }
 }
 
 // ============================================================================
