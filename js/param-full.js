@@ -1015,10 +1015,11 @@ function handleMessage(data) {
     }
 
     function makeValueCell(p, m) {
-        const val = p.value;
+        const droneVal = p.value;
+        const val = (dirtyParams[p.name] !== undefined) ? dirtyParams[p.name] : droneVal;
         if (m && m.options && m.options.length) {
             // Dropdown / combobox
-            let html = '<select class="param-val-select" data-original="'+val+'">';
+            let html = '<select class="param-val-select" data-original="'+droneVal+'">';
             let matched = false;
             m.options.forEach(o => {
                 const sel = (parseFloat(o.code) === parseFloat(val) || o.code === String(val)) ? ' selected' : '';
@@ -1029,7 +1030,7 @@ function handleMessage(data) {
             html += '</select>';
             return '<td class="fp-v fp-v-sel">'+html+'</td>';
         }
-        return '<td class="fp-v"><input class="param-val-input" data-original="'+val+'" value="'+fmtV(val)+'"></td>';
+        return '<td class="fp-v"><input class="param-val-input" data-original="'+droneVal+'" value="'+fmtV(val)+'"></td>';
     }
 
     function makeRangeCell(m) {
@@ -1166,6 +1167,7 @@ function attachRowEvents(row) {
         let row = tbody.querySelector('tr[data-param="'+CSS.escape(name)+'"]');
         if (!row) {
             row = document.createElement('tr'); row.dataset.param = name; row.innerHTML = makeRowHTML(p);
+            if (dirtyParams[name] !== undefined) row.classList.add('param-dirty');
             let ins = false;
             for (const r of Array.from(tbody.querySelectorAll('tr[data-param]')))
                 if (r.dataset.param > name) { tbody.insertBefore(row, r); ins = true; break; }
@@ -1174,14 +1176,27 @@ function attachRowEvents(row) {
         } else {
             // Update numeric input
             const inp = row.querySelector('.param-val-input');
-            if (inp && document.activeElement !== inp) { inp.value = fmtV(p.value); inp.dataset.original = p.value; }
+            if (inp && document.activeElement !== inp) {
+                const curVal = (dirtyParams[name] !== undefined) ? dirtyParams[name] : p.value;
+                inp.value = fmtV(curVal);
+                inp.dataset.original = p.value;
+                if (dirtyParams[name] !== undefined && parseFloat(dirtyParams[name]) === parseFloat(p.value)) {
+                    delete dirtyParams[name];
+                    row.classList.remove('param-dirty');
+                }
+            }
             // Update select
             const sel = row.querySelector('.param-val-select');
             if (sel && document.activeElement !== sel) {
                 sel.dataset.original = p.value;
+                const curVal = (dirtyParams[name] !== undefined) ? dirtyParams[name] : p.value;
+                if (dirtyParams[name] !== undefined && parseFloat(dirtyParams[name]) === parseFloat(p.value)) {
+                    delete dirtyParams[name];
+                    row.classList.remove('param-dirty');
+                }
                 // Try to select matching option
                 for (const opt of sel.options) {
-                    if (parseFloat(opt.value) === parseFloat(p.value)) { sel.value = opt.value; break; }
+                    if (parseFloat(opt.value) === parseFloat(curVal)) { sel.value = opt.value; break; }
                 }
             }
         }
@@ -1211,6 +1226,9 @@ function attachRowEvents(row) {
             row.dataset.param = p.name;
             row.style.display = match ? '' : 'none';
             row.innerHTML = makeRowHTML(p);
+            if (dirtyParams[p.name] !== undefined) {
+                row.classList.add('param-dirty');
+            }
             tbody.appendChild(row);
             attachRowEvents(row);
             if (match) vis++;
@@ -1386,11 +1404,94 @@ function init() {
             }
         });
 
-        document.getElementById('fpSaveBtn')?.addEventListener('click', () => wsSend({ type: 'param_save_file' }));
+        document.getElementById('fpSaveBtn')?.addEventListener('click', () => {
+            const sorted = Object.values(allParams).sort((a, b) => a.name.localeCompare(b.name));
+            if (sorted.length === 0) {
+                const { toast } = window.SwUtil || {};
+                if (toast) toast('⚠ No parameters to save');
+                return;
+            }
+            let text = '# TiHANFly GCS — exported parameters\n';
+            sorted.forEach(p => {
+                text += `${p.name},${fmtV(p.value)}\n`;
+            });
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+            const sysid = (window.selectedSysId && window.selectedSysId > 0) ? window.selectedSysId : 1;
+            a.download = `params_drone_${sysid}_${timestamp}.param`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            const { toast } = window.SwUtil || {};
+            if (toast) toast(`Saved ${sorted.length} parameters to file`);
+        });
 
         document.getElementById('fpLoadBtn')?.addEventListener('click', () => {
-            const p = window.prompt('Enter .param file path on GCS:', 'params.param');
-            if (p && p.trim()) wsSend({ type: 'param_load_file', path: p.trim() });
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.param,.txt';
+            input.addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = evt => {
+                    const content = evt.target.result;
+                    const lines = content.split(/\r?\n/);
+                    let count = 0;
+                    let skipped = 0;
+                    let changed = 0;
+                    lines.forEach((line, idx) => {
+                        line = line.trim();
+                        if (!line || line.startsWith('#')) return;
+                        const comma = line.indexOf(',');
+                        if (comma === -1) {
+                            skipped++;
+                            return;
+                        }
+                        const name = line.substring(0, comma).trim();
+                        const valStr = line.substring(comma + 1).trim();
+                        const val = parseFloat(valStr);
+                        if (name && !isNaN(val)) {
+                            // Check if the parameter exists in our drone's parameter list
+                            if (allParams[name] !== undefined) {
+                                // If the value is different from the drone's value
+                                if (parseFloat(allParams[name].value) !== val) {
+                                    dirtyParams[name] = val;
+                                    changed++;
+                                } else {
+                                    delete dirtyParams[name];
+                                }
+                                count++;
+                            } else {
+                                skipped++;
+                            }
+                        } else {
+                            skipped++;
+                        }
+                    });
+                    
+                    if (count > 0) {
+                        rebuildTable();
+                        const { toast } = window.SwUtil || {};
+                        if (toast) {
+                            if (changed > 0) {
+                                toast(`Loaded ${count} parameters (${changed} changed). Click "Write Changed" to upload.`);
+                            } else {
+                                toast(`Loaded ${count} parameters. All values match current drone settings.`);
+                            }
+                        }
+                    } else {
+                        const { toast } = window.SwUtil || {};
+                        if (toast) toast('⚠ No matching parameters found in file');
+                    }
+                };
+                reader.readAsText(file);
+            });
+            input.click();
         });
 
         // ── Listen to CustomEvents dispatched by websocket.js ─────────────────
